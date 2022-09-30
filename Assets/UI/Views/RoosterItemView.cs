@@ -28,14 +28,34 @@ public class RoosterItemView : View
         
         try
         {
+            //initialize list<string> named appointments with one value in it
+            List<string> locations = new List<string> {"No Location(s)"};
+            List<string> teachers = new List<string> {"No Teacher(s)"};
+            List<string> subjects = new List<string> {"No Subject(s)"};
+
+            if (appointment.locations.Count > 0)
+            {
+                locations = appointment.locations;
+            }
+                    
+            if (appointment.teachers.Count > 0)
+            {
+                teachers = appointment.teachers;
+            }
+                    
+            if (appointment.subjects.Count > 0)
+            {
+                subjects = appointment.subjects;
+            }
+            
             if (appointment.id != null)
             {
-                lokaal.text = appointment.locations[0] ?? "Onbekend";
+                lokaal.text = String.Join(", ", locations);
                 tijd.text = DateTimeOffset.FromUnixTimeSeconds(appointment.start).AddHours(2).UtcDateTime.ToShortTimeString() + " - " +
                     DateTimeOffset.FromUnixTimeSeconds(appointment.end).AddHours(2).UtcDateTime.ToShortTimeString() ?? "Onbekend";
         
-                vak.text = appointment.subjects[0] ?? "Onbekend";
-                docent.text = appointment.teachers[0] ?? "Onbekend";
+                vak.text = String.Join(", ", subjects);;
+                docent.text = String.Join(", ", teachers);;
             }
             else if (appointment.actions[0].post != null)
             {

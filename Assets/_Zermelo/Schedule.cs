@@ -57,7 +57,7 @@ public class Schedule : MonoBehaviour
     
     private UnityWebRequest HttpRequest(string baseURL)
     {
-        print(baseURL);
+        //print(baseURL);
         UnityWebRequest www = UnityWebRequest.Get(baseURL);
         www.SendWebRequest();
 
