@@ -8,15 +8,13 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class Authenticate : MonoBehaviour
+public class AuthenticateZermelo : MonoBehaviour
 {
-    [SerializeField] private string school = "";
-    [SerializeField] private string code = "";
+    string school = "";
+    string code = "";
 
     public ZermeloAuthentication startAuthentication(string schoolCode, string authCode)
     {
-        StartCoroutine(AuthenticateUser());
-        
         return new CoroutineWithData<ZermeloAuthentication>(this, AuthenticateUser(schoolCode, authCode)).result;
     }
 

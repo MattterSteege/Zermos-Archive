@@ -27,8 +27,8 @@ public sealed class ViewManager : MonoBehaviour
 	private View[] defaultViews;
 	
 	[SerializeField]
-	private View LoginView;
-
+	private View Loginview;
+	
 	private void Awake()
 	{
 		Instance = this;
@@ -48,6 +48,12 @@ public sealed class ViewManager : MonoBehaviour
 			view.Hide();
 		}
 
+		if(string.IsNullOrEmpty(PlayerPrefs.GetString("zermelo-access_token")))
+		{
+			Loginview.Show();
+			return;
+		}
+		
 		if (defaultViews != null)
 		{
 			foreach (View view in defaultViews)
@@ -56,18 +62,6 @@ public sealed class ViewManager : MonoBehaviour
 			}
 		}
 		
-		if (PlayerPrefs.GetString("zermelo-access_token") == null ||
-		    PlayerPrefs.GetString("zermelo-access_token") == "")
-		{
-			foreach (View view in views)
-			{
-				view.Initialize();
-
-				view.Hide();
-			}
-			
-			LoginView.Show();
-		}
 	}
 
 	public void Show<TView>(object args = null) where TView : View

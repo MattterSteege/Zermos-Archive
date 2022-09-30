@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using TMPro;
 using Unity.VisualScripting;
@@ -40,6 +41,8 @@ public class RoosterView : View
     public override void Initialize()
     {
         RefreshButton.onClick.AddListener(Initialize);
+        
+        content.transform.parent.parent.GetComponent<ScrollRect>().horizontal = PlayerPrefs.GetInt("UltraSatisfyingScheduleMode") == 1;
 
         foreach (Transform child in content.transform)
         {
@@ -56,7 +59,10 @@ public class RoosterView : View
         
         
 #if UNITY_EDITOR
-        appointments = _schedule.getScheduleOfDay(UnixTimeStampToDateTime(_date));
+        if(_date != 0)
+            appointments = _schedule.getScheduleOfDay(UnixTimeStampToDateTime(_date));
+        else
+            appointments = _schedule.getScheduleOfDay(DateTime.Today);
 #else
         appointments = _schedule.getScheduleOfDay(DateTime.Today);
 #endif
@@ -77,11 +83,31 @@ public class RoosterView : View
             {
                 if (appointment.id != null)
                 {
+                    //initialize list<string> named appointments with one value in it
+                    List<string> appointments = new List<string> {"No Location(s)"};
+                    List<string> teachers = new List<string> {"No Teacher(s)"};
+                    List<string> subjects = new List<string> {"No Subject(s)"};
+
+                    if (appointment.locations.Count > 0)
+                    {
+                        appointments = appointment.locations;
+                    }
+                    
+                    if (appointment.teachers.Count > 0)
+                    {
+                        teachers = appointment.teachers;
+                    }
+                    
+                    if (appointment.subjects.Count > 0)
+                    {
+                        subjects = appointment.subjects;
+                    }
+
                     var rooster = Instantiate(RoosterPrefab, content.transform);
-                    rooster.GetComponent<AppointmentInfo>().SetAppointmentInfo(appointment.locations[0],
+                    rooster.GetComponent<AppointmentInfo>().SetAppointmentInfo(string.Join(", ", appointments),
                         DateTimeOffset.FromUnixTimeSeconds(appointment.start).AddHours(2).UtcDateTime.ToShortTimeString() + " - " +
                         DateTimeOffset.FromUnixTimeSeconds(appointment.end).AddHours(2).UtcDateTime.ToShortTimeString(),
-                        appointment.teachers[0], appointment.subjects[0], appointment.startTimeSlotName);
+                        string.Join(", ", teachers), string.Join(", ", subjects), appointment.startTimeSlotName);
                     rooster.GetComponent<AppointmentInfo>()._appointment = appointment;
                     
                     RoosterItems.Add(rooster);
@@ -182,9 +208,9 @@ public class RoosterView : View
                     catch (ArgumentOutOfRangeException) { }
                 }
             }
-            catch (ArgumentOutOfRangeException)
+            catch (ArgumentOutOfRangeException e)
             {
-                print("ArgumentOutOfRangeException");
+                throw e;
             }
         }
 
@@ -200,7 +226,7 @@ public class RoosterView : View
             {
                 child.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    ViewManager.Instance.Show<RoosterItemView, MainMenuView>(appointments[child.GetSiblingIndex()]);
+                    ViewManager.Instance.Show<RoosterItemView, MainMenuView>(appointments[child.GetSiblingIndex() + NoLessonHours.Count - 1]);
                 });
             };
         }

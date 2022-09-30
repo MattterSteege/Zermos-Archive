@@ -60,4 +60,9 @@ public class AppointmentInfo : MonoBehaviour
     [SerializeField] TMP_Text docent;
     [SerializeField] TMP_Text lesUur;
     public Schedule.Appointment _appointment;
+
+    private void Start()
+    {
+        
+    }
 }
