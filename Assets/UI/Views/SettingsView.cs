@@ -30,7 +30,7 @@ public class SettingsView : View
         
         SomtodayKoppeling.onClick.AddListener(() =>
         {
-            print("No yet implemented");
+            ViewManager.Instance.Show<ConnectSomtodayView, MainMenuView>();
         });
         
         ZermeloKoppeling.onClick.AddListener(() =>

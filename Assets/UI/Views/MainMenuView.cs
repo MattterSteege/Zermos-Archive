@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public sealed class MainMenuView : View
 {
 	[SerializeField] private Button RoosterButton;
+	[SerializeField] private Button HomeworkButton;
 	[SerializeField] private Button LoginButton;
 	[SerializeField] private Button SettingsButton;
 
