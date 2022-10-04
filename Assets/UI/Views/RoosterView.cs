@@ -114,10 +114,7 @@ public class RoosterView : View
                 else
                 {
                     var rooster = Instantiate(TussenUurPrefab, content.transform);
-                    rooster.GetComponent<AppointmentInfo>().SetAppointmentInfo("",
-                        DateTimeOffset.FromUnixTimeSeconds(appointment.start).AddHours(2).UtcDateTime.ToShortTimeString() + " - " +
-                        DateTimeOffset.FromUnixTimeSeconds(appointment.end).AddHours(2).UtcDateTime.ToShortTimeString(),
-                        "", "", i.ToString());
+                    rooster.GetComponent<AppointmentInfo>().SetAppointmentInfo("", "", "", "", i.ToString());
                     
                     rooster.GetComponent<AppointmentInfo>()._appointment = appointment;
                     

@@ -41,9 +41,18 @@ public sealed class ViewManager : MonoBehaviour
 
 	public void Initialize()
 	{
+		View BuggedView = null;
+		
 		foreach (View view in views)
 		{
-			view.Initialize();
+			try
+			{
+				view.Initialize();
+			}
+			catch (Exception)
+			{
+				BuggedView = view;
+			}
 
 			view.Hide();
 		}
@@ -58,7 +67,10 @@ public sealed class ViewManager : MonoBehaviour
 		{
 			foreach (View view in defaultViews)
 			{
-				view.Show(null);
+				if (BuggedView != view)
+				{
+					view.Show(null);
+				}
 			}
 		}
 		
@@ -111,7 +123,7 @@ public sealed class ViewManager : MonoBehaviour
 			}
 		}
 	}
-
+	
 	public void Refresh<TView>(object args = null) where TView : View
 	{
 		foreach (View view in views)

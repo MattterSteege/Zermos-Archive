@@ -4,9 +4,10 @@ using UnityEngine.UI;
 public sealed class MainMenuView : View
 {
 	[SerializeField] private Button RoosterButton;
-	[SerializeField] private Button HomeworkButton;
+	[SerializeField] private Button CijfersButton;
 	[SerializeField] private Button LoginButton;
 	[SerializeField] private Button SettingsButton;
+	[SerializeField] private Grades gradesObject;
 
 	public override void Initialize()
 	{
@@ -25,6 +26,29 @@ public sealed class MainMenuView : View
 		}
 		else
 		{
+			if (!(PlayerPrefs.GetString("somtoday-access_token")==null ||
+			    PlayerPrefs.GetString("somtoday-access_token")==""))
+			{
+				var grades = gradesObject.getGrades();
+				if (grades == null)
+				{
+					CijfersButton.gameObject.transform.parent.gameObject.SetActive(false); ;
+				}
+				else
+				{
+					CijfersButton.gameObject.transform.parent.gameObject.SetActive(true);
+				
+					CijfersButton.onClick.AddListener(() =>
+					{
+						ViewManager.Instance.Show<CijferView, MainMenuView>();
+					});
+				}
+			}
+			else
+			{
+				CijfersButton.gameObject.transform.parent.gameObject.SetActive(false);
+			}
+			
 			RoosterButton.gameObject.transform.parent.gameObject.SetActive(true);
 			SettingsButton.gameObject.transform.parent.gameObject.SetActive(true);
 			LoginButton.gameObject.transform.parent.gameObject.SetActive(false);

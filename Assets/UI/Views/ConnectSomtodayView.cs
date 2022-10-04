@@ -28,6 +28,8 @@ public class ConnectSomtodayView : View
             {
                 somtodayAuthenticate.gameObject.GetComponent<SuccesScreen>().ShowSuccesScreen("Somtoday");
                 PlayerPrefs.SetString("somtoday-access_token", response.access_token);
+                PlayerPrefs.SetString("somtoday-refresh_token", response.refresh_token);
+                PlayerPrefs.SetString("somtoday-api_url", response.somtoday_api_url);
             }
         });
 
@@ -41,18 +43,11 @@ public class ConnectSomtodayView : View
         
         while (!www.isDone) { }
         
-        if (www.isNetworkError || www.isHttpError)
+        schools = JsonConvert.DeserializeObject<List<Schools>>(www.downloadHandler.text)?[0];
+        schoolPicker.ClearOptions();
+        foreach (Instellingen school in schools.instellingen)
         {
-            Debug.Log(www.error);
-        }
-        else
-        {
-            schools = JsonConvert.DeserializeObject<List<Schools>>(www.downloadHandler.text)?[0];
-            schoolPicker.ClearOptions();
-            foreach (Instellingen school in schools.instellingen)
-            {
-                schoolPicker.options.Add(new TMP_Dropdown.OptionData(school.naam));
-            }
+            schoolPicker.options.Add(new TMP_Dropdown.OptionData(school.naam));
         }
     }
 

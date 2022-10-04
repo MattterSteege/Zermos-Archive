@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class AppointmentInfo : MonoBehaviour
 {
-    public void SetAppointmentInfo(string lokaal = null, string tijd = null, string docent = null, string vak = null, string lesUur = null)
+    public void SetAppointmentInfo(string lokaal = "", string tijd = null, string docent = null, string vak = null, string lesUur = null)
     {
         if (!string.IsNullOrEmpty(lokaal))
         {
@@ -60,9 +60,4 @@ public class AppointmentInfo : MonoBehaviour
     [SerializeField] TMP_Text docent;
     [SerializeField] TMP_Text lesUur;
     public Schedule.Appointment _appointment;
-
-    private void Start()
-    {
-        
-    }
 }
