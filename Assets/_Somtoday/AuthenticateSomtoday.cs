@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Networking;
 using Random = UnityEngine.Random;
 
 public class AuthenticateSomtoday : MonoBehaviour
@@ -30,6 +31,12 @@ public class AuthenticateSomtoday : MonoBehaviour
         SomtodayAuthentication auth = startAuthentication("c23fbb99-be4b-4c11-bbf5-57e7fc4f4388", "58373@ccg-leerling.nl", "Somduck");
     }
 
+    public void Start()
+    {
+        RefreshToken();
+    }
+
+    #region authenticate user
     public SomtodayAuthentication startAuthentication(string TENANT_UUID, string username, string password)
     {
         return new CoroutineWithData<SomtodayAuthentication>(this, AuthenticateUser(TENANT_UUID, username, password))
@@ -115,7 +122,67 @@ public class AuthenticateSomtoday : MonoBehaviour
             yield return somtodayAuthentication;
         }
     }
+    #endregion
 
+    #region Refresh token
+    public SomtodayAuthentication RefreshToken()
+    {
+        if (string.IsNullOrEmpty(PlayerPrefs.GetString("somtoday-refresh_token"))) return null;
+
+        WWWForm form = new WWWForm();
+        form.AddField("grant_type", "refresh_token");
+        form.AddField("refresh_token", PlayerPrefs.GetString("somtoday-refresh_token"));
+        form.AddField("scope", "openid");
+        form.AddField("client_id", "D50E0C06-32D1-4B41-A137-A9A850C892C2");
+        UnityWebRequest www = UnityWebRequest.Post($"https://inloggen.somtoday.nl/oauth2/token", form);
+         www.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+         
+         www.SendWebRequest();
+         while (!www.isDone) { }
+         
+         if (www.result == UnityWebRequest.Result.ProtocolError)
+         {
+             Debug.Log(www.error);
+         }
+         else
+         {
+             SomtodayAuthentication somtodayAuthentication = JsonConvert.DeserializeObject<SomtodayAuthentication>(www.downloadHandler.text);
+             PlayerPrefs.SetString("somtoday-refresh_token", somtodayAuthentication.refresh_token);
+             PlayerPrefs.SetString("somtoday-access_token", somtodayAuthentication.access_token);
+             www.Dispose();
+             return somtodayAuthentication;
+         }
+
+         www.Dispose();
+         return null;
+    }
+    #endregion
+
+    #region Check token
+    public bool checkToken()
+    {
+        UnityWebRequest www = UnityWebRequest.Get($"https://api.somtoday.nl/rest/v1/leerlingen");
+        www.SetRequestHeader("Authorization", $"Bearer {PlayerPrefs.GetString("somtoday-access_token")}");
+        www.SendWebRequest();
+        while (!www.isDone) { }
+        if (www.result == UnityWebRequest.Result.ProtocolError)
+        {
+            Debug.Log(www.error);
+            if (www.error == "401 Unauthorized")
+            {
+                RefreshToken();
+            }
+            
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    #endregion
+
+    #region model
     public class SomtodayAuthentication
     {
         public string access_token { get; set; }
@@ -128,7 +195,9 @@ public class AuthenticateSomtoday : MonoBehaviour
         public string token_type { get; set; }
         public int expires_in { get; set; }
     }
+    #endregion
 
+    #region code Verifier/Challenge/random string
     private static string generateRandomString(int count)
     {
         var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -141,9 +210,6 @@ public class AuthenticateSomtoday : MonoBehaviour
 
         return new String(stringChars);
     }
-
-
-    #region code Verifier/Challenge
 
     public void GenerateTokens()
     {

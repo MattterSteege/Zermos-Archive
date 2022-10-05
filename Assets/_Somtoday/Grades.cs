@@ -16,23 +16,46 @@ public class Grades : MonoBehaviour
         {
             return null;
         }
-        
-        Student.getStudent();
-        authentication.AuthenticateUser(PlayerPrefs.GetString("somtoday-tenant_uuid"),PlayerPrefs.GetString("somtoday-username"), PlayerPrefs.GetString("somtoday-password"));
-        
-        string baseurl = string.Format("{0}/rest/v1/resultaten/huidigVoorLeerling/{1}",
-            PlayerPrefs.GetString("somtoday-api_url"), PlayerPrefs.GetString("somtoday-student_id"));
 
-        baseurl += $"?begintNaOfOp={DateTime.Now.ToString("yyyy")}-01-01";
+        string json = "";
         
+        int rangemin = 0;
+        int rangemax = 99;
+        
+        string baseurl = string.Format($"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/resultaten/huidigVoorLeerling/{PlayerPrefs.GetString("somtoday-student_id")}?begintNaOfOp={DateTime.Now.ToString("yyyy")}-01-01");
+
         UnityWebRequest www = UnityWebRequest.Get(baseurl);
         www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
         www.SetRequestHeader("Accept", "application/json");
-
+        www.SetRequestHeader("Range", $"items={rangemin}-{rangemax}");
         www.SendWebRequest();
 
         while (!www.isDone)
         {
+        }
+        
+        json = www.downloadHandler.text;
+        
+        var header = www.GetResponseHeader("Content-Range");
+        var total = int.Parse(header.Split('/')[1]);
+
+        while (rangemax < total)
+        {
+            rangemin += 100;
+            rangemax += 100;
+            baseurl = string.Format($"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/resultaten/huidigVoorLeerling/{PlayerPrefs.GetString("somtoday-student_id")}?begintNaOfOp={DateTime.Now.ToString("yyyy")}-01-01");
+
+            www = UnityWebRequest.Get(baseurl);
+            www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
+            www.SetRequestHeader("Accept", "application/json");
+            www.SetRequestHeader("Range", $"items={rangemin}-{rangemax}");
+            www.SendWebRequest();
+
+            while (!www.isDone)
+            {
+            }
+            
+            json += www.downloadHandler.text;
         }
         
         return JsonConvert.DeserializeObject<SomtodayGrades>(www.downloadHandler.text);

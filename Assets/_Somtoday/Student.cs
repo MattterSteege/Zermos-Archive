@@ -5,13 +5,20 @@ using UnityEngine.Networking;
 
 public class Student : MonoBehaviour
 {
-    public SomtodayStudent getStudent()
+    public SomtodayStudent getStudent(string accessToken = "")
     {
+        if (accessToken == "")
+        {
+            accessToken = PlayerPrefs.GetString("somtoday-access_token");
+        }
+        
         UnityWebRequest www = UnityWebRequest.Get("https://api.somtoday.nl/rest/v1/leerlingen");
-        www.SetRequestHeader("Authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
+        www.SetRequestHeader("Authorization", "Bearer " + accessToken);
         www.SetRequestHeader("Accept", "application/json");
         
         www.SendWebRequest();
+        
+        while (!www.isDone) { }
         
         SomtodayStudent student = JsonConvert.DeserializeObject<SomtodayStudent>(www.downloadHandler.text);
         

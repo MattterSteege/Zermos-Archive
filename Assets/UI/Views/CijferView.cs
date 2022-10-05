@@ -12,22 +12,30 @@ public class CijferView : View
     [ContextMenu("Refresh")]
     public override void Initialize()
     {
-        try
+        var grades = gradesObject.getGrades();
+        if (grades == null) return;
+
+        foreach (Transform child in content.transform)
         {
-            var grades = gradesObject.getGrades();
-            if (grades == null) return;
-            
-            foreach (var grade in grades.items)
+            Destroy(child.gameObject);
+        }
+        
+        foreach (var grade in grades.items)
+        {
+            try
             {
+                if (grade.geldendResultaat == null ||
+                    (string.IsNullOrEmpty(grade.omschrijving) && grade.weging == 0)) continue;
+
                 var gradeView = Instantiate(gradePrefab, content.transform);
                 gradeView.GetComponent<GradeInfo>().SetGradeInfo(grade.vak.naam ?? "",
-                    grade.datumInvoer.ToString("dd MMMM"), grade.omschrijving ?? "", grade.weging + "x",
-                    grade.resultaat ?? "-");
+                    grade.datumInvoer.ToString("d MMMM"), /*grade.omschrijving*/ "", grade.weging + "x",
+                    grade.geldendResultaat ?? "-");
             }
+            catch (Exception) { }
+
+
+            base.Initialize();
         }
-        catch (Exception) { }
-
-
-        base.Initialize();
     }
 }

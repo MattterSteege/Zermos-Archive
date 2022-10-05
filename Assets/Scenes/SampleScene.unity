@@ -8849,6 +8849,7 @@ MonoBehaviour:
   LoginButton: {fileID: 1884329976}
   SettingsButton: {fileID: 387972420}
   gradesObject: {fileID: 1147355065}
+  authenticateSomtodayObject: {fileID: 1147355062}
 --- !u!1 &1530657864
 GameObject:
   m_ObjectHideFlags: 0
@@ -11471,6 +11472,7 @@ MonoBehaviour:
   schoolPicker: {fileID: 589642481}
   connectButton: {fileID: 1467741703}
   somtodayAuthenticate: {fileID: 1147355062}
+  student: {fileID: 1147355066}
 --- !u!1 &1884329974
 GameObject:
   m_ObjectHideFlags: 0

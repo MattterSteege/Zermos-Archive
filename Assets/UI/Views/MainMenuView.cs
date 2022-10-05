@@ -8,6 +8,7 @@ public sealed class MainMenuView : View
 	[SerializeField] private Button LoginButton;
 	[SerializeField] private Button SettingsButton;
 	[SerializeField] private Grades gradesObject;
+	[SerializeField] private AuthenticateSomtoday authenticateSomtodayObject;
 
 	public override void Initialize()
 	{
@@ -29,8 +30,8 @@ public sealed class MainMenuView : View
 			if (!(PlayerPrefs.GetString("somtoday-access_token")==null ||
 			    PlayerPrefs.GetString("somtoday-access_token")==""))
 			{
-				var grades = gradesObject.getGrades();
-				if (grades == null)
+				bool authenticated = authenticateSomtodayObject.checkToken();
+				if (authenticated == false)
 				{
 					CijfersButton.gameObject.transform.parent.gameObject.SetActive(false); ;
 				}
