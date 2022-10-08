@@ -6,7 +6,6 @@ using UnityEngine.Networking;
 
 public class Grades : MonoBehaviour
 {
-    [SerializeField] private Student Student;
     [SerializeField] private AuthenticateSomtoday authentication;
 
     [ContextMenu("get Grades")]

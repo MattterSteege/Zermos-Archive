@@ -12,8 +12,13 @@ public class HomeworkView : View
     
     public override void Initialize()
     {
+        foreach (Transform child in content.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        
         //RefreshButton.onClick.AddListener(Initialize);
-        List<Homework.Item> homework = homeworkObject.getHomework().items;
+        List<Homework.Item> homework = homeworkObject.getHomework();
         
 
         foreach (Homework.Item HomeworkItem in homework)
@@ -24,8 +29,18 @@ public class HomeworkView : View
             
             if (onderwerp.Length == 0)
                 onderwerp = HomeworkItem.studiewijzerItem.omschrijving;
+            
+            string vak;
+            try
+            {
+                vak = HomeworkItem.lesgroep.vak.naam;
+            }
+            catch (Exception)
+            {
+                vak = "error";
+            }
 
-            homeworkItem.GetComponent<HomeworkInfo>().SetHomeworkInfo(HomeworkItem.lesgroep.vak.naam, onderwerp, HomeworkItem.additionalObjects.swigemaaktVinkjes?.items[0].gemaakt ?? false);
+            homeworkItem.GetComponent<HomeworkInfo>().SetHomeworkInfo(vak, onderwerp, HomeworkItem.additionalObjects.swigemaaktVinkjes?.items[0].gemaakt ?? false);
         }
         
         base.Initialize();

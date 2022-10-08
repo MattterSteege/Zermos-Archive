@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public sealed class ViewManager : MonoBehaviour
@@ -34,17 +35,20 @@ public sealed class ViewManager : MonoBehaviour
 		Instance = this;
 	}
 
-	private void Start()
+	private IEnumerator Start()
 	{
-		if (autoInitialize) Initialize();
+		yield return new WaitForEndOfFrame();
+		if (autoInitialize) StartCoroutine(Initialize());
 	}
 
-	public void Initialize()
+	public IEnumerator Initialize()
 	{
 		View BuggedView = null;
 		
 		foreach (View view in views)
 		{
+			yield return new WaitForEndOfFrame();
+			
 			try
 			{
 				view.Initialize();
@@ -61,7 +65,7 @@ public sealed class ViewManager : MonoBehaviour
 		if(string.IsNullOrEmpty(PlayerPrefs.GetString("zermelo-access_token")))
 		{
 			Loginview.Show();
-			return;
+			yield break;
 		}
 		
 		if (defaultViews != null)

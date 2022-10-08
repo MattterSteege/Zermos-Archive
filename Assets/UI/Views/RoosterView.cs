@@ -135,6 +135,11 @@ public class RoosterView : View
                 }
             }
 
+            if (PlayerPrefs.GetInt("ShowTussenUren") == 0)
+            {
+                hideTussenUren();
+            }
+            
             base.Initialize();
         }
     }

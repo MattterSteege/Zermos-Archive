@@ -74,20 +74,7 @@ public class Schedule : MonoBehaviour
     
     public List<Appointment> getScheduleOfDay(DateTime date)
     {
-        DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(date);
-
-        int weeknumber;
-            
-        if (day >= DayOfWeek.Monday && day <= DayOfWeek.Wednesday)
-        {
-            date = date.AddDays(3);
-            weeknumber = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
-            date = date.AddDays(-3);
-        }
-        else
-        {
-            weeknumber = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
-        }
+        int weeknumber = GetweeknumberFromDate(date);
         
         ZermeloSchedule schedule = StartGetSchedule(weeknumber.ToString(), date.Year.ToString());
         
@@ -108,7 +95,27 @@ public class Schedule : MonoBehaviour
 
         return TodaySchedule;
     }
-    
+
+    public int GetweeknumberFromDate(DateTime date)
+    {
+        DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(date);
+
+        int weeknumber;
+            
+        if (day >= DayOfWeek.Monday && day <= DayOfWeek.Wednesday)
+        {
+            date = date.AddDays(3);
+            weeknumber = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+            date = date.AddDays(-3);
+        }
+        else
+        {
+            weeknumber = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+        }
+        
+        return weeknumber;
+    }
+
 
     #region models
     public class Action

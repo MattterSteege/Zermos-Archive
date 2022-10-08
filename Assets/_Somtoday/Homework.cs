@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -8,10 +9,8 @@ using UnityEngine.Networking;
 
 public class Homework : MonoBehaviour
 {
-    [SerializeField] private int maxDaysBack = 14;
-    
     [ContextMenu("get homework")]
-    public SomtodayHomework getHomework()
+    public List<Item> getHomework()
     {
         if (PlayerPrefs.GetString("somtoday-access_token") == "")
         {
@@ -28,6 +27,85 @@ public class Homework : MonoBehaviour
             string.Format(
                 $"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={DateTime.Now.ToString("yyyy")}-01-01&additional=swigemaaktVinkjes&additional=huiswerkgemaakt");
 
+        
+        UnityWebRequest www = UnityWebRequest.Get(baseurl);
+        www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
+        www.SetRequestHeader("Accept", "application/json");
+        www.SetRequestHeader("Range", $"items={rangemin}-{rangemax}");
+        www.SendWebRequest();
+
+        while (!www.isDone)
+        {
+        }
+
+        json = www.downloadHandler.text
+            .Replace("<p>", "").Replace("</p>", "")
+            .Replace("<ul>", "").Replace("</ul>", "")
+            .Replace("<li>", "").Replace("</li>", "");
+        homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
+
+        var header = www.GetResponseHeader("Content-Range");
+        var total = int.Parse(header.Split('/')[1]);
+
+        while (rangemax < total)
+        {
+            rangemin += 100;
+            rangemax += 100;
+            
+            www = UnityWebRequest.Get(baseurl);
+            www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
+            www.SetRequestHeader("Accept", "application/json");
+            www.SetRequestHeader("Range", $"items={rangemin}-{rangemax}");
+            www.SendWebRequest();
+
+            while (!www.isDone)
+            {
+            }
+
+            json += www.downloadHandler.text;
+            header = www.GetResponseHeader("Content-Range");
+            total = int.Parse(header.Split('/')[1]);
+
+            var extraHomework = JsonConvert.DeserializeObject<SomtodayHomework>(www.downloadHandler.text
+                                                                                .Replace("<p>", "").Replace("</p>", "")
+                                                                                .Replace("<ul>", "").Replace("</ul>", "")
+                                                                                .Replace("<li>", "").Replace("</li>", ""));
+            if (extraHomework != null)
+            {
+                for (int i = 0; i < extraHomework.items.Count; i++)
+                {
+                    homework.items.Add(extraHomework.items[i]);
+                }
+            }
+        }
+        
+        var weekHomework = GetWeekHomework();
+        
+        homework?.items.AddRange(weekHomework);
+        homework = Sort(homework);
+
+        return homework.items;
+    }
+
+    [ContextMenu("get week homework")]
+    public List<Item> GetWeekHomework()
+    {
+        if (PlayerPrefs.GetString("somtoday-access_token") == "")
+        {
+            return null;
+        }
+
+        string json = "";
+        var homework = new SomtodayHomework();
+
+        int rangemin = 0;
+        int rangemax = 99;
+
+        string baseurl =
+            string.Format(
+                $"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemweektoekenningen?schooljaar={PlayerPrefs.GetString("somtoday-schooljaar_id")}&begintNaOfOp={DateTime.Now.ToString("yyyy")}-01-01&additional=swigemaaktVinkjes&additional=huiswerkgemaakt");
+
+        
         UnityWebRequest www = UnityWebRequest.Get(baseurl);
         www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
         www.SetRequestHeader("Accept", "application/json");
@@ -79,21 +157,38 @@ public class Homework : MonoBehaviour
             }
         }
 
+        foreach (Item homeworkItem in homework.items)
+        {
+            homeworkItem.datumTijd = getDateFromWeeknumber(homeworkItem.weeknummerVanaf, DateTime.Now.Year);
+        }
         
-        return startSort(homework);
+        homework = Sort(homework);
+
+        return homework.items;
     }
     
-    public SomtodayHomework startSort(SomtodayHomework homework)
-    {
-        return new CoroutineWithData<SomtodayHomework>(this, sort(homework)).result;
-    }
 
-    public IEnumerator sort(SomtodayHomework homework)
+    public SomtodayHomework Sort(SomtodayHomework homework)
     {
-        homework.items.RemoveAll(x => x.studiewijzerItem == null);
-        homework.items.RemoveAll(x=> x.datumTijd < DateTime.Now.AddDays(-maxDaysBack));
         homework.items = homework.items.OrderBy(x => x.datumTijd).ToList();
-        yield return homework;
+        homework.items.RemoveAll(x => x.studiewijzerItem == null);
+        homework.items.RemoveAll(x=> x.datumTijd < DateTime.Now.AddDays(-PlayerPrefs.GetInt("numberofdayshomework")));
+        homework.items.RemoveAll(x=> x.studiewijzerItem.huiswerkType == "LESSTOF");
+        return homework;
+    }
+    
+    public DateTime getDateFromWeeknumber(int weeknumber, int year)
+    {
+        DateTime jan1 = new DateTime(year, 1, 1);
+        int daysOffset = DayOfWeek.Monday - jan1.DayOfWeek;
+        DateTime firstMonday = jan1.AddDays(daysOffset);
+        int firstWeek = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(jan1, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+        if (firstWeek <= 1)
+        {
+            weeknumber -= 1;
+        }
+        DateTime result = firstMonday.AddDays(weeknumber * 7);
+        return result.AddDays(4);
     }
 
     #region Models
@@ -123,6 +218,7 @@ public class Homework : MonoBehaviour
         public Leerling leerling { get; set; }
         public object swiToekenningId { get; set; }
         public bool gemaakt { get; set; }
+        public int weeknummerVanaf { get; set; }
     }
 
     public class Leerling
