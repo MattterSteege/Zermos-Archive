@@ -49,8 +49,9 @@ public sealed class ViewManager : MonoBehaviour
 			{
 				view.Initialize();
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
+				print(e);
 				BuggedView = view;
 			}
 

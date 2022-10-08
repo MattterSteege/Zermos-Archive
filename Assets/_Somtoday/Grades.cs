@@ -60,13 +60,6 @@ public class Grades : MonoBehaviour
         
         return JsonConvert.DeserializeObject<SomtodayGrades>(www.downloadHandler.text);
     }
-    
-    private void CopyToClipboard(string str) {
-        TextEditor textEditor = new TextEditor();
-        textEditor.text = str;
-        textEditor.SelectAll();
-        textEditor.Copy();
-    }
 
     #region model
     public class SomtodayGrades

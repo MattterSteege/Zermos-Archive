@@ -8,7 +8,11 @@ public class SettingsView : View
 {
     [Header("settings")]
     [SerializeField] private Toggle UltraSatisfyingScheduleMode;
-    [SerializeField] private ScrollRect RoosterScrollRect;
+    [SerializeField] private ScrollRect RoosterScrollRect;    
+    
+    [Space]
+    [SerializeField] private Toggle ShowTussenUren;
+    [SerializeField] private RoosterView roosterView;
     
     [Header("Koppelingen")]
     [SerializeField] private Button SomtodayKoppeling;
@@ -26,6 +30,21 @@ public class SettingsView : View
             RoosterScrollRect.horizontal = isOn;
             RoosterScrollRect.inertia = isOn;
             RoosterScrollRect.elasticity = isOn ? 0.1f : 0.3f;
+        });
+        
+        ShowTussenUren.isOn = PlayerPrefs.GetInt("ShowTussenUren") == 0;
+        ShowTussenUren.onValueChanged.AddListener((bool isOn) =>
+        {
+            PlayerPrefs.SetInt("ShowTussenUren", isOn ? 1 : 0);
+
+            if (isOn)
+            {
+                roosterView.showTussenUren();
+            }
+            else
+            {
+                roosterView.hideTussenUren();
+            }
         });
         
         SomtodayKoppeling.onClick.AddListener(() =>

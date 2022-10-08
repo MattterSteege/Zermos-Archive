@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RoosterItemView : View
 {
@@ -12,6 +13,7 @@ public class RoosterItemView : View
     [SerializeField] TMP_Text tijd;
     [SerializeField] TMP_Text vak;
     [SerializeField] TMP_Text docent;
+    [SerializeField] Image background;
     
     private void Load()
     {
@@ -61,7 +63,11 @@ public class RoosterItemView : View
             {
                 
             }
-            
+
+            if (appointment.status[0].code == 4007)
+            {
+                background.color = new Color(1f, 0f, 0f, 0.5f);
+            }
         }
         catch(NullReferenceException){}
     }

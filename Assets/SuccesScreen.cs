@@ -48,6 +48,7 @@ public class SuccesScreen : MonoBehaviour
         ViewManager.Instance.Refresh<MainMenuView>();
         ViewManager.Instance.Refresh<RoosterView>();
         ViewManager.Instance.Refresh<CijferView>();
+        ViewManager.Instance.Refresh<RoosterView>();
         
         yield return new WaitForSeconds(0.25f);
         

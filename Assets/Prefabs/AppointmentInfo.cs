@@ -23,7 +23,7 @@ public class AppointmentInfo : MonoBehaviour
         }
         else
         {
-            this.tijd.text = "Geen tijd";
+            this.tijd.text = tijd;
         }
         
         if (!string.IsNullOrEmpty(docent))
