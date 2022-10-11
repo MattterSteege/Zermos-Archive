@@ -85,6 +85,10 @@ public class SettingsView : View
         NumberOfDaysHomeworkMinus.onClick.AddListener(() =>
         {
             int numberOfDaysHomework = int.Parse(NumberOfDaysHomework.text);
+            if(numberOfDaysHomework <= 1)
+            {
+                return;
+            }
             numberOfDaysHomework--;
             NumberOfDaysHomework.text = numberOfDaysHomework.ToString();
             PlayerPrefs.SetInt("numberofdayshomework", numberOfDaysHomework);

@@ -7,27 +7,25 @@ using UnityEngine.UI;
 
 public class RoosterItemView : View
 {
-    private Schedule.Appointment appointment;
+    [SerializeField] private Schedule.Appointment appointment;
     
     [SerializeField] TMP_Text lokaal;
     [SerializeField] TMP_Text tijd;
     [SerializeField] TMP_Text vak;
     [SerializeField] TMP_Text docent;
     [SerializeField] Image background;
-    
-    private void Load()
+
+    public override void Show(object args = null)
     {
-        appointment = (Schedule.Appointment)args;
-        
-        ViewManager.Instance.onLoad -= Load;
+        this.appointment = (Schedule.Appointment)args;
         
         Initialize();
+        
+        base.Show();
     }
     
     public override void Initialize()
     {
-        ViewManager.Instance.onLoad += Load;
-        
         try
         {
             //initialize list<string> named appointments with one value in it

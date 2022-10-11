@@ -85,8 +85,7 @@ public class RoosterView : View
                     DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start).AddHours(2).UtcDateTime
                         .ToShortTimeString() + " - " + DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end)
                         .AddHours(2).UtcDateTime
-                        .ToShortTimeString(), String.Join(", ", appointments[listIndex].teachers), String.Join(", ", appointments[listIndex].subjects), appointments[listIndex].startTimeSlotName);
-                rooster.GetComponent<AppointmentInfo>()._appointment = appointments[listIndex];
+                        .ToShortTimeString(), String.Join(", ", appointments[listIndex].teachers), String.Join(", ", appointments[listIndex].subjects), appointments[listIndex].startTimeSlotName, appointments[listIndex]);
 
                 RoosterItems.Add(rooster);
 
@@ -95,6 +94,10 @@ public class RoosterView : View
                     rooster.GetComponent<Image>().color = new Color(1f, 0f, 0f, 0.5f);
                 }
 
+                rooster.GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    ViewManager.Instance.Show<RoosterItemView, MainMenuView>(rooster.GetComponent<AppointmentInfo>()._appointment);
+                });
 
                 //must be at the end
                 NoLessonHours.Remove(i);
@@ -124,15 +127,15 @@ public class RoosterView : View
                 {
                     Destroy(child.gameObject);
                 }
-                else
-                {
-                    child.GetComponent<Button>().onClick.AddListener(() =>
-                    {
-                        ViewManager.Instance.Show<RoosterItemView, MainMenuView>(
-                            appointments[
-                                child.GetSiblingIndex() + (NoLessonHours.Count > 0 ? (NoLessonHours.Count - 1) : 0)]);
-                    });
-                }
+                // else
+                // {
+                //     child.GetComponent<Button>().onClick.AddListener(() =>
+                //     {
+                //         ViewManager.Instance.Show<RoosterItemView, MainMenuView>(
+                //             appointments[
+                //                 child.GetSiblingIndex() + (NoLessonHours.Count > 0 ? (NoLessonHours.Count - 1) : 0)]);
+                //     });
+                // }
             }
 
             if (PlayerPrefs.GetInt("ShowTussenUren") == 0)

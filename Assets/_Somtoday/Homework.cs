@@ -25,7 +25,7 @@ public class Homework : MonoBehaviour
 
         string baseurl =
             string.Format(
-                $"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={DateTime.Now.ToString("yyyy")}-01-01&additional=swigemaaktVinkjes&additional=huiswerkgemaakt");
+                $"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={DateTime.Now.ToString("yyyy")}-01-01&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen");
 
         
         UnityWebRequest www = UnityWebRequest.Get(baseurl);
@@ -103,7 +103,7 @@ public class Homework : MonoBehaviour
 
         string baseurl =
             string.Format(
-                $"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemweektoekenningen?schooljaar={PlayerPrefs.GetString("somtoday-schooljaar_id")}&begintNaOfOp={DateTime.Now.ToString("yyyy")}-01-01&additional=swigemaaktVinkjes&additional=huiswerkgemaakt");
+                $"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemweektoekenningen?schooljaar={PlayerPrefs.GetString("somtoday-schooljaar_id")}&begintNaOfOp={DateTime.Now.ToString("yyyy")}-01-01&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen");
 
         
         UnityWebRequest www = UnityWebRequest.Get(baseurl);
@@ -201,6 +201,7 @@ public class Homework : MonoBehaviour
     {
         public SwigemaaktVinkjes swigemaaktVinkjes { get; set; }
         public object huiswerkgemaakt { get; set; }
+        public Leerlingen leerlingen { get; set; }
     }
 
     public class Item
@@ -219,6 +220,11 @@ public class Homework : MonoBehaviour
         public object swiToekenningId { get; set; }
         public bool gemaakt { get; set; }
         public int weeknummerVanaf { get; set; }
+        public string UUID { get; set; }
+        public int leerlingnummer { get; set; }
+        public string roepnaam { get; set; }
+        public string voorvoegsel { get; set; }
+        public string achternaam { get; set; }
     }
 
     public class Leerling
@@ -231,6 +237,13 @@ public class Homework : MonoBehaviour
         public string roepnaam { get; set; }
         public string voorvoegsel { get; set; }
         public string achternaam { get; set; }
+    }
+    
+    public class Leerlingen
+    {
+        [JsonProperty("$type")]
+        public string Type { get; set; }
+        public List<Item> items { get; set; }
     }
 
     public class Lesgroep

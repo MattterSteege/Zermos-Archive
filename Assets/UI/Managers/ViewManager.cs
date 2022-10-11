@@ -6,18 +6,6 @@ public sealed class ViewManager : MonoBehaviour
 {
 	public static ViewManager Instance { get; private set; }
 	
-	public delegate void OnLoad();
-
-	public event OnLoad onLoad;
-
-	private void RaiseOnLoad()
-	{
-		if (onLoad != null)
-		{
-			onLoad();
-		}
-	}
-
 	[SerializeField]
 	private bool autoInitialize;
 
@@ -41,6 +29,9 @@ public sealed class ViewManager : MonoBehaviour
 		if (autoInitialize) StartCoroutine(Initialize());
 	}
 
+	public delegate void OnInitializeComplete();
+	public static event OnInitializeComplete onInitializeComplete;
+	
 	public IEnumerator Initialize()
 	{
 		View BuggedView = null;
@@ -79,6 +70,7 @@ public sealed class ViewManager : MonoBehaviour
 			}
 		}
 		
+		if (onInitializeComplete != null) onInitializeComplete();
 	}
 
 	public void Show<TView>(object args = null) where TView : View
@@ -87,7 +79,6 @@ public sealed class ViewManager : MonoBehaviour
 		{
 			if (view is TView)
 			{
-				RaiseOnLoad();
 				view.Show(args);
 			}
 			else
@@ -104,7 +95,6 @@ public sealed class ViewManager : MonoBehaviour
 			if (view is TView || view is TView2)
 			{
 				view.Show(args);
-				RaiseOnLoad();
 			}
 			else
 			{
@@ -120,7 +110,6 @@ public sealed class ViewManager : MonoBehaviour
 			if (view is TView || view is TView2 || view is TView3)
 			{
 				view.Show(args);
-				RaiseOnLoad();
 			}
 			else
 			{

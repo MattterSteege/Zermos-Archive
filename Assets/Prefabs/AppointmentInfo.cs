@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class AppointmentInfo : MonoBehaviour
 {
-    public void SetAppointmentInfo(string lokaal = "", string tijd = null, string docent = null, string vak = null, string lesUur = null)
+    public void SetAppointmentInfo(string lokaal = "", string tijd = null, string docent = null, string vak = null, string lesUur = null, Schedule.Appointment appointment = null)
     {
         if (!string.IsNullOrEmpty(lokaal))
         {
@@ -51,6 +51,11 @@ public class AppointmentInfo : MonoBehaviour
         else
         {
             this.lesUur.gameObject.SetActive(false);
+        }
+        
+        if (appointment != null)
+        {
+            this._appointment = appointment;
         }
     }
 

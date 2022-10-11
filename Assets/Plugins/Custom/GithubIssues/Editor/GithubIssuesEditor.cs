@@ -270,8 +270,8 @@ namespace GithubIssues
                 issueTitle.style.marginBottom = 2;
                 issueBody.style.height = 200;
                 issueBody.multiline = true;
-                issueBody.value = selectedIssue.Body.Replace("## User bug report", "---USER BUG REPORT---")
-                    .Replace("## Description", "---DESCRIPTION---");
+                issueBody.value = selectedIssue.Body?.Replace("## User bug report", "---USER BUG REPORT---")
+                    .Replace("## Description", "---DESCRIPTION---") ?? issueTitle.text;
                 issueBody.style.whiteSpace = WhiteSpace.Normal;
 
                 var issueTypes = new TextField
