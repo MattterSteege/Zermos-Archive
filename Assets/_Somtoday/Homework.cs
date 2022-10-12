@@ -41,7 +41,8 @@ public class Homework : MonoBehaviour
         json = www.downloadHandler.text
             .Replace("<p>", "").Replace("</p>", "")
             .Replace("<ul>", "").Replace("</ul>", "")
-            .Replace("<li>", "").Replace("</li>", "");
+            .Replace("<li>", "").Replace("</li>", "")
+            .Replace("&amp;", "&");
         homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
 
         var header = www.GetResponseHeader("Content-Range");
@@ -67,9 +68,10 @@ public class Homework : MonoBehaviour
             total = int.Parse(header.Split('/')[1]);
 
             var extraHomework = JsonConvert.DeserializeObject<SomtodayHomework>(www.downloadHandler.text
-                                                                                .Replace("<p>", "").Replace("</p>", "")
-                                                                                .Replace("<ul>", "").Replace("</ul>", "")
-                                                                                .Replace("<li>", "").Replace("</li>", ""));
+                .Replace("<p>", "").Replace("</p>", "")
+                .Replace("<ul>", "").Replace("</ul>", "")
+                .Replace("<li>", "").Replace("</li>", "")
+                .Replace("&amp;", "&"));
             if (extraHomework != null)
             {
                 for (int i = 0; i < extraHomework.items.Count; i++)
@@ -119,7 +121,9 @@ public class Homework : MonoBehaviour
         json = www.downloadHandler.text
             .Replace("<p>", "").Replace("</p>", "")
             .Replace("<ul>", "").Replace("</ul>", "")
-            .Replace("<li>", "").Replace("</li>", "");
+            .Replace("<li>", "").Replace("</li>", "")
+            .Replace("&amp;", "&");
+        
         homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
 
         var header = www.GetResponseHeader("Content-Range");
@@ -147,7 +151,8 @@ public class Homework : MonoBehaviour
             var extraHomework = JsonConvert.DeserializeObject<SomtodayHomework>(www.downloadHandler.text
                                                                                 .Replace("<p>", "").Replace("</p>", "")
                                                                                 .Replace("<ul>", "").Replace("</ul>", "")
-                                                                                .Replace("<li>", "").Replace("</li>", ""));
+                                                                                .Replace("<li>", "").Replace("</li>", "")
+                                                                                .Replace("&amp;", "&"));
             if (extraHomework != null)
             {
                 for (int i = 0; i < extraHomework.items.Count; i++)
@@ -166,7 +171,36 @@ public class Homework : MonoBehaviour
 
         return homework.items;
     }
-    
+
+
+    public bool SetHomeworkStatus(Item huiwerkItem, bool gemaakt)
+    {
+        string json = ("{\"leerling\": {\"links\": [{\"id\": {id},\"rel\": \"self\",\"href\": \"{apiUrl}/rest/v1/leerlingen/{id}\"}]},\"gemaakt\": {gemaakt}}")
+            .Replace("{id}", huiwerkItem.additionalObjects.leerlingen.items[0].links[0].id.ToString())
+            .Replace("{apiUrl}", PlayerPrefs.GetString("somtoday-api_url"))
+            .Replace("{gemaakt}", gemaakt.ToString().ToLower());
+        
+        UnityWebRequest www = UnityWebRequest.Put($"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/huiswerkgemaakt/{huiwerkItem.additionalObjects.swigemaaktVinkjes.items[0].links[0].id}", json);
+        
+        www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
+        
+        www.SetRequestHeader("Accept", "application/json");
+        www.SetRequestHeader("Content-Type", "application/json");
+        www.SendWebRequest();
+        
+        while (!www.isDone)
+        {
+        }
+
+        if (www.downloadHandler.text.Contains("\"gemaakt\": true"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     public SomtodayHomework Sort(SomtodayHomework homework)
     {

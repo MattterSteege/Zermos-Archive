@@ -55,48 +55,46 @@ public class HomeworkView : View
             {
                 bool succesfull = UpdateGemaaktStatus(HomeworkItem, isOn);
                 
-                homeworkItem.GetComponent<HomeworkInfo>().gemaakt.isOn = succesfull;
+                homeworkItem.GetComponent<HomeworkInfo>().gemaakt.SetIsOnWithoutNotify(succesfull);
             });
         }
         
         base.Initialize();
     }
 
-    private bool UpdateGemaaktStatus(Homework.Item HomeworkItem, bool isOn)
+    private bool UpdateGemaaktStatus(Homework.Item HomeworkItem, bool gemaakt)
     {
-        string vinkje = ("{\"links\": [{\"rel\": \"self\"}],\"leerling\": {\"links\": [{\"id\": {0},\"rel\": \"self\"}]},\"swiToekenning\": {\"links\": [{\"id\": {1},\"rel\": \"koppeling\"}] },\"gemaakt\": {2} }")
-            .Replace("{0}", HomeworkItem.additionalObjects.leerlingen.items[0].links[0].id.ToString())
-            .Replace("{1}", HomeworkItem.studiewijzerItem.links[0].id.ToString())
-            .Replace("{2}", isOn.ToString().ToLower());
+        string json = ("{\"leerling\": {\"links\": [{\"id\": {id},\"rel\": \"self\",\"href\": \"{apiUrl}/rest/v1/leerlingen/{id}\"}]},\"gemaakt\": {gemaakt}}")
+            .Replace("{id}", HomeworkItem.additionalObjects.leerlingen.items[0].links[0].id.ToString())
+            .Replace("{apiUrl}", PlayerPrefs.GetString("somtoday-api_url"))
+            .Replace("{gemaakt}", gemaakt.ToString().ToLower());
         
+        UnityWebRequest www = UnityWebRequest.Put($"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/swigemaakt/{HomeworkItem.additionalObjects.swigemaaktVinkjes.items[0].links[0].id}", json);
         
-        string baseurl = string.Format($"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/swigemaakt/{HomeworkItem.studiewijzerItem.links[0].id}");
-
-        UnityWebRequest www = UnityWebRequest.Put(baseurl, vinkje);
         www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
+        
         www.SetRequestHeader("Accept", "application/json");
+        www.SetRequestHeader("Content-Type", "application/json");
         www.SendWebRequest();
-
+        
         while (!www.isDone)
         {
         }
-
+        
         if (www.result == UnityWebRequest.Result.Success)
         {
-            bool success = JsonUtility.FromJson<Gemaakt>(www.downloadHandler.text).gemaakt;
-
+            if (www.downloadHandler.text.Contains("\"gemaakt\":true"))
+            {
+                www.Dispose();
+                return true;
+            }
+            
             www.Dispose();
-            return success;
+            return false;
         }
 
         www.Dispose();
         return false;
     }
-
-    #region gemaakt
-    public class Gemaakt
-    {
-        public bool gemaakt { get; set; }
-    }
-    #endregion
+    
 }
