@@ -22,9 +22,15 @@ public class HomeworkView : View
         
         //RefreshButton.onClick.AddListener(Initialize);
         List<Homework.Item> homework = homeworkObject.getHomework();
-        
-        //TODO: if date is different, create divider
 
+        if (homework == null)
+        {
+            base.Initialize();
+            return;
+        }
+        
+        int day = 0;
+        
         foreach (Homework.Item HomeworkItem in homework)
         {
             var homeworkItem = Instantiate(homeworkPrefab, content.transform);
@@ -57,6 +63,19 @@ public class HomeworkView : View
                 
                 homeworkItem.GetComponent<HomeworkInfo>().gemaakt.SetIsOnWithoutNotify(succesfull);
             });
+
+            if (HomeworkItem.datumTijd.Day > day)
+            {
+                var go = Instantiate(DividerPrefab, content.transform);
+                go.GetComponent<homeworkDivider>().Datum.text = ((DateTimeOffset) HomeworkItem.datumTijd).DateTime.ToString("d MMMM");
+            }
+            if (HomeworkItem.datumTijd.Day < day)
+            {
+                var go = Instantiate(DividerPrefab, content.transform);
+                go.GetComponent<homeworkDivider>().Datum.text = ((DateTimeOffset) HomeworkItem.datumTijd).DateTime.ToString("d MMMM");
+            }
+            
+            day = HomeworkItem.datumTijd.Day;
         }
         
         base.Initialize();

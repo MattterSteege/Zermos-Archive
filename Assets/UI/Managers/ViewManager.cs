@@ -46,7 +46,7 @@ public sealed class ViewManager : MonoBehaviour
 			}
 			catch (Exception e)
 			{
-				print(e);
+				Debug.LogException(e);
 				BuggedView = view;
 			}
 

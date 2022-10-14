@@ -14,7 +14,7 @@ public class SettingsView : View
     
     [Space]
     [SerializeField] private Toggle ShowTussenUren;
-    [SerializeField] private RoosterView roosterView;
+    [SerializeField] private DagRoosterView roosterView;
     
     [Space]
     [SerializeField] private TMP_InputField NumberOfDaysHomework;

@@ -34,8 +34,8 @@ public sealed class MainMenuView : View
 				bool authenticated = authenticateSomtodayObject.checkToken();
 				if (authenticated == false)
 				{
-					CijfersButton.gameObject.transform.parent.gameObject.SetActive(false); ;
-					HomeworkButton.gameObject.transform.parent.gameObject.SetActive(false); ;
+					CijfersButton.gameObject.transform.parent.gameObject.SetActive(false);
+					HomeworkButton.gameObject.transform.parent.gameObject.SetActive(false);
 				}
 				else
 				{
@@ -56,6 +56,7 @@ public sealed class MainMenuView : View
 			else
 			{
 				CijfersButton.gameObject.transform.parent.gameObject.SetActive(false);
+				HomeworkButton.gameObject.transform.parent.gameObject.SetActive(false);
 			}
 			
 			RoosterButton.gameObject.transform.parent.gameObject.SetActive(true);
@@ -64,7 +65,7 @@ public sealed class MainMenuView : View
 			
 			RoosterButton.onClick.AddListener(() =>
 			{
-				ViewManager.Instance.Show<RoosterView, MainMenuView>();
+				ViewManager.Instance.Show<DagRoosterView, MainMenuView>();
 			});
 			
 			SettingsButton.onClick.AddListener(() =>

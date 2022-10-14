@@ -8,12 +8,13 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RoosterView : View
+public class DagRoosterView : View
 {
     [SerializeField] private GameObject content;
     [SerializeField] private GameObject RoosterPrefab;
     [SerializeField] private GameObject TussenUurPrefab;
     [SerializeField] private Button RefreshButton;
+    [SerializeField] private Button WeekRoosterButton;
     [SerializeField] private Schedule _schedule;
     [SerializeField] private int _date;
 
@@ -35,6 +36,7 @@ public class RoosterView : View
     public override void Initialize()
     {
         RefreshButton.onClick.AddListener(Initialize);
+        WeekRoosterButton.onClick.AddListener(() => { ViewManager.Instance.Show<MainMenuView, WeekRoosterView>(); });
 
         content.transform.parent.parent.GetComponent<ScrollRect>().horizontal =
             PlayerPrefs.GetInt("UltraSatisfyingScheduleMode") == 1;
@@ -107,11 +109,28 @@ public class RoosterView : View
             {
                 //no lesson
                 var tussenUur = Instantiate(TussenUurPrefab, content.transform);
-                    tussenUur.GetComponent<AppointmentInfo>().SetAppointmentInfo("", "", "", "", i.ToString());
 
-                    RoosterItems.Add(tussenUur);
+                Schedule.Appointment appointment;
+                if (appointments.Count <= listIndex)
+                {
+                    appointment = null;
+                }
+                else
+                {
+                    appointment = appointments[listIndex];
+                }
+                
+                tussenUur.GetComponent<AppointmentInfo>()
+                    .SetAppointmentInfo("", "", "", "", i.ToString(), appointment);
+                    
+                tussenUur.GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    ViewManager.Instance.Show<RoosterItemView, MainMenuView>(tussenUur.GetComponent<AppointmentInfo>()._appointment);
+                });
 
-                    if (!(listIndex >= appointments.Count) && appointments[listIndex].startTimeSlotName == (i).ToString())
+                RoosterItems.Add(tussenUur);
+
+                if (!(listIndex >= appointments.Count) && appointments[listIndex].startTimeSlotName == (i).ToString())
                 {
                     listIndex++;
                 }

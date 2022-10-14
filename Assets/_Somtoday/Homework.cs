@@ -42,7 +42,9 @@ public class Homework : MonoBehaviour
             .Replace("<p>", "").Replace("</p>", "")
             .Replace("<ul>", "").Replace("</ul>", "")
             .Replace("<li>", "").Replace("</li>", "")
-            .Replace("&amp;", "&");
+            .Replace("&amp;", "&")
+            .Replace("<em>", "").Replace("</em>", "");
+        
         homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
 
         var header = www.GetResponseHeader("Content-Range");
@@ -71,7 +73,8 @@ public class Homework : MonoBehaviour
                 .Replace("<p>", "").Replace("</p>", "")
                 .Replace("<ul>", "").Replace("</ul>", "")
                 .Replace("<li>", "").Replace("</li>", "")
-                .Replace("&amp;", "&"));
+                .Replace("&amp;", "&")
+                .Replace("<em>", "").Replace("</em>", ""));
             if (extraHomework != null)
             {
                 for (int i = 0; i < extraHomework.items.Count; i++)

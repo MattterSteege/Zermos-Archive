@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -60,51 +61,5 @@ public class HomeworkItemView : View
             ToetsPill.SetActive(false);
             GroteToetsPill.SetActive(true); //
         }
-        
-        //Gemaakt.isOn = homeworkInfo.additionalObjects.swigemaaktVinkjes?.items?[0].gemaakt ?? false;
-        
-        //Gemaakt.onValueChanged.AddListener((bool isOn) =>
-        //{
-        //    bool succesfull = UpdateGemaaktStatus(homeworkInfo, isOn);
-        //       
-        //    Gemaakt.SetIsOnWithoutNotify(succesfull);
-        //});
     }
-    
-    /*
-    private bool UpdateGemaaktStatus(Homework.Item HomeworkItem, bool gemaakt)
-    {
-        string json = ("{\"leerling\": {\"links\": [{\"id\": {id},\"rel\": \"self\",\"href\": \"{apiUrl}/rest/v1/leerlingen/{id}\"}]},\"gemaakt\": {gemaakt}}")
-            .Replace("{id}", HomeworkItem.additionalObjects.leerlingen.items[0].links[0].id.ToString())
-            .Replace("{apiUrl}", PlayerPrefs.GetString("somtoday-api_url"))
-            .Replace("{gemaakt}", gemaakt.ToString().ToLower());
-        
-        UnityWebRequest www = UnityWebRequest.Put($"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/swigemaakt/{HomeworkItem.additionalObjects.swigemaaktVinkjes.items[0].links[0].id}", json);
-        
-        www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
-        
-        www.SetRequestHeader("Accept", "application/json");
-        www.SetRequestHeader("Content-Type", "application/json");
-        www.SendWebRequest();
-        
-        while (!www.isDone)
-        {
-        }
-        
-        if (www.result == UnityWebRequest.Result.Success)
-        {
-            if (www.downloadHandler.text.Contains("\"gemaakt\":true"))
-            {
-                www.Dispose();
-                return true;
-            }
-            
-            www.Dispose();
-            return false;
-        }
-
-        www.Dispose();
-        return false;
-    }
-    */
 }
