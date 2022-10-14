@@ -3485,6 +3485,7 @@ MonoBehaviour:
   NoLessonHours: 
   RoosterItems: []
   maxNumberOfLessons: 9
+  showHoursAfterLastLesson: 0
 --- !u!1 &305054779
 GameObject:
   m_ObjectHideFlags: 0
@@ -3845,7 +3846,7 @@ MonoBehaviour:
   RefreshButton: {fileID: 1479886333}
   WeekRoosterButton: {fileID: 1575427538}
   _schedule: {fileID: 1516145119}
-  _date: 1665446400
+  _date: 0
   NoLessonHours: 
   RoosterItems: []
   maxNumberOfLessons: 9
@@ -5072,7 +5073,8 @@ MonoBehaviour:
   UltraSatisfyingScheduleMode: {fileID: 1613086443}
   RoosterScrollRect: {fileID: 963835870}
   ShowTussenUren: {fileID: 1798515687}
-  roosterView: {fileID: 337358175}
+  dagRoosterView: {fileID: 337358175}
+  weekRoosterView: {fileID: 303878680}
   NumberOfDaysHomework: {fileID: 1004114452}
   NumberOfDaysHomeworkPlus: {fileID: 389884709}
   NumberOfDaysHomeworkMinus: {fileID: 1306250311}
@@ -5708,7 +5710,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 31.6, y: -260}
+  m_AnchoredPosition: {x: 31.599976, y: -260}
   m_SizeDelta: {x: 59.2, y: 516}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &570608534

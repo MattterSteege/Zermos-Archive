@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.unity.adaptiveperformance": "4.0.1",
     "com.unity.collab-proxy": "1.15.17",
     "com.unity.feature.2d": "1.0.0",
     "com.unity.git": "file:../External  Packages/com.unity.git-2.1.28-preview.tgz",

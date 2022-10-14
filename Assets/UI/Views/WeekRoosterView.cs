@@ -18,6 +18,7 @@ public class WeekRoosterView : View
     [SerializeField] private List<int> NoLessonHours;
     [SerializeField] private List<GameObject> RoosterItems;
     [SerializeField] private int maxNumberOfLessons;
+    [SerializeField] private bool showHoursAfterLastLesson;
 
 #if UNITY_EDITOR
     public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
@@ -47,12 +48,12 @@ public class WeekRoosterView : View
         }
         
         
+        NoLessonHours = new List<int>();
+        RoosterItems = new List<GameObject>();
+        
         for (int x = 0; x < dagenVanDeWeek.Length; x++)
         {
-            NoLessonHours = new List<int>();
             appointments = new List<Schedule.Appointment>();
-            RoosterItems = new List<GameObject>();
-
 
 #if UNITY_EDITOR
             if (_date != 0)
@@ -60,7 +61,7 @@ public class WeekRoosterView : View
             else
                 appointments = _schedule.getScheduleOfDay(DateTime.Today.StartOfWeek(DayOfWeek.Monday).AddDays(x));
 #else
-            appointments = _schedule.getScheduleOfDay(DateTime.Today);
+            appointments = _schedule.getScheduleOfDay(DateTime.Today.StartOfWeek(DayOfWeek.Monday).AddDays(x));
 #endif
 
             if (appointments == null)
@@ -72,8 +73,6 @@ public class WeekRoosterView : View
             int lastlesson = 0;
             for (int i = 1, listIndex = 0; i < maxNumberOfLessons + 1; i++)
             {
-                NoLessonHours.Add(i);
-
                 if ((!(listIndex >= appointments.Count) && appointments[listIndex]?.appointmentType == "lesson" &&
                      int.Parse(appointments[listIndex].startTimeSlotName) == i) ||
                     (!(i >= appointments.Count) && appointments[i - 1]?.appointmentType == "lesson" &&
@@ -105,11 +104,12 @@ public class WeekRoosterView : View
                     });
 
                     //must be at the end
-                    NoLessonHours.Remove(i);
                     listIndex++;
                 }
                 else
                 {
+                    NoLessonHours.Add(i);
+                    
                     //no lesson
                     var tussenUur = Instantiate(TussenUurPrefab, dagenVanDeWeek[x].transform);
 
@@ -150,15 +150,6 @@ public class WeekRoosterView : View
                     {
                         Destroy(child.gameObject);
                     }
-                    // else
-                    // {
-                    //     child.GetComponent<Button>().onClick.AddListener(() =>
-                    //     {
-                    //         ViewManager.Instance.Show<RoosterItemView, MainMenuView>(
-                    //             appointments[
-                    //                 child.GetSiblingIndex() + (NoLessonHours.Count > 0 ? (NoLessonHours.Count - 1) : 0)]);
-                    //     });
-                    // }
                 }
 
                 if (PlayerPrefs.GetInt("ShowTussenUren") == 0)
@@ -167,6 +158,7 @@ public class WeekRoosterView : View
                 }
             }
 
+            NoLessonHours.Add(-1);
         }
         base.Initialize();
     }
@@ -174,18 +166,38 @@ public class WeekRoosterView : View
     [ContextMenu("Show Tussenuren")]
     public void showTussenUren()
     {
-        for (int i = 0; i < NoLessonHours.Count; i++)
+        List<int> temp = new List<int>();
+        temp = NoLessonHours;
+        
+        for (int i = 0, x = 0; i < NoLessonHours.Count; i++)
         {
-            RoosterItems[NoLessonHours[i] - 1].SetActive(true);
+            if (temp[i] != -1)
+            {
+                RoosterItems[temp[i] - 1 + (x * maxNumberOfLessons)].GetComponent<CanvasGroup>().alpha = 1f;
+            }
+            else
+            {
+                x++;
+            }
         }
     }
-
+    
     [ContextMenu("Hide Tussenuren")]
     public void hideTussenUren()
     {
-        for (int i = 0; i < NoLessonHours.Count; i++)
+        List<int> temp = new List<int>();
+        temp = NoLessonHours;
+        
+        for (int i = 0, x = 0; i < NoLessonHours.Count; i++)
         {
-            RoosterItems[NoLessonHours[i] - 1].SetActive(false);
+            if (temp[i] != -1)
+            {
+                RoosterItems[temp[i] - 1 + (x * maxNumberOfLessons)].GetComponent<CanvasGroup>().alpha = 0f;
+            }
+            else
+            {
+                x++;
+            }
         }
     }
 }

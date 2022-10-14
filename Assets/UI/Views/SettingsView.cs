@@ -14,7 +14,8 @@ public class SettingsView : View
     
     [Space]
     [SerializeField] private Toggle ShowTussenUren;
-    [SerializeField] private DagRoosterView roosterView;
+    [SerializeField] private DagRoosterView dagRoosterView;
+    [SerializeField] private WeekRoosterView weekRoosterView;
     
     [Space]
     [SerializeField] private TMP_InputField NumberOfDaysHomework;
@@ -47,11 +48,13 @@ public class SettingsView : View
 
             if (isOn)
             {
-                roosterView.showTussenUren();
+                dagRoosterView.showTussenUren();
+                weekRoosterView.showTussenUren();
             }
             else
             {
-                roosterView.hideTussenUren();
+                dagRoosterView.hideTussenUren();
+                weekRoosterView.hideTussenUren();
             }
         });
         

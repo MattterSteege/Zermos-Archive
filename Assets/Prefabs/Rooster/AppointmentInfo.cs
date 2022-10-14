@@ -65,4 +65,9 @@ public class AppointmentInfo : MonoBehaviour
     [SerializeField] TMP_Text docent;
     [SerializeField] TMP_Text lesUur;
     public Schedule.Appointment _appointment;
+    
+    public void hide()
+    {
+        this.gameObject.SetActive(false);
+    }
 }
