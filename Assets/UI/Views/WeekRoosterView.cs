@@ -33,7 +33,7 @@ public class WeekRoosterView : View
     public override void Initialize()
     {
         RefreshButton.onClick.AddListener(Initialize);
-        DagRoosterButton.onClick.AddListener(() => { ViewManager.Instance.Show<MainMenuView, DagRoosterView>(); });
+        DagRoosterButton.onClick.AddListener(() => { ViewManager.Instance.Show<NavBarView, DagRoosterView>(); });
 
         for (int i = 0; i < dagenVanDeWeek.Length; i++)
         {
@@ -99,7 +99,7 @@ public class WeekRoosterView : View
 
                     rooster.GetComponent<Button>().onClick.AddListener(() =>
                     {
-                        ViewManager.Instance.Show<RoosterItemView, MainMenuView>(rooster.GetComponent<AppointmentInfo>()
+                        ViewManager.Instance.Show<RoosterItemView, NavBarView>(rooster.GetComponent<AppointmentInfo>()
                             ._appointment);
                     });
 
@@ -128,7 +128,7 @@ public class WeekRoosterView : View
 
                     tussenUur.GetComponent<Button>().onClick.AddListener(() =>
                     {
-                        ViewManager.Instance.Show<RoosterItemView, MainMenuView>(tussenUur
+                        ViewManager.Instance.Show<RoosterItemView, NavBarView>(tussenUur
                             .GetComponent<AppointmentInfo>()._appointment);
                     });
 

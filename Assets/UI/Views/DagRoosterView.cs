@@ -36,7 +36,7 @@ public class DagRoosterView : View
     public override void Initialize()
     {
         RefreshButton.onClick.AddListener(Initialize);
-        WeekRoosterButton.onClick.AddListener(() => { ViewManager.Instance.Show<MainMenuView, WeekRoosterView>(); });
+        WeekRoosterButton.onClick.AddListener(() => { ViewManager.Instance.Show<NavBarView, WeekRoosterView>(); });
 
         content.transform.parent.parent.GetComponent<ScrollRect>().horizontal =
             PlayerPrefs.GetInt("UltraSatisfyingScheduleMode") == 1;
@@ -98,7 +98,7 @@ public class DagRoosterView : View
 
                 rooster.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    ViewManager.Instance.Show<RoosterItemView, MainMenuView>(rooster.GetComponent<AppointmentInfo>()._appointment);
+                    ViewManager.Instance.Show<RoosterItemView, NavBarView>(rooster.GetComponent<AppointmentInfo>()._appointment);
                 });
 
                 //must be at the end
@@ -125,7 +125,7 @@ public class DagRoosterView : View
                     
                 tussenUur.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    ViewManager.Instance.Show<RoosterItemView, MainMenuView>(tussenUur.GetComponent<AppointmentInfo>()._appointment);
+                    ViewManager.Instance.Show<RoosterItemView, NavBarView>(tussenUur.GetComponent<AppointmentInfo>()._appointment);
                 });
 
                 RoosterItems.Add(tussenUur);

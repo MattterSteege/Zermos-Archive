@@ -54,7 +54,7 @@ public class HomeworkView : View
             
             homeworkItem.GetComponent<Button>().onClick.AddListener(() =>
             {
-                ViewManager.Instance.Show<HomeworkItemView, MainMenuView>(homeworkItem.GetComponent<HomeworkInfo>().homeworkInfo);
+                ViewManager.Instance.Show<HomeworkItemView, NavBarView>(homeworkItem.GetComponent<HomeworkInfo>().homeworkInfo);
             });
             
             homeworkItem.GetComponent<HomeworkInfo>().gemaakt.onValueChanged.AddListener((bool isOn) =>
