@@ -1,59 +1,132 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UserInfoView : View
 {
     [SerializeField] private TMP_Text NaamText;
-    [SerializeField] private TMP_Text CodeText;
-    [SerializeField] private TMP_Text ZermeloAuthCodeText;
-    [SerializeField] private TMP_Text SchoolAbbreviationText;
-    [SerializeField] private GameObject ZermeloManager;
+    [SerializeField] private Button NaamTextButton;
+    
+    [SerializeField, Space] private TMP_Text CodeText;
+    [SerializeField] private Button CodeTextButton;
+    
+    [SerializeField, Space] private TMP_Text ZermeloAuthCodeText;
+    [SerializeField] private Button ZermeloAuthCodeTextButton;
+    
+    [SerializeField, Space] private TMP_Text SchoolAbbreviationText;
+    [SerializeField] private Button SchoolAbbreviationTextButton;
+    
+    [SerializeField, Space] private TMP_Text SomtodayAuthCodeText;
+    [SerializeField] private Button SomtodayAuthCodeTextButton;
+    
+    [SerializeField, Space] private GameObject ZermeloManager;
+    [SerializeField] private TMP_Text CopiedText;
 
     public override void Initialize()
     {
         string fullName = PlayerPrefs.GetString("zermelo-full_name");
         string userCode = PlayerPrefs.GetString("zermelo-user_code");
-        string accessToken = PlayerPrefs.GetString("zermelo-access_token");
+        string zermeloAccessToken = PlayerPrefs.GetString("zermelo-access_token");
         string schoolCode = PlayerPrefs.GetString("zermelo-school_code");
+        string SomtodayAccessToken = PlayerPrefs.GetString("somtoday-access_token");
+     
+        CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().alpha = 0;
         
         if (string.IsNullOrEmpty(fullName))
         {
-            NaamText.gameObject.SetActive(false);
+            NaamText.gameObject.transform.parent.gameObject.SetActive(false);
         }
         else
         {
             NaamText.text = fullName;
+            
+            NaamTextButton.onClick.AddListener(() =>
+            {
+                CopyToClipboard(fullName);
+                copyComplete("naam");
+            });
         }
         
         if (string.IsNullOrEmpty(userCode))
         {
-            CodeText.gameObject.SetActive(false);
+            CodeText.gameObject.transform.parent.gameObject.SetActive(false);
         }
         else
         {
             CodeText.text = userCode;
+            
+            CodeTextButton.onClick.AddListener(() =>
+            {
+                CopyToClipboard(userCode);
+                copyComplete("leerling code");
+            });
         }
         
-        if (string.IsNullOrEmpty(accessToken))
+        if (string.IsNullOrEmpty(zermeloAccessToken))
         {
-            ZermeloAuthCodeText.gameObject.SetActive(false);
+            ZermeloAuthCodeText.gameObject.transform.parent.gameObject.SetActive(false);
         }
         else
         {
-            ZermeloAuthCodeText.text = accessToken;
+            ZermeloAuthCodeText.text = zermeloAccessToken.Substring(0, 15) + "...";
+            
+            ZermeloAuthCodeTextButton.onClick.AddListener(() =>
+            {
+                CopyToClipboard(zermeloAccessToken);
+                copyComplete("Zermelo auth code");
+            });
         }
         
         if (string.IsNullOrEmpty(schoolCode))
         {
-            SchoolAbbreviationText.gameObject.SetActive(false);
+            SchoolAbbreviationText.gameObject.transform.parent.gameObject.SetActive(false);
         }
         else
         {
             SchoolAbbreviationText.text = schoolCode;
+            
+            SchoolAbbreviationTextButton.onClick.AddListener(() =>
+            {
+                CopyToClipboard(schoolCode);
+                copyComplete("school code");
+            });
+        }
+        
+        if (string.IsNullOrEmpty(SomtodayAccessToken))
+        {
+            SomtodayAuthCodeText.gameObject.transform.parent.gameObject.SetActive(false);
+        }
+        else
+        {
+            SomtodayAuthCodeText.text = SomtodayAccessToken.Substring(0, 15) + "...";
+            
+            SomtodayAuthCodeTextButton.onClick.AddListener(() =>
+            {
+                CopyToClipboard(SomtodayAccessToken);
+                copyComplete("Somtoday auth code");
+            });
         }
 
         base.Initialize();
+    }
+    
+    private void CopyToClipboard(string str) {
+        TextEditor textEditor = new TextEditor();
+        textEditor.text = str;
+        textEditor.SelectAll();
+        textEditor.Copy();
+    }
+
+    private void copyComplete(string copiedText)
+    {
+        CopiedText.text = copiedText + " Gekopieerd!";
+        
+        CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().DOFade(1, 0.5f).onComplete += () =>
+        {
+            CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().DOFade(0, 0.5f).SetDelay(1f);
+        };
     }
 }

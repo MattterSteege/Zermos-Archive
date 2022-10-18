@@ -16,17 +16,27 @@ using Random = UnityEngine.Random;
 
 public class AuthenticateSomtoday : MonoBehaviour
 {
-    [SerializeField] private string authToken;
+    [SerializeField, Header("The real auth token")]
+    private string AutherizationToken;
+
+    [SerializeField, Space] private string authToken;
     [SerializeField] private string authCode;
     [SerializeField] private string CodeVerifier;
     [SerializeField] private string CodeChallenge;
-    
+    private object cookies;
+
     [ContextMenu("Test Authentication")]
     public void test()
     {
-        startAuthentication("c23fbb99-be4b-4c11-bbf5-57e7fc4f4388", "58373@ccg-leerling.nl", "Somduck");
+        SomtodayAuthentication auth = startAuthentication("c23fbb99-be4b-4c11-bbf5-57e7fc4f4388", "58373@ccg-leerling.nl", "Somduck");
     }
-    
+
+    public void Start()
+    {
+        RefreshToken();
+    }
+
+    #region authenticate user
     public SomtodayAuthentication startAuthentication(string TENANT_UUID, string username, string password)
     {
         return new CoroutineWithData<SomtodayAuthentication>(this, AuthenticateUser(TENANT_UUID, username, password))
@@ -37,99 +47,142 @@ public class AuthenticateSomtoday : MonoBehaviour
     {
         GenerateTokens();
 
-        string baseUrl = string.Format(
-            "https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling://oauth/callback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state={0}&scope=openid&tenant_uuid={1}&session=no_session&code_challenge={2}&code_challenge_method=S256",
-            generateRandomString(8), TENANT_UUID, CodeChallenge);
-
-        UnityWebRequest www = HttpRequestGET(baseUrl);
-
-        if (www.responseCode != 302) yield return null;
-
-        string header = www.GetResponseHeader("Location");
-
-        Uri myUri = new Uri(header);
-
-        authToken = HttpUtility.ParseQueryString(myUri.Query).Get("auth");
-        
-        /*
-        FormUrlEncodedContent Content;
-        Content = new FormUrlEncodedContent(new Dictionary<string, string>()
+        var handler = new HttpClientHandler()
         {
-            {"loginLink", "x"},
-            {"usernameFieldPanel:usernameFieldPanel_body:usernameField", username}
-        });
+            AllowAutoRedirect = false
+        };
 
-        headers.Clear();
-        client.DefaultRequestHeaders.Accept.Add(
-            new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
-        client.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
-        HttpResponseMessage response2 = client
-            .PostAsync($"https://inloggen.somtoday.nl/?-1.-panel-signInForm&auth={authToken}", Content).Result;
+        var client = new HttpClient(handler, false);
 
-
-        Content = new FormUrlEncodedContent(new Dictionary<string, string>()
+        using (client)
         {
-            {"passwordFieldPanel:passwordFieldPanel_body:passwordField", password},
-            {"loginLink", "x"}
-        });
+            string baseUrl = string.Format(
+                "https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling://oauth/callback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state={0}&scope=openid&tenant_uuid={1}&session=no_session&code_challenge={2}&code_challenge_method=S256",
+                generateRandomString(8), "c23fbb99-be4b-4c11-bbf5-57e7fc4f4388", CodeChallenge);
 
-        HttpResponseMessage response3 = client
-            .PostAsync($"https://inloggen.somtoday.nl/login?1-1.-passwordForm&auth={authToken}", Content).Result;
+            var response = client.GetAsync(baseUrl).Result;
 
+            if (response.StatusCode != HttpStatusCode.Found) yield return null;
 
-        headers = response3.Headers;
-        IEnumerable<string> values3;
-        if (!headers.TryGetValues("Location", out values3)) return null;
+            HttpHeaders headers = response.Headers;
+            IEnumerable<string> values;
+            if (!headers.TryGetValues("Location", out values)) yield return null;
 
-        myUri = new Uri(values3.First());
+            Uri myUri = new Uri(values.First());
 
-        authCode = HttpUtility.ParseQueryString(myUri.Query).Get("code");
+            authToken = HttpUtility.ParseQueryString(myUri.Query).Get("auth");
 
+            FormUrlEncodedContent Content;
+            Content = new FormUrlEncodedContent(new Dictionary<string, string>()
+            {
+                {"loginLink", "x"},
+                {"usernameFieldPanel:usernameFieldPanel_body:usernameField", username}
+            });
 
-        //https://inloggen.somtoday.nl/oauth2/token
-        Content = new FormUrlEncodedContent(new Dictionary<string, string>()
-        {
-            {"", ""}
-        });
-        headers.Clear();
-        client.DefaultRequestHeaders.Remove("origin");
-        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*//*"));
-        HttpResponseMessage response4 = client.PostAsync(
-            $"https://inloggen.somtoday.nl/oauth2/token?grant_type=authorization_code&session=no_session&scope=openid&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&code={authCode}&code_verifier={CodeVerifier}",
-            Content).Result;
-        SomtodayAuthentication somtodayResponse =
-            JsonConvert.DeserializeObject<SomtodayAuthentication>(response4.Content.ReadAsStringAsync().Result);
-        return somtodayResponse;
-        */
-
-        yield return null;
-    }
+            headers.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+            client.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
+            HttpResponseMessage response2 = client
+                .PostAsync($"https://inloggen.somtoday.nl/?-1.-panel-signInForm&auth={authToken}", Content).Result;
 
 
-    private UnityWebRequest HttpRequestGET(string baseURL)
-    {
-        UnityWebRequest www = UnityWebRequest.Get(baseURL);
-        www.redirectLimit = 0;
-        www.SendWebRequest();
-        while (!www.isDone)
-        {
+            Content = new FormUrlEncodedContent(new Dictionary<string, string>()
+            {
+                {"passwordFieldPanel:passwordFieldPanel_body:passwordField", password},
+                {"loginLink", "x"}
+            });
+
+            HttpResponseMessage response3 = client
+                .PostAsync($"https://inloggen.somtoday.nl/login?1-1.-passwordForm&auth={authToken}", Content).Result;
+
+
+            headers = response3.Headers;
+            IEnumerable<string> values3;
+            if (!headers.TryGetValues("Location", out values3)) yield return null;
+
+            myUri = new Uri(values3.First());
+
+            authCode = HttpUtility.ParseQueryString(myUri.Query).Get("code");
+            
+            Content = new FormUrlEncodedContent(new Dictionary<string, string>()
+            {
+                {"", ""}
+            });
+            headers.Clear();
+            client.DefaultRequestHeaders.Remove("origin");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
+            HttpResponseMessage response4 = client.PostAsync(
+                $"https://inloggen.somtoday.nl/oauth2/token?grant_type=authorization_code&session=no_session&scope=openid&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&code={authCode}&code_verifier={CodeVerifier}",
+                Content).Result;
+            SomtodayAuthentication somtodayAuthentication =
+                JsonConvert.DeserializeObject<SomtodayAuthentication>(response4.Content.ReadAsStringAsync().Result);
+            
+            AutherizationToken = somtodayAuthentication.access_token;
+            yield return somtodayAuthentication;
         }
-
-        return www;
     }
+    #endregion
 
-    private UnityWebRequest HttpRequestPOST(string baseURL)
+    #region Refresh token
+    public SomtodayAuthentication RefreshToken()
     {
-        UnityWebRequest www = UnityWebRequest.Post(baseURL, "");
-        www.redirectLimit = 0;
-        www.SendWebRequest();
-        while (!www.isDone)
-        {
-        }
+        if (string.IsNullOrEmpty(PlayerPrefs.GetString("somtoday-refresh_token"))) return null;
 
-        return www;
+        WWWForm form = new WWWForm();
+        form.AddField("grant_type", "refresh_token");
+        form.AddField("refresh_token", PlayerPrefs.GetString("somtoday-refresh_token"));
+        form.AddField("scope", "openid");
+        form.AddField("client_id", "D50E0C06-32D1-4B41-A137-A9A850C892C2");
+        UnityWebRequest www = UnityWebRequest.Post($"https://inloggen.somtoday.nl/oauth2/token", form);
+         www.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+         
+         www.SendWebRequest();
+         while (!www.isDone) { }
+         
+         if (www.result == UnityWebRequest.Result.ProtocolError)
+         {
+             Debug.Log(www.error);
+         }
+         else
+         {
+             SomtodayAuthentication somtodayAuthentication = JsonConvert.DeserializeObject<SomtodayAuthentication>(www.downloadHandler.text);
+             PlayerPrefs.SetString("somtoday-refresh_token", somtodayAuthentication.refresh_token);
+             PlayerPrefs.SetString("somtoday-access_token", somtodayAuthentication.access_token);
+             www.Dispose();
+             return somtodayAuthentication;
+         }
+
+         www.Dispose();
+         return null;
     }
+    #endregion
 
+    #region Check token
+    public bool checkToken()
+    {
+        UnityWebRequest www = UnityWebRequest.Get($"https://api.somtoday.nl/rest/v1/leerlingen");
+        www.SetRequestHeader("Authorization", $"Bearer {PlayerPrefs.GetString("somtoday-access_token")}");
+        www.SendWebRequest();
+        while (!www.isDone) { }
+        if (www.result == UnityWebRequest.Result.ProtocolError)
+        {
+            Debug.Log(www.error);
+            if (www.error == "401 Unauthorized")
+            {
+                RefreshToken();
+            }
+            
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    #endregion
+
+    #region model
     public class SomtodayAuthentication
     {
         public string access_token { get; set; }
@@ -142,7 +195,9 @@ public class AuthenticateSomtoday : MonoBehaviour
         public string token_type { get; set; }
         public int expires_in { get; set; }
     }
+    #endregion
 
+    #region code Verifier/Challenge/random string
     private static string generateRandomString(int count)
     {
         var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -155,9 +210,6 @@ public class AuthenticateSomtoday : MonoBehaviour
 
         return new String(stringChars);
     }
-
-
-    #region code Verifier/Challenge
 
     public void GenerateTokens()
     {

@@ -1,0 +1,120 @@
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.UI;
+
+public class HomeworkView : View
+{
+    [SerializeField] Homework homeworkObject;    
+    [SerializeField] GameObject homeworkPrefab;    
+    [SerializeField] GameObject content;    
+    [SerializeField] GameObject DividerPrefab;    
+    
+    //[SerializeField] private Button RefreshButton;
+    
+    public override void Initialize()
+    {
+        foreach (Transform child in content.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        
+        //RefreshButton.onClick.AddListener(Initialize);
+        List<Homework.Item> homework = homeworkObject.getHomework();
+
+        if (homework == null)
+        {
+            base.Initialize();
+            return;
+        }
+        
+        int day = 0;
+        
+        foreach (Homework.Item HomeworkItem in homework)
+        {
+            if (HomeworkItem.datumTijd.Day > day)
+            {
+                var go = Instantiate(DividerPrefab, content.transform);
+                go.GetComponent<homeworkDivider>().Datum.text = ((DateTimeOffset) HomeworkItem.datumTijd).DateTime.ToString("d MMMM");
+            }
+            if (HomeworkItem.datumTijd.Day < day)
+            {
+                var go = Instantiate(DividerPrefab, content.transform);
+                go.GetComponent<homeworkDivider>().Datum.text = ((DateTimeOffset) HomeworkItem.datumTijd).DateTime.ToString("d MMMM");
+            }
+            
+            var homeworkItem = Instantiate(homeworkPrefab, content.transform);
+
+            string onderwerp = HomeworkItem.studiewijzerItem.onderwerp;
+            
+            if (onderwerp.Length == 0)
+                onderwerp = HomeworkItem.studiewijzerItem.omschrijving;
+            
+            string vak;
+            try
+            {
+                vak = HomeworkItem.lesgroep.vak.naam;
+            }
+            catch (Exception)
+            {
+                vak = "error";
+            }
+
+            homeworkItem.GetComponent<HomeworkInfo>().SetHomeworkInfo(vak, onderwerp, HomeworkItem.additionalObjects.swigemaaktVinkjes?.items[0].gemaakt ?? false, HomeworkItem);
+            
+            homeworkItem.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                ViewManager.Instance.Show<HomeworkItemView, NavBarView>(homeworkItem.GetComponent<HomeworkInfo>().homeworkInfo);
+            });
+            
+            homeworkItem.GetComponent<HomeworkInfo>().gemaakt.onValueChanged.AddListener((bool isOn) =>
+            {
+                bool succesfull = UpdateGemaaktStatus(HomeworkItem, isOn);
+                
+                homeworkItem.GetComponent<HomeworkInfo>().gemaakt.SetIsOnWithoutNotify(succesfull);
+            });
+
+            
+            day = HomeworkItem.datumTijd.Day;
+        }
+        
+        base.Initialize();
+    }
+
+    private bool UpdateGemaaktStatus(Homework.Item HomeworkItem, bool gemaakt)
+    {
+        string json = ("{\"leerling\": {\"links\": [{\"id\": {id},\"rel\": \"self\",\"href\": \"{apiUrl}/rest/v1/leerlingen/{id}\"}]},\"gemaakt\": {gemaakt}}")
+            .Replace("{id}", HomeworkItem.additionalObjects.leerlingen.items[0].links[0].id.ToString())
+            .Replace("{apiUrl}", PlayerPrefs.GetString("somtoday-api_url"))
+            .Replace("{gemaakt}", gemaakt.ToString().ToLower());
+        
+        UnityWebRequest www = UnityWebRequest.Put($"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/swigemaakt/{HomeworkItem.additionalObjects.swigemaaktVinkjes.items[0].links[0].id}", json);
+        
+        www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
+        
+        www.SetRequestHeader("Accept", "application/json");
+        www.SetRequestHeader("Content-Type", "application/json");
+        www.SendWebRequest();
+        
+        while (!www.isDone)
+        {
+        }
+        
+        if (www.result == UnityWebRequest.Result.Success)
+        {
+            if (www.downloadHandler.text.Contains("\"gemaakt\":true"))
+            {
+                www.Dispose();
+                return true;
+            }
+            
+            www.Dispose();
+            return false;
+        }
+
+        www.Dispose();
+        return false;
+    }
+    
+}

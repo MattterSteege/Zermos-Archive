@@ -5,6 +5,7 @@ public abstract class View : MonoBehaviour
 	public bool IsInitialized { get; private set; }
 	public object args { get; private set; }
 
+	[ContextMenu("Refresh")]
 	public virtual void Initialize()
 	{
 		IsInitialized = true;

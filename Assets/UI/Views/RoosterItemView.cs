@@ -3,28 +3,35 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RoosterItemView : View
 {
-    private Schedule.Appointment appointment;
+    [SerializeField] private Schedule.Appointment appointment;
     
     [SerializeField] TMP_Text lokaal;
     [SerializeField] TMP_Text tijd;
     [SerializeField] TMP_Text vak;
     [SerializeField] TMP_Text docent;
-    
-    private void Load()
+    [SerializeField] Image background;
+    [SerializeField] private GameObject inplanLesPrefab;
+    [SerializeField] private GameObject inplanLesContainer;
+
+    public override void Show(object args = null)
     {
-        appointment = (Schedule.Appointment)args;
-        
-        ViewManager.Instance.onLoad -= Load;
+        this.appointment = (Schedule.Appointment)args;
         
         Initialize();
+        
+        base.Show();
     }
     
     public override void Initialize()
     {
-        ViewManager.Instance.onLoad += Load;
+        foreach (Transform child in inplanLesContainer.transform)
+        {
+            Destroy(child.gameObject);
+        }
         
         try
         {
@@ -57,11 +64,33 @@ public class RoosterItemView : View
                 vak.text = String.Join(", ", subjects);;
                 docent.text = String.Join(", ", teachers);;
             }
-            else if (appointment.actions[0].post != null)
-            {
-                
-            }
             
+            if (appointment.actions.Count > 0)
+            {
+                for (int i = 0; i < appointment.actions.Count; i++)
+                {
+                    if (appointment.actions[i].allowed == false) break;
+                    
+                    GameObject inplanLes = Instantiate(inplanLesPrefab, inplanLesContainer.transform);
+                    inplanLes.GetComponent<InPlanLes>().post = appointment.actions[i].post;
+                    
+                    inplanLes.GetComponent<AppointmentInfo>().SetAppointmentInfo(String.Join(", ", appointment.actions[i].appointment.locations),
+                        DateTimeOffset.FromUnixTimeSeconds(appointment.actions[i].appointment.start).AddHours(2).UtcDateTime
+                            .ToShortTimeString() + " - " + DateTimeOffset.FromUnixTimeSeconds(appointment.actions[i].appointment.end)
+                            .AddHours(2).UtcDateTime
+                            .ToShortTimeString(), String.Join(", ", appointment.actions[i].appointment.teachers), String.Join(", ", appointment.actions[i].appointment.subjects), appointment.actions[i].appointment.startTimeSlotName, appointment.actions[i].appointment);
+                    
+                    inplanLes.GetComponent<Button>().onClick.AddListener(() =>
+                    {
+                        inplanLes.GetComponent<InPlanLes>().enrollIntoLesson();
+                    });
+                }
+            }
+
+            if (appointment.status.Count > 0 && appointment.status[0].code == 4007)
+            {
+                background.color = new Color(1f, 0f, 0f, 0.5f);
+            }
         }
         catch(NullReferenceException){}
     }

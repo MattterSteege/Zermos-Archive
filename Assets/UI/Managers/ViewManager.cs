@@ -1,22 +1,11 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public sealed class ViewManager : MonoBehaviour
 {
 	public static ViewManager Instance { get; private set; }
 	
-	public delegate void OnLoad();
-
-	public event OnLoad onLoad;
-
-	private void RaiseOnLoad()
-	{
-		if (onLoad != null)
-		{
-			onLoad();
-		}
-	}
-
 	[SerializeField]
 	private bool autoInitialize;
 
@@ -34,34 +23,57 @@ public sealed class ViewManager : MonoBehaviour
 		Instance = this;
 	}
 
-	private void Start()
+	private IEnumerator Start()
 	{
-		if (autoInitialize) Initialize();
+		yield return new WaitForEndOfFrame();
+		if (autoInitialize) StartCoroutine(Initialize());
 	}
 
-	public void Initialize()
+	public delegate void OnInitializeComplete();
+	public static event OnInitializeComplete onInitializeComplete;
+	
+	public IEnumerator Initialize()
 	{
+		View BuggedView = null;
+		
 		foreach (View view in views)
 		{
-			view.Initialize();
+			if (view != null)
+			{
+				yield return new WaitForEndOfFrame();
+				
+				try
+				{
+					view.Initialize();
+				}
+				catch (Exception e)
+				{
+					Debug.LogException(e);
+					BuggedView = view;
+				}
 
-			view.Hide();
+				view.Hide();
+			}
 		}
 
 		if(string.IsNullOrEmpty(PlayerPrefs.GetString("zermelo-access_token")))
 		{
 			Loginview.Show();
-			return;
+			yield break;
 		}
 		
 		if (defaultViews != null)
 		{
 			foreach (View view in defaultViews)
 			{
-				view.Show(null);
+				if (BuggedView != view)
+				{
+					view.Show(null);
+				}
 			}
 		}
 		
+		if (onInitializeComplete != null) onInitializeComplete();
 	}
 
 	public void Show<TView>(object args = null) where TView : View
@@ -70,7 +82,6 @@ public sealed class ViewManager : MonoBehaviour
 		{
 			if (view is TView)
 			{
-				RaiseOnLoad();
 				view.Show(args);
 			}
 			else
@@ -87,7 +98,6 @@ public sealed class ViewManager : MonoBehaviour
 			if (view is TView || view is TView2)
 			{
 				view.Show(args);
-				RaiseOnLoad();
 			}
 			else
 			{
@@ -103,7 +113,6 @@ public sealed class ViewManager : MonoBehaviour
 			if (view is TView || view is TView2 || view is TView3)
 			{
 				view.Show(args);
-				RaiseOnLoad();
 			}
 			else
 			{
@@ -111,7 +120,7 @@ public sealed class ViewManager : MonoBehaviour
 			}
 		}
 	}
-
+	
 	public void Refresh<TView>(object args = null) where TView : View
 	{
 		foreach (View view in views)
