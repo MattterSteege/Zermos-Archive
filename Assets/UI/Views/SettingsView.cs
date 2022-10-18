@@ -23,6 +23,11 @@ public class SettingsView : View
     [SerializeField] private Button NumberOfDaysHomeworkMinus;
     [SerializeField] private Button HomeworkRefreshButton;
     
+    [Space]
+    [SerializeField] private TMP_InputField minutesBeforeClass;
+    [SerializeField] private Button minutesBeforeClassPlus;
+    [SerializeField] private Button minutesBeforeClassMinus;
+
     [Header("Koppelingen")]
     [SerializeField] private Button SomtodayKoppeling;
     [SerializeField] private Button ZermeloKoppeling;
@@ -58,6 +63,7 @@ public class SettingsView : View
             }
         });
         
+        //--------------------------------------------------------------------------------
         if(PlayerPrefs.GetInt("numberofdayshomework") == 0)
         {
             PlayerPrefs.SetInt("numberofdayshomework", 14);
@@ -103,22 +109,51 @@ public class SettingsView : View
             HomeworkRefreshButton.GetComponent<CanvasGroup>().DOFade(0f, 0.2f);
             HomeworkRefreshButton.gameObject.SetActive(false);
         });
-
+        
+        //--------------------------------------------------------------------------------
+        minutesBeforeClass.text = PlayerPrefs.GetInt("minutesbeforeclass").ToString();
+        minutesBeforeClass.onValueChanged.AddListener((string value) =>
+        {
+            int number;
+            if (int.TryParse(value, out number))
+            {
+                PlayerPrefs.SetInt("minutesbeforeclass", number);
+            }
+        });
+        minutesBeforeClassPlus.onClick.AddListener(() =>
+        {
+            int minutes = int.Parse(minutesBeforeClass.text);
+            minutes++;
+            minutesBeforeClass.text = minutes.ToString();
+            PlayerPrefs.SetInt("minutesbeforeclass", minutes);
+        });
+        minutesBeforeClassMinus.onClick.AddListener(() =>
+        {
+            int minutes = int.Parse(minutesBeforeClass.text);
+            if(minutes <= 1)
+            {
+                return;
+            }
+            minutes--;
+            minutesBeforeClass.text = minutes.ToString();
+            PlayerPrefs.SetInt("minutesbeforeclass", minutes);
+        });
+        
         SomtodayKoppeling.onClick.AddListener(() =>
         {
-            ViewManager.Instance.Show<ConnectSomtodayView, NavBarView>();
+            ViewManager.Instance.Show<ConnectSomtodayView>();
         });
         
         ZermeloKoppeling.onClick.AddListener(() =>
         {
-            ViewManager.Instance.Show<ConnectZermeloView, NavBarView>();
+            ViewManager.Instance.Show<ConnectZermeloView>();
         });
         
         userInfo.onClick.AddListener(() =>
         {
-            ViewManager.Instance.Show<UserInfoView, NavBarView>();
+            ViewManager.Instance.Show<UserInfoView>();
         });
-        
+
         PlayerPrefs.Save();
         
         base.Initialize();

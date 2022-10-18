@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
@@ -61,5 +62,15 @@ public class HomeworkItemView : View
             ToetsPill.SetActive(false);
             GroteToetsPill.SetActive(true); //
         }
+        
+        var m1 = Regex.Matches(Omschrijving.text, @"(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])");
+        
+        foreach (var result in m1)
+        {
+            Omschrijving.text = Omschrijving.text.Replace(result.ToString(), "<u><color=\"blue\"><link=" + result + ">" + result + "</link></color></u>");
+        }
     }
+    
+    //regex /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/g
+    
 }

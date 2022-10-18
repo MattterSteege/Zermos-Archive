@@ -33,6 +33,17 @@ public class HomeworkView : View
         
         foreach (Homework.Item HomeworkItem in homework)
         {
+            if (HomeworkItem.datumTijd.Day > day)
+            {
+                var go = Instantiate(DividerPrefab, content.transform);
+                go.GetComponent<homeworkDivider>().Datum.text = ((DateTimeOffset) HomeworkItem.datumTijd).DateTime.ToString("d MMMM");
+            }
+            if (HomeworkItem.datumTijd.Day < day)
+            {
+                var go = Instantiate(DividerPrefab, content.transform);
+                go.GetComponent<homeworkDivider>().Datum.text = ((DateTimeOffset) HomeworkItem.datumTijd).DateTime.ToString("d MMMM");
+            }
+            
             var homeworkItem = Instantiate(homeworkPrefab, content.transform);
 
             string onderwerp = HomeworkItem.studiewijzerItem.onderwerp;
@@ -64,16 +75,6 @@ public class HomeworkView : View
                 homeworkItem.GetComponent<HomeworkInfo>().gemaakt.SetIsOnWithoutNotify(succesfull);
             });
 
-            if (HomeworkItem.datumTijd.Day > day)
-            {
-                var go = Instantiate(DividerPrefab, content.transform);
-                go.GetComponent<homeworkDivider>().Datum.text = ((DateTimeOffset) HomeworkItem.datumTijd).DateTime.ToString("d MMMM");
-            }
-            if (HomeworkItem.datumTijd.Day < day)
-            {
-                var go = Instantiate(DividerPrefab, content.transform);
-                go.GetComponent<homeworkDivider>().Datum.text = ((DateTimeOffset) HomeworkItem.datumTijd).DateTime.ToString("d MMMM");
-            }
             
             day = HomeworkItem.datumTijd.Day;
         }

@@ -41,9 +41,10 @@ public class Homework : MonoBehaviour
         json = www.downloadHandler.text
             .Replace("<p>", "").Replace("</p>", "")
             .Replace("<ul>", "").Replace("</ul>", "")
-            .Replace("<li>", "").Replace("</li>", "")
+            .Replace("<li>", "• ").Replace("</li>", "")
             .Replace("&amp;", "&")
-            .Replace("<em>", "").Replace("</em>", "");
+            .Replace("<strong>", "<b>").Replace("</strong>", "</b>")
+            .Replace("<em>", "<i>").Replace("</em>", "</i>");
         
         homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
 
@@ -72,9 +73,11 @@ public class Homework : MonoBehaviour
             var extraHomework = JsonConvert.DeserializeObject<SomtodayHomework>(www.downloadHandler.text
                 .Replace("<p>", "").Replace("</p>", "")
                 .Replace("<ul>", "").Replace("</ul>", "")
-                .Replace("<li>", "").Replace("</li>", "")
-                .Replace("&amp;", "&")
-                .Replace("<em>", "").Replace("</em>", ""));
+                .Replace("<li>", "• ").Replace("</li>", "")
+                .Replace("&amp;", "&").Replace("<br>", "\n")
+                .Replace("<strong>", "<b>").Replace("</strong>", "</b>")
+                .Replace("<em>", "<i>").Replace("</em>", "</i>"));
+            
             if (extraHomework != null)
             {
                 for (int i = 0; i < extraHomework.items.Count; i++)

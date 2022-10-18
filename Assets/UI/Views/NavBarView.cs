@@ -75,6 +75,11 @@ public sealed class NavBarView : View
 			{
 				ViewManager.Instance.Show<SettingsView, NavBarView>();
 			});
+			
+			HomeButton.onClick.AddListener(() =>
+			{
+				ViewManager.Instance.Show<MainMenuView, NavBarView>();
+			});
 		}
 
 		base.Initialize();
