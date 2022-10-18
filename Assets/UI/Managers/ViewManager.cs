@@ -38,19 +38,22 @@ public sealed class ViewManager : MonoBehaviour
 		
 		foreach (View view in views)
 		{
-			yield return new WaitForEndOfFrame();
-			
-			try
+			if (view != null)
 			{
-				view.Initialize();
-			}
-			catch (Exception e)
-			{
-				Debug.LogException(e);
-				BuggedView = view;
-			}
+				yield return new WaitForEndOfFrame();
+				
+				try
+				{
+					view.Initialize();
+				}
+				catch (Exception e)
+				{
+					Debug.LogException(e);
+					BuggedView = view;
+				}
 
-			view.Hide();
+				view.Hide();
+			}
 		}
 
 		if(string.IsNullOrEmpty(PlayerPrefs.GetString("zermelo-access_token")))
