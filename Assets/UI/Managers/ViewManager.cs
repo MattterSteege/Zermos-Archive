@@ -29,9 +29,10 @@ public sealed class ViewManager : MonoBehaviour
 		if (autoInitialize) StartCoroutine(Initialize());
 	}
 
-	public delegate void OnInitializeComplete();
-	public static event OnInitializeComplete onInitializeComplete;
-	
+	public delegate void OnIntializeComplete();
+
+	public static event OnIntializeComplete onInitializeComplete;
+
 	public IEnumerator Initialize()
 	{
 		View BuggedView = null;
@@ -73,7 +74,10 @@ public sealed class ViewManager : MonoBehaviour
 			}
 		}
 		
-		if (onInitializeComplete != null) onInitializeComplete();
+		if (onInitializeComplete != null)
+		{
+			onInitializeComplete();
+		}
 	}
 
 	public void Show<TView>(object args = null) where TView : View

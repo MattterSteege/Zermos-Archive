@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CijferView : View
@@ -8,6 +9,8 @@ public class CijferView : View
     [SerializeField] private GameObject content;
     [SerializeField] private GameObject gradePrefab;
     [SerializeField] private Grades gradesObject;
+    
+    private List<Grades.Item> lastGrades = new List<Grades.Item>();
 
     [ContextMenu("Refresh")]
     public override void Initialize()
@@ -15,6 +18,8 @@ public class CijferView : View
         var grades = gradesObject.getGrades();
         if (grades == null) return;
 
+        lastGrades = grades.items.TakeLast(3).ToList();
+        
         foreach (Transform child in content.transform)
         {
             Destroy(child.gameObject);
@@ -37,5 +42,14 @@ public class CijferView : View
 
             base.Initialize();
         }
+    }
+}
+
+public static class MiscExtensions
+{
+    // Ex: collection.TakeLast(5);
+    public static IEnumerable<T> TakeLast<T>(this IEnumerable<T> source, int N)
+    {
+        return source.Skip(Math.Max(0, source.Count() - N));
     }
 }

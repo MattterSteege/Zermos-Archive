@@ -38,6 +38,9 @@ public class LoadingScreen : MonoBehaviour
     {
         done = true;
         Destroy(loadingScreen);
+        
+        ViewManager.Instance.Refresh<MainMenuView>();
+        ViewManager.Instance.Show<MainMenuView, NavBarView>();
     }
 
     IEnumerator LoadingText()
