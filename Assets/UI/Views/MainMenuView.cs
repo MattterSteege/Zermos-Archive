@@ -100,10 +100,11 @@ public class MainMenuView : View
     
     private void Countdowns()
     {
+        if(IsVisible == false) return;
+        
         Schedule.Appointment currentAppointment = GetCurrentLesson(appointments);
-        if (currentAppointment == null || IsVisible == false) return;
-
-        if (UnixTimeStampToDateTime(currentAppointment.start) <= DateTime.Now)
+        
+        if (currentAppointment == null)
         {
             tijdText1.gameObject.SetActive(false);
             tijdText2.gameObject.SetActive(true);
@@ -132,35 +133,18 @@ public class MainMenuView : View
 
         tijdText2.text = span.ToString(@"hh\:mm\:ss") + " tot " + currentAppointment.subjects[0];
 
-        // if (span > new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
-        //         .AddSeconds(appointments[int.Parse(currentAppointment.startTimeSlotName)].start).ToLocalTime() - DateTime.Now)
-        // {
-        //     currentLesson++;
-        // }
-
         #endregion
     }
 
     private Schedule.Appointment GetCurrentLesson(List<Schedule.Appointment> appointments)
     {
+        if (appointments.Count == 0) return null;
+        
         var a = appointments.Where(x => new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(x.start)
                 .ToLocalTime() > DateTime.Now)
             .OrderBy(x => x.start)
-            .First();
+            .FirstOrDefault();
 
         return a;
-    }
-    
-    public static double DateTimeToUnixTimestamp(DateTime dateTime)
-    {
-        return (dateTime - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
-    }
-    
-    public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
-    {
-        // Unix timestamp is seconds past epoch
-        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        dateTime = dateTime.AddSeconds(unixTimeStamp).ToLocalTime();
-        return dateTime;
     }
 }

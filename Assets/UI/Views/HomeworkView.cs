@@ -11,6 +11,8 @@ public class HomeworkView : View
     [SerializeField] GameObject content;    
     [SerializeField] GameObject DividerPrefab;    
     
+    [SerializeField] private CustomHomework _CustomHomework;
+    
     //[SerializeField] private Button RefreshButton;
     
     public override void Initialize()
@@ -46,9 +48,9 @@ public class HomeworkView : View
             
             var homeworkItem = Instantiate(homeworkPrefab, content.transform);
 
-            string onderwerp = HomeworkItem.studiewijzerItem.onderwerp;
+            string onderwerp = HomeworkItem.studiewijzerItem.onderwerp ?? "";
             
-            if (onderwerp.Length == 0)
+            if (onderwerp == "" || onderwerp.Length == 0)
                 onderwerp = HomeworkItem.studiewijzerItem.omschrijving;
             
             string vak;
@@ -70,9 +72,16 @@ public class HomeworkView : View
             
             homeworkItem.GetComponent<HomeworkInfo>().gemaakt.onValueChanged.AddListener((bool isOn) =>
             {
-                bool succesfull = UpdateGemaaktStatus(HomeworkItem, isOn);
-                
-                homeworkItem.GetComponent<HomeworkInfo>().gemaakt.SetIsOnWithoutNotify(succesfull);
+                if (HomeworkItem.gemaakt == false)
+                {
+                    bool succesfull = UpdateGemaaktStatus(HomeworkItem, isOn);
+                    
+                    homeworkItem.GetComponent<HomeworkInfo>().gemaakt.SetIsOnWithoutNotify(succesfull);
+                }
+                else
+                {
+                    _CustomHomework.SetCustomHomework(int.Parse(HomeworkItem.UUID), HomeworkItem.lesgroep.vak.naam, HomeworkItem.studiewijzerItem.omschrijving, HomeworkItem.datumTijd, isOn);
+                }
             });
 
             

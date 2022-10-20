@@ -9,6 +9,8 @@ using UnityEngine.Networking;
 
 public class Homework : MonoBehaviour
 {
+    [SerializeField] private CustomHomework _CustomHomework;
+    
     [ContextMenu("get homework")]
     public List<Item> getHomework()
     {
@@ -90,6 +92,8 @@ public class Homework : MonoBehaviour
         var weekHomework = GetWeekHomework();
         
         homework?.items.AddRange(weekHomework);
+        homework?.items.AddRange(_CustomHomework.GetCustomHomeWork());
+        
         homework = Sort(homework);
 
         return homework.items;
@@ -172,7 +176,7 @@ public class Homework : MonoBehaviour
         {
             homeworkItem.datumTijd = getDateFromWeeknumber(homeworkItem.weeknummerVanaf, DateTime.Now.Year);
         }
-        
+
         homework = Sort(homework);
 
         return homework.items;

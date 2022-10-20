@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 997
   m_ShowMode: 4
-  m_Title: Console
+  m_Title: Git for Unity
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 57
+  controlID: 65
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 58
+  controlID: 66
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 59
+  controlID: 67
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -189,8 +189,8 @@ MonoBehaviour:
     y: 0
     width: 321
     height: 636
-  m_MinSize: {x: 201, y: 221}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 13}
   m_Panes:
   - {fileID: 13}
@@ -215,8 +215,8 @@ MonoBehaviour:
     y: 0
     width: 1195
     height: 636
-  m_MinSize: {x: 202, y: 221}
-  m_MaxSize: {x: 4002, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 15}
   m_Panes:
   - {fileID: 14}
@@ -242,8 +242,8 @@ MonoBehaviour:
     y: 636
     width: 1516
     height: 311
-  m_MinSize: {x: 101, y: 121}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 100, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 12}
@@ -260,7 +260,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: InspectorWindow
+  m_Name: Window
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -269,15 +269,15 @@ MonoBehaviour:
     y: 0
     width: 404
     height: 947
-  m_MinSize: {x: 276, y: 71}
-  m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 17}
+  m_MinSize: {x: 100, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_ActualView: {fileID: 19}
   m_Panes:
   - {fileID: 17}
   - {fileID: 18}
   - {fileID: 19}
   - {fileID: 20}
-  m_Selected: 0
+  m_Selected: 2
   m_LastSelected: 1
 --- !u!114 &12
 MonoBehaviour:
@@ -320,22 +320,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/UI/Views
+    - Assets/_Somtoday
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 67
   m_LastFolders:
-  - Assets/UI/Views
+  - Assets/_Somtoday
   m_LastFoldersGridSize: 67
   m_LastProjectPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 38}
-    m_SelectedIDs: 527e0000
-    m_LastClickedID: 32338
-    m_ExpandedIDs: 00000000b65d0000b85d0000ba5d0000bc5d0000be5d0000c05d0000
+    scrollPos: {x: 0, y: 31}
+    m_SelectedIDs: 626a0000
+    m_LastClickedID: 27234
+    m_ExpandedIDs: 00000000b05d0000b25d0000b45d0000b65d0000b85d0000ba5d0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -363,7 +363,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000b65d0000b85d0000ba5d0000bc5d0000be5d0000c05d0000
+    m_ExpandedIDs: 00000000b05d0000b25d0000b45d0000b65d0000b85d0000ba5d0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -388,9 +388,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: cc550000
-    m_LastClickedInstanceID: 21964
-    m_HadKeyboardFocusLastEvent: 0
+    m_SelectedInstanceIDs: 38580000
+    m_LastClickedInstanceID: 22584
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000526a0100bcdd0100f0370300b4d90100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -452,7 +452,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: ecf8ffff24f9fffff4f9ffff20fbffff
+      m_ExpandedIDs: 02dbfeff34dbfeff12dcfeff26fbffffa6560000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -862,7 +862,7 @@ MonoBehaviour:
     m_VAllowExceedBaseRangeMax: 1
     m_ScaleWithWindow: 0
     m_HSlider: 0
-    m_VSlider: 1
+    m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
     m_EnableMouseInput: 1
     m_EnableSliderZoomHorizontal: 0
@@ -875,7 +875,7 @@ MonoBehaviour:
       y: 21
       width: 1193
       height: 594
-    m_Scale: {x: 0.25625, y: 0.25625}
+    m_Scale: {x: 0.24749999, y: 0.2475}
     m_Translation: {x: 596.5, y: 297}
     m_MarginLeft: 0
     m_MarginRight: 0
@@ -883,12 +883,12 @@ MonoBehaviour:
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -2327.805
-      y: -1159.0244
-      width: 4655.61
-      height: 2318.0488
+      x: -2410.101
+      y: -1200
+      width: 4820.202
+      height: 2400
     m_MinimalGUI: 1
-  m_defaultScale: 0.25625
+  m_defaultScale: 0.2475
   m_LastWindowPixelSize: {x: 1193, y: 615}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
@@ -957,7 +957,7 @@ MonoBehaviour:
     m_CachedPref: 209
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
-  m_LastInspectedObjectInstanceID: -1
+  m_LastInspectedObjectInstanceID: 22584
   m_LastVerticalScrollValue: 0
   m_GlobalObjectId: 
   m_InspectorMode: 0
@@ -1026,8 +1026,8 @@ MonoBehaviour:
   currentBranchAndRemoteHasUpdate: 0
   currentTrackingStatusHasUpdate: 0
   currentStatusEntriesHasUpdate: 0
-  repositoryProgressHasUpdate: 1
-  appManagerProgressHasUpdate: 1
+  repositoryProgressHasUpdate: 0
+  appManagerProgressHasUpdate: 0
   changeTab: 3
   activeTab: 3
   initProjectView:
@@ -1112,9 +1112,9 @@ MonoBehaviour:
     localBranches: []
     remoteBranches: []
   changesView:
-    currentBranchHasUpdate: 1
-    currentStatusEntriesHasUpdate: 1
-    currentLocksHasUpdate: 1
+    currentBranchHasUpdate: 0
+    currentStatusEntriesHasUpdate: 0
+    currentLocksHasUpdate: 0
     commitBody: 
     commitMessage: 
     currentBranch: main
@@ -1124,10 +1124,6 @@ MonoBehaviour:
         keys:
         - 00000000000000001000000000000000
         - 2cda990e2423bbf4892e6590ba056729
-        - 385e5acba03b12045be0bdf06a2c4464
-        - 1c23ede5499a4b74c89f2dc54955741c
-        - fca78733e2dcc974db5ad27fb387bffe
-        - bd0a4522d1a9bbd4cbe761463daa2bcf
         values:
         - path: Assets
           label: Assets
@@ -1165,161 +1161,13 @@ MonoBehaviour:
             originalPath: 
             indexStatus: 0
             workTreeStatus: 3
-        - path: Assets\UI
-          label: UI
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\UI\Views
-          label: Views
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\UI\Views\CijferView.cs
-          label: CijferView.cs
-          level: 3
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\UI\Views\CijferView.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\CijferView.cs
-            projectPath: Assets\UI\Views\CijferView.cs
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
-        - path: Assets\UI\Views\MainMenuView.cs
-          label: MainMenuView.cs
-          level: 3
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\UI\Views\MainMenuView.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\MainMenuView.cs
-            projectPath: Assets\UI\Views\MainMenuView.cs
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
       folders:
         keys:
         - Assets
-        - Assets\UI
-        - Assets\UI\Views
-        - UserSettings
-        - UserSettings\Layouts
         values:
         - path: Assets
           label: Assets
           level: 0
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\UI
-          label: UI
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\UI\Views
-          label: Views
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: UserSettings
-          label: UserSettings
-          level: 0
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: UserSettings\Layouts
-          label: Layouts
-          level: 1
           isFolder: 1
           isContainer: 0
           isCollapsed: 0
@@ -1399,132 +1247,6 @@ MonoBehaviour:
           originalPath: 
           indexStatus: 0
           workTreeStatus: 3
-      - path: Assets\UI
-        label: UI
-        level: 1
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\UI\Views
-        label: Views
-        level: 2
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\UI\Views\CijferView.cs
-        label: CijferView.cs
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\UI\Views\CijferView.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\CijferView.cs
-          projectPath: Assets\UI\Views\CijferView.cs
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: Assets\UI\Views\MainMenuView.cs
-        label: MainMenuView.cs
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\UI\Views\MainMenuView.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\MainMenuView.cs
-          projectPath: Assets\UI\Views\MainMenuView.cs
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: UserSettings
-        label: UserSettings
-        level: 0
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: UserSettings\Layouts
-        label: Layouts
-        level: 1
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: UserSettings\Layouts\default-2021.dwlt
-        label: default-2021.dwlt
-        level: 2
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: UserSettings\Layouts\default-2021.dwlt
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\UserSettings\Layouts\default-2021.dwlt
-          projectPath: UserSettings\Layouts\default-2021.dwlt
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
       selectedNode:
         path: 
         label: 
@@ -1551,33 +1273,15 @@ MonoBehaviour:
       originalPath: 
       indexStatus: 0
       workTreeStatus: 3
-    - path: Assets\UI\Views\CijferView.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\CijferView.cs
-      projectPath: Assets\UI\Views\CijferView.cs
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: Assets\UI\Views\MainMenuView.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\MainMenuView.cs
-      projectPath: Assets\UI\Views\MainMenuView.cs
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: UserSettings\Layouts\default-2021.dwlt
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\UserSettings\Layouts\default-2021.dwlt
-      projectPath: UserSettings\Layouts\default-2021.dwlt
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    changedFilesText: 4 changed files
+    changedFilesText: 1 changed file
     lastCurrentBranchChangedEvent:
-      updatedTimeString: 2022-10-19T20:34:47.360+02:00
+      updatedTimeString: 2022-10-20T09:17:43.653+02:00
       cacheType: 1
     lastStatusEntriesChangedEvent:
-      updatedTimeString: 2022-10-19T20:34:55.855+02:00
+      updatedTimeString: 2022-10-20T09:18:41.959+02:00
       cacheType: 6
     lastLocksChangedEvent:
-      updatedTimeString: 2022-10-19T20:33:20.653+02:00
+      updatedTimeString: 2022-10-20T09:16:17.063+02:00
       cacheType: 7
   historyView:
     currentLogHasUpdate: 0
@@ -10999,13 +10703,13 @@ MonoBehaviour:
     m_Image: {fileID: 0}
     m_Tooltip: Url of the origin remote
   lastCurrentBranchAndRemoteChangedEvent:
-    updatedTimeString: 2022-10-18T17:33:34.157+02:00
+    updatedTimeString: 2022-10-20T09:17:43.653+02:00
     cacheType: 1
   lastTrackingStatusChangedEvent:
-    updatedTimeString: 2022-10-18T17:48:39.738+02:00
+    updatedTimeString: 2022-10-20T09:18:42.022+02:00
     cacheType: 5
   lastStatusEntriesChangedEvent:
-    updatedTimeString: 2022-10-18T17:48:39.523+02:00
+    updatedTimeString: 2022-10-20T09:18:41.959+02:00
     cacheType: 6
   pullButtonContent:
     m_Text: Pull
@@ -11023,7 +10727,7 @@ MonoBehaviour:
     m_Text: Fetch
     m_Image: {fileID: 0}
     m_Tooltip: 
-  repositoryProgressValue: 1
+  repositoryProgressValue: 0
   repositoryProgressMessage: 
   appManagerProgressValue: 1
   appManagerProgressMessage: 

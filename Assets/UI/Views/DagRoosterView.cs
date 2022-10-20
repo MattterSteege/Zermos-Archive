@@ -121,7 +121,7 @@ public class DagRoosterView : View
                 }
                 
                 tussenUur.GetComponent<AppointmentInfo>()
-                    .SetAppointmentInfo("", "", "", "", i.ToString(), appointment);
+                    .SetAppointmentInfo("Geen les", "", "", "", i.ToString(), appointment);
                     
                 tussenUur.GetComponent<Button>().onClick.AddListener(() =>
                 {

@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 25
+  controlID: -1
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -34,137 +34,89 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 1
-  m_Script: {fileID: 12014, guid: 0000000000000000e000000000000000, type: 0}
+  m_Script: {fileID: 12015, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MinSize: {x: 230, y: 250}
-  m_MaxSize: {x: 10000, y: 10000}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_TitleContent:
-    m_Text: Project
-    m_Image: {fileID: -5467254957812901981, guid: 0000000000000000d000000000000000, type: 0}
+    m_Text: Game
+    m_Image: {fileID: -6423792434712278376, guid: 0000000000000000d000000000000000, type: 0}
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 0
-    y: 709
-    width: 1516
-    height: 290
+    x: 321
+    y: 73
+    width: 1193
+    height: 615
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
     m_SaveData: []
-  m_SearchFilter:
-    m_NameFilter: 
-    m_ClassNames: []
-    m_AssetLabels: []
-    m_AssetBundleNames: []
-    m_VersionControlStates: []
-    m_SoftLockControlStates: []
-    m_ReferencingInstanceIDs: 
-    m_SceneHandles: 
-    m_ShowAllHits: 0
-    m_SkipHidden: 0
-    m_SearchArea: 1
-    m_Folders:
-    - Assets/Plugins
-    m_Globs: []
-    m_OriginalText: 
-  m_ViewMode: 1
-  m_StartGridSize: 67
-  m_LastFolders:
-  - Assets/Plugins
-  m_LastFoldersGridSize: 67
-  m_LastProjectPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday
-  m_LockTracker:
-    m_IsLocked: 0
-  m_FolderTreeState:
-    scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: d45b0000
-    m_LastClickedID: 23508
-    m_ExpandedIDs: 00000000b05b0000d45b0000da5b00005ab60000
-    m_RenameOverlay:
-      m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
-      m_EditFieldRect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 0
-        height: 0
-      m_UserData: 0
-      m_IsWaitingForDelay: 0
-      m_IsRenaming: 0
-      m_OriginalEventType: 11
-      m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 0}
-    m_SearchString: 
-    m_CreateAssetUtility:
-      m_EndAction: {fileID: 0}
-      m_InstanceID: 0
-      m_Path: 
-      m_Icon: {fileID: 0}
-      m_ResourceFile: 
-  m_AssetTreeState:
-    scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 
-    m_LastClickedID: 0
-    m_ExpandedIDs: 00000000b05b0000
-    m_RenameOverlay:
-      m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
-      m_EditFieldRect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 0
-        height: 0
-      m_UserData: 0
-      m_IsWaitingForDelay: 0
-      m_IsRenaming: 0
-      m_OriginalEventType: 11
-      m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 0}
-    m_SearchString: 
-    m_CreateAssetUtility:
-      m_EndAction: {fileID: 0}
-      m_InstanceID: 0
-      m_Path: 
-      m_Icon: {fileID: 0}
-      m_ResourceFile: 
-  m_ListAreaState:
-    m_SelectedInstanceIDs: bca70000
-    m_LastClickedInstanceID: 42940
-    m_HadKeyboardFocusLastEvent: 0
-    m_ExpandedInstanceIDs: c6230000
-    m_RenameOverlay:
-      m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
-      m_EditFieldRect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 0
-        height: 0
-      m_UserData: 0
-      m_IsWaitingForDelay: 0
-      m_IsRenaming: 0
-      m_OriginalEventType: 11
-      m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 10}
-    m_CreateAssetUtility:
-      m_EndAction: {fileID: 0}
-      m_InstanceID: 0
-      m_Path: 
-      m_Icon: {fileID: 0}
-      m_ResourceFile: 
-    m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 0}
-    m_GridSize: 67
-  m_SkipHiddenPackages: 0
-  m_DirectoriesAreaWidth: 207
+  m_SerializedViewNames: []
+  m_SerializedViewValues: []
+  m_PlayModeViewName: GameView
+  m_ShowGizmos: 0
+  m_TargetDisplay: 0
+  m_ClearColor: {r: 0, g: 0, b: 0, a: 0}
+  m_TargetSize: {x: 1080, y: 2400}
+  m_TextureFilterMode: 0
+  m_TextureHideFlags: 61
+  m_RenderIMGUI: 1
+  m_EnterPlayModeBehavior: 0
+  m_UseMipMap: 0
+  m_VSyncEnabled: 0
+  m_Gizmos: 0
+  m_Stats: 0
+  m_SelectedSizes: 00000000000000000000000012000000000000000000000000000000000000000000000000000000
+  m_ZoomArea:
+    m_HRangeLocked: 0
+    m_VRangeLocked: 0
+    hZoomLockedByDefault: 0
+    vZoomLockedByDefault: 0
+    m_HBaseRangeMin: -540
+    m_HBaseRangeMax: 540
+    m_VBaseRangeMin: -1200
+    m_VBaseRangeMax: 1200
+    m_HAllowExceedBaseRangeMin: 1
+    m_HAllowExceedBaseRangeMax: 1
+    m_VAllowExceedBaseRangeMin: 1
+    m_VAllowExceedBaseRangeMax: 1
+    m_ScaleWithWindow: 0
+    m_HSlider: 0
+    m_VSlider: 0
+    m_IgnoreScrollWheelUntilClicked: 0
+    m_EnableMouseInput: 0
+    m_EnableSliderZoomHorizontal: 0
+    m_EnableSliderZoomVertical: 0
+    m_UniformScale: 1
+    m_UpDirection: 1
+    m_DrawArea:
+      serializedVersion: 2
+      x: 0
+      y: 21
+      width: 1193
+      height: 594
+    m_Scale: {x: 0.24749999, y: 0.2475}
+    m_Translation: {x: 596.5, y: 297}
+    m_MarginLeft: 0
+    m_MarginRight: 0
+    m_MarginTop: 0
+    m_MarginBottom: 0
+    m_LastShownAreaInsideMargins:
+      serializedVersion: 2
+      x: -2410.101
+      y: -1200
+      width: 4820.202
+      height: 2400
+    m_MinimalGUI: 1
+  m_defaultScale: 0.2475
+  m_LastWindowPixelSize: {x: 1193, y: 615}
+  m_ClearInEditMode: 1
+  m_NoCameraWarning: 1
+  m_LowResolutionForAspectRatios: 01000001000000000000
+  m_XRRenderMode: 0
+  m_RenderTexture: {fileID: 0}
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -179,17 +131,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Children:
   - {fileID: 4}
-  - {fileID: 10}
+  - {fileID: 9}
   m_Position:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1517
+    width: 1516
     height: 947
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 26
+  controlID: -1
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -209,12 +161,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1517
+    width: 1516
     height: 636
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 78
+  controlID: -1
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -234,8 +186,8 @@ MonoBehaviour:
     y: 0
     width: 321
     height: 636
-  m_MinSize: {x: 201, y: 221}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 6}
   m_Panes:
   - {fileID: 6}
@@ -272,23 +224,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: bca70000
-      m_LastClickedID: 42940
-      m_ExpandedIDs: 26fbffff
+      m_SelectedIDs: def7feff
+      m_LastClickedID: -67618
+      m_ExpandedIDs: 26fbffffaa560000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: Canvas
-        m_OriginalName: Canvas
+        m_Name: 
+        m_OriginalName: 
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 42940
+        m_UserData: 0
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 0
+        m_OriginalEventType: 11
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 5}
       m_SearchString: 
@@ -308,23 +260,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: SceneView
+  m_Name: GameView
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
     x: 321
     y: 0
-    width: 1196
+    width: 1195
     height: 636
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
-  m_ActualView: {fileID: 8}
+  m_ActualView: {fileID: 2}
   m_Panes:
   - {fileID: 8}
-  - {fileID: 9}
-  m_Selected: 0
-  m_LastSelected: 1
+  - {fileID: 2}
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -347,7 +299,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 321
     y: 73
-    width: 1194
+    width: 1193
     height: 615
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
@@ -572,9 +524,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 148.5, y: 297, z: 0}
+    m_Target: {x: 539.18726, y: 269.7537, z: -10.100965}
     speed: 2
-    m_Value: {x: 148.5, y: 297, z: 0}
+    m_Value: {x: 539.18726, y: 269.7537, z: -10.100965}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -591,7 +543,7 @@ MonoBehaviour:
     showImageEffects: 1
     showParticleSystems: 1
     showVisualEffectGraphs: 1
-    m_FxEnabled: 1
+    m_FxEnabled: 0
   m_Grid:
     xGrid:
       m_Fade:
@@ -611,23 +563,23 @@ MonoBehaviour:
       m_Size: {x: 1, y: 1}
     zGrid:
       m_Fade:
-        m_Target: 1
+        m_Target: 0
         speed: 2
-        m_Value: 1
+        m_Value: 0
       m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 0.4}
       m_Pivot: {x: 0, y: 0, z: 0}
       m_Size: {x: 1, y: 1}
-    m_ShowGrid: 1
+    m_ShowGrid: 0
     m_GridAxis: 1
-    m_gridOpacity: 0.5
+    m_gridOpacity: 0.465
   m_Rotation:
     m_Target: {x: 0, y: 0, z: 0, w: 1}
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 332.0561
+    m_Target: 588.0169
     speed: 2
-    m_Value: 332.0561
+    m_Value: 588.0169
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -661,89 +613,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 1
-  m_Script: {fileID: 12015, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
+  m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: ConsoleWindow
   m_EditorClassIdentifier: 
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
-  m_TitleContent:
-    m_Text: Game
-    m_Image: {fileID: -6423792434712278376, guid: 0000000000000000d000000000000000, type: 0}
-    m_Tooltip: 
-  m_Pos:
+  m_Children: []
+  m_Position:
     serializedVersion: 2
-    x: 321
-    y: 73
-    width: 1194
-    height: 615
-  m_ViewDataDictionary: {fileID: 0}
-  m_OverlayCanvas:
-    m_LastAppliedPresetName: Default
-    m_SaveData: []
-  m_SerializedViewNames: []
-  m_SerializedViewValues: []
-  m_PlayModeViewName: GameView
-  m_ShowGizmos: 0
-  m_TargetDisplay: 0
-  m_ClearColor: {r: 0, g: 0, b: 0, a: 0}
-  m_TargetSize: {x: 297, y: 594}
-  m_TextureFilterMode: 0
-  m_TextureHideFlags: 61
-  m_RenderIMGUI: 1
-  m_EnterPlayModeBehavior: 0
-  m_UseMipMap: 0
-  m_VSyncEnabled: 0
-  m_Gizmos: 0
-  m_Stats: 0
-  m_SelectedSizes: 0000000000000000000000000f000000000000000000000000000000000000000000000000000000
-  m_ZoomArea:
-    m_HRangeLocked: 0
-    m_VRangeLocked: 0
-    hZoomLockedByDefault: 0
-    vZoomLockedByDefault: 0
-    m_HBaseRangeMin: -148.5
-    m_HBaseRangeMax: 148.5
-    m_VBaseRangeMin: -297
-    m_VBaseRangeMax: 297
-    m_HAllowExceedBaseRangeMin: 1
-    m_HAllowExceedBaseRangeMax: 1
-    m_VAllowExceedBaseRangeMin: 1
-    m_VAllowExceedBaseRangeMax: 1
-    m_ScaleWithWindow: 0
-    m_HSlider: 0
-    m_VSlider: 0
-    m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 1
-    m_EnableSliderZoomHorizontal: 0
-    m_EnableSliderZoomVertical: 0
-    m_UniformScale: 1
-    m_UpDirection: 1
-    m_DrawArea:
-      serializedVersion: 2
-      x: 0
-      y: 21
-      width: 1194
-      height: 594
-    m_Scale: {x: 1, y: 1}
-    m_Translation: {x: 597, y: 297}
-    m_MarginLeft: 0
-    m_MarginRight: 0
-    m_MarginTop: 0
-    m_MarginBottom: 0
-    m_LastShownAreaInsideMargins:
-      serializedVersion: 2
-      x: -597
-      y: -297
-      width: 1194
-      height: 594
-    m_MinimalGUI: 1
-  m_defaultScale: 1
-  m_LastWindowPixelSize: {x: 1194, y: 615}
-  m_ClearInEditMode: 1
-  m_NoCameraWarning: 1
-  m_LowResolutionForAspectRatios: 01000001000000000000
-  m_XRRenderMode: 0
-  m_RenderTexture: {fileID: 0}
+    x: 0
+    y: 636
+    width: 1516
+    height: 311
+  m_MinSize: {x: 100, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_ActualView: {fileID: 11}
+  m_Panes:
+  - {fileID: 10}
+  - {fileID: 11}
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -753,24 +640,137 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 1
-  m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ProjectBrowser
+  m_Script: {fileID: 12014, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
   m_EditorClassIdentifier: 
-  m_Children: []
-  m_Position:
+  m_MinSize: {x: 230, y: 250}
+  m_MaxSize: {x: 10000, y: 10000}
+  m_TitleContent:
+    m_Text: Project
+    m_Image: {fileID: -5467254957812901981, guid: 0000000000000000d000000000000000, type: 0}
+    m_Tooltip: 
+  m_Pos:
     serializedVersion: 2
     x: 0
-    y: 636
-    width: 1517
-    height: 311
-  m_MinSize: {x: 231, y: 271}
-  m_MaxSize: {x: 10001, y: 10021}
-  m_ActualView: {fileID: 2}
-  m_Panes:
-  - {fileID: 2}
-  - {fileID: 11}
-  m_Selected: 0
-  m_LastSelected: 1
+    y: 709
+    width: 1515
+    height: 290
+  m_ViewDataDictionary: {fileID: 0}
+  m_OverlayCanvas:
+    m_LastAppliedPresetName: Default
+    m_SaveData: []
+  m_SearchFilter:
+    m_NameFilter: 
+    m_ClassNames: []
+    m_AssetLabels: []
+    m_AssetBundleNames: []
+    m_VersionControlStates: []
+    m_SoftLockControlStates: []
+    m_ReferencingInstanceIDs: 
+    m_SceneHandles: 
+    m_ShowAllHits: 0
+    m_SkipHidden: 0
+    m_SearchArea: 1
+    m_Folders:
+    - Assets/UI/Views
+    m_Globs: []
+    m_OriginalText: 
+  m_ViewMode: 1
+  m_StartGridSize: 67
+  m_LastFolders:
+  - Assets/UI/Views
+  m_LastFoldersGridSize: 67
+  m_LastProjectPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday
+  m_LockTracker:
+    m_IsLocked: 0
+  m_FolderTreeState:
+    scrollPos: {x: 0, y: 114}
+    m_SelectedIDs: 305e0000
+    m_LastClickedID: 24112
+    m_ExpandedIDs: 00000000d25d0000d45d0000d65d0000d85d0000da5d0000dc5d00002a5e0000425e0000
+    m_RenameOverlay:
+      m_UserAcceptedRename: 0
+      m_Name: 
+      m_OriginalName: 
+      m_EditFieldRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      m_UserData: 0
+      m_IsWaitingForDelay: 0
+      m_IsRenaming: 0
+      m_OriginalEventType: 11
+      m_IsRenamingFilename: 1
+      m_ClientGUIView: {fileID: 0}
+    m_SearchString: 
+    m_CreateAssetUtility:
+      m_EndAction: {fileID: 0}
+      m_InstanceID: 0
+      m_Path: 
+      m_Icon: {fileID: 0}
+      m_ResourceFile: 
+  m_AssetTreeState:
+    scrollPos: {x: 0, y: 0}
+    m_SelectedIDs: 
+    m_LastClickedID: 0
+    m_ExpandedIDs: 00000000d25d0000d45d0000d65d0000d85d0000da5d0000dc5d0000
+    m_RenameOverlay:
+      m_UserAcceptedRename: 0
+      m_Name: 
+      m_OriginalName: 
+      m_EditFieldRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      m_UserData: 0
+      m_IsWaitingForDelay: 0
+      m_IsRenaming: 0
+      m_OriginalEventType: 11
+      m_IsRenamingFilename: 1
+      m_ClientGUIView: {fileID: 0}
+    m_SearchString: 
+    m_CreateAssetUtility:
+      m_EndAction: {fileID: 0}
+      m_InstanceID: 0
+      m_Path: 
+      m_Icon: {fileID: 0}
+      m_ResourceFile: 
+  m_ListAreaState:
+    m_SelectedInstanceIDs: def7feff
+    m_LastClickedInstanceID: -67618
+    m_HadKeyboardFocusLastEvent: 1
+    m_ExpandedInstanceIDs: c6230000526a0100bcdd0100f0370300b4d90100
+    m_RenameOverlay:
+      m_UserAcceptedRename: 0
+      m_Name: 
+      m_OriginalName: 
+      m_EditFieldRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      m_UserData: 0
+      m_IsWaitingForDelay: 0
+      m_IsRenaming: 0
+      m_OriginalEventType: 11
+      m_IsRenamingFilename: 1
+      m_ClientGUIView: {fileID: 9}
+    m_CreateAssetUtility:
+      m_EndAction: {fileID: 0}
+      m_InstanceID: 0
+      m_Path: 
+      m_Icon: {fileID: 0}
+      m_ResourceFile: 
+    m_NewAssetIndexInList: -1
+    m_ScrollPosition: {x: 0, y: 0}
+    m_GridSize: 67
+  m_SkipHiddenPackages: 0
+  m_DirectoriesAreaWidth: 207
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -793,7 +793,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 709
-    width: 1516
+    width: 1515
     height: 290
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
@@ -809,24 +809,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: GithubIssuesEditor
+  m_Name: InspectorWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 1517
+    x: 1516
     y: 0
-    width: 403
+    width: 404
     height: 947
-  m_MinSize: {x: 101, y: 121}
-  m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 16}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_ActualView: {fileID: 13}
   m_Panes:
   - {fileID: 13}
   - {fileID: 14}
   - {fileID: 15}
   - {fileID: 16}
-  m_Selected: 3
+  m_Selected: 0
   m_LastSelected: 2
 --- !u!114 &13
 MonoBehaviour:
@@ -848,9 +848,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1517
+    x: 1516
     y: 73
-    width: 402
+    width: 403
     height: 926
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
@@ -859,10 +859,10 @@ MonoBehaviour:
   m_ObjectsLockedBeforeSerialization: []
   m_InstanceIDsLockedBeforeSerialization: 
   m_PreviewResizer:
-    m_CachedPref: 160
+    m_CachedPref: 209
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
-  m_LastInspectedObjectInstanceID: 42940
+  m_LastInspectedObjectInstanceID: -1
   m_LastVerticalScrollValue: 0
   m_GlobalObjectId: 
   m_InspectorMode: 0
@@ -889,9 +889,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1517
+    x: 1516
     y: 73
-    width: 402
+    width: 403
     height: 926
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
@@ -917,9 +917,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1517
+    x: 1516
     y: 73
-    width: 402
+    width: 403
     height: 926
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
@@ -928,7 +928,7 @@ MonoBehaviour:
   progressMessageClearTime: -1
   notificationClearTime: -1
   timeSinceLastRotation: -1
-  currentBranchAndRemoteHasUpdate: 1
+  currentBranchAndRemoteHasUpdate: 0
   currentTrackingStatusHasUpdate: 1
   currentStatusEntriesHasUpdate: 1
   repositoryProgressHasUpdate: 1
@@ -1019,7 +1019,7 @@ MonoBehaviour:
   changesView:
     currentBranchHasUpdate: 1
     currentStatusEntriesHasUpdate: 1
-    currentLocksHasUpdate: 0
+    currentLocksHasUpdate: 1
     commitBody: 
     commitMessage: 
     currentBranch: main
@@ -1028,49 +1028,7 @@ MonoBehaviour:
       assets:
         keys:
         - 00000000000000001000000000000000
-        - e4435d122f3c76d44ba97dd077e15ae8
-        - 6173302953ae75d459be5093c18ccd91
-        - 809c6381a5e0a4e40865092f7a2440d7
-        - e193f019d4a1aa547a647fb0a7e9653e
-        - ffb746b3692094e4ba3528c73b61d48b
-        - ba712cdc24ad76e449ddecf4f9244702
-        - b45c7b45c9256a745978ed0eb3cf5663
-        - d2e45ca1b6714194e90f7eb923c3f243
-        - 9dd219ac2bff62648a6ae1c651c2eb5b
-        - 1c5d0ac416e6c7847bc6fc71a0c41f8b
-        - a6e5e67a77ff0402b907d9f025feb0f8
-        - c97afc556caea1c44969477eb7ddec74
-        - 1151db2560eece8479e4bcc5b3cd61a6
-        - 08b9668e533c0bd4791452c426ebb7f2
-        - 4cd83d00b51ef00478d702b1f778fb56
-        - 2c18a220c5b2c9646b4a84d208413f59
-        - 68b9283fe9de7f7499fd97e7e2ac6142
-        - a6daffb58583c3c44a160d392af5c9f7
-        - 427b1f20ba357174baa40486ad9a7851
-        - 4127fdd470523484489494b52b2ba553
-        - 345a2d69e18d3ea4e924109b1ce46ba3
-        - ee4a787704a2b8349a09a4b8b6070a5e
-        - 59701ed772ccf9a4f908b3995c4a7a04
-        - ab1225cfa2ec2d24b8a5a79030cc49af
-        - f4aa6e86381e4824880beec28723da16
-        - 704f7953e6332af40bddc5466bd52c6e
-        - abd543cfbfe488c47b5f408102c391ec
-        - ec47d33fcea717440bf1679516ebd84c
-        - 7a4bbe309a4c4cd4484f7d077027a7b0
-        - 6dfd85869103c8947a115d1e79dd5d19
         - 2cda990e2423bbf4892e6590ba056729
-        - 385e5acba03b12045be0bdf06a2c4464
-        - bf75e05e2d685af479576ddf19d7b330
-        - 38f71149df02ff04c870924df42c5558
-        - bf495898d6d098949aeeca0b81061c23
-        - 1c23ede5499a4b74c89f2dc54955741c
-        - 3d2c76f7ff0c1a94a9c6f646b4d3496d
-        - 723a4e40f83442bf80164f5fecc2c361
-        - 82fabad955bd5c24787ed33f5d9507ff
-        - b38a5f975e96e0d4bb0a537aa61fd5d2
-        - 0000000000000000b000000000000000
-        - 0000000000000000c000000000000000
-        - 00000000000000004000000000000000
         values:
         - path: Assets
           label: Assets
@@ -1090,728 +1048,8 @@ MonoBehaviour:
             originalPath: 
             indexStatus: 0
             workTreeStatus: 0
-        - path: Assets\_Somtoday
-          label: _Somtoday
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\_Somtoday\Homework.cs
-          label: Homework.cs
-          level: 2
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\_Somtoday\Homework.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\_Somtoday\Homework.cs
-            projectPath: Assets\_Somtoday\Homework.cs
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
-        - path: Assets\Art
-          label: Art
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Art\settingsIcon.png
-          label: settingsIcon.png
-          level: 2
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Art\settingsIcon.png
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Art\settingsIcon.png
-            projectPath: Assets\Art\settingsIcon.png
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Plugins
-          label: Plugins
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Plugins\CrystalFramework
-          label: CrystalFramework
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Plugins\CrystalFramework\Utility
-          label: Utility
-          level: 3
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Plugins\CrystalFramework\Utility\Demos
-          label: Demos
-          level: 4
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs
-          label: SafeAreaDemo.cs
-          level: 5
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs
-            projectPath: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt
-          label: SafeAreaDemo.txt
-          level: 5
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt
-            projectPath: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity
-          label: SafeAreaDemo.unity
-          level: 5
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity
-            projectPath: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Plugins\CrystalFramework\Utility\SafeArea.cs
-          label: SafeArea.cs
-          level: 4
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Plugins\CrystalFramework\Utility\SafeArea.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\SafeArea.cs
-            projectPath: Assets\Plugins\CrystalFramework\Utility\SafeArea.cs
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Plugins\git2.dll
-          label: git2.dll
-          level: 2
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Plugins\git2.dll
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\git2.dll
-            projectPath: Assets\Plugins\git2.dll
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 5
-        - path: Assets\Plugins\LibGit2Sharp.dll
-          label: LibGit2Sharp.dll
-          level: 2
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Plugins\LibGit2Sharp.dll
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\LibGit2Sharp.dll
-            projectPath: Assets\Plugins\LibGit2Sharp.dll
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 5
-        - path: Assets\Prefabs
-          label: Prefabs
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Prefabs\Grades
-          label: Grades
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Prefabs\Grades\GradeInfo.cs
-          label: GradeInfo.cs
-          level: 3
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Prefabs\Grades\GradeInfo.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Grades\GradeInfo.cs
-            projectPath: Assets\Prefabs\Grades\GradeInfo.cs
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Prefabs\Grades\GradePrefab.prefab
-          label: GradePrefab.prefab
-          level: 3
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Prefabs\Grades\GradePrefab.prefab
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Grades\GradePrefab.prefab
-            projectPath: Assets\Prefabs\Grades\GradePrefab.prefab
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Prefabs\Homework
-          label: Homework
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Prefabs\Homework\homeworkDivider.cs
-          label: homeworkDivider.cs
-          level: 3
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Prefabs\Homework\homeworkDivider.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\homeworkDivider.cs
-            projectPath: Assets\Prefabs\Homework\homeworkDivider.cs
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Prefabs\Homework\HomeworkInfo.cs
-          label: HomeworkInfo.cs
-          level: 3
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Prefabs\Homework\HomeworkInfo.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\HomeworkInfo.cs
-            projectPath: Assets\Prefabs\Homework\HomeworkInfo.cs
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Prefabs\Homework\HomeworkPrefab.prefab
-          label: HomeworkPrefab.prefab
-          level: 3
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Prefabs\Homework\HomeworkPrefab.prefab
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\HomeworkPrefab.prefab
-            projectPath: Assets\Prefabs\Homework\HomeworkPrefab.prefab
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Prefabs\Homework\HomeworkViewDivider.prefab
-          label: HomeworkViewDivider.prefab
-          level: 3
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Prefabs\Homework\HomeworkViewDivider.prefab
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\HomeworkViewDivider.prefab
-            projectPath: Assets\Prefabs\Homework\HomeworkViewDivider.prefab
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Prefabs\Rooster
-          label: Rooster
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Prefabs\Rooster\AppointmentInfo.cs
-          label: AppointmentInfo.cs
-          level: 3
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Prefabs\Rooster\AppointmentInfo.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\AppointmentInfo.cs
-            projectPath: Assets\Prefabs\Rooster\AppointmentInfo.cs
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Prefabs\Rooster\AppointmentPrefab.prefab
-          label: AppointmentPrefab.prefab
-          level: 3
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Prefabs\Rooster\AppointmentPrefab.prefab
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\AppointmentPrefab.prefab
-            projectPath: Assets\Prefabs\Rooster\AppointmentPrefab.prefab
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Prefabs\Rooster\InPlanLes.cs
-          label: InPlanLes.cs
-          level: 3
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Prefabs\Rooster\InPlanLes.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\InPlanLes.cs
-            projectPath: Assets\Prefabs\Rooster\InPlanLes.cs
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Prefabs\Rooster\InPlanLesPrefab.prefab
-          label: InPlanLesPrefab.prefab
-          level: 3
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Prefabs\Rooster\InPlanLesPrefab.prefab
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\InPlanLesPrefab.prefab
-            projectPath: Assets\Prefabs\Rooster\InPlanLesPrefab.prefab
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Prefabs\Rooster\TussenUurPrefab.prefab
-          label: TussenUurPrefab.prefab
-          level: 3
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Prefabs\Rooster\TussenUurPrefab.prefab
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\TussenUurPrefab.prefab
-            projectPath: Assets\Prefabs\Rooster\TussenUurPrefab.prefab
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Scenes
-          label: Scenes
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Scenes\MainScene.unity
-          label: MainScene.unity
-          level: 2
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Scenes\MainScene.unity
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Scenes\MainScene.unity
-            projectPath: Assets\Scenes\MainScene.unity
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
-        - path: Assets\UI
-          label: UI
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\UI\Managers
-          label: Managers
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\UI\Managers\screenManager.cs
-          label: screenManager.cs
-          level: 3
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\UI\Managers\screenManager.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Managers\screenManager.cs
-            projectPath: Assets\UI\Managers\screenManager.cs
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\UI\Managers\ViewManager.cs
-          label: ViewManager.cs
-          level: 3
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\UI\Managers\ViewManager.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Managers\ViewManager.cs
-            projectPath: Assets\UI\Managers\ViewManager.cs
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
-        - path: Assets\UI\Views
-          label: Views
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\UI\Views\HomeworkItemView.cs
-          label: HomeworkItemView.cs
-          level: 3
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\UI\Views\HomeworkItemView.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\HomeworkItemView.cs
-            projectPath: Assets\UI\Views\HomeworkItemView.cs
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
-        - path: Assets\UI\Views\HomeworkView.cs
-          label: HomeworkView.cs
-          level: 3
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\UI\Views\HomeworkView.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\HomeworkView.cs
-            projectPath: Assets\UI\Views\HomeworkView.cs
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
-        - path: Assets\UI\Views\RoosterItemView.cs
-          label: RoosterItemView.cs
-          level: 3
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\UI\Views\RoosterItemView.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\RoosterItemView.cs
-            projectPath: Assets\UI\Views\RoosterItemView.cs
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
-        - path: Assets\UI\Views\RoosterView.cs
-          label: RoosterView.cs
-          level: 3
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\UI\Views\RoosterView.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\RoosterView.cs
-            projectPath: Assets\UI\Views\RoosterView.cs
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
-        - path: ProjectSettings\EditorBuildSettings.asset
-          label: EditorBuildSettings.asset
+        - path: Assets\_MainScene.unity
+          label: _MainScene.unity
           level: 1
           isFolder: 0
           isContainer: 0
@@ -1822,341 +1060,20 @@ MonoBehaviour:
           checkState: 0
           isLocked: 0
           gitStatusEntry:
-            path: ProjectSettings\EditorBuildSettings.asset
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\ProjectSettings\EditorBuildSettings.asset
-            projectPath: ProjectSettings\EditorBuildSettings.asset
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
-        - path: ProjectSettings\EditorSettings.asset
-          label: EditorSettings.asset
-          level: 1
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: ProjectSettings\EditorSettings.asset
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\ProjectSettings\EditorSettings.asset
-            projectPath: ProjectSettings\EditorSettings.asset
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
-        - path: ProjectSettings\ProjectSettings.asset
-          label: ProjectSettings.asset
-          level: 1
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: ProjectSettings\ProjectSettings.asset
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\ProjectSettings\ProjectSettings.asset
-            projectPath: ProjectSettings\ProjectSettings.asset
+            path: Assets\_MainScene.unity
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\_MainScene.unity
+            projectPath: Assets\_MainScene.unity
             originalPath: 
             indexStatus: 0
             workTreeStatus: 3
       folders:
         keys:
         - Assets
-        - Assets\_Somtoday
-        - Assets\Art
-        - Assets\Plugins
-        - Assets\Plugins\CrystalFramework
-        - Assets\Plugins\CrystalFramework\Utility
-        - Assets\Plugins\CrystalFramework\Utility\Demos
-        - Assets\Prefabs
-        - Assets\Prefabs\Grades
-        - Assets\Prefabs\Homework
-        - Assets\Prefabs\Rooster
-        - Assets\Scenes
-        - Assets\UI
-        - Assets\UI\Managers
-        - Assets\UI\Views
-        - ProjectSettings
         - UserSettings
         - UserSettings\Layouts
         values:
         - path: Assets
           label: Assets
-          level: 0
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\_Somtoday
-          label: _Somtoday
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Art
-          label: Art
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Plugins
-          label: Plugins
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Plugins\CrystalFramework
-          label: CrystalFramework
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Plugins\CrystalFramework\Utility
-          label: Utility
-          level: 3
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Plugins\CrystalFramework\Utility\Demos
-          label: Demos
-          level: 4
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Prefabs
-          label: Prefabs
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Prefabs\Grades
-          label: Grades
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Prefabs\Homework
-          label: Homework
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Prefabs\Rooster
-          label: Rooster
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Scenes
-          label: Scenes
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\UI
-          label: UI
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\UI\Managers
-          label: Managers
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\UI\Views
-          label: Views
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: ProjectSettings
-          label: ProjectSettings
           level: 0
           isFolder: 1
           isContainer: 0
@@ -2255,44 +1172,8 @@ MonoBehaviour:
           originalPath: 
           indexStatus: 0
           workTreeStatus: 0
-      - path: Assets\_Somtoday
-        label: _Somtoday
-        level: 1
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\_Somtoday\Homework.cs
-        label: Homework.cs
-        level: 2
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\_Somtoday\Homework.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\_Somtoday\Homework.cs
-          projectPath: Assets\_Somtoday\Homework.cs
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: Assets\Art.meta
-        label: Art.meta
+      - path: Assets\_MainScene.unity
+        label: _MainScene.unity
         level: 1
         isFolder: 0
         isContainer: 0
@@ -2303,1575 +1184,9 @@ MonoBehaviour:
         checkState: 0
         isLocked: 0
         gitStatusEntry:
-          path: Assets\Art.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Art.meta
-          projectPath: Assets\Art.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Art
-        label: Art
-        level: 1
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\Art\settingsIcon.png
-        label: settingsIcon.png
-        level: 2
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Art\settingsIcon.png
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Art\settingsIcon.png
-          projectPath: Assets\Art\settingsIcon.png
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Art\settingsIcon.png.meta
-        label: settingsIcon.png.meta
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Art\settingsIcon.png.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Art\settingsIcon.png.meta
-          projectPath: Assets\Art\settingsIcon.png.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Plugins
-        label: Plugins
-        level: 1
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\Plugins\CrystalFramework.meta
-        label: CrystalFramework.meta
-        level: 2
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Plugins\CrystalFramework.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework.meta
-          projectPath: Assets\Plugins\CrystalFramework.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Plugins\CrystalFramework
-        label: CrystalFramework
-        level: 2
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\Plugins\CrystalFramework\Utility.meta
-        label: Utility.meta
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Plugins\CrystalFramework\Utility.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility.meta
-          projectPath: Assets\Plugins\CrystalFramework\Utility.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Plugins\CrystalFramework\Utility
-        label: Utility
-        level: 3
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\Plugins\CrystalFramework\Utility\Demos.meta
-        label: Demos.meta
-        level: 4
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Plugins\CrystalFramework\Utility\Demos.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\Demos.meta
-          projectPath: Assets\Plugins\CrystalFramework\Utility\Demos.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Plugins\CrystalFramework\Utility\Demos
-        label: Demos
-        level: 4
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs
-        label: SafeAreaDemo.cs
-        level: 5
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs
-          projectPath: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs.meta
-        label: SafeAreaDemo.cs.meta
-        level: 6
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs.meta
-          projectPath: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt
-        label: SafeAreaDemo.txt
-        level: 5
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt
-          projectPath: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt.meta
-        label: SafeAreaDemo.txt.meta
-        level: 6
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt.meta
-          projectPath: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity
-        label: SafeAreaDemo.unity
-        level: 5
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity
-          projectPath: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity.meta
-        label: SafeAreaDemo.unity.meta
-        level: 6
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity.meta
-          projectPath: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Plugins\CrystalFramework\Utility\SafeArea.cs
-        label: SafeArea.cs
-        level: 4
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Plugins\CrystalFramework\Utility\SafeArea.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\SafeArea.cs
-          projectPath: Assets\Plugins\CrystalFramework\Utility\SafeArea.cs
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Plugins\CrystalFramework\Utility\SafeArea.cs.meta
-        label: SafeArea.cs.meta
-        level: 5
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Plugins\CrystalFramework\Utility\SafeArea.cs.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\SafeArea.cs.meta
-          projectPath: Assets\Plugins\CrystalFramework\Utility\SafeArea.cs.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Plugins\git2.dll
-        label: git2.dll
-        level: 2
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Plugins\git2.dll
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\git2.dll
-          projectPath: Assets\Plugins\git2.dll
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Plugins\git2.dll.meta
-        label: git2.dll.meta
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Plugins\git2.dll.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\git2.dll.meta
-          projectPath: Assets\Plugins\git2.dll.meta
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Plugins\LibGit2Sharp.dll
-        label: LibGit2Sharp.dll
-        level: 2
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Plugins\LibGit2Sharp.dll
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\LibGit2Sharp.dll
-          projectPath: Assets\Plugins\LibGit2Sharp.dll
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Plugins\LibGit2Sharp.dll.meta
-        label: LibGit2Sharp.dll.meta
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Plugins\LibGit2Sharp.dll.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\LibGit2Sharp.dll.meta
-          projectPath: Assets\Plugins\LibGit2Sharp.dll.meta
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs
-        label: Prefabs
-        level: 1
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\Prefabs\AppointmentInfo.cs
-        label: AppointmentInfo.cs
-        level: 2
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\AppointmentInfo.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\AppointmentInfo.cs
-          projectPath: Assets\Prefabs\AppointmentInfo.cs
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs\AppointmentInfo.cs.meta
-        label: AppointmentInfo.cs.meta
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\AppointmentInfo.cs.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\AppointmentInfo.cs.meta
-          projectPath: Assets\Prefabs\AppointmentInfo.cs.meta
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs\AppointmentPrefab.prefab
-        label: AppointmentPrefab.prefab
-        level: 2
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\AppointmentPrefab.prefab
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\AppointmentPrefab.prefab
-          projectPath: Assets\Prefabs\AppointmentPrefab.prefab
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs\AppointmentPrefab.prefab.meta
-        label: AppointmentPrefab.prefab.meta
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\AppointmentPrefab.prefab.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\AppointmentPrefab.prefab.meta
-          projectPath: Assets\Prefabs\AppointmentPrefab.prefab.meta
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs\GradeInfo.cs
-        label: GradeInfo.cs
-        level: 2
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\GradeInfo.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\GradeInfo.cs
-          projectPath: Assets\Prefabs\GradeInfo.cs
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs\GradeInfo.cs.meta
-        label: GradeInfo.cs.meta
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\GradeInfo.cs.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\GradeInfo.cs.meta
-          projectPath: Assets\Prefabs\GradeInfo.cs.meta
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs\GradePrefab.prefab
-        label: GradePrefab.prefab
-        level: 2
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\GradePrefab.prefab
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\GradePrefab.prefab
-          projectPath: Assets\Prefabs\GradePrefab.prefab
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs\GradePrefab.prefab.meta
-        label: GradePrefab.prefab.meta
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\GradePrefab.prefab.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\GradePrefab.prefab.meta
-          projectPath: Assets\Prefabs\GradePrefab.prefab.meta
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs\Grades.meta
-        label: Grades.meta
-        level: 2
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Grades.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Grades.meta
-          projectPath: Assets\Prefabs\Grades.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Grades
-        label: Grades
-        level: 2
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\Prefabs\Grades\GradeInfo.cs
-        label: GradeInfo.cs
-        level: 3
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Grades\GradeInfo.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Grades\GradeInfo.cs
-          projectPath: Assets\Prefabs\Grades\GradeInfo.cs
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Grades\GradeInfo.cs.meta
-        label: GradeInfo.cs.meta
-        level: 4
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Grades\GradeInfo.cs.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Grades\GradeInfo.cs.meta
-          projectPath: Assets\Prefabs\Grades\GradeInfo.cs.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Grades\GradePrefab.prefab
-        label: GradePrefab.prefab
-        level: 3
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Grades\GradePrefab.prefab
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Grades\GradePrefab.prefab
-          projectPath: Assets\Prefabs\Grades\GradePrefab.prefab
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Grades\GradePrefab.prefab.meta
-        label: GradePrefab.prefab.meta
-        level: 4
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Grades\GradePrefab.prefab.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Grades\GradePrefab.prefab.meta
-          projectPath: Assets\Prefabs\Grades\GradePrefab.prefab.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Homework.meta
-        label: Homework.meta
-        level: 2
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Homework.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework.meta
-          projectPath: Assets\Prefabs\Homework.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Homework
-        label: Homework
-        level: 2
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\Prefabs\Homework\homeworkDivider.cs
-        label: homeworkDivider.cs
-        level: 3
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Homework\homeworkDivider.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\homeworkDivider.cs
-          projectPath: Assets\Prefabs\Homework\homeworkDivider.cs
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Homework\homeworkDivider.cs.meta
-        label: homeworkDivider.cs.meta
-        level: 4
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Homework\homeworkDivider.cs.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\homeworkDivider.cs.meta
-          projectPath: Assets\Prefabs\Homework\homeworkDivider.cs.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Homework\HomeworkInfo.cs
-        label: HomeworkInfo.cs
-        level: 3
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Homework\HomeworkInfo.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\HomeworkInfo.cs
-          projectPath: Assets\Prefabs\Homework\HomeworkInfo.cs
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Homework\HomeworkInfo.cs.meta
-        label: HomeworkInfo.cs.meta
-        level: 4
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Homework\HomeworkInfo.cs.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\HomeworkInfo.cs.meta
-          projectPath: Assets\Prefabs\Homework\HomeworkInfo.cs.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Homework\HomeworkPrefab.prefab
-        label: HomeworkPrefab.prefab
-        level: 3
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Homework\HomeworkPrefab.prefab
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\HomeworkPrefab.prefab
-          projectPath: Assets\Prefabs\Homework\HomeworkPrefab.prefab
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Homework\HomeworkPrefab.prefab.meta
-        label: HomeworkPrefab.prefab.meta
-        level: 4
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Homework\HomeworkPrefab.prefab.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\HomeworkPrefab.prefab.meta
-          projectPath: Assets\Prefabs\Homework\HomeworkPrefab.prefab.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Homework\HomeworkViewDivider.prefab
-        label: HomeworkViewDivider.prefab
-        level: 3
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Homework\HomeworkViewDivider.prefab
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\HomeworkViewDivider.prefab
-          projectPath: Assets\Prefabs\Homework\HomeworkViewDivider.prefab
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Homework\HomeworkViewDivider.prefab.meta
-        label: HomeworkViewDivider.prefab.meta
-        level: 4
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Homework\HomeworkViewDivider.prefab.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\HomeworkViewDivider.prefab.meta
-          projectPath: Assets\Prefabs\Homework\HomeworkViewDivider.prefab.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\HomeworkInfo.cs
-        label: HomeworkInfo.cs
-        level: 2
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\HomeworkInfo.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\HomeworkInfo.cs
-          projectPath: Assets\Prefabs\HomeworkInfo.cs
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs\HomeworkInfo.cs.meta
-        label: HomeworkInfo.cs.meta
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\HomeworkInfo.cs.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\HomeworkInfo.cs.meta
-          projectPath: Assets\Prefabs\HomeworkInfo.cs.meta
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs\HomeworkPrefab.prefab
-        label: HomeworkPrefab.prefab
-        level: 2
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\HomeworkPrefab.prefab
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\HomeworkPrefab.prefab
-          projectPath: Assets\Prefabs\HomeworkPrefab.prefab
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs\HomeworkPrefab.prefab.meta
-        label: HomeworkPrefab.prefab.meta
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\HomeworkPrefab.prefab.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\HomeworkPrefab.prefab.meta
-          projectPath: Assets\Prefabs\HomeworkPrefab.prefab.meta
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs\HomeworkViewDivider.prefab
-        label: HomeworkViewDivider.prefab
-        level: 2
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\HomeworkViewDivider.prefab
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\HomeworkViewDivider.prefab
-          projectPath: Assets\Prefabs\HomeworkViewDivider.prefab
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs\HomeworkViewDivider.prefab.meta
-        label: HomeworkViewDivider.prefab.meta
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\HomeworkViewDivider.prefab.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\HomeworkViewDivider.prefab.meta
-          projectPath: Assets\Prefabs\HomeworkViewDivider.prefab.meta
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs\InPlanLesPrefab.prefab
-        label: InPlanLesPrefab.prefab
-        level: 2
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\InPlanLesPrefab.prefab
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\InPlanLesPrefab.prefab
-          projectPath: Assets\Prefabs\InPlanLesPrefab.prefab
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs\InPlanLesPrefab.prefab.meta
-        label: InPlanLesPrefab.prefab.meta
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\InPlanLesPrefab.prefab.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\InPlanLesPrefab.prefab.meta
-          projectPath: Assets\Prefabs\InPlanLesPrefab.prefab.meta
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs\Rooster.meta
-        label: Rooster.meta
-        level: 2
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Rooster.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster.meta
-          projectPath: Assets\Prefabs\Rooster.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Rooster
-        label: Rooster
-        level: 2
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\Prefabs\Rooster\AppointmentInfo.cs
-        label: AppointmentInfo.cs
-        level: 3
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Rooster\AppointmentInfo.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\AppointmentInfo.cs
-          projectPath: Assets\Prefabs\Rooster\AppointmentInfo.cs
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Rooster\AppointmentInfo.cs.meta
-        label: AppointmentInfo.cs.meta
-        level: 4
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Rooster\AppointmentInfo.cs.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\AppointmentInfo.cs.meta
-          projectPath: Assets\Prefabs\Rooster\AppointmentInfo.cs.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Rooster\AppointmentPrefab.prefab
-        label: AppointmentPrefab.prefab
-        level: 3
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Rooster\AppointmentPrefab.prefab
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\AppointmentPrefab.prefab
-          projectPath: Assets\Prefabs\Rooster\AppointmentPrefab.prefab
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Rooster\AppointmentPrefab.prefab.meta
-        label: AppointmentPrefab.prefab.meta
-        level: 4
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Rooster\AppointmentPrefab.prefab.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\AppointmentPrefab.prefab.meta
-          projectPath: Assets\Prefabs\Rooster\AppointmentPrefab.prefab.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Rooster\InPlanLes.cs
-        label: InPlanLes.cs
-        level: 3
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Rooster\InPlanLes.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\InPlanLes.cs
-          projectPath: Assets\Prefabs\Rooster\InPlanLes.cs
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Rooster\InPlanLes.cs.meta
-        label: InPlanLes.cs.meta
-        level: 4
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Rooster\InPlanLes.cs.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\InPlanLes.cs.meta
-          projectPath: Assets\Prefabs\Rooster\InPlanLes.cs.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Rooster\InPlanLesPrefab.prefab
-        label: InPlanLesPrefab.prefab
-        level: 3
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Rooster\InPlanLesPrefab.prefab
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\InPlanLesPrefab.prefab
-          projectPath: Assets\Prefabs\Rooster\InPlanLesPrefab.prefab
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Rooster\InPlanLesPrefab.prefab.meta
-        label: InPlanLesPrefab.prefab.meta
-        level: 4
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Rooster\InPlanLesPrefab.prefab.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\InPlanLesPrefab.prefab.meta
-          projectPath: Assets\Prefabs\Rooster\InPlanLesPrefab.prefab.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Rooster\TussenUurPrefab.prefab
-        label: TussenUurPrefab.prefab
-        level: 3
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Rooster\TussenUurPrefab.prefab
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\TussenUurPrefab.prefab
-          projectPath: Assets\Prefabs\Rooster\TussenUurPrefab.prefab
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\Rooster\TussenUurPrefab.prefab.meta
-        label: TussenUurPrefab.prefab.meta
-        level: 4
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\Rooster\TussenUurPrefab.prefab.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\TussenUurPrefab.prefab.meta
-          projectPath: Assets\Prefabs\Rooster\TussenUurPrefab.prefab.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\settingsIcon.png
-        label: settingsIcon.png
-        level: 2
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\settingsIcon.png
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\settingsIcon.png
-          projectPath: Assets\Prefabs\settingsIcon.png
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Prefabs\settingsIcon.png.meta
-        label: settingsIcon.png.meta
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\settingsIcon.png.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\settingsIcon.png.meta
-          projectPath: Assets\Prefabs\settingsIcon.png.meta
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\Scenes
-        label: Scenes
-        level: 1
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\Scenes\MainScene.unity
-        label: MainScene.unity
-        level: 2
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Scenes\MainScene.unity
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Scenes\MainScene.unity
-          projectPath: Assets\Scenes\MainScene.unity
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: Assets\StreamingAssets.meta
-        label: StreamingAssets.meta
-        level: 1
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\StreamingAssets.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\StreamingAssets.meta
-          projectPath: Assets\StreamingAssets.meta
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 5
-      - path: Assets\UI
-        label: UI
-        level: 1
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\UI\Managers
-        label: Managers
-        level: 2
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\UI\Managers\screenManager.cs
-        label: screenManager.cs
-        level: 3
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\UI\Managers\screenManager.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Managers\screenManager.cs
-          projectPath: Assets\UI\Managers\screenManager.cs
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\UI\Managers\screenManager.cs.meta
-        label: screenManager.cs.meta
-        level: 4
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\UI\Managers\screenManager.cs.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Managers\screenManager.cs.meta
-          projectPath: Assets\UI\Managers\screenManager.cs.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\UI\Managers\ViewManager.cs
-        label: ViewManager.cs
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\UI\Managers\ViewManager.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Managers\ViewManager.cs
-          projectPath: Assets\UI\Managers\ViewManager.cs
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: Assets\UI\Views
-        label: Views
-        level: 2
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\UI\Views\HomeworkItemView.cs
-        label: HomeworkItemView.cs
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\UI\Views\HomeworkItemView.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\HomeworkItemView.cs
-          projectPath: Assets\UI\Views\HomeworkItemView.cs
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: Assets\UI\Views\HomeworkView.cs
-        label: HomeworkView.cs
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\UI\Views\HomeworkView.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\HomeworkView.cs
-          projectPath: Assets\UI\Views\HomeworkView.cs
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: Assets\UI\Views\RoosterItemView.cs
-        label: RoosterItemView.cs
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\UI\Views\RoosterItemView.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\RoosterItemView.cs
-          projectPath: Assets\UI\Views\RoosterItemView.cs
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: Assets\UI\Views\RoosterView.cs
-        label: RoosterView.cs
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\UI\Views\RoosterView.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\RoosterView.cs
-          projectPath: Assets\UI\Views\RoosterView.cs
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: ProjectSettings
-        label: ProjectSettings
-        level: 0
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: ProjectSettings\BurstAotSettings_StandaloneWindows.json
-        label: BurstAotSettings_StandaloneWindows.json
-        level: 1
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: ProjectSettings\BurstAotSettings_StandaloneWindows.json
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\ProjectSettings\BurstAotSettings_StandaloneWindows.json
-          projectPath: ProjectSettings\BurstAotSettings_StandaloneWindows.json
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: ProjectSettings\EditorBuildSettings.asset
-        label: EditorBuildSettings.asset
-        level: 1
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: ProjectSettings\EditorBuildSettings.asset
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\ProjectSettings\EditorBuildSettings.asset
-          projectPath: ProjectSettings\EditorBuildSettings.asset
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: ProjectSettings\EditorSettings.asset
-        label: EditorSettings.asset
-        level: 1
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: ProjectSettings\EditorSettings.asset
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\ProjectSettings\EditorSettings.asset
-          projectPath: ProjectSettings\EditorSettings.asset
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: ProjectSettings\ProjectSettings.asset
-        label: ProjectSettings.asset
-        level: 1
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: ProjectSettings\ProjectSettings.asset
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\ProjectSettings\ProjectSettings.asset
-          projectPath: ProjectSettings\ProjectSettings.asset
+          path: Assets\_MainScene.unity
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\_MainScene.unity
+          projectPath: Assets\_MainScene.unity
           originalPath: 
           indexStatus: 0
           workTreeStatus: 3
@@ -3893,24 +1208,6 @@ MonoBehaviour:
           originalPath: 
           indexStatus: 0
           workTreeStatus: 0
-      - path: UserSettings\EditorUserSettings.asset
-        label: EditorUserSettings.asset
-        level: 1
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: UserSettings\EditorUserSettings.asset
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\UserSettings\EditorUserSettings.asset
-          projectPath: UserSettings\EditorUserSettings.asset
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
       - path: UserSettings\Layouts
         label: Layouts
         level: 1
@@ -3967,459 +1264,9 @@ MonoBehaviour:
           indexStatus: 0
           workTreeStatus: 0
     gitStatusEntries:
-    - path: Assets\_Somtoday\Homework.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\_Somtoday\Homework.cs
-      projectPath: Assets\_Somtoday\Homework.cs
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: Assets\Art.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Art.meta
-      projectPath: Assets\Art.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Art\settingsIcon.png
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Art\settingsIcon.png
-      projectPath: Assets\Art\settingsIcon.png
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Art\settingsIcon.png.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Art\settingsIcon.png.meta
-      projectPath: Assets\Art\settingsIcon.png.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Plugins\CrystalFramework.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework.meta
-      projectPath: Assets\Plugins\CrystalFramework.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Plugins\CrystalFramework\Utility.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility.meta
-      projectPath: Assets\Plugins\CrystalFramework\Utility.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Plugins\CrystalFramework\Utility\Demos.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\Demos.meta
-      projectPath: Assets\Plugins\CrystalFramework\Utility\Demos.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs
-      projectPath: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs.meta
-      projectPath: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.cs.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt
-      projectPath: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt.meta
-      projectPath: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.txt.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity
-      projectPath: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity.meta
-      projectPath: Assets\Plugins\CrystalFramework\Utility\Demos\SafeAreaDemo.unity.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Plugins\CrystalFramework\Utility\SafeArea.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\SafeArea.cs
-      projectPath: Assets\Plugins\CrystalFramework\Utility\SafeArea.cs
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Plugins\CrystalFramework\Utility\SafeArea.cs.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\CrystalFramework\Utility\SafeArea.cs.meta
-      projectPath: Assets\Plugins\CrystalFramework\Utility\SafeArea.cs.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Plugins\git2.dll
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\git2.dll
-      projectPath: Assets\Plugins\git2.dll
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Plugins\git2.dll.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\git2.dll.meta
-      projectPath: Assets\Plugins\git2.dll.meta
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Plugins\LibGit2Sharp.dll
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\LibGit2Sharp.dll
-      projectPath: Assets\Plugins\LibGit2Sharp.dll
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Plugins\LibGit2Sharp.dll.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\LibGit2Sharp.dll.meta
-      projectPath: Assets\Plugins\LibGit2Sharp.dll.meta
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\AppointmentInfo.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\AppointmentInfo.cs
-      projectPath: Assets\Prefabs\AppointmentInfo.cs
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\AppointmentInfo.cs.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\AppointmentInfo.cs.meta
-      projectPath: Assets\Prefabs\AppointmentInfo.cs.meta
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\AppointmentPrefab.prefab
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\AppointmentPrefab.prefab
-      projectPath: Assets\Prefabs\AppointmentPrefab.prefab
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\AppointmentPrefab.prefab.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\AppointmentPrefab.prefab.meta
-      projectPath: Assets\Prefabs\AppointmentPrefab.prefab.meta
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\GradeInfo.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\GradeInfo.cs
-      projectPath: Assets\Prefabs\GradeInfo.cs
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\GradeInfo.cs.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\GradeInfo.cs.meta
-      projectPath: Assets\Prefabs\GradeInfo.cs.meta
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\GradePrefab.prefab
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\GradePrefab.prefab
-      projectPath: Assets\Prefabs\GradePrefab.prefab
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\GradePrefab.prefab.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\GradePrefab.prefab.meta
-      projectPath: Assets\Prefabs\GradePrefab.prefab.meta
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\Grades.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Grades.meta
-      projectPath: Assets\Prefabs\Grades.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Grades\GradeInfo.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Grades\GradeInfo.cs
-      projectPath: Assets\Prefabs\Grades\GradeInfo.cs
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Grades\GradeInfo.cs.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Grades\GradeInfo.cs.meta
-      projectPath: Assets\Prefabs\Grades\GradeInfo.cs.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Grades\GradePrefab.prefab
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Grades\GradePrefab.prefab
-      projectPath: Assets\Prefabs\Grades\GradePrefab.prefab
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Grades\GradePrefab.prefab.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Grades\GradePrefab.prefab.meta
-      projectPath: Assets\Prefabs\Grades\GradePrefab.prefab.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Homework.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework.meta
-      projectPath: Assets\Prefabs\Homework.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Homework\homeworkDivider.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\homeworkDivider.cs
-      projectPath: Assets\Prefabs\Homework\homeworkDivider.cs
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Homework\homeworkDivider.cs.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\homeworkDivider.cs.meta
-      projectPath: Assets\Prefabs\Homework\homeworkDivider.cs.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Homework\HomeworkInfo.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\HomeworkInfo.cs
-      projectPath: Assets\Prefabs\Homework\HomeworkInfo.cs
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Homework\HomeworkInfo.cs.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\HomeworkInfo.cs.meta
-      projectPath: Assets\Prefabs\Homework\HomeworkInfo.cs.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Homework\HomeworkPrefab.prefab
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\HomeworkPrefab.prefab
-      projectPath: Assets\Prefabs\Homework\HomeworkPrefab.prefab
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Homework\HomeworkPrefab.prefab.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\HomeworkPrefab.prefab.meta
-      projectPath: Assets\Prefabs\Homework\HomeworkPrefab.prefab.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Homework\HomeworkViewDivider.prefab
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\HomeworkViewDivider.prefab
-      projectPath: Assets\Prefabs\Homework\HomeworkViewDivider.prefab
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Homework\HomeworkViewDivider.prefab.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Homework\HomeworkViewDivider.prefab.meta
-      projectPath: Assets\Prefabs\Homework\HomeworkViewDivider.prefab.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\HomeworkInfo.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\HomeworkInfo.cs
-      projectPath: Assets\Prefabs\HomeworkInfo.cs
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\HomeworkInfo.cs.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\HomeworkInfo.cs.meta
-      projectPath: Assets\Prefabs\HomeworkInfo.cs.meta
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\HomeworkPrefab.prefab
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\HomeworkPrefab.prefab
-      projectPath: Assets\Prefabs\HomeworkPrefab.prefab
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\HomeworkPrefab.prefab.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\HomeworkPrefab.prefab.meta
-      projectPath: Assets\Prefabs\HomeworkPrefab.prefab.meta
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\HomeworkViewDivider.prefab
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\HomeworkViewDivider.prefab
-      projectPath: Assets\Prefabs\HomeworkViewDivider.prefab
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\HomeworkViewDivider.prefab.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\HomeworkViewDivider.prefab.meta
-      projectPath: Assets\Prefabs\HomeworkViewDivider.prefab.meta
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\InPlanLesPrefab.prefab
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\InPlanLesPrefab.prefab
-      projectPath: Assets\Prefabs\InPlanLesPrefab.prefab
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\InPlanLesPrefab.prefab.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\InPlanLesPrefab.prefab.meta
-      projectPath: Assets\Prefabs\InPlanLesPrefab.prefab.meta
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\Rooster.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster.meta
-      projectPath: Assets\Prefabs\Rooster.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Rooster\AppointmentInfo.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\AppointmentInfo.cs
-      projectPath: Assets\Prefabs\Rooster\AppointmentInfo.cs
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Rooster\AppointmentInfo.cs.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\AppointmentInfo.cs.meta
-      projectPath: Assets\Prefabs\Rooster\AppointmentInfo.cs.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Rooster\AppointmentPrefab.prefab
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\AppointmentPrefab.prefab
-      projectPath: Assets\Prefabs\Rooster\AppointmentPrefab.prefab
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Rooster\AppointmentPrefab.prefab.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\AppointmentPrefab.prefab.meta
-      projectPath: Assets\Prefabs\Rooster\AppointmentPrefab.prefab.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Rooster\InPlanLes.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\InPlanLes.cs
-      projectPath: Assets\Prefabs\Rooster\InPlanLes.cs
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Rooster\InPlanLes.cs.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\InPlanLes.cs.meta
-      projectPath: Assets\Prefabs\Rooster\InPlanLes.cs.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Rooster\InPlanLesPrefab.prefab
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\InPlanLesPrefab.prefab
-      projectPath: Assets\Prefabs\Rooster\InPlanLesPrefab.prefab
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Rooster\InPlanLesPrefab.prefab.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\InPlanLesPrefab.prefab.meta
-      projectPath: Assets\Prefabs\Rooster\InPlanLesPrefab.prefab.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Rooster\TussenUurPrefab.prefab
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\TussenUurPrefab.prefab
-      projectPath: Assets\Prefabs\Rooster\TussenUurPrefab.prefab
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\Rooster\TussenUurPrefab.prefab.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\Rooster\TussenUurPrefab.prefab.meta
-      projectPath: Assets\Prefabs\Rooster\TussenUurPrefab.prefab.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\settingsIcon.png
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\settingsIcon.png
-      projectPath: Assets\Prefabs\settingsIcon.png
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Prefabs\settingsIcon.png.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\settingsIcon.png.meta
-      projectPath: Assets\Prefabs\settingsIcon.png.meta
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\Scenes\MainScene.unity
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Scenes\MainScene.unity
-      projectPath: Assets\Scenes\MainScene.unity
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: Assets\StreamingAssets.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\StreamingAssets.meta
-      projectPath: Assets\StreamingAssets.meta
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 5
-    - path: Assets\UI\Managers\screenManager.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Managers\screenManager.cs
-      projectPath: Assets\UI\Managers\screenManager.cs
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\UI\Managers\screenManager.cs.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Managers\screenManager.cs.meta
-      projectPath: Assets\UI\Managers\screenManager.cs.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\UI\Managers\ViewManager.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Managers\ViewManager.cs
-      projectPath: Assets\UI\Managers\ViewManager.cs
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: Assets\UI\Views\HomeworkItemView.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\HomeworkItemView.cs
-      projectPath: Assets\UI\Views\HomeworkItemView.cs
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: Assets\UI\Views\HomeworkView.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\HomeworkView.cs
-      projectPath: Assets\UI\Views\HomeworkView.cs
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: Assets\UI\Views\RoosterItemView.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\RoosterItemView.cs
-      projectPath: Assets\UI\Views\RoosterItemView.cs
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: Assets\UI\Views\RoosterView.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\RoosterView.cs
-      projectPath: Assets\UI\Views\RoosterView.cs
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: ProjectSettings\BurstAotSettings_StandaloneWindows.json
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\ProjectSettings\BurstAotSettings_StandaloneWindows.json
-      projectPath: ProjectSettings\BurstAotSettings_StandaloneWindows.json
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: ProjectSettings\EditorBuildSettings.asset
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\ProjectSettings\EditorBuildSettings.asset
-      projectPath: ProjectSettings\EditorBuildSettings.asset
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: ProjectSettings\EditorSettings.asset
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\ProjectSettings\EditorSettings.asset
-      projectPath: ProjectSettings\EditorSettings.asset
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: ProjectSettings\ProjectSettings.asset
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\ProjectSettings\ProjectSettings.asset
-      projectPath: ProjectSettings\ProjectSettings.asset
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: UserSettings\EditorUserSettings.asset
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\UserSettings\EditorUserSettings.asset
-      projectPath: UserSettings\EditorUserSettings.asset
+    - path: Assets\_MainScene.unity
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\_MainScene.unity
+      projectPath: Assets\_MainScene.unity
       originalPath: 
       indexStatus: 0
       workTreeStatus: 3
@@ -4429,12 +1276,12 @@ MonoBehaviour:
       originalPath: 
       indexStatus: 0
       workTreeStatus: 3
-    changedFilesText: 77 changed files
+    changedFilesText: 2 changed files
     lastCurrentBranchChangedEvent:
-      updatedTimeString: 2022-10-13T16:17:06.637+02:00
+      updatedTimeString: 2022-10-20T17:11:21.030+02:00
       cacheType: 1
     lastStatusEntriesChangedEvent:
-      updatedTimeString: 2022-10-13T16:18:21.547+02:00
+      updatedTimeString: 2022-10-20T17:13:55.498+02:00
       cacheType: 6
     lastLocksChangedEvent:
       updatedTimeString: 0001-01-01T00:00:00.000+00:00
@@ -13859,13 +10706,13 @@ MonoBehaviour:
     m_Image: {fileID: 0}
     m_Tooltip: Url of the origin remote
   lastCurrentBranchAndRemoteChangedEvent:
-    updatedTimeString: 2022-10-13T16:17:06.637+02:00
+    updatedTimeString: 2022-10-20T16:07:32.996+02:00
     cacheType: 1
   lastTrackingStatusChangedEvent:
-    updatedTimeString: 2022-10-13T16:17:08.312+02:00
+    updatedTimeString: 2022-10-20T16:10:36.575+02:00
     cacheType: 5
   lastStatusEntriesChangedEvent:
-    updatedTimeString: 2022-10-13T16:17:08.247+02:00
+    updatedTimeString: 2022-10-20T16:10:36.459+02:00
     cacheType: 6
   pullButtonContent:
     m_Text: Pull
@@ -13908,9 +10755,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1517
+    x: 1516
     y: 73
-    width: 402
+    width: 403
     height: 926
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
