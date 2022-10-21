@@ -17,6 +17,9 @@ public class HomeworkItemView : View
     [SerializeField] TMP_Text Omschrijving;
     [SerializeField] Toggle Gemaakt;
 
+    [SerializeField] private Button delete;
+    [SerializeField] private CustomHomework _customHomework;
+
     [Space, SerializeField] private GameObject HuiswerkPill;
     [SerializeField] private GameObject ToetsPill;
     [SerializeField] private GameObject GroteToetsPill;
@@ -32,6 +35,19 @@ public class HomeworkItemView : View
 
     public override void Initialize()
     {
+        if (homeworkInfo == null) return;
+        
+        delete.onClick.AddListener(() => DeleteHomework());
+
+        if (homeworkInfo.gemaakt == true)
+        {
+            delete.gameObject.SetActive(true);
+        }
+        else
+        {
+            delete.gameObject.SetActive(false);
+        }
+
         if (homeworkInfo == null) return;
 
         Vak.text = homeworkInfo.lesgroep.vak.naam ?? "";
@@ -70,7 +86,19 @@ public class HomeworkItemView : View
             Omschrijving.text = Omschrijving.text.Replace(result.ToString(), "<u><color=\"blue\"><link=" + result + ">" + result + "</link></color></u>");
         }
     }
-    
+
+    private void DeleteHomework()
+    {
+        if (homeworkInfo.gemaakt == true)
+        {
+            try
+            {
+                _customHomework.DeleteCustomHomework(int.Parse(homeworkInfo.UUID));
+            }
+            catch(Exception){}
+        }
+    }
+
     //regex /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/g
     
 }

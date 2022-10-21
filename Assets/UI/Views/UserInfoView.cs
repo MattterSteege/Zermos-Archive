@@ -24,6 +24,10 @@ public class UserInfoView : View
     
     [SerializeField, Space] private GameObject ZermeloManager;
     [SerializeField] private TMP_Text CopiedText;
+    
+    [SerializeField, Space] private TMP_Text filePathText;
+    [SerializeField] private Button filePathTextButton;
+    
 
     public override void Initialize()
     {
@@ -32,6 +36,7 @@ public class UserInfoView : View
         string zermeloAccessToken = PlayerPrefs.GetString("zermelo-access_token");
         string schoolCode = PlayerPrefs.GetString("zermelo-school_code");
         string SomtodayAccessToken = PlayerPrefs.GetString("somtoday-access_token");
+        string filePath = PlayerPrefs.GetString("file_path");
      
         CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().alpha = 0;
         
@@ -107,6 +112,21 @@ public class UserInfoView : View
             {
                 CopyToClipboard(SomtodayAccessToken);
                 copyComplete("Somtoday auth code");
+            });
+        }
+        
+        if (string.IsNullOrEmpty(filePath))
+        {
+            filePathText.gameObject.transform.parent.gameObject.SetActive(false);
+        }
+        else
+        {
+            filePathText.text = filePath.Substring(0, 15) + "...";;
+            
+            filePathTextButton.onClick.AddListener(() =>
+            {
+                CopyToClipboard(filePath);
+                copyComplete("file path");
             });
         }
 

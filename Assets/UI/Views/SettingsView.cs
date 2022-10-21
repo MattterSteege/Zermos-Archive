@@ -141,17 +141,17 @@ public class SettingsView : View
         
         SomtodayKoppeling.onClick.AddListener(() =>
         {
-            ViewManager.Instance.Show<ConnectSomtodayView>();
+            ViewManager.Instance.Show<NavBarView, ConnectSomtodayView>();
         });
         
         ZermeloKoppeling.onClick.AddListener(() =>
         {
-            ViewManager.Instance.Show<ConnectZermeloView>();
+            ViewManager.Instance.Show<NavBarView, ConnectZermeloView>();
         });
         
         userInfo.onClick.AddListener(() =>
         {
-            ViewManager.Instance.Show<UserInfoView>();
+            ViewManager.Instance.Show<NavBarView, UserInfoView>();
         });
 
         PlayerPrefs.Save();
