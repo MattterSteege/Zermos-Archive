@@ -3,13 +3,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
-using NUnit.Framework;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
+
+#if UNITY_EDITOR
+    using System.Diagnostics;
+#endif
 
 public class CustomHomework : MonoBehaviour
 {
     [SerializeField, Tooltip("'*' means Application.persistentDataPath.")] private string savePath = "*/CustomHomework.json";
 
+#if UNITY_EDITOR
+    [ContextMenu("open explorer")]
+    private void openExplorer()
+    {
+        Process.Start(Application.persistentDataPath);
+    }
+#endif
+    
     [ContextMenu("try save")]
     public void AddCustomHomeWorkItem()
     {
@@ -76,10 +88,24 @@ public class CustomHomework : MonoBehaviour
         File.AppendAllText(destination, convertedJson);
     }
 
+    public void DeleteCustomHomework(int id)
+    {
+        List<CustomHomeworkItem> customHomeworkItems = JsonConvert.DeserializeObject<List<CustomHomeworkItem>>(LoadFile());
+        customHomeworkItems.RemoveAll(x => x.id == id);
+        
+        var convertedJson = JsonConvert.SerializeObject(customHomeworkItems, Formatting.Indented);
 
-    public void SaveFile(string titel, string omschrijving, DateTime deadline, bool gemaakt)
+        string destination = savePath.Replace("*", Application.persistentDataPath);
+        
+        File.WriteAllText(destination,"//In dit bestand staan alle zelf aangemaakte huiswerk items.\r\n");
+        File.AppendAllText(destination, convertedJson);
+    }
+
+
+    public void SaveFile(string titel, string omschrijving, DateTime deadline, bool gemaakt = false)
     {
         string destination = savePath.Replace("*", Application.persistentDataPath);
+        PlayerPrefs.SetString("file_path", destination);
         FileStream file;
 
         if (!File.Exists(destination))

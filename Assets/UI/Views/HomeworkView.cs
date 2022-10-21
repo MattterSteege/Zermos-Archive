@@ -13,10 +13,14 @@ public class HomeworkView : View
     
     [SerializeField] private CustomHomework _CustomHomework;
     
+    [SerializeField] private Button _AddHomeworkButton;
+    
     //[SerializeField] private Button RefreshButton;
     
     public override void Initialize()
     {
+        _AddHomeworkButton.onClick.AddListener(() => ViewManager.Instance.Show<AddHomeworkView, NavBarView>());
+
         foreach (Transform child in content.transform)
         {
             Destroy(child.gameObject);
