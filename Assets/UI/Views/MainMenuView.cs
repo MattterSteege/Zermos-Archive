@@ -11,8 +11,12 @@ public class MainMenuView : View
     [SerializeField] private GameObject paklijstPrefab;
     [SerializeField] private Schedule zermeloSchedule;
 
-    [Space] [SerializeField] private TMP_Text tijdText1;
+    [Space] 
+    [SerializeField] private TMP_Text tijdText1;
     [SerializeField] private TMP_Text tijdText2;
+    
+    [Space]
+    [SerializeField] private TMP_Text dagSamenvattingText;
 
     [Space] [SerializeField] private float updateTime;
 
@@ -23,13 +27,14 @@ public class MainMenuView : View
 
     public override void Initialize()
     {
-        PlayerPrefs.SetString("main_menu_settings", "1,1");
+        PlayerPrefs.SetString("main_menu_settings", "1,1,1");
 
         appointments = zermeloSchedule.getScheduleOfDay(DateTime.Today);
 
         if (appointments == null) return;
 
-        if (PlayerPrefs.GetString("main_menu_settings", "1,1").Split(",")[0] == "1") // show paklijst
+        #region paklijst
+        if (PlayerPrefs.GetString("main_menu_settings").Split(",")[0] == "1") // show paklijst
         {
             // TimeSpan span = (timeTillDeparture - DateTime.Now);
             // if (UnixTimeStampToDateTime(appointments[1].start) <= DateTime.Now)
@@ -74,8 +79,10 @@ public class MainMenuView : View
         {
             paklijstGameObject.SetActive(false);
         }
+        #endregion
 
-        if (PlayerPrefs.GetString("main_menu_settings", "1,1").Split(",")[1] == "1") // show vertrektijd
+        #region countdown
+        if (PlayerPrefs.GetString("main_menu_settings").Split(",")[1] == "1") // show vertrektijd
         {
             int minutesbeforeclass = PlayerPrefs.GetInt("minutesbeforeclass", 0);
             if (minutesbeforeclass == 0) return;
@@ -96,6 +103,27 @@ public class MainMenuView : View
         {
             tijdText1.transform.parent.parent.parent.gameObject.SetActive(false);
         }
+        #endregion
+
+        #region samenvatting
+        if (PlayerPrefs.GetString("main_menu_settings").Split(",")[2] == "1") // show dag samenvatting
+        {
+            dagSamenvattingText.transform.parent.parent.parent.gameObject.SetActive(true);
+            dagSamenvattingText.gameObject.SetActive(true);
+            dagSamenvattingText.text = "Vandaag heb je " + appointments.Count + " lessen";
+        }
+        else
+        {
+            dagSamenvattingText.transform.parent.parent.parent.gameObject.SetActive(false);
+        }
+        
+        // begin:                                           je lesdag is vanaf het [eerste les uur nummer]e uur tot en met het [laatste les uur nummer]e.
+        // als er uitvals is:                               er zijn X lessen uitgevallen, en je hebt X tussenuren.
+        // als er geen uitvals is, maar wel tussenuren:     er zijn X lessen uitgevallen, en je hebt X tussenuren.
+        // als er geen uitvals is, en geen tussenuren:      [VOEG NIKS TOE]
+        // als er vandaag een toets is:                     er staat vandaag een (grote )toets in gepland voor [vaknaam]
+        
+        #endregion
     }
     
     private void Countdowns()

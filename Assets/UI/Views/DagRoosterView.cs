@@ -17,11 +17,18 @@ public class DagRoosterView : View
     [SerializeField] private Button WeekRoosterButton;
     [SerializeField] private Schedule _schedule;
     [SerializeField] private int _date;
-
+    
+    [Space, Header("UI controls")]
+    [SerializeField] private TMP_Text _dateText;
+    [SerializeField] private Button nextDayButton;
+    [SerializeField] private Button previousDayButton;
+    
+    [Space]
     private List<Schedule.Appointment> appointments;
     [SerializeField] private List<int> NoLessonHours;
     [SerializeField] private List<GameObject> RoosterItems;
     [SerializeField] private int maxNumberOfLessons;
+    [SerializeField] private int addedDays = 0;
     
 #if UNITY_EDITOR
     public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
@@ -37,6 +44,21 @@ public class DagRoosterView : View
     {
         RefreshButton.onClick.AddListener(Initialize);
         WeekRoosterButton.onClick.AddListener(() => { ViewManager.Instance.Show<NavBarView, WeekRoosterView>(); });
+        
+        nextDayButton.onClick.AddListener(() =>
+        {
+            addedDays++; 
+            nextDayButton.onClick.RemoveAllListeners(); 
+            previousDayButton.onClick.RemoveAllListeners(); 
+            Initialize();
+        });
+        previousDayButton.onClick.AddListener(() => 
+        { 
+            addedDays--;
+            nextDayButton.onClick.RemoveAllListeners(); 
+            previousDayButton.onClick.RemoveAllListeners(); 
+            Initialize(); 
+        });
 
         content.transform.parent.parent.GetComponent<ScrollRect>().horizontal =
             PlayerPrefs.GetInt("UltraSatisfyingScheduleMode") == 1;
@@ -54,14 +76,17 @@ public class DagRoosterView : View
         appointments = new List<Schedule.Appointment>();
         RoosterItems = new List<GameObject>();
 
+        DateTime extraDays = DateTime.Now.AddDays(addedDays - 1);
+
+        _dateText.text = extraDays.AddDays(1).ToString("d MMMM");
 
 #if UNITY_EDITOR
         if (_date != 0)
             appointments = _schedule.getScheduleOfDay(UnixTimeStampToDateTime(_date));
         else
-            appointments = _schedule.getScheduleOfDay(DateTime.Today);
+            appointments = _schedule.getScheduleOfDay(extraDays);
 #else
-        appointments = _schedule.getScheduleOfDay(DateTime.Today);
+        appointments = _schedule.getScheduleOfDay(extraDays);
 #endif
 
         if (appointments == null)
