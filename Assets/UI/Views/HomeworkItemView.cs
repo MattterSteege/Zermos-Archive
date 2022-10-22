@@ -94,6 +94,8 @@ public class HomeworkItemView : View
             try
             {
                 _customHomework.DeleteCustomHomework(int.Parse(homeworkInfo.UUID));
+                ViewManager.Instance.Refresh<HomeworkView>();
+                ViewManager.Instance.Show<HomeworkView, NavBarView>();
             }
             catch(Exception){}
         }

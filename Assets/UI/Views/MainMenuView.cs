@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TMPro;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ public class MainMenuView : View
     [SerializeField] private GameObject paklijstContentGameObject;
     [SerializeField] private GameObject paklijstPrefab;
     [SerializeField] private Schedule zermeloSchedule;
+    [SerializeField] private int _date;
 
     [Space] 
     [SerializeField] private TMP_Text tijdText1;
@@ -23,13 +25,30 @@ public class MainMenuView : View
     DateTime timeTillDeparture;
 
     List<Schedule.Appointment> appointments = new List<Schedule.Appointment>();
-
-
+    
+#if UNITY_EDITOR
+    private static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
+    {
+        // Unix timestamp is seconds past epoch
+        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        dateTime = dateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+        return dateTime;
+    }
+#endif
+    
     public override void Initialize()
     {
-        PlayerPrefs.SetString("main_menu_settings", "1,1,1");
+        PlayerPrefs.SetString("main_menu_settings", "1,1,0");
 
+        
+#if UNITY_EDITOR
+        if (_date != 0)
+            appointments = zermeloSchedule.getScheduleOfDay(UnixTimeStampToDateTime(_date));
+        else
+            appointments = zermeloSchedule.getScheduleOfDay(DateTime.Today);
+#else
         appointments = zermeloSchedule.getScheduleOfDay(DateTime.Today);
+#endif
 
         if (appointments == null) return;
 
@@ -84,6 +103,8 @@ public class MainMenuView : View
         #region countdown
         if (PlayerPrefs.GetString("main_menu_settings").Split(",")[1] == "1") // show vertrektijd
         {
+            if (appointments == null) return;
+            
             int minutesbeforeclass = PlayerPrefs.GetInt("minutesbeforeclass", 0);
             if (minutesbeforeclass == 0) return;
 
@@ -105,12 +126,92 @@ public class MainMenuView : View
         }
         #endregion
 
-        #region samenvatting
+        #region samenvatting - Disabled by default
         if (PlayerPrefs.GetString("main_menu_settings").Split(",")[2] == "1") // show dag samenvatting
         {
             dagSamenvattingText.transform.parent.parent.parent.gameObject.SetActive(true);
             dagSamenvattingText.gameObject.SetActive(true);
-            dagSamenvattingText.text = "Vandaag heb je " + appointments.Count + " lessen";
+            
+            StringBuilder sb = new StringBuilder();
+
+            //lessen
+            if (appointments.Count == 0)
+            {
+                sb.Append("je hebt vandaag geen lessen, je had dus lekker kunnen uitslapen!");
+            }
+            else if (appointments.Count == 1)
+            {
+                sb.Append($"je hebt vandaag maar 1 les, dat is {appointments[0].subjects[0]}. Dit is op het {appointments[0].startTimeSlotName}e uur.");
+            }
+            else
+            {
+                sb.Append($"je hebt vandaag {appointments.Count} lessen, dat zijn: ");
+                for (int i = 0; i < appointments.Count; i++)
+                {
+                    if (i == appointments.Count - 1 && appointments[i].cancelled == false)
+                    {
+                        sb.Append($"en {appointments[i].subjects[0]}. ");
+                    }
+                    else if (appointments[i].cancelled == false)
+                    {
+                        sb.Append($"{appointments[i].subjects[0]}, ");
+                    }
+                }
+                
+                sb.Append($"Deze lessen heb je tussen het {appointments.Where(x => x.appointmentType.ToLower() == "lesson" && x.cancelled == false).First().startTimeSlotName}e en {appointments.Where(x => x.appointmentType.ToLower() == "lesson" && x.cancelled == false).Last().startTimeSlotName}e uur.");
+            }
+            //lessen
+
+            //uitval
+            if (appointments.Where(x => x.cancelled).Count() == 0)
+            {
+                sb.Append("Vandaag is er geen les uitval, balen.");
+            }
+            else if (appointments.Where(x => x.cancelled).Count() == 1)
+            {
+                sb.Append($"Vandaag is er 1 les uitval, dat is: {appointments.Where(x => x.cancelled).First().subjects[0]}.");
+            }
+            else
+            {
+                sb.Append($"Vandaag zijn er {appointments.Where(x => x.cancelled).Count()} lessen uitval, dat zijn: ");
+                for (int i = 0; i < appointments.Where(x => x.cancelled).Count(); i++)
+                {
+                    if (i == appointments.Where(x => x.cancelled).Count() - 1)
+                    {
+                        sb.Append($"en {appointments.Where(x => x.cancelled).ToList()[i].subjects[0]}. ");
+                    }
+                    else
+                    {
+                        sb.Append($"{appointments.Where(x => x.cancelled).ToList()[i].subjects[0]}, ");
+                    }
+                }
+            }
+            //uitval
+            
+            //Toest
+            /*
+            if (appointments.Where(x => x.appointmentType.ToLower() == "toest").Count() == 1)
+            {
+                sb.Append($"Vandaag is er 1 toest, dat is: {appointments.Where(x => x.appointmentType.ToLower() == "toest").First().subjects[0]}.");
+            }
+            else
+            {
+                sb.Append($"Vandaag zijn er {appointments.Where(x => x.appointmentType.ToLower() == "toest").Count()} toesten, dat zijn: ");
+                for (int i = 0; i < appointments.Where(x => x.appointmentType.ToLower() == "toest").Count(); i++)
+                {
+                    if (i == appointments.Where(x => x.appointmentType.ToLower() == "toest").Count() - 1)
+                    {
+                        sb.Append($"en {appointments.Where(x => x.appointmentType.ToLower() == "toest").ToList()[i].subjects[0]}.");
+                    }
+                    else
+                    {
+                        sb.Append($"{appointments.Where(x => x.appointmentType.ToLower() == "toest").ToList()[i].subjects[0]}, ");
+                    }
+                }
+            }*/
+            
+            dagSamenvattingText.text = sb.ToString();
+            
         }
         else
         {
