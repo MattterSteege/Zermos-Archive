@@ -84,4 +84,6 @@ public sealed class NavBarView : View
 
 		base.Initialize();
 	}
+	
+	
 }

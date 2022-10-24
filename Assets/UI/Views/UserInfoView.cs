@@ -121,12 +121,18 @@ public class UserInfoView : View
         }
         else
         {
-            filePathText.text = filePath.Substring(0, 15) + "...";;
+            filePathText.text = filePath.Substring(0, 15) + "...";
             
             filePathTextButton.onClick.AddListener(() =>
             {
-                CopyToClipboard(filePath);
-                copyComplete("file path");
+                CopiedText.text = "Opening file explorer";
+        
+                CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().DOFade(1, 0.5f).onComplete += () =>
+                {
+                    CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().DOFade(0, 0.5f).SetDelay(1f);
+                };
+                
+                Application.OpenURL(filePath.Replace(@"/CustomHomework.json", ""));
             });
         }
 

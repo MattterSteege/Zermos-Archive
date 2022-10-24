@@ -35,8 +35,26 @@ public class SettingsView : View
     [Header("User info")]
     [SerializeField] private Button userInfo;
     
+    [Header("Secret Settings")]
+    [SerializeField] private Button SecretSettingsButton;
+    [SerializeField] private int ClicksNeeded = 10;
+    
     public override void Initialize()
     {
+        int timesCLicked = 0;
+        
+        SecretSettingsButton.onClick.AddListener(() =>
+        {
+            print($"clicked {timesCLicked} times");
+            
+            timesCLicked++;
+            if (timesCLicked >= ClicksNeeded)
+            {
+                timesCLicked = 0;
+                ViewManager.Instance.Show<SecretSettingsView, NavBarView>();
+            }
+        });
+        
         UltraSatisfyingScheduleMode.isOn = PlayerPrefs.GetInt("UltraSatisfyingScheduleMode") == 1;
         UltraSatisfyingScheduleMode.onValueChanged.AddListener((bool isOn) =>
         {
