@@ -30,15 +30,6 @@ public class DagRoosterView : View
     [SerializeField] private int maxNumberOfLessons;
     [SerializeField] private int addedDays = 0;
     
-#if UNITY_EDITOR
-    public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
-    {
-        // Unix timestamp is seconds past epoch
-        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        dateTime = dateTime.AddSeconds(unixTimeStamp).ToLocalTime();
-        return dateTime;
-    }
-#endif
 
     public override void Initialize()
     {
@@ -76,18 +67,11 @@ public class DagRoosterView : View
         appointments = new List<Schedule.Appointment>();
         RoosterItems = new List<GameObject>();
 
-        DateTime extraDays = DateTime.Now.AddDays(addedDays - 1);
+        DateTime extraDays = TimeManager.Instance.DateTime.AddDays(addedDays);
 
-        _dateText.text = extraDays.AddDays(1).ToString("d MMMM");
-
-#if UNITY_EDITOR
-        if (_date != 0)
-            appointments = _schedule.getScheduleOfDay(UnixTimeStampToDateTime(_date));
-        else
-            appointments = _schedule.getScheduleOfDay(extraDays);
-#else
+        _dateText.text = extraDays.ToString("d MMMM");
+        
         appointments = _schedule.getScheduleOfDay(extraDays);
-#endif
 
         if (appointments == null)
         {

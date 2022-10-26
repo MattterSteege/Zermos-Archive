@@ -29,10 +29,13 @@ public sealed class ViewManager : MonoBehaviour
 		if (autoInitialize) StartCoroutine(Initialize());
 	}
 
-	public delegate void OnIntializeComplete();
-
+	public delegate void OnIntializeComplete(bool done = false);
 	public static event OnIntializeComplete onInitializeComplete;
+	
+	public delegate void OnLoadedView(float loadingComplete = 0f);
+	public static event OnLoadedView onLoadedView;
 
+	[SerializeField] float viewsLoaded = 0f;
 	public IEnumerator Initialize()
 	{
 		View BuggedView = null;
@@ -55,6 +58,9 @@ public sealed class ViewManager : MonoBehaviour
 
 				view.Hide();
 			}
+			
+			viewsLoaded += 1f / views.Length;
+			onLoadedView?.Invoke(viewsLoaded);
 		}
 
 		if(string.IsNullOrEmpty(PlayerPrefs.GetString("zermelo-access_token")))
@@ -74,10 +80,8 @@ public sealed class ViewManager : MonoBehaviour
 			}
 		}
 		
-		if (onInitializeComplete != null)
-		{
-			onInitializeComplete();
-		}
+		onLoadedView?.Invoke(1f);
+		onInitializeComplete?.Invoke(true);
 	}
 
 	public void Show<TView>(object args = null) where TView : View
@@ -125,6 +129,39 @@ public sealed class ViewManager : MonoBehaviour
 		}
 	}
 	
+	public void Hide<TView>(object args = null) where TView : View
+	{
+		foreach (View view in views)
+		{
+			if (view is TView)
+			{
+				view.Hide();
+			}
+		}
+	}
+	
+	public void Hide<TView, TView2>(object args = null) where TView : View
+	{
+		foreach (View view in views)
+		{
+			if (view is TView || view is TView2)
+			{
+				view.Hide();
+			}
+		}
+	}
+	
+	public void Hide<TView, TView2, TView3>(object args = null) where TView : View
+	{
+		foreach (View view in views)
+		{
+			if (view is TView || view is TView2 || view is TView3)
+			{
+				view.Hide();
+			}
+		}
+	}
+	
 	public void Refresh<TView>(object args = null) where TView : View
 	{
 		foreach (View view in views)
@@ -135,4 +172,6 @@ public sealed class ViewManager : MonoBehaviour
 			}
 		}
 	}
+	
+	
 }

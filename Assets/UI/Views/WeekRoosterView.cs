@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,21 +20,32 @@ public class WeekRoosterView : View
     [SerializeField] private List<GameObject> RoosterItems;
     [SerializeField] private int maxNumberOfLessons;
     [SerializeField] private bool showHoursAfterLastLesson;
-
-#if UNITY_EDITOR
-    public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
-    {
-        // Unix timestamp is seconds past epoch
-        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        dateTime = dateTime.AddSeconds(unixTimeStamp).ToLocalTime();
-        return dateTime;
-    }
-#endif
-
+    [SerializeField] private int addedDays = 0;
+    
+    [Space, Header("UI controls")]
+    [SerializeField] private TMP_Text _dateText;
+    [SerializeField] private Button nextDayButton;
+    [SerializeField] private Button previousDayButton;
+    
     public override void Initialize()
     {
         RefreshButton.onClick.AddListener(Initialize);
         DagRoosterButton.onClick.AddListener(() => { ViewManager.Instance.Show<NavBarView, DagRoosterView>(); });
+        
+        nextDayButton.onClick.AddListener(() =>
+        {
+            addedDays += 7; 
+            nextDayButton.onClick.RemoveAllListeners(); 
+            previousDayButton.onClick.RemoveAllListeners(); 
+            Initialize();
+        });
+        previousDayButton.onClick.AddListener(() => 
+        { 
+            addedDays -= 7;
+            nextDayButton.onClick.RemoveAllListeners(); 
+            previousDayButton.onClick.RemoveAllListeners(); 
+            Initialize(); 
+        });
 
         for (int i = 0; i < dagenVanDeWeek.Length; i++)
         {
@@ -47,6 +59,8 @@ public class WeekRoosterView : View
             }
         }
         
+        DateTime extraDays = TimeManager.Instance.DateTime.AddDays(addedDays);
+        _dateText.text = "Week van " + extraDays.ToString("d MMMM");
         
         NoLessonHours = new List<int>();
         RoosterItems = new List<GameObject>();
@@ -54,15 +68,8 @@ public class WeekRoosterView : View
         for (int x = 0; x < dagenVanDeWeek.Length; x++)
         {
             appointments = new List<Schedule.Appointment>();
-
-#if UNITY_EDITOR
-            if (_date != 0)
-                appointments = _schedule.getScheduleOfDay(UnixTimeStampToDateTime(_date).StartOfWeek(DayOfWeek.Monday).AddDays(x));
-            else
-                appointments = _schedule.getScheduleOfDay(DateTime.Today.StartOfWeek(DayOfWeek.Monday).AddDays(x));
-#else
-            appointments = _schedule.getScheduleOfDay(DateTime.Today.StartOfWeek(DayOfWeek.Monday).AddDays(x));
-#endif
+            
+            appointments = _schedule.getScheduleOfDay(TimeManager.Instance.DateTime.StartOfWeek(DayOfWeek.Monday).AddDays(x));
 
             if (appointments == null)
             {
@@ -86,7 +93,7 @@ public class WeekRoosterView : View
                         DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start).AddHours(2).UtcDateTime
                             .ToShortTimeString() + " - " + DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end)
                             .AddHours(2).UtcDateTime
-                            .ToShortTimeString(), appointments[listIndex].teachers[0] + "...",
+                            .ToShortTimeString(), appointments[listIndex].teachers[0],
                         String.Join(", ", appointments[listIndex].subjects), appointments[listIndex].startTimeSlotName,
                         appointments[listIndex]);
 

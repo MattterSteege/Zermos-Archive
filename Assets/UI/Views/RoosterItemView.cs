@@ -69,7 +69,7 @@ public class RoosterItemView : View
             {
                 for (int i = 0; i < appointment.actions.Count; i++)
                 {
-                    if (appointment.actions[i].allowed == false) break;
+                    if (appointment.actions[i].allowed == false) continue;
                     
                     GameObject inplanLes = Instantiate(inplanLesPrefab, inplanLesContainer.transform);
                     inplanLes.GetComponent<InPlanLes>().post = appointment.actions[i].post;

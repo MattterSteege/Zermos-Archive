@@ -27,6 +27,13 @@ public class SettingsView : View
     [SerializeField] private TMP_InputField minutesBeforeClass;
     [SerializeField] private Button minutesBeforeClassPlus;
     [SerializeField] private Button minutesBeforeClassMinus;
+    
+    [Space]
+    [SerializeField] private TMP_InputField BackgroundPreset;
+    [SerializeField] private Button BackgroundPresetPlus;
+    [SerializeField] private Button BackgroundPresetMinus;
+    [SerializeField] private BackgroundManager BackgroundComponent;
+    
 
     [Header("Koppelingen")]
     [SerializeField] private Button SomtodayKoppeling;
@@ -55,7 +62,7 @@ public class SettingsView : View
             }
         });
         
-        UltraSatisfyingScheduleMode.isOn = PlayerPrefs.GetInt("UltraSatisfyingScheduleMode") == 1;
+        UltraSatisfyingScheduleMode.isOn = PlayerPrefs.GetInt("UltraSatisfyingScheduleMode", 0) == 1;
         UltraSatisfyingScheduleMode.onValueChanged.AddListener((bool isOn) =>
         {
             PlayerPrefs.SetInt("UltraSatisfyingScheduleMode", isOn ? 1 : 0);
@@ -64,7 +71,7 @@ public class SettingsView : View
             RoosterScrollRect.elasticity = isOn ? 0.1f : 0.3f;
         });
         
-        ShowTussenUren.isOn = PlayerPrefs.GetInt("ShowTussenUren") == 1;
+        ShowTussenUren.isOn = PlayerPrefs.GetInt("ShowTussenUren", 1) == 1;
         ShowTussenUren.onValueChanged.AddListener((bool isOn) =>
         {
             PlayerPrefs.SetInt("ShowTussenUren", isOn ? 1 : 0);
@@ -155,6 +162,38 @@ public class SettingsView : View
             minutes--;
             minutesBeforeClass.text = minutes.ToString();
             PlayerPrefs.SetInt("minutesbeforeclass", minutes);
+        });
+        
+        //--------------------------------------------------------------------------------
+        
+        BackgroundPreset.text = PlayerPrefs.GetInt("backgroundpreset", 3).ToString();
+        BackgroundPreset.onValueChanged.AddListener((string value) =>
+        {
+            BackgroundPreset.text = PlayerPrefs.GetInt("backgroundpreset", 3).ToString();
+        });
+        BackgroundPresetPlus.onClick.AddListener(() =>
+        {
+            int preset = int.Parse(BackgroundPreset.text);
+            if(preset >= BackgroundComponent.Instance.backgrounds.Length)
+            {
+                return;
+            }
+            preset++;
+            PlayerPrefs.SetInt("backgroundpreset", preset);
+            BackgroundPreset.text = preset.ToString();
+            BackgroundComponent.Instance.setBackGround(preset);
+        });
+        BackgroundPresetMinus.onClick.AddListener(() =>
+        {
+            int preset = int.Parse(BackgroundPreset.text);
+            if(preset <= 1)
+            {
+                return;
+            }
+            preset--;
+            PlayerPrefs.SetInt("backgroundpreset", preset);
+            BackgroundPreset.text = preset.ToString();
+            BackgroundComponent.Instance.setBackGround(preset);
         });
         
         SomtodayKoppeling.onClick.AddListener(() =>

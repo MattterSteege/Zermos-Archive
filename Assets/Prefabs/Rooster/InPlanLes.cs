@@ -15,7 +15,7 @@ public class InPlanLes : MonoBehaviour
         
         baseURL = baseURL.Replace("{school}", PlayerPrefs.GetString("zermelo-school_code"));
         
-        UnityWebRequest www = UnityWebRequest.Post(baseURL, "");
+        UnityWebRequest www = UnityWebRequest.Post(baseURL, new WWWForm());
         www.SetRequestHeader("Authorization", "Bearer " + PlayerPrefs.GetString("zermelo-access_token"));
         
         www.SendWebRequest();

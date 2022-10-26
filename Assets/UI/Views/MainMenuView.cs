@@ -11,7 +11,6 @@ public class MainMenuView : View
     [SerializeField] private GameObject paklijstContentGameObject;
     [SerializeField] private GameObject paklijstPrefab;
     [SerializeField] private Schedule zermeloSchedule;
-    [SerializeField] private int _date;
 
     [Space] 
     [SerializeField] private TMP_Text tijdText1;
@@ -26,31 +25,15 @@ public class MainMenuView : View
 
     List<Schedule.Appointment> appointments = new List<Schedule.Appointment>();
     
-#if UNITY_EDITOR
-    private static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
-    {
-        // Unix timestamp is seconds past epoch
-        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        dateTime = dateTime.AddSeconds(unixTimeStamp).ToLocalTime();
-        return dateTime;
-    }
-#endif
+
     
     public override void Initialize()
     {
         PlayerPrefs.SetString("main_menu_settings", "1,1,0");
 
-        
-#if UNITY_EDITOR
-        if (_date != 0)
-            appointments = zermeloSchedule.getScheduleOfDay(UnixTimeStampToDateTime(_date));
-        else
-            appointments = zermeloSchedule.getScheduleOfDay(DateTime.Today);
-#else
-        appointments = zermeloSchedule.getScheduleOfDay(DateTime.Today);
-#endif
+        appointments = zermeloSchedule.getScheduleOfDay(TimeManager.Instance.DateTime);
 
-        if (appointments == null) return;
+        if (appointments == null || appointments.Count == 0) return;
 
         #region paklijst
         if (PlayerPrefs.GetString("main_menu_settings").Split(",")[0] == "1") // show paklijst
@@ -67,9 +50,8 @@ public class MainMenuView : View
                 List<string> lessen = new List<string>();
 
                 foreach (Schedule.Appointment item in appointments)
-                    //foreach (Schedule.Appointment item in zermeloSchedule.getScheduleOfDay(new DateTime(2022, 10, 17, 0, 0, 0)))
                 {
-                    if (!lessen.Contains(item.subjects[0]) && item.cancelled != true)
+                    if (item.appointmentType != "choice" && !lessen.Contains(item.subjects[0]) && item.cancelled != true)
                     {
                         lessen.Add(item.subjects[0]);
                         var paklijstItem = Instantiate(paklijstPrefab, paklijstContentGameObject.transform);
@@ -244,7 +226,7 @@ public class MainMenuView : View
 
         #region Vertrektijd
 
-        TimeSpan span = (timeTillDeparture - DateTime.Now);
+        TimeSpan span = (timeTillDeparture - TimeManager.Instance.DateTime);
         tijdText1.text = span.ToString(@"hh\:mm\:ss") + " tot vertrek";
 
         if (span.TotalSeconds <= 0)
@@ -258,7 +240,7 @@ public class MainMenuView : View
         #region eerste les
 
         span = (new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(currentAppointment.start)
-            .ToLocalTime() - DateTime.Now);
+            .ToLocalTime() - TimeManager.Instance.DateTime);
 
         tijdText2.text = span.ToString(@"hh\:mm\:ss") + " tot " + currentAppointment.subjects[0];
 
@@ -270,7 +252,7 @@ public class MainMenuView : View
         if (appointments.Count == 0) return null;
         
         var a = appointments.Where(x => new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(x.start)
-                .ToLocalTime() > DateTime.Now)
+                .ToLocalTime() > TimeManager.Instance.DateTime)
             .OrderBy(x => x.start)
             .FirstOrDefault();
 

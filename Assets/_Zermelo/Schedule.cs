@@ -9,6 +9,9 @@ using UnityEngine.Networking;
 
 public class Schedule : MonoBehaviour
 {
+    public static ZermeloSchedule ScheduledAppointments;
+    
+    
     public ZermeloSchedule StartGetSchedule(string week = "38", string year = "0")
     { 
         if (Regex.IsMatch(week, "/^(?=.{1,2}$).*/"))
@@ -20,11 +23,13 @@ public class Schedule : MonoBehaviour
             
             if (year == "0")
             {
-                year = System.DateTime.Now.Year.ToString();
+                year = TimeManager.Instance.DateTime.Year.ToString();
             }
         }
 
-        return new CoroutineWithData<ZermeloSchedule>(this, GetSchedule(year + week)).result;
+        
+        ScheduledAppointments = new CoroutineWithData<ZermeloSchedule>(this, GetSchedule(year + week)).result;
+        return ScheduledAppointments;
     }
 
     private IEnumerator GetSchedule(string date)

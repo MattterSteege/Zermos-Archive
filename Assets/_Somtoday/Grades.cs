@@ -21,7 +21,7 @@ public class Grades : MonoBehaviour
         int rangemin = 0;
         int rangemax = 99;
         
-        string baseurl = string.Format($"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/resultaten/huidigVoorLeerling/{PlayerPrefs.GetString("somtoday-student_id")}?begintNaOfOp={DateTime.Now.ToString("yyyy")}-01-01");
+        string baseurl = string.Format($"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/resultaten/huidigVoorLeerling/{PlayerPrefs.GetString("somtoday-student_id")}?begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01");
 
         UnityWebRequest www = UnityWebRequest.Get(baseurl);
         www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
@@ -42,7 +42,7 @@ public class Grades : MonoBehaviour
         {
             rangemin += 100;
             rangemax += 100;
-            baseurl = string.Format($"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/resultaten/huidigVoorLeerling/{PlayerPrefs.GetString("somtoday-student_id")}?begintNaOfOp={DateTime.Now.ToString("yyyy")}-01-01");
+            baseurl = string.Format($"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/resultaten/huidigVoorLeerling/{PlayerPrefs.GetString("somtoday-student_id")}?begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01");
 
             www = UnityWebRequest.Get(baseurl);
             www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));

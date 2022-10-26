@@ -27,7 +27,7 @@ public class Homework : MonoBehaviour
 
         string baseurl =
             string.Format(
-                $"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={DateTime.Now.ToString("yyyy")}-01-01&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen");
+                $"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen");
 
         
         UnityWebRequest www = UnityWebRequest.Get(baseurl);
@@ -115,7 +115,7 @@ public class Homework : MonoBehaviour
 
         string baseurl =
             string.Format(
-                $"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemweektoekenningen?schooljaar={PlayerPrefs.GetString("somtoday-schooljaar_id")}&begintNaOfOp={DateTime.Now.ToString("yyyy")}-01-01&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen");
+                $"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemweektoekenningen?schooljaar={PlayerPrefs.GetString("somtoday-schooljaar_id")}&begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen");
 
         
         UnityWebRequest www = UnityWebRequest.Get(baseurl);
@@ -174,7 +174,7 @@ public class Homework : MonoBehaviour
 
         foreach (Item homeworkItem in homework.items)
         {
-            homeworkItem.datumTijd = getDateFromWeeknumber(homeworkItem.weeknummerVanaf, DateTime.Now.Year);
+            homeworkItem.datumTijd = getDateFromWeeknumber(homeworkItem.weeknummerVanaf, TimeManager.Instance.DateTime.Year);
         }
 
         homework = Sort(homework);
@@ -216,7 +216,7 @@ public class Homework : MonoBehaviour
     {
         homework.items = homework.items.OrderBy(x => x.datumTijd).ToList();
         homework.items.RemoveAll(x => x.studiewijzerItem == null);
-        homework.items.RemoveAll(x=> x.datumTijd < DateTime.Now.AddDays(-PlayerPrefs.GetInt("numberofdayshomework")));
+        homework.items.RemoveAll(x=> x.datumTijd < TimeManager.Instance.DateTime.AddDays(-PlayerPrefs.GetInt("numberofdayshomework")));
         homework.items.RemoveAll(x=> x.studiewijzerItem.huiswerkType == "LESSTOF");
         return homework;
     }

@@ -3,15 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SecretSettingsView : View
 {
+    [SerializeField] TMP_Text output;
+    [SerializeField] Button deletePlayerPrefsButton;
+    
     public override void Initialize()
     {
         Application.logMessageReceived += HandleLog;
+        
+        deletePlayerPrefsButton.onClick.AddListener(() =>
+        {
+            PlayerPrefs.DeleteAll();
+            PlayerPrefs.Save();
+            
+            ViewManager.Instance.Show<ConnectZermeloView>();
+        });
     }
     
-    [SerializeField] TMP_Text output;
 
     void HandleLog(string logString, string stackTrace, LogType type)
     {
