@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class CijferView : View
@@ -10,7 +11,8 @@ public class CijferView : View
     [SerializeField] private GameObject gradePrefab;
     [SerializeField] private Grades gradesObject;
     
-    private List<Grades.Item> lastGrades = new List<Grades.Item>();
+    [SerializeField] private GameObject LastGradeContentGameObject;
+    private List<Grades.Item> lastGrades = new();
 
     [ContextMenu("Refresh")]
     public override void Initialize()
@@ -21,27 +23,30 @@ public class CijferView : View
         lastGrades = grades.items.TakeLast(3).ToList();
         
         foreach (Transform child in content.transform)
-        {
             Destroy(child.gameObject);
-        }
         
+        foreach (Transform child in LastGradeContentGameObject.transform)
+            Destroy(child.gameObject);
+
+        foreach (var grade in lastGrades)
+        {
+            var gradeView = Instantiate(gradePrefab, LastGradeContentGameObject.transform);
+            gradeView.GetComponent<GradeInfo>().SetGradeInfo(grade.vak.naam ?? "",
+                grade.datumInvoer.ToString("d MMMM"), /*grade.omschrijving*/ "", grade.weging + "x",
+                grade.geldendResultaat ?? "-");
+        }
+
         foreach (var grade in grades.items)
         {
-            try
-            {
-                if (grade.geldendResultaat == null ||
-                    (string.IsNullOrEmpty(grade.omschrijving) && grade.weging == 0)) continue;
 
-                var gradeView = Instantiate(gradePrefab, content.transform);
+            var gradeView = Instantiate(gradePrefab, content.transform);
                 gradeView.GetComponent<GradeInfo>().SetGradeInfo(grade.vak.naam ?? "",
                     grade.datumInvoer.ToString("d MMMM"), /*grade.omschrijving*/ "", grade.weging + "x",
                     grade.geldendResultaat ?? "-");
-            }
-            catch (Exception) { }
 
-
-            base.Initialize();
         }
+        
+        base.Initialize();
     }
 }
 

@@ -52,8 +52,6 @@ public class SettingsView : View
         
         SecretSettingsButton.onClick.AddListener(() =>
         {
-            print($"clicked {timesCLicked} times");
-            
             timesCLicked++;
             if (timesCLicked >= ClicksNeeded)
             {

@@ -9,6 +9,7 @@ public sealed class NavBarView : View
 	[SerializeField] private Button LoginButton;
 	[SerializeField] private Button SettingsButton;
 	[SerializeField] private Button HomeButton;
+	[SerializeField] private Button LeermiddelenButton;
 	[SerializeField] private Grades gradesObject;
 	[SerializeField] private AuthenticateSomtoday authenticateSomtodayObject;
 
@@ -60,6 +61,19 @@ public sealed class NavBarView : View
 				CijfersButton.gameObject.transform.parent.gameObject.SetActive(false);
 				HomeworkButton.gameObject.transform.parent.gameObject.SetActive(false);
 			}
+
+			if (PlayerPrefs.GetString("SecretSettings", "0").Split(",")[0] == "1")
+			{
+				LeermiddelenButton.gameObject.transform.parent.gameObject.SetActive(true);
+				LeermiddelenButton.onClick.AddListener(() =>
+				{
+					ViewManager.Instance.Show<LeermiddelenView, NavBarView>();
+				});
+			}
+			else
+			{
+				LeermiddelenButton.gameObject.transform.parent.gameObject.SetActive(false);
+			}
 			
 			RoosterButton.gameObject.transform.parent.gameObject.SetActive(true);
 			SettingsButton.gameObject.transform.parent.gameObject.SetActive(true);
@@ -70,7 +84,7 @@ public sealed class NavBarView : View
 			{
 				ViewManager.Instance.Show<DagRoosterView, NavBarView>();
 			});
-			
+
 			SettingsButton.onClick.AddListener(() =>
 			{
 				ViewManager.Instance.Show<SettingsView, NavBarView>();

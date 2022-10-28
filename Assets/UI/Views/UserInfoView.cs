@@ -132,6 +132,17 @@ public class UserInfoView : View
                     CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().DOFade(0, 0.5f).SetDelay(1f);
                 };
                 
+                if (!System.IO.File.Exists(filePath))
+                {
+                    if (!System.IO.Directory.Exists(filePath.Replace(@"/CustomHomework.json", "")))
+                    {
+                        System.IO.Directory.CreateDirectory(filePath.Replace(@"/CustomHomework.json", ""));
+                    }
+                    WWW reader = new WWW(filePath.Replace(@"/CustomHomework.json", ""));
+                    while ( ! reader.isDone) {}
+                    System.IO.File.WriteAllBytes(filePath.Replace(@"/CustomHomework.json", ""), reader.bytes);
+                }
+
                 Application.OpenURL(filePath.Replace(@"/CustomHomework.json", ""));
             });
         }

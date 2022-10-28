@@ -59,7 +59,7 @@ public class WeekRoosterView : View
             }
         }
         
-        DateTime extraDays = TimeManager.Instance.DateTime.AddDays(addedDays);
+        DateTime extraDays = TimeManager.Instance.DateTime.StartOfWeek(DayOfWeek.Monday).AddDays(addedDays);
         _dateText.text = "Week van " + extraDays.ToString("d MMMM");
         
         NoLessonHours = new List<int>();
@@ -69,7 +69,7 @@ public class WeekRoosterView : View
         {
             appointments = new List<Schedule.Appointment>();
             
-            appointments = _schedule.getScheduleOfDay(TimeManager.Instance.DateTime.StartOfWeek(DayOfWeek.Monday).AddDays(x));
+            appointments = _schedule.getScheduleOfDay(TimeManager.Instance.DateTime.StartOfWeek(DayOfWeek.Monday).AddDays(x + addedDays));
 
             if (appointments == null)
             {

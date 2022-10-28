@@ -24,11 +24,16 @@ public class MainMenuView : View
     DateTime timeTillDeparture;
 
     List<Schedule.Appointment> appointments = new List<Schedule.Appointment>();
+    [SerializeField] private Vakken _vakken;
+
+    private Vakken.SomtodayVakken vakken;
     
 
     
     public override void Initialize()
     {
+        vakken = _vakken.getVakken();
+        
         PlayerPrefs.SetString("main_menu_settings", "1,1,0");
 
         appointments = zermeloSchedule.getScheduleOfDay(TimeManager.Instance.DateTime);
@@ -55,13 +60,13 @@ public class MainMenuView : View
                     {
                         lessen.Add(item.subjects[0]);
                         var paklijstItem = Instantiate(paklijstPrefab, paklijstContentGameObject.transform);
-                        paklijstItem.GetComponent<Paklijst>().text.text = "• " + item.subjects[0];
+                        paklijstItem.GetComponent<Paklijst>().text.text = "• " + vakken.items.Find(x => x.afkorting == item.subjects[0]).naam;
                         paklijstItem.GetComponent<Paklijst>().toggle.isOn = false;
 
                         paklijstItem.GetComponent<Paklijst>().toggle.onValueChanged.AddListener((bool isOn) =>
                         {
                             paklijstItem.GetComponent<Paklijst>().text.text =
-                                isOn ? "<s>• " + item.subjects[0] + "<s>" : "• " + item.subjects[0];
+                                isOn ? "<s>• " + item.subjects[0] + "<s>" : "• " + vakken.items.Find(x => x.afkorting == item.subjects[0]).naam;
                             paklijstItem.GetComponent<Paklijst>().text.color = isOn ? Color.gray : Color.black;
                         });
                     }
@@ -242,7 +247,7 @@ public class MainMenuView : View
         span = (new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(currentAppointment.start)
             .ToLocalTime() - TimeManager.Instance.DateTime);
 
-        tijdText2.text = span.ToString(@"hh\:mm\:ss") + " tot " + currentAppointment.subjects[0];
+        tijdText2.text = span.ToString(@"hh\:mm\:ss") + " tot " + vakken.items.Find(x => x.afkorting == currentAppointment.subjects[0]).naam;
 
         #endregion
     }

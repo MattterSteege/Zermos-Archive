@@ -66,7 +66,9 @@ public class AuthenticateSomtoday : MonoBehaviour
 
             HttpHeaders headers = response.Headers;
             IEnumerable<string> values;
+            IEnumerable<string> cookie1;
             if (!headers.TryGetValues("Location", out values)) yield return null;
+            if (!headers.TryGetValues("set-cookie", out cookie1)) Debug.Log(cookie1);
 
             Uri myUri = new Uri(values.First());
 
@@ -99,7 +101,9 @@ public class AuthenticateSomtoday : MonoBehaviour
 
             headers = response3.Headers;
             IEnumerable<string> values3;
+            IEnumerable<string> cookie2;
             if (!headers.TryGetValues("Location", out values3)) yield return null;
+            if (!headers.TryGetValues("set-cookie", out cookie2)) Debug.Log(cookie2);
 
             myUri = new Uri(values3.First());
 
@@ -149,10 +153,12 @@ public class AuthenticateSomtoday : MonoBehaviour
              SomtodayAuthentication somtodayAuthentication = JsonConvert.DeserializeObject<SomtodayAuthentication>(www.downloadHandler.text);
              PlayerPrefs.SetString("somtoday-refresh_token", somtodayAuthentication.refresh_token);
              PlayerPrefs.SetString("somtoday-access_token", somtodayAuthentication.access_token);
+
              www.Dispose();
              return somtodayAuthentication;
          }
-
+         
+         
          www.Dispose();
          return null;
     }

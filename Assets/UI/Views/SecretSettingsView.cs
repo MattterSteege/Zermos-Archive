@@ -9,6 +9,8 @@ public class SecretSettingsView : View
 {
     [SerializeField] TMP_Text output;
     [SerializeField] Button deletePlayerPrefsButton;
+    [SerializeField] Button EnableLeermiddelen;
+    [SerializeField] Button DisableLeermiddelen;
     
     public override void Initialize()
     {
@@ -20,6 +22,22 @@ public class SecretSettingsView : View
             PlayerPrefs.Save();
             
             ViewManager.Instance.Show<ConnectZermeloView>();
+        });
+        
+        EnableLeermiddelen.onClick.AddListener(() =>
+        {
+            PlayerPrefs.SetString("SecretSettings", "1");
+            PlayerPrefs.Save();
+            
+            ViewManager.Instance.Refresh<NavBarView>();
+        });
+        
+        DisableLeermiddelen.onClick.AddListener(() =>
+        {
+            PlayerPrefs.SetString("SecretSettings", "0");
+            PlayerPrefs.Save();
+            
+            ViewManager.Instance.Refresh<NavBarView>();
         });
     }
     

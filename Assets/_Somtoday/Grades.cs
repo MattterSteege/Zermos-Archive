@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -57,8 +58,17 @@ public class Grades : MonoBehaviour
             json += www.downloadHandler.text;
         }
         
-        return JsonConvert.DeserializeObject<SomtodayGrades>(www.downloadHandler.text);
+        return Sort(JsonConvert.DeserializeObject<SomtodayGrades>(www.downloadHandler.text));
     }
+
+    public SomtodayGrades Sort(SomtodayGrades grades)
+    {
+        grades.items = grades.items.OrderBy(x => x.datumInvoer).ToList();
+        grades.items.RemoveAll(x => x.geldendResultaat == null);
+        grades.items.RemoveAll(x=> string.IsNullOrEmpty(x.omschrijving) && x.weging == 0);
+        return grades;
+    }
+    
 
     #region model
     public class SomtodayGrades
