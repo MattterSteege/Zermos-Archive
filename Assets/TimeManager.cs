@@ -7,9 +7,10 @@ public class TimeManager : MonoBehaviour
 {
     public static TimeManager Instance;
 
-    public int unixTime;
-    [SerializeField] private UDateTime _dateTime;
-    public DateTime DateTime;
+    [SerializeField] public int unixTime;
+    [SerializeField] private UDateTime _dateTime;    /*<- inspector field | public field -> */ public DateTime DateTime;
+    
+    [SerializeField] bool TimeShouldRun = true;
 
     void Start()
     {
@@ -22,13 +23,29 @@ public class TimeManager : MonoBehaviour
         }
 
         _dateTime = new DateTime(1970, 1, 1).AddSeconds(unixTime);
+        StartCoroutine(UpdateDateTime());
+
 #else
-        unixTime = (int) DateTime.Today.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+        unixTime = (int) DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
         _dateTime = new DateTime(1970, 1, 1).AddSeconds(unixTime);
 #endif
 
         DateTime = _dateTime.dateTime;
+        
     }
+    
+#if UNITY_EDITOR
+    private IEnumerator UpdateDateTime()
+    {
+        while (TimeShouldRun)
+        {
+            yield return new WaitForSeconds(1);
+            unixTime++;
+            _dateTime = new DateTime(1970, 1, 1).AddSeconds(unixTime);
+            DateTime = _dateTime.dateTime;
+        }
+    }
+#endif
 
     int unixTimeSave;
     UDateTime dateTimeSave;

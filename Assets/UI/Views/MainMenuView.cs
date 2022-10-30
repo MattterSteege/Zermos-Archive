@@ -58,17 +58,32 @@ public class MainMenuView : View
                 {
                     if (item.appointmentType != "choice" && !lessen.Contains(item.subjects[0]) && item.cancelled != true)
                     {
-                        lessen.Add(item.subjects[0]);
-                        var paklijstItem = Instantiate(paklijstPrefab, paklijstContentGameObject.transform);
-                        paklijstItem.GetComponent<Paklijst>().text.text = "• " + vakken.items.Find(x => x.afkorting == item.subjects[0]).naam;
-                        paklijstItem.GetComponent<Paklijst>().toggle.isOn = false;
-
-                        paklijstItem.GetComponent<Paklijst>().toggle.onValueChanged.AddListener((bool isOn) =>
+                        try
                         {
-                            paklijstItem.GetComponent<Paklijst>().text.text =
-                                isOn ? "<s>• " + item.subjects[0] + "<s>" : "• " + vakken.items.Find(x => x.afkorting == item.subjects[0]).naam;
-                            paklijstItem.GetComponent<Paklijst>().text.color = isOn ? Color.gray : Color.black;
-                        });
+                            lessen.Add(item.subjects[0]);
+                            var paklijstItem = Instantiate(paklijstPrefab, paklijstContentGameObject.transform);
+
+                            string vak = item.subjects[0];
+                            try
+                            {
+                                vak = vakken.items.Find(x => x.afkorting == item.subjects[0]).naam ??
+                                             item.subjects[0];
+                            }
+                            catch(Exception) { }
+
+                            paklijstItem.GetComponent<Paklijst>().text.text = "• " + vak;
+                            paklijstItem.GetComponent<Paklijst>().toggle.isOn = false;
+
+                            paklijstItem.GetComponent<Paklijst>().toggle.onValueChanged.AddListener((bool isOn) =>
+                            {
+                                paklijstItem.GetComponent<Paklijst>().text.text =
+                                    isOn
+                                        ? "<s>• " + item.subjects[0] + "<s>"
+                                        : "• " + vakken.items.Find(x => x.afkorting == item.subjects[0]).naam;
+                                paklijstItem.GetComponent<Paklijst>().text.color = isOn ? Color.gray : Color.black;
+                            });
+                        }
+                        catch (Exception) { }
                     }
                 }
 
@@ -246,8 +261,8 @@ public class MainMenuView : View
 
         span = (new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(currentAppointment.start)
             .ToLocalTime() - TimeManager.Instance.DateTime);
-
-        tijdText2.text = span.ToString(@"hh\:mm\:ss") + " tot " + vakken.items.Find(x => x.afkorting == currentAppointment.subjects[0]).naam;
+        
+        tijdText2.text = span.ToString(@"hh\:mm\:ss") + " tot " + currentAppointment.subjects[0];
 
         #endregion
     }

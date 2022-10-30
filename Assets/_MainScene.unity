@@ -1049,9 +1049,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.175
 --- !u!1 &31196732
 GameObject:
@@ -1524,6 +1524,7 @@ GameObject:
   - component: {fileID: 56468693}
   - component: {fileID: 56468692}
   - component: {fileID: 56468694}
+  - component: {fileID: 56468695}
   m_Layer: 0
   m_Name: Mobile Manager
   m_TagString: Untagged
@@ -1568,6 +1569,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: de49112df649035418f5d021dfd10b9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  schedule: {fileID: 1516145119}
+--- !u!114 &56468695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56468691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd55704c84a8d8c469e85100f09ac028, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &56978676
@@ -2087,9 +2101,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!114 &76528637
 MonoBehaviour:
@@ -3744,9 +3758,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!222 &141428531
 CanvasRenderer:
@@ -3911,9 +3925,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.65
 --- !u!1 &173811739
 GameObject:
@@ -4235,9 +4249,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 3
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!222 &183081003
 CanvasRenderer:
@@ -5438,9 +5452,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!1 &241821415
 GameObject:
@@ -5501,9 +5515,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ae3c9da5a64f974b8b8aaef1aa37d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unixTime: 1667088000
+  unixTime: 1667174400
   _dateTime:
-    _dateTime: 30-10-2022 00:00:00
+    _dateTime: 31-10-2022 00:00:00
 --- !u!114 &241821419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7865,9 +7879,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 2
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.175
 --- !u!1 &367534140
 GameObject:
@@ -8125,9 +8139,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 3
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!222 &378169149
 CanvasRenderer:
@@ -8351,9 +8365,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!1 &395497818
 GameObject:
@@ -8693,9 +8707,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 3
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.65
 --- !u!1 &408277528
 GameObject:
@@ -9508,8 +9522,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
-    m_Right: 0
+    m_Left: 5
+    m_Right: 5
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
@@ -9930,9 +9944,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0
 --- !u!222 &474034525
 CanvasRenderer:
@@ -10276,7 +10290,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &501444027
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10753,9 +10767,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!1 &536266360
 GameObject:
@@ -10881,9 +10895,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.175
 --- !u!1 &542015997
 GameObject:
@@ -10954,9 +10968,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!222 &542016000
 CanvasRenderer:
@@ -11950,9 +11964,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 3
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.65
 --- !u!114 &577044000
 MonoBehaviour:
@@ -13207,9 +13221,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 2
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.35
 --- !u!1 &644395652
 GameObject:
@@ -13464,9 +13478,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.2625
 --- !u!1 &654956211
 GameObject:
@@ -14892,9 +14906,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!1 &719170186
 GameObject:
@@ -15216,9 +15230,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0
 --- !u!222 &749826574
 CanvasRenderer:
@@ -15695,9 +15709,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.175
 --- !u!1 &812545000
 GameObject:
@@ -15980,9 +15994,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!1 &815133193
 GameObject:
@@ -17734,6 +17748,7 @@ MonoBehaviour:
   deletePlayerPrefsButton: {fileID: 1320760367}
   EnableLeermiddelen: {fileID: 74914031}
   DisableLeermiddelen: {fileID: 1711615841}
+  _vakken: {fileID: 1147355069}
 --- !u!1 &937943512
 GameObject:
   m_ObjectHideFlags: 0
@@ -18632,9 +18647,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!1 &971901052
 GameObject:
@@ -19574,9 +19589,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!1 &1014757735
 GameObject:
@@ -20272,7 +20287,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -26}
-  m_SizeDelta: {x: -4, y: -52}
+  m_SizeDelta: {x: 0, y: -52}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1075305972
 MonoBehaviour:
@@ -21069,9 +21084,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.175
 --- !u!1 &1101852883
 GameObject:
@@ -22936,9 +22951,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.175
 --- !u!1 &1223970023
 GameObject:
@@ -23990,10 +24005,10 @@ RectTransform:
   m_Father: {fileID: 1427028494}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000037368463, y: -14.999985}
-  m_SizeDelta: {x: 350, y: 15}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: -6.9999847}
+  m_SizeDelta: {x: 0, y: 15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1298668175
 MonoBehaviour:
@@ -24126,9 +24141,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 2
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!1 &1306250309
 GameObject:
@@ -24253,9 +24268,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!1 &1306732154
 GameObject:
@@ -25003,9 +25018,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.65
 --- !u!222 &1353043823
 CanvasRenderer:
@@ -25479,9 +25494,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.175
 --- !u!1 &1390241579
 GameObject:
@@ -26418,10 +26433,10 @@ RectTransform:
   m_Father: {fileID: 1411089602}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000037368463, y: -14.999985}
-  m_SizeDelta: {x: 350, y: 15}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: -6.9999847}
+  m_SizeDelta: {x: 0, y: 15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1458515513
 MonoBehaviour:
@@ -28285,9 +28300,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.65
 --- !u!114 &1548087774
 MonoBehaviour:
@@ -28829,9 +28844,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!114 &1577308035
 MonoBehaviour:
@@ -29438,9 +29453,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!1 &1618542507
 GameObject:
@@ -30111,9 +30126,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!222 &1648449903
 CanvasRenderer:
@@ -31091,9 +31106,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!1 &1703920479
 GameObject:
@@ -31461,7 +31476,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 5}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1717848144
 MonoBehaviour:
@@ -31626,9 +31641,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!1 &1731994509
 GameObject:
@@ -33554,9 +33569,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!1 &1861701467
 GameObject:
@@ -34229,9 +34244,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 2
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.35
 --- !u!1 &1909318437
 GameObject:
@@ -35592,9 +35607,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!114 &1989122830
 MonoBehaviour:
@@ -36142,9 +36157,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 2
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.175
 --- !u!1 &2062290781
 GameObject:
@@ -36875,9 +36890,9 @@ MonoBehaviour:
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 3
   source: {fileID: 1440646487}
-  vibrancy: 1.8
+  vibrancy: 1.93
   brightness: 0.1
-  flatten: 0.15
+  flatten: 0.1
   spriteBlending: 0.525
 --- !u!222 &2097942842
 CanvasRenderer:

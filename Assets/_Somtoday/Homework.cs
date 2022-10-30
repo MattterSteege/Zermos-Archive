@@ -43,7 +43,7 @@ public class Homework : MonoBehaviour
         json = www.downloadHandler.text
             .Replace("<p>", "").Replace("</p>", "")
             .Replace("<ul>", "").Replace("</ul>", "")
-            .Replace("<li>", "• ").Replace("</li>", "")
+            .Replace("<li>", "\n• ").Replace("</li>", "")
             .Replace("&amp;", "&")
             .Replace("<strong>", "<b>").Replace("</strong>", "</b>")
             .Replace("<em>", "<i>").Replace("</em>", "</i>");
@@ -75,7 +75,7 @@ public class Homework : MonoBehaviour
             var extraHomework = JsonConvert.DeserializeObject<SomtodayHomework>(www.downloadHandler.text
                 .Replace("<p>", "").Replace("</p>", "")
                 .Replace("<ul>", "").Replace("</ul>", "")
-                .Replace("<li>", "• ").Replace("</li>", "")
+                .Replace("<li>", "\n• ").Replace("</li>", "")
                 .Replace("&amp;", "&").Replace("<br>", "\n")
                 .Replace("<strong>", "<b>").Replace("</strong>", "</b>")
                 .Replace("<em>", "<i>").Replace("</em>", "</i>"));

@@ -9,7 +9,7 @@ using UnityEngine.Networking;
 
 public class Schedule : MonoBehaviour
 {
-    public static ZermeloSchedule ScheduledAppointments;
+    public static List<Appointment> ScheduledAppointments;
     
     
     public ZermeloSchedule StartGetSchedule(string week = "38", string year = "0")
@@ -28,8 +28,7 @@ public class Schedule : MonoBehaviour
         }
 
         
-        ScheduledAppointments = new CoroutineWithData<ZermeloSchedule>(this, GetSchedule(year + week)).result;
-        return ScheduledAppointments;
+        return new CoroutineWithData<ZermeloSchedule>(this, GetSchedule(year + week)).result;
     }
 
     private IEnumerator GetSchedule(string date)
@@ -92,7 +91,8 @@ public class Schedule : MonoBehaviour
 
         foreach (Appointment appointment in schedule.response.data[0].appointments)
         {
-            if (appointment.start >= ((DateTimeOffset)date).ToUnixTimeSeconds() && appointment.start <= ((DateTimeOffset)date.AddDays(1)).ToUnixTimeSeconds())
+            if (appointment.start >= ((DateTimeOffset) date).ToUnixTimeSeconds() &&
+                appointment.start <= ((DateTimeOffset) date.AddDays(1)).ToUnixTimeSeconds())
             {
                 TodaySchedule.Add(appointment);
             }

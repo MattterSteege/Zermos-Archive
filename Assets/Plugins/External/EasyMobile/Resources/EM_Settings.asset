@@ -285,9 +285,9 @@ MonoBehaviour:
       enableBadge: 1
       lights: 1
       lightColor: {r: 1, g: 1, b: 1, a: 1}
-      vibration: 1
+      vibration: 0
       vibrationPattern: 
-      lockScreenVisibility: 2
+      lockScreenVisibility: 0
       sound: 1
       soundName: 
       actionButtons: []
@@ -377,5 +377,5 @@ MonoBehaviour:
   mIsGameServiceModuleEnable: 0
   mIsNotificationModuleEnable: 1
   mIsSharingModuleEnable: 0
-  mActiveModuleIndex: 8
-  mIsSelectingModule: 0
+  mActiveModuleIndex: 7
+  mIsSelectingModule: 1

@@ -11,6 +11,7 @@ public class SecretSettingsView : View
     [SerializeField] Button deletePlayerPrefsButton;
     [SerializeField] Button EnableLeermiddelen;
     [SerializeField] Button DisableLeermiddelen;
+    [SerializeField] Vakken _vakken;
     
     public override void Initialize()
     {
@@ -28,6 +29,8 @@ public class SecretSettingsView : View
         {
             PlayerPrefs.SetString("SecretSettings", "1");
             PlayerPrefs.Save();
+            
+            _vakken.Downloadvakken();
             
             ViewManager.Instance.Refresh<NavBarView>();
         });

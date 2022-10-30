@@ -57,7 +57,10 @@ namespace EasyMobile
                 if (Initialized != null)
                     Initialized();
 
+#if UNITY_EDITOR
                 Debug.Log("Easy Mobile runtime has been initialized.");
+#endif
+                
             }
         }
 

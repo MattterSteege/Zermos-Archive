@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -97,10 +98,25 @@ public class HomeworkView : View
 
     private bool UpdateGemaaktStatus(Homework.Item HomeworkItem, bool gemaakt)
     {
-        string json = ("{\"leerling\": {\"links\": [{\"id\": {id},\"rel\": \"self\",\"href\": \"{apiUrl}/rest/v1/leerlingen/{id}\"}]},\"gemaakt\": {gemaakt}}")
-            .Replace("{id}", HomeworkItem.additionalObjects.leerlingen.items[0].links[0].id.ToString())
-            .Replace("{apiUrl}", PlayerPrefs.GetString("somtoday-api_url"))
-            .Replace("{gemaakt}", gemaakt.ToString().ToLower());
+        SomtodayHoweworkStatus root = new SomtodayHoweworkStatus
+        {
+            leerling = new Leerling
+            {
+                links = new List<Link>
+                {
+                    new()
+                    {
+                        id = int.Parse(HomeworkItem.additionalObjects.leerlingen.items[0].links[0].id.ToString()),
+                        rel = "self",
+                        href = $"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/leerlingen/{HomeworkItem.additionalObjects.leerlingen.items[0].links[0].id}"
+                    }
+                }
+            },
+            gemaakt = gemaakt
+        };
+
+        //root to a json string
+        string json = JsonConvert.SerializeObject(root);
         
         UnityWebRequest www = UnityWebRequest.Put($"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/swigemaakt/{HomeworkItem.additionalObjects.swigemaaktVinkjes.items[0].links[0].id}", json);
         
@@ -129,5 +145,25 @@ public class HomeworkView : View
         www.Dispose();
         return false;
     }
-    
+
+    #region model
+    public class Leerling
+    {
+        public List<Link> links { get; set; }
+    }
+
+    public class Link
+    {
+        public int id { get; set; }
+        public string rel { get; set; }
+        public string href { get; set; }
+    }
+
+    [Serializable]
+    public class SomtodayHoweworkStatus
+    {
+        public Leerling leerling { get; set; }
+        public bool gemaakt { get; set; }
+    }
+    #endregion
 }

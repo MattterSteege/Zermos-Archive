@@ -8,13 +8,12 @@ using UnityEngine;
 public class LoadingScreenView : View
 {
     [SerializeField] TMP_Text loadingText;
-
     [SerializeField] GameObject loadingScreen;
-    
-    bool done = false;
-    
+
     IEnumerator Start()
     {
+        this.gameObject.SetActive(true);
+        
         ViewManager.onLoadedView += OnLoadedView;
         ViewManager.onInitializeComplete += Complete;
 
@@ -36,7 +35,6 @@ public class LoadingScreenView : View
 
     private void Complete(bool done)
     {
-        done = true;
         Destroy(loadingScreen);
         
         ViewManager.Instance.Hide<LoadingScreenView>();
