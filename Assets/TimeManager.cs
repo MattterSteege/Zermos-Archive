@@ -9,43 +9,26 @@ public class TimeManager : MonoBehaviour
 
     [SerializeField] public int unixTime;
     [SerializeField] private UDateTime _dateTime;    /*<- inspector field | public field -> */ public DateTime DateTime;
+    public DateTime CurrentDateTime;
+    
     
     [SerializeField] bool TimeShouldRun = true;
 
     void Start()
     {
         Instance = this;
-
-#if UNITY_EDITOR
-        if (unixTime == 0)
-        {
-            unixTime = (int) DateTime.Today.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-        }
-
-        _dateTime = new DateTime(1970, 1, 1).AddSeconds(unixTime);
-        StartCoroutine(UpdateDateTime());
-
-#else
+        
         unixTime = (int) DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
         _dateTime = new DateTime(1970, 1, 1).AddSeconds(unixTime);
-#endif
 
         DateTime = _dateTime.dateTime;
         
     }
-    
-#if UNITY_EDITOR
-    private IEnumerator UpdateDateTime()
+
+    private void Update()
     {
-        while (TimeShouldRun)
-        {
-            yield return new WaitForSeconds(1);
-            unixTime++;
-            _dateTime = new DateTime(1970, 1, 1).AddSeconds(unixTime);
-            DateTime = _dateTime.dateTime;
-        }
+        CurrentDateTime = DateTime.Now;
     }
-#endif
 
     int unixTimeSave;
     UDateTime dateTimeSave;

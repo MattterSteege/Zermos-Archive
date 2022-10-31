@@ -246,7 +246,7 @@ public class MainMenuView : View
 
         #region Vertrektijd
 
-        TimeSpan span = (timeTillDeparture - TimeManager.Instance.DateTime);
+        TimeSpan span = (timeTillDeparture - TimeManager.Instance.CurrentDateTime);
         tijdText1.text = span.ToString(@"hh\:mm\:ss") + " tot vertrek";
 
         if (span.TotalSeconds <= 0)
@@ -260,9 +260,13 @@ public class MainMenuView : View
         #region eerste les
 
         span = (new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(currentAppointment.start)
-            .ToLocalTime() - TimeManager.Instance.DateTime);
-        
-        tijdText2.text = span.ToString(@"hh\:mm\:ss") + " tot " + currentAppointment.subjects[0];
+            .ToLocalTime() - TimeManager.Instance.CurrentDateTime);
+
+        try
+        {
+            tijdText2.text = span.ToString(@"hh\:mm\:ss") + " tot " + (currentAppointment.subjects[0] ?? "error");
+        }
+        catch (Exception) { }
 
         #endregion
     }
@@ -272,7 +276,7 @@ public class MainMenuView : View
         if (appointments.Count == 0) return null;
         
         var a = appointments.Where(x => new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(x.start)
-                .ToLocalTime() > TimeManager.Instance.DateTime)
+                .ToLocalTime() > TimeManager.Instance.CurrentDateTime)
             .OrderBy(x => x.start)
             .FirstOrDefault();
 

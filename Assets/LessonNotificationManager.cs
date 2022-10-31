@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using EasyMobile;
+using Unity.Notifications.Android;
 using UnityEngine;
 using LocalNotification = EasyMobile.LocalNotification;
 
@@ -12,34 +13,29 @@ public class LessonNotificationManager : MonoBehaviour
 
     private void Start()
     {
-#if !UNITY_EDITOR
         ViewManager.onInitializeComplete += ctx => onIntializeComplete();
-#endif
+
+        if (PlayerPrefs.GetInt("notifssetup", 0) == 0)
+        {
+            var channel = new AndroidNotificationChannel()
+            {
+                Id = "lessons",
+                Name = "the default channel for sending lesson notifications",
+                Importance = Importance.Default,
+                Description = "Generic notifications",
+            };
+            AndroidNotificationCenter.RegisterNotificationChannel(channel);
+            
+            PlayerPrefs.SetInt("notifssetup", 1);
+        }
     }
 
-    void OnEnable()
-    {
-        ViewManager.onInitializeComplete += ctx => onIntializeComplete();
-        Notifications.LocalNotificationOpened += OnLocalNotificationOpened;
-    }
-    
-    void OnDisable()
-    {
-        ViewManager.onInitializeComplete -= ctx => onIntializeComplete();
-        Notifications.LocalNotificationOpened -= OnLocalNotificationOpened;
-    }
-    
     private void onIntializeComplete()
     {
         _appointments = schedule.getScheduleOfDay(TimeManager.Instance.DateTime);
 
         // Cancels all pending local notifications.
-        Notifications.CancelAllPendingLocalNotifications();
-        
-        if (Notifications.DataPrivacyConsent != ConsentStatus.Granted)
-        {
-            Notifications.GrantDataPrivacyConsent();
-        }
+        AndroidNotificationCenter.CancelAllNotifications();
 
         for (int i = 0; i < _appointments.Count; i++)
         {
@@ -54,38 +50,45 @@ public class LessonNotificationManager : MonoBehaviour
             }
             else
             {
-                string title = $"Nog 5 minuten!";
-                string body = $"De volgende les is {_appointments[i].subjects?[0] ?? "error"} in {_appointments[i].locations?[0] ?? "error"}.";
-                
-                ScheduleLocalNotification(title, body, UnixTimeStampToDateTime(_appointments[i].end).AddMinutes(-5));
+                try
+                {
+                    string title = $"Nog 5 minuten!";
+                    string body =
+                        $"De volgende les is {_appointments[i + 1].subjects?[0] ?? "error"} in {_appointments[i + 1].locations?[0] ?? "error"}.";
+
+                    ScheduleLocalNotification(title, body,
+                        UnixTimeStampToDateTime(_appointments[i].end).AddMinutes(-5));
+                }catch(Exception) { }
             }
         }
     }
-    
-    private void OnLocalNotificationOpened(LocalNotification delivered)
-    {
-        Notifications.ClearAllDeliveredNotifications();
-    }
-    
+
     void ScheduleLocalNotification(string title, string body, DateTime timeToSend)
     {
-        NotificationContent content = PrepareNotificationContent(title, body);
+        var notification = new AndroidNotification();
+        notification.Title = title;
+        notification.Text = body;
+        notification.FireTime = timeToSend;
 
-        Notifications.ScheduleLocalNotification(timeToSend, content);
+        AndroidNotificationCenter.SendNotification(notification, "lessons");
         
-        NotificationContent PrepareNotificationContent(string title, string body)
-        {
-            NotificationContent content = new NotificationContent();
-            
-            content.title = title;
-            content.body = body;
-
-            return content;
-        }
+        Debug.Log($"Added notification for {timeToSend}");
     }
     
-    
-    
+    [ContextMenu("Test")]
+    public void SendTestNotification()
+    {
+        print("Test notif");
+        
+        var notification = new AndroidNotification();
+        notification.Title = "Test";
+        notification.Text = "Test";
+        notification.FireTime = DateTime.Now.AddSeconds(5);
+
+        AndroidNotificationCenter.SendNotification(notification, "lessons");
+    }
+
+
     private static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
     {
         // Unix timestamp is seconds past epoch

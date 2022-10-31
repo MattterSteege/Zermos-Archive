@@ -46,6 +46,10 @@ public class SettingsView : View
     [SerializeField] private Button SecretSettingsButton;
     [SerializeField] private int ClicksNeeded = 10;
     
+    [Header("Send notif")]
+    [SerializeField] private Button SendNotifButton;
+    [SerializeField] private LessonNotificationManager lessonNotificationManager;
+    
     public override void Initialize()
     {
         int timesCLicked = 0;
@@ -207,6 +211,11 @@ public class SettingsView : View
         userInfo.onClick.AddListener(() =>
         {
             ViewManager.Instance.Show<NavBarView, UserInfoView>();
+        });
+        
+        SendNotifButton.onClick.AddListener(() =>
+        {
+            lessonNotificationManager.SendTestNotification();
         });
 
         PlayerPrefs.Save();

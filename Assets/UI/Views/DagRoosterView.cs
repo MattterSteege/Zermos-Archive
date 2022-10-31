@@ -93,10 +93,7 @@ public class DagRoosterView : View
 
                 var rooster = Instantiate(RoosterPrefab, content.transform);
                 rooster.GetComponent<AppointmentInfo>().SetAppointmentInfo(String.Join(", ", appointments[listIndex].locations),
-                    DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start).AddHours(TimeManager.Instance.DateTime.IsDaylightSavingTime() ? 2 : 1).UtcDateTime
-                        .ToShortTimeString() + " - " + DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end)
-                        .AddHours(2).UtcDateTime
-                        .ToShortTimeString(), String.Join(", ", appointments[listIndex].teachers), String.Join(", ", appointments[listIndex].subjects), appointments[listIndex].startTimeSlotName, appointments[listIndex]);
+                    DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start).DateTime.AddHours(1).ToString("HH:mm") + " - " + DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end).DateTime.AddHours(1).ToString("HH:mm"), String.Join(", ", appointments[listIndex].teachers), String.Join(", ", appointments[listIndex].subjects), appointments[listIndex].startTimeSlotName, appointments[listIndex]);
 
                 RoosterItems.Add(rooster);
 
