@@ -5,4 +5,5 @@ Als je hebt ingelogd op Zermelo en je meer wilt dan alleen je lessen zien, dan i
 2) Je kan Cijfers bekijken
 3) je kan leermiddelen toevoegen
 
-Dit is natuurlijk heel erg handig én makkelijk te doen, het is namelijk heel erg makkelijk. Inloggen op de app is het bijna het zelfde als inloggen op Somtoday zelf. Dit heeft niet heel veel uitleg meer nodig. dus succes.
+Dit is natuurlijk heel erg handig én makkelijk te doen, het is namelijk heel erg makkelijk. Inloggen op de app is het bijna het zelfde als inloggen op Somtoday zelf. Dit heeft niet heel veel uitleg meer nodig. dus succes.<br><br>
+![](Assets/InloggenOpSomtoday.jpg)
