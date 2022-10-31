@@ -1,5 +1,5 @@
 # Zermos - help
 
-[Inloggen op Zermelo](Assets/InloggenOpZermelo#Inloggen-op-Zermelo)<br>
-[Inloggen op Somtoday]()
+[Inloggen op Zermelo](Inloggen/InloggenOpZermelo)<br>
+[Inloggen op Somtoday](Inloggen/InloggenOpSomtoday)
 

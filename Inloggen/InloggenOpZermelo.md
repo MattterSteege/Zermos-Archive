@@ -1,4 +1,4 @@
-# Inloggen op Zermelo
+## Inloggen op Zermelo
 
 Als je de app voor de eerste keer opent krijg je dit scherm te zien. 
 Hier moet je inloggen op Zermelo, hiervoor heb je 2 manieren.
