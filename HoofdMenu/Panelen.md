@@ -14,7 +14,7 @@ Hier zie je een aftellende klok die afteld naar de eerstvolgende gebeurtenis. bi
 [Foto van aftellende klok]
 
 
-### Instellingen
+## Instellingen
 
 #### panelen aan of uit zetten
 Als je genoeg hebt van een of meerdere van panelen in het hoofdmenu, dan kan je die gewoon uitzetten door in de instellingen te klikken op 'hoofd menu' en daarna de verschillende panelen aan of uit te zetten. <br><br>
