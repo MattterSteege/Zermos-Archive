@@ -1,3 +1,5 @@
-# Zermelo-Somtoday
+# Zermos - help
 
-De documentatie voor Zermos
+[Inloggen op Zermelo](Assets/InloggenOpZermelo#Inloggen-op-Zermelo)<br>
+[Inloggen op Somtoday]()
+
