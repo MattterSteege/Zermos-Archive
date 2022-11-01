@@ -1,19 +1,20 @@
 Op deze pagina vind je alle informatie over het hoofd menu.
 
+___
 ## De vakken van vandaag
 
 Hier word elke dag een nieuwe lijst met gemaakt met de vakken die je die dag hebt. (als jij liever je tas 's avonds inpakt [klik hier](#tijd-van-inpakken-veranderen)). 
 
-[Foto van paklijst]
+![](Assets/Paklijst.jpg)
 
-
+___
 ## De tijd tot...
 
 Hier zie je een aftellende klok die afteld naar de eerstvolgende gebeurtenis. bijv: totdat je moet vertrekken, totdat de volgende les begint of totdat je klaar bent met je lesdag.
 
-[Foto van aftellende klok]
+![](Assets/Tijd tot...jpg)
 
-
+___
 ## Instellingen
 
 #### panelen aan of uit zetten
