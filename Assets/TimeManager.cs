@@ -9,7 +9,7 @@ public class TimeManager : MonoBehaviour
 
     [SerializeField] public int unixTime;
     [SerializeField] private UDateTime _dateTime;    /*<- inspector field | public field -> */ public DateTime DateTime;
-    public DateTime CurrentDateTime;
+    [SerializeField] private UDateTime _currentDateTime; /*<- inspector field | public field -> */ public DateTime CurrentDateTime;
     
     
     [SerializeField] bool TimeShouldRun = true;
@@ -18,7 +18,7 @@ public class TimeManager : MonoBehaviour
     {
         Instance = this;
         
-        unixTime = (int) DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+        unixTime = (int) DateTime.Today.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
         _dateTime = new DateTime(1970, 1, 1).AddSeconds(unixTime);
 
         DateTime = _dateTime.dateTime;
@@ -28,6 +28,7 @@ public class TimeManager : MonoBehaviour
     private void Update()
     {
         CurrentDateTime = DateTime.Now;
+        _currentDateTime.dateTime = CurrentDateTime;
     }
 
     int unixTimeSave;

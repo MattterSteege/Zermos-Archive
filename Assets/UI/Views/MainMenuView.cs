@@ -78,9 +78,9 @@ public class MainMenuView : View
                             {
                                 paklijstItem.GetComponent<Paklijst>().text.text =
                                     isOn
-                                        ? "<s>• " + item.subjects[0] + "<s>"
-                                        : "• " + vakken.items.Find(x => x.afkorting == item.subjects[0]).naam;
-                                paklijstItem.GetComponent<Paklijst>().text.color = isOn ? Color.gray : Color.black;
+                                        ? "<s>• " + vak + "<s>"
+                                        : "• " + vak;
+                                paklijstItem.GetComponent<Paklijst>().text.color = isOn ? Color.white : Color.black;
                             });
                         }
                         catch (Exception) { }
@@ -107,10 +107,10 @@ public class MainMenuView : View
         {
             if (appointments == null) return;
             
-            int minutesbeforeclass = PlayerPrefs.GetInt("minutesbeforeclass", 0);
+            int minutesbeforeclass = PlayerPrefs.GetInt("minutesbeforeclass", 1);
             if (minutesbeforeclass == 0) return;
 
-            var firstlesson = appointments.Find(x => x.appointmentType == "lesson");
+            var firstlesson = appointments.Find(x => x.appointmentType == "lesson" && x.status[0].code != 4007);
 
             DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             timeTillDeparture = dateTime.AddSeconds(firstlesson.start).ToLocalTime() -

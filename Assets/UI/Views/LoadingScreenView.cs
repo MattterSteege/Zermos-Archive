@@ -10,14 +10,12 @@ public class LoadingScreenView : View
     [SerializeField] TMP_Text loadingText;
     [SerializeField] GameObject loadingScreen;
 
-    IEnumerator Start()
+    void Start()
     {
-        this.gameObject.SetActive(true);
+        gameObject.SetActive(true);
         
         ViewManager.onLoadedView += OnLoadedView;
         ViewManager.onInitializeComplete += Complete;
-
-        yield return null;
     }
 
     private void OnLoadedView(float loadingcomplete)

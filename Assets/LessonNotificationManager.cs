@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using EasyMobile;
 using Unity.Notifications.Android;
 using UnityEngine;
-using LocalNotification = EasyMobile.LocalNotification;
 
 public class LessonNotificationManager : MonoBehaviour
 {
@@ -32,10 +30,17 @@ public class LessonNotificationManager : MonoBehaviour
 
     private void onIntializeComplete()
     {
+        
         _appointments = schedule.getScheduleOfDay(TimeManager.Instance.DateTime);
 
         // Cancels all pending local notifications.
         AndroidNotificationCenter.CancelAllNotifications();
+        
+        var firstlesson = _appointments.Find(x => x.appointmentType == "lesson" && x.status[0].code != 4007);
+        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        DateTime timeTillDeparture = dateTime.AddSeconds(firstlesson.start).ToLocalTime() - new TimeSpan(0, PlayerPrefs.GetInt("minutesbeforeclass", 1), 0);
+        
+        ScheduleLocalNotification("Nog 5 minuten!", "Je moet bijna vertrekken.", timeTillDeparture.AddMinutes(-5));
 
         for (int i = 0; i < _appointments.Count; i++)
         {

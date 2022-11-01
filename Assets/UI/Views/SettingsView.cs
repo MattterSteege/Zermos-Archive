@@ -50,6 +50,9 @@ public class SettingsView : View
     [SerializeField] private Button SendNotifButton;
     [SerializeField] private LessonNotificationManager lessonNotificationManager;
     
+    [Header("Hulp")]
+    [SerializeField] private Button openDocumentatie;
+
     public override void Initialize()
     {
         int timesCLicked = 0;
@@ -216,6 +219,11 @@ public class SettingsView : View
         SendNotifButton.onClick.AddListener(() =>
         {
             lessonNotificationManager.SendTestNotification();
+        });
+        
+        openDocumentatie.onClick.AddListener(() =>
+        {
+            Application.OpenURL(@"https://mjtsgamer.github.io/Zermos/");
         });
 
         PlayerPrefs.Save();
