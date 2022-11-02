@@ -11,3 +11,4 @@ Hier vind je de Datum die hoort bij de daaronder aangegeven lessen. Als je op he
 ---
 ### Het rooster zelf
 Hier vind je je lessen die je hebt op de datum [net daar boven](#net-daar-onder). Als de les rood gekleurd is, dan is die les uitgevallen, als hij oranje is dan is er een wijziging. Als je een les wilt inplannen, dan klik je op het les rooster waarop je de les wilt inplannen en dan op de les die je wilt doen. Als er geen lessen staan, dan is er geen mogelijkheid tot inplannen.
+<br><br>![](Assets/dag rooster.jpg)
