@@ -20,7 +20,7 @@ public class CijferView : View
         var grades = gradesObject.getGrades();
         if (grades == null) return;
 
-        lastGrades = grades.items.TakeLast(3).ToList();
+        lastGrades = grades.items.TakeLast(2).ToList();
         
         foreach (Transform child in content.transform)
             Destroy(child.gameObject);

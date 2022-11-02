@@ -11,16 +11,14 @@ public class LessonNotificationManager : MonoBehaviour
 
     private void Start()
     {
-        ViewManager.onInitializeComplete += ctx => onIntializeComplete();
-
         if (PlayerPrefs.GetInt("notifssetup", 0) == 0)
         {
             var channel = new AndroidNotificationChannel()
             {
                 Id = "lessons",
-                Name = "the default channel for sending lesson notifications",
+                Name = "lessons",
                 Importance = Importance.Default,
-                Description = "Generic notifications",
+                Description = "the default channel for sending lesson notifications"
             };
             AndroidNotificationCenter.RegisterNotificationChannel(channel);
             
@@ -28,7 +26,7 @@ public class LessonNotificationManager : MonoBehaviour
         }
     }
 
-    private void onIntializeComplete()
+    private void OnApplicationQuit()
     {
         
         _appointments = schedule.getScheduleOfDay(TimeManager.Instance.DateTime);
@@ -40,13 +38,16 @@ public class LessonNotificationManager : MonoBehaviour
         DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         DateTime timeTillDeparture = dateTime.AddSeconds(firstlesson.start).ToLocalTime() - new TimeSpan(0, PlayerPrefs.GetInt("minutesbeforeclass", 1), 0);
         
-        ScheduleLocalNotification("Nog 5 minuten!", "Je moet bijna vertrekken.", timeTillDeparture.AddMinutes(-5));
+        if (timeTillDeparture > DateTime.Now)
+            ScheduleLocalNotification("Nog 5 minuten!", "Je moet bijna vertrekken.", timeTillDeparture.AddMinutes(-5));
 
         for (int i = 0; i < _appointments.Count; i++)
         {
             if (_appointments[i].appointmentType == "choice") continue;
-            
-            if (i == _appointments.Count - 1)
+
+            if (UnixTimeStampToDateTime(_appointments[i].start) < DateTime.Now) continue;
+
+                if (i == _appointments.Count - 1)
             {
                 string title = $"Nog 5 minuten!";
                 string body = $"Je laatste les is dan afgelopen!";

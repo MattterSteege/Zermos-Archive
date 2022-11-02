@@ -5,7 +5,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
-public class LoadingScreenView : View
+public class LoadingScreenView : MonoBehaviour
 {
     [SerializeField] TMP_Text loadingText;
     [SerializeField] GameObject loadingScreen;
@@ -34,7 +34,5 @@ public class LoadingScreenView : View
     private void Complete(bool done)
     {
         Destroy(loadingScreen);
-        
-        ViewManager.Instance.Hide<LoadingScreenView>();
     }
 }

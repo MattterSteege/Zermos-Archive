@@ -9,7 +9,7 @@ using UnityEngine.Networking;
 
 public class Schedule : MonoBehaviour
 {
-    public static List<Appointment> ScheduledAppointments;
+    public static List<Appointment> TodaysScheduledAppointments;
     
     
     public ZermeloSchedule StartGetSchedule(string week = "38", string year = "0")

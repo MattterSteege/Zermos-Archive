@@ -11,8 +11,6 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private UDateTime _dateTime;    /*<- inspector field | public field -> */ public DateTime DateTime;
     [SerializeField] private UDateTime _currentDateTime; /*<- inspector field | public field -> */ public DateTime CurrentDateTime;
     
-    
-    [SerializeField] bool TimeShouldRun = true;
 
     void Start()
     {
