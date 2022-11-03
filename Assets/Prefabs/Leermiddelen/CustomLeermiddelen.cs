@@ -61,7 +61,6 @@ public class CustomLeermiddelen : MonoBehaviour
     public void SaveFile(string url, string vak)
     {
         string destination = savePath.Replace("*", Application.persistentDataPath);
-        PlayerPrefs.SetString("file_path", destination);
         FileStream file;
 
         if (!File.Exists(destination))

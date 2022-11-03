@@ -19,12 +19,18 @@ public class AddLeermiddelenView : View
 
     public override void Initialize()
     {
-        save.onClick.AddListener(SaveHomework);
-
-        foreach (Vakken.Item vak in _vakken.getVakken().items)
+        openNavigationButton.onClick.AddListener(() =>
         {
-            this.vak.AddOptions(new List<string>( new[] { vak.naam }));
-        }
+            ViewManager.Instance.Hide<AddLeermiddelenView>();
+            ViewManager.Instance.ShowNewView<LeermiddelenView>();
+        });
+        
+        //save.onClick.AddListener(SaveHomework);
+
+        //foreach (Vakken.Item vak in _vakken.getVakken().items)
+        //{
+        //    this.vak.AddOptions(new List<string>( new[] { vak.naam }));
+        //}
     }
 
     private void SaveHomework()

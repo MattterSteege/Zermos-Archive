@@ -16,7 +16,22 @@ public class LeermiddelenView : View
 
     public override void Initialize()
     {
-        AddleermiddelButton.onClick.AddListener(() => { ViewManager.Instance.Show<AddLeermiddelenView, NavBarView>(); });
+        openNavigationButton.onClick.AddListener(() =>
+        {
+            openNavigationButton.enabled = false;
+            ViewManager.Instance.ShowNavigation();
+        });
+        
+        CloseButtonWholePage.onClick.AddListener(() =>
+        {
+            openNavigationButton.enabled = true;
+            ViewManager.Instance.HideNavigation();
+        });
+        
+        AddleermiddelButton.onClick.AddListener(() =>
+        {
+            ViewManager.Instance.ShowNewView<AddLeermiddelenView>();
+        });
 
         foreach (CustomLeermiddelen.LeermiddelenItem vak in GetLeermiddelenItems())
         {

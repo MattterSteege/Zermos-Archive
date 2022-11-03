@@ -6,7 +6,7 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 
-public class NewsAndInformation : View
+public class NewsAndInformationView : View
 {
     [SerializeField] private GameObject paklijstGameObject;
     [SerializeField] private GameObject paklijstContentGameObject;

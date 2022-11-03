@@ -48,12 +48,12 @@ public sealed class NavBarView : View
 				
 					CijfersButton.onClick.AddListener(() =>
 					{
-						ViewManager.Instance.Show<CijferView>();
+						ViewManager.Instance.ShowNewView<CijferView>();
 					});
 					
 					HomeworkButton.onClick.AddListener(() =>
 					{
-						ViewManager.Instance.Show<HomeworkView>();
+						ViewManager.Instance.ShowNewView<HomeworkView>();
 					});
 				}
 			}
@@ -68,7 +68,7 @@ public sealed class NavBarView : View
 				LeermiddelenButton.gameObject.transform.parent.gameObject.SetActive(true);
 				LeermiddelenButton.onClick.AddListener(() =>
 				{
-					ViewManager.Instance.Show<LeermiddelenView, NavBarView>();
+					ViewManager.Instance.ShowNewView<LeermiddelenView>();
 				});
 			}
 			else
@@ -82,17 +82,17 @@ public sealed class NavBarView : View
 
 			RoosterButton.onClick.AddListener(() =>
 			{
-				ViewManager.Instance.Show<DagRoosterView, NavBarView>();
+				ViewManager.Instance.ShowNewView<DagRoosterView>();
 			});
 
 			SettingsButton.onClick.AddListener(() =>
 			{
-				ViewManager.Instance.Show<SettingsView, NavBarView>();
+				ViewManager.Instance.ShowNewView<SettingsView>();
 			});
 			
 			HomeButton.onClick.AddListener(() =>
 			{
-				ViewManager.Instance.Show<MainMenuView, NavBarView>();
+				ViewManager.Instance.ShowNewView<NewsAndInformationView>();
 			});
 		}
 

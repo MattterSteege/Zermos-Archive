@@ -30,6 +30,8 @@ public class LessonNotificationManager : MonoBehaviour
     {
         
         _appointments = schedule.getScheduleOfDay(TimeManager.Instance.DateTime);
+        
+        if (_appointments == null) return;
 
         // Cancels all pending local notifications.
         AndroidNotificationCenter.CancelAllNotifications();

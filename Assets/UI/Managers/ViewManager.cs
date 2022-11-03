@@ -17,7 +17,7 @@ public sealed class ViewManager : MonoBehaviour
 	[SerializeField] private Image Background;
 	[SerializeField] private float animationTime = 0.5f;
 	
-	[Space, SerializeField] private View currentView;
+	[Space, SerializeField] public View currentView;
 
 	[Space, SerializeField] private static GameObject ViewPrefab;
 	
@@ -89,6 +89,7 @@ public sealed class ViewManager : MonoBehaviour
 	public void ShowNavigation()
 	{
 		currentView.CloseButtonWholePage.enabled = true;
+		currentView.openNavigationButton.enabled = false;
 		
 		Background.DOColor(new Color(0.06666667f, 0.1529412f, 0.4352941f), animationTime);
 		
@@ -103,12 +104,86 @@ public sealed class ViewManager : MonoBehaviour
 	public void HideNavigation()
 	{
 		currentView.CloseButtonWholePage.enabled = false;
+		currentView.openNavigationButton.enabled = true;
 		
 		RectTransform rectTransform = currentView.GetComponent<RectTransform>();
 		
 		rectTransform.DOLocalMove(new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime);
 		rectTransform.DOLocalRotate(new Vector3(0f, 0f, 0f), animationTime).WaitForCompletion();
 		Background.DOColor(currentView.GetComponent<Image>().color, animationTime);
+	}
+	
+	public void ShowNewView<TView>() where TView : View
+	{
+		View LastView = currentView;
+		
+		foreach (View view in views)
+		{
+			if (view == currentView && view is TView)
+			{
+				HideNavigation();
+				return;
+			}
+			
+			
+			if (view is TView)
+			{
+				currentView = view;	
+				view.transform.SetAsLastSibling();
+				
+				RectTransform rectTransform = view.GetComponent<RectTransform>();
+				
+				rectTransform.transform.position = new Vector3(400f * 1.2f, -100f, 0f);
+				rectTransform.transform.rotation = Quaternion.Euler(0f, 0f, 8.3f);
+				view.Show();
+
+				rectTransform.DOLocalMove(new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime);
+				rectTransform.DOLocalRotate(new Vector3(0f, 0f, 0f), animationTime).WaitForCompletion();
+				Background.DOColor(view.GetComponent<Image>().color, animationTime);
+				
+				new WaitForSeconds(animationTime);
+				
+				Invoke(nameof(changeView), animationTime);
+
+				void changeView()
+				{
+					LastView.Hide();
+				}
+			}
+		}
+	}
+	
+	public void HideView<TView>() where TView : View
+	{
+		View LastView = currentView;
+		
+		foreach (View view in views)
+		{
+			if (view is TView)
+			{
+				currentView = view;	
+				view.transform.SetAsLastSibling();
+				
+				RectTransform rectTransform = view.GetComponent<RectTransform>();
+				
+				rectTransform.transform.position = new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f);
+				rectTransform.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+				view.Show();
+
+				rectTransform.DOLocalMove(new Vector3(400f * 1.2f, -100f, 0f), animationTime);
+				rectTransform.DOLocalRotate(new Vector3(0f, 0f, 8.3f), animationTime).WaitForCompletion();
+				Background.DOColor(view.GetComponent<Image>().color, animationTime);
+				
+				new WaitForSeconds(animationTime);
+				
+				Invoke(nameof(changeView), animationTime);
+
+				void changeView()
+				{
+					LastView.Hide();
+				}
+			}
+		}
 	}
 
 	public void Show<TView>(object args = null) where TView : View
@@ -215,4 +290,5 @@ public sealed class ViewManager : MonoBehaviour
 		Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
 		Selection.activeObject = go;
 	}
+	
 }

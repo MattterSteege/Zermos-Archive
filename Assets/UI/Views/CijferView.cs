@@ -17,6 +17,18 @@ public class CijferView : View
     [ContextMenu("Refresh")]
     public override void Initialize()
     {
+        openNavigationButton.onClick.AddListener(() =>
+        {
+            openNavigationButton.enabled = false;
+            ViewManager.Instance.ShowNavigation();
+        });
+        
+        CloseButtonWholePage.onClick.AddListener(() =>
+        {
+            openNavigationButton.enabled = true;
+            ViewManager.Instance.HideNavigation();
+        });
+        
         var grades = gradesObject.getGrades();
         if (grades == null) return;
 
