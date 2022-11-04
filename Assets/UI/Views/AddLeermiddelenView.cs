@@ -21,7 +21,6 @@ public class AddLeermiddelenView : View
     {
         openNavigationButton.onClick.AddListener(() =>
         {
-            ViewManager.Instance.Hide<AddLeermiddelenView>();
             ViewManager.Instance.ShowNewView<LeermiddelenView>();
         });
         

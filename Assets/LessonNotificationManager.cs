@@ -26,7 +26,8 @@ public class LessonNotificationManager : MonoBehaviour
         }
     }
 
-    private void OnApplicationQuit()
+    [ContextMenu("Test real")]
+    public void OnApplicationQuit()
     {
         
         _appointments = schedule.getScheduleOfDay(TimeManager.Instance.DateTime);
@@ -45,29 +46,32 @@ public class LessonNotificationManager : MonoBehaviour
 
         for (int i = 0; i < _appointments.Count; i++)
         {
+            string title = "";
+            string body = "";
+            
             if (_appointments[i].appointmentType == "choice") continue;
 
             if (UnixTimeStampToDateTime(_appointments[i].start) < DateTime.Now) continue;
 
-                if (i == _appointments.Count - 1)
+            if (i == _appointments.Count - 1)
             {
-                string title = $"Nog 5 minuten!";
-                string body = $"Je laatste les is dan afgelopen!";
+                title = $"Nog 5 minuten!";
+                body = $"De laatste les is {_appointments[i].subjects?[0] ?? "error"} in {_appointments[i].locations?[0] ?? "error"}.";
+
+                ScheduleLocalNotification(title, body, UnixTimeStampToDateTime(_appointments[i].start).AddMinutes(-5));
+                
+                title = $"Nog 5 minuten!";
+                body = $"Je laatste les is dan afgelopen!";
                 
                 ScheduleLocalNotification(title, body, UnixTimeStampToDateTime(_appointments[i].end).AddMinutes(-5));
+                
+                break;
             }
-            else
-            {
-                try
-                {
-                    string title = $"Nog 5 minuten!";
-                    string body =
-                        $"De volgende les is {_appointments[i + 1].subjects?[0] ?? "error"} in {_appointments[i + 1].locations?[0] ?? "error"}.";
+            
+            title = $"Nog 5 minuten!";
+            body = $"De volgende les is {_appointments[i].subjects?[0] ?? "error"} in {_appointments[i].locations?[0] ?? "error"}.";
 
-                    ScheduleLocalNotification(title, body,
-                        UnixTimeStampToDateTime(_appointments[i].end).AddMinutes(-5));
-                }catch(Exception) { }
-            }
+            ScheduleLocalNotification(title, body, UnixTimeStampToDateTime(_appointments[i].start).AddMinutes(-5));
         }
     }
 
@@ -80,7 +84,7 @@ public class LessonNotificationManager : MonoBehaviour
 
         AndroidNotificationCenter.SendNotification(notification, "lessons");
         
-        Debug.Log($"Added notification for {timeToSend}");
+        Debug.Log($"Added notification for {timeToSend},\n{title}, {body}");
     }
     
     [ContextMenu("Test")]

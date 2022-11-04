@@ -18,6 +18,7 @@ public sealed class ViewManager : MonoBehaviour
 	[SerializeField] private float animationTime = 0.5f;
 	
 	[Space, SerializeField] public View currentView;
+	[SerializeField] public View lastView;
 
 	[Space, SerializeField] private static GameObject ViewPrefab;
 	
@@ -115,7 +116,7 @@ public sealed class ViewManager : MonoBehaviour
 	
 	public void ShowNewView<TView>() where TView : View
 	{
-		View LastView = currentView;
+		lastView = currentView;
 		
 		foreach (View view in views)
 		{
@@ -124,7 +125,6 @@ public sealed class ViewManager : MonoBehaviour
 				HideNavigation();
 				return;
 			}
-			
 			
 			if (view is TView)
 			{
@@ -140,19 +140,16 @@ public sealed class ViewManager : MonoBehaviour
 				rectTransform.DOLocalMove(new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime);
 				rectTransform.DOLocalRotate(new Vector3(0f, 0f, 0f), animationTime).WaitForCompletion();
 				Background.DOColor(view.GetComponent<Image>().color, animationTime);
-				
-				new WaitForSeconds(animationTime);
-				
-				Invoke(nameof(changeView), animationTime);
 
-				void changeView()
-				{
-					LastView.Hide();
-				}
+				Invoke("HideLastView", animationTime);
 			}
 		}
 	}
-	
+	private void HideLastView()
+	{
+		lastView.Hide();
+	}
+
 	public void HideView<TView>() where TView : View
 	{
 		View LastView = currentView;
@@ -168,10 +165,7 @@ public sealed class ViewManager : MonoBehaviour
 				
 				rectTransform.transform.position = new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f);
 				rectTransform.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-				view.Show();
-
-				rectTransform.DOLocalMove(new Vector3(400f * 1.2f, -100f, 0f), animationTime);
-				rectTransform.DOLocalRotate(new Vector3(0f, 0f, 8.3f), animationTime).WaitForCompletion();
+				
 				Background.DOColor(view.GetComponent<Image>().color, animationTime);
 				
 				new WaitForSeconds(animationTime);
@@ -180,7 +174,7 @@ public sealed class ViewManager : MonoBehaviour
 
 				void changeView()
 				{
-					LastView.Hide();
+					view.Hide();
 				}
 			}
 		}

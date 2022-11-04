@@ -20,6 +20,18 @@ public class HomeworkView : View
     
     public override void Initialize()
     {
+        openNavigationButton.onClick.AddListener(() =>
+        {
+            openNavigationButton.enabled = false;
+            ViewManager.Instance.ShowNavigation();
+        });
+        
+        CloseButtonWholePage.onClick.AddListener(() =>
+        {
+            openNavigationButton.enabled = true;
+            ViewManager.Instance.HideNavigation();
+        });
+        
         _AddHomeworkButton.onClick.AddListener(() => ViewManager.Instance.Show<AddHomeworkView, NavBarView>());
 
         foreach (Transform child in content.transform)

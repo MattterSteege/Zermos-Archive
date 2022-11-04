@@ -33,6 +33,18 @@ public class DagRoosterView : View
 
     public override void Initialize()
     {
+        openNavigationButton.onClick.AddListener(() =>
+        {
+            openNavigationButton.enabled = false;
+            ViewManager.Instance.ShowNavigation();
+        });
+        
+        CloseButtonWholePage.onClick.AddListener(() =>
+        {
+            openNavigationButton.enabled = true;
+            ViewManager.Instance.HideNavigation();
+        });
+        
         RefreshButton.onClick.AddListener(Initialize);
         WeekRoosterButton.onClick.AddListener(() => { ViewManager.Instance.Show<NavBarView, WeekRoosterView>(); });
         
