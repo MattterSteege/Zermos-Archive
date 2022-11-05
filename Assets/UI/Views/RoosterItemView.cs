@@ -16,6 +16,7 @@ public class RoosterItemView : View
     [SerializeField] Image background;
     [SerializeField] private GameObject inplanLesPrefab;
     [SerializeField] private GameObject inplanLesContainer;
+    [SerializeField] private TMP_Text Title;
 
     public override void Show(object args = null)
     {
@@ -28,6 +29,12 @@ public class RoosterItemView : View
     
     public override void Initialize()
     {
+        openNavigationButton.onClick.RemoveAllListeners();
+        openNavigationButton.onClick.AddListener(() =>
+        {
+            ViewManager.Instance.ShowNewView<DagRoosterView>();
+        });
+        
         foreach (Transform child in inplanLesContainer.transform)
         {
             Destroy(child.gameObject);
@@ -53,6 +60,7 @@ public class RoosterItemView : View
             if (appointment.subjects.Count > 0)
             {
                 subjects = appointment.subjects;
+                Title.text = subjects[0];
             }
             
             if (appointment.id != null)

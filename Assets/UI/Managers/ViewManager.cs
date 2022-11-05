@@ -114,7 +114,7 @@ public sealed class ViewManager : MonoBehaviour
 		Background.DOColor(currentView.GetComponent<Image>().color, animationTime);
 	}
 	
-	public void ShowNewView<TView>() where TView : View
+	public void ShowNewView<TView>(object args = null) where TView : View
 	{
 		lastView = currentView;
 		
@@ -133,15 +133,15 @@ public sealed class ViewManager : MonoBehaviour
 				
 				RectTransform rectTransform = view.GetComponent<RectTransform>();
 				
-				rectTransform.transform.position = new Vector3(400f * 1.2f, -100f, 0f);
-				rectTransform.transform.rotation = Quaternion.Euler(0f, 0f, 8.3f);
-				view.Show();
+				rectTransform.transform.position = new Vector3(Screen.width * 2.4f, -100f, 0f);
+				rectTransform.transform.rotation = Quaternion.Euler(0f, 0f, 16.6f);
+				view.Show(args);
 
-				rectTransform.DOLocalMove(new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime);
-				rectTransform.DOLocalRotate(new Vector3(0f, 0f, 0f), animationTime).WaitForCompletion();
-				Background.DOColor(view.GetComponent<Image>().color, animationTime);
+				rectTransform.DOLocalMove(new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime * 2f);
+				rectTransform.DOLocalRotate(new Vector3(0f, 0f, 0f), animationTime * 2f).WaitForCompletion();
+				Background.DOColor(view.GetComponent<Image>().color, animationTime * 2f);
 
-				Invoke("HideLastView", animationTime);
+				Invoke("HideLastView", animationTime * 2f);
 			}
 		}
 	}
@@ -269,7 +269,8 @@ public sealed class ViewManager : MonoBehaviour
 			}
 		}
 	}
-	
+
+#if UNITY_EDITOR
 	// Add a menu item to create custom GameObjects.
 	// Priority 10 ensures it is grouped with the other menu items of the same kind
 	// and propagated to the hierarchy dropdown and hierarchy context menus.
@@ -284,5 +285,5 @@ public sealed class ViewManager : MonoBehaviour
 		Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
 		Selection.activeObject = go;
 	}
-	
+#endif
 }

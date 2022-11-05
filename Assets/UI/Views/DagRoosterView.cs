@@ -46,7 +46,11 @@ public class DagRoosterView : View
         });
         
         RefreshButton.onClick.AddListener(Initialize);
-        WeekRoosterButton.onClick.AddListener(() => { ViewManager.Instance.Show<NavBarView, WeekRoosterView>(); });
+        WeekRoosterButton.onClick.AddListener(() =>
+        {
+            ViewManager.Instance.ShowNewView<WeekRoosterView>();
+            
+        });
         
         nextDayButton.onClick.AddListener(() =>
         {
@@ -116,7 +120,7 @@ public class DagRoosterView : View
 
                 rooster.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    ViewManager.Instance.Show<RoosterItemView, NavBarView>(rooster.GetComponent<AppointmentInfo>()._appointment);
+                    ViewManager.Instance.ShowNewView<RoosterItemView>(rooster.GetComponent<AppointmentInfo>()._appointment);
                 });
 
                 //must be at the end
@@ -143,7 +147,7 @@ public class DagRoosterView : View
                     
                 tussenUur.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    ViewManager.Instance.Show<RoosterItemView, NavBarView>(tussenUur.GetComponent<AppointmentInfo>()._appointment);
+                    ViewManager.Instance.ShowNewView<RoosterItemView>(tussenUur.GetComponent<AppointmentInfo>()._appointment);
                 });
 
                 RoosterItems.Add(tussenUur);

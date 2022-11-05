@@ -29,9 +29,12 @@ public class LessonNotificationManager : MonoBehaviour
     [ContextMenu("Test real")]
     public void OnApplicationQuit()
     {
-        
-        _appointments = schedule.getScheduleOfDay(TimeManager.Instance.DateTime);
-        
+        try
+        {
+            _appointments = schedule.getScheduleOfDay(TimeManager.Instance.DateTime);
+        }
+        catch (Exception) { return; }
+
         if (_appointments == null) return;
 
         // Cancels all pending local notifications.
@@ -77,10 +80,16 @@ public class LessonNotificationManager : MonoBehaviour
 
     void ScheduleLocalNotification(string title, string body, DateTime timeToSend)
     {
-        var notification = new AndroidNotification();
-        notification.Title = title;
-        notification.Text = body;
-        notification.FireTime = timeToSend;
+        DateTime now = DateTime.Now;
+        AndroidNotification notification = new AndroidNotification
+        {
+            Title = title,
+            Text = body,
+            FireTime = timeToSend,
+            IntentData = "{\"title\": \"Notification 1\", \"data\": \"200\"}",
+            ShouldAutoCancel = true,
+            ShowTimestamp = true,
+        };
 
         AndroidNotificationCenter.SendNotification(notification, "lessons");
         
@@ -92,12 +101,7 @@ public class LessonNotificationManager : MonoBehaviour
     {
         print("Test notif");
         
-        var notification = new AndroidNotification();
-        notification.Title = "Test";
-        notification.Text = "Test";
-        notification.FireTime = DateTime.Now.AddSeconds(5);
-
-        AndroidNotificationCenter.SendNotification(notification, "lessons");
+        ScheduleLocalNotification("Test", "Test", DateTime.Now.AddSeconds(5));
     }
 
 

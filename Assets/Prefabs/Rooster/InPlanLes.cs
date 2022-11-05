@@ -31,7 +31,7 @@ public class InPlanLes : MonoBehaviour
             Debug.Log("Form upload complete!");
             
             ViewManager.Instance.Refresh<DagRoosterView>();
-            ViewManager.Instance.Show<NavBarView, DagRoosterView>();
+            ViewManager.Instance.ShowNewView<DagRoosterView>();
         }
     }
 }

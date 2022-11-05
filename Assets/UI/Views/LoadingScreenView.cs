@@ -10,9 +10,10 @@ public class LoadingScreenView : MonoBehaviour
     [SerializeField] TMP_Text loadingText;
     [SerializeField] GameObject loadingScreen;
 
-    void Start()
+    void Awake()
     {
         gameObject.SetActive(true);
+        loadingScreen.GetComponent<CanvasGroup>().alpha = 1;
         
         ViewManager.onLoadedView += OnLoadedView;
         ViewManager.onInitializeComplete += Complete;
@@ -33,6 +34,13 @@ public class LoadingScreenView : MonoBehaviour
 
     private void Complete(bool done)
     {
-        Destroy(loadingScreen);
+        loadingScreen.GetComponent<CanvasGroup>().DOFade(1, 0.5f).onComplete += () =>
+        {
+            loadingScreen.GetComponent<CanvasGroup>().DOFade(0, 1.5f).onComplete += () =>
+            {
+                gameObject.SetActive(false);
+                Destroy(gameObject);
+            };
+        };
     }
 }

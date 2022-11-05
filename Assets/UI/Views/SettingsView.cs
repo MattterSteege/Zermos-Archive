@@ -9,10 +9,6 @@ using UnityEngine.UI;
 public class SettingsView : View
 {
     [Header("settings")]
-    [SerializeField] private Toggle UltraSatisfyingScheduleMode;
-    [SerializeField] private ScrollRect RoosterScrollRect;    
-    
-    [Space]
     [SerializeField] private Toggle ShowTussenUren;
     [SerializeField] private DagRoosterView dagRoosterView;
     [SerializeField] private WeekRoosterView weekRoosterView;
@@ -21,19 +17,12 @@ public class SettingsView : View
     [SerializeField] private TMP_InputField NumberOfDaysHomework;
     [SerializeField] private Button NumberOfDaysHomeworkPlus;
     [SerializeField] private Button NumberOfDaysHomeworkMinus;
-    [SerializeField] private Button HomeworkRefreshButton;
-    
+
     [Space]
     [SerializeField] private TMP_InputField minutesBeforeClass;
     [SerializeField] private Button minutesBeforeClassPlus;
     [SerializeField] private Button minutesBeforeClassMinus;
-    
-    [Space]
-    [SerializeField] private TMP_InputField BackgroundPreset;
-    [SerializeField] private Button BackgroundPresetPlus;
-    [SerializeField] private Button BackgroundPresetMinus;
-    [SerializeField] private BackgroundManager BackgroundComponent;
-    
+
 
     [Header("Koppelingen")]
     [SerializeField] private Button SomtodayKoppeling;
@@ -55,6 +44,18 @@ public class SettingsView : View
 
     public override void Initialize()
     {
+        openNavigationButton.onClick.AddListener(() =>
+        {
+            openNavigationButton.enabled = false;
+            ViewManager.Instance.ShowNavigation();
+        });
+        
+        CloseButtonWholePage.onClick.AddListener(() =>
+        {
+            openNavigationButton.enabled = true;
+            ViewManager.Instance.HideNavigation();
+        });
+        
         int timesCLicked = 0;
         
         SecretSettingsButton.onClick.AddListener(() =>
@@ -66,16 +67,7 @@ public class SettingsView : View
                 ViewManager.Instance.Show<SecretSettingsView, NavBarView>();
             }
         });
-        
-        UltraSatisfyingScheduleMode.isOn = PlayerPrefs.GetInt("UltraSatisfyingScheduleMode", 0) == 1;
-        UltraSatisfyingScheduleMode.onValueChanged.AddListener((bool isOn) =>
-        {
-            PlayerPrefs.SetInt("UltraSatisfyingScheduleMode", isOn ? 1 : 0);
-            RoosterScrollRect.horizontal = isOn;
-            RoosterScrollRect.inertia = isOn;
-            RoosterScrollRect.elasticity = isOn ? 0.1f : 0.3f;
-        });
-        
+
         ShowTussenUren.isOn = PlayerPrefs.GetInt("ShowTussenUren", 1) == 1;
         ShowTussenUren.onValueChanged.AddListener((bool isOn) =>
         {
@@ -99,9 +91,6 @@ public class SettingsView : View
             PlayerPrefs.SetInt("numberofdayshomework", 14);
         }
 
-        HomeworkRefreshButton.GetComponent<CanvasGroup>().alpha = 0;
-        HomeworkRefreshButton.gameObject.SetActive(false);
-        
         NumberOfDaysHomework.text = PlayerPrefs.GetInt("numberofdayshomework").ToString();
         NumberOfDaysHomework.onValueChanged.AddListener((string value) =>
         {
@@ -110,9 +99,6 @@ public class SettingsView : View
             {
                 PlayerPrefs.SetInt("numberofdayshomework", number);
             }
-            
-            HomeworkRefreshButton.gameObject.SetActive(true);
-            HomeworkRefreshButton.GetComponent<CanvasGroup>().DOFade(1f, 0.2f);
         });
         NumberOfDaysHomeworkPlus.onClick.AddListener(() =>
         {
@@ -133,13 +119,7 @@ public class SettingsView : View
             PlayerPrefs.SetInt("numberofdayshomework", numberOfDaysHomework);
         });
         
-        HomeworkRefreshButton.onClick.AddListener(() =>
-        {
-            ViewManager.Instance.Refresh<HomeworkView>();
-            HomeworkRefreshButton.GetComponent<CanvasGroup>().DOFade(0f, 0.2f);
-            HomeworkRefreshButton.gameObject.SetActive(false);
-        });
-        
+
         //--------------------------------------------------------------------------------
         minutesBeforeClass.text = PlayerPrefs.GetInt("minutesbeforeclass").ToString();
         minutesBeforeClass.onValueChanged.AddListener((string value) =>
@@ -170,37 +150,7 @@ public class SettingsView : View
         });
         
         //--------------------------------------------------------------------------------
-        
-        BackgroundPreset.text = PlayerPrefs.GetInt("backgroundpreset", 3).ToString();
-        BackgroundPreset.onValueChanged.AddListener((string value) =>
-        {
-            BackgroundPreset.text = PlayerPrefs.GetInt("backgroundpreset", 3).ToString();
-        });
-        BackgroundPresetPlus.onClick.AddListener(() =>
-        {
-            int preset = int.Parse(BackgroundPreset.text);
-            if(preset >= BackgroundComponent.Instance.backgrounds.Length)
-            {
-                return;
-            }
-            preset++;
-            PlayerPrefs.SetInt("backgroundpreset", preset);
-            BackgroundPreset.text = preset.ToString();
-            BackgroundComponent.Instance.setBackGround(preset);
-        });
-        BackgroundPresetMinus.onClick.AddListener(() =>
-        {
-            int preset = int.Parse(BackgroundPreset.text);
-            if(preset <= 1)
-            {
-                return;
-            }
-            preset--;
-            PlayerPrefs.SetInt("backgroundpreset", preset);
-            BackgroundPreset.text = preset.ToString();
-            BackgroundComponent.Instance.setBackGround(preset);
-        });
-        
+
         SomtodayKoppeling.onClick.AddListener(() =>
         {
             ViewManager.Instance.Show<NavBarView, ConnectSomtodayView>();

@@ -29,8 +29,23 @@ public class WeekRoosterView : View
     
     public override void Initialize()
     {
+        openNavigationButton.onClick.AddListener(() =>
+        {
+            openNavigationButton.enabled = false;
+            ViewManager.Instance.ShowNavigation();
+        });
+        
+        CloseButtonWholePage.onClick.AddListener(() =>
+        {
+            openNavigationButton.enabled = true;
+            ViewManager.Instance.HideNavigation();
+        });
+        
         RefreshButton.onClick.AddListener(Initialize);
-        DagRoosterButton.onClick.AddListener(() => { ViewManager.Instance.Show<NavBarView, DagRoosterView>(); });
+        DagRoosterButton.onClick.AddListener(() =>
+        {
+            ViewManager.Instance.ShowNewView<DagRoosterView>();
+        });
         
         nextDayButton.onClick.AddListener(() =>
         {
@@ -106,7 +121,7 @@ public class WeekRoosterView : View
 
                     rooster.GetComponent<Button>().onClick.AddListener(() =>
                     {
-                        ViewManager.Instance.Show<RoosterItemView, NavBarView>(rooster.GetComponent<AppointmentInfo>()
+                        ViewManager.Instance.ShowNewView<RoosterItemView>(rooster.GetComponent<AppointmentInfo>()
                             ._appointment);
                     });
 
@@ -135,7 +150,7 @@ public class WeekRoosterView : View
 
                     tussenUur.GetComponent<Button>().onClick.AddListener(() =>
                     {
-                        ViewManager.Instance.Show<RoosterItemView, NavBarView>(tussenUur
+                        ViewManager.Instance.ShowNewView<RoosterItemView>(tussenUur
                             .GetComponent<AppointmentInfo>()._appointment);
                     });
 

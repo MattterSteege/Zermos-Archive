@@ -16,6 +16,11 @@ public class AddHomeworkView : View
 
     public override void Initialize()
     {
+        openNavigationButton.onClick.AddListener(() =>
+        {
+            ViewManager.Instance.ShowNewView<HomeworkView>();
+        });
+        
         save.onClick.AddListener(SaveHomework);
     }
 
@@ -23,6 +28,6 @@ public class AddHomeworkView : View
     {
         _CustomHomework.SaveFile(titel.text, omschrijving.text, new DateTime(Int32.Parse(datum.text.Split("-")[2]), Int32.Parse(datum.text.Split("-")[1]), Int32.Parse(datum.text.Split("-")[0])));
         ViewManager.Instance.Refresh<HomeworkView>();
-        ViewManager.Instance.Show<HomeworkView, NavBarView>();
+        ViewManager.Instance.ShowNewView<HomeworkView>();
     }
 }

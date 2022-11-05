@@ -32,7 +32,7 @@ public class HomeworkView : View
             ViewManager.Instance.HideNavigation();
         });
         
-        _AddHomeworkButton.onClick.AddListener(() => ViewManager.Instance.Show<AddHomeworkView, NavBarView>());
+        _AddHomeworkButton.onClick.AddListener(() => ViewManager.Instance.ShowNewView<AddHomeworkView>());
 
         foreach (Transform child in content.transform)
         {
@@ -84,7 +84,7 @@ public class HomeworkView : View
             
             homeworkItem.GetComponent<Button>().onClick.AddListener(() =>
             {
-                ViewManager.Instance.Show<HomeworkItemView, NavBarView>(homeworkItem.GetComponent<HomeworkInfo>().homeworkInfo);
+                ViewManager.Instance.ShowNewView<HomeworkItemView>(homeworkItem.GetComponent<HomeworkInfo>().homeworkInfo);
             });
             
             homeworkItem.GetComponent<HomeworkInfo>().gemaakt.onValueChanged.AddListener((bool isOn) =>

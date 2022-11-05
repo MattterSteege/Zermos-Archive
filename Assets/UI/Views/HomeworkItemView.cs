@@ -35,6 +35,13 @@ public class HomeworkItemView : View
 
     public override void Initialize()
     {
+        openNavigationButton.onClick.RemoveAllListeners();
+        openNavigationButton.onClick.AddListener(() =>
+        {
+            ViewManager.Instance.ShowNewView<HomeworkView>();
+        });
+
+        
         if (homeworkInfo == null) return;
         
         delete.onClick.AddListener(() => DeleteHomework());
@@ -95,7 +102,7 @@ public class HomeworkItemView : View
             {
                 _customHomework.DeleteCustomHomework(int.Parse(homeworkInfo.UUID));
                 ViewManager.Instance.Refresh<HomeworkView>();
-                ViewManager.Instance.Show<HomeworkView, NavBarView>();
+                ViewManager.Instance.ShowNewView<HomeworkView>();
             }
             catch(Exception){}
         }
