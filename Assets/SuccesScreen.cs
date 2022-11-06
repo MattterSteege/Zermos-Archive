@@ -15,17 +15,16 @@ public class SuccesScreen : MonoBehaviour
     {
         //succesScreen.SetActive(false);
         RectTransform rect = succesScreen.GetComponent<RectTransform>();
-        rect.anchoredPosition = new Vector2(0f, -Screen.height);
+        rect.anchoredPosition = new Vector2(0f, -Screen.height * 2f);
     }
 
-    // Update is called once per frame
-    void Update()
+    [ContextMenu("Show Context menu")]
+    public void testIt()
     {
-        
+        ShowSuccesScreen("Test");
     }
     
-    [ContextMenu("Show Context menu")]
-    public void ShowSuccesScreen(string koppelingName)
+    public void ShowSuccesScreen(string koppelingName = "")
     {
         succesScreen.SetActive(true);
         StartCoroutine(IShowSuccesScreen(koppelingName));
@@ -37,14 +36,14 @@ public class SuccesScreen : MonoBehaviour
         
         RectTransform rect = succesScreen.GetComponent<RectTransform>();
         
-        rect.anchoredPosition = new Vector2(0f, -Screen.height);
+        rect.anchoredPosition = new Vector2(0f, -Screen.height * 2f);
         
         yield return new WaitForSeconds(0.3f);
         
         rect.DOAnchorPosY(0f, 2f);
         yield return new WaitForSeconds(2f);
         
-        ViewManager.Instance.Show<NavBarView, DagRoosterView>();
+        ViewManager.Instance.ShowNewView<DagRoosterView>();
         ViewManager.Instance.Refresh<NavBarView>();
         ViewManager.Instance.Refresh<HomeworkView>();
         ViewManager.Instance.Refresh<CijferView>();
@@ -52,9 +51,10 @@ public class SuccesScreen : MonoBehaviour
         
         yield return new WaitForSeconds(0.25f);
         
-        rect.DOAnchorPosY(Screen.height * 1.1f, 2f);
-        yield return new WaitForSeconds(2f);
-        
-        succesScreen.SetActive(false);
+        rect.GetComponent<CanvasGroup>().DOFade(0f, 0.5f).onComplete += () =>
+        {
+            succesScreen.SetActive(false);
+            Destroy(succesScreen);
+        };
     }
 }

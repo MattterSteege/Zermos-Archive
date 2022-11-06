@@ -15,6 +15,11 @@ public class SecretSettingsView : View
     
     public override void Initialize()
     {
+        openNavigationButton.onClick.AddListener(() =>
+        {
+            ViewManager.Instance.ShowNewView<SettingsView>();
+        });
+        
         Application.logMessageReceived += HandleLog;
         
         deletePlayerPrefsButton.onClick.AddListener(() =>
@@ -22,7 +27,7 @@ public class SecretSettingsView : View
             PlayerPrefs.DeleteAll();
             PlayerPrefs.Save();
             
-            ViewManager.Instance.Show<ConnectZermeloView>();
+            ViewManager.Instance.ShowNewView<ConnectZermeloView>();
         });
         
         EnableLeermiddelen.onClick.AddListener(() =>

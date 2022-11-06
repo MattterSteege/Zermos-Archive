@@ -19,6 +19,11 @@ public class ConnectSomtodayView : View
     
     public override void Initialize()
     {
+        openNavigationButton.onClick.AddListener(() =>
+        {
+            ViewManager.Instance.ShowNewView<SettingsView>();
+        });
+        
         populateSchoolPicker();
 
         connectButton.onClick.AddListener(() =>

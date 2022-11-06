@@ -64,7 +64,7 @@ public class SettingsView : View
             if (timesCLicked >= ClicksNeeded)
             {
                 timesCLicked = 0;
-                ViewManager.Instance.Show<SecretSettingsView, NavBarView>();
+                //ViewManager.Instance.Show<SecretSettingsView, NavBarView>();
             }
         });
 
@@ -153,17 +153,17 @@ public class SettingsView : View
 
         SomtodayKoppeling.onClick.AddListener(() =>
         {
-            ViewManager.Instance.Show<NavBarView, ConnectSomtodayView>();
+            ViewManager.Instance.ShowNewView<ConnectSomtodayView>();
         });
         
         ZermeloKoppeling.onClick.AddListener(() =>
         {
-            ViewManager.Instance.Show<NavBarView, ConnectZermeloView>();
+            ViewManager.Instance.ShowNewView<ConnectZermeloView>();
         });
         
         userInfo.onClick.AddListener(() =>
         {
-            ViewManager.Instance.Show<NavBarView, UserInfoView>();
+            ViewManager.Instance.ShowNewView<SavedInformationView>();
         });
         
         SendNotifButton.onClick.AddListener(() =>
