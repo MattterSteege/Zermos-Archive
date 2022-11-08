@@ -221,7 +221,7 @@ public class Homework : MonoBehaviour
         return homework;
     }
     
-    public DateTime getDateFromWeeknumber(int weeknumber, int year)
+    public static DateTime getDateFromWeeknumber(int weeknumber, int year)
     {
         DateTime jan1 = new DateTime(year, 1, 1);
         int daysOffset = DayOfWeek.Monday - jan1.DayOfWeek;

@@ -1,113 +1,112 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class HomeworkItemView : View
+namespace UI.Views
 {
-    private Homework.Item homeworkInfo;
-
-    [SerializeField] TMP_Text Vak;
-    [SerializeField] TMP_Text Datum;
-    [SerializeField] TMP_Text Omschrijving;
-    [SerializeField] Toggle Gemaakt;
-
-    [SerializeField] private Button delete;
-    [SerializeField] private CustomHomework _customHomework;
-
-    [Space, SerializeField] private GameObject HuiswerkPill;
-    [SerializeField] private GameObject ToetsPill;
-    [SerializeField] private GameObject GroteToetsPill;
-
-    public override void Show(object args = null)
+    public class HomeworkItemView : View
     {
-        this.homeworkInfo = (Homework.Item) args;
+        private Homework.Item homeworkInfo;
 
-        Initialize();
+        [SerializeField] TMP_Text Vak;
+        [SerializeField] TMP_Text Datum;
+        [SerializeField] TMP_Text Omschrijving;
+        [SerializeField] Toggle Gemaakt;
 
-        base.Show();
-    }
+        [SerializeField] private Button delete;
+        [SerializeField] private CustomHomework _customHomework;
 
-    public override void Initialize()
-    {
-        openNavigationButton.onClick.RemoveAllListeners();
-        openNavigationButton.onClick.AddListener(() =>
+        [Space, SerializeField] private GameObject HuiswerkPill;
+        [SerializeField] private GameObject ToetsPill;
+        [SerializeField] private GameObject GroteToetsPill;
+
+        public override void Show(object args = null)
         {
-            ViewManager.Instance.ShowNewView<HomeworkView>();
-        });
+            this.homeworkInfo = (Homework.Item) args;
 
-        
-        if (homeworkInfo == null) return;
-        
-        delete.onClick.AddListener(() => DeleteHomework());
+            Initialize();
 
-        if (homeworkInfo.gemaakt == true)
-        {
-            delete.gameObject.SetActive(true);
-        }
-        else
-        {
-            delete.gameObject.SetActive(false);
+            base.Show();
         }
 
-        if (homeworkInfo == null) return;
-
-        Vak.text = homeworkInfo.lesgroep.vak.naam ?? "";
-
-        Datum.text = homeworkInfo.datumTijd.ToString("d MMMM");
-
-        Omschrijving.text = homeworkInfo.studiewijzerItem.omschrijving;
-        if (Omschrijving.text.Length == 0)
-            Omschrijving.text = homeworkInfo.studiewijzerItem.onderwerp;
-        
-        Gemaakt.isOn = homeworkInfo.additionalObjects.swigemaaktVinkjes?.items?[0].gemaakt ?? false;
-
-        if (homeworkInfo.studiewijzerItem.huiswerkType == "HUISWERK")
+        public override void Initialize()
         {
-            HuiswerkPill.SetActive(true); //
-            ToetsPill.SetActive(false);
-            GroteToetsPill.SetActive(false);
-        }
-        else if (homeworkInfo.studiewijzerItem.huiswerkType == "TOETS")
-        {
-            HuiswerkPill.SetActive(false);
-            ToetsPill.SetActive(true); //
-            GroteToetsPill.SetActive(false);
-        }
-        else if (homeworkInfo.studiewijzerItem.huiswerkType == "GROTE_TOETS")
-        {
-            HuiswerkPill.SetActive(false);
-            ToetsPill.SetActive(false);
-            GroteToetsPill.SetActive(true); //
-        }
-        
-        var m1 = Regex.Matches(Omschrijving.text, @"(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])");
-        
-        foreach (var result in m1)
-        {
-            Omschrijving.text = Omschrijving.text.Replace(result.ToString(), "<u><color=\"blue\"><link=" + result + ">" + result + "</link></color></u>");
-        }
-    }
-
-    private void DeleteHomework()
-    {
-        if (homeworkInfo.gemaakt == true)
-        {
-            try
+            openNavigationButton.onClick.RemoveAllListeners();
+            openNavigationButton.onClick.AddListener(() =>
             {
-                _customHomework.DeleteCustomHomework(int.Parse(homeworkInfo.UUID));
-                ViewManager.Instance.Refresh<HomeworkView>();
                 ViewManager.Instance.ShowNewView<HomeworkView>();
-            }
-            catch(Exception){}
-        }
-    }
+            });
 
-    //regex /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/g
+        
+            if (homeworkInfo == null) return;
+        
+            delete.onClick.AddListener(() => DeleteHomework());
+
+            if (homeworkInfo.gemaakt == true)
+            {
+                delete.gameObject.SetActive(true);
+            }
+            else
+            {
+                delete.gameObject.SetActive(false);
+            }
+
+            if (homeworkInfo == null) return;
+
+            Vak.text = homeworkInfo.lesgroep.vak.naam ?? "";
+
+            Datum.text = homeworkInfo.datumTijd.ToString("d MMMM");
+
+            Omschrijving.text = homeworkInfo.studiewijzerItem.omschrijving;
+            if (Omschrijving.text.Length == 0)
+                Omschrijving.text = homeworkInfo.studiewijzerItem.onderwerp;
+        
+            Gemaakt.isOn = homeworkInfo.additionalObjects.swigemaaktVinkjes?.items?[0].gemaakt ?? false;
+
+            if (homeworkInfo.studiewijzerItem.huiswerkType == "HUISWERK")
+            {
+                HuiswerkPill.SetActive(true); //
+                ToetsPill.SetActive(false);
+                GroteToetsPill.SetActive(false);
+            }
+            else if (homeworkInfo.studiewijzerItem.huiswerkType == "TOETS")
+            {
+                HuiswerkPill.SetActive(false);
+                ToetsPill.SetActive(true); //
+                GroteToetsPill.SetActive(false);
+            }
+            else if (homeworkInfo.studiewijzerItem.huiswerkType == "GROTE_TOETS")
+            {
+                HuiswerkPill.SetActive(false);
+                ToetsPill.SetActive(false);
+                GroteToetsPill.SetActive(true); //
+            }
+        
+            var m1 = Regex.Matches(Omschrijving.text, @"(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])");
+        
+            foreach (var result in m1)
+            {
+                Omschrijving.text = Omschrijving.text.Replace(result.ToString(), "<u><color=\"blue\"><link=" + result + ">" + result + "</link></color></u>");
+            }
+        }
+
+        private void DeleteHomework()
+        {
+            if (homeworkInfo.gemaakt == true)
+            {
+                try
+                {
+                    _customHomework.DeleteCustomHomework(int.Parse(homeworkInfo.UUID));
+                    ViewManager.Instance.Refresh<HomeworkView>();
+                    ViewManager.Instance.ShowNewView<HomeworkView>();
+                }
+                catch(Exception){}
+            }
+        }
+
+        //regex /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/g
     
+    }
 }

@@ -1,5 +1,6 @@
 using DG.Tweening;
 using TMPro;
+using UI.Views;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,7 +36,7 @@ public class SavedInformationView : View
             ViewManager.Instance.ShowNavigation();
         });
         
-        CloseButtonWholePage.onClick.AddListener(() =>
+        closeButtonWholePage.onClick.AddListener(() =>
         {
             openNavigationButton.enabled = true;
             ViewManager.Instance.HideNavigation();

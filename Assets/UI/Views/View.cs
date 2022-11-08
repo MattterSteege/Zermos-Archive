@@ -1,40 +1,42 @@
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 
-[RequireComponent(typeof(Image))]
-[RequireComponent(typeof(Button))]
-public abstract class View : MonoBehaviour
+namespace UI.Views
 {
-	[SerializeField] public Button CloseButtonWholePage;
-	[SerializeField] public Button openNavigationButton;
-	
-	public bool IsInitialized { get; private set; }
-	public bool IsVisible { get; private set; }
-	public object args { get; private set; }
-	
-	public virtual void Initialize()
+	[RequireComponent(typeof(Image))]
+	[RequireComponent(typeof(Button))]
+	public abstract class View : MonoBehaviour
 	{
-		IsInitialized = true;
-	}
-	
-	[ContextMenu("Refresh")]
-	public virtual void Refresh(object args)
-	{
-		Initialize();
-		this.args = args;
-	}
+		[Header("View buttons"), SerializeField] public Button closeButtonWholePage;
+		[SerializeField] public Button openNavigationButton;
 
-	public virtual void Show(object args = null)
-	{
-		this.args = args;
-		gameObject.SetActive(true);
-		IsVisible = true;
-	}
+		[Header("Own component fields"), HideInInspector] public bool isInitialized;
+		[HideInInspector] public bool isVisible;
+		private object _args;
+	
+		public virtual void Initialize()
+		{
+			isInitialized = true;
+		}
+	
+		[ContextMenu("Refresh")]
+		public virtual void Refresh(object args)
+		{
+			Initialize();
+			this._args = args;
+		}
 
-	public virtual void Hide()
-	{
-		gameObject.SetActive(false);
-		IsVisible = false;
+		public virtual void Show(object args = null)
+		{
+			this._args = args;
+			gameObject.SetActive(true);
+			isVisible = true;
+		}
+
+		public virtual void Hide()
+		{
+			gameObject.SetActive(false);
+			isVisible = false;
+		}
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using UI.Views;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using DG.Tweening;
+using UI.Views;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -89,7 +90,7 @@ public sealed class ViewManager : MonoBehaviour
 	[ContextMenu("Show Navigation")]
 	public void ShowNavigation()
 	{
-		currentView.CloseButtonWholePage.enabled = true;
+		currentView.closeButtonWholePage.enabled = true;
 		currentView.openNavigationButton.enabled = false;
 		
 		Background.DOColor(new Color(0.06666667f, 0.1529412f, 0.4352941f), animationTime);
@@ -104,7 +105,7 @@ public sealed class ViewManager : MonoBehaviour
 	[ContextMenu("Hide Navigation")]
 	public void HideNavigation()
 	{
-		currentView.CloseButtonWholePage.enabled = false;
+		currentView.closeButtonWholePage.enabled = false;
 		currentView.openNavigationButton.enabled = true;
 		
 		RectTransform rectTransform = currentView.GetComponent<RectTransform>();

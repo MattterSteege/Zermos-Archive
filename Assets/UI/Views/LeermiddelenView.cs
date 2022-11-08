@@ -1,61 +1,63 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LeermiddelenView : View
+namespace UI.Views
 {
-    [SerializeField] Button AddleermiddelButton;
-
-    [SerializeField] private GameObject content;
-    [SerializeField] private GameObject leermiddelPrefab;
-    
-    [SerializeField] private CustomLeermiddelen _leermiddelen;
-
-    public override void Initialize()
+    public class LeermiddelenView : View
     {
-        openNavigationButton.onClick.AddListener(() =>
-        {
-            openNavigationButton.enabled = false;
-            ViewManager.Instance.ShowNavigation();
-        });
-        
-        CloseButtonWholePage.onClick.AddListener(() =>
-        {
-            openNavigationButton.enabled = true;
-            ViewManager.Instance.HideNavigation();
-        });
-        
-        AddleermiddelButton.onClick.AddListener(() =>
-        {
-            ViewManager.Instance.ShowNewView<AddLeermiddelenView>();
-        });
+        [SerializeField] Button AddleermiddelButton;
 
-        foreach (CustomLeermiddelen.LeermiddelenItem vak in GetLeermiddelenItems())
-        {
-            GameObject leermiddel = Instantiate(leermiddelPrefab, content.transform);
-            leermiddel.GetComponent<LeermiddelenInfo>().SetLeermiddelenText(vak.vak, vak.url);
-        }
-        
-        base.Initialize();
-    }
+        [SerializeField] private GameObject content;
+        [SerializeField] private GameObject leermiddelPrefab;
     
-    public List<CustomLeermiddelen.LeermiddelenItem> GetLeermiddelenItems()
-    {
-        string destination = _leermiddelen.savePath.Replace("*", Application.persistentDataPath);
+        [SerializeField] private CustomLeermiddelen _leermiddelen;
 
-        if (!File.Exists(destination))
+        public override void Initialize()
         {
-            Debug.LogError("File not found");
-            return null;
+            openNavigationButton.onClick.AddListener(() =>
+            {
+                openNavigationButton.enabled = false;
+                ViewManager.Instance.ShowNavigation();
+            });
+        
+            closeButtonWholePage.onClick.AddListener(() =>
+            {
+                openNavigationButton.enabled = true;
+                ViewManager.Instance.HideNavigation();
+            });
+        
+            AddleermiddelButton.onClick.AddListener(() =>
+            {
+                ViewManager.Instance.ShowNewView<AddLeermiddelenView>();
+            });
+
+            foreach (CustomLeermiddelen.LeermiddelenItem vak in GetLeermiddelenItems())
+            {
+                GameObject leermiddel = Instantiate(leermiddelPrefab, content.transform);
+                leermiddel.GetComponent<LeermiddelenInfo>().SetLeermiddelenText(vak.vak, vak.url);
+            }
+        
+            base.Initialize();
         }
-
-        using (StreamReader r = new StreamReader(destination))
+    
+        public List<CustomLeermiddelen.LeermiddelenItem> GetLeermiddelenItems()
         {
-            string json = r.ReadToEnd();
-            return JsonConvert.DeserializeObject<List<CustomLeermiddelen.LeermiddelenItem>>(json);
+            string destination = _leermiddelen.savePath.Replace("*", Application.persistentDataPath);
+
+            if (!File.Exists(destination))
+            {
+                Debug.LogError("File not found");
+                return null;
+            }
+
+            using (StreamReader r = new StreamReader(destination))
+            {
+                string json = r.ReadToEnd();
+                return JsonConvert.DeserializeObject<List<CustomLeermiddelen.LeermiddelenItem>>(json);
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Notifications.Android;
 using UnityEngine;
 
@@ -11,18 +12,20 @@ public class LessonNotificationManager : MonoBehaviour
 
     private void Start()
     {
-        if (PlayerPrefs.GetInt("notifssetup", 0) == 0)
+        var channels = AndroidNotificationCenter.GetNotificationChannels();
+        
+        if (channels.All(x => x.Id != "lessons"))
         {
-            var channel = new AndroidNotificationChannel()
+            var channel = new AndroidNotificationChannel
             {
                 Id = "lessons",
                 Name = "lessons",
                 Importance = Importance.Default,
-                Description = "the default channel for sending lesson notifications"
+                Description = "the default channel for sending lesson notifications",
             };
             AndroidNotificationCenter.RegisterNotificationChannel(channel);
             
-            PlayerPrefs.SetInt("notifssetup", 1);
+            Debug.Log("channel created");
         }
     }
 

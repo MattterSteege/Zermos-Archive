@@ -1,72 +1,73 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using UnityEngine;
 
-public class CijferView : View
+namespace UI.Views
 {
-    [SerializeField] private GameObject content;
-    [SerializeField] private GameObject gradePrefab;
-    [SerializeField] private Grades gradesObject;
-    
-    [SerializeField] private GameObject LastGradeContentGameObject;
-    private List<Grades.Item> lastGrades = new();
-
-    [ContextMenu("Refresh")]
-    public override void Initialize()
+    public class CijferView : View
     {
-        openNavigationButton.onClick.AddListener(() =>
-        {
-            openNavigationButton.enabled = false;
-            ViewManager.Instance.ShowNavigation();
-        });
-        
-        CloseButtonWholePage.onClick.AddListener(() =>
-        {
-            openNavigationButton.enabled = true;
-            ViewManager.Instance.HideNavigation();
-        });
-        
-        var grades = gradesObject.getGrades();
-        if (grades == null) return;
+        [SerializeField] private GameObject content;
+        [SerializeField] private GameObject gradePrefab;
+        [SerializeField] private Grades gradesObject;
+    
+        [SerializeField] private GameObject LastGradeContentGameObject;
+        private List<Grades.Item> lastGrades = new();
 
-        lastGrades = grades.items.TakeLast(2).ToList();
-        
-        foreach (Transform child in content.transform)
-            Destroy(child.gameObject);
-        
-        foreach (Transform child in LastGradeContentGameObject.transform)
-            Destroy(child.gameObject);
-
-        foreach (var grade in lastGrades)
+        [ContextMenu("Refresh")]
+        public override void Initialize()
         {
-            var gradeView = Instantiate(gradePrefab, LastGradeContentGameObject.transform);
-            gradeView.GetComponent<GradeInfo>().SetGradeInfo(grade.vak.naam ?? "",
-                grade.datumInvoer.ToString("d MMMM"), /*grade.omschrijving*/ "", grade.weging + "x",
-                grade.geldendResultaat ?? "-");
-        }
+            openNavigationButton.onClick.AddListener(() =>
+            {
+                openNavigationButton.enabled = false;
+                ViewManager.Instance.ShowNavigation();
+            });
+        
+            closeButtonWholePage.onClick.AddListener(() =>
+            {
+                openNavigationButton.enabled = true;
+                ViewManager.Instance.HideNavigation();
+            });
+        
+            var grades = gradesObject.getGrades();
+            if (grades == null) return;
 
-        foreach (var grade in grades.items)
-        {
+            lastGrades = grades.items.TakeLast(2).ToList();
+        
+            foreach (Transform child in content.transform)
+                Destroy(child.gameObject);
+        
+            foreach (Transform child in LastGradeContentGameObject.transform)
+                Destroy(child.gameObject);
 
-            var gradeView = Instantiate(gradePrefab, content.transform);
+            foreach (var grade in lastGrades)
+            {
+                var gradeView = Instantiate(gradePrefab, LastGradeContentGameObject.transform);
+                gradeView.GetComponent<GradeInfo>().SetGradeInfo(grade.vak.naam ?? "",
+                    grade.datumInvoer.ToString("d MMMM"), /*grade.omschrijving*/ "", grade.weging + "x",
+                    grade.geldendResultaat ?? "-");
+            }
+
+            foreach (var grade in grades.items)
+            {
+
+                var gradeView = Instantiate(gradePrefab, content.transform);
                 gradeView.GetComponent<GradeInfo>().SetGradeInfo(grade.vak.naam ?? "",
                     grade.datumInvoer.ToString("d MMMM"), /*grade.omschrijving*/ "", grade.weging + "x",
                     grade.geldendResultaat ?? "-");
 
-        }
+            }
         
-        base.Initialize();
+            base.Initialize();
+        }
     }
-}
 
-public static class MiscExtensions
-{
-    // Ex: collection.TakeLast(5);
-    public static IEnumerable<T> TakeLast<T>(this IEnumerable<T> source, int N)
+    public static class MiscExtensions
     {
-        return source.Skip(Math.Max(0, source.Count() - N));
+        // Ex: collection.TakeLast(5);
+        public static IEnumerable<T> TakeLast<T>(this IEnumerable<T> source, int N)
+        {
+            return source.Skip(Math.Max(0, source.Count() - N));
+        }
     }
 }

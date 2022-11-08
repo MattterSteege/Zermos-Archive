@@ -5,230 +5,240 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WeekRoosterView : View
+namespace UI.Views
 {
-    [SerializeField] private GameObject[] dagenVanDeWeek;
-    [SerializeField] private GameObject RoosterPrefab;
-    [SerializeField] private GameObject TussenUurPrefab;
-    [SerializeField] private Button RefreshButton;
-    [SerializeField] private Button DagRoosterButton;
-    [SerializeField] private Schedule _schedule;
-    [SerializeField] private int _date;
-
-    private List<Schedule.Appointment> appointments;
-    [SerializeField] private List<int> NoLessonHours;
-    [SerializeField] private List<GameObject> RoosterItems;
-    [SerializeField] private int maxNumberOfLessons;
-    [SerializeField] private bool showHoursAfterLastLesson;
-    [SerializeField] private int addedDays = 0;
-    
-    [Space, Header("UI controls")]
-    [SerializeField] private TMP_Text _dateText;
-    [SerializeField] private Button nextDayButton;
-    [SerializeField] private Button previousDayButton;
-    
-    public override void Initialize()
+    public class WeekRoosterView : View
     {
-        openNavigationButton.onClick.AddListener(() =>
-        {
-            openNavigationButton.enabled = false;
-            ViewManager.Instance.ShowNavigation();
-        });
-        
-        CloseButtonWholePage.onClick.AddListener(() =>
-        {
-            openNavigationButton.enabled = true;
-            ViewManager.Instance.HideNavigation();
-        });
-        
-        RefreshButton.onClick.AddListener(Initialize);
-        DagRoosterButton.onClick.AddListener(() =>
-        {
-            ViewManager.Instance.ShowNewView<DagRoosterView>();
-        });
-        
-        nextDayButton.onClick.AddListener(() =>
-        {
-            addedDays += 7; 
-            nextDayButton.onClick.RemoveAllListeners(); 
-            previousDayButton.onClick.RemoveAllListeners(); 
-            Initialize();
-        });
-        previousDayButton.onClick.AddListener(() => 
-        { 
-            addedDays -= 7;
-            nextDayButton.onClick.RemoveAllListeners(); 
-            previousDayButton.onClick.RemoveAllListeners(); 
-            Initialize(); 
-        });
+        [SerializeField] private GameObject[] dagenVanDeWeek;
+        [SerializeField] private GameObject RoosterPrefab;
+        [SerializeField] private GameObject TussenUurPrefab;
+        [SerializeField] private Button RefreshButton;
+        [SerializeField] private Button DagRoosterButton;
+        [SerializeField] private Schedule _schedule;
+        [SerializeField] private int _date;
 
-        for (int i = 0; i < dagenVanDeWeek.Length; i++)
+        private List<Schedule.Appointment> appointments;
+        [SerializeField] private List<int> NoLessonHours;
+        [SerializeField] private List<GameObject> RoosterItems;
+        [SerializeField] private int maxNumberOfLessons;
+        [SerializeField] private bool showHoursAfterLastLesson;
+        [SerializeField] private int addedDays = 0;
+    
+        [Space, Header("UI controls")]
+        [SerializeField] private TMP_Text _dateText;
+        [SerializeField] private Button nextDayButton;
+        [SerializeField] private Button previousDayButton;
+    
+        public override void Initialize()
         {
-            foreach (Transform child in dagenVanDeWeek[i].transform)
+            openNavigationButton.onClick.RemoveAllListeners();
+            openNavigationButton.onClick.AddListener(() =>
             {
-                Destroy(child.gameObject);
-                NoLessonHours.Clear();
-                NoLessonHours = new List<int>();
-                appointments.Clear();
-                RoosterItems.Clear();
-            }
-        }
+                openNavigationButton.enabled = false;
+                ViewManager.Instance.ShowNavigation();
+            });
         
-        DateTime extraDays = TimeManager.Instance.DateTime.StartOfWeek(DayOfWeek.Monday).AddDays(addedDays);
-        _dateText.text = "Week van " + extraDays.ToString("d MMMM");
+            closeButtonWholePage.onClick.RemoveAllListeners();
+            closeButtonWholePage.onClick.AddListener(() =>
+            {
+                openNavigationButton.enabled = true;
+                ViewManager.Instance.HideNavigation();
+            });
         
-        NoLessonHours = new List<int>();
-        RoosterItems = new List<GameObject>();
+            RefreshButton.onClick.RemoveAllListeners();
+            RefreshButton.onClick.AddListener(Initialize);
+
+            DagRoosterButton.onClick.RemoveAllListeners();
+            DagRoosterButton.onClick.AddListener(() =>
+            {
+                ViewManager.Instance.ShowNewView<DagRoosterView>();
+            });
         
-        for (int x = 0; x < dagenVanDeWeek.Length; x++)
-        {
-            appointments = new List<Schedule.Appointment>();
             
-            appointments = _schedule.getScheduleOfDay(TimeManager.Instance.DateTime.StartOfWeek(DayOfWeek.Monday).AddDays(x + addedDays));
-
-            if (appointments == null)
+            nextDayButton.onClick.RemoveAllListeners(); 
+            nextDayButton.onClick.AddListener(() =>
             {
-                base.Initialize();
-                return;
-            }
+                addedDays += 7;
+                Initialize();
+            });
+            
+            previousDayButton.onClick.RemoveAllListeners(); 
+            previousDayButton.onClick.AddListener(() => 
+            { 
+                addedDays -= 7;
+                Initialize(); 
+            });
 
-            int lastlesson = 0;
-            for (int i = 1, listIndex = 0; i < maxNumberOfLessons + 1; i++)
+            for (int i = 0; i < dagenVanDeWeek.Length; i++)
             {
-                if ((!(listIndex >= appointments.Count) && appointments[listIndex]?.appointmentType == "lesson" &&
-                     int.Parse(appointments[listIndex].startTimeSlotName) == i) ||
-                    (!(i >= appointments.Count) && appointments[i - 1]?.appointmentType == "lesson" &&
-                     int.Parse(appointments[i - 1].startTimeSlotName) == i))
+                foreach (Transform child in dagenVanDeWeek[i].transform)
                 {
-                    //les
-
-                    var rooster = Instantiate(RoosterPrefab, dagenVanDeWeek[x].transform);
-                    rooster.GetComponent<AppointmentInfo>().SetAppointmentInfo(
-                        String.Join(", ", appointments[listIndex].locations),
-                        DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start).AddHours(2).UtcDateTime
-                            .ToShortTimeString() + " - " + DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end)
-                            .AddHours(2).UtcDateTime
-                            .ToShortTimeString(), appointments[listIndex].teachers[0],
-                        String.Join(", ", appointments[listIndex].subjects), appointments[listIndex].startTimeSlotName,
-                        appointments[listIndex]);
-
-                    RoosterItems.Add(rooster);
-
-                    if (appointments[listIndex].status[0].code == 4007)
-                    {
-                        rooster.GetComponent<Image>().color = new Color(1f, 0f, 0f, 0.5f);
-                    }
-
-                    rooster.GetComponent<Button>().onClick.AddListener(() =>
-                    {
-                        ViewManager.Instance.ShowNewView<RoosterItemView>(rooster.GetComponent<AppointmentInfo>()
-                            ._appointment);
-                    });
-
-                    //must be at the end
-                    listIndex++;
+                    Destroy(child.gameObject);
+                    NoLessonHours.Clear();
+                    NoLessonHours = new List<int>();
+                    appointments.Clear();
+                    RoosterItems.Clear();
                 }
-                else
-                {
-                    NoLessonHours.Add(i);
-                    
-                    //no lesson
-                    var tussenUur = Instantiate(TussenUurPrefab, dagenVanDeWeek[x].transform);
+            }
+        
+            DateTime extraDays = TimeManager.Instance.DateTime.StartOfWeek(DayOfWeek.Monday).AddDays(addedDays);
+            _dateText.text = "Week van " + extraDays.ToString("d MMMM");
+        
+            NoLessonHours = new List<int>();
+            RoosterItems = new List<GameObject>();
+        
+            for (int x = 0; x < dagenVanDeWeek.Length; x++)
+            {
+                appointments = new List<Schedule.Appointment>();
+            
+                appointments = _schedule.getScheduleOfDay(TimeManager.Instance.DateTime.StartOfWeek(DayOfWeek.Monday).AddDays(x + addedDays));
 
-                    Schedule.Appointment appointment;
-                    if (appointments.Count <= listIndex)
+                if (appointments == null)
+                {
+                    base.Initialize();
+                    return;
+                }
+
+                int lastlesson = 0;
+                for (int i = 1, listIndex = 0; i < maxNumberOfLessons + 1; i++)
+                {
+                    if ((!(listIndex >= appointments.Count) && appointments[listIndex]?.appointmentType == "lesson" &&
+                         int.Parse(appointments[listIndex].startTimeSlotName) == i) ||
+                        (!(i >= appointments.Count) && appointments[i - 1]?.appointmentType == "lesson" &&
+                         int.Parse(appointments[i - 1].startTimeSlotName) == i))
                     {
-                        appointment = null;
+                        //les
+
+                        var rooster = Instantiate(RoosterPrefab, dagenVanDeWeek[x].transform);
+                        rooster.GetComponent<AppointmentInfo>().SetAppointmentInfo(
+                            String.Join(", ", appointments[listIndex].locations),
+                            DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start).AddHours(2).UtcDateTime
+                                .ToShortTimeString() + " - " + DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end)
+                                .AddHours(2).UtcDateTime
+                                .ToShortTimeString(), appointments[listIndex].teachers[0],
+                            String.Join(", ", appointments[listIndex].subjects), appointments[listIndex].startTimeSlotName,
+                            appointments[listIndex]);
+
+                        RoosterItems.Add(rooster);
+
+                        if (appointments[listIndex].status[0].code == 4007)
+                        {
+                            rooster.GetComponent<Image>().color = new Color(1f, 0f, 0f, 0.5f);
+                        }
+
+                        rooster.GetComponent<Button>().onClick.RemoveAllListeners();
+                        rooster.GetComponent<Button>().onClick.AddListener(() =>
+                        {
+                            ViewManager.Instance.ShowNewView<RoosterItemView>(rooster.GetComponent<AppointmentInfo>()
+                                ._appointment);
+                        });
+
+                        //must be at the end
+                        listIndex++;
                     }
                     else
                     {
-                        appointment = appointments[listIndex];
+                        NoLessonHours.Add(i);
+                    
+                        //no lesson
+                        var tussenUur = Instantiate(TussenUurPrefab, dagenVanDeWeek[x].transform);
+
+                        Schedule.Appointment appointment;
+                        if (appointments.Count <= listIndex)
+                        {
+                            appointment = null;
+                        }
+                        else
+                        {
+                            appointment = appointments[listIndex];
+                        }
+
+                        tussenUur.GetComponent<AppointmentInfo>()
+                            .SetAppointmentInfo("Geen les", "", "", "", i.ToString(), appointment);
+
+                        tussenUur.GetComponent<Button>().onClick.RemoveAllListeners();
+                        tussenUur.GetComponent<Button>().onClick.AddListener(() =>
+                        {
+                            ViewManager.Instance.ShowNewView<RoosterItemView>(tussenUur
+                                .GetComponent<AppointmentInfo>()._appointment);
+                        });
+
+                        RoosterItems.Add(tussenUur);
+
+                        if (!(listIndex >= appointments.Count) && appointments[listIndex].startTimeSlotName == (i).ToString())
+                        {
+                            listIndex++;
+                        }
                     }
 
-                    tussenUur.GetComponent<AppointmentInfo>()
-                        .SetAppointmentInfo("Geen les", "", "", "", i.ToString(), appointment);
+                    lastlesson = i;
 
-                    tussenUur.GetComponent<Button>().onClick.AddListener(() =>
+                    foreach (Transform child in dagenVanDeWeek[x].transform)
                     {
-                        ViewManager.Instance.ShowNewView<RoosterItemView>(tussenUur
-                            .GetComponent<AppointmentInfo>()._appointment);
-                    });
+                        bool contains = RoosterItems.Contains(child.gameObject);
 
-                    RoosterItems.Add(tussenUur);
+                        if (!contains)
+                        {
+                            Destroy(child.gameObject);
+                        }
+                    }
 
-                    if (!(listIndex >= appointments.Count) && appointments[listIndex].startTimeSlotName == (i).ToString())
+                    if (PlayerPrefs.GetInt("ShowTussenUren", 1) == 0)
                     {
-                        listIndex++;
+                        hideTussenUren();
                     }
                 }
 
-                lastlesson = i;
-
-                foreach (Transform child in dagenVanDeWeek[x].transform)
-                {
-                    bool contains = RoosterItems.Contains(child.gameObject);
-
-                    if (!contains)
-                    {
-                        Destroy(child.gameObject);
-                    }
-                }
-
-                if (PlayerPrefs.GetInt("ShowTussenUren") == 0)
-                {
-                    hideTussenUren();
-                }
+                NoLessonHours.Add(-1);
             }
-
-            NoLessonHours.Add(-1);
+            base.Initialize();
         }
-        base.Initialize();
-    }
 
-    [ContextMenu("Show Tussenuren")]
-    public void showTussenUren()
-    {
-        List<int> temp = new List<int>();
-        temp = NoLessonHours;
-        
-        for (int i = 0, x = 0; i < NoLessonHours.Count; i++)
+        [ContextMenu("Show Tussenuren")]
+        public void showTussenUren()
         {
-            if (temp[i] != -1)
+            List<int> temp = new List<int>();
+            temp = NoLessonHours;
+        
+            for (int i = 0, x = 0; i < NoLessonHours.Count; i++)
             {
-                RoosterItems[temp[i] - 1 + (x * maxNumberOfLessons)].GetComponent<CanvasGroup>().alpha = 1f;
-            }
-            else
-            {
-                x++;
+                if (temp[i] != -1)
+                {
+                    RoosterItems[temp[i] - 1 + (x * maxNumberOfLessons)].GetComponent<CanvasGroup>().alpha = 1f;
+                }
+                else
+                {
+                    x++;
+                }
             }
         }
-    }
     
-    [ContextMenu("Hide Tussenuren")]
-    public void hideTussenUren()
-    {
-        List<int> temp = new List<int>();
-        temp = NoLessonHours;
-        
-        for (int i = 0, x = 0; i < NoLessonHours.Count; i++)
+        [ContextMenu("Hide Tussenuren")]
+        public void hideTussenUren()
         {
-            if (temp[i] != -1)
+            List<int> temp = new List<int>();
+            temp = NoLessonHours;
+        
+            for (int i = 0, x = 0; i < NoLessonHours.Count; i++)
             {
-                RoosterItems[temp[i] - 1 + (x * maxNumberOfLessons)].GetComponent<CanvasGroup>().alpha = 0f;
-            }
-            else
-            {
-                x++;
+                if (temp[i] != -1)
+                {
+                    RoosterItems[temp[i] - 1 + (x * maxNumberOfLessons)].GetComponent<CanvasGroup>().alpha = 0f;
+                }
+                else
+                {
+                    x++;
+                }
             }
         }
     }
-}
 
-public static class DateTimeExtensions
-{
-    public static DateTime StartOfWeek(this DateTime dt, DayOfWeek startOfWeek)
+    public static class DateTimeExtensions
     {
-        int diff = (7 + (dt.DayOfWeek - startOfWeek)) % 7;
-        return dt.AddDays(-1 * diff).Date;
+        public static DateTime StartOfWeek(this DateTime dt, DayOfWeek startOfWeek)
+        {
+            int diff = (7 + (dt.DayOfWeek - startOfWeek)) % 7;
+            return dt.AddDays(-1 * diff).Date;
+        }
     }
 }

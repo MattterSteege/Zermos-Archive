@@ -9,10 +9,11 @@ using UnityEngine.Networking;
 
 public class Schedule : MonoBehaviour
 {
-    public static List<Appointment> TodaysScheduledAppointments;
+    public List<Appointment> TodaysScheduledAppointments;
     
     
-    public ZermeloSchedule StartGetSchedule(string week = "38", string year = "0")
+    
+    public ZermeloSchedule StartGetSchedule(string week, string year)
     { 
         if (Regex.IsMatch(week, "/^(?=.{1,2}$).*/"))
         {
@@ -96,6 +97,11 @@ public class Schedule : MonoBehaviour
             {
                 TodaySchedule.Add(appointment);
             }
+        }
+        
+        if (date == DateTime.Today)
+        {
+            TodaysScheduledAppointments = TodaySchedule;
         }
 
         return TodaySchedule;

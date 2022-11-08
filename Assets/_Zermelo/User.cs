@@ -7,9 +7,9 @@ using UnityEngine.Networking;
 
 public class User : MonoBehaviour
 {
-    public void startGetUser()
+    public ZermeloUser startGetUser()
     {
-        StartCoroutine(GetUser());
+        return new CoroutineWithData<ZermeloUser>(this, GetUser()).result;
     }
 
     public IEnumerator GetUser() 
@@ -25,7 +25,9 @@ public class User : MonoBehaviour
         baseURL = baseURL.Replace("{access_token}", PlayerPrefs.GetString("zermelo-access_token"));
 
         UnityWebRequest www = UnityWebRequest.Get(baseURL);
-        yield return www.SendWebRequest();
+        www.SendWebRequest();
+        
+        while (!www.isDone) { }
  
         if(www.result != UnityWebRequest.Result.Success) {
             Debug.Log(www.error);
@@ -37,6 +39,8 @@ public class User : MonoBehaviour
             PlayerPrefs.SetString("zermelo-user_code", response.Response.Data[0].Code);
             PlayerPrefs.SetString("zermelo-full_name", response.Response.Data[0].FirstName + " " + response.Response.Data[0].Prefix + " " + response.Response.Data[0].LastName);
             PlayerPrefs.Save();
+
+            yield return response;
         }
     }
     

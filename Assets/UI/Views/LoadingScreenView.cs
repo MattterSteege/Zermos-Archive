@@ -1,46 +1,47 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
-public class LoadingScreenView : MonoBehaviour
+namespace UI.Views
 {
-    [SerializeField] TMP_Text loadingText;
-    [SerializeField] GameObject loadingScreen;
-
-    void Awake()
+    public class LoadingScreenView : MonoBehaviour
     {
-        gameObject.SetActive(true);
-        loadingScreen.GetComponent<CanvasGroup>().alpha = 1;
-        
-        ViewManager.onLoadedView += OnLoadedView;
-        ViewManager.onInitializeComplete += Complete;
-    }
+        [SerializeField] TMP_Text loadingText;
+        [SerializeField] GameObject loadingScreen;
 
-    private void OnLoadedView(float loadingcomplete)
-    {
-        loadingScreen.SetActive(true);
-        loadingText.text = "Laden: " + loadingcomplete.ToString("P0");
-        
-        if (Math.Abs(loadingcomplete - 1) < 0.05f)
+        void Awake()
         {
-            ViewManager.onLoadedView -= OnLoadedView;
-            ViewManager.onInitializeComplete -= Complete;
-            Complete(true);
+            gameObject.SetActive(true);
+            loadingScreen.GetComponent<CanvasGroup>().alpha = 1;
+        
+            ViewManager.onLoadedView += OnLoadedView;
+            ViewManager.onInitializeComplete += Complete;
         }
-    }
 
-    private void Complete(bool done)
-    {
-        loadingScreen.GetComponent<CanvasGroup>().DOFade(1, 0.5f).onComplete += () =>
+        private void OnLoadedView(float loadingcomplete)
         {
-            loadingScreen.GetComponent<CanvasGroup>().DOFade(0, 1.5f).onComplete += () =>
+            loadingScreen.SetActive(true);
+            loadingText.text = "Laden: " + loadingcomplete.ToString("P0");
+        
+            if (Math.Abs(loadingcomplete - 1) < 0.05f)
             {
-                gameObject.SetActive(false);
-                Destroy(gameObject);
+                ViewManager.onLoadedView -= OnLoadedView;
+                ViewManager.onInitializeComplete -= Complete;
+                Complete(true);
+            }
+        }
+
+        private void Complete(bool done)
+        {
+            loadingScreen.GetComponent<CanvasGroup>().DOFade(1, 0.5f).onComplete += () =>
+            {
+                loadingScreen.GetComponent<CanvasGroup>().DOFade(0, 1.5f).onComplete += () =>
+                {
+                    gameObject.SetActive(false);
+                    Destroy(gameObject);
+                };
             };
-        };
+        }
     }
 }

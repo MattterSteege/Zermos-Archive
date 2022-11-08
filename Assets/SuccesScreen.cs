@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
+using UI.Views;
 
 public class SuccesScreen : MonoBehaviour
 {

@@ -1,159 +1,160 @@
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UserInfoView : View
+namespace UI.Views
 {
-    [Space]
-    [SerializeField] private TMP_Text NaamText;
-    [SerializeField] private Button NaamTextButton;
+    public class UserInfoView : View
+    {
+        [Space]
+        [SerializeField] private TMP_Text NaamText;
+        [SerializeField] private Button NaamTextButton;
     
-    [SerializeField, Space] private TMP_Text CodeText;
-    [SerializeField] private Button CodeTextButton;
+        [SerializeField, Space] private TMP_Text CodeText;
+        [SerializeField] private Button CodeTextButton;
     
-    [SerializeField, Space] private TMP_Text ZermeloAuthCodeText;
-    [SerializeField] private Button ZermeloAuthCodeTextButton;
+        [SerializeField, Space] private TMP_Text ZermeloAuthCodeText;
+        [SerializeField] private Button ZermeloAuthCodeTextButton;
     
-    [SerializeField, Space] private TMP_Text SchoolAbbreviationText;
-    [SerializeField] private Button SchoolAbbreviationTextButton;
+        [SerializeField, Space] private TMP_Text SchoolAbbreviationText;
+        [SerializeField] private Button SchoolAbbreviationTextButton;
     
-    [SerializeField, Space] private TMP_Text SomtodayAuthCodeText;
-    [SerializeField] private Button SomtodayAuthCodeTextButton;
+        [SerializeField, Space] private TMP_Text SomtodayAuthCodeText;
+        [SerializeField] private Button SomtodayAuthCodeTextButton;
     
-    [SerializeField, Space] private GameObject ZermeloManager;
-    [SerializeField] private TMP_Text CopiedText;
+        [SerializeField, Space] private GameObject ZermeloManager;
+        [SerializeField] private TMP_Text CopiedText;
     
-    [SerializeField, Space] private TMP_Text filePathText;
-    [SerializeField] private Button filePathTextButton;
+        [SerializeField, Space] private TMP_Text filePathText;
+        [SerializeField] private Button filePathTextButton;
     
 
-    public override void Initialize()
-    {
-        string fullName = PlayerPrefs.GetString("zermelo-full_name");
-        string userCode = PlayerPrefs.GetString("zermelo-user_code");
-        string zermeloAccessToken = PlayerPrefs.GetString("zermelo-access_token");
-        string schoolCode = PlayerPrefs.GetString("zermelo-school_code");
-        string SomtodayAccessToken = PlayerPrefs.GetString("somtoday-access_token");
-        string filePath = PlayerPrefs.GetString("file_path");
+        public override void Initialize()
+        {
+            string fullName = PlayerPrefs.GetString("zermelo-full_name");
+            string userCode = PlayerPrefs.GetString("zermelo-user_code");
+            string zermeloAccessToken = PlayerPrefs.GetString("zermelo-access_token");
+            string schoolCode = PlayerPrefs.GetString("zermelo-school_code");
+            string SomtodayAccessToken = PlayerPrefs.GetString("somtoday-access_token");
+            string filePath = PlayerPrefs.GetString("file_path");
      
-        CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().alpha = 0;
+            CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().alpha = 0;
         
-        if (string.IsNullOrEmpty(fullName))
-        {
-            NaamText.gameObject.transform.parent.gameObject.SetActive(false);
-        }
-        else
-        {
-            NaamText.text = fullName;
-            
-            NaamTextButton.onClick.AddListener(() =>
+            if (string.IsNullOrEmpty(fullName))
             {
-                CopyToClipboard(fullName);
-                copyComplete("naam");
-            });
-        }
-        
-        if (string.IsNullOrEmpty(userCode))
-        {
-            CodeText.gameObject.transform.parent.gameObject.SetActive(false);
-        }
-        else
-        {
-            CodeText.text = userCode;
-            
-            CodeTextButton.onClick.AddListener(() =>
+                NaamText.gameObject.transform.parent.gameObject.SetActive(false);
+            }
+            else
             {
-                CopyToClipboard(userCode);
-                copyComplete("leerling code");
-            });
-        }
-        
-        if (string.IsNullOrEmpty(zermeloAccessToken))
-        {
-            ZermeloAuthCodeText.gameObject.transform.parent.gameObject.SetActive(false);
-        }
-        else
-        {
-            ZermeloAuthCodeText.text = zermeloAccessToken.Substring(0, 15) + "...";
+                NaamText.text = fullName;
             
-            ZermeloAuthCodeTextButton.onClick.AddListener(() =>
-            {
-                CopyToClipboard(zermeloAccessToken);
-                copyComplete("Zermelo auth code");
-            });
-        }
-        
-        if (string.IsNullOrEmpty(schoolCode))
-        {
-            SchoolAbbreviationText.gameObject.transform.parent.gameObject.SetActive(false);
-        }
-        else
-        {
-            SchoolAbbreviationText.text = schoolCode;
-            
-            SchoolAbbreviationTextButton.onClick.AddListener(() =>
-            {
-                CopyToClipboard(schoolCode);
-                copyComplete("school code");
-            });
-        }
-        
-        if (string.IsNullOrEmpty(SomtodayAccessToken))
-        {
-            SomtodayAuthCodeText.gameObject.transform.parent.gameObject.SetActive(false);
-        }
-        else
-        {
-            SomtodayAuthCodeText.text = SomtodayAccessToken.Substring(0, 15) + "...";
-            
-            SomtodayAuthCodeTextButton.onClick.AddListener(() =>
-            {
-                CopyToClipboard(SomtodayAccessToken);
-                copyComplete("Somtoday auth code");
-            });
-        }
-        
-        if (string.IsNullOrEmpty(filePath))
-        {
-            filePathText.gameObject.transform.parent.gameObject.SetActive(false);
-        }
-        else
-        {
-            filePathText.text = filePath.Substring(0, 15) + "...";
-            
-            filePathTextButton.onClick.AddListener(() =>
-            {
-                CopiedText.text = "Opening file explorer";
-        
-                CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().DOFade(1, 0.5f).onComplete += () =>
+                NaamTextButton.onClick.AddListener(() =>
                 {
-                    CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().DOFade(0, 0.5f).SetDelay(1f);
-                };
+                    CopyToClipboard(fullName);
+                    copyComplete("naam");
+                });
+            }
+        
+            if (string.IsNullOrEmpty(userCode))
+            {
+                CodeText.gameObject.transform.parent.gameObject.SetActive(false);
+            }
+            else
+            {
+                CodeText.text = userCode;
+            
+                CodeTextButton.onClick.AddListener(() =>
+                {
+                    CopyToClipboard(userCode);
+                    copyComplete("leerling code");
+                });
+            }
+        
+            if (string.IsNullOrEmpty(zermeloAccessToken))
+            {
+                ZermeloAuthCodeText.gameObject.transform.parent.gameObject.SetActive(false);
+            }
+            else
+            {
+                ZermeloAuthCodeText.text = zermeloAccessToken.Substring(0, 15) + "...";
+            
+                ZermeloAuthCodeTextButton.onClick.AddListener(() =>
+                {
+                    CopyToClipboard(zermeloAccessToken);
+                    copyComplete("Zermelo auth code");
+                });
+            }
+        
+            if (string.IsNullOrEmpty(schoolCode))
+            {
+                SchoolAbbreviationText.gameObject.transform.parent.gameObject.SetActive(false);
+            }
+            else
+            {
+                SchoolAbbreviationText.text = schoolCode;
+            
+                SchoolAbbreviationTextButton.onClick.AddListener(() =>
+                {
+                    CopyToClipboard(schoolCode);
+                    copyComplete("school code");
+                });
+            }
+        
+            if (string.IsNullOrEmpty(SomtodayAccessToken))
+            {
+                SomtodayAuthCodeText.gameObject.transform.parent.gameObject.SetActive(false);
+            }
+            else
+            {
+                SomtodayAuthCodeText.text = SomtodayAccessToken.Substring(0, 15) + "...";
+            
+                SomtodayAuthCodeTextButton.onClick.AddListener(() =>
+                {
+                    CopyToClipboard(SomtodayAccessToken);
+                    copyComplete("Somtoday auth code");
+                });
+            }
+        
+            if (string.IsNullOrEmpty(filePath))
+            {
+                filePathText.gameObject.transform.parent.gameObject.SetActive(false);
+            }
+            else
+            {
+                filePathText.text = filePath.Substring(0, 15) + "...";
+            
+                filePathTextButton.onClick.AddListener(() =>
+                {
+                    CopiedText.text = "Opening file explorer";
+        
+                    CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().DOFade(1, 0.5f).onComplete += () =>
+                    {
+                        CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().DOFade(0, 0.5f).SetDelay(1f);
+                    };
 
-                Application.OpenURL(filePath.Replace(@"/CustomHomework.json", ""));
-            });
+                    Application.OpenURL(filePath.Replace(@"/CustomHomework.json", ""));
+                });
+            }
+
+            base.Initialize();
+        }
+    
+        private void CopyToClipboard(string str) {
+            TextEditor textEditor = new TextEditor();
+            textEditor.text = str;
+            textEditor.SelectAll();
+            textEditor.Copy();
         }
 
-        base.Initialize();
-    }
-    
-    private void CopyToClipboard(string str) {
-        TextEditor textEditor = new TextEditor();
-        textEditor.text = str;
-        textEditor.SelectAll();
-        textEditor.Copy();
-    }
-
-    private void copyComplete(string copiedText)
-    {
-        CopiedText.text = copiedText + " Gekopieerd!";
-        
-        CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().DOFade(1, 0.5f).onComplete += () =>
+        private void copyComplete(string copiedText)
         {
-            CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().DOFade(0, 0.5f).SetDelay(1f);
-        };
+            CopiedText.text = copiedText + " Gekopieerd!";
+        
+            CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().DOFade(1, 0.5f).onComplete += () =>
+            {
+                CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().DOFade(0, 0.5f).SetDelay(1f);
+            };
+        }
     }
 }
