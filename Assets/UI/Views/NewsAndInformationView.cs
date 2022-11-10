@@ -133,6 +133,8 @@ namespace UI.Views
 
                 var firstlesson = appointments.Find(x => x.appointmentType == "lesson" && x.status[0].code != 4007);
 
+                if (firstlesson == null) return;
+                
                 DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
                 timeTillDeparture = dateTime.AddSeconds(firstlesson.start).ToLocalTime() -
                                     new TimeSpan(0, minutesbeforeclass, 0);

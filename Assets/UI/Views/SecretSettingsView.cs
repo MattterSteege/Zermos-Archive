@@ -29,12 +29,22 @@ namespace UI.Views
             });
         
         
+            int timesClicked = 0;
             deletePlayerPrefsButton.onClick.AddListener(() =>
             {
-                PlayerPrefs.DeleteAll();
-                PlayerPrefs.Save();
+                if (timesClicked < 5)
+                {
+                    timesClicked++;
+                }
+                else
+                {
+                    PlayerPrefs.DeleteAll();
+                    PlayerPrefs.Save();
             
-                ViewManager.Instance.ShowNewView<ConnectZermeloView>();
+                    ViewManager.Instance.ShowNewView<ConnectZermeloView>();
+
+                    timesClicked = 0;
+                }
             });
         
             EnableLeermiddelen.onClick.AddListener(() =>
@@ -66,7 +76,7 @@ namespace UI.Views
         {
             if (type == LogType.Log)
             {
-                output.text += $"<color=white>{logString}</color>\n\n ";
+                output.text += $"<color=black>{logString}</color>\n\n ";
 
                 string stacktrace = stackTrace;
                 var m1 = Regex.Matches(stacktrace, @"((([A-Za-z]+\/)+)?[A-Z-a-z]+?(.[A-Za-z]+:[0-9]+))");

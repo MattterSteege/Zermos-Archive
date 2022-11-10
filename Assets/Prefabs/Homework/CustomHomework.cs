@@ -105,7 +105,6 @@ public class CustomHomework : MonoBehaviour
     public void SaveFile(string titel, string omschrijving, DateTime deadline, bool gemaakt = false)
     {
         string destination = savePath.Replace("*", Application.persistentDataPath);
-        PlayerPrefs.SetString("file_path", destination);
         FileStream file;
 
         if (!File.Exists(destination))

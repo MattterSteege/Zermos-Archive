@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -11,24 +12,53 @@ public class Schedule : MonoBehaviour
 {
     public List<Appointment> TodaysScheduledAppointments;
     
-    
-    
-    public ZermeloSchedule StartGetSchedule(string week, string year)
-    { 
-        if (Regex.IsMatch(week, "/^(?=.{1,2}$).*/"))
+    [SerializeField, Tooltip("'*' means Application.persistentDataPath.")] private string savePath = "*/Lessons.json";
+
+    private void Start()
+    {
+        ViewManager.onInitializeComplete += FetchSchedule;
+    }
+
+    private void FetchSchedule(bool done)
+    {
+        ZermeloSchedule schedule = new ZermeloSchedule();
+        
+        int week = GetweeknumberFromDate(TimeManager.Instance.DateTime);
+        schedule = new CoroutineWithData<ZermeloSchedule>(this, GetSchedule(TimeManager.Instance.DateTime.Year + week.ToString())).result;
+        
+        for (int i = 1; i < 5; i++)
         {
-            if (week.ToCharArray().Length == 1)
+            schedule.response.data[0].appointments.AddRange(new CoroutineWithData<ZermeloSchedule>(this, GetSchedule(TimeManager.Instance.DateTime.Year + (week + i).ToString())).result.response.data[0].appointments); 
+        }
+        
+        SaveFile(schedule);
+    }
+
+    public ZermeloSchedule StartGetSchedule(string week, string year)
+    {
+        var schedule = LoadFile();
+        
+        if (schedule == null)
+        {
+            if (Regex.IsMatch(week, "/^(?=.{1,2}$).*/"))
             {
-                week = "0" + week;
-            }
+                if (week.ToCharArray().Length == 1)
+                {
+                    week = "0" + week;
+                }
             
-            if (year == "0")
-            {
-                year = TimeManager.Instance.DateTime.Year.ToString();
+                if (year == "0")
+                {
+                    year = TimeManager.Instance.DateTime.Year.ToString();
+                }
             }
         }
+        else
+        {
+            return schedule;
+        }
 
-        
+
         return new CoroutineWithData<ZermeloSchedule>(this, GetSchedule(year + week)).result;
     }
 
@@ -54,9 +84,11 @@ public class Schedule : MonoBehaviour
         {
             Debug.Log(www.error);
         }
-        else 
+        else
         {
-            yield return JsonConvert.DeserializeObject<ZermeloSchedule>(www.downloadHandler.text);
+            var schedule = JsonConvert.DeserializeObject<ZermeloSchedule>(www.downloadHandler.text);
+            SaveFile(schedule);
+            yield return schedule;
         }
     }
     
@@ -71,11 +103,62 @@ public class Schedule : MonoBehaviour
         return www;
     }
 
-    [ContextMenu("get todays items")]
-    public void testgetScheduleOfDay()
+    #region saving and loading the latest schedule
+    private void SaveFile(ZermeloSchedule schedule)
     {
-        getScheduleOfDay(new DateTime(2022, 9, 19, 0, 0, 0));
+        string path = savePath.Replace("*", Application.persistentDataPath);
+        string json = JsonConvert.SerializeObject(schedule, Formatting.Indented);
+        File.WriteAllText(path,"//In dit bestand staan alle zelf aangemaakte huiswerk items.\r\n");
+        File.AppendAllText(path, json);
     }
+
+    private ZermeloSchedule LoadFile()
+    {
+        string destination = savePath.Replace("*", Application.persistentDataPath);
+
+        if(!File.Exists(destination))
+        {
+            Debug.LogError("File not found");
+            return null;
+        }
+
+        using (StreamReader r = new StreamReader(destination))
+        {
+            string json = r.ReadToEnd();
+            ZermeloSchedule schedule = JsonConvert.DeserializeObject<ZermeloSchedule>(json);
+            
+            //might need to sort by date, if not already sorted
+            
+            return schedule;
+        }
+    }
+    
+    private void AddAppointment(Appointment appointment)
+    {
+        var schedule = LoadFile();
+
+        if (schedule != null)
+        {
+            schedule.response.data[0].appointments.Add(appointment);
+        }
+    }
+
+    private void AddAppointment(Appointment[] appointments)
+    {
+        var schedule = LoadFile();
+
+        if (schedule != null)
+        {
+            foreach (var appointment in appointments)
+            {
+                schedule.response.data[0].appointments.Add(appointment);
+            }
+        }
+        
+        SaveFile(schedule);
+    }
+
+    #endregion
     
     public List<Appointment> getScheduleOfDay(DateTime date)
     {

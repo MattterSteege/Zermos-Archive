@@ -34,7 +34,7 @@ public class LessonNotificationManager : MonoBehaviour
     {
         try
         {
-            _appointments = schedule.getScheduleOfDay(TimeManager.Instance.DateTime);
+            _appointments = schedule.getScheduleOfDay(DateTime.Today);
         }
         catch (Exception) { return; }
 
@@ -44,6 +44,7 @@ public class LessonNotificationManager : MonoBehaviour
         AndroidNotificationCenter.CancelAllNotifications();
         
         var firstlesson = _appointments.Find(x => x.appointmentType == "lesson" && x.status[0].code != 4007);
+        if (firstlesson == null) return;
         DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         DateTime timeTillDeparture = dateTime.AddSeconds(firstlesson.start).ToLocalTime() - new TimeSpan(0, PlayerPrefs.GetInt("minutesbeforeclass", 1), 0);
         
@@ -57,19 +58,19 @@ public class LessonNotificationManager : MonoBehaviour
             
             if (_appointments[i].appointmentType == "choice") continue;
 
-            if (UnixTimeStampToDateTime(_appointments[i].start) < DateTime.Now) continue;
+            if (_appointments[i].start.ToDateTime() < DateTime.Now) continue;
 
             if (i == _appointments.Count - 1)
             {
                 title = $"Nog 5 minuten!";
                 body = $"De laatste les is {_appointments[i].subjects?[0] ?? "error"} in {_appointments[i].locations?[0] ?? "error"}.";
 
-                ScheduleLocalNotification(title, body, UnixTimeStampToDateTime(_appointments[i].start).AddMinutes(-5));
+                ScheduleLocalNotification(title, body, _appointments[i].start.ToDateTime().AddMinutes(-5));
                 
                 title = $"Nog 5 minuten!";
                 body = $"Je laatste les is dan afgelopen!";
                 
-                ScheduleLocalNotification(title, body, UnixTimeStampToDateTime(_appointments[i].end).AddMinutes(-5));
+                ScheduleLocalNotification(title, body, _appointments[i].end.ToDateTime().AddMinutes(-5));
                 
                 break;
             }
@@ -77,7 +78,7 @@ public class LessonNotificationManager : MonoBehaviour
             title = $"Nog 5 minuten!";
             body = $"De volgende les is {_appointments[i].subjects?[0] ?? "error"} in {_appointments[i].locations?[0] ?? "error"}.";
 
-            ScheduleLocalNotification(title, body, UnixTimeStampToDateTime(_appointments[i].start).AddMinutes(-5));
+            ScheduleLocalNotification(title, body, _appointments[i].start.ToDateTime().AddMinutes(-5));
         }
     }
 
@@ -105,14 +106,5 @@ public class LessonNotificationManager : MonoBehaviour
         print("Test notif");
         
         ScheduleLocalNotification("Test", "Test", DateTime.Now.AddSeconds(5));
-    }
-
-
-    private static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
-    {
-        // Unix timestamp is seconds past epoch
-        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        dateTime = dateTime.AddSeconds(unixTimeStamp).ToLocalTime();
-        return dateTime;
     }
 }
