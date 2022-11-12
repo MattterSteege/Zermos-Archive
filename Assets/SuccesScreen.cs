@@ -47,7 +47,7 @@ public class SuccesScreen : MonoBehaviour
         ViewManager.Instance.ShowNewView<DagRoosterView>();
         ViewManager.Instance.Refresh<NavBarView>();
         ViewManager.Instance.Refresh<HomeworkView>();
-        ViewManager.Instance.Refresh<CijferView>();
+        ViewManager.Instance.Refresh<GradeView>();
         ViewManager.Instance.Refresh<DagRoosterView>();
         
         yield return new WaitForSeconds(0.25f);

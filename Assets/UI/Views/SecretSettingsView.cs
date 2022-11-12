@@ -13,6 +13,10 @@ namespace UI.Views
         [SerializeField] Button EnableLeermiddelen;
         [SerializeField] Button DisableLeermiddelen;
         [SerializeField] Vakken _vakken;
+        
+        [Header("Send notif")]
+        [SerializeField] private Button SendNotifButton;
+        [SerializeField] private LessonNotificationManager lessonNotificationManager;
     
         public override void Initialize()
         {
@@ -49,7 +53,11 @@ namespace UI.Views
         
             EnableLeermiddelen.onClick.AddListener(() =>
             {
-                PlayerPrefs.SetString("SecretSettings", "1");
+                string settings = PlayerPrefs.GetString("SecretSettings", "1");
+                
+                settings.ToCharArray()[0] = '1';
+                
+                PlayerPrefs.SetString("SecretSettings", settings);
                 PlayerPrefs.Save();
             
                 _vakken.Downloadvakken();
@@ -59,12 +67,20 @@ namespace UI.Views
         
             DisableLeermiddelen.onClick.AddListener(() =>
             {
-                PlayerPrefs.SetString("SecretSettings", "0");
+                string settings = PlayerPrefs.GetString("SecretSettings", "1");
+                
+                settings.ToCharArray()[0] = '0';
+                
+                PlayerPrefs.SetString("SecretSettings", settings);
                 PlayerPrefs.Save();
             
                 ViewManager.Instance.Refresh<NavBarView>();
             });
             
+            SendNotifButton.onClick.AddListener(() =>
+            {
+                lessonNotificationManager.SendTestNotification();
+            });
             
             output.text = "Log:\n";
             Application.logMessageReceived += HandleLog;

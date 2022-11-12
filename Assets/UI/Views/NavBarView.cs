@@ -51,7 +51,7 @@ namespace UI.Views
 						CijfersButton.onClick.RemoveAllListeners();
 						CijfersButton.onClick.AddListener(() =>
 						{
-							ViewManager.Instance.ShowNewView<CijferView>();
+							ViewManager.Instance.ShowNewView<GradeView>();
 						});
 					
 						HomeworkButton.onClick.RemoveAllListeners();

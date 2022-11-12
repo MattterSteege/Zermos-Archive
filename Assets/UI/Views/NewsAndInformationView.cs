@@ -9,8 +9,11 @@ namespace UI.Views
 {
     public class NewsAndInformationView : View
     {
-        [SerializeField] private GameObject paklijstGameObject;
-        [SerializeField] private GameObject paklijstContentGameObject;
+        [Space, Header("Widgets"), SerializeField] private GameObject paklijstGameObject;
+        [SerializeField] private GameObject tijdenGameObject;
+        [SerializeField] private GameObject samenvattingsGameObject;
+        
+        [Space, SerializeField] private GameObject paklijstContentGameObject;
         [SerializeField] private GameObject paklijstPrefab;
         [SerializeField] private Schedule zermeloSchedule;
 
@@ -47,8 +50,18 @@ namespace UI.Views
             });
         
             vakken = _vakken.getVakken();
-        
-            PlayerPrefs.SetString("main_menu_settings", "1,1,0");
+
+            char[] Settings = PlayerPrefs.GetString("MainMenuSettings", "-").ToCharArray();
+
+            if (Settings[0] == '-')
+            {
+                PlayerPrefs.SetString("MainMenuSettings", "110");
+                Settings = PlayerPrefs.GetString("MainMenuSettings", "110").ToCharArray();
+            }
+
+            bool showPaklijst = Settings[0] == '1';
+            bool showTijd = Settings[1] == '1';
+            bool showDagSamenvatting = Settings[2] == '1';
 
             if (zermeloSchedule.TodaysScheduledAppointments != null)
             {
@@ -62,15 +75,8 @@ namespace UI.Views
             if (appointments == null || appointments.Count == 0) return;
 
             #region paklijst
-            if (PlayerPrefs.GetString("main_menu_settings").Split(",")[0] == "1") // show paklijst
+            if (showPaklijst) // show paklijst
             {
-                // TimeSpan span = (timeTillDeparture - DateTime.Now);
-                // if (UnixTimeStampToDateTime(appointments[1].start) <= DateTime.Now)
-                // {
-                //     paklijstGameObject.SetActive(false);
-                // }
-                //else
-                //{
                 paklijstGameObject.SetActive(true);
 
                 List<string> lessen = new List<string>();
@@ -124,8 +130,10 @@ namespace UI.Views
             #endregion
 
             #region countdown
-            if (PlayerPrefs.GetString("main_menu_settings").Split(",")[1] == "1") // show vertrektijd
+            if (showTijd) // show vertrektijd
             {
+                tijdenGameObject.SetActive(true);
+                
                 if (appointments == null) return;
             
                 int minutesbeforeclass = PlayerPrefs.GetInt("minutesbeforeclass", 1);
@@ -147,16 +155,15 @@ namespace UI.Views
             }
             else
             {
-                tijdText1.transform.parent.parent.parent.gameObject.SetActive(false);
+                tijdenGameObject.SetActive(false);
             }
             #endregion
 
             #region samenvatting - Disabled by default
-            if (PlayerPrefs.GetString("main_menu_settings").Split(",")[2] == "1") // show dag samenvatting
+            if (showDagSamenvatting) // show dag samenvatting
             {
-                dagSamenvattingText.transform.parent.parent.parent.gameObject.SetActive(true);
-                dagSamenvattingText.gameObject.SetActive(true);
-            
+                samenvattingsGameObject.SetActive(true);
+
                 StringBuilder sb = new StringBuilder();
 
                 //lessen
@@ -183,25 +190,25 @@ namespace UI.Views
                         }
                     }
                 
-                    sb.Append($"Deze lessen heb je tussen het {appointments.Where(x => x.appointmentType.ToLower() == "lesson" && x.cancelled == false).First().startTimeSlotName}e en {appointments.Where(x => x.appointmentType.ToLower() == "lesson" && x.cancelled == false).Last().startTimeSlotName}e uur.");
+                    sb.Append($"Deze lessen heb je tussen het {appointments.First(x => x.appointmentType.ToLower() == "lesson" && x.cancelled == false).startTimeSlotName}e en {appointments.Last(x => x.appointmentType.ToLower() == "lesson" && x.cancelled == false).startTimeSlotName}e uur.");
                 }
                 //lessen
 
                 //uitval
-                if (appointments.Where(x => x.cancelled).Count() == 0)
+                if (!appointments.Any(x => x.cancelled))
                 {
                     sb.Append("Vandaag is er geen les uitval, balen.");
                 }
-                else if (appointments.Where(x => x.cancelled).Count() == 1)
+                else if (appointments.Count(x => x.cancelled) == 1)
                 {
-                    sb.Append($"Vandaag is er 1 les uitval, dat is: {appointments.Where(x => x.cancelled).First().subjects[0]}.");
+                    sb.Append($"Vandaag is er 1 les uitval, dat is: {appointments.First(x => x.cancelled).subjects[0]}.");
                 }
                 else
                 {
-                    sb.Append($"Vandaag zijn er {appointments.Where(x => x.cancelled).Count()} lessen uitval, dat zijn: ");
-                    for (int i = 0; i < appointments.Where(x => x.cancelled).Count(); i++)
+                    sb.Append($"Vandaag zijn er {appointments.Count(x => x.cancelled)} lessen uitval, dat zijn: ");
+                    for (int i = 0; i < appointments.Count(x => x.cancelled); i++)
                     {
-                        if (i == appointments.Where(x => x.cancelled).Count() - 1)
+                        if (i == appointments.Count(x => x.cancelled) - 1)
                         {
                             sb.Append($"en {appointments.Where(x => x.cancelled).ToList()[i].subjects[0]}. ");
                         }
@@ -214,33 +221,33 @@ namespace UI.Views
                 //uitval
             
                 //Toest
-                /*
-            if (appointments.Where(x => x.appointmentType.ToLower() == "toest").Count() == 1)
-            {
-                sb.Append($"Vandaag is er 1 toest, dat is: {appointments.Where(x => x.appointmentType.ToLower() == "toest").First().subjects[0]}.");
-            }
-            else
-            {
-                sb.Append($"Vandaag zijn er {appointments.Where(x => x.appointmentType.ToLower() == "toest").Count()} toesten, dat zijn: ");
-                for (int i = 0; i < appointments.Where(x => x.appointmentType.ToLower() == "toest").Count(); i++)
-                {
-                    if (i == appointments.Where(x => x.appointmentType.ToLower() == "toest").Count() - 1)
-                    {
-                        sb.Append($"en {appointments.Where(x => x.appointmentType.ToLower() == "toest").ToList()[i].subjects[0]}.");
-                    }
-                    else
-                    {
-                        sb.Append($"{appointments.Where(x => x.appointmentType.ToLower() == "toest").ToList()[i].subjects[0]}, ");
-                    }
-                }
-            }*/
+           
+                // if (appointments.Count(x => x.appointmentType.ToLower() == "toest") == 1)
+                // {
+                //     sb.Append($"Vandaag is er 1 toest, dat is: {appointments.First(x => x.appointmentType.ToLower() == "toest").subjects[0]}.");
+                // }
+                // else
+                // {
+                //     sb.Append($"Vandaag zijn er {appointments.Count(x => x.appointmentType.ToLower() == "toest")} toesten, dat zijn: ");
+                //     for (int i = 0; i < appointments.Count(x => x.appointmentType.ToLower() == "toest"); i++)
+                //     {
+                //         if (i == appointments.Count(x => x.appointmentType.ToLower() == "toest") - 1)
+                //         {
+                //             sb.Append($"en {appointments.Where(x => x.appointmentType.ToLower() == "toest").ToList()[i].subjects[0]}.");
+                //         }
+                //         else
+                //         {
+                //             sb.Append($"{appointments.Where(x => x.appointmentType.ToLower() == "toest").ToList()[i].subjects[0]}, ");
+                //         }
+                //     }
+                // }
             
                 dagSamenvattingText.text = sb.ToString();
             
             }
             else
             {
-                dagSamenvattingText.transform.parent.parent.parent.gameObject.SetActive(false);
+                samenvattingsGameObject.SetActive(false);
             }
         
             // begin:                                           je lesdag is vanaf het [eerste les uur nummer]e uur tot en met het [laatste les uur nummer]e.

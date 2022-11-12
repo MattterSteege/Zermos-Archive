@@ -25,12 +25,12 @@ public class AddLeermiddelenView : View
             ViewManager.Instance.ShowNewView<LeermiddelenView>();
         });
         
-        //save.onClick.AddListener(SaveHomework);
+        save.onClick.AddListener(SaveHomework);
 
-        //foreach (Vakken.Item vak in _vakken.getVakken().items)
-        //{
-        //    this.vak.AddOptions(new List<string>( new[] { vak.naam }));
-        //}
+        foreach (Vakken.Item vak in _vakken.getVakken().items)
+        {
+            this.vak.AddOptions(new List<string>( new[] { vak.naam }));
+        }
     }
 
     private void SaveHomework()

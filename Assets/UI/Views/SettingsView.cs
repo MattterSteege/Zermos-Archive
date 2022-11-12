@@ -38,10 +38,7 @@ namespace UI.Views
         [Header("Secret Settings")]
         [SerializeField] private Button SecretSettingsButton;
         [SerializeField] private int ClicksNeeded = 5;
-    
-        [Header("Send notif")]
-        [SerializeField] private Button SendNotifButton;
-        [SerializeField] private LessonNotificationManager lessonNotificationManager;
+        
     
         [Header("Hulp")]
         [SerializeField] private Button openDocumentatie;
@@ -175,12 +172,7 @@ namespace UI.Views
             {
                 ViewManager.Instance.ShowNewView<SavedInformationView>();
             });
-        
-            SendNotifButton.onClick.AddListener(() =>
-            {
-                lessonNotificationManager.SendTestNotification();
-            });
-        
+
             openDocumentatie.onClick.AddListener(() =>
             {
                 Application.OpenURL(@"https://mjtsgamer.github.io/Zermos/");
