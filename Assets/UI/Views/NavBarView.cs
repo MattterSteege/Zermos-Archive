@@ -11,6 +11,7 @@ namespace UI.Views
 		[SerializeField] private Button HomeworkButton;
 		[SerializeField] private Button CijfersButton;
 		[SerializeField] private Button LeermiddelenButton;
+		[SerializeField] private Button SchoolNieuwsButton;
 		[SerializeField] private Button SettingsButton;
 		[SerializeField] private TMP_Text UsernameText;
 	
@@ -102,6 +103,21 @@ namespace UI.Views
 				{
 					ViewManager.Instance.ShowNewView<NewsAndInformationView>();
 				});
+				
+				if (!(PlayerPrefs.GetString("infowijs-access_token")==null ||
+				      PlayerPrefs.GetString("infowijs-access_token")==""))
+				{
+					SchoolNieuwsButton.gameObject.SetActive(true);
+					SchoolNieuwsButton.onClick.RemoveAllListeners();
+					SchoolNieuwsButton.onClick.AddListener(() =>
+					{
+						ViewManager.Instance.ShowNewView<SchoolNewsView>();
+					});
+				}
+				else
+				{
+					SchoolNieuwsButton.gameObject.SetActive(false);
+				}
 			}
 
 			base.Initialize();

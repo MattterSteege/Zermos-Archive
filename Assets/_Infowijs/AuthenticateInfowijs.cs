@@ -6,12 +6,12 @@ using UnityEngine.Networking;
 
 public class AuthenticateInfowijs : MonoBehaviour
 {
-    public InfowijsAccessToken GetAccesToken()
+    public InfowijsAccessToken GetAccesToken(string access_token = null)
     {
         string baseurl = string.Format("https://api.infowijs.nl/sessions/access_token");
 
         UnityWebRequest www = UnityWebRequest.Post(baseurl, "");
-        www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("infowijs-access_token"));
+        www.SetRequestHeader("authorization", "Bearer " + access_token);
         www.SetRequestHeader("Accept", "application/vnd.infowijs.v1+json");
         www.SetRequestHeader("x-infowijs-client", $"nl.infowijs.hoy.android/nl.infowijs.client.antonius");
         www.SendWebRequest();

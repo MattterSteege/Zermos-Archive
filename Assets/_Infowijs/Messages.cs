@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -16,12 +17,19 @@ public class Messages : MonoBehaviour
     
     public RawInfowijsMessages GetInfowijsMessages(bool includeArchived = true, int since = 0)
     {
-        string access_token = authenticateInfowijs.GetAccesToken().data;
+        
+        var access_token = authenticateInfowijs.GetAccesToken(PlayerPrefs.GetString("infowijs-access_token"));
+        
+        if (access_token == null)
+        {
+            Debug.LogError("No access token");
+            return null;
+        }
         
         var baseurl = string.Format($"https://antonius.hoyapp.nl/hoy/v3/messages?include_archived={(includeArchived ? "1" : "0")}&since={since}");
 
         var www = UnityWebRequest.Get(baseurl);
-        www.SetRequestHeader("authorization", "Bearer " + access_token);
+        www.SetRequestHeader("authorization", "Bearer " + access_token.data);
         www.SendWebRequest();
 
         while (!www.isDone)
@@ -58,36 +66,40 @@ public class Messages : MonoBehaviour
     
     public List<Message> GetBetterInfowijsMessages()
     {
-        var messages = GetInfowijsMessages();
-        messages.data.messages.RemoveAll(x => x.type == 2); // TODO: add support for attachments
-        messages.data.messages.RemoveAll(x => x.type == 3); // TODO: add support for foto's
-        messages.data.messages.RemoveAll(x => x.type == 12);
-        messages.data.messages.RemoveAll(x => x.type == 30); // TODO: add support for titles
+        var messages = GetInfowijsMessages().data.messages.OrderByDescending(x => x.createdAt).ToList();
+        if (messages.Count == 0)
+        {
+            Debug.Log("No messages");
+            return null;
+        }
+        messages.RemoveAll(x => x.type == 2); // TODO: add support for attachments
+        messages.RemoveAll(x => x.type == 3); // TODO: add support for foto's
+        messages.RemoveAll(x => x.type == 12);
+        messages.RemoveAll(x => x.type == 30); // TODO: add support for titles
         
         List<Message> betterMessages = new List<Message>();
 
-        
-        for (int i = 0; i < messages.data.messages.Count / 2; i++)
-        {
-            try
-            {
-                //string title = JsonConvert.DeserializeObject<RawContent>(messages.data.messages[i * 2].content.ToString())?.title ?? "Error getting title";
 
-                betterMessages.Add(new Message
-                {
-                    id = i.ToString(),
-                    type = messages.data.messages[i * 2 + 1].type,
-                    title = "Error getting title",
-                    content = messages.data.messages[i * 2 + 1].content.ToString(),
-                    createdBy = messages.data.messages[i * 2 + 1].createdBy,
-                    createdAt = messages.data.messages[i * 2 + 1].createdAt,
-                    broadcast = messages.data.messages[i * 2 + 1].broadcast,
-                    receiver = messages.data.messages[i * 2 + 1].receiver,
-                    groupId = messages.data.messages[i * 2 + 1].groupId,
-                    isMe = messages.data.messages[i * 2 + 1].isMe,
-                });
-            }
-            catch (Exception) { }
+        int index = 0;
+        foreach (RawMessage message in messages)
+        {
+
+            betterMessages.Add(new Message
+            {
+                id = index.ToString(),
+                type = message.type,
+                title = "Error getting title",
+                content = message.content.ToString(),
+                createdAt = message.createdAt,
+                broadcast = message.broadcast,
+                receiver = message.receiver,
+                groupId = message.groupId,
+                isMe = message.isMe,
+                createdBy = message.createdBy,
+
+            });
+            
+            index++;
         }
         
         //i * 2 because we want to skip every other message

@@ -12,6 +12,7 @@ namespace UI.Views
         [SerializeField] Button deletePlayerPrefsButton;
         [SerializeField] Button EnableLeermiddelen;
         [SerializeField] Button DisableLeermiddelen;
+        [SerializeField] Button ConnectInfowijs;
         [SerializeField] Vakken _vakken;
         
         [Header("Send notif")]
@@ -80,6 +81,11 @@ namespace UI.Views
             SendNotifButton.onClick.AddListener(() =>
             {
                 lessonNotificationManager.SendTestNotification();
+            });
+            
+            ConnectInfowijs.onClick.AddListener(() =>
+            {
+                ViewManager.Instance.ShowNewView<ConnectInfowijsView>();
             });
             
             output.text = "Log:\n";
