@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 
 public class Messages : MonoBehaviour
 {
-    [SerializeField] AuthenticateInfowijs authenticateInfowijs;
+    [SerializeField] SessionAuthenticatorInfowijs authenticateInfowijs;
     
     [ContextMenu("Test")]
     public void Test()
@@ -22,7 +22,7 @@ public class Messages : MonoBehaviour
         
         if (access_token == null)
         {
-            Debug.LogError("No access token");
+            Debug.Log("No access token");
             return null;
         }
         
@@ -66,7 +66,7 @@ public class Messages : MonoBehaviour
     
     public List<Message> GetBetterInfowijsMessages()
     {
-        var messages = GetInfowijsMessages().data.messages.OrderByDescending(x => x.createdAt).ToList();
+        var messages = GetInfowijsMessages()?.data.messages.OrderByDescending(x => x.createdAt).ToList() ?? new List<RawMessage>();
         if (messages.Count == 0)
         {
             Debug.Log("No messages");

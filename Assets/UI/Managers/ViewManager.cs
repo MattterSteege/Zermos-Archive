@@ -197,6 +197,21 @@ public sealed class ViewManager : MonoBehaviour
 		}
 	}
 	
+	public void ShowNavbar<TView>(object args = null) where TView : View
+	{
+		foreach (View view in views)
+		{
+			if (view is TView)
+			{
+				view.Show(args);
+			}
+			else
+			{
+				view.Hide();
+			}
+		}
+	}
+	
 	public void Show<TView, TView2>(object args = null) where TView : View
 	{
 		foreach (View view in views)

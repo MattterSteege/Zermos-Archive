@@ -36,6 +36,7 @@ namespace UI.Views
         {
             loadingScreen.GetComponent<CanvasGroup>().DOFade(1, 0.5f).onComplete += () =>
             {
+                loadingScreen.GetComponent<CanvasGroup>().blocksRaycasts = false;
                 loadingScreen.GetComponent<CanvasGroup>().DOFade(0, 1.5f).onComplete += () =>
                 {
                     gameObject.SetActive(false);

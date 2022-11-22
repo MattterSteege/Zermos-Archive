@@ -33,6 +33,8 @@ public class SuccesScreen : MonoBehaviour
     
     public IEnumerator IShowSuccesScreen(string screenText)
     {
+        succesScreen.transform.SetAsLastSibling();
+        
         this.screenText.text = succesText.Replace("{koppeling name}", screenText);
         
         RectTransform rect = succesScreen.GetComponent<RectTransform>();
@@ -44,14 +46,17 @@ public class SuccesScreen : MonoBehaviour
         rect.DOAnchorPosY(0f, 2f);
         yield return new WaitForSeconds(2f);
         
-        ViewManager.Instance.ShowNewView<DagRoosterView>();
+        ViewManager.Instance.Refresh<DagRoosterView>();
         ViewManager.Instance.Refresh<NavBarView>();
         ViewManager.Instance.Refresh<HomeworkView>();
         ViewManager.Instance.Refresh<GradeView>();
-        ViewManager.Instance.Refresh<DagRoosterView>();
-        
-        yield return new WaitForSeconds(0.25f);
-        
+        ViewManager.Instance.Refresh<SettingsView>();
+        ViewManager.Instance.Hide<ConnectSomtodayView>();
+        ViewManager.Instance.Hide<ConnectInfowijsView>();
+        ViewManager.Instance.Hide<ConnectZermeloView>();
+        ViewManager.Instance.ShowNavbar<NavBarView>();
+        ViewManager.Instance.ShowNewView<DagRoosterView>();
+
         rect.GetComponent<CanvasGroup>().DOFade(0f, 0.5f).onComplete += () =>
         {
             succesScreen.SetActive(false);

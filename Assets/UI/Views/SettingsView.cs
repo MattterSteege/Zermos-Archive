@@ -31,14 +31,18 @@ namespace UI.Views
         [SerializeField] private Button ZermeloKoppeling;
         [SerializeField] private Image Zermelogekoppeld;
         [SerializeField] private User user;
+        [SerializeField] private Button InfowijsKoppeling;
+        [SerializeField] private Image Infowijsgekoppeld;
+        [SerializeField] private SessionAuthenticatorInfowijs sessionAuthenticatorInfowijs;
     
         [Header("User info")]
         [SerializeField] private Button userInfo;
     
         [Header("Secret Settings")]
         [SerializeField] private Button SecretSettingsButton;
+#if !UNITY_EDITOR
         [SerializeField] private int ClicksNeeded = 5;
-        
+#endif
     
         [Header("Hulp")]
         [SerializeField] private Button openDocumentatie;
@@ -167,6 +171,11 @@ namespace UI.Views
             {
                 ViewManager.Instance.ShowNewView<ConnectZermeloView>();
             });
+            
+            InfowijsKoppeling.onClick.AddListener(() =>
+            {
+                ViewManager.Instance.ShowNewView<ConnectInfowijsView>();
+            });
         
             userInfo.onClick.AddListener(() =>
             {
@@ -187,8 +196,9 @@ namespace UI.Views
 
         private void CheckKoppelingen()
         {
-            bool SomtodayIslinked = !string.IsNullOrEmpty(student.getStudent(PlayerPrefs.GetString("somtoday-access_token")).items[0].UUID ?? "");
-            bool ZermeloIslinked = !string.IsNullOrEmpty(user.startGetUser().Response.Data[0].Code ?? "");
+            bool SomtodayIslinked = !string.IsNullOrEmpty(student.getStudent(PlayerPrefs.GetString("somtoday-access_token"))?.items[0].UUID ?? "");
+            bool ZermeloIslinked = !string.IsNullOrEmpty(user.startGetUser()?.Response?.Data[0]?.Code ?? "");
+            bool InfowijsIslinked = !string.IsNullOrEmpty(sessionAuthenticatorInfowijs.GetAccesToken(PlayerPrefs.GetString("infowijs-access_token", ""))?.data ?? "");
 
             if (SomtodayIslinked)
             {
@@ -206,6 +216,15 @@ namespace UI.Views
             else
             {
                 Zermelogekoppeld.color = new Color(0.9921569f, 0.4509804f, 0.4431373f);
+            }
+            
+            if (InfowijsIslinked)
+            {
+                Infowijsgekoppeld.color = new Color(0.172549f, 0.9333333f, 0.5568628f);
+            }
+            else
+            {
+                Infowijsgekoppeld.color = new Color(0.9921569f, 0.4509804f, 0.4431373f);
             }
         }
     }

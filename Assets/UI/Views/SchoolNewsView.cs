@@ -1,37 +1,38 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UI.Views;
 using UnityEngine;
 
-public class SchoolNewsView : View
+namespace UI.Views
 {
-    [SerializeField] private GameObject _newsItemPrefab;
-    [SerializeField] private GameObject _newsItemContainer;
-    [SerializeField] private Messages InfowijsMessages;
-    
-    public override void Initialize()
+    public class SchoolNewsView : View
     {
-        openNavigationButton.onClick.AddListener(() =>
+        [SerializeField] private GameObject _newsItemPrefab;
+        [SerializeField] private GameObject _newsItemContainer;
+        [SerializeField] private Messages InfowijsMessages;
+    
+        public override void Initialize()
         {
-            openNavigationButton.enabled = false;
-            ViewManager.Instance.ShowNavigation();
-        });
+            openNavigationButton.onClick.AddListener(() =>
+            {
+                openNavigationButton.enabled = false;
+                ViewManager.Instance.ShowNavigation();
+            });
         
-        closeButtonWholePage.onClick.AddListener(() =>
-        {
-            openNavigationButton.enabled = true;
-            ViewManager.Instance.HideNavigation();
-        });
+            closeButtonWholePage.onClick.AddListener(() =>
+            {
+                openNavigationButton.enabled = true;
+                ViewManager.Instance.HideNavigation();
+            });
         
-        List<Message> newsItems = InfowijsMessages.GetBetterInfowijsMessages();
+            List<Message> newsItems = InfowijsMessages.GetBetterInfowijsMessages() ?? new List<Message>();
 
-        foreach (Message message in newsItems.OrderByDescending(x => x.createdAt))
-        {
-            GameObject newsItem = Instantiate(_newsItemPrefab, _newsItemContainer.transform);
-            newsItem.GetComponent<SchoolNews>().Initialize(message);
-        }
+            foreach (Message message in newsItems?.OrderByDescending(x => x.createdAt)!)
+            {
+                GameObject newsItem = Instantiate(_newsItemPrefab, _newsItemContainer.transform);
+                newsItem.GetComponent<SchoolNews>().Initialize(message);
+            }
         
-        base.Initialize();
+            base.Initialize();
+        }
     }
 }

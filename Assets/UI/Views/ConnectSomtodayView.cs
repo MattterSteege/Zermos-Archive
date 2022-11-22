@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using TMPro;
@@ -28,6 +29,8 @@ namespace UI.Views
 
             connectButton.onClick.AddListener(() =>
             {
+                StartCoroutine(Loading(true));
+                
                 AuthenticateSomtoday.SomtodayAuthentication response = somtodayAuthenticate.startAuthentication(schools.instellingen[schoolPicker.value].uuid, username.text, password.text);
             
                 if (response.access_token != null)
@@ -45,13 +48,34 @@ namespace UI.Views
                         PlayerPrefs.SetString("somtoday-student_id", user.items[0].links[0].id.ToString());
                         PlayerPrefs.Save();
                     }
+                    
+                    StartCoroutine(Loading(false));
+                }
+                else
+                {
+                    connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Inloggen mislukt";
                 }
 
             });
 
             base.Initialize();
         }
-    
+
+        private IEnumerator Loading(bool b)
+        {
+            while (b)
+            {
+                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Loading...";
+                yield return new WaitForSeconds(0.5f);
+                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Loading.";
+                yield return new WaitForSeconds(0.5f);
+                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Loading..";
+                yield return new WaitForSeconds(0.5f);
+                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Loading...";
+                yield return new WaitForSeconds(0.5f);
+            }
+        }
+
         public void populateSchoolPicker()
         {
             UnityWebRequest www = UnityWebRequest.Get("https://servers.somtoday.nl/organisaties.json");
