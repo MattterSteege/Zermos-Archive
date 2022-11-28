@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
@@ -28,18 +29,22 @@ namespace UI.Views
                 openNavigationButton.enabled = true;
                 ViewManager.Instance.HideNavigation();
             });
-        
-            AddleermiddelButton.onClick.AddListener(() =>
-            {
-                ViewManager.Instance.ShowNewView<AddLeermiddelenView>();
-            });
 
-            foreach (CustomLeermiddelen.LeermiddelenItem vak in GetLeermiddelenItems())
+            try
             {
-                GameObject leermiddel = Instantiate(leermiddelPrefab, content.transform);
-                leermiddel.GetComponent<LeermiddelenInfo>().SetLeermiddelenText(vak.vak, vak.url);
-            }
-        
+                AddleermiddelButton.onClick.AddListener(() =>
+                {
+                    ViewManager.Instance.ShowNewView<AddLeermiddelenView>();
+                });
+
+                foreach (CustomLeermiddelen.LeermiddelenItem vak in GetLeermiddelenItems() ??
+                                                                    new List<CustomLeermiddelen.LeermiddelenItem>())
+                {
+                    GameObject leermiddel = Instantiate(leermiddelPrefab, content.transform);
+                    leermiddel.GetComponent<LeermiddelenInfo>().SetLeermiddelenText(vak.vak, vak.url);
+                }
+            }catch(Exception){}
+
             base.Initialize();
         }
     

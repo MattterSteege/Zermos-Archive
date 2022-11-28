@@ -4,39 +4,50 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Notifications.Android;
 using UnityEngine;
+using UnityEngine.Android;
 
 public class LessonNotificationManager : MonoBehaviour
 {
     [SerializeField] Schedule schedule;
     List<Schedule.Appointment> _appointments;
+    
+    const string CHANNEL_ID = "lessons";
 
     private void Start()
     {
-        var channels = AndroidNotificationCenter.GetNotificationChannels();
-        
-        if (channels.All(x => x.Id != "lessons"))
-        {
-            var channel = new AndroidNotificationChannel
-            {
-                Id = "lessons",
-                Name = "lessons",
-                Importance = Importance.Default,
-                Description = "the default channel for sending lesson notifications",
-            };
-            AndroidNotificationCenter.RegisterNotificationChannel(channel);
-            
-            Debug.Log("channel created");
-        }
+        ViewManager.onInitializeComplete += ctx => ScheduleNotifications();
     }
 
     [ContextMenu("Test real")]
-    public void OnApplicationQuit()
+    public void ScheduleNotifications()
     {
+        Debug.Log("Adding notifications");
+        
+#region Permissions & Channel
+        var channels = AndroidNotificationCenter.GetNotificationChannels();
+
+        if (channels.All(x => x.Id != CHANNEL_ID))
+        {
+            var channel = new AndroidNotificationChannel()
+            {
+                Id = CHANNEL_ID,
+                Name = "Lessons",
+                Importance = Importance.High,
+                Description = "Notifications for lessons"
+            };
+            AndroidNotificationCenter.RegisterNotificationChannel(channel);
+            Debug.Log("channel created");
+        }
+#endregion
+
         try
         {
-            _appointments = schedule.getScheduleOfDay(DateTime.Today);
+            _appointments = schedule.getScheduleOfDay(TimeManager.Instance.DateTime);
         }
-        catch (Exception) { return; }
+        catch (Exception)
+        {
+            Debug.Log("Error fetching schedule for notifs");
+        }
 
         if (_appointments == null) return;
 
@@ -48,7 +59,7 @@ public class LessonNotificationManager : MonoBehaviour
         DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         DateTime timeTillDeparture = dateTime.AddSeconds(firstlesson.start).ToLocalTime() - new TimeSpan(0, PlayerPrefs.GetInt("minutesbeforeclass", 1), 0);
         
-        if (timeTillDeparture > DateTime.Now)
+        if (timeTillDeparture > TimeManager.Instance.CurrentDateTime)
             ScheduleLocalNotification("Nog 5 minuten!", "Je moet bijna vertrekken.", timeTillDeparture.AddMinutes(-5));
 
         for (int i = 0; i < _appointments.Count; i++)
@@ -56,9 +67,10 @@ public class LessonNotificationManager : MonoBehaviour
             string title = "";
             string body = "";
             
+            
             if (_appointments[i].appointmentType == "choice") continue;
 
-            if (_appointments[i].start.ToDateTime() < DateTime.Now) continue;
+            if (_appointments[i].start <= TimeManager.Instance.CurrentDateTime.ToUnixTime()) continue;
 
             if (i == _appointments.Count - 1)
             {
@@ -84,20 +96,18 @@ public class LessonNotificationManager : MonoBehaviour
 
     void ScheduleLocalNotification(string title, string body, DateTime timeToSend)
     {
-        DateTime now = DateTime.Now;
         AndroidNotification notification = new AndroidNotification
         {
             Title = title,
             Text = body,
-            FireTime = timeToSend,
-            IntentData = "{\"title\": \"Notification 1\", \"data\": \"200\"}",
             ShouldAutoCancel = true,
+            FireTime = timeToSend,
             ShowTimestamp = true,
         };
 
         AndroidNotificationCenter.SendNotification(notification, "lessons");
         
-        Debug.Log($"Added notification for {timeToSend},\n{title}, {body}");
+        Debug.Log($"Added notification for {timeToSend:HH:mm:ss}, {title}, {body}");
     }
     
     [ContextMenu("Test")]
@@ -105,6 +115,6 @@ public class LessonNotificationManager : MonoBehaviour
     {
         print("Test notif");
         
-        ScheduleLocalNotification("Test", "Test", DateTime.Now.AddSeconds(5));
+        ScheduleLocalNotification("Test", "Test", TimeManager.Instance.CurrentDateTime.AddSeconds(5));
     }
 }

@@ -12,6 +12,7 @@ namespace UI.Views
 		[SerializeField] private Button CijfersButton;
 		[SerializeField] private Button LeermiddelenButton;
 		[SerializeField] private Button SchoolNieuwsButton;
+		[SerializeField] private Button LeerlingBesprekingButton;
 		[SerializeField] private Button SettingsButton;
 		[SerializeField] private TMP_Text UsernameText;
 	
@@ -117,6 +118,20 @@ namespace UI.Views
 				else
 				{
 					SchoolNieuwsButton.gameObject.SetActive(false);
+				}
+				
+				if (!string.IsNullOrEmpty(PlayerPrefs.GetString("leerlingbespreking-access_token")))
+				{
+					LeerlingBesprekingButton.gameObject.SetActive(true);
+					LeerlingBesprekingButton.onClick.RemoveAllListeners();
+					LeerlingBesprekingButton.onClick.AddListener(() =>
+					{
+						ViewManager.Instance.ShowNewView<LeerlingbesprekingView>();
+					});
+				}
+				else
+				{
+					LeerlingBesprekingButton.gameObject.SetActive(false);
 				}
 			}
 

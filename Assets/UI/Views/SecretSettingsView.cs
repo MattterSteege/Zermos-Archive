@@ -1,7 +1,9 @@
 using System;
+using System.IO;
 using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI.Views
@@ -12,12 +14,13 @@ namespace UI.Views
         [SerializeField] Button deletePlayerPrefsButton;
         [SerializeField] Button EnableLeermiddelen;
         [SerializeField] Button DisableLeermiddelen;
-        [SerializeField] Button ConnectInfowijs;
+        [SerializeField] Button searchForUpdates;
         [SerializeField] Vakken _vakken;
         
         [Header("Send notif")]
         [SerializeField] private Button SendNotifButton;
         [SerializeField] private LessonNotificationManager lessonNotificationManager;
+        [SerializeField] private UpdateSystem updateSystem;
     
         public override void Initialize()
         {
@@ -83,37 +86,46 @@ namespace UI.Views
                 lessonNotificationManager.SendTestNotification();
             });
             
-            ConnectInfowijs.onClick.AddListener(() =>
+            searchForUpdates.onClick.AddListener(() =>
             {
-                ViewManager.Instance.ShowNewView<ConnectInfowijsView>();
+                searchForUpdates.GetComponentInChildren<TMP_Text>().text = "Zoeke naar updates...";
+                int checkVoorUpdates = updateSystem.checkForUpdates();
+
+                if (checkVoorUpdates == 1)
+                {
+                    searchForUpdates.GetComponentInChildren<TMP_Text>().text = "Update gevonden, Downloaden?";
+                    searchForUpdates.onClick.RemoveAllListeners();
+                    searchForUpdates.onClick.AddListener(() =>
+                    {
+                        updateSystem.DownloadLatestVersion();
+                        
+                        searchForUpdates.GetComponentInChildren<TMP_Text>().text = "gelijk installeren?";
+                    });
+                }
+                else if (checkVoorUpdates == 0)
+                {
+                    searchForUpdates.GetComponentInChildren<TMP_Text>().text = "Je bent up to date";
+                }
+                else
+                {
+                    searchForUpdates.GetComponentInChildren<TMP_Text>().text = "Error";
+                }
             });
-            
-            output.text = "Log:\n";
+
+            output.text = "Log:\n\n";
             Application.logMessageReceived += HandleLog;
         }
-    
-        // file path regex: ((([A-Za-z]+\/)+)?[A-Z-a-z]+?(.[A-Za-z]+:[0-9]+))
 
         void HandleLog(string logString, string stackTrace, LogType type)
         {
             if (type == LogType.Log)
             {
-                output.text += $"<color=black>{logString}</color>\n\n ";
-
-                string stacktrace = stackTrace;
-                var m1 = Regex.Matches(stacktrace, @"((([A-Za-z]+\/)+)?[A-Z-a-z]+?(.[A-Za-z]+:[0-9]+))");
-
-                foreach (Match match in m1)
-                {
-                    stacktrace = stacktrace.Replace(match.Value, $"<color=blue>{match.Value}</color>");
-                }
-
-                output.text += $"{stacktrace}";
-                output.text += $"\n-----------------\n";
+                output.text += $"<color=black>{logString}</color>\n";
+                output.text += $"-----------------\n";
             }
             else if (type == LogType.Warning)
             {
-                output.text += $"<color=yellow>{logString}</color>\n\n ";
+                output.text += $"<color=yellow>{logString}</color>\n";
 
                 string stacktrace = stackTrace;
                 var m1 = Regex.Matches(stacktrace, @"((([A-Za-z]+\/)+)?[A-Z-a-z]+?(.[A-Za-z]+:[0-9]+))");
@@ -124,11 +136,11 @@ namespace UI.Views
                 }
 
                 output.text += $"{stacktrace}";
-                output.text += $"\n-----------------\n";
+                output.text += $"-----------------\n";
             }
             else if (type == LogType.Error)
             {
-                output.text += $"<color=red>{logString}</color>\n\n ";
+                output.text += $"<color=red>{logString}</color>\n";
 
                 string stacktrace = stackTrace;
                 var m1 = Regex.Matches(stacktrace, @"((([A-Za-z]+\/)+)?[A-Z-a-z]+?(.[A-Za-z]+:[0-9]+))");
@@ -139,11 +151,11 @@ namespace UI.Views
                 }
 
                 output.text += $"{stacktrace}";
-                output.text += $"\n-----------------\n";
+                output.text += $"-----------------\n";
             }
             else if (type == LogType.Exception)
             {
-                output.text += $"<color=red>{logString}</color>\n\n ";
+                output.text += $"<color=red>{logString}</color>\n";
 
                 string stacktrace = stackTrace;
                 var m1 = Regex.Matches(stacktrace, @"((([A-Za-z]+\/)+)?[A-Z-a-z]+?(.[A-Za-z]+:[0-9]+))");
@@ -154,11 +166,11 @@ namespace UI.Views
                 }
 
                 output.text += $"{stacktrace}";
-                output.text += $"\n-----------------\n";
+                output.text += $"-----------------\n";
             }
             else if (type == LogType.Assert)
             {
-                output.text += $"<color=red>{logString}</color>\n\n ";
+                output.text += $"<color=red>{logString}</color>\n";
 
                 string stacktrace = stackTrace;
                 var m1 = Regex.Matches(stacktrace, @"((([A-Za-z]+\/)+)?[A-Z-a-z]+?(.[A-Za-z]+:[0-9]+))");
@@ -169,7 +181,7 @@ namespace UI.Views
                 }
 
                 output.text += $"{stacktrace}";
-                output.text += $"\n-----------------\n";
+                output.text += $"-----------------\n";
             }
         }
     }

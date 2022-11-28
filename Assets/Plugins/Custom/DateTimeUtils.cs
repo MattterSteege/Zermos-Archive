@@ -9,6 +9,6 @@ public static class DateTimeUtils
     
     public static DateTime ToDateTime(this int unixTimeStamp)
     {
-        return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimeStamp); 
+        return new DateTime(1970, 1, 1, 1, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimeStamp); 
     }
 }

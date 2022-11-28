@@ -52,6 +52,7 @@ public sealed class ViewManager : MonoBehaviour
 				try
 				{
 					view.Initialize();
+					Debug.Log (view.GetType ().Name + " at " + viewsLoaded.ToString("P0"));
 				}
 				catch (Exception e)
 				{

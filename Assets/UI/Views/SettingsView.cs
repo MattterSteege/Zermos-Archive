@@ -41,7 +41,7 @@ namespace UI.Views
         [Header("Secret Settings")]
         [SerializeField] private Button SecretSettingsButton;
 #if !UNITY_EDITOR
-        [SerializeField] private int ClicksNeeded = 5;
+        private int ClicksNeeded = 5;
 #endif
     
         [Header("Hulp")]

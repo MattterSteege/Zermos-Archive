@@ -182,7 +182,7 @@ public class Schedule : MonoBehaviour
             }
         }
         
-        if (date == DateTime.Today)
+        if (date == TimeManager.Instance.DateTime)
         {
             TodaysScheduledAppointments = TodaySchedule;
         }
