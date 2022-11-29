@@ -8,6 +8,8 @@ namespace UI.Views
     public class LoadingScreenView : MonoBehaviour
     {
         [SerializeField] TMP_Text loadingText;
+        [SerializeField] TMP_Text versionText;
+        [SerializeField] UpdateSystem updateSystem;
         [SerializeField] GameObject loadingScreen;
 
         void Awake()
@@ -15,6 +17,8 @@ namespace UI.Views
             gameObject.SetActive(true);
             loadingScreen.GetComponent<CanvasGroup>().alpha = 1;
         
+            versionText.text = updateSystem.CurrentVersion;
+            
             ViewManager.onLoadedView += OnLoadedView;
             ViewManager.onInitializeComplete += Complete;
         }

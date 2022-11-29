@@ -9,8 +9,8 @@ using UnityEngine.Networking;
 
 public class UpdateSystem : MonoBehaviour
 {
-    [SerializeField, Tooltip("Vx.x.x")] private string CurrentVersion;
-    
+    [SerializeField, Tooltip("Vx.x.x")] public string CurrentVersion;
+
     /// <summary>
     /// 1 - Update available
     /// 0 - Up to date             
@@ -26,67 +26,95 @@ public class UpdateSystem : MonoBehaviour
         {
             return 1;
         }
+
         if (shouldUpdate == 0)
         {
             return 0;
         }
+
         if (shouldUpdate == 1)
         {
             return -1;
         }
+
         return -2;
     }
-    
+
     public string GetLatestVersion(bool url = false)
     {
         UnityWebRequest request = UnityWebRequest.Get("https://api.github.com/repos/MJTSgamer/Zermos/releases");
         request.SetRequestHeader("Accept", "application/vnd.github+json");
-        request.SetRequestHeader("Authorization", "Bearer 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");
+        request.SetRequestHeader("Authorization",
+            "Bearer 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");
         request.SendWebRequest();
-        
-        while (!request.isDone) { }
-        
+
+        while (!request.isDone)
+        {
+        }
+
         var UpdateResponse = JsonConvert.DeserializeObject<List<UpdateResponse>>(request.downloadHandler.text);
 
         if (url)
         {
             return UpdateResponse[0].assets[0].url;
         }
+
         return UpdateResponse[0].tag_name;
     }
 
     public void DownloadLatestVersion()
     {
         string url = GetLatestVersion(true);
-        
+
         UnityWebRequest request = UnityWebRequest.Get(url);
         request.SetRequestHeader("Accept", "application/octet-stream");
         request.SetRequestHeader("Content-Type", "application/vnd.android.package-archive");
-        request.SetRequestHeader("Authorization", "Bearer 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");
-        
+        request.SetRequestHeader("Authorization",
+            "Bearer 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");
+
         request.SendWebRequest();
-        
-        while (!request.isDone) { }
+
+        while (!request.isDone)
+        {
+        }
+
+        byte[] results = request.downloadHandler.data;
 
 #if UNITY_EDITOR
         string path = Path.Combine(Application.persistentDataPath, "..", "..", "..", "..", "Downloads", "Zermos.apk");
 #elif UNITY_ANDROID && !UNITY_EDITOR
         string path = Path.Combine(Application.persistentDataPath, "..", "..", "..", "..", "Documents", "Zermos.apk");
 #endif
+        bool success = SaveFile(path, results);
+        
+        if (success)
+        {
+            Debug.Log("Open 'Mijn Bestanden' > 'Interne opslag' > 'Documents' > 'Zermos.apk' to install the update");
+        }
+        else
+        {
+            Debug.Log("Failed to download file");
+        }
+    }
 
+    private bool SaveFile(string path, byte[] results)
+    {
         try
         {
-            Debug.Log("Try");
-            File.WriteAllBytes(path, request.downloadHandler.data);
+            File.WriteAllBytes(path, results);
+            return true;
         }
         catch (IOException)
         {
-            Debug.Log("catch");
             File.Delete(path);
-            File.WriteAllBytes(path, request.downloadHandler.data);
+            File.WriteAllBytes(path, results);
+            return false;
         }
-
-        Debug.Log("Open 'Mijn Bestanden' > 'Interne opslag' > 'Documents' > 'Zermos.apk' to install the update");
+        catch (UnauthorizedAccessException)
+        {
+            Debug.Log("Downloaden mislukt, kijk of je de laatste versie wel verwijderd hebt, zo niet verwijder het dan! ('Mijn Bestanden' > 'Interne opslag' > 'Documents' > 'Zermos.apk')");
+            return false;
+        }
     }
 
     /// <summary>
@@ -120,18 +148,19 @@ public class UpdateSystem : MonoBehaviour
 
         for (int i = 0; i < v1parts.Length; i++)
         {
-            if (v2parts.Length < i+1)
+            if (v2parts.Length < i + 1)
                 break; // we're done here
-            
+
             string v1Token = v1parts[i];
             string v2Token = v2parts[i];
-            
+
             int x;
             bool v1Numeric = int.TryParse(v1Token, out x);
             bool v2Numeric = int.TryParse(v2Token, out x);
-            
+
             // handle scenario {"2" versus "20"} by prepending zeroes, e.g. it would become {"02" versus "20"}
-            if (v1Numeric && v2Numeric) {
+            if (v1Numeric && v2Numeric)
+            {
                 while (v1Token.Length < v2Token.Length)
                     v1Token = "0" + v1Token;
                 while (v2Token.Length < v1Token.Length)
@@ -243,6 +272,4 @@ public class UpdateSystem : MonoBehaviour
         public string type { get; set; }
         public bool site_admin { get; set; }
     }
-
-
 }

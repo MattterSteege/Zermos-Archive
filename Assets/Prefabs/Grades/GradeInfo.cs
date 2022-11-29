@@ -14,6 +14,19 @@ public class GradeInfo : MonoBehaviour
         this.details.text = details ?? "";
         this.weging.text = weging ?? "";
         this.cijfer.text = cijfer ?? "";
+
+        if (float.Parse(cijfer ?? "0.0") >= 8.0f)
+        {
+            this.cijfer.color = new Color(0.172549f, 0.702f, 0.028f);
+        }
+        else if (float.Parse(cijfer ?? "0.0") >= 5.5f)
+        {
+            this.cijfer.color = new Color(0.172549f, 0.702f, 0.028f);
+        }
+        else
+        {
+            this.cijfer.color = new Color(0.929411f, 0.203921f, 0.098039f);
+        }
     }
 
     [SerializeField] TMP_Text vak;

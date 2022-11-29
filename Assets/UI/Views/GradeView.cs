@@ -67,7 +67,12 @@ namespace UI.Views
                 if (GradesPerVak.Count > 0)
                 {
                     int totalWeight = GradesPerVak.Sum(x => x.weging);
-                    float avarege = GradesPerVak.Sum(x => x.weging * float.Parse(x.geldendResultaat)) / totalWeight;
+                    float avarege;
+                    
+                    if (totalWeight == 0)
+                        avarege = GradesPerVak.Sum(x => float.Parse(x.geldendResultaat));
+                    else
+                        avarege = GradesPerVak.Sum(x => x.weging * float.Parse(x.geldendResultaat) / totalWeight);
                     
                     var gradeView = Instantiate(gradePrefab, content.transform);
                     gradeView.GetComponent<GradeInfo>().SetGradeInfo(Vak.naam ?? "", "",  "", totalWeight + "x", avarege.ToString("0.0"));

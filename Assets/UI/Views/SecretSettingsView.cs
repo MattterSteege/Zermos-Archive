@@ -59,7 +59,7 @@ namespace UI.Views
             {
                 string settings = PlayerPrefs.GetString("SecretSettings", "1");
                 
-                settings.ToCharArray()[0] = '1';
+                settings = (settings.ToCharArray()[0] = '1').ToString();
                 
                 PlayerPrefs.SetString("SecretSettings", settings);
                 PlayerPrefs.Save();
@@ -73,7 +73,7 @@ namespace UI.Views
             {
                 string settings = PlayerPrefs.GetString("SecretSettings", "1");
                 
-                settings.ToCharArray()[0] = '0';
+                settings = (settings.ToCharArray()[0] = '0').ToString();
                 
                 PlayerPrefs.SetString("SecretSettings", settings);
                 PlayerPrefs.Save();
@@ -88,7 +88,7 @@ namespace UI.Views
             
             searchForUpdates.onClick.AddListener(() =>
             {
-                searchForUpdates.GetComponentInChildren<TMP_Text>().text = "Zoeke naar updates...";
+                searchForUpdates.GetComponentInChildren<TMP_Text>().text = "Zoeken naar updates...";
                 int checkVoorUpdates = updateSystem.checkForUpdates();
 
                 if (checkVoorUpdates == 1)
@@ -99,7 +99,7 @@ namespace UI.Views
                     {
                         updateSystem.DownloadLatestVersion();
                         
-                        searchForUpdates.GetComponentInChildren<TMP_Text>().text = "gelijk installeren?";
+                        searchForUpdates.GetComponentInChildren<TMP_Text>().text = "Klaar!";
                     });
                 }
                 else if (checkVoorUpdates == 0)
