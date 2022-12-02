@@ -110,8 +110,13 @@ namespace UI.Views
                     //les
 
                     var rooster = Instantiate(RoosterPrefab, content.transform);
-                    rooster.GetComponent<AppointmentInfo>().SetAppointmentInfo(String.Join(", ", appointments[listIndex].locations),
-                        DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start).DateTime.AddHours(1).ToString("HH:mm") + " - " + DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end).DateTime.AddHours(1).ToString("HH:mm"), String.Join(", ", appointments[listIndex].teachers), String.Join(", ", appointments[listIndex].subjects), appointments[listIndex].startTimeSlotName, appointments[listIndex]);
+                    rooster.GetComponent<AppointmentInfo>().SetAppointmentInfo(
+                        String.Join(", ", appointments[listIndex].locations),
+                        TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start).DateTime, TimeZoneInfo.Local).AddHours(1).ToString("HH:mm") + " - " + 
+                        TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end).DateTime, TimeZoneInfo.Local).AddHours(1).ToString("HH:mm"),
+                        String.Join(", ", appointments[listIndex].teachers),
+                        String.Join(", ", appointments[listIndex].subjects), appointments[listIndex].startTimeSlotName,
+                        appointments[listIndex]);
 
                     RoosterItems.Add(rooster);
 

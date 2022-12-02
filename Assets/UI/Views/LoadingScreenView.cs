@@ -9,6 +9,7 @@ namespace UI.Views
     {
         [SerializeField] TMP_Text loadingText;
         [SerializeField] TMP_Text versionText;
+        [SerializeField] TMP_Text loadingInfoText;
         [SerializeField] UpdateSystem updateSystem;
         [SerializeField] GameObject loadingScreen;
 
@@ -23,10 +24,11 @@ namespace UI.Views
             ViewManager.onInitializeComplete += Complete;
         }
 
-        private void OnLoadedView(float loadingcomplete)
+        private void OnLoadedView(float loadingcomplete, string viewName)
         {
             loadingScreen.SetActive(true);
             loadingText.text = "Laden: " + loadingcomplete.ToString("P0");
+            //loadingInfoText.text = viewName;
         
             if (Math.Abs(loadingcomplete - 1) < 0.05f)
             {

@@ -11,6 +11,7 @@ public sealed class ViewManager : MonoBehaviour
 	public static ViewManager Instance { get; private set; }
 	
 	[SerializeField] private bool autoInitialize;
+	[SerializeField] public bool isShowingNavigation;
 	[SerializeField] private View Loginview;
 	[SerializeField] private View[] views;
 	[SerializeField] private View[] defaultViews;
@@ -37,7 +38,7 @@ public sealed class ViewManager : MonoBehaviour
 	public delegate void OnIntializeComplete(bool done = false);
 	public static event OnIntializeComplete onInitializeComplete;
 	
-	public delegate void OnLoadedView(float loadingComplete = 0f);
+	public delegate void OnLoadedView(float loadingComplete = 0f, string viewName = "");
 	public static event OnLoadedView onLoadedView;
 
 	float viewsLoaded;
@@ -63,7 +64,7 @@ public sealed class ViewManager : MonoBehaviour
 			}
 			
 			viewsLoaded += 1f / views.Length;
-			onLoadedView?.Invoke(viewsLoaded);
+			onLoadedView?.Invoke(viewsLoaded, view.GetType().Name);
 		}
 
 		if(string.IsNullOrEmpty(PlayerPrefs.GetString("zermelo-access_token")))
@@ -94,12 +95,15 @@ public sealed class ViewManager : MonoBehaviour
 		currentView.closeButtonWholePage.enabled = true;
 		currentView.openNavigationButton.enabled = false;
 		
-		Background.DOColor(new Color(0.06666667f, 0.1529412f, 0.4352941f), animationTime);
-		
 		RectTransform rectTransform = currentView.GetComponent<RectTransform>();
+		
 
 		rectTransform.DOLocalMove(new Vector3(125f, -450f, 0f), animationTime);
-		rectTransform.DOLocalRotate(new Vector3(0f, 0f, 8.3f), animationTime).WaitForCompletion();
+		rectTransform.DOLocalRotate(new Vector3(0f, 0f, 8.3f), animationTime);
+		Background.DOColor(new Color(0.06666667f, 0.1529412f, 0.4352941f), animationTime).onComplete += () =>
+		{
+			isShowingNavigation = true;
+		};
 		
 	}
 
@@ -113,7 +117,10 @@ public sealed class ViewManager : MonoBehaviour
 		
 		rectTransform.DOLocalMove(new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime);
 		rectTransform.DOLocalRotate(new Vector3(0f, 0f, 0f), animationTime).WaitForCompletion();
-		Background.DOColor(currentView.GetComponent<Image>().color, animationTime);
+		Background.DOColor(currentView.GetComponent<Image>().color, animationTime).onComplete += () =>
+		{
+			isShowingNavigation = false;
+		};
 	}
 	
 	public void ShowNewView<TView>(object args = null) where TView : View
@@ -151,6 +158,7 @@ public sealed class ViewManager : MonoBehaviour
 	{
 		lastView.Hide();
 	}
+	
 
 	public void HideView<TView>() where TView : View
 	{
@@ -303,4 +311,17 @@ public sealed class ViewManager : MonoBehaviour
 		Selection.activeObject = go;
 	}
 #endif
+	
+	public bool IsViewActive<TView>() where TView : View
+	{
+		foreach (View view in views)
+		{
+			if (view is TView)
+			{
+				return view.gameObject.activeSelf;
+			}
+		}
+
+		return false;
+	}
 }

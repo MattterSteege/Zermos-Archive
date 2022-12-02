@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using TMPro;
 using UI.Views;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GradeItemView : View
 {
@@ -10,6 +12,7 @@ public class GradeItemView : View
     [SerializeField] private GameObject gradePrefab;
     [SerializeField] private TMP_Text TitleText;
     [SerializeField] private GameObject GradeContent;
+    [SerializeField] private Button welkCijferMoetIkHalenButton;
     [SerializeField] private UnityEngine.UI.Extensions.UILineRenderer UILineRenderer;
     [SerializeField] private UnityEngine.UI.Extensions.UIGridRenderer UIGridRenderer;
 
@@ -52,6 +55,23 @@ public class GradeItemView : View
           ViewManager.Instance.ShowNewView<GradeView>();  
         });
         
+        welkCijferMoetIkHalenButton.onClick.AddListener(() =>
+        {
+            ViewManager.Instance.ShowNewView<WatMoetIkHalenView>(Grades);
+        });
+        
         base.Initialize();
+    }
+
+    private float WatMoetIkHalen(List<Grades.Item> cijfers, int weging, float gewenstCijfer = 5.5f)
+    {
+        int totaleWeging = cijfers.Sum(x => x.weging);
+        gewenstCijfer *= totaleWeging;
+        
+        float alBehaaldePunten = cijfers.Sum(x => x.weging * float.Parse(x.geldendResultaat));
+        
+        float nogTeBehalen = gewenstCijfer - alBehaaldePunten;
+        
+        return nogTeBehalen / weging;
     }
 }

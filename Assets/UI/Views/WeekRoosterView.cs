@@ -112,11 +112,11 @@ namespace UI.Views
                         var rooster = Instantiate(RoosterPrefab, dagenVanDeWeek[x].transform);
                         rooster.GetComponent<AppointmentInfo>().SetAppointmentInfo(
                             String.Join(", ", appointments[listIndex].locations),
-                            DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start).AddHours(2).UtcDateTime
-                                .ToShortTimeString() + " - " + DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end)
-                                .AddHours(2).UtcDateTime
-                                .ToShortTimeString(), appointments[listIndex].teachers[0],
-                            String.Join(", ", appointments[listIndex].subjects), appointments[listIndex].startTimeSlotName,
+                            TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start), TimeZoneInfo.Local).AddHours(1).ToString("HH:mm") + " - " +
+                            TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end), TimeZoneInfo.Local).AddHours(1).ToString("HH:mm"),
+                            appointments[listIndex].teachers[0],
+                            String.Join(", ", appointments[listIndex].subjects),
+                            appointments[listIndex].startTimeSlotName,
                             appointments[listIndex]);
 
                         RoosterItems.Add(rooster);

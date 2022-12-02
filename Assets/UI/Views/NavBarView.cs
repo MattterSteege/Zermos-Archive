@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,10 +15,12 @@ namespace UI.Views
 		[SerializeField] private Button SchoolNieuwsButton;
 		[SerializeField] private Button LeerlingBesprekingButton;
 		[SerializeField] private Button SettingsButton;
+		[SerializeField] private Image IconNotification;
 		[SerializeField] private TMP_Text UsernameText;
 	
 		[SerializeField] private Grades gradesObject;
 		[SerializeField] private AuthenticateSomtoday authenticateSomtodayObject;
+		[SerializeField] private UpdateSystem updateSystem;
 
 		public override void Initialize()
 		{
@@ -98,7 +101,20 @@ namespace UI.Views
 				{
 					ViewManager.Instance.ShowNewView<SettingsView>();
 				});
-			
+#if UNITY_ANDROID
+				int checkVoorUpdates = updateSystem.checkForUpdates();
+
+				if (checkVoorUpdates == 1)
+				{
+					IconNotification.gameObject.SetActive(true);
+				}
+				else
+#endif
+				{
+					IconNotification.gameObject.SetActive(false);
+				}
+
+
 				HomeButton.onClick.RemoveAllListeners();
 				HomeButton.onClick.AddListener(() =>
 				{
@@ -137,7 +153,22 @@ namespace UI.Views
 
 			base.Initialize();
 		}
-	
-	
+
+		private void Update()
+		{
+			try
+			{
+				if (Input.GetKeyDown(KeyCode.Escape) && !ViewManager.Instance.isShowingNavigation)
+				{
+					ViewManager.Instance.ShowNavigation();
+				}
+
+				if (Input.GetKeyDown(KeyCode.Escape) && ViewManager.Instance.isShowingNavigation)
+				{
+					ViewManager.Instance.HideNavigation();
+				}
+			}
+			catch (Exception) { }
+		}
 	}
 }

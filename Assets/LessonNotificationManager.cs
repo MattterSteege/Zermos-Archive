@@ -2,12 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+#if UNITY_ANDROID
 using Unity.Notifications.Android;
+#endif
 using UnityEngine;
 using UnityEngine.Android;
 
 public class LessonNotificationManager : MonoBehaviour
 {
+#if UNITY_ANDROID
+
     [SerializeField] Schedule schedule;
     List<Schedule.Appointment> _appointments;
     
@@ -101,7 +105,7 @@ public class LessonNotificationManager : MonoBehaviour
             Title = title,
             Text = body,
             ShouldAutoCancel = true,
-            FireTime = timeToSend,
+            FireTime = timeToSend.AddHours(-1),
             ShowTimestamp = true,
         };
 
@@ -117,4 +121,5 @@ public class LessonNotificationManager : MonoBehaviour
         
         ScheduleLocalNotification("Test", "Test", TimeManager.Instance.CurrentDateTime.AddSeconds(5));
     }
+#endif
 }

@@ -9,8 +9,18 @@ using UnityEngine.Networking;
 
 public class UpdateSystem : MonoBehaviour
 {
+    public enum fetchType
+    {
+        version,
+        url,
+        release_notes
+    }
+    
+    public fetchType _fetchType;
+    
     [SerializeField, Tooltip("Vx.x.x")] public string CurrentVersion;
 
+#if UNITY_ANDROID
     /// <summary>
     /// 1 - Update available
     /// 0 - Up to date             
@@ -40,7 +50,7 @@ public class UpdateSystem : MonoBehaviour
         return -2;
     }
 
-    public string GetLatestVersion(bool url = false)
+    public string GetLatestVersion(fetchType type = fetchType.version)
     {
         UnityWebRequest request = UnityWebRequest.Get("https://api.github.com/repos/MJTSgamer/Zermos/releases");
         request.SetRequestHeader("Accept", "application/vnd.github+json");
@@ -54,17 +64,24 @@ public class UpdateSystem : MonoBehaviour
 
         var UpdateResponse = JsonConvert.DeserializeObject<List<UpdateResponse>>(request.downloadHandler.text);
 
-        if (url)
+        if (type == fetchType.url)
         {
             return UpdateResponse[0].assets[0].url;
         }
+        else if (type == fetchType.release_notes)
+        {
+            return UpdateResponse[0].body;
+        }
+        else
+        {
+            return UpdateResponse[0].tag_name;
+        }
 
-        return UpdateResponse[0].tag_name;
     }
 
     public void DownloadLatestVersion()
     {
-        string url = GetLatestVersion(true);
+        string url = GetLatestVersion(fetchType.url);
 
         UnityWebRequest request = UnityWebRequest.Get(url);
         request.SetRequestHeader("Accept", "application/octet-stream");
@@ -90,10 +107,6 @@ public class UpdateSystem : MonoBehaviour
         if (success)
         {
             Debug.Log("Open 'Mijn Bestanden' > 'Interne opslag' > 'Documents' > 'Zermos.apk' to install the update");
-        }
-        else
-        {
-            Debug.Log("Failed to download file");
         }
     }
 
@@ -188,8 +201,7 @@ public class UpdateSystem : MonoBehaviour
         else
             return rc < 0 ? -1 : 1;
     }
-
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<List<Root>>(myJsonResponse);
+    
     public class Asset
     {
         public string url { get; set; }
@@ -272,4 +284,5 @@ public class UpdateSystem : MonoBehaviour
         public string type { get; set; }
         public bool site_admin { get; set; }
     }
+#endif
 }

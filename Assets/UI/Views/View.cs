@@ -18,8 +18,7 @@ namespace UI.Views
 		{
 			isInitialized = true;
 		}
-	
-		[ContextMenu("Refresh")]
+		
 		public virtual void Refresh(object args)
 		{
 			Initialize();

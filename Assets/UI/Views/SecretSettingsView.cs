@@ -14,14 +14,12 @@ namespace UI.Views
         [SerializeField] Button deletePlayerPrefsButton;
         [SerializeField] Button EnableLeermiddelen;
         [SerializeField] Button DisableLeermiddelen;
-        [SerializeField] Button searchForUpdates;
         [SerializeField] Vakken _vakken;
         
         [Header("Send notif")]
         [SerializeField] private Button SendNotifButton;
         [SerializeField] private LessonNotificationManager lessonNotificationManager;
-        [SerializeField] private UpdateSystem updateSystem;
-    
+
         public override void Initialize()
         {
             openNavigationButton.onClick.AddListener(() =>
@@ -83,33 +81,9 @@ namespace UI.Views
             
             SendNotifButton.onClick.AddListener(() =>
             {
+#if UNITY_ANDROID
                 lessonNotificationManager.SendTestNotification();
-            });
-            
-            searchForUpdates.onClick.AddListener(() =>
-            {
-                searchForUpdates.GetComponentInChildren<TMP_Text>().text = "Zoeken naar updates...";
-                int checkVoorUpdates = updateSystem.checkForUpdates();
-
-                if (checkVoorUpdates == 1)
-                {
-                    searchForUpdates.GetComponentInChildren<TMP_Text>().text = "Update gevonden, Downloaden?";
-                    searchForUpdates.onClick.RemoveAllListeners();
-                    searchForUpdates.onClick.AddListener(() =>
-                    {
-                        updateSystem.DownloadLatestVersion();
-                        
-                        searchForUpdates.GetComponentInChildren<TMP_Text>().text = "Klaar!";
-                    });
-                }
-                else if (checkVoorUpdates == 0)
-                {
-                    searchForUpdates.GetComponentInChildren<TMP_Text>().text = "Je bent up to date";
-                }
-                else
-                {
-                    searchForUpdates.GetComponentInChildren<TMP_Text>().text = "Error";
-                }
+#endif
             });
 
             output.text = "Log:\n\n";
