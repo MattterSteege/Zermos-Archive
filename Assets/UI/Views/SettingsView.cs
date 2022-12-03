@@ -10,7 +10,13 @@ namespace UI.Views
     public class SettingsView : View
     {
         [SerializeField] private SubViewManager subViewManager;
+        
+        [Header("Secret Settings")]
         [SerializeField] private Button SecretSettingsButton;
+#if !UNITY_EDITOR
+        private int ClicksNeeded = 5;
+#endif
+        [Header("SubView buttons")]
         [SerializeField] private Button algemeneInstellingenButton;
         [SerializeField] private Button koppelingenButton;
         [SerializeField] private Button userInfoButton;
@@ -33,15 +39,53 @@ namespace UI.Views
                 ViewManager.Instance.HideNavigation();
             });
             
+#if !UNITY_EDITOR
+            int timesCLicked = 0;
+
+            SecretSettingsButton.onClick.AddListener(() =>
+            {
+            timesCLicked++;
+            if (timesCLicked >= ClicksNeeded)
+                {
+                    timesCLicked = 0;
+                    ViewManager.Instance.ShowNewView<SecretSettingsView>();
+                }
+            });
+#else
+            SecretSettingsButton.onClick.AddListener(() =>
+            {
+                ViewManager.Instance.ShowNewView<SecretSettingsView>();
+            });
+#endif
+            
+//SubView buttons
+            
             algemeneInstellingenButton.onClick.AddListener(() =>
             {
                 subViewManager.ShowNewView<AlgemeneInstellingenSubView>();
+            });
+            
+            koppelingenButton.onClick.AddListener(() =>
+            {
+                subViewManager.ShowNewView<KoppelingenSubView>();
+            });
+            
+            // userInfoButton.onClick.AddListener(() =>
+            // {
+            //     subViewManager.ShowNewView<UserInfoSubView>();
+            // });
+            
+            UpdatesButton.onClick.AddListener(() =>
+            {
+                subViewManager.ShowNewView<UpdatesSubView>();
             });
             
             HulpNodigButton.onClick.AddListener(() =>
             {
                 Application.OpenURL(@"https://mjtsgamer.github.io/Zermos/");
             });
+            
+//end of subview buttons
         }
     }
     /*

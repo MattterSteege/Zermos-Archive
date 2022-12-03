@@ -13,6 +13,11 @@ namespace UI.Views
 	
         public virtual void Initialize()
         {
+            backButton.onClick.AddListener(() =>
+            {
+                gameObject.GetComponentInParent<SubViewManager>().ShowParentView();
+            });
+            
             isInitialized = true;
         }
 		
