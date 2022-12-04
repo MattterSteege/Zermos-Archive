@@ -80,7 +80,7 @@ public sealed class SubViewManager : MonoBehaviour
 		if (currentView == null) return;
 		RectTransform rectTransform = currentView.GetComponent<RectTransform>();
 		
-		rectTransform.DOLocalMove(new Vector3(Screen.width * 1.2f, -rectTransform.rect.height / 2f, 0f), animationTime);
+		rectTransform.DOLocalMove(new Vector3(Screen.width * 2.4f, -rectTransform.rect.height / 2f, 0f), animationTime);
 	}
 
 	[ContextMenu("Hide Navigation")]
@@ -109,7 +109,7 @@ public sealed class SubViewManager : MonoBehaviour
 				
 				RectTransform rectTransform = view.GetComponent<RectTransform>();
 				
-				rectTransform.transform.position = new Vector3(Screen.width * 1.2f, 0f, 0f);
+				rectTransform.transform.position = new Vector3(Screen.width * 2.4f, 0f, 0f);
 				view.Show(args);
 
 				rectTransform.DOLocalMove(new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime * 2f);

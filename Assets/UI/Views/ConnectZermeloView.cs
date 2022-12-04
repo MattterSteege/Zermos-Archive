@@ -9,6 +9,7 @@ namespace UI.Views
     {
         [SerializeField] private TMP_InputField Gebruikersnaam;
         [SerializeField] private TMP_InputField Wachtwoord;
+        [SerializeField] private TMP_InputField SchoolCode;
         [SerializeField] private Button connectButton;
         [SerializeField] private AuthenticateZermelo zermeloAuthenticate;
         [SerializeField] private User user;
@@ -21,12 +22,13 @@ namespace UI.Views
 
                 string gebruikersnaam = Gebruikersnaam.text;
                 string wachtwoord = Wachtwoord.text;
+                string schoolCode = SchoolCode.text;
+                
 
-
-                if (gebruikersnaam != "" && wachtwoord != "")
+                if (gebruikersnaam != "" && wachtwoord != "" && schoolCode != "")
                 {
                     AuthenticateZermelo.ZermeloAuthentication response =
-                        zermeloAuthenticate.startAuthentication("ccg", gebruikersnaam, wachtwoord);
+                        zermeloAuthenticate.startAuthentication(schoolCode, gebruikersnaam, wachtwoord);
 
                     if (response.access_token != null)
                     {

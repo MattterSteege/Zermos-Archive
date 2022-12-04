@@ -1,15 +1,10 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Timers;
 using DG.Tweening;
 using UI.Views;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
 
 public sealed class ViewManager : MonoBehaviour
 {
@@ -47,13 +42,8 @@ public sealed class ViewManager : MonoBehaviour
 	public static event OnLoadedView onLoadedView;
 
 	float viewsLoaded;
-	Stopwatch _timer;
-	float passedTime = 0f;
-	List<float> times = new List<float>();
 	public IEnumerator Initialize()
 	{
-		_timer = new Stopwatch();
-		_timer.Start();
 		foreach (View view in views)
 		{
 			if (view != null)
@@ -64,8 +54,6 @@ public sealed class ViewManager : MonoBehaviour
 				{
 					view.Initialize();
 					Debug.Log (view.GetType ().Name + " at " + viewsLoaded.ToString("P0"));
-					times.Add((float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
-					passedTime = _timer.ElapsedMilliseconds / 1000f;
 				}
 				catch (Exception e)
 				{
@@ -78,7 +66,7 @@ public sealed class ViewManager : MonoBehaviour
 			viewsLoaded += 1f / views.Length;
 			onLoadedView?.Invoke(viewsLoaded, view.GetType().Name);
 		}
-_timer.Stop();
+
 		if(string.IsNullOrEmpty(PlayerPrefs.GetString("zermelo-access_token")))
 		{
 			Loginview.Show();
@@ -99,20 +87,6 @@ _timer.Stop();
 		
 		onLoadedView?.Invoke(1f);
 		onInitializeComplete?.Invoke(true);
-
-#if UNITY_EDITOR
-		try
-		{
-			using (StreamWriter sw =
-			       new StreamWriter(
-				       @"C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\LoadingTimes.csv", true))
-			{
-				times.Add((float) Math.Round(_timer.ElapsedMilliseconds / 1000f, 3));
-				sw.WriteLine(string.Join(";", times));
-			}
-		}
-		catch(Exception) { }
-#endif
 	}
 	
 	[ContextMenu("Show Navigation")]

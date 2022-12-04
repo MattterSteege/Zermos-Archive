@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -9,7 +8,6 @@ using UnityEngine.Networking;
 public class Messages : MonoBehaviour
 {
     [SerializeField] SessionAuthenticatorInfowijs authenticateInfowijs;
-    [SerializeField] int maxTryCount = 3;
     
     [ContextMenu("Test")]
     public void Test()
@@ -41,16 +39,17 @@ public class Messages : MonoBehaviour
         var response = JsonConvert.DeserializeObject<RawInfowijsMessages>(www.downloadHandler.text);
 
         www.Dispose();
-        
-        while (response.data.hasMore && maxTryCount > 0)
+
+        int maxtries = 10;
+        while (response.data.hasMore && maxtries > 0)
         {
-            maxTryCount--;
+            maxtries--;
             var moreMessages = GetInfowijsMessages(includeArchived, response.data.since);
             response.data.messages.AddRange(moreMessages.data.messages);
             response.data.since = moreMessages.data.since;
             response.data.hasMore = moreMessages.data.hasMore;
         }
-        maxTryCount = 3;
+
         return response;
     }
 
@@ -65,13 +64,13 @@ public class Messages : MonoBehaviour
         30: contains information about sender/reader and the title of the post 
      */
     
-    public IEnumerator GetBetterInfowijsMessages()
+    public List<Message> GetBetterInfowijsMessages()
     {
         var messages = GetInfowijsMessages()?.data.messages.OrderByDescending(x => x.createdAt).ToList() ?? new List<RawMessage>();
         if (messages.Count == 0)
         {
             Debug.Log("No messages");
-            yield return null;
+            return null;
         }
         messages.RemoveAll(x => x.type == 2); // TODO: add support for attachments
         messages.RemoveAll(x => x.type == 3); // TODO: add support for foto's
@@ -101,13 +100,12 @@ public class Messages : MonoBehaviour
             });
             
             index++;
-            yield return null;
         }
         
         //i * 2 because we want to skip every other message
         //i * 2 + 1
 
-        yield return betterMessages;
+        return betterMessages;
     }
 }
 
