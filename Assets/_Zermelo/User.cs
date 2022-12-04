@@ -14,15 +14,15 @@ public class User : MonoBehaviour
 
     public IEnumerator GetUser() 
     {
-        if (string.IsNullOrEmpty(PlayerPrefs.GetString("zermelo-access_token")))
+        if (string.IsNullOrEmpty(LocalPrefs.GetString("zermelo-access_token")))
         {
             yield break;
         }
         
         string baseURL = "https://{school}.zportal.nl/api/v3/users/~me?access_token={access_token}";
         
-        baseURL = baseURL.Replace("{school}", PlayerPrefs.GetString("zermelo-school_code"));
-        baseURL = baseURL.Replace("{access_token}", PlayerPrefs.GetString("zermelo-access_token"));
+        baseURL = baseURL.Replace("{school}", LocalPrefs.GetString("zermelo-school_code"));
+        baseURL = baseURL.Replace("{access_token}", LocalPrefs.GetString("zermelo-access_token"));
 
         UnityWebRequest www = UnityWebRequest.Get(baseURL);
         www.SendWebRequest();
@@ -36,9 +36,8 @@ public class User : MonoBehaviour
         {
             ZermeloUser response = JsonConvert.DeserializeObject<ZermeloUser>(www.downloadHandler.text);
 
-            PlayerPrefs.SetString("zermelo-user_code", response.Response.Data[0].Code);
-            PlayerPrefs.SetString("zermelo-full_name", response.Response.Data[0].FirstName + " " + response.Response.Data[0].Prefix + " " + response.Response.Data[0].LastName);
-            PlayerPrefs.Save();
+            LocalPrefs.SetString("zermelo-user_code", response.Response.Data[0].Code);
+            LocalPrefs.SetString("zermelo-full_name", response.Response.Data[0].FirstName + " " + response.Response.Data[0].Prefix + " " + response.Response.Data[0].LastName);
 
             yield return response;
         }

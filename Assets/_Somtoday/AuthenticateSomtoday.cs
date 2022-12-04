@@ -131,11 +131,11 @@ public class AuthenticateSomtoday : MonoBehaviour
     #region Refresh token
     public SomtodayAuthentication RefreshToken()
     {
-        if (string.IsNullOrEmpty(PlayerPrefs.GetString("somtoday-refresh_token"))) return null;
+        if (string.IsNullOrEmpty(LocalPrefs.GetString("somtoday-refresh_token"))) return null;
 
         WWWForm form = new WWWForm();
         form.AddField("grant_type", "refresh_token");
-        form.AddField("refresh_token", PlayerPrefs.GetString("somtoday-refresh_token"));
+        form.AddField("refresh_token", LocalPrefs.GetString("somtoday-refresh_token"));
         form.AddField("scope", "openid");
         form.AddField("client_id", "D50E0C06-32D1-4B41-A137-A9A850C892C2");
         UnityWebRequest www = UnityWebRequest.Post($"https://inloggen.somtoday.nl/oauth2/token", form);
@@ -151,8 +151,8 @@ public class AuthenticateSomtoday : MonoBehaviour
          else
          {
              SomtodayAuthentication somtodayAuthentication = JsonConvert.DeserializeObject<SomtodayAuthentication>(www.downloadHandler.text);
-             PlayerPrefs.SetString("somtoday-refresh_token", somtodayAuthentication.refresh_token);
-             PlayerPrefs.SetString("somtoday-access_token", somtodayAuthentication.access_token);
+             LocalPrefs.SetString("somtoday-refresh_token", somtodayAuthentication.refresh_token);
+             LocalPrefs.SetString("somtoday-access_token", somtodayAuthentication.access_token);
 
              www.Dispose();
              return somtodayAuthentication;
@@ -168,7 +168,7 @@ public class AuthenticateSomtoday : MonoBehaviour
     public bool checkToken()
     {
         UnityWebRequest www = UnityWebRequest.Get($"https://api.somtoday.nl/rest/v1/leerlingen");
-        www.SetRequestHeader("Authorization", $"Bearer {PlayerPrefs.GetString("somtoday-access_token")}");
+        www.SetRequestHeader("Authorization", $"Bearer {LocalPrefs.GetString("somtoday-access_token")}");
         www.SendWebRequest();
         while (!www.isDone) { }
         if (www.result == UnityWebRequest.Result.ProtocolError)
