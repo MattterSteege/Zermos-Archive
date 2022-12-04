@@ -11,6 +11,7 @@ namespace UI.Views
         [SerializeField] private TMP_InputField Wachtwoord;
         [SerializeField] private Button connectButton;
         [SerializeField] private AuthenticateZermelo zermeloAuthenticate;
+        [SerializeField] private User user;
 
         public override void Initialize()
         {
@@ -30,6 +31,7 @@ namespace UI.Views
                     if (response.access_token != null)
                     {
                         zermeloAuthenticate.gameObject.GetComponent<SuccesScreen>().ShowSuccesScreen("Zermelo");
+                        user.startGetUser();
                     }
                     else
                     {

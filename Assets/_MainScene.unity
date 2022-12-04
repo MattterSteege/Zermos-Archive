@@ -7111,6 +7111,7 @@ MonoBehaviour:
   Wachtwoord: {fileID: 368756167}
   connectButton: {fileID: 1163065579}
   zermeloAuthenticate: {fileID: 1516145123}
+  user: {fileID: 1516145122}
 --- !u!222 &297110263
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -19045,7 +19046,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &836496268
 RectTransform:
   m_ObjectHideFlags: 0
@@ -31577,7 +31578,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1401600206
 RectTransform:
   m_ObjectHideFlags: 0
