@@ -33,17 +33,15 @@ namespace UI.Views
                 if (response.access_token != null)
                 {
                     somtodayAuthenticate.gameObject.GetComponent<SuccesScreen>().ShowSuccesScreen("Somtoday");
-                    PlayerPrefs.SetString("somtoday-access_token", response.access_token);
-                    PlayerPrefs.SetString("somtoday-refresh_token", response.refresh_token);
-                    PlayerPrefs.SetString("somtoday-api_url", response.somtoday_api_url);
-                    PlayerPrefs.Save();
-                
+                    LocalPrefs.SetString("somtoday-access_token", response.access_token);
+                    LocalPrefs.SetString("somtoday-refresh_token", response.refresh_token);
+                    LocalPrefs.SetString("somtoday-api_url", response.somtoday_api_url);
+
                     Student.SomtodayStudent user = student.getStudent(response.access_token);
 
                     if (user?.items[0].links[0].id != 0)
                     {
-                        PlayerPrefs.SetString("somtoday-student_id", user.items[0].links[0].id.ToString());
-                        PlayerPrefs.Save();
+                        LocalPrefs.SetString("somtoday-student_id", user.items[0].links[0].id.ToString());
                     }
                     
                     StartCoroutine(Loading(false));

@@ -122,7 +122,7 @@ namespace UI.Views
                         {
                             id = int.Parse(HomeworkItem.additionalObjects.leerlingen.items[0].links[0].id.ToString()),
                             rel = "self",
-                            href = $"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/leerlingen/{HomeworkItem.additionalObjects.leerlingen.items[0].links[0].id}"
+                            href = $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/leerlingen/{HomeworkItem.additionalObjects.leerlingen.items[0].links[0].id}"
                         }
                     }
                 },
@@ -132,9 +132,9 @@ namespace UI.Views
             //root to a json string
             string json = JsonConvert.SerializeObject(root);
         
-            UnityWebRequest www = UnityWebRequest.Put($"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/swigemaakt/{HomeworkItem.additionalObjects.swigemaaktVinkjes.items[0].links[0].id}", json);
+            UnityWebRequest www = UnityWebRequest.Put($"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/swigemaakt/{HomeworkItem.additionalObjects.swigemaaktVinkjes.items[0].links[0].id}", json);
         
-            www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
+            www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
         
             www.SetRequestHeader("Accept", "application/json");
             www.SetRequestHeader("Content-Type", "application/json");

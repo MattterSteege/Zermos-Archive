@@ -70,12 +70,6 @@ public class AuthenticateZermelo : MonoBehaviour
     private string username;
     private string password;
 
-    [ContextMenu("Test")]
-    public void test()
-    {
-        startAuthentication("ccg", "58373", "M77IFDDC");
-    }
-    
     public ZermeloAuthentication startAuthentication(string schoolCode, string username, string password)
     {
         return new CoroutineWithData<ZermeloAuthentication>(this, AuthenticateUser(schoolCode, username, password)).result;

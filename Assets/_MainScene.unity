@@ -18435,7 +18435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fetchType: 0
-  CurrentVersion: V0.7.6
+  CurrentVersion: V0.7.8
 --- !u!1 &797783473
 GameObject:
   m_ObjectHideFlags: 0
@@ -46308,8 +46308,7 @@ MonoBehaviour:
   isVisible: 0
   output: {fileID: 1802488284}
   deletePlayerPrefsButton: {fileID: 531213176}
-  EnableLeermiddelen: {fileID: 1911962771}
-  DisableLeermiddelen: {fileID: 681254563}
+  ToggleLeermiddelen: {fileID: 0}
   _vakken: {fileID: 1147355069}
   SendNotifButton: {fileID: 1936487868}
   lessonNotificationManager: {fileID: 56468694}

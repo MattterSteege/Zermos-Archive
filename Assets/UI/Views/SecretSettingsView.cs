@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using TMPro;
@@ -12,8 +14,7 @@ namespace UI.Views
     {
         [SerializeField] TMP_Text output;
         [SerializeField] Button deletePlayerPrefsButton;
-        [SerializeField] Button EnableLeermiddelen;
-        [SerializeField] Button DisableLeermiddelen;
+        [SerializeField] Button ToggleLeermiddelen;
         [SerializeField] Vakken _vakken;
         
         [Header("Send notif")]
@@ -35,50 +36,40 @@ namespace UI.Views
             });
         
         
-            int timesClicked = 0;
-            deletePlayerPrefsButton.onClick.AddListener(() =>
+            // int timesClicked = 0;
+            // deleteLocalPrefsButton.onClick.AddListener(() =>
+            // {
+            //     if (timesClicked < 5)
+            //     {
+            //         timesClicked++;
+            //     }
+            //     else
+            //     {
+            //         LocalPrefs.DeleteFile();
+            //         LocalPrefs.Save();
+            //
+            //         ViewManager.Instance.ShowNewView<ConnectZermeloView>();
+            //
+            //         timesClicked = 0;
+            //     }
+            // });
+        
+            ToggleLeermiddelen.onClick.AddListener(() =>
             {
-                if (timesClicked < 5)
+                bool enableLeermiddelen = LocalPrefs.GetBool("enable_leermiddelen");
+                
+                if (enableLeermiddelen)
                 {
-                    timesClicked++;
+                    LocalPrefs.SetBool("enable_leermiddelen", false);
                 }
                 else
                 {
-                    PlayerPrefs.DeleteAll();
-                    PlayerPrefs.Save();
-            
-                    ViewManager.Instance.ShowNewView<ConnectZermeloView>();
-
-                    timesClicked = 0;
+                    LocalPrefs.SetBool("enable_leermiddelen", true);
                 }
-            });
-        
-            EnableLeermiddelen.onClick.AddListener(() =>
-            {
-                string settings = PlayerPrefs.GetString("SecretSettings", "1");
-                
-                settings = (settings.ToCharArray()[0] = '1').ToString();
-                
-                PlayerPrefs.SetString("SecretSettings", settings);
-                PlayerPrefs.Save();
-            
                 _vakken.Downloadvakken();
-            
                 ViewManager.Instance.Refresh<NavBarView>();
             });
-        
-            DisableLeermiddelen.onClick.AddListener(() =>
-            {
-                string settings = PlayerPrefs.GetString("SecretSettings", "1");
-                
-                settings = (settings.ToCharArray()[0] = '0').ToString();
-                
-                PlayerPrefs.SetString("SecretSettings", settings);
-                PlayerPrefs.Save();
-            
-                ViewManager.Instance.Refresh<NavBarView>();
-            });
-            
+
             SendNotifButton.onClick.AddListener(() =>
             {
 #if UNITY_ANDROID
@@ -86,6 +77,8 @@ namespace UI.Views
 #endif
             });
 
+            base.Initialize();
+            
             output.text = "Log:\n\n";
             Application.logMessageReceived += HandleLog;
         }

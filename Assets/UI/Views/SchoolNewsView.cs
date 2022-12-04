@@ -38,7 +38,40 @@ namespace UI.Views
                 loaded = true;
                 StartCoroutine(PopulateNewsItems());
             }
+            else
+            {
+                MonoBehaviour camMono = ViewManager.Instance.GetComponent<MonoBehaviour>();
+                camMono.StartCoroutine(ShowNewsItems());
+            }
         }
+        
+        public override void Hide()
+        {
+            MonoBehaviour camMono = ViewManager.Instance.GetComponent<MonoBehaviour>();
+            camMono.StartCoroutine(HideNewsItems());
+
+            base.Hide();
+        }
+        
+        private IEnumerator ShowNewsItems()
+        {
+            foreach (Transform child in _newsItemContainer.transform) 
+            {
+                child.gameObject.SetActive(true);
+                yield return new WaitForEndOfFrame();
+            }
+        }
+        
+        private IEnumerator HideNewsItems()
+        {
+            foreach (Transform child in _newsItemContainer.transform)
+            {
+                child.gameObject.SetActive(false);
+                yield return new WaitForEndOfFrame();
+            }
+        }
+        
+        
 
         private IEnumerator PopulateNewsItems()
         {
