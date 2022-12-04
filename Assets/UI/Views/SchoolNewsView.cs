@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,7 +9,6 @@ namespace UI.Views
         [SerializeField] private GameObject _newsItemPrefab;
         [SerializeField] private GameObject _newsItemContainer;
         [SerializeField] private Messages InfowijsMessages;
-        [SerializeField] private bool loaded = false;
     
         public override void Initialize()
         {
@@ -25,7 +23,10 @@ namespace UI.Views
                 openNavigationButton.enabled = true;
                 ViewManager.Instance.HideNavigation();
             });
+        
+            List<Message> newsItems = InfowijsMessages.GetBetterInfowijsMessages() ?? new List<Message>();
 
+<<<<<<< HEAD
             base.Initialize();
         }
 
@@ -78,11 +79,15 @@ namespace UI.Views
             yield return new WaitForSeconds(0.5f);
             var messages = new CoroutineWithData<List<Message>>(this, InfowijsMessages.GetBetterInfowijsMessages()).result;
             foreach (Message message in messages)
+=======
+            foreach (Message message in newsItems?.OrderByDescending(x => x.createdAt)!)
+>>>>>>> parent of 89cbb2a... Just saving 33% on loading times. nothing to much ;)
             {
                 GameObject newsItem = Instantiate(_newsItemPrefab, _newsItemContainer.transform);
                 newsItem.GetComponent<SchoolNews>().Initialize(message);
-                yield return new WaitForEndOfFrame();
             }
+        
+            base.Initialize();
         }
-    }   
+    }
 }
