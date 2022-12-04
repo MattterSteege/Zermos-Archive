@@ -64,7 +64,7 @@ public class Schedule : MonoBehaviour
 
     private IEnumerator GetSchedule(string date)
     {
-        if (string.IsNullOrEmpty(LocalPrefs.GetString("zermelo-user_code")))
+        if (string.IsNullOrEmpty(PlayerPrefs.GetString("zermelo-user_code")))
         {
             GetComponent<User>().startGetUser();
             yield break; 
@@ -73,9 +73,9 @@ public class Schedule : MonoBehaviour
 
         string baseURL = "https://{school}.zportal.nl/api/v3/liveschedule?access_token={access_token}&student={student}&week={week}";
         
-        baseURL = baseURL.Replace("{school}", LocalPrefs.GetString("zermelo-school_code"));
-        baseURL = baseURL.Replace("{access_token}", LocalPrefs.GetString("zermelo-access_token"));
-        baseURL = baseURL.Replace("{student}", LocalPrefs.GetString("zermelo-user_code"));
+        baseURL = baseURL.Replace("{school}", PlayerPrefs.GetString("zermelo-school_code"));
+        baseURL = baseURL.Replace("{access_token}", PlayerPrefs.GetString("zermelo-access_token"));
+        baseURL = baseURL.Replace("{student}", PlayerPrefs.GetString("zermelo-user_code"));
         baseURL = baseURL.Replace("{week}", date);
 
         UnityWebRequest www = HttpRequest(baseURL);

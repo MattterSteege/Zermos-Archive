@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using Octokit;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -14,10 +11,8 @@ namespace GithubIssues
 
         private Editor _settingEditor;
         private SettingsScriptableObject _settingsScriptableObject;
-        
-        private static readonly string[] _dontIncludeMe = new string[]{"m_Script"};
 
-        [MenuItem("Github For Unity/Credentials", false, -1)]
+        [MenuItem("Tools/Github Issues/Credentials")]
         public static void ShowExample()
         {
             CredentialsEditor wnd = GetWindow<CredentialsEditor>();
@@ -39,31 +34,15 @@ namespace GithubIssues
         {
             _settingsScriptableObject =
                 AssetDatabase.LoadAssetAtPath<SettingsScriptableObject>(
-                    "Assets/Plugins/Custom/GithubIssues/Editor/Settings.asset");
+                    "Assets/Plugins/GithubIssues/Editor/Settings.asset");
 
             if (_settingsScriptableObject == null)
             {
                 _settingsScriptableObject = ScriptableObject.CreateInstance<SettingsScriptableObject>();
-                AssetDatabase.CreateAsset(_settingsScriptableObject, "Assets/Plugins/Custom/GithubIssues/Editor/Settings.asset");
+                AssetDatabase.CreateAsset(_settingsScriptableObject, "Assets/Plugins/GithubIssues/Editor/Settings.asset");
             }
 
             _settingEditor = Editor.CreateEditor(_settingsScriptableObject);
         }
-
-        private void OnDisable()
-        {
-            if (_settingEditor != null)
-            {
-                _settingsScriptableObject.username = _settingsScriptableObject.repoURL.Replace("https://", "").Trim().Split('/')[1];
-                _settingsScriptableObject.repoName = _settingsScriptableObject.repoURL.Replace("https://", "").Trim().Split('/')[2];
-
-                _settingsScriptableObject.client = new GitHubClient(new ProductHeaderValue(_settingsScriptableObject.repoName ?? "Unity-Game"));
-
-                var tokenAuth = new Credentials(_settingsScriptableObject.token);
-                _settingsScriptableObject.client.Credentials = tokenAuth;
-            }
-        }
     }
-    
-    
 }

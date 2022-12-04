@@ -50,7 +50,18 @@ namespace UI.Views
             });
         
             vakken = _vakken.getVakken();
-            
+
+            char[] Settings = PlayerPrefs.GetString("MainMenuSettings", "-").ToCharArray();
+
+            if (Settings[0] == '-')
+            {
+                PlayerPrefs.SetString("MainMenuSettings", "110");
+                Settings = PlayerPrefs.GetString("MainMenuSettings", "110").ToCharArray();
+            }
+
+            bool showPaklijst = Settings[0] == '1';
+            bool showTijd = Settings[1] == '1';
+            bool showDagSamenvatting = Settings[2] == '1';
 
             if (zermeloSchedule.TodaysScheduledAppointments != null)
             {
@@ -64,7 +75,7 @@ namespace UI.Views
             if (appointments == null || appointments.Count == 0) return;
 
             #region paklijst
-            if (true) // show paklijst
+            if (showPaklijst) // show paklijst
             {
                 paklijstGameObject.SetActive(true);
 
@@ -119,13 +130,13 @@ namespace UI.Views
             #endregion
 
             #region countdown
-            if (true) // show vertrektijd
+            if (showTijd) // show vertrektijd
             {
                 tijdenGameObject.SetActive(true);
                 
                 if (appointments == null) return;
             
-                int minutesbeforeclass = LocalPrefs.GetInt("minutesbeforeclass", 1);
+                int minutesbeforeclass = PlayerPrefs.GetInt("minutesbeforeclass", 1);
                 if (minutesbeforeclass == 0) return;
 
                 var firstlesson = appointments.Find(x => x.appointmentType == "lesson" && x.status[0].code != 4007);
@@ -149,7 +160,7 @@ namespace UI.Views
             #endregion
 
             #region samenvatting - Disabled by default
-            if (false) // show dag samenvatting
+            if (showDagSamenvatting) // show dag samenvatting
             {
                 samenvattingsGameObject.SetActive(true);
 

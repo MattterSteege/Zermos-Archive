@@ -1,15 +1,11 @@
-using Octokit;
 using UnityEngine;
 
 namespace GithubIssues
 {
-    //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
+    [CreateAssetMenu(fileName = "Settings", menuName = "GithubIssues/Settings", order = 1)]
     public class SettingsScriptableObject : ScriptableObject
     {
         public string repoURL;
         public string token;
-        [HideInInspector] public string username;
-        [HideInInspector] public string repoName;
-        public GitHubClient client;
     }
 }

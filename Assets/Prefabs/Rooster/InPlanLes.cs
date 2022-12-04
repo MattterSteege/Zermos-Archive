@@ -14,10 +14,10 @@ public class InPlanLes : MonoBehaviour
         
         string baseURL = "https://{school}.zportal.nl" + post;
         
-        baseURL = baseURL.Replace("{school}", LocalPrefs.GetString("zermelo-school_code"));
+        baseURL = baseURL.Replace("{school}", PlayerPrefs.GetString("zermelo-school_code"));
         
         UnityWebRequest www = UnityWebRequest.Post(baseURL, new WWWForm());
-        www.SetRequestHeader("Authorization", "Bearer " + LocalPrefs.GetString("zermelo-access_token"));
+        www.SetRequestHeader("Authorization", "Bearer " + PlayerPrefs.GetString("zermelo-access_token"));
         
         www.SendWebRequest();
 

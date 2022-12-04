@@ -7111,7 +7111,6 @@ MonoBehaviour:
   Wachtwoord: {fileID: 368756167}
   connectButton: {fileID: 1163065579}
   zermeloAuthenticate: {fileID: 1516145123}
-  user: {fileID: 1516145122}
 --- !u!222 &297110263
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -18436,7 +18435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fetchType: 0
-  CurrentVersion: V0.7.8
+  CurrentVersion: V0.7.6
 --- !u!1 &797783473
 GameObject:
   m_ObjectHideFlags: 0
@@ -19046,7 +19045,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &836496268
 RectTransform:
   m_ObjectHideFlags: 0
@@ -31578,7 +31577,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1401600206
 RectTransform:
   m_ObjectHideFlags: 0
@@ -46309,7 +46308,8 @@ MonoBehaviour:
   isVisible: 0
   output: {fileID: 1802488284}
   deletePlayerPrefsButton: {fileID: 531213176}
-  ToggleLeermiddelen: {fileID: 0}
+  EnableLeermiddelen: {fileID: 1911962771}
+  DisableLeermiddelen: {fileID: 681254563}
   _vakken: {fileID: 1147355069}
   SendNotifButton: {fileID: 1936487868}
   lessonNotificationManager: {fileID: 56468694}

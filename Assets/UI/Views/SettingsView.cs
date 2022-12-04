@@ -10,7 +10,13 @@ namespace UI.Views
     public class SettingsView : View
     {
         [SerializeField] private SubViewManager subViewManager;
+        
+        [Header("Secret Settings")]
         [SerializeField] private Button SecretSettingsButton;
+#if !UNITY_EDITOR
+        private int ClicksNeeded = 5;
+#endif
+        [Header("SubView buttons")]
         [SerializeField] private Button algemeneInstellingenButton;
         [SerializeField] private Button koppelingenButton;
         [SerializeField] private Button userInfoButton;
@@ -21,7 +27,7 @@ namespace UI.Views
         {
             MonoBehaviour camMono = ViewManager.Instance.GetComponent<MonoBehaviour>();
             camMono.StartCoroutine(subViewManager.Initialize());
-
+            
             openNavigationButton.onClick.AddListener(() =>
             {
                 openNavigationButton.enabled = false;
@@ -34,17 +40,53 @@ namespace UI.Views
                 ViewManager.Instance.HideNavigation();
             });
             
+#if !UNITY_EDITOR
+            int timesCLicked = 0;
+
+            SecretSettingsButton.onClick.AddListener(() =>
+            {
+            timesCLicked++;
+            if (timesCLicked >= ClicksNeeded)
+                {
+                    timesCLicked = 0;
+                    ViewManager.Instance.ShowNewView<SecretSettingsView>();
+                }
+            });
+#else
+            SecretSettingsButton.onClick.AddListener(() =>
+            {
+                ViewManager.Instance.ShowNewView<SecretSettingsView>();
+            });
+#endif
+            
+//SubView buttons
+            
             algemeneInstellingenButton.onClick.AddListener(() =>
             {
                 subViewManager.ShowNewView<AlgemeneInstellingenSubView>();
+            });
+            
+            koppelingenButton.onClick.AddListener(() =>
+            {
+                subViewManager.ShowNewView<KoppelingenSubView>();
+            });
+            
+            // userInfoButton.onClick.AddListener(() =>
+            // {
+            //     subViewManager.ShowNewView<UserInfoSubView>();
+            // });
+            
+            UpdatesButton.onClick.AddListener(() =>
+            {
+                subViewManager.ShowNewView<UpdatesSubView>();
             });
             
             HulpNodigButton.onClick.AddListener(() =>
             {
                 Application.OpenURL(@"https://mjtsgamer.github.io/Zermos/");
             });
-<<<<<<< HEAD
-=======
+            
+//end of subview buttons
         }
     }
     /*
@@ -300,7 +342,7 @@ namespace UI.Views
         else
         {
             Infowijsgekoppeld.color = new Color(0.9921569f, 0.4509804f, 0.4431373f);
->>>>>>> parent of 89cbb2a... Just saving 33% on loading times. nothing to much ;)
         }
     }
+}*/
 }

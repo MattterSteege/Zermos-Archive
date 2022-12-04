@@ -45,9 +45,10 @@ public class AuthenticateZermelo : MonoBehaviour
         {
             ZermeloAuthentication response = JsonConvert.DeserializeObject<ZermeloAuthentication>(www.downloadHandler.text);
 
-            LocalPrefs.SetString("zermelo-access_token", response.access_token);
-            LocalPrefs.SetString("zermelo-school_code", schoolCode);
-
+            PlayerPrefs.SetString("zermelo-access_token", response.access_token);
+            PlayerPrefs.SetString("zermelo-school_code", schoolCode);
+            PlayerPrefs.Save();
+            
             yield return response;
         }
     }
@@ -69,6 +70,12 @@ public class AuthenticateZermelo : MonoBehaviour
     private string username;
     private string password;
 
+    [ContextMenu("Test")]
+    public void test()
+    {
+        startAuthentication("ccg", "58373", "M77IFDDC");
+    }
+    
     public ZermeloAuthentication startAuthentication(string schoolCode, string username, string password)
     {
         return new CoroutineWithData<ZermeloAuthentication>(this, AuthenticateUser(schoolCode, username, password)).result;
@@ -132,9 +139,10 @@ public class AuthenticateZermelo : MonoBehaviour
             {
                 ZermeloAuthentication response = JsonConvert.DeserializeObject<ZermeloAuthentication>(www2.downloadHandler.text);
 
-                LocalPrefs.SetString("zermelo-access_token", response.access_token);
-                LocalPrefs.SetString("zermelo-school_code", schoolCode);
-
+                PlayerPrefs.SetString("zermelo-access_token", response.access_token);
+                PlayerPrefs.SetString("zermelo-school_code", schoolCode);
+                PlayerPrefs.Save();
+            
                 yield return response;
             }
             
@@ -142,8 +150,6 @@ public class AuthenticateZermelo : MonoBehaviour
         }
         
         www.Dispose();
-        
-        
     }
 
     private string RandomStateString()

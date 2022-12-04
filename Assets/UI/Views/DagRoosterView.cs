@@ -69,6 +69,9 @@ namespace UI.Views
                 Initialize(); 
             });
 
+            content.transform.parent.parent.GetComponent<ScrollRect>().horizontal =
+                PlayerPrefs.GetInt("UltraSatisfyingScheduleMode") == 1;
+
             foreach (Transform child in content.transform)
             {
                 Destroy(child.gameObject);
@@ -176,7 +179,7 @@ namespace UI.Views
                     }
                 }
 
-                if (!LocalPrefs.GetBool("ShowTussenUren", true))
+                if (PlayerPrefs.GetInt("ShowTussenUren", 1) == 0)
                 {
                     hideTussenUren();
                 }

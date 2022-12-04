@@ -44,14 +44,12 @@ public sealed class SubViewManager : MonoBehaviour
 		foreach (SubView view in views)
 		{
 			yield return new WaitForEndOfFrame();
-			
 			if (view != null)
 			{
 				try
 				{
 					view.Initialize();
-					Debug.Log (view.GetType ().Name + " at " + viewsLoaded.ToString("P0") + " -  loading time: " + (float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
-					times.Add((float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
+					Debug.Log (view.GetType ().Name + " at " + viewsLoaded.ToString("P0") + " - time passed: " + (float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
 					passedTime = _timer.ElapsedMilliseconds / 1000f;
 				}
 				catch (Exception e)
@@ -65,13 +63,13 @@ public sealed class SubViewManager : MonoBehaviour
 			viewsLoaded += 1f / views.Length;
 			onLoadedView?.Invoke(viewsLoaded, view.GetType ().Name);
 		}
-		
 		_timer.Stop();
 
 		HideParentView();
 		
 		onLoadedView?.Invoke(1f);
 		onInitializeComplete?.Invoke(true);
+		
 	}
 	
 	[ContextMenu("Show Navigation")]
@@ -80,7 +78,7 @@ public sealed class SubViewManager : MonoBehaviour
 		if (currentView == null) return;
 		RectTransform rectTransform = currentView.GetComponent<RectTransform>();
 		
-		rectTransform.DOLocalMove(new Vector3(Screen.width * 2.4f, -rectTransform.rect.height / 2f, 0f), animationTime);
+		rectTransform.DOLocalMove(new Vector3(Screen.width * 1.2f, -rectTransform.rect.height / 2f, 0f), animationTime);
 	}
 
 	[ContextMenu("Hide Navigation")]
@@ -109,7 +107,7 @@ public sealed class SubViewManager : MonoBehaviour
 				
 				RectTransform rectTransform = view.GetComponent<RectTransform>();
 				
-				rectTransform.transform.position = new Vector3(Screen.width * 2.4f, 0f, 0f);
+				rectTransform.transform.position = new Vector3(Screen.width * 1.2f, 0f, 0f);
 				view.Show(args);
 
 				rectTransform.DOLocalMove(new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime * 2f);

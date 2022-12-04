@@ -9,10 +9,8 @@ namespace UI.Views
     {
         [SerializeField] private TMP_InputField Gebruikersnaam;
         [SerializeField] private TMP_InputField Wachtwoord;
-        [SerializeField] private TMP_InputField SchoolCode;
         [SerializeField] private Button connectButton;
         [SerializeField] private AuthenticateZermelo zermeloAuthenticate;
-        [SerializeField] private User user;
 
         public override void Initialize()
         {
@@ -22,18 +20,16 @@ namespace UI.Views
 
                 string gebruikersnaam = Gebruikersnaam.text;
                 string wachtwoord = Wachtwoord.text;
-                string schoolCode = SchoolCode.text;
-                
 
-                if (gebruikersnaam != "" && wachtwoord != "" && schoolCode != "")
+
+                if (gebruikersnaam != "" && wachtwoord != "")
                 {
                     AuthenticateZermelo.ZermeloAuthentication response =
-                        zermeloAuthenticate.startAuthentication(schoolCode, gebruikersnaam, wachtwoord);
+                        zermeloAuthenticate.startAuthentication("ccg", gebruikersnaam, wachtwoord);
 
                     if (response.access_token != null)
                     {
                         zermeloAuthenticate.gameObject.GetComponent<SuccesScreen>().ShowSuccesScreen("Zermelo");
-                        user.startGetUser();
                     }
                     else
                     {

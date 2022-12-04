@@ -183,7 +183,7 @@ namespace UI.Views
                         }
                     }
 
-                    if (LocalPrefs.GetBool("ShowTussenUren", true))
+                    if (PlayerPrefs.GetInt("ShowTussenUren", 1) == 0)
                     {
                         hideTussenUren();
                     }

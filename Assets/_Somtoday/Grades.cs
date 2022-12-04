@@ -12,7 +12,7 @@ public class Grades : MonoBehaviour
     [ContextMenu("get Grades")]
     public SomtodayGrades getGrades()
     {
-        if (LocalPrefs.GetString("somtoday-access_token") == "")
+        if (PlayerPrefs.GetString("somtoday-access_token") == "")
         {
             return null;
         }
@@ -22,10 +22,10 @@ public class Grades : MonoBehaviour
         int rangemin = 0;
         int rangemax = 99;
         
-        string baseurl = string.Format($"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/resultaten/huidigVoorLeerling/{LocalPrefs.GetString("somtoday-student_id")}?begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01");
+        string baseurl = string.Format($"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/resultaten/huidigVoorLeerling/{PlayerPrefs.GetString("somtoday-student_id")}?begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01");
 
         UnityWebRequest www = UnityWebRequest.Get(baseurl);
-        www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
+        www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
         www.SetRequestHeader("Accept", "application/json");
         www.SetRequestHeader("Range", $"items={rangemin}-{rangemax}");
         www.SendWebRequest();
@@ -43,10 +43,10 @@ public class Grades : MonoBehaviour
         {
             rangemin += 100;
             rangemax += 100;
-            baseurl = string.Format($"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/resultaten/huidigVoorLeerling/{LocalPrefs.GetString("somtoday-student_id")}?begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01");
+            baseurl = string.Format($"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/resultaten/huidigVoorLeerling/{PlayerPrefs.GetString("somtoday-student_id")}?begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01");
 
             www = UnityWebRequest.Get(baseurl);
-            www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
+            www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
             www.SetRequestHeader("Accept", "application/json");
             www.SetRequestHeader("Range", $"items={rangemin}-{rangemax}");
             www.SendWebRequest();

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Octokit;
 using UnityEditor;
 using UnityEngine;
@@ -32,13 +31,13 @@ namespace GithubIssues
 
         private TextField _titleInputField;
         private TextField _descriptionInputField;
-        private DropdownField _issueDropdown;
+        private VisualElement _issueDropdown;
         private VisualElement _submitButton;
         private Issue[] _issues;
         private ListView _upperPaneList;
 
 
-        [MenuItem("Github For Unity/Github Issues")]
+        [MenuItem("Tools/Github Issues/Github Issues")]
         public static void ShowExample()
         {
             var wnd = GetWindow<GithubIssuesEditor>();
@@ -49,15 +48,16 @@ namespace GithubIssues
         {
             SettingsScriptableObject settingsScriptableObject =
                 AssetDatabase.LoadAssetAtPath<SettingsScriptableObject>(
-                    "Assets/Plugins/Custom/GithubIssues/Editor/Settings.asset");
+                    "Assets/Plugins/GithubIssues/Editor/Settings.asset");
             _token = settingsScriptableObject.token;
 
             _username = settingsScriptableObject.repoURL.Replace("https://", "").Trim().Split('/')[1];
             _repoName = settingsScriptableObject.repoURL.Replace("https://", "").Trim().Split('/')[2];
 
             _client = new GitHubClient(new ProductHeaderValue(_repoName ?? "Unity-Game"));
-            
-            _client.Credentials = new Credentials(_token);
+
+            var tokenAuth = new Credentials(_token);
+            _client.Credentials = tokenAuth;
 
             #region UpperPane
 
@@ -236,16 +236,10 @@ namespace GithubIssues
             if (_issues == null || _issues == Array.Empty<Issue>()) return;
 
             _upperPaneList.makeItem = () => new UnityEngine.UIElements.Label();
-
             _upperPaneList.bindItem = (item, index) =>
             {
-                try
-                {
-                    ((UnityEngine.UIElements.Label) item).text = _issues[index].Title;
-                }
-                catch (IndexOutOfRangeException) { }
+                ((UnityEngine.UIElements.Label) item).text = _issues[index].Title;
             };
-
             _upperPaneList.itemsSource = _issues;
 
             // Get the selected sprite
@@ -270,8 +264,8 @@ namespace GithubIssues
                 issueTitle.style.marginBottom = 2;
                 issueBody.style.height = 200;
                 issueBody.multiline = true;
-                issueBody.value = selectedIssue.Body?.Replace("## User bug report", "---USER BUG REPORT---")
-                    .Replace("## Description", "---DESCRIPTION---") ?? issueTitle.text;
+                issueBody.value = selectedIssue.Body.Replace("## User bug report", "---USER BUG REPORT---")
+                    .Replace("## Description", "---DESCRIPTION---");
                 issueBody.style.whiteSpace = WhiteSpace.Normal;
 
                 var issueTypes = new TextField
@@ -283,18 +277,8 @@ namespace GithubIssues
                         alignSelf = Align.Center,
                         textOverflow = TextOverflow.Ellipsis
                     },
-                    value = "No Labels Specified"
+                    value = string.Join(", ", selectedIssue.Labels.Select(x => x.Name).ToArray())
                 };
-                
-                if (!(string.Join(", ", selectedIssue.Labels.Select(x => x.Name).ToArray()).Replace(" ", "") == "" || string.Join(", ", selectedIssue.Labels.Select(x => x.Name).ToArray()).Replace(" ", "") == String.Empty))
-                {
-                    issueTypes.value = string.Join(", ", selectedIssue.Labels.Select(x => x.Name).ToArray());
-                }
-
-                if (selectedIssue.Comments > 0)
-                {
-                    issueTypes.value += $" (+ {selectedIssue.Comments} comment{(selectedIssue.Comments > 1 ? "s" : "")})";
-                }
 
                 var linkButton = new Button(() => { Application.OpenURL(selectedIssue.HtmlUrl); })
                 {
@@ -316,26 +300,10 @@ namespace GithubIssues
                     {
                         State = ItemState.Closed
                     });
-                    _client.Issue.Comment.Create(_username, _repoName, selectedIssue.Number, _descriptionInputField.value ?? "This has been resolved!");
+                    _client.Issue.Comment.Create(_username, _repoName, selectedIssue.Number, "This has been resolved!");
                 })
                 {
                     text = "Mark Issue closed"
-                };
-
-                var CommentButton = new Button(() =>
-                {
-                    if(string.IsNullOrEmpty(_descriptionInputField.value) || _descriptionInputField.value == "")
-                    {
-                        _descriptionInputField.value = "Enter Comment here";
-                    }
-                    else
-                    {
-                        _client.Issue.Comment.Create(_username, _repoName, selectedIssue.Number, _descriptionInputField.value ?? "This has been resolved!");
-                        _descriptionInputField.value = "Done";
-                    }
-                })
-                {
-                    text = "Add comment (description field)"
                 };
 
                 // Add the Image control to the right-hand pane
@@ -344,13 +312,11 @@ namespace GithubIssues
                 _lowerPane.Add(issueTypes);
                 _lowerPane.Add(linkButton);
                 _lowerPane.Add(divider);
-                _lowerPane.Add(closeButton);                
-                _lowerPane.Add(divider);
-                _lowerPane.Add(CommentButton);
+                _lowerPane.Add(closeButton);
             }
         }
 
-        private void SubmitIssue()
+        public void SubmitIssue()
         {
             if (_issueTitle == string.Empty || _issueBody == string.Empty) return;
 
@@ -360,27 +326,13 @@ namespace GithubIssues
             var createIssue = new NewIssue(_issueTitle);
             createIssue.Assignees.Add(_username);
 
-            createIssue.Labels.Add(_issueTypes[_issueDropdown.index]);
+            createIssue.Labels.Add("Bug");
 
             createIssue.Body = _issueBody;
 
             _client.Issue.Create(_username, _repoName, createIssue);
 
             _descriptionInputField.value = "Successfully Submitted!";
-            
-            Thread.Sleep(1000);
-            
-            // Clear all previous content from the pane
-            _lowerPane.Clear();
-
-            _issues = _client.Issue.GetAllForRepository(_username, _repoName).Result.ToArray();
-
-            _upperPaneList.makeItem = () => new UnityEngine.UIElements.Label();
-            _upperPaneList.bindItem = (item, index) =>
-            {
-                ((UnityEngine.UIElements.Label) item).text = _issues[index].Title;
-            };
-            _upperPaneList.itemsSource = _issues;
         }
     }
 }

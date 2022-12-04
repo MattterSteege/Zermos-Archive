@@ -41,19 +41,10 @@ namespace UI.Views
 
         private void CheckKoppelingen()
         {
-            bool ZermeloIslinked = LocalPrefs.GetString("zermelo-access_token", "") != "";
-            bool SomtodayIslinked = LocalPrefs.GetString("somtoday-access_token", "") != "";
-            bool InfowijsIslinked = LocalPrefs.GetString("infowijs-access_token", "") != "";
+            bool SomtodayIslinked = PlayerPrefs.GetString("somtoday-access_token") != "";
+            bool ZermeloIslinked = PlayerPrefs.GetString("zermelo-access_token") != "";
+            bool InfowijsIslinked = PlayerPrefs.GetString("infowijs-access_token", "") != "";
 
-            if (ZermeloIslinked)
-            {
-                Zermelogekoppeld.color = new Color(0.172549f, 0.9333333f, 0.5568628f);
-            }
-            else
-            {
-                Zermelogekoppeld.color = new Color(0.9921569f, 0.4509804f, 0.4431373f);
-            }
-            
             if (SomtodayIslinked)
             {
                 Somtodaygekoppeld.color = new Color(0.172549f, 0.9333333f, 0.5568628f);
@@ -62,7 +53,16 @@ namespace UI.Views
             {
                 Somtodaygekoppeld.color = new Color(0.9921569f, 0.4509804f, 0.4431373f);
             }
-
+        
+            if (ZermeloIslinked)
+            {
+                Zermelogekoppeld.color = new Color(0.172549f, 0.9333333f, 0.5568628f);
+            }
+            else
+            {
+                Zermelogekoppeld.color = new Color(0.9921569f, 0.4509804f, 0.4431373f);
+            }
+        
             if (InfowijsIslinked)
             {
                 Infowijsgekoppeld.color = new Color(0.172549f, 0.9333333f, 0.5568628f);

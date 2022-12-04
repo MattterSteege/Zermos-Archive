@@ -18,7 +18,7 @@ public class Vakken : MonoBehaviour
     {
         //somtoday
         UnityWebRequest www = UnityWebRequest.Get("https://api.somtoday.nl/rest/v1/vakken");
-        www.SetRequestHeader("Authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
+        www.SetRequestHeader("Authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
         www.SetRequestHeader("Accept", "application/json");
         
         www.SendWebRequest();
@@ -32,7 +32,7 @@ public class Vakken : MonoBehaviour
         
         //zermelo
         UnityWebRequest www2 = UnityWebRequest.Get($"https://ccg.zportal.nl/api/v3/courses?year={TimeManager.Instance.DateTime.Year}");
-        www2.SetRequestHeader("Authorization", "Bearer " + LocalPrefs.GetString("zermelo-access_token"));
+        www2.SetRequestHeader("Authorization", "Bearer " + PlayerPrefs.GetString("zermelo-access_token"));
         www2.SetRequestHeader("Accept", "application/json");
         
         www2.SendWebRequest();

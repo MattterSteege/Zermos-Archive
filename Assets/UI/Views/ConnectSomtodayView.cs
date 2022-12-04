@@ -12,7 +12,6 @@ namespace UI.Views
     {
         [SerializeField] private TMP_InputField username;
         [SerializeField] private TMP_InputField password;
-        [SerializeField] private TMP_Dropdown schoolPicker;
         [SerializeField] private Button connectButton;
         [SerializeField] private AuthenticateSomtoday somtodayAuthenticate;
         [SerializeField] private Student student;
@@ -24,27 +23,27 @@ namespace UI.Views
             {
                 ViewManager.Instance.ShowNewView<SettingsView>();
             });
-        
-            populateSchoolPicker();
 
             connectButton.onClick.AddListener(() =>
             {
                 StartCoroutine(Loading(true));
                 
-                AuthenticateSomtoday.SomtodayAuthentication response = somtodayAuthenticate.startAuthentication(schools.instellingen[schoolPicker.value].uuid, username.text, password.text);
+                AuthenticateSomtoday.SomtodayAuthentication response = somtodayAuthenticate.startAuthentication("c23fbb99-be4b-4c11-bbf5-57e7fc4f4388", username.text, password.text);
             
                 if (response.access_token != null)
                 {
                     somtodayAuthenticate.gameObject.GetComponent<SuccesScreen>().ShowSuccesScreen("Somtoday");
-                    LocalPrefs.SetString("somtoday-access_token", response.access_token);
-                    LocalPrefs.SetString("somtoday-refresh_token", response.refresh_token);
-                    LocalPrefs.SetString("somtoday-api_url", response.somtoday_api_url);
-
+                    PlayerPrefs.SetString("somtoday-access_token", response.access_token);
+                    PlayerPrefs.SetString("somtoday-refresh_token", response.refresh_token);
+                    PlayerPrefs.SetString("somtoday-api_url", response.somtoday_api_url);
+                    PlayerPrefs.Save();
+                
                     Student.SomtodayStudent user = student.getStudent(response.access_token);
 
                     if (user?.items[0].links[0].id != 0)
                     {
-                        LocalPrefs.SetString("somtoday-student_id", user.items[0].links[0].id.ToString());
+                        PlayerPrefs.SetString("somtoday-student_id", user.items[0].links[0].id.ToString());
+                        PlayerPrefs.Save();
                     }
                     
                     StartCoroutine(Loading(false));
@@ -73,22 +72,7 @@ namespace UI.Views
                 yield return new WaitForSeconds(0.5f);
             }
         }
-
-        public void populateSchoolPicker()
-        {
-            UnityWebRequest www = UnityWebRequest.Get("https://servers.somtoday.nl/organisaties.json");
-            www.SendWebRequest();
         
-            while (!www.isDone) { }
-        
-            schools = JsonConvert.DeserializeObject<List<Schools>>(www.downloadHandler.text)?[0];
-            schoolPicker.ClearOptions();
-            foreach (Instellingen school in schools.instellingen)
-            {
-                schoolPicker.options.Add(new TMP_Dropdown.OptionData(school.naam));
-            }
-        }
-
         #region model
         public class Instellingen
         {
