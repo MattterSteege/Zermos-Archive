@@ -28,17 +28,34 @@ public class Schedule : MonoBehaviour
         
         for (int i = 1; i < 5; i++)
         {
-            schedule.response.data[0].appointments.AddRange(new CoroutineWithData<ZermeloSchedule>(this, GetSchedule(TimeManager.Instance.DateTime.Year + (week + i).ToString())).result.response.data[0].appointments); 
+            string year = "202201";
+           
+           if (week + i > 52)
+           {
+               year = (TimeManager.Instance.DateTime.Year + 1) + (week + i - 52).ToString("00");
+           }
+           else
+           {
+               year = TimeManager.Instance.DateTime.Year + (week + i).ToString();
+           }
+           schedule.response.data[0].appointments.AddRange(new CoroutineWithData<ZermeloSchedule>(this, GetSchedule(year)).result.response.data[0].appointments); 
         }
         
         SaveFile(schedule);
     }
 
+    DateTime LastFetched;
+
     public ZermeloSchedule StartGetSchedule(string week, string year)
     {
+        if (LastFetched.Year != TimeManager.Instance.DateTime.Year)
+        {
+            LastFetched = TimeManager.Instance.CurrentDateTime;
+        }
+
         var schedule = LoadFile();
         
-        if (schedule == null)
+        if (schedule == null && !(LastFetched.AddMinutes(5) < TimeManager.Instance.CurrentDateTime))
         {
             if (Regex.IsMatch(week, "/^(?=.{1,2}$).*/"))
             {
@@ -52,14 +69,10 @@ public class Schedule : MonoBehaviour
                     year = TimeManager.Instance.DateTime.Year.ToString();
                 }
             }
+            LastFetched = TimeManager.Instance.DateTime;
+            return new CoroutineWithData<ZermeloSchedule>(this, GetSchedule(year + week)).result;
         }
-        else
-        {
-            return schedule;
-        }
-
-
-        return new CoroutineWithData<ZermeloSchedule>(this, GetSchedule(year + week)).result;
+        return schedule;
     }
 
     private IEnumerator GetSchedule(string date)

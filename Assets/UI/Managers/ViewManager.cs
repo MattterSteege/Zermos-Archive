@@ -48,8 +48,8 @@ public sealed class ViewManager : MonoBehaviour
 
 	float viewsLoaded;
 	Stopwatch _timer;
-	float passedTime = 0f;
-	List<float> times = new List<float>();
+	float passedTime;
+	List<float> times = new();
 	public IEnumerator Initialize()
 	{
 		_timer = new Stopwatch();
@@ -63,7 +63,7 @@ public sealed class ViewManager : MonoBehaviour
 				try
 				{
 					view.Initialize();
-					Debug.Log (view.GetType ().Name + " at " + viewsLoaded.ToString("P0"));
+					Debug.Log (view.GetType ().Name + " at " + viewsLoaded.ToString("P0") + " - time passed: " + (float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
 					times.Add((float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
 					passedTime = _timer.ElapsedMilliseconds / 1000f;
 				}
