@@ -24,7 +24,7 @@ public class Student : MonoBehaviour
         
         if (student != null)
         {
-            PlayerPrefs.SetString("somtoday-student_id", student.items[0].links[0].id.ToString());
+            LocalPrefs.SetString("somtoday-student_id", student.items[0].links[0].id.ToString());
             return student;
         }
         return null;

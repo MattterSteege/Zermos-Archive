@@ -41,9 +41,9 @@ namespace UI.Views
 
         private void CheckKoppelingen()
         {
-            bool SomtodayIslinked = PlayerPrefs.GetString("somtoday-access_token") != "";
-            bool ZermeloIslinked = PlayerPrefs.GetString("zermelo-access_token") != "";
-            bool InfowijsIslinked = PlayerPrefs.GetString("infowijs-access_token", "") != "";
+            bool SomtodayIslinked = LocalPrefs.GetString("somtoday-access_token") != "";
+            bool ZermeloIslinked = LocalPrefs.GetString("zermelo-access_token") != "";
+            bool InfowijsIslinked = LocalPrefs.GetString("infowijs-access_token", "") != "";
 
             if (SomtodayIslinked)
             {

@@ -8,13 +8,11 @@ public class screenManager : MonoBehaviour
     {
 #if UNITY_ANDROID
         Screen.fullScreen = false;
+        Screen.orientation = ScreenOrientation.Portrait;
+        Screen.autorotateToLandscapeLeft = false;
+        Screen.autorotateToLandscapeRight = false;
+        Screen.autorotateToPortrait = true;
+        Screen.autorotateToPortraitUpsideDown = false;
 #endif
-
-        if (PlayerPrefs.GetString("main_menu_settings", "") == "")
-        {
-            string defaultSettings;
-            defaultSettings = "1"; //show paklijst
-            PlayerPrefs.SetString("main_menu_settings", defaultSettings);
-        }
     }
 }

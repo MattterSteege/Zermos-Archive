@@ -42,12 +42,12 @@ public class SavedInformationView : View
             ViewManager.Instance.HideNavigation();
         });
         
-        string fullName = PlayerPrefs.GetString("zermelo-full_name");
-        string userCode = PlayerPrefs.GetString("zermelo-user_code");
-        string zermeloAccessToken = PlayerPrefs.GetString("zermelo-access_token");
-        string schoolCode = PlayerPrefs.GetString("zermelo-school_code");
-        string SomtodayAccessToken = PlayerPrefs.GetString("somtoday-access_token");
-        string filePath = PlayerPrefs.GetString("file_path");
+        string fullName = LocalPrefs.GetString("zermelo-full_name");
+        string userCode = LocalPrefs.GetString("zermelo-user_code");
+        string zermeloAccessToken = LocalPrefs.GetString("zermelo-access_token");
+        string schoolCode = LocalPrefs.GetString("zermelo-school_code");
+        string somtodayAccessToken = LocalPrefs.GetString("somtoday-access_token");
+        string filePath = LocalPrefs.GetString("file_path");
      
         CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().alpha = 0;
         
@@ -111,17 +111,17 @@ public class SavedInformationView : View
             });
         }
         
-        if (string.IsNullOrEmpty(SomtodayAccessToken))
+        if (string.IsNullOrEmpty(somtodayAccessToken))
         {
             SomtodayAuthCodeText.gameObject.transform.parent.gameObject.SetActive(false);
         }
         else
         {
-            SomtodayAuthCodeText.text = SomtodayAccessToken.Substring(0, 15) + "...";
+            SomtodayAuthCodeText.text = somtodayAccessToken.Substring(0, 15) + "...";
             
             SomtodayAuthCodeTextButton.onClick.AddListener(() =>
             {
-                CopyToClipboard(SomtodayAccessToken);
+                CopyToClipboard(somtodayAccessToken);
                 copyComplete("Somtoday auth code");
             });
         }
