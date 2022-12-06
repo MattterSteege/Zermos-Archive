@@ -45,22 +45,10 @@ public class SuccesScreen : MonoBehaviour
         
         rect.DOAnchorPosY(0f, 2f);
         yield return new WaitForSeconds(2f);
-        
-        ViewManager.Instance.Refresh<DagRoosterView>();
-        ViewManager.Instance.Refresh<NavBarView>();
-        ViewManager.Instance.Refresh<HomeworkView>();
-        ViewManager.Instance.Refresh<GradeView>();
-        ViewManager.Instance.Refresh<SettingsView>();
-        ViewManager.Instance.Hide<ConnectSomtodayView>();
-        ViewManager.Instance.Hide<ConnectInfowijsView>();
-        ViewManager.Instance.Hide<ConnectZermeloView>();
-        ViewManager.Instance.ShowNavbar<NavBarView>();
-        ViewManager.Instance.ShowNewView<DagRoosterView>();
 
-        rect.GetComponent<CanvasGroup>().DOFade(0f, 0.5f).onComplete += () =>
+        rect.GetComponent<CanvasGroup>().DOFade(1f, 10f).onComplete += () =>
         {
-            succesScreen.SetActive(false);
-            Destroy(succesScreen);
+            Application.Quit(200);
         };
     }
 }

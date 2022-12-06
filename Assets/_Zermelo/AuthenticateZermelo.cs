@@ -141,6 +141,8 @@ public class AuthenticateZermelo : MonoBehaviour
                 LocalPrefs.SetString("zermelo-access_token", response.access_token);
                 LocalPrefs.SetString("zermelo-school_code", schoolCode);
 
+                GetComponent<User>().startGetUser();
+
                 yield return response;
             }
             

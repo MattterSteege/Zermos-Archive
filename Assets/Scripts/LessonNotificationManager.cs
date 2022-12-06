@@ -61,7 +61,7 @@ public class LessonNotificationManager : MonoBehaviour
         var firstlesson = _appointments.Find(x => x.appointmentType == "lesson" && x.status[0].code != 4007);
         if (firstlesson == null) return;
         DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        DateTime timeTillDeparture = dateTime.AddSeconds(firstlesson.start).ToLocalTime() - new TimeSpan(0, LocalPrefs.GetInt("minutesbeforeclass", 1), 0);
+        DateTime timeTillDeparture = dateTime.AddSeconds(firstlesson.start).ToLocalTime() - new TimeSpan(0, LocalPrefs.GetInt("minutes_before_class", 1), 0);
         
         if (timeTillDeparture > TimeManager.Instance.CurrentDateTime)
             ScheduleLocalNotification("Nog 5 minuten!", "Je moet bijna vertrekken.", timeTillDeparture.AddMinutes(-5));

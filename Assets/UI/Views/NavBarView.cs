@@ -27,7 +27,7 @@ namespace UI.Views
 			openNavigationButton.onClick.RemoveAllListeners();
 			openNavigationButton.onClick.AddListener(() => ViewManager.Instance.HideNavigation());
 
-			UsernameText.text = $"Hoi, <b>{LocalPrefs.GetString("zermelo-full_name").Split(" ")[0]}</b>";
+			UsernameText.text = $"Hoi, <b>{LocalPrefs.GetString("zermelo-full_name", "<br><size=12>hoe gaat het").Split(" ")[0]}</b>";
 		
 			if (string.IsNullOrEmpty(LocalPrefs.GetString("zermelo-access_token")))
 			{

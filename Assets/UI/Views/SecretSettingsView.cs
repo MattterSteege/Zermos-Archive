@@ -38,13 +38,14 @@ namespace UI.Views
             int timesClicked = 0;
             deletePlayerPrefsButton.onClick.AddListener(() =>
             {
-                if (timesClicked < 5)
+                if (timesClicked <= 5)
                 {
                     timesClicked++;
                 }
                 else
                 {
-                    LocalPrefs.Delete();
+                    LocalPrefs.DeleteFile();
+                    LocalPrefs.Load();
 
                     ViewManager.Instance.ShowNewView<ConnectZermeloView>();
 
@@ -52,8 +53,8 @@ namespace UI.Views
                 }
             });
         
-            ToggleLeermiddelen.isOn = LocalPrefs.GetBool("show_leermiddelen", true);
-            ToggleLeermiddelen.onValueChanged.AddListener((bool enabled) =>
+            ToggleLeermiddelen.isOn = LocalPrefs.GetBool("show_leermiddelen", false);
+            ToggleLeermiddelen.onValueChanged.AddListener((enabled) =>
             {
                 if (enabled)
                 {

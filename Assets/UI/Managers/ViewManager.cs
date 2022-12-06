@@ -152,7 +152,6 @@ _timer.Stop();
 	
 	public void ShowNewView<TView>(object args = null) where TView : View
 	{
-		lastView = currentView;
 		
 		foreach (View view in views)
 		{
@@ -164,6 +163,7 @@ _timer.Stop();
 			
 			if (view is TView)
 			{
+				lastView = currentView;
 				currentView = view;	
 				view.transform.SetAsLastSibling();
 				
