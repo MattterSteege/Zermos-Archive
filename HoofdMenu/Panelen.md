@@ -12,7 +12,7 @@ ___
 
 Hier zie je een aftellende klok die afteld naar de eerstvolgende gebeurtenis. bijv: totdat je moet vertrekken, totdat de volgende les begint of totdat je klaar bent met je lesdag.
 
-![](Assets/Tijd tot...jpg)
+![](Assets/Tijd tot....jpg)
 
 ___
 ## Instellingen

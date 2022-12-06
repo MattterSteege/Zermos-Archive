@@ -10,3 +10,7 @@ Hier vind je alle uitleg over Zermos. als er iets ontbreekt dan kan je altijd fe
   - Rooster
     - [Dag rooster](Rooster/DagRooster)
     - [Week rooster](Rooster/WeekRooster)
+  - Downloaden/Updaten
+    - [nieuwe versie downloaden](Downloaden/Downloads)
+    - [Downloaden](Downloaden/Downloaden#downloaden)
+    - [Updaten](Downloaden/Downloaden#gedownload-en-nu)
