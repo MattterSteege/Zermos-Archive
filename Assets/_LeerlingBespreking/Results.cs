@@ -17,7 +17,7 @@ public class Results : MonoBehaviour
     public List<LeerlingBesprekingResults> GetResults(string userId)
     {
         UnityWebRequest www = UnityWebRequest.Get("https://laravel.leerlingbespreking.nl/api/student/" + userId + "/ratings");   
-        www.SetRequestHeader("Authorization", "Bearer " + PlayerPrefs.GetString("leerlingbespreking-access_token"));
+        www.SetRequestHeader("Authorization", "Bearer " + LocalPrefs.GetString("leerlingbespreking-access_token"));
         www.SetRequestHeader("Accept", "application/json");
         
         www.SendWebRequest();

@@ -105,7 +105,7 @@ public class LessonNotificationManager : MonoBehaviour
             Title = title,
             Text = body,
             ShouldAutoCancel = true,
-            FireTime = timeToSend.AddHours(-1),
+            FireTime = timeToSend,
             ShowTimestamp = true,
         };
 

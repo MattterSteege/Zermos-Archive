@@ -45,10 +45,9 @@ public class AuthenticateZermelo : MonoBehaviour
         {
             ZermeloAuthentication response = JsonConvert.DeserializeObject<ZermeloAuthentication>(www.downloadHandler.text);
 
-            PlayerPrefs.SetString("zermelo-access_token", response.access_token);
-            PlayerPrefs.SetString("zermelo-school_code", schoolCode);
-            PlayerPrefs.Save();
-            
+            LocalPrefs.SetString("zermelo-access_token", response.access_token);
+            LocalPrefs.SetString("zermelo-school_code", schoolCode);
+
             yield return response;
         }
     }
@@ -139,10 +138,9 @@ public class AuthenticateZermelo : MonoBehaviour
             {
                 ZermeloAuthentication response = JsonConvert.DeserializeObject<ZermeloAuthentication>(www2.downloadHandler.text);
 
-                PlayerPrefs.SetString("zermelo-access_token", response.access_token);
-                PlayerPrefs.SetString("zermelo-school_code", schoolCode);
-                PlayerPrefs.Save();
-            
+                LocalPrefs.SetString("zermelo-access_token", response.access_token);
+                LocalPrefs.SetString("zermelo-school_code", schoolCode);
+
                 yield return response;
             }
             

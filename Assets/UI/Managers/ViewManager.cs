@@ -32,6 +32,7 @@ public sealed class ViewManager : MonoBehaviour
 	private void Awake()
 	{
 		Instance = this;
+		LocalPrefs.Load();
 	}
 
 	private IEnumerator Start()
@@ -79,7 +80,7 @@ public sealed class ViewManager : MonoBehaviour
 			onLoadedView?.Invoke(viewsLoaded, view.GetType().Name);
 		}
 _timer.Stop();
-		if(string.IsNullOrEmpty(PlayerPrefs.GetString("zermelo-access_token")))
+		if(string.IsNullOrEmpty(LocalPrefs.GetString("zermelo-access_token")))
 		{
 			Loginview.Show();
 			yield break;

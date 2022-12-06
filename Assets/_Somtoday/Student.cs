@@ -9,7 +9,7 @@ public class Student : MonoBehaviour
     {
         if (accessToken == "")
         {
-            accessToken = PlayerPrefs.GetString("somtoday-access_token");
+            accessToken = LocalPrefs.GetString("somtoday-access_token");
         }
         
         UnityWebRequest www = UnityWebRequest.Get("https://api.somtoday.nl/rest/v1/leerlingen");

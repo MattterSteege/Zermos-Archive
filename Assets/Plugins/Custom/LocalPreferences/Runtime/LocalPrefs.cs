@@ -75,6 +75,11 @@ public sealed class LocalPrefs : ScriptableObject
     {
         SaveToFile(defaultFileName, Data.enableEncryption);
     }
+    
+    public static void Load()
+    {
+        Load(defaultFileName, Data.enableEncryption);
+    }
     public static void Load(string fileName, bool encrypt = false)
     {
         if (fileName.Contains(ENCRYPTION_SYMBOL))
@@ -162,6 +167,13 @@ public sealed class LocalPrefs : ScriptableObject
     {
         byte[] encryptedData = File.ReadAllBytes(filePath);
         return crypto.Decrypt(encryptedData, ENCRYPTION_KEY);
+    }
+    
+    public static void Delete()
+    {
+        string filePath = Data.FilesPath + defaultFileName + filesExtension;
+        if (File.Exists(filePath))
+            File.Delete(filePath);
     }
     public static void DeleteFile(string fileName)
     {

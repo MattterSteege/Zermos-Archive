@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
 namespace UI.Views
@@ -12,8 +13,7 @@ namespace UI.Views
     {
         [SerializeField] TMP_Text output;
         [SerializeField] Button deletePlayerPrefsButton;
-        [SerializeField] Button EnableLeermiddelen;
-        [SerializeField] Button DisableLeermiddelen;
+        [SerializeField] Toggle ToggleLeermiddelen;
         [SerializeField] Vakken _vakken;
         
         [Header("Send notif")]
@@ -44,41 +44,30 @@ namespace UI.Views
                 }
                 else
                 {
-                    PlayerPrefs.DeleteAll();
-                    PlayerPrefs.Save();
-            
+                    LocalPrefs.Delete();
+
                     ViewManager.Instance.ShowNewView<ConnectZermeloView>();
 
                     timesClicked = 0;
                 }
             });
         
-            EnableLeermiddelen.onClick.AddListener(() =>
+            ToggleLeermiddelen.isOn = LocalPrefs.GetBool("show_leermiddelen", true);
+            ToggleLeermiddelen.onValueChanged.AddListener((bool enabled) =>
             {
-                string settings = PlayerPrefs.GetString("SecretSettings", "1");
+                if (enabled)
+                {
+                    LocalPrefs.SetBool("show_leermiddelen", true);
+                    _vakken.Downloadvakken();
+                }
+                else
+                {
+                    LocalPrefs.SetBool("show_leermiddelen", false);
+                }
                 
-                settings = (settings.ToCharArray()[0] = '1').ToString();
-                
-                PlayerPrefs.SetString("SecretSettings", settings);
-                PlayerPrefs.Save();
-            
-                _vakken.Downloadvakken();
-            
                 ViewManager.Instance.Refresh<NavBarView>();
             });
-        
-            DisableLeermiddelen.onClick.AddListener(() =>
-            {
-                string settings = PlayerPrefs.GetString("SecretSettings", "1");
-                
-                settings = (settings.ToCharArray()[0] = '0').ToString();
-                
-                PlayerPrefs.SetString("SecretSettings", settings);
-                PlayerPrefs.Save();
-            
-                ViewManager.Instance.Refresh<NavBarView>();
-            });
-            
+
             SendNotifButton.onClick.AddListener(() =>
             {
 #if UNITY_ANDROID
@@ -99,7 +88,7 @@ namespace UI.Views
             }
             else if (type == LogType.Warning)
             {
-                output.text += $"<color=yellow>{logString}</color>\n";
+                output.text += $"<color=orange>{logString}</color>\n";
 
                 string stacktrace = stackTrace;
                 var m1 = Regex.Matches(stacktrace, @"((([A-Za-z]+\/)+)?[A-Z-a-z]+?(.[A-Za-z]+:[0-9]+))");

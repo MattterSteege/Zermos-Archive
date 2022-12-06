@@ -20,7 +20,7 @@ public class Messages : MonoBehaviour
     public RawInfowijsMessages GetInfowijsMessages(bool includeArchived = true, int since = 0)
     {
         
-        var access_token = authenticateInfowijs.GetAccesToken(PlayerPrefs.GetString("infowijs-access_token"));
+        var access_token = authenticateInfowijs.GetAccesToken(LocalPrefs.GetString("infowijs-access_token"));
         
         if (access_token == null)
         {

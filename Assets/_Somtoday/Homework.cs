@@ -14,10 +14,7 @@ public class Homework : MonoBehaviour
     [ContextMenu("get homework")]
     public List<Item> getHomework()
     {
-        if (PlayerPrefs.GetString("somtoday-access_token") == "")
-        {
-            return null;
-        }
+        if (string.IsNullOrEmpty(LocalPrefs.GetString("somtoday-access_token"))) return null;
 
         string json = "";
         var homework = new SomtodayHomework();
@@ -27,11 +24,11 @@ public class Homework : MonoBehaviour
 
         string baseurl =
             string.Format(
-                $"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen");
+                $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen");
 
         
         UnityWebRequest www = UnityWebRequest.Get(baseurl);
-        www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
+        www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
         www.SetRequestHeader("Accept", "application/json");
         www.SetRequestHeader("Range", $"items={rangemin}-{rangemax}");
         www.SendWebRequest();
@@ -59,7 +56,7 @@ public class Homework : MonoBehaviour
             rangemax += 100;
             
             www = UnityWebRequest.Get(baseurl);
-            www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
+            www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
             www.SetRequestHeader("Accept", "application/json");
             www.SetRequestHeader("Range", $"items={rangemin}-{rangemax}");
             www.SendWebRequest();
@@ -102,10 +99,7 @@ public class Homework : MonoBehaviour
     [ContextMenu("get week homework")]
     public List<Item> GetWeekHomework()
     {
-        if (PlayerPrefs.GetString("somtoday-access_token") == "")
-        {
-            return null;
-        }
+        if (string.IsNullOrEmpty(LocalPrefs.GetString("somtoday-access_token"))) return null;
 
         string json = "";
         var homework = new SomtodayHomework();
@@ -115,11 +109,11 @@ public class Homework : MonoBehaviour
 
         string baseurl =
             string.Format(
-                $"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemweektoekenningen?schooljaar={PlayerPrefs.GetString("somtoday-schooljaar_id")}&begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen");
+                $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemweektoekenningen?schooljaar=&begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen");
 
         
         UnityWebRequest www = UnityWebRequest.Get(baseurl);
-        www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
+        www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
         www.SetRequestHeader("Accept", "application/json");
         www.SetRequestHeader("Range", $"items={rangemin}-{rangemax}");
         www.SendWebRequest();
@@ -145,7 +139,7 @@ public class Homework : MonoBehaviour
             rangemax += 100;
             
             www = UnityWebRequest.Get(baseurl);
-            www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
+            www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
             www.SetRequestHeader("Accept", "application/json");
             www.SetRequestHeader("Range", $"items={rangemin}-{rangemax}");
             www.SendWebRequest();
@@ -182,41 +176,11 @@ public class Homework : MonoBehaviour
         return homework.items;
     }
 
-
-    public bool SetHomeworkStatus(Item huiwerkItem, bool gemaakt)
-    {
-        string json = ("{\"leerling\": {\"links\": [{\"id\": {id},\"rel\": \"self\",\"href\": \"{apiUrl}/rest/v1/leerlingen/{id}\"}]},\"gemaakt\": {gemaakt}}")
-            .Replace("{id}", huiwerkItem.additionalObjects.leerlingen.items[0].links[0].id.ToString())
-            .Replace("{apiUrl}", PlayerPrefs.GetString("somtoday-api_url"))
-            .Replace("{gemaakt}", gemaakt.ToString().ToLower());
-        
-        UnityWebRequest www = UnityWebRequest.Put($"{PlayerPrefs.GetString("somtoday-api_url")}/rest/v1/huiswerkgemaakt/{huiwerkItem.additionalObjects.swigemaaktVinkjes.items[0].links[0].id}", json);
-        
-        www.SetRequestHeader("authorization", "Bearer " + PlayerPrefs.GetString("somtoday-access_token"));
-        
-        www.SetRequestHeader("Accept", "application/json");
-        www.SetRequestHeader("Content-Type", "application/json");
-        www.SendWebRequest();
-        
-        while (!www.isDone)
-        {
-        }
-
-        if (www.downloadHandler.text.Contains("\"gemaakt\": true"))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
     public SomtodayHomework Sort(SomtodayHomework homework)
     {
         homework.items = homework.items.OrderBy(x => x.datumTijd).ToList();
         homework.items.RemoveAll(x => x.studiewijzerItem == null);
-        homework.items.RemoveAll(x=> x.datumTijd < TimeManager.Instance.DateTime.AddDays(-PlayerPrefs.GetInt("numberofdayshomework")));
+        homework.items.RemoveAll(x=> x.datumTijd < TimeManager.Instance.DateTime.AddDays(-LocalPrefs.GetInt("numberofdayshomework", 14)));
         homework.items.RemoveAll(x=> x.studiewijzerItem.huiswerkType == "LESSTOF");
         return homework;
     }

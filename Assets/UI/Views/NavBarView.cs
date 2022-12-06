@@ -27,10 +27,9 @@ namespace UI.Views
 			openNavigationButton.onClick.RemoveAllListeners();
 			openNavigationButton.onClick.AddListener(() => ViewManager.Instance.HideNavigation());
 
-			UsernameText.text = $"Hoi, <b>{PlayerPrefs.GetString("zermelo-full_name").Split(" ")[0]}</b>";
+			UsernameText.text = $"Hoi, <b>{LocalPrefs.GetString("zermelo-full_name").Split(" ")[0]}</b>";
 		
-			if (PlayerPrefs.GetString("zermelo-access_token") == null ||
-			    PlayerPrefs.GetString("zermelo-access_token") == "")
+			if (string.IsNullOrEmpty(LocalPrefs.GetString("zermelo-access_token")))
 			{
 				RoosterButton.gameObject.SetActive(false);
 				SettingsButton.gameObject.SetActive(false);
@@ -39,8 +38,7 @@ namespace UI.Views
 			}
 			else
 			{
-				if (!(PlayerPrefs.GetString("somtoday-access_token")==null ||
-				      PlayerPrefs.GetString("somtoday-access_token")==""))
+				if (!string.IsNullOrEmpty(LocalPrefs.GetString("somtoday-access_token")))
 				{
 					bool authenticated = authenticateSomtodayObject.checkToken();
 					if (authenticated == false)
@@ -72,7 +70,7 @@ namespace UI.Views
 					HomeworkButton.gameObject.SetActive(false);
 				}
 
-				if (PlayerPrefs.GetString("SecretSettings", "0").ToCharArray()[0] == '1')
+				if (LocalPrefs.GetBool("show_leermiddelen"))
 				{
 					LeermiddelenButton.gameObject.SetActive(true);
 					LeermiddelenButton.onClick.RemoveAllListeners();
@@ -121,8 +119,7 @@ namespace UI.Views
 					ViewManager.Instance.ShowNewView<NewsAndInformationView>();
 				});
 				
-				if (!(PlayerPrefs.GetString("infowijs-access_token")==null ||
-				      PlayerPrefs.GetString("infowijs-access_token")==""))
+				if (!string.IsNullOrEmpty(LocalPrefs.GetString("infowijs-access_token")))
 				{
 					SchoolNieuwsButton.gameObject.SetActive(true);
 					SchoolNieuwsButton.onClick.RemoveAllListeners();
@@ -136,7 +133,7 @@ namespace UI.Views
 					SchoolNieuwsButton.gameObject.SetActive(false);
 				}
 				
-				if (!string.IsNullOrEmpty(PlayerPrefs.GetString("leerlingbespreking-access_token")))
+				if (!string.IsNullOrEmpty(LocalPrefs.GetString("leerlingbespreking-access_token")))
 				{
 					LeerlingBesprekingButton.gameObject.SetActive(true);
 					LeerlingBesprekingButton.onClick.RemoveAllListeners();

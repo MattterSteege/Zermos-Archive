@@ -10,14 +10,7 @@ public class AuthenticateInfowijs : MonoBehaviour
 {
     private InfowijsAuthenticateFase1_1 auth1_1;
     private InfowijsAuthenticateFase1_2 auth1_2;
-    
-    [SerializeField] string username;
-    [ContextMenu("test fase 1")]
-    public void testFase1()
-    {
-        startAuthenticationFase1(username);
-    }
-    
+
     public bool startAuthenticationFase1(string username)
     {
         string url = "https://api.infowijs.nl/sessions/customer-products";
@@ -68,14 +61,6 @@ public class AuthenticateInfowijs : MonoBehaviour
         www2.Dispose();
         return true;
     }
-    
-    [SerializeField] string eur3Link;
-    
-    [ContextMenu("test fase 2")]
-    public void testFase2()
-    {
-        startAuthenticationFase2(eur3Link);
-    }
 
     public bool startAuthenticationFase2(string emailLink)
     {
@@ -114,7 +99,7 @@ public class AuthenticateInfowijs : MonoBehaviour
             }
 
             InfowijsAuthenticateToken authenticateToken = JsonConvert.DeserializeObject<InfowijsAuthenticateToken>(www2.downloadHandler.text);
-            PlayerPrefs.SetString("infowijs-access_token", authenticateToken.data);
+            LocalPrefs.SetString("infowijs-access_token", authenticateToken.data);
             return true;
         }
     }

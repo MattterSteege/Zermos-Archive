@@ -51,17 +51,9 @@ namespace UI.Views
         
             vakken = _vakken.getVakken();
 
-            char[] Settings = PlayerPrefs.GetString("MainMenuSettings", "-").ToCharArray();
-
-            if (Settings[0] == '-')
-            {
-                PlayerPrefs.SetString("MainMenuSettings", "110");
-                Settings = PlayerPrefs.GetString("MainMenuSettings", "110").ToCharArray();
-            }
-
-            bool showPaklijst = Settings[0] == '1';
-            bool showTijd = Settings[1] == '1';
-            bool showDagSamenvatting = Settings[2] == '1';
+            bool showPaklijst = LocalPrefs.GetBool("show_paklijst", true);
+            bool showTijd = LocalPrefs.GetBool("show_tijd", true);
+            bool showDagSamenvatting = LocalPrefs.GetBool("show_dag_samenvatting", false);
 
             if (zermeloSchedule.TodaysScheduledAppointments != null)
             {
@@ -136,7 +128,7 @@ namespace UI.Views
                 
                 if (appointments == null) return;
             
-                int minutesbeforeclass = PlayerPrefs.GetInt("minutesbeforeclass", 1);
+                int minutesbeforeclass = LocalPrefs.GetInt("minutes_before_class", 1);
                 if (minutesbeforeclass == 0) return;
 
                 var firstlesson = appointments.Find(x => x.appointmentType == "lesson" && x.status[0].code != 4007);

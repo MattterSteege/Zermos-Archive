@@ -12,9 +12,9 @@ namespace UI.Views
         
         public override void Initialize()
         {
+#if UNITY_ANDROID
             bool shouldUpdate = updateSystem.checkForUpdates() == 1;
             
-#if UNITY_ANDROID
             if (shouldUpdate)
             {
                 updateButton.GetComponentInChildren<TMP_Text>().text = "Update gevonden! downloaden?";
@@ -35,7 +35,7 @@ namespace UI.Views
                 releaseNotesText.transform.parent.gameObject.SetActive(false);
             }
 #elif UNITY_IOS
-            searchForUpdates.GetComponentInChildren<TMP_Text>().text = "Updaten kan alleen op Android";
+            updateButton.GetComponentInChildren<TMP_Text>().text = "Updaten kan alleen op Android";
 #endif
             
             base.Initialize();
