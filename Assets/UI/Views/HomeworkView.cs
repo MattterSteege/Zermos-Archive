@@ -1,25 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using DG.Tweening;
 
 namespace UI.Views
 {
     public class HomeworkView : View
     {
-        [SerializeField] Homework homeworkObject;    
-        [SerializeField] GameObject homeworkPrefab;    
-        [SerializeField] GameObject content;    
-        [SerializeField] GameObject DividerPrefab;    
-    
+        [SerializeField] Homework homeworkObject;
+        [SerializeField] GameObject homeworkPrefab;
+        [SerializeField] GameObject content;
+        [SerializeField] GameObject DividerPrefab;
+
         [SerializeField] private CustomHomework _CustomHomework;
-    
+        [SerializeField] private ScrollRect _ScrollRect;
+        [SerializeField] RectTransform _rectTransformDefault;
+
         [SerializeField] private Button _AddHomeworkButton;
-    
-        //[SerializeField] private Button RefreshButton;
-    
+        [SerializeField] private Button _recenterButton;
+        
+        private List<DateTime> _Dates = new List<DateTime>();
+        private List<GameObject> _homeworkDateDividers = new List<GameObject>();
+
         public override void Initialize()
         {
             openNavigationButton.onClick.AddListener(() =>
@@ -27,20 +33,27 @@ namespace UI.Views
                 openNavigationButton.enabled = false;
                 ViewManager.Instance.ShowNavigation();
             });
-        
+
             closeButtonWholePage.onClick.AddListener(() =>
             {
                 openNavigationButton.enabled = true;
                 ViewManager.Instance.HideNavigation();
             });
-        
+
             _AddHomeworkButton.onClick.AddListener(() => ViewManager.Instance.ShowNewView<AddHomeworkView>());
+            _recenterButton.onClick.AddListener(() => Recenter());
+            ViewManager.onViewChanged += view =>
+            {
+                float decelerationRate = _ScrollRect.decelerationRate;
+                _ScrollRect.decelerationRate = 0f;
+                _ScrollRect.content.DOLocalMove(_ScrollRect.GetSnapToPositionToBringChildIntoView(_rectTransformDefault), 0.1f, true).onComplete += () => _ScrollRect.decelerationRate = decelerationRate;
+            };
 
             foreach (Transform child in content.transform)
             {
                 Destroy(child.gameObject);
             }
-        
+
             //RefreshButton.onClick.AddListener(Initialize);
             List<Homework.Item> homework = homeworkObject.getHomework();
 
@@ -49,29 +62,36 @@ namespace UI.Views
                 base.Initialize();
                 return;
             }
-        
+
             int day = 0;
-        
+
             foreach (Homework.Item HomeworkItem in homework)
             {
                 if (HomeworkItem.datumTijd.Day > day)
                 {
                     var go = Instantiate(DividerPrefab, content.transform);
-                    go.GetComponent<homeworkDivider>().Datum.text = ((DateTimeOffset) HomeworkItem.datumTijd).DateTime.ToString("d MMMM");
+                    go.GetComponent<homeworkDivider>().Datum.text =
+                        ((DateTimeOffset) HomeworkItem.datumTijd).DateTime.ToString("d MMMM");
+                    _Dates.Add(((DateTimeOffset) HomeworkItem.datumTijd).DateTime.Date);
+                    _homeworkDateDividers.Add(go);
                 }
+
                 if (HomeworkItem.datumTijd.Day < day)
                 {
                     var go = Instantiate(DividerPrefab, content.transform);
-                    go.GetComponent<homeworkDivider>().Datum.text = ((DateTimeOffset) HomeworkItem.datumTijd).DateTime.ToString("d MMMM");
+                    go.GetComponent<homeworkDivider>().Datum.text =
+                        ((DateTimeOffset) HomeworkItem.datumTijd).DateTime.ToString("d MMMM");
+                    _Dates.Add(((DateTimeOffset) HomeworkItem.datumTijd).DateTime.Date);
+                    _homeworkDateDividers.Add(go);
                 }
-            
+
                 var homeworkItem = Instantiate(homeworkPrefab, content.transform);
 
                 string onderwerp = HomeworkItem.studiewijzerItem.onderwerp ?? "";
-            
+
                 if (onderwerp == "" || onderwerp.Length == 0)
                     onderwerp = HomeworkItem.studiewijzerItem.omschrijving;
-            
+
                 string vak;
                 try
                 {
@@ -82,31 +102,37 @@ namespace UI.Views
                     vak = "error";
                 }
 
-                homeworkItem.GetComponent<HomeworkInfo>().SetHomeworkInfo(vak, onderwerp, HomeworkItem.additionalObjects.swigemaaktVinkjes?.items[0].gemaakt ?? false, HomeworkItem);
-            
+                homeworkItem.GetComponent<HomeworkInfo>().SetHomeworkInfo(vak, onderwerp,
+                    HomeworkItem.additionalObjects.swigemaaktVinkjes?.items[0].gemaakt ?? false, HomeworkItem);
+
                 homeworkItem.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    ViewManager.Instance.ShowNewView<HomeworkItemView>(homeworkItem.GetComponent<HomeworkInfo>().homeworkInfo);
+                    ViewManager.Instance.ShowNewView<HomeworkItemView>(homeworkItem.GetComponent<HomeworkInfo>()
+                        .homeworkInfo);
                 });
-            
+
                 homeworkItem.GetComponent<HomeworkInfo>().gemaakt.onValueChanged.AddListener((bool isOn) =>
                 {
                     if (HomeworkItem.gemaakt == false)
                     {
                         bool succesfull = UpdateGemaaktStatus(HomeworkItem, isOn);
-                    
+
                         homeworkItem.GetComponent<HomeworkInfo>().gemaakt.SetIsOnWithoutNotify(succesfull);
                     }
                     else
                     {
-                        _CustomHomework.SetCustomHomework(int.Parse(HomeworkItem.UUID), HomeworkItem.lesgroep.vak.naam, HomeworkItem.studiewijzerItem.omschrijving, HomeworkItem.datumTijd, isOn);
+                        _CustomHomework.SetCustomHomework(int.Parse(HomeworkItem.UUID), HomeworkItem.lesgroep.vak.naam,
+                            HomeworkItem.studiewijzerItem.omschrijving, HomeworkItem.datumTijd, isOn);
                     }
                 });
 
-            
+
                 day = HomeworkItem.datumTijd.Day;
             }
-        
+            
+            int closestTimeIndex = _Dates.IndexOf(_Dates.OrderBy(t => Math.Abs((t - TimeManager.Instance.CurrentDateTime).Ticks)).First());
+            _ScrollRect.content.position = _ScrollRect.GetSnapToPositionToBringChildIntoView(_rectTransformDefault = _homeworkDateDividers[closestTimeIndex].GetComponent<RectTransform>());
+
             base.Initialize();
         }
 
@@ -122,7 +148,8 @@ namespace UI.Views
                         {
                             id = int.Parse(HomeworkItem.additionalObjects.leerlingen.items[0].links[0].id.ToString()),
                             rel = "self",
-                            href = $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/leerlingen/{HomeworkItem.additionalObjects.leerlingen.items[0].links[0].id}"
+                            href =
+                                $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/leerlingen/{HomeworkItem.additionalObjects.leerlingen.items[0].links[0].id}"
                         }
                     }
                 },
@@ -131,19 +158,22 @@ namespace UI.Views
 
             //root to a json string
             string json = JsonConvert.SerializeObject(root);
-        
-            UnityWebRequest www = UnityWebRequest.Put($"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/swigemaakt/{HomeworkItem.additionalObjects.swigemaaktVinkjes.items[0].links[0].id}", json);
-        
+
+            UnityWebRequest www =
+                UnityWebRequest.Put(
+                    $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/swigemaakt/{HomeworkItem.additionalObjects.swigemaaktVinkjes.items[0].links[0].id}",
+                    json);
+
             www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
-        
+
             www.SetRequestHeader("Accept", "application/json");
             www.SetRequestHeader("Content-Type", "application/json");
             www.SendWebRequest();
-        
+
             while (!www.isDone)
             {
             }
-        
+
             if (www.result == UnityWebRequest.Result.Success)
             {
                 if (www.downloadHandler.text.Contains("\"gemaakt\":true"))
@@ -151,7 +181,7 @@ namespace UI.Views
                     www.Dispose();
                     return true;
                 }
-            
+
                 www.Dispose();
                 return false;
             }
@@ -160,7 +190,15 @@ namespace UI.Views
             return false;
         }
 
+        private void Recenter()
+        {
+            float decelerationRate = _ScrollRect.decelerationRate;
+            _ScrollRect.decelerationRate = 0f;
+            _ScrollRect.content.DOLocalMove(_ScrollRect.GetSnapToPositionToBringChildIntoView(_rectTransformDefault), 0.5f, true).onComplete += () => _ScrollRect.decelerationRate = decelerationRate;
+        }
+        
         #region model
+
         public class Leerling
         {
             public List<Link> links { get; set; }
@@ -179,6 +217,25 @@ namespace UI.Views
             public Leerling leerling { get; set; }
             public bool gemaakt { get; set; }
         }
+
         #endregion
+    }
+    
+    
+    public static class ScrollRectExtensions
+    {
+        public static Vector2 GetSnapToPositionToBringChildIntoView(this ScrollRect instance, RectTransform child)
+        {
+            Canvas.ForceUpdateCanvases();
+            Vector2 viewportLocalPosition = instance.viewport.localPosition;
+            Vector2 childLocalPosition   = child.localPosition;
+            Vector2 result = new Vector2(
+                0 - (viewportLocalPosition.x + childLocalPosition.x),
+                0 - (viewportLocalPosition.y + childLocalPosition.y)
+            );
+            result.y += (instance.viewport.rect.height -10) / 2 - 5;
+            result.x = 0f;
+            return result;
+        }
     }
 }

@@ -46,6 +46,9 @@ public sealed class ViewManager : MonoBehaviour
 	
 	public delegate void OnLoadedView(float loadingComplete = 0f, string viewName = "");
 	public static event OnLoadedView onLoadedView;
+	
+	public delegate void OnViewChanged(View view);
+	public static event OnViewChanged onViewChanged;
 
 	float viewsLoaded;
 	Stopwatch _timer;
@@ -177,6 +180,7 @@ _timer.Stop();
 				rectTransform.DOLocalRotate(new Vector3(0f, 0f, 0f), animationTime * 2f).WaitForCompletion();
 				Background.DOColor(view.GetComponent<Image>().color, animationTime * 2f);
 
+				onViewChanged?.Invoke(view);
 				Invoke("HideLastView", animationTime * 2f);
 			}
 		}
