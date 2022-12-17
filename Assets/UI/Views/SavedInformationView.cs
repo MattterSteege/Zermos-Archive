@@ -47,8 +47,7 @@ public class SavedInformationView : View
         string zermeloAccessToken = LocalPrefs.GetString("zermelo-access_token");
         string schoolCode = LocalPrefs.GetString("zermelo-school_code");
         string somtodayAccessToken = LocalPrefs.GetString("somtoday-access_token");
-        string filePath = LocalPrefs.GetString("file_path");
-     
+
         CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().alpha = 0;
         
         if (string.IsNullOrEmpty(fullName))
@@ -123,27 +122,6 @@ public class SavedInformationView : View
             {
                 CopyToClipboard(somtodayAccessToken);
                 copyComplete("Somtoday auth code");
-            });
-        }
-        
-        if (string.IsNullOrEmpty(filePath))
-        {
-            filePathText.gameObject.transform.parent.gameObject.SetActive(false);
-        }
-        else
-        {
-            filePathText.text = filePath.Substring(0, 15) + "...";
-            
-            filePathTextButton.onClick.AddListener(() =>
-            {
-                CopiedText.text = "Opening file explorer";
-        
-                CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().DOFade(1, 0.5f).onComplete += () =>
-                {
-                    CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().DOFade(0, 0.5f).SetDelay(1f);
-                };
-
-                Application.OpenURL(filePath.Replace(@"/CustomHomework.json", ""));
             });
         }
 

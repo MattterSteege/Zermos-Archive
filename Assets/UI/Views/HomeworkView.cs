@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
@@ -6,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using DG.Tweening;
+using NUnit.Framework;
 
 namespace UI.Views
 {
@@ -44,6 +46,7 @@ namespace UI.Views
             _recenterButton.onClick.AddListener(() => Recenter());
             ViewManager.onViewChanged += view =>
             {
+                if (view != this) return;
                 float decelerationRate = _ScrollRect.decelerationRate;
                 _ScrollRect.decelerationRate = 0f;
                 _ScrollRect.content.DOLocalMove(_ScrollRect.GetSnapToPositionToBringChildIntoView(_rectTransformDefault), 0.1f, true).onComplete += () => _ScrollRect.decelerationRate = decelerationRate;
@@ -136,6 +139,55 @@ namespace UI.Views
             base.Initialize();
         }
 
+        #region sorting
+        [Flags]
+        public enum HomeworkTypes
+        {
+            huiswerk = 1,
+            toets = 2,
+            grote_toets = 4,
+        }
+        
+        [Flags]
+        public enum HomeworkStatus
+        {
+            gemaakt = 1,
+            niet_gemaakt = 2,
+        }
+        #endregion
+
+        [SerializeField] private HomeworkTypes _HomeworkTypes;
+        [SerializeField] private HomeworkStatus _HomeworkStatus;
+        
+        [ContextMenu("Sort by")]
+        public void sort()
+        {
+            StartCoroutine(SortHomework(_HomeworkTypes, _HomeworkStatus));
+        }
+        
+        public IEnumerator SortHomework(HomeworkTypes types, HomeworkStatus status) 
+        {
+            HomeworkInfo[] homeworkInfos = content.GetComponentsInChildren<HomeworkInfo>(true);
+            foreach(HomeworkInfo homeworkInfo in homeworkInfos) {
+                homeworkInfo.gameObject.SetActive(false);
+
+                if (homeworkInfo.homeworkInfo.studiewijzerItem.huiswerkType == "HUISWERK" && types.HasFlag(HomeworkTypes.huiswerk)) {
+                    if (homeworkInfo.gemaakt.isOn && status.HasFlag(HomeworkStatus.gemaakt)) homeworkInfo.gameObject.SetActive(true);
+                    if (!homeworkInfo.gemaakt.isOn && status.HasFlag(HomeworkStatus.niet_gemaakt)) homeworkInfo.gameObject.SetActive(true);
+                }
+                if (homeworkInfo.homeworkInfo.studiewijzerItem.huiswerkType == "TOETS" && types.HasFlag(HomeworkTypes.toets)) {
+                    if (homeworkInfo.gemaakt.isOn && status.HasFlag(HomeworkStatus.gemaakt)) homeworkInfo.gameObject.SetActive(true);
+                    if (!homeworkInfo.gemaakt.isOn && status.HasFlag(HomeworkStatus.niet_gemaakt)) homeworkInfo.gameObject.SetActive(true);
+                }
+                if (homeworkInfo.homeworkInfo.studiewijzerItem.huiswerkType == "GROTE_TOETS" && types.HasFlag(HomeworkTypes.grote_toets)) {
+                    if (homeworkInfo.gemaakt.isOn && status.HasFlag(HomeworkStatus.gemaakt)) homeworkInfo.gameObject.SetActive(true);
+                    if (!homeworkInfo.gemaakt.isOn && status.HasFlag(HomeworkStatus.niet_gemaakt)) homeworkInfo.gameObject.SetActive(true);
+                }
+
+                yield return null;
+            }
+        }
+
         private bool UpdateGemaaktStatus(Homework.Item HomeworkItem, bool gemaakt)
         {
             SomtodayHoweworkStatus root = new SomtodayHoweworkStatus
@@ -156,38 +208,45 @@ namespace UI.Views
                 gemaakt = gemaakt
             };
 
-            //root to a json string
-            string json = JsonConvert.SerializeObject(root);
-
-            UnityWebRequest www =
-                UnityWebRequest.Put(
-                    $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/swigemaakt/{HomeworkItem.additionalObjects.swigemaaktVinkjes.items[0].links[0].id}",
-                    json);
-
-            www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
-
-            www.SetRequestHeader("Accept", "application/json");
-            www.SetRequestHeader("Content-Type", "application/json");
-            www.SendWebRequest();
-
-            while (!www.isDone)
+            try
             {
-            }
+                //root to a json string
+                string json = JsonConvert.SerializeObject(root);
 
-            if (www.result == UnityWebRequest.Result.Success)
-            {
-                if (www.downloadHandler.text.Contains("\"gemaakt\":true"))
+                UnityWebRequest www =
+                    UnityWebRequest.Put(
+                        $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/swigemaakt/{HomeworkItem.additionalObjects.swigemaaktVinkjes.items[0].links[0].id}",
+                        json);
+
+                www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
+
+                www.SetRequestHeader("Accept", "application/json");
+                www.SetRequestHeader("Content-Type", "application/json");
+                www.SendWebRequest();
+
+                while (!www.isDone)
                 {
+                }
+
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    if (www.downloadHandler.text.Contains("\"gemaakt\":true"))
+                    {
+                        www.Dispose();
+                        return true;
+                    }
+
                     www.Dispose();
-                    return true;
+                    return false;
                 }
 
                 www.Dispose();
                 return false;
             }
-
-            www.Dispose();
-            return false;
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         private void Recenter()

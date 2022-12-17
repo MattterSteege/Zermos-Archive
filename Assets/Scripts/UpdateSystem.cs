@@ -1,11 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
+using Debug = UnityEngine.Debug;
 
 public class UpdateSystem : MonoBehaviour
 {
@@ -200,7 +199,8 @@ public class UpdateSystem : MonoBehaviour
         else
             return rc < 0 ? -1 : 1;
     }
-    
+
+    #region models
     public class Asset
     {
         public string url { get; set; }
@@ -283,5 +283,7 @@ public class UpdateSystem : MonoBehaviour
         public string type { get; set; }
         public bool site_admin { get; set; }
     }
+#endregion
+
 #endif
 }

@@ -1,0 +1,27 @@
+/* Coolors Exported Palette - https://coolors.co/fedd80-4f51c0-fdfdfd-f0f1f9-fd90a3-232528-fde8cd */
+
+/* CSV */
+FEDD80,4F51C0,FDFDFD,F0F1F9,FD90A3,232528,FDE8CD
+
+/* With # */
+#FEDD80, #4F51C0, #FDFDFD, #F0F1F9, #FD90A3, #232528, #FDE8CD
+
+/* Array */
+["FEDD80","4F51C0","FDFDFD","F0F1F9","FD90A3","232528","FDE8CD"]
+
+/* Object */
+{"Jasmine":"FEDD80","Iris":"4F51C0","White":"FDFDFD","Ghost White":"F0F1F9","Salmon Pink":"FD90A3","Raisin Black":"232528","Blanched Almond":"FDE8CD"}
+
+/* Extended Array */
+[{"name":"Jasmine","hex":"FEDD80","rgb":[254,221,128],"cmyk":[0,13,50,0],"hsb":[44,50,100],"hsl":[44,98,75],"lab":[89,0,50]},{"name":"Iris","hex":"4F51C0","rgb":[79,81,192],"cmyk":[59,58,0,25],"hsb":[239,59,75],"hsl":[239,47,53],"lab":[40,32,-59]},{"name":"White","hex":"FDFDFD","rgb":[253,253,253],"cmyk":[0,0,0,1],"hsb":[0,0,99],"hsl":[0,0,99],"lab":[99,0,0]},{"name":"Ghost White","hex":"F0F1F9","rgb":[240,241,249],"cmyk":[4,3,0,2],"hsb":[233,4,98],"hsl":[233,43,96],"lab":[95,1,-4]},{"name":"Salmon Pink","hex":"FD90A3","rgb":[253,144,163],"cmyk":[0,43,36,1],"hsb":[350,43,99],"hsl":[350,96,78],"lab":[72,43,8]},{"name":"Raisin Black","hex":"232528","rgb":[35,37,40],"cmyk":[13,7,0,84],"hsb":[216,12,16],"hsl":[216,7,15],"lab":[15,0,-2]},{"name":"Blanched Almond","hex":"FDE8CD","rgb":[253,232,205],"cmyk":[0,8,19,1],"hsb":[34,19,99],"hsl":[34,92,90],"lab":[93,3,16]}]
+
+/* XML */
+<palette>
+  <color name="Jasmine" hex="FEDD80" r="254" g="221" b="128" />
+  <color name="Iris" hex="4F51C0" r="79" g="81" b="192" />
+  <color name="White" hex="FDFDFD" r="253" g="253" b="253" />
+  <color name="Ghost White" hex="F0F1F9" r="240" g="241" b="249" />
+  <color name="Salmon Pink" hex="FD90A3" r="253" g="144" b="163" />
+  <color name="Raisin Black" hex="232528" r="35" g="37" b="40" />
+  <color name="Blanched Almond" hex="FDE8CD" r="253" g="232" b="205" />
+</palette>

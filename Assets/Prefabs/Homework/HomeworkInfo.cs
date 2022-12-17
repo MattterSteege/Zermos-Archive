@@ -5,6 +5,15 @@ using UnityEngine.UI;
 
 public class HomeworkInfo : MonoBehaviour
 {
+    [SerializeField] TMP_Text vak;
+    [SerializeField] TMP_Text details;
+    [SerializeField] public Toggle gemaakt;
+    
+    [Space, SerializeField] private GameObject ToetsPill;
+    [SerializeField] private GameObject GroteToetsPill;
+
+    public Homework.Item homeworkInfo;
+    
     public void SetHomeworkInfo(string vak = null, string details = null, bool gemaakt = false, Homework.Item homeworkInfo = null)
     {
         if (vak?.Length > 40)
@@ -43,14 +52,4 @@ public class HomeworkInfo : MonoBehaviour
             GroteToetsPill.SetActive(true); //
         }
     }
-
-    [SerializeField] TMP_Text vak;
-    [SerializeField] TMP_Text details;
-    [SerializeField] public Toggle gemaakt;
-    
-    [Space, SerializeField] private GameObject ToetsPill;
-    [SerializeField] private GameObject GroteToetsPill;
-    
-    
-    public Homework.Item homeworkInfo;
 }

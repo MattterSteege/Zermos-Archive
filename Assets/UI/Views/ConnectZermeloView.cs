@@ -24,8 +24,7 @@ namespace UI.Views
 
                 if (gebruikersnaam != "" && wachtwoord != "")
                 {
-                    AuthenticateZermelo.ZermeloAuthentication response =
-                        zermeloAuthenticate.startAuthentication("ccg", gebruikersnaam, wachtwoord);
+                    AuthenticateZermelo.ZermeloAuthentication response = zermeloAuthenticate.AuthenticateUser(gebruikersnaam, wachtwoord);
 
                     if (response.access_token != null)
                     {

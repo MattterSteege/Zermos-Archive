@@ -20,14 +20,16 @@ namespace UI.Views
         [SerializeField] private Button SendNotifButton;
         [SerializeField] private LessonNotificationManager lessonNotificationManager;
 
-        public override void Initialize()
+        public override void Show(object args = null)
         {
+            openNavigationButton.onClick.RemoveAllListeners();
             openNavigationButton.onClick.AddListener(() =>
             {
                 openNavigationButton.enabled = false;
                 ViewManager.Instance.ShowNavigation();
             });
         
+            closeButtonWholePage.onClick.RemoveAllListeners();
             closeButtonWholePage.onClick.AddListener(() =>
             {
                 openNavigationButton.enabled = true;
@@ -36,6 +38,7 @@ namespace UI.Views
         
         
             int timesClicked = 0;
+            deletePlayerPrefsButton.onClick.RemoveAllListeners();
             deletePlayerPrefsButton.onClick.AddListener(() =>
             {
                 if (timesClicked <= 5)
@@ -53,6 +56,7 @@ namespace UI.Views
                 }
             });
         
+            ToggleLeermiddelen.onValueChanged.RemoveAllListeners();
             ToggleLeermiddelen.isOn = LocalPrefs.GetBool("show_leermiddelen", false);
             ToggleLeermiddelen.onValueChanged.AddListener((enabled) =>
             {
@@ -69,6 +73,7 @@ namespace UI.Views
                 ViewManager.Instance.Refresh<NavBarView>();
             });
 
+            SendNotifButton.onClick.RemoveAllListeners();
             SendNotifButton.onClick.AddListener(() =>
             {
 #if UNITY_ANDROID
@@ -77,7 +82,7 @@ namespace UI.Views
             });
 
             output.text = "Log:\n\n";
-            Application.logMessageReceived += HandleLog;
+            //Application.logMessageReceived += HandleLog;
         }
 
         void HandleLog(string logString, string stackTrace, LogType type)
