@@ -23,6 +23,7 @@ public sealed class ViewManager : MonoBehaviour
 
 	[SerializeField] private Image Background;
 	[SerializeField] private float animationTime = 0.5f;
+	[SerializeField] private bool saveLoadingTimes = false;
 	
 	[Space, SerializeField] public View currentView;
 	[SerializeField] public View lastView;
@@ -67,9 +68,11 @@ public sealed class ViewManager : MonoBehaviour
 				try
 				{
 					view.Initialize();
-					Debug.Log (view.GetType ().Name + " at " + viewsLoaded.ToString("P0") + " - time passed: " + (float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
+					#if UNITY_EDITOR || DEVELOPMENT_BUILD
+					Debug.Log(view.GetType ().Name + " at " + viewsLoaded.ToString("P0") + " - time passed: " + (float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
 					times.Add((float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
 					passedTime = _timer.ElapsedMilliseconds / 1000f;
+					#endif
 				}
 				catch (Exception e)
 				{
@@ -105,17 +108,20 @@ _timer.Stop();
 		onInitializeComplete?.Invoke(true);
 
 #if UNITY_EDITOR
-		try
+		if (saveLoadingTimes == true)		
 		{
-			using (StreamWriter sw =
-			       new StreamWriter(
-				       @"C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\LoadingTimes.csv", true))
+			try
 			{
-				times.Add((float) Math.Round(_timer.ElapsedMilliseconds / 1000f, 3));
-				sw.WriteLine(string.Join(";", times));
+				using (StreamWriter sw =
+				       new StreamWriter(
+					       @"C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\LoadingTimes.csv", true))
+				{
+					times.Add((float) Math.Round(_timer.ElapsedMilliseconds / 1000f, 3));
+					sw.WriteLine(string.Join(";", times));
+				}
 			}
+			catch(Exception) { }
 		}
-		catch(Exception) { }
 #endif
 	}
 	

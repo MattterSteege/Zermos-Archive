@@ -81,20 +81,20 @@ public class LessonNotificationManager : MonoBehaviour
                 title = $"Nog 5 minuten!";
                 body = $"De laatste les is {_appointments[i].subjects?[0] ?? "error"} in {_appointments[i].locations?[0] ?? "error"}.";
 
-                ScheduleLocalNotification(title, body, _appointments[i].start.ToDateTime().AddMinutes(-5));
+                ScheduleLocalNotification(title, body, TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(_appointments[i].start), TimeZoneInfo.Local).DateTime.AddMinutes(-5));
                 
                 title = $"Nog 5 minuten!";
                 body = $"Je laatste les is dan afgelopen!";
                 
-                ScheduleLocalNotification(title, body, _appointments[i].end.ToDateTime().AddMinutes(-5));
+                ScheduleLocalNotification(title, body, TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(_appointments[i].end), TimeZoneInfo.Local).DateTime.AddMinutes(-5));
                 
                 break;
             }
             
             title = $"Nog 5 minuten!";
             body = $"De volgende les is {_appointments[i].subjects?[0] ?? "error"} in {_appointments[i].locations?[0] ?? "error"}.";
-
-            ScheduleLocalNotification(title, body, _appointments[i].start.ToDateTime().AddMinutes(-5));
+            
+            ScheduleLocalNotification(title, body, TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(_appointments[i].start), TimeZoneInfo.Local).DateTime.AddMinutes(-5));
         }
     }
 

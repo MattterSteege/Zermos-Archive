@@ -1,13 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Networking;
 
-public class Vakken : MonoBehaviour
+public class Vakken : BetterHttpClient
 {
     [SerializeField, Tooltip("'*' means Application.persistentDataPath.")]
     private string savePath = "*/Vakken.json";
@@ -16,75 +14,78 @@ public class Vakken : MonoBehaviour
     [ContextMenu("donwload vakken")]
     public void Downloadvakken()
     {
-        //somtoday
-        UnityWebRequest www = UnityWebRequest.Get("https://api.somtoday.nl/rest/v1/vakken");
-        www.SetRequestHeader("Authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
-        www.SetRequestHeader("Accept", "application/json");
+
+        SomtodayVakken vakSom;
+        //somtoday -- end\
         
-        www.SendWebRequest();
-        
-        while (!www.isDone) { }
-        
-        SomtodayVakken vakSom = JsonConvert.DeserializeObject<SomtodayVakken>(www.downloadHandler.text);
-        //somtoday -- end
-        
-        
-        
-        //zermelo
-        UnityWebRequest www2 = UnityWebRequest.Get($"https://ccg.zportal.nl/api/v3/courses?year={TimeManager.Instance.DateTime.Year}");
-        www2.SetRequestHeader("Authorization", "Bearer " + LocalPrefs.GetString("zermelo-access_token"));
-        www2.SetRequestHeader("Accept", "application/json");
-        
-        www2.SendWebRequest();
-        
-        while (!www2.isDone) { }
-        
-        ZermeloVakken vakZer = JsonConvert.DeserializeObject<ZermeloVakken>(www2.downloadHandler.text);
-        //zermelo -- end
-        
-        // find all the similar vakken
-        
-        List<Item> vakken = new List<Item>();
-        
-        foreach (Item somVak in vakSom.items)
+        Get("https://api.somtoday.nl/rest/v1/vakken", new Dictionary<string, string> {{ "Authorization", "Bearer" + LocalPrefs.GetString("somtoday-access_token")}, { "Accept", "application/json" }}, (response) =>
         {
-            foreach (Course zerVak in vakZer.response.data[0].courses)
+            vakSom = JsonConvert.DeserializeObject<SomtodayVakken>(response.downloadHandler.text);
+            
+            Get($"https://ccg.zportal.nl/api/v3/courses?year={TimeManager.Instance.DateTime.Year}", new Dictionary<string, string> {{ "Authorization", "Bearer" + LocalPrefs.GetString("zermelo-access_token")}, { "Accept", "application/json" }}, (response) =>
             {
-                if (somVak.afkorting == zerVak.abbreviation)
+                ZermeloVakken vakZer = JsonConvert.DeserializeObject<ZermeloVakken>(response.downloadHandler.text);
+                
+                List<Item> vakken = new List<Item>();
+        
+                foreach (Item somVak in vakSom.items)
                 {
-                    vakken.Add(new Item {afkorting = somVak.afkorting, naam = somVak.naam});
+                    foreach (Course zerVak in vakZer.response.data[0].courses)
+                    {
+                        if (somVak.afkorting == zerVak.abbreviation)
+                        {
+                            vakken.Add(new Item {afkorting = somVak.afkorting, naam = somVak.naam});
+                        }
+                    }
                 }
-            }
-        }
-        
-        
-        
-        if (vakken.Count != 0)
-        {
-            var convertedJson = JsonConvert.SerializeObject(vakken.OrderBy(x => x.afkorting), Formatting.Indented);
+                
+                if (vakken.Count != 0)
+                {
+                    var convertedJson = JsonConvert.SerializeObject(
+                        new SomtodayVakken()
+                        {
+                            items = vakken.OrderBy(x => x.afkorting).ToList(),
+                            laatsteWijziging = TimeManager.Instance.CurrentDateTime.ToUnixTime()
+                        }, 
+                        Formatting.Indented);
 
-            string destination = savePath.Replace("*", Application.persistentDataPath);
+                    string destination = savePath.Replace("*", Application.persistentDataPath);
 
-            File.WriteAllText(destination, "//In dit bestand staan alle vakken die je school aanbied.\r\n");
-            File.AppendAllText(destination, convertedJson);
-        }
+                    File.WriteAllText(destination, "//In dit bestand staan alle vakken die je school aanbied.\r\n");
+                    File.AppendAllText(destination, convertedJson);
+                }
+
+                return null;
+            });
+            return null;
+        });
     }
     
-    //https://ccg.zportal.nl/api/v3/courses?year=2022
+    int i = 0;
     public SomtodayVakken getVakken()
     {
         string destination = savePath.Replace("*", Application.persistentDataPath);
 
         if (!File.Exists(destination))
         {
-            Debug.LogError("File not found");
+            Debug.LogWarning("File not found, creating new file.");
+            Downloadvakken();
             return null;
         }
 
         using (StreamReader r = new StreamReader(destination))
         {
             string json = r.ReadToEnd();
-            return new SomtodayVakken {items = JsonConvert.DeserializeObject<List<Item>>(json)};
+            var vakkenObject = JsonConvert.DeserializeObject<SomtodayVakken>(json);
+            if (vakkenObject?.laatsteWijziging.ToDateTime().AddDays(5) < TimeManager.Instance.CurrentDateTime && i < 3)
+            {
+                r.Close();
+                Debug.LogWarning("Local file is outdated, downloading new file.");
+                Downloadvakken();
+                getVakken();
+                i++;
+            }
+            return vakkenObject;
         }
     }
 
@@ -99,6 +100,7 @@ public class Vakken : MonoBehaviour
     [Serializable]
     public class SomtodayVakken
     {
+        public int laatsteWijziging { get; set; }
         public List<Item> items { get; set; }
     }
     #endregion

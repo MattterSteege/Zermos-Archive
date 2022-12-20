@@ -14,6 +14,8 @@ public class ConnectInfowijsView : View
     
     public override void Initialize()
     {
+        if (int.Parse(LocalPrefs.GetString("infowijs-access_token_expires_in", "0")).ToDateTime() > TimeManager.Instance.CurrentDateTime) return;
+        
         openNavigationButton.onClick.AddListener(() =>
         {
             ViewManager.Instance.ShowNewView<SettingsView>();
@@ -52,20 +54,5 @@ public class ConnectInfowijsView : View
         });
 
         base.Initialize();
-    }
-    
-    private IEnumerator Loading(bool b)
-    {
-        while (b)
-        {
-            connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Loading...";
-            yield return new WaitForSeconds(0.5f);
-            connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Loading.";
-            yield return new WaitForSeconds(0.5f);
-            connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Loading..";
-            yield return new WaitForSeconds(0.5f);
-            connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Loading...";
-            yield return new WaitForSeconds(0.5f);
-        }
     }
 }

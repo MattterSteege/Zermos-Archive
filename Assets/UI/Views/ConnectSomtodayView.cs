@@ -34,6 +34,7 @@ namespace UI.Views
                 {
                     somtodayAuthenticate.gameObject.GetComponent<SuccesScreen>().ShowSuccesScreen("Somtoday");
                     LocalPrefs.SetString("somtoday-access_token", response.access_token);
+                    LocalPrefs.SetString("somtoday-access_token_expires_in", response.expires_in.ToString());
                     LocalPrefs.SetString("somtoday-refresh_token", response.refresh_token);
                     LocalPrefs.SetString("somtoday-api_url", response.somtoday_api_url);
 

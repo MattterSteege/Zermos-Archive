@@ -21,8 +21,8 @@ namespace UI.Views
 		
 		public virtual void Refresh(object args)
 		{
-			Initialize();
 			this._args = args;
+			Initialize();
 		}
 
 		public virtual void Show(object args = null)

@@ -25,21 +25,15 @@ public class AuthenticateSomtoday : MonoBehaviour
     [SerializeField] private string CodeChallenge;
     private object cookies;
 
-    [ContextMenu("Test Authentication")]
-    public void test()
-    {
-        SomtodayAuthentication auth = startAuthentication("c23fbb99-be4b-4c11-bbf5-57e7fc4f4388", "58373@ccg-leerling.nl", "Somduck");
-    }
-
     public void Start()
     {
         RefreshToken();
     }
 
     #region authenticate user
-    public SomtodayAuthentication startAuthentication(string TENANT_UUID, string username, string password)
+    public SomtodayAuthentication startAuthentication(string tenantUuid, string username, string password)
     {
-        return new CoroutineWithData<SomtodayAuthentication>(this, AuthenticateUser(TENANT_UUID, username, password))
+        return new CoroutineWithData<SomtodayAuthentication>(this, AuthenticateUser(tenantUuid, username, password))
             .result;
     }
 
@@ -161,30 +155,6 @@ public class AuthenticateSomtoday : MonoBehaviour
          
          www.Dispose();
          return null;
-    }
-    #endregion
-
-    #region Check token
-    public bool checkToken()
-    {
-        UnityWebRequest www = UnityWebRequest.Get($"https://api.somtoday.nl/rest/v1/leerlingen");
-        www.SetRequestHeader("Authorization", $"Bearer {LocalPrefs.GetString("somtoday-access_token")}");
-        www.SendWebRequest();
-        while (!www.isDone) { }
-        if (www.result == UnityWebRequest.Result.ProtocolError)
-        {
-            Debug.Log(www.error);
-            if (www.error == "401 Unauthorized")
-            {
-                RefreshToken();
-            }
-            
-            return false;
-        }
-        else
-        {
-            return true;
-        }
     }
     #endregion
 

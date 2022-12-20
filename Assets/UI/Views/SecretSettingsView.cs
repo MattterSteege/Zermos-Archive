@@ -20,7 +20,7 @@ namespace UI.Views
         [SerializeField] private Button SendNotifButton;
         [SerializeField] private LessonNotificationManager lessonNotificationManager;
 
-        public override void Show(object args = null)
+        public override void Initialize()
         {
             openNavigationButton.onClick.RemoveAllListeners();
             openNavigationButton.onClick.AddListener(() =>
@@ -82,7 +82,7 @@ namespace UI.Views
             });
 
             output.text = "Log:\n\n";
-            //Application.logMessageReceived += HandleLog;
+            Application.logMessageReceived += HandleLog;
         }
 
         void HandleLog(string logString, string stackTrace, LogType type)

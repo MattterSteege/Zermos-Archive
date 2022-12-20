@@ -60,6 +60,7 @@ public class AuthenticateZermelo : BetterHttpClient
                 ZermeloAuthentication response = JsonConvert.DeserializeObject<ZermeloAuthentication>(www.downloadHandler.text);
 
                 LocalPrefs.SetString("zermelo-access_token", response.access_token);
+                LocalPrefs.SetString("zermelo-access_token_expires_in", response.expires_in.ToString());
                 LocalPrefs.SetString("zermelo-school_code", "ccg");
 
                 GetComponent<User>().GetUser();
