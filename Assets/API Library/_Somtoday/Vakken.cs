@@ -15,14 +15,27 @@ public class Vakken : BetterHttpClient
     public void Downloadvakken()
     {
 
+        if (LocalPrefs.GetString("somtoday-access_token") == null || LocalPrefs.GetString("zermelo-access_token") == null)
+        {
+            Debug.Log("Missing token(s)");
+            return;
+        }
+
         SomtodayVakken vakSom;
         //somtoday -- end\
         
-        Get("https://api.somtoday.nl/rest/v1/vakken", new Dictionary<string, string> {{ "Authorization", "Bearer" + LocalPrefs.GetString("somtoday-access_token")}, { "Accept", "application/json" }}, (response) =>
+        WWWForm form = new WWWForm();
+        form.headers.Add("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
+
+        Get("https://api.somtoday.nl/rest/v1/vakken", form, (response) =>
         {
             vakSom = JsonConvert.DeserializeObject<SomtodayVakken>(response.downloadHandler.text);
             
-            Get($"https://ccg.zportal.nl/api/v3/courses?year={TimeManager.Instance.DateTime.Year}", new Dictionary<string, string> {{ "Authorization", "Bearer" + LocalPrefs.GetString("zermelo-access_token")}, { "Accept", "application/json" }}, (response) =>
+            WWWForm form = new WWWForm();
+            form.headers["Authorization"] = "Bearer " + LocalPrefs.GetString("zermelo-access_token");
+            
+            
+            Get($"https://ccg.zportal.nl/api/v3/courses?year={TimeManager.Instance.DateTime.Year}", form, (response) =>
             {
                 ZermeloVakken vakZer = JsonConvert.DeserializeObject<ZermeloVakken>(response.downloadHandler.text);
                 
@@ -56,7 +69,18 @@ public class Vakken : BetterHttpClient
                 }
 
                 return null;
+            },
+            (error) =>
+            {
+                Debug.LogError(error);
+                return null;
             });
+            
+            return null;
+        },
+        (error) =>
+        {
+            Debug.LogError(error);
             return null;
         });
     }

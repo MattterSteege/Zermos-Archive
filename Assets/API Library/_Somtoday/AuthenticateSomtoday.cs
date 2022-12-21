@@ -14,7 +14,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Random = UnityEngine.Random;
 
-public class AuthenticateSomtoday : MonoBehaviour
+public class AuthenticateSomtoday : BetterHttpClient
 {
     [SerializeField, Header("The real auth token")]
     private string AutherizationToken;
@@ -25,7 +25,7 @@ public class AuthenticateSomtoday : MonoBehaviour
     [SerializeField] private string CodeChallenge;
     private object cookies;
 
-    public void Start()
+    public void Awake()
     {
         RefreshToken();
     }
@@ -125,36 +125,24 @@ public class AuthenticateSomtoday : MonoBehaviour
     #region Refresh token
     public SomtodayAuthentication RefreshToken()
     {
-        if (string.IsNullOrEmpty(LocalPrefs.GetString("somtoday-refresh_token"))) return null;
-
+        if (LocalPrefs.GetString("somtoday-refresh_token") == null) return null;
+        
         WWWForm form = new WWWForm();
         form.AddField("grant_type", "refresh_token");
         form.AddField("refresh_token", LocalPrefs.GetString("somtoday-refresh_token"));
         form.AddField("scope", "openid");
         form.AddField("client_id", "D50E0C06-32D1-4B41-A137-A9A850C892C2");
-        UnityWebRequest www = UnityWebRequest.Post($"https://inloggen.somtoday.nl/oauth2/token", form);
-         www.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-         
-         www.SendWebRequest();
-         while (!www.isDone) { }
-         
-         if (www.result == UnityWebRequest.Result.ProtocolError)
-         {
-             Debug.Log(www.error);
-         }
-         else
-         {
-             SomtodayAuthentication somtodayAuthentication = JsonConvert.DeserializeObject<SomtodayAuthentication>(www.downloadHandler.text);
-             LocalPrefs.SetString("somtoday-refresh_token", somtodayAuthentication.refresh_token);
-             LocalPrefs.SetString("somtoday-access_token", somtodayAuthentication.access_token);
 
-             www.Dispose();
-             return somtodayAuthentication;
-         }
-         
-         
-         www.Dispose();
-         return null;
+        var SomAuthToken = (SomtodayAuthentication) Post("https://inloggen.somtoday.nl/oauth2/token", form, (response) =>
+        {
+            SomtodayAuthentication somtodayAuthentication = JsonConvert.DeserializeObject<SomtodayAuthentication>(response.downloadHandler.text);
+            LocalPrefs.SetString("somtoday-refresh_token", somtodayAuthentication.refresh_token);
+            LocalPrefs.SetString("somtoday-access_token", somtodayAuthentication.access_token);
+            return somtodayAuthentication;
+        });
+        return SomAuthToken;
+        
+        
     }
     #endregion
 

@@ -7,19 +7,17 @@ using UnityEngine.Networking;
 
 public class User : BetterHttpClient
 {
-    public void GetUser() 
+    public Datum GetUser() 
     {
-        if (string.IsNullOrEmpty(LocalPrefs.GetString("zermelo-access_token")))
-            return;
+        if (string.IsNullOrEmpty(LocalPrefs.GetString("zermelo-access_token"))) return null;
         
         string baseURL = $"https://{LocalPrefs.GetString("zermelo-school_code")}.zportal.nl/api/v3/users/~me?access_token={LocalPrefs.GetString("zermelo-access_token")}";
-        Get(baseURL, response =>
+        return (Datum) Get(baseURL, response =>
         {
             ZermeloUser zermeloUser = JsonConvert.DeserializeObject<ZermeloUser>(response.downloadHandler.text);
-            
             LocalPrefs.SetString("zermelo-user_code", zermeloUser.Response.Data[0].Code);
             LocalPrefs.SetString("zermelo-full_name", zermeloUser.Response.Data[0].FirstName + " " + zermeloUser.Response.Data[0].Prefix + " " + zermeloUser.Response.Data[0].LastName);
-            return null;
+            return zermeloUser.Response.Data[0];
         });
     }
 

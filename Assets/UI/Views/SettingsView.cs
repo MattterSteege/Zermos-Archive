@@ -20,7 +20,6 @@ namespace UI.Views
         [SerializeField] private Button algemeneInstellingenButton;
         [SerializeField] private Button koppelingenButton;
         [SerializeField] private Button userInfoButton;
-        [SerializeField] private Button UpdatesButton;
         [SerializeField] private Button HulpNodigButton;
 
         public override void Initialize()
@@ -75,12 +74,7 @@ namespace UI.Views
             // {
             //     subViewManager.ShowNewView<UserInfoSubView>();
             // });
-            
-            UpdatesButton.onClick.AddListener(() =>
-            {
-                subViewManager.ShowNewView<UpdatesSubView>();
-            });
-            
+
             HulpNodigButton.onClick.AddListener(() =>
             {
                 Application.OpenURL(@"https://mjtsgamer.github.io/Zermos/");

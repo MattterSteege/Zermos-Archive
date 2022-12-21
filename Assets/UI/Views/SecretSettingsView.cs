@@ -22,23 +22,19 @@ namespace UI.Views
 
         public override void Initialize()
         {
-            openNavigationButton.onClick.RemoveAllListeners();
             openNavigationButton.onClick.AddListener(() =>
             {
                 openNavigationButton.enabled = false;
                 ViewManager.Instance.ShowNavigation();
             });
-        
-            closeButtonWholePage.onClick.RemoveAllListeners();
+
             closeButtonWholePage.onClick.AddListener(() =>
             {
                 openNavigationButton.enabled = true;
                 ViewManager.Instance.HideNavigation();
             });
-        
-        
+            
             int timesClicked = 0;
-            deletePlayerPrefsButton.onClick.RemoveAllListeners();
             deletePlayerPrefsButton.onClick.AddListener(() =>
             {
                 if (timesClicked <= 5)
@@ -55,8 +51,7 @@ namespace UI.Views
                     timesClicked = 0;
                 }
             });
-        
-            ToggleLeermiddelen.onValueChanged.RemoveAllListeners();
+
             ToggleLeermiddelen.isOn = LocalPrefs.GetBool("show_leermiddelen", false);
             ToggleLeermiddelen.onValueChanged.AddListener((enabled) =>
             {
@@ -73,16 +68,25 @@ namespace UI.Views
                 ViewManager.Instance.Refresh<NavBarView>();
             });
 
-            SendNotifButton.onClick.RemoveAllListeners();
+#if UNITY_ANDROID
             SendNotifButton.onClick.AddListener(() =>
             {
-#if UNITY_ANDROID
                 lessonNotificationManager.SendTestNotification();
-#endif
             });
+#endif
 
             output.text = "Log:\n\n";
             Application.logMessageReceived += HandleLog;
+        }
+
+        public override void Refresh(object args)
+        {
+            openNavigationButton.onClick.RemoveAllListeners();
+            closeButtonWholePage.onClick.RemoveAllListeners();
+            deletePlayerPrefsButton.onClick.RemoveAllListeners();
+            ToggleLeermiddelen.onValueChanged.RemoveAllListeners();
+            SendNotifButton.onClick.RemoveAllListeners();
+            base.Refresh(args);
         }
 
         void HandleLog(string logString, string stackTrace, LogType type)

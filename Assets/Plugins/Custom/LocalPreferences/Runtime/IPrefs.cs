@@ -46,17 +46,25 @@ namespace Neonagee.LocalPreferences
         public Type type { get; } = typeof(T);
         public T GetPref(string prefName, T defaultValue)
         {
-            if (dictionary.TryGetValue(prefName, out T value))
-                return value;
-            else
-                return SetPref(prefName, defaultValue);
+            if (dictionary.TryGetValue(prefName, out T value)) return value;
+
+            return defaultValue;
+            
+            // if (dictionary.TryGetValue(prefName, out T value))
+            //     return value;
+            // else
+            //     return SetPref(prefName, defaultValue);
         }
         public object GetPref(string prefName, object defaultValue)
         {
-            if (dictionary.TryGetValue(prefName, out T value))
-                return value;
-            else
-                return SetPref(prefName, (T)defaultValue);
+            if (dictionary.TryGetValue(prefName, out T value)) return value;
+
+            return (T)defaultValue;
+            
+            // if (dictionary.TryGetValue(prefName, out T value))
+            //     return value;
+            // else
+            //     return SetPref(prefName, (T)defaultValue);
         }
         public T SetPref(string prefName, T newValue)
         {

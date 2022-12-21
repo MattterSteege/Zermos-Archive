@@ -1,27 +1,13 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class AuthenticateZermelo : BetterHttpClient
 {
-    #region credentials based
     private string username;
     private string password;
-    
-    [ContextMenu("Test")]
-    public void Test()
-    {
-       var a = AuthenticateUser("58373", "M77IFDDC");
-         Debug.Log(a?.access_token ?? "no token found");
-    }
-    
+
     public ZermeloAuthentication AuthenticateUser(string username = "", string password = "") 
     {
         if (username == "" || password == "")
@@ -38,7 +24,7 @@ public class AuthenticateZermelo : BetterHttpClient
         form.AddField("state", RandomStateString());
         form.AddField("response_type", "code");
         form.AddField("tenant", "ccg");
-        
+
         string baseURL = $"https://ccg.zportal.nl/api/v3/oauth";
 
         return (ZermeloAuthentication) Post(baseURL, form,www =>
@@ -91,8 +77,7 @@ public class AuthenticateZermelo : BetterHttpClient
 
         return result;
     }
-    #endregion
-    
+
     public class ZermeloAuthentication
     {
         public string access_token { get; set; }

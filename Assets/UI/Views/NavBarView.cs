@@ -14,10 +14,7 @@ namespace UI.Views
 		[SerializeField] private Button LeermiddelenButton;
 		[SerializeField] private Button SchoolNieuwsButton;
 		[SerializeField] private Button SettingsButton;
-		[SerializeField] private Image IconNotification;
 		[SerializeField] private TMP_Text UsernameText;
-		
-		[SerializeField] private UpdateSystem updateSystem;
 
 		public override void Initialize()
 		{
@@ -77,19 +74,6 @@ namespace UI.Views
 				{
 					ViewManager.Instance.ShowNewView<SettingsView>();
 				});
-#if UNITY_ANDROID
-				int checkVoorUpdates = updateSystem.checkForUpdates();
-
-				if (checkVoorUpdates == 1)
-				{
-					IconNotification.gameObject.SetActive(true);
-				}
-				else
-#endif
-				{
-					IconNotification.gameObject.SetActive(false);
-				}
-
 
 				HomeButton.onClick.AddListener(() =>
 				{

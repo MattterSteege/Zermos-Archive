@@ -24,7 +24,7 @@ namespace UI.Views
 
         [SerializeField] private Button _AddHomeworkButton;
         [SerializeField] private Button _recenterButton;
-        
+
         private List<DateTime> _Dates = new List<DateTime>();
         private List<GameObject> _homeworkDateDividers = new List<GameObject>();
 
@@ -44,20 +44,13 @@ namespace UI.Views
 
             _AddHomeworkButton.onClick.AddListener(() => ViewManager.Instance.ShowNewView<AddHomeworkView>());
             _recenterButton.onClick.AddListener(() => Recenter());
-            ViewManager.onViewChanged += view =>
+            ViewManager.onInitializeComplete += ctx =>
             {
-                if (view != this) return;
                 float decelerationRate = _ScrollRect.decelerationRate;
                 _ScrollRect.decelerationRate = 0f;
                 _ScrollRect.content.DOLocalMove(_ScrollRect.GetSnapToPositionToBringChildIntoView(_rectTransformDefault), 0.1f, true).onComplete += () => _ScrollRect.decelerationRate = decelerationRate;
             };
 
-            foreach (Transform child in content.transform)
-            {
-                Destroy(child.gameObject);
-            }
-
-            //RefreshButton.onClick.AddListener(Initialize);
             List<Homework.Item> homework = homeworkObject.getHomework();
 
             if (homework == null)
@@ -114,30 +107,16 @@ namespace UI.Views
                         .homeworkInfo);
                 });
 
-                homeworkItem.GetComponent<HomeworkInfo>().gemaakt.onValueChanged.AddListener((bool isOn) =>
-                {
-                    if (HomeworkItem.gemaakt == false)
-                    {
-                        bool succesfull = UpdateGemaaktStatus(HomeworkItem, isOn);
-
-                        homeworkItem.GetComponent<HomeworkInfo>().gemaakt.SetIsOnWithoutNotify(succesfull);
-                    }
-                    else
-                    {
-                        _CustomHomework.SetCustomHomework(int.Parse(HomeworkItem.UUID), HomeworkItem.lesgroep.vak.naam,
-                            HomeworkItem.studiewijzerItem.omschrijving, HomeworkItem.datumTijd, isOn);
-                    }
-                });
-
-
                 day = HomeworkItem.datumTijd.Day;
             }
             
             int closestTimeIndex = _Dates.IndexOf(_Dates.OrderBy(t => Math.Abs((t - TimeManager.Instance.CurrentDateTime).Ticks)).First());
             _ScrollRect.content.position = _ScrollRect.GetSnapToPositionToBringChildIntoView(_rectTransformDefault = _homeworkDateDividers[closestTimeIndex].GetComponent<RectTransform>());
-
+            
             base.Initialize();
         }
+        
+        
 
         #region sorting
         [Flags]
@@ -154,7 +133,6 @@ namespace UI.Views
             gemaakt = 1,
             niet_gemaakt = 2,
         }
-        #endregion
 
         [SerializeField] private HomeworkTypes _HomeworkTypes;
         [SerializeField] private HomeworkStatus _HomeworkStatus;
@@ -187,68 +165,8 @@ namespace UI.Views
                 yield return null;
             }
         }
-
-        private bool UpdateGemaaktStatus(Homework.Item HomeworkItem, bool gemaakt)
-        {
-            SomtodayHoweworkStatus root = new SomtodayHoweworkStatus
-            {
-                leerling = new Leerling
-                {
-                    links = new List<Link>
-                    {
-                        new()
-                        {
-                            id = int.Parse(HomeworkItem.additionalObjects.leerlingen.items[0].links[0].id.ToString()),
-                            rel = "self",
-                            href =
-                                $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/leerlingen/{HomeworkItem.additionalObjects.leerlingen.items[0].links[0].id}"
-                        }
-                    }
-                },
-                gemaakt = gemaakt
-            };
-
-            try
-            {
-                //root to a json string
-                string json = JsonConvert.SerializeObject(root);
-
-                UnityWebRequest www =
-                    UnityWebRequest.Put(
-                        $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/swigemaakt/{HomeworkItem.additionalObjects.swigemaaktVinkjes.items[0].links[0].id}",
-                        json);
-
-                www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
-
-                www.SetRequestHeader("Accept", "application/json");
-                www.SetRequestHeader("Content-Type", "application/json");
-                www.SendWebRequest();
-
-                while (!www.isDone)
-                {
-                }
-
-                if (www.result == UnityWebRequest.Result.Success)
-                {
-                    if (www.downloadHandler.text.Contains("\"gemaakt\":true"))
-                    {
-                        www.Dispose();
-                        return true;
-                    }
-
-                    www.Dispose();
-                    return false;
-                }
-
-                www.Dispose();
-                return false;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
+        #endregion
+        
         private void Recenter()
         {
             float decelerationRate = _ScrollRect.decelerationRate;
@@ -285,6 +203,9 @@ namespace UI.Views
     {
         public static Vector2 GetSnapToPositionToBringChildIntoView(this ScrollRect instance, RectTransform child)
         {
+            if (child == null)
+                return Vector2.zero;
+            
             Canvas.ForceUpdateCanvases();
             Vector2 viewportLocalPosition = instance.viewport.localPosition;
             Vector2 childLocalPosition   = child.localPosition;

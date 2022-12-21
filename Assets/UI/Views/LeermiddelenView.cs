@@ -54,7 +54,7 @@ namespace UI.Views
 
             if (!File.Exists(destination))
             {
-                Debug.LogError("File not found");
+                Debug.LogWarning("File not found");
                 return null;
             }
 

@@ -27,7 +27,7 @@ public class AddLeermiddelenView : View
         
         save.onClick.AddListener(SaveHomework);
 
-        foreach (Vakken.Item vak in _vakken.getVakken().items)
+        foreach (Vakken.Item vak in _vakken.getVakken()?.items ?? new List<Vakken.Item>())
         {
             this.vak.AddOptions(new List<string>( new[] { vak.naam }));
         }

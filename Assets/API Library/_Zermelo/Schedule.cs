@@ -81,9 +81,8 @@ public class Schedule : BetterHttpClient
 
     private ZermeloSchedule GetSchedule(string date)
     {
-        if (string.IsNullOrEmpty(LocalPrefs.GetString("zermelo-user_code")))
-            GetComponent<User>().GetUser();
-
+        if (LocalPrefs.GetString("zermelo-school_code") == null || LocalPrefs.GetString("zermelo-access_token") == null || LocalPrefs.GetString("zermelo-user_code") == null)
+            return null;
 
         string baseURL = $"https://{LocalPrefs.GetString("zermelo-school_code")}.zportal.nl/api/v3/liveschedule" +
                          $"?access_token={LocalPrefs.GetString("zermelo-access_token")}" +
@@ -119,7 +118,7 @@ public class Schedule : BetterHttpClient
 
         if (!File.Exists(destination))
         {
-            Debug.LogError("File not found");
+            Debug.LogWarning("File not found");
             return null;
         }
 

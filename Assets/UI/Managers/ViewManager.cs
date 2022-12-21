@@ -39,7 +39,11 @@ public sealed class ViewManager : MonoBehaviour
 	private IEnumerator Start()
 	{
 		yield return new WaitForEndOfFrame();
-		if (autoInitialize) StartCoroutine(Initialize());
+
+		if (autoInitialize)
+		{
+			StartCoroutine(Initialize());
+		}
 	}
 
 	public delegate void OnIntializeComplete(bool done = false);
@@ -47,9 +51,6 @@ public sealed class ViewManager : MonoBehaviour
 	
 	public delegate void OnLoadedView(float loadingComplete = 0f, string viewName = "");
 	public static event OnLoadedView onLoadedView;
-	
-	public delegate void OnViewChanged(View view);
-	public static event OnViewChanged onViewChanged;
 
 	float viewsLoaded;
 	Stopwatch _timer;
@@ -58,9 +59,9 @@ public sealed class ViewManager : MonoBehaviour
 	public IEnumerator Initialize()
 	{
 		_timer = new Stopwatch();
-		_timer.Start();
 		foreach (View view in views)
 		{
+			_timer.Start();
 			if (view != null)
 			{
 				yield return new WaitForEndOfFrame();
@@ -68,11 +69,6 @@ public sealed class ViewManager : MonoBehaviour
 				try
 				{
 					view.Initialize();
-					#if UNITY_EDITOR || DEVELOPMENT_BUILD
-					Debug.Log(view.GetType ().Name + " at " + viewsLoaded.ToString("P0") + " - time passed: " + (float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
-					times.Add((float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
-					passedTime = _timer.ElapsedMilliseconds / 1000f;
-					#endif
 				}
 				catch (Exception e)
 				{
@@ -84,8 +80,13 @@ public sealed class ViewManager : MonoBehaviour
 			
 			viewsLoaded += 1f / views.Length;
 			onLoadedView?.Invoke(viewsLoaded, view.GetType().Name);
+			_timer.Stop();
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+			Debug.Log(view.GetType ().Name + " at " + viewsLoaded.ToString("P0") + " - time passed: " + (float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
+			times.Add((float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
+			passedTime = _timer.ElapsedMilliseconds / 1000f;
+#endif
 		}
-_timer.Stop();
 		if(string.IsNullOrEmpty(LocalPrefs.GetString("zermelo-access_token")))
 		{
 			Loginview.Show();
@@ -185,8 +186,7 @@ _timer.Stop();
 				rectTransform.DOLocalMove(new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime * 2f);
 				rectTransform.DOLocalRotate(new Vector3(0f, 0f, 0f), animationTime * 2f).WaitForCompletion();
 				Background.DOColor(view.GetComponent<Image>().color, animationTime * 2f);
-
-				onViewChanged?.Invoke(view);
+				
 				Invoke("HideLastView", animationTime * 2f);
 			}
 		}
