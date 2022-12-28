@@ -86,7 +86,7 @@ namespace UI.Views
 
             _dateText.text = extraDays.ToString("d MMMM");
         
-            appointments = _schedule.getScheduleOfDay(extraDays);
+            appointments = _schedule.GetScheduleOfDay(extraDays);
 
             if (appointments == null)
             {

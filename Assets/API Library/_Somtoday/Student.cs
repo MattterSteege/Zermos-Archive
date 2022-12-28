@@ -3,31 +3,27 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Student : MonoBehaviour
+public class Student : BetterHttpClient
 {
-    public SomtodayStudent getStudent(string accessToken = "")
+    public SomtodayStudent getStudent()
     {
-        if (accessToken == "")
+        if (LocalPrefs.GetString("somtoday-access_token") == null)
+            return null;
+
+        Dictionary<string, string> headers = new Dictionary<string,string>();
+        headers.Add("Authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
+        return (SomtodayStudent)Get("https://api.somtoday.nl/rest/v1/leerlingen", headers, (response) =>
         {
-            accessToken = LocalPrefs.GetString("somtoday-access_token");
-        }
+
+            SomtodayStudent student = JsonConvert.DeserializeObject<SomtodayStudent>(response.downloadHandler.text);
         
-        UnityWebRequest www = UnityWebRequest.Get("https://api.somtoday.nl/rest/v1/leerlingen");
-        www.SetRequestHeader("Authorization", "Bearer " + accessToken);
-        www.SetRequestHeader("Accept", "application/json");
-        
-        www.SendWebRequest();
-        
-        while (!www.isDone) { }
-        
-        SomtodayStudent student = JsonConvert.DeserializeObject<SomtodayStudent>(www.downloadHandler.text);
-        
-        if (student != null)
-        {
-            LocalPrefs.SetString("somtoday-student_id", student.items[0].links[0].id.ToString());
-            return student;
-        }
-        return null;
+            if (student != null)
+            {
+                LocalPrefs.SetString("somtoday-student_id", student.items[0].links[0].id.ToString());
+                return student;
+            }
+            return null;        
+        });
     }
     
     #region models

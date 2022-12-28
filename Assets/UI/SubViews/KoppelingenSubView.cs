@@ -39,6 +39,14 @@ namespace UI.Views
             base.Initialize();
         }
 
+        public override void Refresh(object args)
+        {
+            SomtodayKoppeling.onClick.RemoveAllListeners();
+            ZermeloKoppeling.onClick.RemoveAllListeners();
+            InfowijsKoppeling.onClick.RemoveAllListeners();
+            base.Refresh(args);
+        }
+
         private void CheckKoppelingen()
         {
             bool SomtodayIslinked = LocalPrefs.GetString("somtoday-access_token") != null;

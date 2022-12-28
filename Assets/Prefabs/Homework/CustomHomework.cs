@@ -139,7 +139,7 @@ public class CustomHomework : MonoBehaviour
 
         if(!File.Exists(destination))
         {
-            Debug.LogError("File not found");
+            Debug.LogWarning("File not found");
             return "";
         }
 

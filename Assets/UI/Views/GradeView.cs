@@ -51,7 +51,7 @@ namespace UI.Views
                     grade.geldendResultaat ?? "-");
             }
             
-            foreach (Vakken.Item Vak in vakkenObject.getVakken().items)
+            foreach (Vakken.Item Vak in vakkenObject.getVakken()?.items ?? new List<Vakken.Item>())
             {
                 // foreach (var grade in grades.items.Where(x => x.vak.naam == Vakken.naam))
                 // {

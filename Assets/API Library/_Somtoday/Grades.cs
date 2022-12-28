@@ -1,82 +1,134 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Grades : MonoBehaviour
+public class Grades : BetterHttpClient
 {
-    [SerializeField] private AuthenticateSomtoday authentication;
+    [SerializeField, Tooltip("'*' means Application.persistentDataPath.")]
+    private string savePath = "*/Grades.json";
 
     [ContextMenu("get Grades")]
-    public SomtodayGrades getGrades()
+    public SomtodayGrades getGrades(bool savedIsGood = true)
     {
+        if (savedIsGood)
+        {
+            var savedGrades = getSavedGrades();
+            if (savedGrades != null)
+            {
+                return savedGrades;
+            }
+        }
+        
         if (string.IsNullOrEmpty(LocalPrefs.GetString("somtoday-access_token"))) return null;
 
-        string json = "";
-        
-        int rangemin = 0;
-        int rangemax = 99;
-        
-        string baseurl = string.Format($"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/resultaten/huidigVoorLeerling/{LocalPrefs.GetString("somtoday-student_id")}?begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01");
+        string json;
 
-        UnityWebRequest www = UnityWebRequest.Get(baseurl);
-        www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
-        www.SetRequestHeader("Accept", "application/json");
-        www.SetRequestHeader("Range", $"items={rangemin}-{rangemax}");
-        www.SendWebRequest();
+        string baseUrl =
+            $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/resultaten/huidigVoorLeerling/{LocalPrefs.GetString("somtoday-student_id")}?begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01";
 
-        while (!www.isDone)
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+        headers.Add("Authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
+        headers.Add("Range", "items=0-99");
+
+        return (SomtodayGrades) Get(baseUrl, headers, (response) =>
         {
-        }
-        
-        json = www.downloadHandler.text;
-        
-        var header = www.GetResponseHeader("Content-Range");
-        var total = int.Parse(header.Split('/')[1]);
+            json = response.downloadHandler.text;
 
-        while (rangemax < total)
-        {
-            rangemin += 100;
-            rangemax += 100;
-            baseurl = string.Format($"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/resultaten/huidigVoorLeerling/{LocalPrefs.GetString("somtoday-student_id")}?begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01");
+            int total = int.Parse(response.GetResponseHeader("Content-Range").Split('/')[1]);
 
-            www = UnityWebRequest.Get(baseurl);
-            www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
-            www.SetRequestHeader("Accept", "application/json");
-            www.SetRequestHeader("Range", $"items={rangemin}-{rangemax}");
-            www.SendWebRequest();
+            int requests = Mathf.CeilToInt(total / 100f) * 100 - 1;
 
-            while (!www.isDone)
+            for (int i = 100; i < requests; i += 100)
             {
+                Dictionary<string, string> headers = new Dictionary<string, string>();
+                headers.Add("Authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
+                headers.Add("Range", $"items={i}-{i + 99}");
+
+                Get(baseUrl, headers, (response) =>
+                {
+                    json += response.downloadHandler.text;
+                    return null;
+                });
             }
             
-            json += www.downloadHandler.text;
+            var sortedGrades = Sort(JsonConvert.DeserializeObject<SomtodayGrades>(json));
+            SaveGrades(sortedGrades);
+            return sortedGrades;
+        });
+    }
+
+    private int i = 0;
+    private SomtodayGrades getSavedGrades()
+    {
+        string destination = savePath.Replace("*", Application.persistentDataPath);
+
+        if (!File.Exists(destination))
+        {
+            Debug.LogWarning("File not found, creating new file.");
+            getGrades(false);
+            return null;
         }
-        
-        return Sort(JsonConvert.DeserializeObject<SomtodayGrades>(www.downloadHandler.text));
+
+        using (StreamReader r = new StreamReader(destination))
+        {
+            string json = r.ReadToEnd();
+            var GradesObject = JsonConvert.DeserializeObject<SomtodayGrades>(json);
+            if (GradesObject?.laatsteWijziging.ToDateTime().AddMinutes(10) < TimeManager.Instance.CurrentDateTime && i < 3)
+            {
+                r.Close();
+                Debug.LogWarning("Local file is outdated, downloading new file.");
+                var upToDateGrades = getGrades(false);
+                getSavedGrades();
+                i++;
+                return upToDateGrades;
+            }
+            return GradesObject;
+        }
+    }
+
+    private void SaveGrades(SomtodayGrades grades)
+    {
+        if (grades.items.Count != 0)
+        {
+            var convertedJson = JsonConvert.SerializeObject(
+                new SomtodayGrades()
+                {
+                    items = grades.items,
+                    laatsteWijziging = TimeManager.Instance.CurrentDateTime.ToUnixTime()
+                }, 
+                Formatting.Indented);
+
+            string destination = savePath.Replace("*", Application.persistentDataPath);
+
+            File.WriteAllText(destination, "//In dit bestand staan alle cijfers die je hebt gehaald.\r\n");
+            File.AppendAllText(destination, convertedJson);
+        }
     }
 
     public SomtodayGrades Sort(SomtodayGrades grades)
     {
         grades.items = grades.items.OrderBy(x => x.datumInvoer).ToList();
         grades.items.RemoveAll(x => x.geldendResultaat == null);
-        grades.items.RemoveAll(x=> string.IsNullOrEmpty(x.omschrijving) && x.weging == 0);
+        grades.items.RemoveAll(x => string.IsNullOrEmpty(x.omschrijving) && x.weging == 0);
         return grades;
     }
-    
+
 
     #region model
+
     public class SomtodayGrades
     {
+        public int laatsteWijziging { get; set; }
         public List<Item> items { get; set; }
     }
-    
+
     public class Item
     {
-        [JsonProperty("$type")]
-        public string Type { get; set; }
+        [JsonProperty("$type")] public string Type { get; set; }
         public List<Link> links { get; set; }
         public List<Permission> permissions { get; set; }
         public string herkansingstype { get; set; }
@@ -122,5 +174,6 @@ public class Grades : MonoBehaviour
         public string afkorting { get; set; }
         public string naam { get; set; }
     }
+
     #endregion
 }

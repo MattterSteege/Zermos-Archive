@@ -24,18 +24,15 @@ public class Vakken : BetterHttpClient
         SomtodayVakken vakSom;
         //somtoday -- end\
         
-        WWWForm form = new WWWForm();
-        form.headers.Add("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
-
-        Get("https://api.somtoday.nl/rest/v1/vakken", form, (response) =>
+        Dictionary<string, string> headers = new Dictionary<string,string>();
+        headers.Add("Authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
+        Get("https://api.somtoday.nl/rest/v1/vakken", headers, (response) =>
         {
             vakSom = JsonConvert.DeserializeObject<SomtodayVakken>(response.downloadHandler.text);
             
-            WWWForm form = new WWWForm();
-            form.headers["Authorization"] = "Bearer " + LocalPrefs.GetString("zermelo-access_token");
-            
-            
-            Get($"https://ccg.zportal.nl/api/v3/courses?year={TimeManager.Instance.DateTime.Year}", form, (response) =>
+            Dictionary<string, string> headers = new Dictionary<string,string>();
+            headers.Add("Authorization", "Bearer " + LocalPrefs.GetString("zermelo-access_token"));
+            Get($"https://ccg.zportal.nl/api/v3/courses?year={TimeManager.Instance.DateTime.Year}", headers, (response) =>
             {
                 ZermeloVakken vakZer = JsonConvert.DeserializeObject<ZermeloVakken>(response.downloadHandler.text);
                 
@@ -72,7 +69,7 @@ public class Vakken : BetterHttpClient
             },
             (error) =>
             {
-                Debug.LogError(error);
+                Debug.LogWarning(error.error);
                 return null;
             });
             
@@ -80,7 +77,7 @@ public class Vakken : BetterHttpClient
         },
         (error) =>
         {
-            Debug.LogError(error);
+            Debug.LogWarning(error.error);
             return null;
         });
     }

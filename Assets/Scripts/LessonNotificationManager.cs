@@ -46,7 +46,7 @@ public class LessonNotificationManager : MonoBehaviour
 
         try
         {
-            _appointments = schedule.getScheduleOfDay(TimeManager.Instance.DateTime);
+            _appointments = schedule.GetScheduleOfDay(TimeManager.Instance.DateTime);
         }
         catch (Exception)
         {

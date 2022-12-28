@@ -31,7 +31,7 @@ namespace UI.Views
 			}
 			else
 			{
-				if (!string.IsNullOrEmpty(LocalPrefs.GetString("somtoday-access_token")) && int.Parse(LocalPrefs.GetString("somtoday-access_token_expires_in", "0")).ToDateTime() > TimeManager.Instance.CurrentDateTime)
+				if (!string.IsNullOrEmpty(LocalPrefs.GetString("somtoday-access_token")))
 				{
 					CijfersButton.gameObject.SetActive(true);
 					HomeworkButton.gameObject.SetActive(true);
@@ -80,7 +80,7 @@ namespace UI.Views
 					ViewManager.Instance.ShowNewView<NewsAndInformationView>();
 				});
 				
-				if (!string.IsNullOrEmpty(LocalPrefs.GetString("infowijs-access_token")) && int.Parse(LocalPrefs.GetString("infowijs-access_token_expires_in", "0")).ToDateTime() > TimeManager.Instance.CurrentDateTime)
+				if (!string.IsNullOrEmpty(LocalPrefs.GetString("infowijs-access_token")))
 				{
 					SchoolNieuwsButton.gameObject.SetActive(true);
 					SchoolNieuwsButton.onClick.AddListener(() =>
@@ -108,6 +108,11 @@ namespace UI.Views
 			HomeButton.onClick.RemoveAllListeners();
 			SchoolNieuwsButton.onClick.RemoveAllListeners();
 			base.Refresh(args);
+		}
+
+		public override void Hide()
+		{
+			//do nothing when hide is called on this view
 		}
 	}
 }

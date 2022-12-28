@@ -68,6 +68,7 @@ namespace UI.Views
                 ViewManager.Instance.Refresh<NavBarView>();
             });
 
+            
 #if UNITY_ANDROID
             SendNotifButton.onClick.AddListener(() =>
             {
@@ -77,6 +78,8 @@ namespace UI.Views
 
             output.text = "Log:\n\n";
             Application.logMessageReceived += HandleLog;
+            
+            base.Initialize();
         }
 
         public override void Refresh(object args)

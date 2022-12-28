@@ -52,13 +52,13 @@ namespace UI.Views
         {
             while (b)
             {
-                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Loading...";
+                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Laden...";
                 yield return new WaitForSeconds(0.5f);
-                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Loading.";
+                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Laden.";
                 yield return new WaitForSeconds(0.5f);
-                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Loading..";
+                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Laden..";
                 yield return new WaitForSeconds(0.5f);
-                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Loading...";
+                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Laden...";
                 yield return new WaitForSeconds(0.5f);
             }
         }

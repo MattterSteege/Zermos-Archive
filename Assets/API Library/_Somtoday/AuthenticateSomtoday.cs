@@ -27,7 +27,8 @@ public class AuthenticateSomtoday : BetterHttpClient
 
     public void Awake()
     {
-        RefreshToken();
+        if (!new CheckTokenExpirationDate().CheckToken(LocalPrefs.GetString("somtoday-access_token")))
+            RefreshToken();
     }
 
     #region authenticate user

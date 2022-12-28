@@ -91,7 +91,7 @@ namespace UI.Views
             {
                 appointments = new List<Schedule.Appointment>();
             
-                appointments = _schedule.getScheduleOfDay(TimeManager.Instance.DateTime.StartOfWeek(DayOfWeek.Monday).AddDays(x + addedDays));
+                appointments = _schedule.GetScheduleOfDay(TimeManager.Instance.DateTime.StartOfWeek(DayOfWeek.Monday).AddDays(x + addedDays));
 
                 if (appointments == null)
                 {

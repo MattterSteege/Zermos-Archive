@@ -166,7 +166,13 @@ namespace UI.Views
             }
         }
         #endregion
-        
+
+        public override void Refresh(object args)
+        {
+            _ScrollRect.content.DOLocalMove(new Vector3(0f, 0f, 0f), 0.1f, true);
+            base.Refresh(args);
+        }
+
         private void Recenter()
         {
             float decelerationRate = _ScrollRect.decelerationRate;
