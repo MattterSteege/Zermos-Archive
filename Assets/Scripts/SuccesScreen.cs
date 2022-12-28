@@ -69,8 +69,8 @@ public class SuccesScreen : MonoBehaviour
                 ViewManager.Instance.Refresh<GradeView>();
                 break;
             case LoginType.zermelo:
-                ViewManager.Instance.Refresh<DagRoosterView>();
-                ViewManager.Instance.Refresh<WeekRoosterView>();
+                ViewManager.Instance.Refresh<DagRoosterView>(false);
+                ViewManager.Instance.Refresh<WeekRoosterView>(false);
                 break;
         }
     }

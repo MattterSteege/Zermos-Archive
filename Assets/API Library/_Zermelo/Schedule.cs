@@ -12,11 +12,11 @@ public class Schedule : BetterHttpClient
     [SerializeField, Tooltip("'*' means Application.persistentDataPath.")]
     private string savePath = "*/Lessons.json";
 
-    public List<Appointment> GetScheduleOfDay(DateTime date)
+    public List<Appointment> GetScheduleOfDay(DateTime date, bool shouldRefreshFile)
     {
         int weeknumber = GetweeknumberFromDate(date);
 
-        Items schedule = GetSchedule(weeknumber.ToString(), date.Year.ToString());
+        Items schedule = GetSchedule(weeknumber.ToString(), date.Year.ToString(), shouldRefreshFile);
 
         if (schedule == null)
         {
@@ -43,31 +43,28 @@ public class Schedule : BetterHttpClient
     }
 
     
-    int i = 0;
-    public Items GetSchedule(string week, string year)
+    int tries = 0;
+    public Items GetSchedule(string week, string year, bool ShouldRefreshFile)
     {
         string destination = savePath.Replace("*", Application.persistentDataPath);
 
         if (!File.Exists(destination))
         {
             Debug.LogWarning("File not found, creating new file.");
-            DownloadLessons(week, year);
-            return null;
+            return DownloadLessons(week, year)?.response.data[0] ?? new Items{appointments = new List<Appointment>()};
         }
 
         using (StreamReader r = new StreamReader(destination))
         {
             string json = r.ReadToEnd();
-            var vakkenObject = JsonConvert.DeserializeObject<Items>(json);
-            if (vakkenObject?.laatsteWijziging.ToDateTime().AddDays(5) < TimeManager.Instance.CurrentDateTime && i < 3)
+            var scheduleObject = JsonConvert.DeserializeObject<Items>(json);
+            if ((scheduleObject?.laatsteWijziging.ToDateTime().AddMinutes(10) < TimeManager.Instance.CurrentDateTime && tries < 2) || (ShouldRefreshFile && scheduleObject?.laatsteWijziging.ToDateTime().AddSeconds(15) < TimeManager.Instance.CurrentDateTime && tries < 2))
             {
                 r.Close();
                 Debug.LogWarning("Local file is outdated, downloading new file.");
-                DownloadLessons(week, year);
-                GetSchedule(week, year);
-                i++;
+                return DownloadLessons(week, year)?.response.data[0] ?? new Items{appointments = new List<Appointment>()};
             }
-            return vakkenObject;
+            return scheduleObject;
         }
     }
 

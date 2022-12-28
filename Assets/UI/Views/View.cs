@@ -12,7 +12,7 @@ namespace UI.Views
 
 		[Header("Own component fields"), HideInInspector] public bool isInitialized;
 		[HideInInspector] public bool isVisible;
-		private object _args;
+		public object args;
 	
 		public virtual void Initialize()
 		{
@@ -21,13 +21,13 @@ namespace UI.Views
 		
 		public virtual void Refresh(object args)
 		{
-			this._args = args;
+			this.args = args;
 			Initialize();
 		}
 
 		public virtual void Show(object args = null)
 		{
-			this._args = args;
+			this.args = args;
 			gameObject.SetActive(true);
 			isVisible = true;
 		}

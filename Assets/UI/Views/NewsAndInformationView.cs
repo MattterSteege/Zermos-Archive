@@ -61,7 +61,7 @@ namespace UI.Views
             }
             else
             {
-                appointments = zermeloSchedule.GetScheduleOfDay(TimeManager.Instance.DateTime);
+                appointments = zermeloSchedule.GetScheduleOfDay(TimeManager.Instance.DateTime, false);
             }
 
             if (appointments == null || appointments.Count == 0) return;

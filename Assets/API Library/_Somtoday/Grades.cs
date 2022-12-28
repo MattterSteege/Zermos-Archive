@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -60,34 +61,31 @@ public class Grades : BetterHttpClient
             return sortedGrades;
         });
     }
-
-    private int i = 0;
+    
     private SomtodayGrades getSavedGrades()
     {
-        string destination = savePath.Replace("*", Application.persistentDataPath);
-
-        if (!File.Exists(destination))
-        {
-            Debug.LogWarning("File not found, creating new file.");
-            getGrades(false);
-            return null;
-        }
-
-        using (StreamReader r = new StreamReader(destination))
-        {
-            string json = r.ReadToEnd();
-            var GradesObject = JsonConvert.DeserializeObject<SomtodayGrades>(json);
-            if (GradesObject?.laatsteWijziging.ToDateTime().AddMinutes(10) < TimeManager.Instance.CurrentDateTime && i < 3)
-            {
-                r.Close();
-                Debug.LogWarning("Local file is outdated, downloading new file.");
-                var upToDateGrades = getGrades(false);
-                getSavedGrades();
-                i++;
-                return upToDateGrades;
-            }
-            return GradesObject;
-        }
+        // string destination = savePath.Replace("*", Application.persistentDataPath);
+        //
+        // if (!File.Exists(destination))
+        // {
+        //     Debug.LogWarning("File not found, creating new file.");
+        //     return getGrades(false);
+        // }
+        //
+        // using (StreamReader r = new StreamReader(destination))
+        // {
+        //     string json = r.ReadToEnd();
+        //     SomtodayGrades gradesObject = JObject.Parse(json).ToObject<SomtodayGrades>();
+        //     if (gradesObject?.laatsteWijziging.ToDateTime().AddMinutes(10) < TimeManager.Instance.CurrentDateTime)
+        //     {
+        //         r.Close();
+        //         Debug.LogWarning("Local file is outdated, downloading new file.");
+        //         return getGrades(false);
+        //     }
+        //     return gradesObject;
+        // }
+        
+        return getGrades(false);
     }
 
     private void SaveGrades(SomtodayGrades grades)
@@ -97,14 +95,14 @@ public class Grades : BetterHttpClient
             var convertedJson = JsonConvert.SerializeObject(
                 new SomtodayGrades()
                 {
-                    items = grades.items,
+                    items = grades.items.OrderBy(x => x.datumInvoer).ToList(),
                     laatsteWijziging = TimeManager.Instance.CurrentDateTime.ToUnixTime()
                 }, 
                 Formatting.Indented);
 
             string destination = savePath.Replace("*", Application.persistentDataPath);
 
-            File.WriteAllText(destination, "//In dit bestand staan alle cijfers die je hebt gehaald.\r\n");
+            File.WriteAllText(destination, "//In dit bestand staan alle cijfers die je dit jaar hebt gehaald.\r\n");
             File.AppendAllText(destination, convertedJson);
         }
     }

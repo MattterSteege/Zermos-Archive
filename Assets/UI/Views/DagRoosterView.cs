@@ -31,51 +31,43 @@ namespace UI.Views
 
         public override void Initialize()
         {
-            openNavigationButton.onClick.RemoveAllListeners();
+            if (args == null) args = false;
+            
             openNavigationButton.onClick.AddListener(() =>
             {
                 openNavigationButton.enabled = false;
                 ViewManager.Instance.ShowNavigation();
             });
-        
-            closeButtonWholePage.onClick.RemoveAllListeners();
+            
             closeButtonWholePage.onClick.AddListener(() =>
             {
                 openNavigationButton.enabled = true;
                 ViewManager.Instance.HideNavigation();
             });
-        
-            RefreshButton.onClick.RemoveAllListeners();
-            RefreshButton.onClick.AddListener(Initialize);
             
-            WeekRoosterButton.onClick.RemoveAllListeners();
+            RefreshButton.onClick.AddListener(() => Refresh(true));
+            
             WeekRoosterButton.onClick.AddListener(() =>
             {
                 ViewManager.Instance.ShowNewView<WeekRoosterView>();
             
             });
-        
-            nextDayButton.onClick.RemoveAllListeners(); 
+            
             nextDayButton.onClick.AddListener(() =>
             {
                 addedDays++;
-                Initialize();
+                Refresh(false);
             });
             
-            previousDayButton.onClick.RemoveAllListeners(); 
             previousDayButton.onClick.AddListener(() => 
             { 
                 addedDays--;
-                Initialize(); 
+                Refresh(false);
             });
-
+            
             foreach (Transform child in content.transform)
             {
                 Destroy(child.gameObject);
-                NoLessonHours.Clear();
-                NoLessonHours = new List<int>();
-                appointments.Clear();
-                RoosterItems.Clear();
             }
 
             NoLessonHours = new List<int>();
@@ -85,16 +77,13 @@ namespace UI.Views
             DateTime extraDays = TimeManager.Instance.DateTime.AddDays(addedDays);
 
             _dateText.text = extraDays.ToString("d MMMM");
-        
-            appointments = _schedule.GetScheduleOfDay(extraDays);
+            
+            appointments = _schedule.GetScheduleOfDay(extraDays, (bool) args);
 
             if (appointments == null)
-            {
-                base.Initialize();
-                return;
-            }
-
-            int lastlesson = 0;
+                appointments = new List<Schedule.Appointment>();
+            
+            
             for (int i = 1, listIndex = 0; i < maxNumberOfLessons + 1; i++)
             {
                 NoLessonHours.Add(i);
@@ -163,8 +152,6 @@ namespace UI.Views
                         listIndex++;
                     }
                 }
-            
-                lastlesson = i;
 
                 foreach (Transform child in content.transform)
                 {
@@ -185,6 +172,7 @@ namespace UI.Views
             }
         }
 
+
         [ContextMenu("Show Tussenuren")]
         public void showTussenUren()
         {
@@ -202,52 +190,16 @@ namespace UI.Views
                 RoosterItems[NoLessonHours[i] - 1].SetActive(false);
             }
         }
-
-        string consecutiveNumbersToString(int[] numbers)
+        
+        public override void Refresh(object args)
         {
-            string result = "";
-            int start = 0;
-            int end = 0;
-            for (int i = 0; i < numbers.Length; i++)
-            {
-                if (i == 0)
-                {
-                    start = numbers[i];
-                    end = numbers[i];
-                }
-                else
-                {
-                    if (numbers[i] == end + 1)
-                    {
-                        end = numbers[i];
-                    }
-                    else
-                    {
-                        if (start == end)
-                        {
-                            result += start + ", ";
-                        }
-                        else
-                        {
-                            result += start + "-" + end + ", ";
-                        }
-
-                        start = numbers[i];
-                        end = numbers[i];
-                    }
-                }
-            }
-
-            if (start == end)
-            {
-                result += start;
-            }
-            else
-            {
-                result += start + "-" + end;
-            }
-
-            return result;
+            openNavigationButton.onClick.RemoveAllListeners();
+            closeButtonWholePage.onClick.RemoveAllListeners();
+            RefreshButton.onClick.RemoveAllListeners();
+            WeekRoosterButton.onClick.RemoveAllListeners();
+            nextDayButton.onClick.RemoveAllListeners(); 
+            previousDayButton.onClick.RemoveAllListeners(); 
+            base.Refresh(args);
         }
     }
 }

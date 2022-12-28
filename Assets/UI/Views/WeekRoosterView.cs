@@ -31,42 +31,38 @@ namespace UI.Views
     
         public override void Initialize()
         {
-            openNavigationButton.onClick.RemoveAllListeners();
+            if (args == null) args = false;
+            
             openNavigationButton.onClick.AddListener(() =>
             {
                 openNavigationButton.enabled = false;
                 ViewManager.Instance.ShowNavigation();
             });
-        
-            closeButtonWholePage.onClick.RemoveAllListeners();
+
             closeButtonWholePage.onClick.AddListener(() =>
             {
                 openNavigationButton.enabled = true;
                 ViewManager.Instance.HideNavigation();
             });
-        
-            RefreshButton.onClick.RemoveAllListeners();
-            RefreshButton.onClick.AddListener(Initialize);
 
-            DagRoosterButton.onClick.RemoveAllListeners();
+            RefreshButton.onClick.AddListener(() => Refresh(false));
+
             DagRoosterButton.onClick.AddListener(() =>
             {
                 ViewManager.Instance.ShowNewView<DagRoosterView>();
             });
         
-            
-            nextDayButton.onClick.RemoveAllListeners(); 
+
             nextDayButton.onClick.AddListener(() =>
             {
                 addedDays += 7;
-                Initialize();
+                Refresh(true);
             });
-            
-            previousDayButton.onClick.RemoveAllListeners(); 
+
             previousDayButton.onClick.AddListener(() => 
             { 
                 addedDays -= 7;
-                Initialize(); 
+                Refresh(true);
             });
 
             for (int i = 0; i < dagenVanDeWeek.Length; i++)
@@ -91,7 +87,7 @@ namespace UI.Views
             {
                 appointments = new List<Schedule.Appointment>();
             
-                appointments = _schedule.GetScheduleOfDay(TimeManager.Instance.DateTime.StartOfWeek(DayOfWeek.Monday).AddDays(x + addedDays));
+                appointments = _schedule.GetScheduleOfDay(TimeManager.Instance.DateTime.StartOfWeek(DayOfWeek.Monday).AddDays(x + addedDays), (bool)args);
 
                 if (appointments == null)
                 {
@@ -230,6 +226,17 @@ namespace UI.Views
                     x++;
                 }
             }
+        }
+
+        public override void Refresh(object args)
+        {
+            openNavigationButton.onClick.RemoveAllListeners();
+            closeButtonWholePage.onClick.RemoveAllListeners();
+            RefreshButton.onClick.RemoveAllListeners();
+            DagRoosterButton.onClick.RemoveAllListeners();
+            nextDayButton.onClick.RemoveAllListeners();
+            previousDayButton.onClick.RemoveAllListeners(); 
+            base.Refresh(args);
         }
     }
 
