@@ -51,17 +51,8 @@ namespace UI.Views
                     grade.geldendResultaat ?? "-");
             }
             
-            foreach (Vakken.Item Vak in vakkenObject.getVakken()?.items ?? new List<Vakken.Item>())
+            foreach (Vakken.Item Vak in vakkenObject.getVakken().items ?? new List<Vakken.Item>())
             {
-                // foreach (var grade in grades.items.Where(x => x.vak.naam == Vakken.naam))
-                // {
-                //     var gradeView = Instantiate(gradePrefab, content.transform);
-                //     gradeView.GetComponent<GradeInfo>().SetGradeInfo(grade.vak.naam ?? "",
-                //         grade.datumInvoer.ToString("d MMMM"), /*grade.omschrijving*/ "", grade.weging + "x",
-                //         grade.geldendResultaat ?? "-");
-                //
-                // }
-
                 List<Grades.Item> GradesPerVak = grades.items.Where(x => x.vak.naam == Vak.naam).ToList();
                 
                 if (GradesPerVak.Count > 0)

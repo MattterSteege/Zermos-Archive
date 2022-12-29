@@ -77,23 +77,25 @@ public class Schedule : BetterHttpClient
         ZermeloSchedule schedule = new ZermeloSchedule {response = new Response {data = new List<Items> {new() {appointments = new List<Appointment>()}}}};
         for (int i = 0; i < weeksSaved; i++)
         {
+            string date = $"{year}-{week}";
+            
             //check if week plus i is bigger than 52, if so, add 1 to year
             int weeknumber = int.Parse(week) + i;
             if (weeknumber > 52)
             {
                 weeknumber -= 52;
-                year = (int.Parse(year) + 1).ToString();
+                date = (int.Parse(year) + 1).ToString() + (weeknumber.ToString().ToCharArray().Length == 1 ? "0" + weeknumber : weeknumber.ToString());
+            }
+            else
+            {
+                date = year + (weeknumber.ToString().ToCharArray().Length == 1 ? "0" + weeknumber : weeknumber.ToString());
             }
             
-            if (weeknumber.ToString().ToCharArray().Length == 1)
-                week = "0" + weeknumber;
-
             string baseURL = $"https://ccg.zportal.nl/api/v3/liveschedule" +
                              $"?access_token={LocalPrefs.GetString("zermelo-access_token")}" +
                              $"&student={LocalPrefs.GetString("zermelo-user_code")}" +
-                             $"&week={year + week}";
-
-
+                             $"&week={date}";
+            
             var scheduleResponse = (ZermeloSchedule) Get(baseURL, callback => JsonConvert.DeserializeObject<ZermeloSchedule>(callback.downloadHandler.text));
 
             if (scheduleResponse != null)

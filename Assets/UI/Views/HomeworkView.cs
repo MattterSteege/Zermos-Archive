@@ -98,8 +98,7 @@ namespace UI.Views
                     vak = "error";
                 }
 
-                homeworkItem.GetComponent<HomeworkInfo>().SetHomeworkInfo(vak, onderwerp,
-                    HomeworkItem.additionalObjects.swigemaaktVinkjes?.items[0].gemaakt ?? false, HomeworkItem);
+                homeworkItem.GetComponent<HomeworkInfo>().SetHomeworkInfo(vak, onderwerp, HomeworkItem.additionalObjects.swigemaaktVinkjes?.items[0].gemaakt ?? false, HomeworkItem);
 
                 homeworkItem.GetComponent<Button>().onClick.AddListener(() =>
                 {
@@ -107,6 +106,11 @@ namespace UI.Views
                         .homeworkInfo);
                 });
 
+                homeworkItem.GetComponent<HomeworkInfo>().gemaakt.onValueChanged.AddListener((isOn) =>
+                {
+                    UpdateGemaaktStatus((long) HomeworkItem.links[0].id, isOn);
+                });
+                
                 day = HomeworkItem.datumTijd.Day;
             }
             
@@ -180,6 +184,57 @@ namespace UI.Views
             _ScrollRect.content.DOLocalMove(_ScrollRect.GetSnapToPositionToBringChildIntoView(_rectTransformDefault), 0.5f, true).onComplete += () => _ScrollRect.decelerationRate = decelerationRate;
         }
         
+        private bool UpdateGemaaktStatus(long huiswerkId, bool gemaakt)
+        {
+            SomtodayHoweworkStatus root = new SomtodayHoweworkStatus
+            {
+                leerling = new Leerling
+                {
+                    links = new List<Link>
+                    {
+                        new()
+                        {
+                            id = int.Parse(LocalPrefs.GetString("somtoday-student_id")),
+                            rel = "self",
+                            href = $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/leerlingen/{LocalPrefs.GetString("somtoday-student_id")}"
+                        }
+                    }
+                },
+                swiToekenningId = huiswerkId,
+				gemaakt = gemaakt
+            };
+
+            //root to a json string
+            string json = JsonConvert.SerializeObject(root);
+
+            UnityWebRequest www = UnityWebRequest.Put($"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/swigemaakt/cou", json);
+
+            www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
+
+            www.SetRequestHeader("Accept", "application/json");
+            www.SetRequestHeader("Content-Type", "application/json");
+            www.SendWebRequest();
+
+            while (!www.isDone)
+            {
+            }
+
+            if (www.result == UnityWebRequest.Result.Success)
+            {
+                if (www.downloadHandler.text.Contains("\"gemaakt\":true"))
+                {
+                    www.Dispose();
+                    return true;
+                }
+
+                www.Dispose();
+                return false;
+            }
+
+            www.Dispose();
+            return false;
+        }
+        
         #region model
 
         public class Leerling
@@ -198,6 +253,7 @@ namespace UI.Views
         public class SomtodayHoweworkStatus
         {
             public Leerling leerling { get; set; }
+            public long swiToekenningId { get; set; }
             public bool gemaakt { get; set; }
         }
 

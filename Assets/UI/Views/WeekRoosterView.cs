@@ -32,6 +32,7 @@ namespace UI.Views
         public override void Initialize()
         {
             if (args == null) args = false;
+            if (LocalPrefs.GetString("zermelo-access_token") == null) return;
             
             openNavigationButton.onClick.AddListener(() =>
             {
@@ -52,17 +53,18 @@ namespace UI.Views
                 ViewManager.Instance.ShowNewView<DagRoosterView>();
             });
         
-
+            nextDayButton.onClick.RemoveAllListeners();
             nextDayButton.onClick.AddListener(() =>
             {
                 addedDays += 7;
-                Refresh(true);
+                Refresh(false);
             });
 
+            previousDayButton.onClick.RemoveAllListeners();
             previousDayButton.onClick.AddListener(() => 
             { 
                 addedDays -= 7;
-                Refresh(true);
+                Refresh(false);
             });
 
             for (int i = 0; i < dagenVanDeWeek.Length; i++)
@@ -90,12 +92,8 @@ namespace UI.Views
                 appointments = _schedule.GetScheduleOfDay(TimeManager.Instance.DateTime.StartOfWeek(DayOfWeek.Monday).AddDays(x + addedDays), (bool)args);
 
                 if (appointments == null)
-                {
-                    base.Initialize();
-                    return;
-                }
-
-                int lastlesson = 0;
+                    appointments = new List<Schedule.Appointment>();
+                
                 for (int i = 1, listIndex = 0; i < maxNumberOfLessons + 1; i++)
                 {
                     if ((!(listIndex >= appointments.Count) && appointments[listIndex]?.appointmentType == "lesson" &&
@@ -166,8 +164,6 @@ namespace UI.Views
                             listIndex++;
                         }
                     }
-
-                    lastlesson = i;
 
                     foreach (Transform child in dagenVanDeWeek[x].transform)
                     {

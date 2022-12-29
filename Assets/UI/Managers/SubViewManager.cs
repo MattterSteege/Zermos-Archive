@@ -49,8 +49,10 @@ public sealed class SubViewManager : MonoBehaviour
 				try
 				{
 					view.Initialize();
-					Debug.Log (view.GetType ().Name + " at " + viewsLoaded.ToString("P0") + " - time passed: " + (float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
-					passedTime = _timer.ElapsedMilliseconds / 1000f;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+					//Debug.Log (view.GetType ().Name + " at " + viewsLoaded.ToString("P0") + " - time passed: " + (float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
+					//passedTime = _timer.ElapsedMilliseconds / 1000f;
+#endif
 				}
 				catch (Exception e)
 				{

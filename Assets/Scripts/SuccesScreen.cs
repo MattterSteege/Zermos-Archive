@@ -13,6 +13,7 @@ public class SuccesScreen : MonoBehaviour
     [SerializeField] private TMP_Text screenText;
     [SerializeField] private LoginType loginType;
     [SerializeField] private Image backgroundOfEverything;
+    [SerializeField] private Image koppelingAdded;
 
     // Start is called before the first frame update
     void Start()
@@ -62,6 +63,7 @@ public class SuccesScreen : MonoBehaviour
         backgroundOfEverything.color = new Color(0.06666667f, 0.1529412f, 0.4352941f);
         ViewManager.Instance.Show<NavBarView>();
         ViewManager.Instance.Refresh<NavBarView>();
+        koppelingAdded.color = new Color(0.172549f, 0.9333333f, 0.5568628f);
         switch (loginType)
         {
             case LoginType.somtoday:

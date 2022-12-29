@@ -82,7 +82,8 @@ public sealed class ViewManager : MonoBehaviour
 			onLoadedView?.Invoke(viewsLoaded, view.GetType().Name);
 			_timer.Stop();
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-			Debug.Log(view.GetType ().Name + " at " + viewsLoaded.ToString("P0") + " - time passed: " + (float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
+			if (saveLoadingTimes)
+				Debug.Log(view.GetType ().Name + " at " + viewsLoaded.ToString("P0") + " - time passed: " + (float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
 			times.Add((float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
 			passedTime = _timer.ElapsedMilliseconds / 1000f;
 #endif

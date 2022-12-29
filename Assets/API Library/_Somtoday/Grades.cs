@@ -64,28 +64,36 @@ public class Grades : BetterHttpClient
     
     private SomtodayGrades getSavedGrades()
     {
-        // string destination = savePath.Replace("*", Application.persistentDataPath);
-        //
-        // if (!File.Exists(destination))
-        // {
-        //     Debug.LogWarning("File not found, creating new file.");
-        //     return getGrades(false);
-        // }
-        //
-        // using (StreamReader r = new StreamReader(destination))
-        // {
-        //     string json = r.ReadToEnd();
-        //     SomtodayGrades gradesObject = JObject.Parse(json).ToObject<SomtodayGrades>();
-        //     if (gradesObject?.laatsteWijziging.ToDateTime().AddMinutes(10) < TimeManager.Instance.CurrentDateTime)
-        //     {
-        //         r.Close();
-        //         Debug.LogWarning("Local file is outdated, downloading new file.");
-        //         return getGrades(false);
-        //     }
-        //     return gradesObject;
-        // }
+        string destination = savePath.Replace("*", Application.persistentDataPath);
         
-        return getGrades(false);
+        if (!File.Exists(destination))
+        {
+            Debug.LogWarning("File not found, creating new file.");
+            return getGrades(false);
+        }
+        
+        using (StreamReader r = new StreamReader(destination))
+        {
+            string json = r.ReadToEnd();
+            try
+            {
+                SomtodayGrades gradesObject = JsonConvert.DeserializeObject<SomtodayGrades>(json);
+                if (gradesObject?.laatsteWijziging.ToDateTime().AddMinutes(10) < TimeManager.Instance.CurrentDateTime)
+                {
+                    r.Close();
+                    Debug.LogWarning("Local file is outdated, downloading new file.");
+                    return getGrades(false);
+                }
+
+                return gradesObject;
+            }
+            catch(Exception)
+            {
+                r.Close();
+                Debug.LogWarning("Local file is corrupt, downloading new file.");
+                return getGrades(false);
+            }
+        }
     }
 
     private void SaveGrades(SomtodayGrades grades)
@@ -126,7 +134,7 @@ public class Grades : BetterHttpClient
 
     public class Item
     {
-        [JsonProperty("$type")] public string Type { get; set; }
+        //[JsonProperty("$type")] public string Type { get; set; }
         public List<Link> links { get; set; }
         public List<Permission> permissions { get; set; }
         public string herkansingstype { get; set; }

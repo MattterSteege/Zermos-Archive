@@ -12,13 +12,13 @@ public class Vakken : BetterHttpClient
     
     
     [ContextMenu("donwload vakken")]
-    public void Downloadvakken()
+    public SomtodayVakken Downloadvakken()
     {
 
         if (LocalPrefs.GetString("somtoday-access_token") == null || LocalPrefs.GetString("zermelo-access_token") == null)
         {
             Debug.Log("Missing token(s)");
-            return;
+            return null;
         }
 
         SomtodayVakken vakSom;
@@ -26,13 +26,13 @@ public class Vakken : BetterHttpClient
         
         Dictionary<string, string> headers = new Dictionary<string,string>();
         headers.Add("Authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
-        Get("https://api.somtoday.nl/rest/v1/vakken", headers, (response) =>
+        return (SomtodayVakken) Get("https://api.somtoday.nl/rest/v1/vakken", headers, (response) =>
         {
             vakSom = JsonConvert.DeserializeObject<SomtodayVakken>(response.downloadHandler.text);
             
             Dictionary<string, string> headers = new Dictionary<string,string>();
             headers.Add("Authorization", "Bearer " + LocalPrefs.GetString("zermelo-access_token"));
-            Get($"https://ccg.zportal.nl/api/v3/courses?year={TimeManager.Instance.DateTime.Year}", headers, (response) =>
+            return (SomtodayVakken)Get($"https://ccg.zportal.nl/api/v3/courses?year={TimeManager.Instance.DateTime.Year}", headers, (response) =>
             {
                 ZermeloVakken vakZer = JsonConvert.DeserializeObject<ZermeloVakken>(response.downloadHandler.text);
                 
@@ -48,7 +48,7 @@ public class Vakken : BetterHttpClient
                         }
                     }
                 }
-                
+
                 if (vakken.Count != 0)
                 {
                     var convertedJson = JsonConvert.SerializeObject(
@@ -56,13 +56,19 @@ public class Vakken : BetterHttpClient
                         {
                             items = vakken.OrderBy(x => x.afkorting).ToList(),
                             laatsteWijziging = TimeManager.Instance.CurrentDateTime.ToUnixTime()
-                        }, 
+                        },
                         Formatting.Indented);
 
                     string destination = savePath.Replace("*", Application.persistentDataPath);
 
                     File.WriteAllText(destination, "//In dit bestand staan alle vakken die je school aanbied.\r\n");
                     File.AppendAllText(destination, convertedJson);
+
+                    return new SomtodayVakken
+                    {
+                        items = vakken.OrderBy(x => x.afkorting).ToList(),
+                        laatsteWijziging = TimeManager.Instance.CurrentDateTime.ToUnixTime()
+                    };
                 }
 
                 return null;
@@ -72,8 +78,6 @@ public class Vakken : BetterHttpClient
                 Debug.LogWarning(error.error);
                 return null;
             });
-            
-            return null;
         },
         (error) =>
         {
@@ -82,7 +86,6 @@ public class Vakken : BetterHttpClient
         });
     }
     
-    int i = 0;
     public SomtodayVakken getVakken()
     {
         string destination = savePath.Replace("*", Application.persistentDataPath);
@@ -90,21 +93,18 @@ public class Vakken : BetterHttpClient
         if (!File.Exists(destination))
         {
             Debug.LogWarning("File not found, creating new file.");
-            Downloadvakken();
-            return null;
+            return Downloadvakken();
         }
 
         using (StreamReader r = new StreamReader(destination))
         {
             string json = r.ReadToEnd();
             var vakkenObject = JsonConvert.DeserializeObject<SomtodayVakken>(json);
-            if (vakkenObject?.laatsteWijziging.ToDateTime().AddDays(5) < TimeManager.Instance.CurrentDateTime && i < 3)
+            if (vakkenObject?.laatsteWijziging.ToDateTime().AddDays(5) < TimeManager.Instance.CurrentDateTime)
             {
                 r.Close();
                 Debug.LogWarning("Local file is outdated, downloading new file.");
-                Downloadvakken();
-                getVakken();
-                i++;
+                return Downloadvakken();
             }
             return vakkenObject;
         }

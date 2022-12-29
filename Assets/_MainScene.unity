@@ -16360,6 +16360,7 @@ MonoBehaviour:
   screenText: {fileID: 1819893293}
   loginType: 2
   backgroundOfEverything: {fileID: 749826575}
+  koppelingAdded: {fileID: 1882211881}
 --- !u!4 &748369142
 Transform:
   m_ObjectHideFlags: 0
@@ -17051,7 +17052,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fetchType: 0
-  CurrentVersion: V0.7.8.3
+  CurrentVersion: V0.7.8.4
 --- !u!1 &797783473
 GameObject:
   m_ObjectHideFlags: 0
@@ -25556,6 +25557,7 @@ MonoBehaviour:
   screenText: {fileID: 1819893293}
   loginType: 0
   backgroundOfEverything: {fileID: 749826575}
+  koppelingAdded: {fileID: 1148461781}
 --- !u!114 &1147355065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33098,6 +33100,7 @@ MonoBehaviour:
   screenText: {fileID: 1819893293}
   loginType: 1
   backgroundOfEverything: {fileID: 749826575}
+  koppelingAdded: {fileID: 1092126376}
 --- !u!4 &1516145121
 Transform:
   m_ObjectHideFlags: 0

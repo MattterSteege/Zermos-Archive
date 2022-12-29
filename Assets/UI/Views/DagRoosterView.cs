@@ -32,6 +32,7 @@ namespace UI.Views
         public override void Initialize()
         {
             if (args == null) args = false;
+            if (LocalPrefs.GetString("zermelo-access_token") == null) return;
             
             openNavigationButton.onClick.AddListener(() =>
             {
@@ -50,7 +51,6 @@ namespace UI.Views
             WeekRoosterButton.onClick.AddListener(() =>
             {
                 ViewManager.Instance.ShowNewView<WeekRoosterView>();
-            
             });
             
             nextDayButton.onClick.AddListener(() =>
@@ -198,7 +198,7 @@ namespace UI.Views
             RefreshButton.onClick.RemoveAllListeners();
             WeekRoosterButton.onClick.RemoveAllListeners();
             nextDayButton.onClick.RemoveAllListeners(); 
-            previousDayButton.onClick.RemoveAllListeners(); 
+            previousDayButton.onClick.RemoveAllListeners();
             base.Refresh(args);
         }
     }
