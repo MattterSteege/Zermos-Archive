@@ -116,4 +116,36 @@ public class BetterHttpClient : MonoBehaviour
         www.Dispose();
         return returned;
     }
+    
+    //with headers
+    public object Post(string url, WWWForm form, Dictionary<string, string> headers, Func<UnityWebRequest, object> callback, Func<UnityWebRequest, object> error = null)
+    {
+        Debug.Log("Request started");
+        UnityWebRequest www = UnityWebRequest.Post(url, form);
+        www.SetRequestHeader("Accept", "application/json");
+        if (headers != null)
+        {
+            foreach (var header in headers)
+            {
+                www.SetRequestHeader(header.Key, header.Value);
+            }
+        }
+        www.SendWebRequest();
+
+        while (!www.isDone)
+        {
+        }
+
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogWarning(www.error);
+            var errored = error.Invoke(www);
+            www.Dispose();
+            return errored;
+        }
+
+        var returned = callback.Invoke(www);
+        www.Dispose();
+        return returned;
+    }
 }

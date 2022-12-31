@@ -34,13 +34,8 @@ public sealed class SubViewManager : MonoBehaviour
 	public static event OnLoadedView onLoadedView;
 
 	float viewsLoaded;
-	Stopwatch _timer;
-	float passedTime = 0f;
-	List<float> times = new List<float>();
 	public IEnumerator Initialize()
 	{
-		_timer = new Stopwatch();
-		_timer.Start();
 		foreach (SubView view in views)
 		{
 			yield return new WaitForEndOfFrame();
@@ -49,10 +44,6 @@ public sealed class SubViewManager : MonoBehaviour
 				try
 				{
 					view.Initialize();
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-					//Debug.Log (view.GetType ().Name + " at " + viewsLoaded.ToString("P0") + " - time passed: " + (float) Math.Round((_timer.ElapsedMilliseconds / 1000f) - passedTime, 3));
-					//passedTime = _timer.ElapsedMilliseconds / 1000f;
-#endif
 				}
 				catch (Exception e)
 				{
@@ -65,8 +56,6 @@ public sealed class SubViewManager : MonoBehaviour
 			viewsLoaded += 1f / views.Length;
 			onLoadedView?.Invoke(viewsLoaded, view.GetType ().Name);
 		}
-		_timer.Stop();
-
 		HideParentView();
 		
 		onLoadedView?.Invoke(1f);

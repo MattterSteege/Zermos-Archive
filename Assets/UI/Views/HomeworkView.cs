@@ -173,6 +173,7 @@ namespace UI.Views
 
         public override void Refresh(object args)
         {
+            content.transform.localPosition = Vector3.zero;
             _ScrollRect.content.DOLocalMove(new Vector3(0f, 0f, 0f), 0.1f, true);
             base.Refresh(args);
         }

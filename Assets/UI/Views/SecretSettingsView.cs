@@ -37,13 +37,19 @@ namespace UI.Views
             int timesClicked = 0;
             deletePlayerPrefsButton.onClick.AddListener(() =>
             {
-                if (timesClicked <= 5)
+                if (timesClicked <= 4)
                 {
                     timesClicked++;
                 }
                 else
                 {
-                    LocalPrefs.DeleteFile();
+                    File.Delete(Application.persistentDataPath + @"/zermos-encrypted.encrypted");
+                    File.Delete(Application.persistentDataPath + @"/zermos.encrypted");
+                    File.Delete(Application.persistentDataPath + @"/Vakken.json");
+                    File.Delete(Application.persistentDataPath + @"/Grades.json");
+                    File.Delete(Application.persistentDataPath + @"/Lessons.json");
+                    File.Delete(Application.persistentDataPath + @"/CustomHomework.json");
+                    File.Delete(Application.persistentDataPath + @"/Leermiddelen.json");
                     LocalPrefs.Load();
 
                     ViewManager.Instance.ShowNewView<ConnectZermeloView>();

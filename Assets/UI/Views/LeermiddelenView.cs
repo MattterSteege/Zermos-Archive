@@ -14,7 +14,7 @@ namespace UI.Views
         [SerializeField] private GameObject content;
         [SerializeField] private GameObject leermiddelPrefab;
     
-        [SerializeField] private CustomLeermiddelen _leermiddelen;
+        [SerializeField] private Leermiddelen _leermiddelen;
 
         public override void Initialize()
         {
@@ -37,32 +37,14 @@ namespace UI.Views
                     ViewManager.Instance.ShowNewView<AddLeermiddelenView>();
                 });
 
-                foreach (CustomLeermiddelen.LeermiddelenItem vak in GetLeermiddelenItems() ??
-                                                                    new List<CustomLeermiddelen.LeermiddelenItem>())
+                foreach (Leermiddelen.Item vak in _leermiddelen.GetLeermiddelen().items ?? new List<Leermiddelen.Item>())
                 {
                     GameObject leermiddel = Instantiate(leermiddelPrefab, content.transform);
-                    leermiddel.GetComponent<LeermiddelenInfo>().SetLeermiddelenText(vak.vak, vak.url);
+                    leermiddel.GetComponent<LeermiddelenInfo>().SetLeermiddelenText(vak.description, vak.href);
                 }
             }catch(Exception){}
 
             base.Initialize();
-        }
-    
-        public List<CustomLeermiddelen.LeermiddelenItem> GetLeermiddelenItems()
-        {
-            string destination = _leermiddelen.savePath.Replace("*", Application.persistentDataPath);
-
-            if (!File.Exists(destination))
-            {
-                Debug.LogWarning("File not found");
-                return null;
-            }
-
-            using (StreamReader r = new StreamReader(destination))
-            {
-                string json = r.ReadToEnd();
-                return JsonConvert.DeserializeObject<List<CustomLeermiddelen.LeermiddelenItem>>(json);
-            }
         }
     }
 }

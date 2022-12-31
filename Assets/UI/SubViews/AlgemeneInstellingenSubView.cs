@@ -8,6 +8,7 @@ namespace UI.SubViews
     {
         [SerializeField] Toggle show_tussenuren;
         [SerializeField] PlusMinusButtons minutes_before_class;
+        [SerializeField] PlusMinusButtons homework_stays_till;
 
         [Space, SerializeField] WeekRoosterView weekRoosterView;
         [SerializeField] DagRoosterView dagRoosterView;
@@ -64,8 +65,31 @@ namespace UI.SubViews
             });
             
             //---
+                        
+            homework_stays_till.valueText.text = LocalPrefs.GetInt("homework_stays_till", 1).ToString();
+            int dagen = LocalPrefs.GetInt("homework_stays_till", 14);
+            homework_stays_till.plusButton.onClick.AddListener(() =>
+            {
+                dagen++;
+                LocalPrefs.SetInt("homework_stays_till", dagen);
+                homework_stays_till.valueText.text = dagen.ToString();
+            });
+            homework_stays_till.minusButton.onClick.AddListener(() =>
+            {
+                dagen--;
+                LocalPrefs.SetInt("homework_stays_till", dagen);
+                homework_stays_till.valueText.text = dagen.ToString();
+            });
+            homework_stays_till.valueText.onValueChanged.AddListener((value) =>
+            {
+                if (int.TryParse(value, out int result))
+                {
+                    dagen = result;
+                    LocalPrefs.SetInt("homework_stays_till", dagen);
+                }
+            });
             
-            
+            //---
             
             base.Initialize();
         }

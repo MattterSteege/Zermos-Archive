@@ -52,10 +52,7 @@ public class SuccesScreen : MonoBehaviour
         yield return new WaitForSeconds(2f);
         Refresh();
         yield return new WaitForSeconds(1f);
-        rect.DOAnchorPosY(-Screen.height * 2f, 2f).onComplete += () =>
-        {
-            Destroy(this.gameObject);
-        };
+        rect.DOAnchorPosY(-Screen.height * 2f, 2f);
     }
 
     private void Refresh()

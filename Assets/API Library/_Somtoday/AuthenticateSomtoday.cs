@@ -11,7 +11,6 @@ using System.Text.RegularExpressions;
 using System.Web;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Networking;
 using Random = UnityEngine.Random;
 
 public class AuthenticateSomtoday : BetterHttpClient
@@ -61,9 +60,7 @@ public class AuthenticateSomtoday : BetterHttpClient
 
             HttpHeaders headers = response.Headers;
             IEnumerable<string> values;
-            IEnumerable<string> cookie1;
             if (!headers.TryGetValues("Location", out values)) yield return null;
-            if (!headers.TryGetValues("set-cookie", out cookie1)) Debug.Log(cookie1);
 
             Uri myUri = new Uri(values.First());
 
@@ -75,8 +72,7 @@ public class AuthenticateSomtoday : BetterHttpClient
                 {"loginLink", "x"},
                 {"usernameFieldPanel:usernameFieldPanel_body:usernameField", username}
             });
-
-            headers.Clear();
+            
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
             client.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
@@ -89,26 +85,26 @@ public class AuthenticateSomtoday : BetterHttpClient
                 {"passwordFieldPanel:passwordFieldPanel_body:passwordField", password},
                 {"loginLink", "x"}
             });
-
+            
             HttpResponseMessage response3 = client
                 .PostAsync($"https://inloggen.somtoday.nl/login?1-1.-passwordForm&auth={authToken}", Content).Result;
 
 
             headers = response3.Headers;
             IEnumerable<string> values3;
-            IEnumerable<string> cookie2;
             if (!headers.TryGetValues("Location", out values3)) yield return null;
-            if (!headers.TryGetValues("set-cookie", out cookie2)) Debug.Log(cookie2);
 
             myUri = new Uri(values3.First());
 
             authCode = HttpUtility.ParseQueryString(myUri.Query).Get("code");
             
+            string ResponseHTML = response3.Content.ReadAsStringAsync().Result;
+            
             Content = new FormUrlEncodedContent(new Dictionary<string, string>()
             {
                 {"", ""}
             });
-            headers.Clear();
+            
             client.DefaultRequestHeaders.Remove("origin");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
             HttpResponseMessage response4 = client.PostAsync(
@@ -118,9 +114,14 @@ public class AuthenticateSomtoday : BetterHttpClient
                 JsonConvert.DeserializeObject<SomtodayAuthentication>(response4.Content.ReadAsStringAsync().Result);
             
             AutherizationToken = somtodayAuthentication.access_token;
+
+            GetCookies(username, password);
+            
             yield return somtodayAuthentication;
         }
     }
+
+
     #endregion
 
     #region Refresh token
@@ -206,4 +207,72 @@ public class AuthenticateSomtoday : BetterHttpClient
     }
 
     #endregion
+
+    public void GetCookies(string username, string password)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("nextLink", "x");
+        form.AddField("organisatieSearchField--selected-value-1", "c23fbb99-be4b-4c11-bbf5-57e7fc4f4388"); //uuid of carmelcollege Gouda
+        form.AddField("organisatieSearchFieldPanel:organisatieSearchFieldPanel_body:organisatieSearchField", "Carmelcollege Gouda");
+        
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+        headers.Add("referer", "https://inloggen.somtoday.nl");
+
+        Post("https://inloggen.somtoday.nl/?-1.-panel-organisatieSelectionForm", form, headers,(response) =>
+        {
+            Uri myUri = new Uri(response.url);
+            string authToken = HttpUtility.ParseQueryString(myUri.Query).Get("auth");
+            
+            WWWForm form = new WWWForm();
+            form.AddField("loginLink", "x");
+            form.AddField("usernameFieldPanel:usernameFieldPanel_body:usernameField", username);
+            
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("referer", "https://inloggen.somtoday.nl");
+            
+            Post($"https://inloggen.somtoday.nl/?-1.-panel-signInForm&auth={authToken}", form, headers,(response) =>
+            {
+
+                WWWForm form = new WWWForm();
+                form.AddField("loginLink", "x");
+                form.AddField("passwordFieldPanel:passwordFieldPanel_body:passwordField", password);
+
+                Dictionary<string, string> headers = new Dictionary<string, string>();
+                headers.Add("referer", "https://inloggen.somtoday.nl");
+                
+                Post("https://inloggen.somtoday.nl/login?1-1.-passwordForm", form, headers,(response) =>
+                {
+                    string saml2AcsToken = Regex.Match(response.downloadHandler.text, "(?<=<input type=\"hidden\" name=\"SAMLResponse\" value=\")(.*)(?=\")").Value;
+                    
+                    //this isn't because UnityWebRequest doesn't support cookies & disabling redirects
+                    HttpClientHandler handler = new HttpClientHandler()
+                    {
+                        AllowAutoRedirect = false
+                    };
+                    HttpClient client = new HttpClient(handler);
+                    var content = new FormUrlEncodedContent(new[]
+                    {
+                        new KeyValuePair<string, string>("SAMLResponse", saml2AcsToken)
+                    });
+                    var result = client.PostAsync("https://elo.somtoday.nl/saml2/acs", content);
+                    
+                    foreach (var header in result.Result.Headers)
+                    {
+                        if (header.Key.ToLower() == "set-cookie")
+                        {
+                            GetComponent<Leermiddelen>().SetLeermiddelen(string.Join(";", header.Value.ToList()).Replace(" ", ""));
+                        }
+                    }
+
+                    client.Dispose();
+                    
+                    return null;
+                });
+                
+                return null;
+            });
+            
+            return null;
+        });
+    }
 }

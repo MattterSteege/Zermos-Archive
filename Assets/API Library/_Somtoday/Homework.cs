@@ -180,7 +180,7 @@ public class Homework : MonoBehaviour
     {
         homework.items = homework.items.OrderBy(x => x.datumTijd).ToList();
         homework.items.RemoveAll(x => x.studiewijzerItem == null);
-        homework.items.RemoveAll(x=> x.datumTijd < TimeManager.Instance.DateTime.AddDays(-LocalPrefs.GetInt("numberofdayshomework", 14)));
+        homework.items.RemoveAll(x=> x.datumTijd < TimeManager.Instance.DateTime.AddDays(-LocalPrefs.GetInt("homework_stays_till", 14)));
         homework.items.RemoveAll(x=> x.studiewijzerItem.huiswerkType == "LESSTOF");
         return homework;
     }
