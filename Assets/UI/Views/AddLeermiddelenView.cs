@@ -39,4 +39,11 @@ public class AddLeermiddelenView : View
         ViewManager.Instance.Refresh<LeermiddelenView>();
         ViewManager.Instance.Show<LeermiddelenView, NavBarView>();
     }
+
+    public override void Refresh(object args)
+    {
+        openNavigationButton.onClick.RemoveAllListeners();
+        save.onClick.RemoveAllListeners();
+        base.Refresh(args);
+    }
 }

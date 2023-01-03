@@ -26,14 +26,13 @@ namespace UI.Views
         {
             this.homeworkInfo = (Homework.Item) args;
 
-            Initialize();
+            Refresh(args);
 
             base.Show();
         }
 
         public override void Initialize()
         {
-            openNavigationButton.onClick.RemoveAllListeners();
             openNavigationButton.onClick.AddListener(() =>
             {
                 ViewManager.Instance.ShowNewView<HomeworkView>();
@@ -92,6 +91,12 @@ namespace UI.Views
             }
         }
 
+        public override void Refresh(object args)
+        {
+            openNavigationButton.onClick.RemoveAllListeners();
+            base.Refresh(args);
+        }
+        
         private void DeleteHomework()
         {
             if (homeworkInfo.gemaakt == true)

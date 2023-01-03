@@ -18,7 +18,7 @@ public class CoroutineWithData<T>
     {
         while (_target.MoveNext())
         {
-            if (_target.Current != null)
+            if (_target.Current != null && _target.Current is not WaitForSeconds)
             {
                 result = (T) _target.Current;
                 yield return result;

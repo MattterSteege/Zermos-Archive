@@ -62,16 +62,11 @@ public class GradeItemView : View
         
         base.Initialize();
     }
-
-    private float WatMoetIkHalen(List<Grades.Item> cijfers, int weging, float gewenstCijfer = 5.5f)
+    
+    public override void Refresh(object args)
     {
-        int totaleWeging = cijfers.Sum(x => x.weging);
-        gewenstCijfer *= totaleWeging;
-        
-        float alBehaaldePunten = cijfers.Sum(x => x.weging * float.Parse(x.geldendResultaat));
-        
-        float nogTeBehalen = gewenstCijfer - alBehaaldePunten;
-        
-        return nogTeBehalen / weging;
+        openNavigationButton.onClick.RemoveAllListeners();
+        welkCijferMoetIkHalenButton.onClick.RemoveAllListeners();
+        base.Refresh(args);
     }
 }

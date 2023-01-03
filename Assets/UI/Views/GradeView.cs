@@ -77,6 +77,13 @@ namespace UI.Views
         
             base.Initialize();
         }
+        
+        public override void Refresh(object args)
+        {
+            openNavigationButton.onClick.RemoveAllListeners();
+            closeButtonWholePage.onClick.RemoveAllListeners();
+            base.Refresh(args);
+        }
     }
 
     public static class MiscExtensions

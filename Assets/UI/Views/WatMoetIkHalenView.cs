@@ -68,5 +68,11 @@ namespace UI.Views
 
             return (gewenstCijfer + nogTeBehalen / weging).ToString("0.00");
         }
+        
+        public override void Refresh(object args)
+        {
+            openNavigationButton.onClick.RemoveAllListeners();
+            base.Refresh(args);
+        }
     }
 }

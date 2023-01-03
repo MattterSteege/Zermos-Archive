@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class AuthenticateInfowijs : MonoBehaviour
+public class AuthenticateInfowijs : BetterHttpClient
 {
     private InfowijsAuthenticateFase1_1 auth1_1;
     private InfowijsAuthenticateFase1_2 auth1_2;
 
-    public bool startAuthenticationFase1(string username)
+    public InfowijsAuthenticateFase1_2 startAuthenticationFase1(string username)
     {
         string url = "https://api.infowijs.nl/sessions/customer-products";
         string json = "{\"username\": \"" + username + "\"}";
@@ -29,7 +30,7 @@ public class AuthenticateInfowijs : MonoBehaviour
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.Log(www.error);
-            return false;
+            return null;
         }
         auth1_1 = JsonConvert.DeserializeObject<InfowijsAuthenticateFase1_1>(www.downloadHandler.text);
         
@@ -52,56 +53,30 @@ public class AuthenticateInfowijs : MonoBehaviour
         if (www2.result != UnityWebRequest.Result.Success)
         {
             Debug.Log(www2.error);
-            return false;
+            return null;
         }
         
         auth1_2 = JsonConvert.DeserializeObject<InfowijsAuthenticateFase1_2>(www2.downloadHandler.text);
         
         www.Dispose();
         www2.Dispose();
-        return true;
+        return auth1_2;
     }
-
-    public bool startAuthenticationFase2(string emailLink)
+    
+    public bool startAuthenticationCodeFetcher(string id, string custom_product_id, string user_id)
     {
-        emailLink = emailLink.Substring(emailLink.IndexOf("url=", StringComparison.Ordinal) + 4).Replace("%3A", ":").Replace("%2F", "/").Replace("%3D", "=").Replace("%3F", "?").Replace("%7C", "|");
-
-        string token = emailLink.Substring(emailLink.IndexOf("token=", StringComparison.Ordinal) + 6);
-        token = Regex.Match(token, @"(^[\w-]*\.[\w-]*\.[\w-]*)").Value;
-
-        if (string.IsNullOrEmpty(token)) return false;
-
-        UnityWebRequest www1 = UnityWebRequest.Post("https://api.infowijs.nl/sessions/validate", new WWWForm());
-        www1.SetRequestHeader("accept", "application/vnd.infowijs.v1+json");
-        www1.SetRequestHeader("authorization", $"Bearer {token}");
-        www1.SendWebRequest();
-
-        while (!www1.isDone) { }
-
-        if (www1.result != UnityWebRequest.Result.Success)
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+        headers.Add("accept", "application/vnd.infowijs.v1+json");
+        headers.Add("x-infowijs-client", "nl.infowijs.hoy.android/nl.infowijs.client.antonius");
+        return (bool) Post($"https://api.infowijs.nl/sessions/{id}/{custom_product_id}/{user_id}", new WWWForm(), headers, (response) =>
         {
-            Debug.Log(www1.error);
-            return false;
-        }
-        else
-        {
-            UnityWebRequest www2 = UnityWebRequest.Post($"https://api.infowijs.nl/sessions/{auth1_2.data.id}/{auth1_2.data.customer_product_id}/{auth1_2.data.user_id}", new WWWForm());
-            www2.SetRequestHeader("accept", "application/vnd.infowijs.v1+json");
-            www2.SetRequestHeader("authorization", $"Bearer {token}");
-            www2.SendWebRequest();
-
-            while (!www2.isDone) { }
-
-            if (www2.result != UnityWebRequest.Result.Success)
+            if (int.Parse(response.GetResponseHeader("content-length")) > 500)
             {
-                Debug.Log(www2.error);
-                return false;
+                LocalPrefs.SetString("infowijs-access_token", JsonConvert.DeserializeObject<InfowijsAuthenticateToken>(response.downloadHandler.text)?.data);
+                return true;
             }
-
-            InfowijsAuthenticateToken authenticateToken = JsonConvert.DeserializeObject<InfowijsAuthenticateToken>(www2.downloadHandler.text);
-            LocalPrefs.SetString("infowijs-access_token", authenticateToken.data);
-            return true;
-        }
+            return false;
+        });
     }
     
     public class Datum

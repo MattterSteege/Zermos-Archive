@@ -9,8 +9,7 @@ public class Vakken : BetterHttpClient
 {
     [SerializeField, Tooltip("'*' means Application.persistentDataPath.")]
     private string savePath = "*/Vakken.json";
-    
-    
+
     [ContextMenu("donwload vakken")]
     public SomtodayVakken Downloadvakken()
     {
@@ -32,7 +31,7 @@ public class Vakken : BetterHttpClient
             
             Dictionary<string, string> headers = new Dictionary<string,string>();
             headers.Add("Authorization", "Bearer " + LocalPrefs.GetString("zermelo-access_token"));
-            return (SomtodayVakken)Get($"https://ccg.zportal.nl/api/v3/courses?year={TimeManager.Instance.DateTime.Year}", headers, (response) =>
+            return (SomtodayVakken)Get($"https://ccg.zportal.nl/api/v3/courses?schoolYear={GetComponent<Schooljaar>().getCurrentSchooljaarStartDate().Year}&student=~me", headers, (response) =>
             {
                 ZermeloVakken vakZer = JsonConvert.DeserializeObject<ZermeloVakken>(response.downloadHandler.text);
                 
@@ -40,9 +39,9 @@ public class Vakken : BetterHttpClient
         
                 foreach (Item somVak in vakSom.items)
                 {
-                    foreach (Course zerVak in vakZer.response.data[0].courses)
+                    foreach (Datum zerVak in vakZer.response.data)
                     {
-                        if (somVak.afkorting == zerVak.abbreviation)
+                        if (somVak.afkorting == zerVak.subjectCode)
                         {
                             vakken.Add(new Item {afkorting = somVak.afkorting, naam = somVak.naam});
                         }
@@ -100,7 +99,7 @@ public class Vakken : BetterHttpClient
         {
             string json = r.ReadToEnd();
             var vakkenObject = JsonConvert.DeserializeObject<SomtodayVakken>(json);
-            if (vakkenObject?.laatsteWijziging.ToDateTime().AddDays(5) < TimeManager.Instance.CurrentDateTime)
+            if (vakkenObject?.laatsteWijziging.ToDateTime().AddDays(7) < TimeManager.Instance.CurrentDateTime)
             {
                 r.Close();
                 Debug.LogWarning("Local file is outdated, downloading new file.");
@@ -127,14 +126,9 @@ public class Vakken : BetterHttpClient
     #endregion
     
     #region models - zermelo
-    public class Course
-    {
-        public string abbreviation { get; set; }
-    }
-
     public class Datum
     {
-        public List<Course> courses { get; set; }
+        public string subjectCode { get; set; }
     }
 
     public class Response

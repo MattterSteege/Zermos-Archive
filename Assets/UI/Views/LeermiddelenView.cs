@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,7 @@ namespace UI.Views
 
         [SerializeField] private GameObject content;
         [SerializeField] private GameObject leermiddelPrefab;
+        [SerializeField] private TMP_Text descriptionText;
     
         [SerializeField] private Leermiddelen _leermiddelen;
 
@@ -37,7 +39,11 @@ namespace UI.Views
                     ViewManager.Instance.ShowNewView<AddLeermiddelenView>();
                 });
 
-                foreach (Leermiddelen.Item vak in _leermiddelen.GetLeermiddelen().items ?? new List<Leermiddelen.Item>())
+                var leermiddelen = _leermiddelen.GetLeermiddelen().items ?? new List<Leermiddelen.Item>();
+                
+                if (leermiddelen.Count != 0) descriptionText.gameObject.SetActive(false);
+                
+                foreach (Leermiddelen.Item vak in leermiddelen)
                 {
                     GameObject leermiddel = Instantiate(leermiddelPrefab, content.transform);
                     leermiddel.GetComponent<LeermiddelenInfo>().SetLeermiddelenText(vak.description, vak.href);
@@ -45,6 +51,14 @@ namespace UI.Views
             }catch(Exception){}
 
             base.Initialize();
+        }
+        
+        public override void Refresh(object args)
+        {
+            openNavigationButton.onClick.RemoveAllListeners();
+            closeButtonWholePage.onClick.RemoveAllListeners();
+            AddleermiddelButton.onClick.RemoveAllListeners();
+            base.Refresh(args);
         }
     }
 }

@@ -48,6 +48,12 @@ namespace UI.Views
             base.Initialize();
         }
 
+        public override void Refresh(object args)
+        {
+            connectButton.onClick.RemoveAllListeners();
+            base.Refresh(args);
+        }
+        
         private IEnumerator Loading(bool b)
         {
             while (b)

@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Homework : MonoBehaviour
+public class Homework : BetterHttpClient
 {
     [SerializeField] private CustomHomework _CustomHomework;
     
@@ -22,9 +22,11 @@ public class Homework : MonoBehaviour
         int rangemin = 0;
         int rangemax = 99;
 
+        string startDate = GetComponent<global::Schooljaar>().getCurrentSchooljaarStartDate().ToString("yyyy-MM-dd");
+        
         string baseurl =
             string.Format(
-                $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen&additional=studiewijzerId");
+                $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={startDate}&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen&additional=studiewijzerId");
 
         
         UnityWebRequest www = UnityWebRequest.Get(baseurl);
@@ -107,11 +109,12 @@ public class Homework : MonoBehaviour
         int rangemin = 0;
         int rangemax = 99;
 
+        string startDate = GetComponent<global::Schooljaar>().getCurrentSchooljaarStartDate().ToString("yyyy-MM-dd");
+
         string baseurl =
             string.Format(
-                $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemweektoekenningen?schooljaar=&begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen");
+                $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemweektoekenningen?schooljaar=&begintNaOfOp={startDate}&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen");
 
-        
         UnityWebRequest www = UnityWebRequest.Get(baseurl);
         www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
         www.SetRequestHeader("Accept", "application/json");
@@ -166,10 +169,10 @@ public class Homework : MonoBehaviour
             }
         }
 
-        foreach (Item homeworkItem in homework.items)
-        {
-            homeworkItem.datumTijd = getDateFromWeeknumber(homeworkItem.weeknummerVanaf, TimeManager.Instance.DateTime.Year);
-        }
+        // foreach (Item homeworkItem in homework.items)
+        // {
+        //     homeworkItem.datumTijd = getDateFromWeeknumber(homeworkItem.weeknummerVanaf, TimeManager.Instance.DateTime.Year);
+        // }
 
         homework = Sort(homework);
 

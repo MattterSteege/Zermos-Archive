@@ -30,7 +30,6 @@ namespace UI.Views
     
         public override void Initialize()
         {
-            openNavigationButton.onClick.RemoveAllListeners();
             openNavigationButton.onClick.AddListener(() =>
             {
                 ViewManager.Instance.ShowNewView<DagRoosterView>();
@@ -102,6 +101,13 @@ namespace UI.Views
                 }
             }
             catch(NullReferenceException){}
+        }
+        
+        public override void Refresh(object args)
+        {
+            openNavigationButton.onClick.RemoveAllListeners();
+            closeButtonWholePage.onClick.RemoveAllListeners();
+            base.Refresh(args);
         }
     }
 }

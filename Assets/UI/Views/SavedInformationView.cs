@@ -144,4 +144,16 @@ public class SavedInformationView : View
             CopiedText.gameObject.transform.parent.gameObject.GetComponent<CanvasGroup>().DOFade(0, 0.5f).SetDelay(1f);
         };
     }
+    
+    public override void Refresh(object args)
+    {
+        openNavigationButton.onClick.RemoveAllListeners();
+        closeButtonWholePage.onClick.RemoveAllListeners();
+        NaamTextButton.onClick.RemoveAllListeners();
+        CodeTextButton.onClick.RemoveAllListeners();
+        ZermeloAuthCodeTextButton.onClick.RemoveAllListeners();
+        SchoolAbbreviationTextButton.onClick.RemoveAllListeners();
+        SomtodayAuthCodeTextButton.onClick.RemoveAllListeners();
+        base.Refresh(args);
+    }
 }

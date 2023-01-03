@@ -66,7 +66,7 @@ public class BetterHttpClient : MonoBehaviour
     {
         Debug.Log("Request started");
         UnityWebRequest www = UnityWebRequest.Get(url);
-        www.SetRequestHeader("Accept", "application/json");
+        //www.SetRequestHeader("Accept", "application/json");
         if (headers != null)
         {
             foreach (var header in headers)

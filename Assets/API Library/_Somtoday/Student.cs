@@ -1,11 +1,39 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
 public class Student : BetterHttpClient
 {
+    [SerializeField, Tooltip("'*' means Application.persistentDataPath.")]
+    private string savePath = "*/Student.json";
+    
     public SomtodayStudent getStudent()
+    {
+        string destination = savePath.Replace("*", Application.persistentDataPath);
+
+        if (!File.Exists(destination))
+        {
+            Debug.LogWarning("File not found, creating new file.");
+            return DownloadStudent();
+        }
+
+        using (StreamReader r = new StreamReader(destination))
+        {
+            string json = r.ReadToEnd();
+            var vakkenObject = JsonConvert.DeserializeObject<SomtodayStudent>(json);
+            if (vakkenObject?.laatsteWijziging.ToDateTime().AddDays(50) < TimeManager.Instance.CurrentDateTime)
+            {
+                r.Close();
+                Debug.LogWarning("Local file is outdated, downloading new file.");
+                return DownloadStudent();
+            }
+            return vakkenObject;
+        }
+    }
+    
+    public SomtodayStudent DownloadStudent()
     {
         if (LocalPrefs.GetString("somtoday-access_token") == null)
             return null;
@@ -20,6 +48,20 @@ public class Student : BetterHttpClient
             if (student != null)
             {
                 LocalPrefs.SetString("somtoday-student_id", student.items[0].links[0].id.ToString());
+                
+                var convertedJson = JsonConvert.SerializeObject(
+                    new SomtodayStudent()
+                    {
+                        items = student.items,
+                        laatsteWijziging = TimeManager.Instance.CurrentDateTime.ToUnixTime()
+                    },
+                    Formatting.Indented);
+
+                string destination = savePath.Replace("*", Application.persistentDataPath);
+
+                File.WriteAllText(destination, "//In dit bestand staat al jouw informatie.\r\n");
+                File.AppendAllText(destination, convertedJson);
+
                 return student;
             }
             return null;        
@@ -61,6 +103,7 @@ public class Student : BetterHttpClient
 
     public class SomtodayStudent
     {
+        public int laatsteWijziging { get; set; }
         public List<Item> items { get; set; }
     }
     #endregion

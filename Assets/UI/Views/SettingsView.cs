@@ -82,5 +82,17 @@ namespace UI.Views
             
 #endregion
         }
+        
+        public override void Refresh(object args)
+        {
+            openNavigationButton.onClick.RemoveAllListeners();
+            closeButtonWholePage.onClick.RemoveAllListeners();
+            SecretSettingsButton.onClick.RemoveAllListeners();
+            algemeneInstellingenButton.onClick.RemoveAllListeners();
+            koppelingenButton.onClick.RemoveAllListeners();
+            // userInfoButton.onClick.RemoveAllListeners();
+            HulpNodigButton.onClick.RemoveAllListeners();
+            base.Refresh(args);
+        }
     }
 }

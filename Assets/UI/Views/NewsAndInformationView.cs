@@ -64,8 +64,6 @@ namespace UI.Views
                 appointments = zermeloSchedule.GetScheduleOfDay(TimeManager.Instance.DateTime, false);
             }
 
-            if (appointments == null || appointments.Count == 0) return;
-
             #region paklijst
             if (showPaklijst) // show paklijst
             {
@@ -88,7 +86,9 @@ namespace UI.Views
                                 vak = vakken.items.Find(x => x.afkorting == item.subjects[0]).naam ??
                                       item.subjects[0];
                             }
-                            catch(Exception) { }
+                            catch (Exception)
+                            {
+                            }
 
                             paklijstItem.GetComponent<Paklijst>().text.text = "• " + vak;
                             paklijstItem.GetComponent<Paklijst>().toggle.isOn = false;
@@ -99,10 +99,18 @@ namespace UI.Views
                                     isOn
                                         ? "<s>• " + vak + "<s>"
                                         : "• " + vak;
-                                paklijstItem.GetComponent<Paklijst>().text.color = isOn ? new Color(0.3490196f, 0.7411765f, 9568628f) : new Color(0.0627451f, 0.1529412f, 0.4352942f);
+                                paklijstItem.GetComponent<Paklijst>().text.color = isOn
+                                    ? new Color(0.3490196f, 0.7411765f, 9568628f)
+                                    : new Color(0.0627451f, 0.1529412f, 0.4352942f);
                             });
                         }
-                        catch (Exception) { }
+                        catch (Exception)
+                        {
+                            var paklijstItem = Instantiate(paklijstPrefab, paklijstContentGameObject.transform);
+                            paklijstItem.GetComponent<Paklijst>().text.text = "Geen lessen vandaag";
+                            paklijstItem.GetComponent<Paklijst>().text.alignment = TextAlignmentOptions.Center;
+                            paklijstItem.GetComponent<Paklijst>().toggle.gameObject.SetActive(false);
+                        }
                     }
                 }
 
@@ -303,6 +311,13 @@ namespace UI.Views
                 .FirstOrDefault();
 
             return a;
+        }
+        
+        public override void Refresh(object args)
+        {
+            openNavigationButton.onClick.RemoveAllListeners();
+            closeButtonWholePage.onClick.RemoveAllListeners();
+            base.Refresh(args);
         }
     }
 }

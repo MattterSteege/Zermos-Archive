@@ -172,7 +172,6 @@ namespace UI.Views
             }
         }
 
-
         [ContextMenu("Show Tussenuren")]
         public void showTussenUren()
         {

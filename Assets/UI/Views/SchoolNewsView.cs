@@ -82,5 +82,12 @@ namespace UI.Views
                 yield return new WaitForEndOfFrame();
             }
         }
+        
+        public override void Refresh(object args)
+        {
+            openNavigationButton.onClick.RemoveAllListeners();
+            closeButtonWholePage.onClick.RemoveAllListeners();
+            base.Refresh(args);
+        }
     }   
 }

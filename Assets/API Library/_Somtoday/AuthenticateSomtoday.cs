@@ -15,13 +15,10 @@ using Random = UnityEngine.Random;
 
 public class AuthenticateSomtoday : BetterHttpClient
 {
-    [SerializeField, Header("The real auth token")]
-    private string AutherizationToken;
-
-    [SerializeField, Space] private string authToken;
-    [SerializeField] private string authCode;
-    [SerializeField] private string CodeVerifier;
-    [SerializeField] private string CodeChallenge;
+    private string authToken;
+    private string authCode;
+    private string CodeVerifier;
+    private string CodeChallenge;
     private object cookies;
 
     public void Awake()
@@ -112,8 +109,6 @@ public class AuthenticateSomtoday : BetterHttpClient
                 Content).Result;
             SomtodayAuthentication somtodayAuthentication =
                 JsonConvert.DeserializeObject<SomtodayAuthentication>(response4.Content.ReadAsStringAsync().Result);
-            
-            AutherizationToken = somtodayAuthentication.access_token;
 
             GetCookies(username, password);
             
@@ -260,7 +255,8 @@ public class AuthenticateSomtoday : BetterHttpClient
                     {
                         if (header.Key.ToLower() == "set-cookie")
                         {
-                            GetComponent<Leermiddelen>().SetLeermiddelen(string.Join(";", header.Value.ToList()).Replace(" ", ""));
+                            GetComponent<Leermiddelen>().SetLeermiddelen(string.Join("; ", header.Value.ToList()));
+                            Debug.Log(string.Join(";", header.Value.ToList()).Replace(" ", ""));
                         }
                     }
 

@@ -14,8 +14,6 @@ public class ConnectInfowijsView : View
     
     public override void Initialize()
     {
-        if (int.Parse(LocalPrefs.GetString("infowijs-access_token_expires_in", "0")).ToDateTime() > TimeManager.Instance.CurrentDateTime) return;
-        
         openNavigationButton.onClick.AddListener(() =>
         {
             ViewManager.Instance.ShowNewView<SettingsView>();
@@ -24,28 +22,21 @@ public class ConnectInfowijsView : View
         {
             var success = authenticateInfowijs.startAuthenticationFase1(emailInputField.text);
 
-            if (success)
+            if (success != null)
             {
-                emailInputField.placeholder.GetComponent<TextMeshProUGUI>().text = "email link";
-                emailInputField.text = "";
-                
-                connectButton.onClick.RemoveAllListeners();
-                connectButton.onClick.AddListener(() =>
+                var success2 = new CoroutineWithData<bool>(this, FetchToken(true, success.data.id, success.data.customer_product_id, success.data.user_id)).result;
+                StopCoroutine(FetchToken(false));
+                if (success2)
                 {
-                    var success = authenticateInfowijs.startAuthenticationFase2(emailInputField.text);
-
-                    if (success)
-                    {
-                        succesScreen.ShowSuccesScreen("Antonius app");
-                        ViewManager.Instance.Refresh<SchoolNewsView>();
-                        emailInputField.placeholder.GetComponent<TextMeshProUGUI>().text = "school email";
-                        emailInputField.text = "";
-                    }
-                    else
-                    {
-                        connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Probeer opnieuw";
-                    }
-                });
+                    succesScreen.ShowSuccesScreen("Antonius app");
+                    ViewManager.Instance.Refresh<SchoolNewsView>();
+                    emailInputField.placeholder.GetComponent<TextMeshProUGUI>().text = "school email";
+                    emailInputField.text = "";
+                }
+                else
+                {
+                    connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Probeer opnieuw";
+                }
             }
             else
             {
@@ -54,5 +45,26 @@ public class ConnectInfowijsView : View
         });
 
         base.Initialize();
+    }
+    
+    private IEnumerator FetchToken(bool b, string id = "", string custom_product_id = "", string user_id = "")
+    {
+        while (b)
+        {
+            connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Klik op de link in je mail";
+            bool success = authenticateInfowijs.startAuthenticationCodeFetcher(id, custom_product_id, user_id);
+            if (success)
+            {
+                yield return success;
+            }
+            yield return null;
+        }
+    }
+    
+    public override void Refresh(object args)
+    {
+        openNavigationButton.onClick.RemoveAllListeners();
+        connectButton.onClick.RemoveAllListeners();
+        base.Refresh(args);
     }
 }

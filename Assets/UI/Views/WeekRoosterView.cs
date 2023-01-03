@@ -52,15 +52,13 @@ namespace UI.Views
             {
                 ViewManager.Instance.ShowNewView<DagRoosterView>();
             });
-        
-            nextDayButton.onClick.RemoveAllListeners();
+
             nextDayButton.onClick.AddListener(() =>
             {
                 addedDays += 7;
                 Refresh(false);
             });
 
-            previousDayButton.onClick.RemoveAllListeners();
             previousDayButton.onClick.AddListener(() => 
             { 
                 addedDays -= 7;

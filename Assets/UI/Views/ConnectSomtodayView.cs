@@ -55,6 +55,13 @@ namespace UI.Views
 
             base.Initialize();
         }
+        
+        public override void Refresh(object args)
+        {
+            openNavigationButton.onClick.RemoveAllListeners();
+            connectButton.onClick.RemoveAllListeners();
+            base.Refresh(args);
+        }
 
         private IEnumerator Loading(bool b)
         {

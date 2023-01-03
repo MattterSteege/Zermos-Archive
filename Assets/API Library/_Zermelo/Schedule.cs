@@ -14,7 +14,7 @@ public class Schedule : BetterHttpClient
 
     public List<Appointment> GetScheduleOfDay(DateTime date, bool shouldRefreshFile)
     {
-        int weeknumber = GetweeknumberFromDate(date);
+        int weeknumber = GetWeekOfYear(date);
 
         Items schedule = GetSchedule(weeknumber.ToString(), date.Year.ToString(), shouldRefreshFile);
 
@@ -120,28 +120,30 @@ public class Schedule : BetterHttpClient
         return schedule;
     }
     
-    public int GetweeknumberFromDate(DateTime date)
+    private int GetWeekOfYear(DateTime date)
     {
-        DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(date);
+        // Get the day of the year for the date
+        int dayOfYear = date.DayOfYear;
 
-        int weeknumber;
+        // Get the day of the week for the first day of the year
+        DateTime firstDayOfYear = new DateTime(date.Year, 1, 1);
+        DayOfWeek firstDayOfWeek = firstDayOfYear.DayOfWeek;
 
-        if (day >= DayOfWeek.Monday && day <= DayOfWeek.Wednesday)
+        // Calculate the number of days between the first day of the year and the date
+        int daysSinceFirstDay = dayOfYear - 1;
+        if (firstDayOfWeek > DayOfWeek.Sunday)
         {
-            date = date.AddDays(3);
-            weeknumber =
-                CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek,
-                    DayOfWeek.Monday);
-            date = date.AddDays(-3);
-        }
-        else
-        {
-            weeknumber =
-                CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek,
-                    DayOfWeek.Monday);
+            daysSinceFirstDay -= (int)firstDayOfWeek;
         }
 
-        return weeknumber;
+        // Calculate the week of the year
+        int week = daysSinceFirstDay / 7 + 1;
+        if (firstDayOfWeek > DayOfWeek.Sunday)
+        {
+            week += 1;
+        }
+
+        return week;
     }
     
     #region models

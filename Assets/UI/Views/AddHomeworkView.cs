@@ -31,4 +31,11 @@ public class AddHomeworkView : View
         ViewManager.Instance.Refresh<HomeworkView>();
         ViewManager.Instance.ShowNewView<HomeworkView>();
     }
+
+    public override void Refresh(object args)
+    {
+        openNavigationButton.onClick.RemoveAllListeners();
+        save.onClick.RemoveAllListeners();
+        base.Refresh(args);
+    }
 }

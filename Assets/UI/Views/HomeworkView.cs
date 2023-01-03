@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using DG.Tweening;
 using NUnit.Framework;
+using Unity.Mathematics;
 
 namespace UI.Views
 {
@@ -20,10 +21,11 @@ namespace UI.Views
 
         [SerializeField] private CustomHomework _CustomHomework;
         [SerializeField] private ScrollRect _ScrollRect;
-        [SerializeField] RectTransform _rectTransformDefault;
+        private RectTransform _rectTransformDefault;
 
         [SerializeField] private Button _AddHomeworkButton;
         [SerializeField] private Button _recenterButton;
+        [SerializeField] private Toggle _FilterButton;
 
         private List<DateTime> _Dates = new List<DateTime>();
         private List<GameObject> _homeworkDateDividers = new List<GameObject>();
@@ -50,6 +52,13 @@ namespace UI.Views
                 _ScrollRect.decelerationRate = 0f;
                 _ScrollRect.content.DOLocalMove(_ScrollRect.GetSnapToPositionToBringChildIntoView(_rectTransformDefault), 0.1f, true).onComplete += () => _ScrollRect.decelerationRate = decelerationRate;
             };
+            
+            _FilterButton.onValueChanged.AddListener((ctx) =>
+            {
+                RectTransform rectTransform = _ScrollRect.GetComponent<RectTransform>();
+                rectTransform.offsetMin = new Vector2(rectTransform.offsetMin.x, 20f);
+                StartCoroutine(lerpTo(rectTransform, ctx ? -185f : -40f, 0.5f));
+            });
 
             List<Homework.Item> homework = homeworkObject.getHomework();
 
@@ -116,11 +125,52 @@ namespace UI.Views
             
             int closestTimeIndex = _Dates.IndexOf(_Dates.OrderBy(t => Math.Abs((t - TimeManager.Instance.CurrentDateTime).Ticks)).First());
             _ScrollRect.content.position = _ScrollRect.GetSnapToPositionToBringChildIntoView(_rectTransformDefault = _homeworkDateDividers[closestTimeIndex].GetComponent<RectTransform>());
+
+            #region Sorting Shit
+            huiswerk.onValueChanged.AddListener((isOn) =>
+            {
+                if (isOn)
+                    _HomeworkTypes |= HomeworkTypes.huiswerk;
+                else
+                    _HomeworkTypes &= ~HomeworkTypes.huiswerk;
+            });
+            
+            toets.onValueChanged.AddListener((isOn) =>
+            {
+                if (isOn)
+                    _HomeworkTypes |= HomeworkTypes.toets;
+                else
+                    _HomeworkTypes &= ~HomeworkTypes.toets;
+            });
+            
+            grote_toets.onValueChanged.AddListener((isOn) =>
+            {
+                if (isOn)
+                    _HomeworkTypes |= HomeworkTypes.grote_toets;
+                else
+                    _HomeworkTypes &= ~HomeworkTypes.grote_toets;
+            });
+            
+            gemaakt.onValueChanged.AddListener((isOn) =>
+            {
+                if (isOn)
+                    _HomeworkStatus |= HomeworkStatus.gemaakt;
+                else
+                    _HomeworkStatus &= ~HomeworkStatus.gemaakt;
+            });
+            
+            niet_gemaakt.onValueChanged.AddListener((isOn) =>
+            {
+                if (isOn)
+                    _HomeworkStatus |= HomeworkStatus.niet_gemaakt;
+                else
+                    _HomeworkStatus &= ~HomeworkStatus.niet_gemaakt;
+            });
+            sorteerButton.onClick.AddListener(() => StartCoroutine(SortHomework(_HomeworkTypes, _HomeworkStatus)));
+            #endregion
             
             base.Initialize();
         }
-        
-        
 
         #region sorting
         [Flags]
@@ -140,6 +190,12 @@ namespace UI.Views
 
         [SerializeField] private HomeworkTypes _HomeworkTypes;
         [SerializeField] private HomeworkStatus _HomeworkStatus;
+        [SerializeField] private Toggle huiswerk;
+        [SerializeField] private Toggle toets;
+        [SerializeField] private Toggle grote_toets;
+        [SerializeField] private Toggle gemaakt;
+        [SerializeField] private Toggle niet_gemaakt;
+        [SerializeField] private Button sorteerButton;
         
         [ContextMenu("Sort by")]
         public void sort()
@@ -173,8 +229,10 @@ namespace UI.Views
 
         public override void Refresh(object args)
         {
-            content.transform.localPosition = Vector3.zero;
-            _ScrollRect.content.DOLocalMove(new Vector3(0f, 0f, 0f), 0.1f, true);
+            openNavigationButton.onClick.RemoveAllListeners();
+            closeButtonWholePage.onClick.RemoveAllListeners();
+            _AddHomeworkButton.onClick.RemoveAllListeners();
+            _recenterButton.onClick.RemoveAllListeners();
             base.Refresh(args);
         }
 
@@ -234,6 +292,28 @@ namespace UI.Views
 
             www.Dispose();
             return false;
+        }
+        
+        float lerpDuration = 3; 
+        float startValue = 0; 
+        float endValue = 10; 
+        float valueToLerp;
+        [SerializeField] AnimationCurve curve;
+        public IEnumerator lerpTo(RectTransform instance, float top, float duration)
+        {
+            float timeElapsed = 0;
+            lerpDuration = duration;
+            startValue = instance.offsetMax.y;
+            endValue = top;
+            while (timeElapsed < lerpDuration)
+            {
+                valueToLerp = Vector2.Lerp(new Vector2(startValue, 0f), new Vector2(endValue, 0f), curve.Evaluate(timeElapsed)).x;
+                timeElapsed += Time.deltaTime;
+                instance.offsetMax = new Vector2(instance.offsetMax.x, valueToLerp);
+                yield return null;
+            }
+            valueToLerp = endValue;
+            instance.offsetMax = new Vector2(instance.offsetMax.x, valueToLerp);
         }
         
         #region model
