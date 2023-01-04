@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -11,6 +12,7 @@ public class ConnectInfowijsView : View
     [SerializeField] private TMP_InputField emailInputField;
     [SerializeField] AuthenticateInfowijs authenticateInfowijs;
     [SerializeField] SuccesScreen succesScreen;
+    [SerializeField] TMP_Text buttonTextField;
     
     public override void Initialize()
     {
@@ -20,43 +22,75 @@ public class ConnectInfowijsView : View
         });
         connectButton.onClick.AddListener(() =>
         {
-            var success = authenticateInfowijs.startAuthenticationFase1(emailInputField.text);
-
-            if (success != null)
-            {
-                var success2 = new CoroutineWithData<bool>(this, FetchToken(true, success.data.id, success.data.customer_product_id, success.data.user_id)).result;
-                StopCoroutine(FetchToken(false));
-                if (success2)
-                {
-                    succesScreen.ShowSuccesScreen("Antonius app");
-                    ViewManager.Instance.Refresh<SchoolNewsView>();
-                    emailInputField.placeholder.GetComponent<TextMeshProUGUI>().text = "school email";
-                    emailInputField.text = "";
-                }
-                else
-                {
-                    connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Probeer opnieuw";
-                }
-            }
-            else
-            {
-                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Probeer opnieuw";
-            }
+            StartCoroutine(OnClickConnectButton());
         });
 
         base.Initialize();
     }
-    
-    private IEnumerator FetchToken(bool b, string id = "", string custom_product_id = "", string user_id = "")
+
+    private IEnumerator OnClickConnectButton()
     {
+        yield return null;
+        
+        var success = authenticateInfowijs.startAuthenticationFase1(emailInputField.text);
+        yield return null;
+        if (success != null)
+        {
+            buttonTextField.text = "Check je mail!";
+            yield return null;
+
+            bool istweening = false;
+            StartCoroutine(FetchToken(true, success.data.id, success.data.customer_product_id, success.data.user_id, success =>
+            {
+                if (success && !istweening)
+                {
+                    istweening = true;
+                    succesScreen.ShowSuccesScreen("Antonius app");
+                    emailInputField.text = "";
+                }
+                else
+                {
+                    buttonTextField.text = "Probeer opnieuw";
+                }
+
+                return null;
+            }));
+            
+            istweening = false;
+        }
+        else
+        {
+            buttonTextField.text = "Probeer opnieuw";
+        }
+    }
+    
+
+    float maxLoadingTime = 30f;
+    private IEnumerator FetchToken(bool b, string id = "", string custom_product_id = "", string user_id = "", Func<bool, object> callback = null)
+    {
+        maxLoadingTime = 30f;
         while (b)
         {
-            connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Klik op de link in je mail";
-            bool success = authenticateInfowijs.startAuthenticationCodeFetcher(id, custom_product_id, user_id);
-            if (success)
+            StartCoroutine(authenticateInfowijs.startAuthenticationCodeFetcher(id, custom_product_id, user_id, success =>
             {
-                yield return success;
-            }
+                if (success)
+                {
+                    buttonTextField.text = "Inloggen!";
+                    StopCoroutine(FetchToken(false));
+                    callback(true);
+                    return true;
+                }
+
+                maxLoadingTime -= Time.deltaTime;
+                if (maxLoadingTime <= 0)
+                {
+                    b = false;
+                    callback(false);
+                    return false;
+                }
+                return false;
+            }));
+
             yield return null;
         }
     }

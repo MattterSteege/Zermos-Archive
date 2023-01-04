@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
+using TMPro;
 using UnityEngine;
 
 namespace UI.Views
@@ -10,6 +12,7 @@ namespace UI.Views
         [SerializeField] private GameObject _newsItemPrefab;
         [SerializeField] private GameObject _newsItemContainer;
         [SerializeField] private Messages InfowijsMessages;
+        [SerializeField] private TMP_Text beschrijving;
         [SerializeField] private bool loaded = false;
     
         public override void Initialize()
@@ -74,6 +77,8 @@ namespace UI.Views
         private IEnumerator PopulateNewsItems()
         {
             yield return new WaitForSeconds(0.5f);
+            beschrijving.DOFade(0f, 0.1f);
+            yield return new WaitForSeconds(0.05f);
             var messages = new CoroutineWithData<List<Message>>(this, InfowijsMessages.GetBetterInfowijsMessages()).result;
             foreach (Message message in messages)
             {

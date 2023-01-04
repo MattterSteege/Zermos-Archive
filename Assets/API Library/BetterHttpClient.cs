@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
@@ -118,7 +119,7 @@ public class BetterHttpClient : MonoBehaviour
     }
     
     //with headers
-    public object Post(string url, WWWForm form, Dictionary<string, string> headers, Func<UnityWebRequest, object> callback, Func<UnityWebRequest, object> error = null)
+    public IEnumerator Post(string url, WWWForm form, Dictionary<string, string> headers, Func<UnityWebRequest, object> callback, Func<UnityWebRequest, object> error = null)
     {
         Debug.Log("Request started");
         UnityWebRequest www = UnityWebRequest.Post(url, form);
@@ -133,19 +134,18 @@ public class BetterHttpClient : MonoBehaviour
         www.SendWebRequest();
 
         while (!www.isDone)
-        {
-        }
+            yield return null;
 
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.LogWarning(www.error);
             var errored = error.Invoke(www);
             www.Dispose();
-            return errored;
+            yield return errored;
         }
 
         var returned = callback.Invoke(www);
         www.Dispose();
-        return returned;
+        yield return returned;
     }
 }

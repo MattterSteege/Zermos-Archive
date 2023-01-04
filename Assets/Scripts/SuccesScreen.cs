@@ -71,6 +71,9 @@ public class SuccesScreen : MonoBehaviour
                 ViewManager.Instance.Refresh<DagRoosterView>(false);
                 ViewManager.Instance.Refresh<WeekRoosterView>(false);
                 break;
+            case LoginType.infowijs:
+                ViewManager.Instance.Refresh<SchoolNewsView>();
+                break;
         }
     }
 }

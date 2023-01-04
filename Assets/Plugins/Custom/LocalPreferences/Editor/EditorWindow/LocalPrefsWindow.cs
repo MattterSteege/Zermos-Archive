@@ -84,10 +84,9 @@ namespace Neonagee.EditorInternal
         }
         private void OnDisable()
         {
-            if(!EditorApplication.isPlayingOrWillChangePlaymode)
+            if(!EditorApplication.isPlayingOrWillChangePlaymode && files.Length > 0)
                 LocalPrefs.Save(files[selectedFile]);
             EditorApplication.update -= Repaint;
-
             isInitialized = false;
         }
 

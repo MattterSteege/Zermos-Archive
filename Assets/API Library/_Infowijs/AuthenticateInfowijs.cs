@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -57,26 +59,28 @@ public class AuthenticateInfowijs : BetterHttpClient
         }
         
         auth1_2 = JsonConvert.DeserializeObject<InfowijsAuthenticateFase1_2>(www2.downloadHandler.text);
-        
+
         www.Dispose();
         www2.Dispose();
         return auth1_2;
     }
     
-    public bool startAuthenticationCodeFetcher(string id, string custom_product_id, string user_id)
+    public IEnumerator startAuthenticationCodeFetcher(string id, string custom_product_id, string user_id, Func<bool, object> callback)
     {
         Dictionary<string, string> headers = new Dictionary<string, string>();
         headers.Add("accept", "application/vnd.infowijs.v1+json");
         headers.Add("x-infowijs-client", "nl.infowijs.hoy.android/nl.infowijs.client.antonius");
-        return (bool) Post($"https://api.infowijs.nl/sessions/{id}/{custom_product_id}/{user_id}", new WWWForm(), headers, (response) =>
+        yield return StartCoroutine(Post($"https://api.infowijs.nl/sessions/{id}/{custom_product_id}/{user_id}", new WWWForm(), headers, (response) =>
         {
             if (int.Parse(response.GetResponseHeader("content-length")) > 500)
             {
                 LocalPrefs.SetString("infowijs-access_token", JsonConvert.DeserializeObject<InfowijsAuthenticateToken>(response.downloadHandler.text)?.data);
+                callback(true);
                 return true;
             }
+            callback(false);
             return false;
-        });
+        }));
     }
     
     public class Datum
