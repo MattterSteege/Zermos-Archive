@@ -20,7 +20,12 @@ namespace UI.Views
         [SerializeField] private Button algemeneInstellingenButton;
         [SerializeField] private Button koppelingenButton;
         [SerializeField] private Button userInfoButton;
-        [SerializeField] private Button HulpNodigButton;
+        [SerializeField] private Button hulpNodigButton;
+        [Header("Snelle links")]
+        [SerializeField] private Button zermeloButton;
+        [SerializeField] private Button somtodayButton;
+        [SerializeField] private Button OfficeButton;
+        [SerializeField] private Button schoolwikiButton;
 
         public override void Initialize()
         {
@@ -44,8 +49,8 @@ namespace UI.Views
 
             SecretSettingsButton.onClick.AddListener(() =>
             {
-            timesCLicked++;
-            if (timesCLicked >= ClicksNeeded)
+                timesCLicked++;
+                if (timesCLicked >= ClicksNeeded)
                 {
                     timesCLicked = 0;
                     ViewManager.Instance.ShowNewView<SecretSettingsView>();
@@ -58,7 +63,7 @@ namespace UI.Views
             });
 #endif
             
-#region SubView buttons
+            #region SubView buttons
             
             algemeneInstellingenButton.onClick.AddListener(() =>
             {
@@ -75,12 +80,12 @@ namespace UI.Views
             //     subViewManager.ShowNewView<UserInfoSubView>();
             // });
 
-            HulpNodigButton.onClick.AddListener(() =>
-            {
-                Application.OpenURL(@"https://mjtsgamer.github.io/Zermos/");
-            });
-            
-#endregion
+            hulpNodigButton.onClick.AddListener(() => Application.OpenURL(@"https://mjtsgamer.github.io/Zermos/"));
+            zermeloButton.onClick.AddListener(() => Application.OpenURL(@"https://ccg.zportal.nl/"));
+            somtodayButton.onClick.AddListener(() => Application.OpenURL(@"https://carmelcollegegouda.somtoday.nl/"));
+            OfficeButton.onClick.AddListener(() => Application.OpenURL(@"https://portal.office.com/"));
+            schoolwikiButton.onClick.AddListener(() => Application.OpenURL(@"https://antonius.schoolwiki.nl/antoniuscollege"));
+            #endregion
         }
         
         public override void Refresh(object args)
@@ -91,7 +96,11 @@ namespace UI.Views
             algemeneInstellingenButton.onClick.RemoveAllListeners();
             koppelingenButton.onClick.RemoveAllListeners();
             // userInfoButton.onClick.RemoveAllListeners();
-            HulpNodigButton.onClick.RemoveAllListeners();
+            hulpNodigButton.onClick.RemoveAllListeners();
+            zermeloButton.onClick.RemoveAllListeners();
+            somtodayButton.onClick.RemoveAllListeners();
+            OfficeButton.onClick.RemoveAllListeners();
+            schoolwikiButton.onClick.RemoveAllListeners();
             base.Refresh(args);
         }
     }

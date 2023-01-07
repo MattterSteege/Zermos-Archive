@@ -10,6 +10,7 @@ public class SchoolNewsItemView : View
     
     public override void Show(object args = null)
     {
+        openNavigationButton.onClick.RemoveAllListeners();
         openNavigationButton.onClick.AddListener(() => ViewManager.Instance.ShowNewView<SchoolNewsView>());
         
         var message = (Message) args;
@@ -17,6 +18,7 @@ public class SchoolNewsItemView : View
         
         base.Show(args);
     }
+    
     public override void Refresh(object args)
     {
         openNavigationButton.onClick.RemoveAllListeners();

@@ -9,8 +9,9 @@ public class HomeworkInfo : MonoBehaviour
     [SerializeField] TMP_Text details;
     [SerializeField] public Toggle gemaakt;
     
-    [Space, SerializeField] private GameObject ToetsPill;
-    [SerializeField] private GameObject GroteToetsPill;
+    [Space, SerializeField] private GameObject toetsPill;
+    [SerializeField] private GameObject groteToetsPill;
+    [SerializeField] private GameObject bijlagePill;
 
     public Homework.Item homeworkInfo;
     
@@ -43,13 +44,19 @@ public class HomeworkInfo : MonoBehaviour
         
         if (homeworkInfo.studiewijzerItem.huiswerkType == "TOETS")
         {
-            ToetsPill.SetActive(true); //
-            GroteToetsPill.SetActive(false);
+            toetsPill.SetActive(true);
+            groteToetsPill.SetActive(false);
         }
         else if (homeworkInfo.studiewijzerItem.huiswerkType == "GROTE_TOETS")
         {
-            ToetsPill.SetActive(false);
-            GroteToetsPill.SetActive(true); //
+            toetsPill.SetActive(false);
+            groteToetsPill.SetActive(true);
         }
+        
+        if(homeworkInfo.studiewijzerItem.bijlagen.Count > 0)
+            bijlagePill.SetActive(true);
+        else
+            bijlagePill.SetActive(false);
+        
     }
 }

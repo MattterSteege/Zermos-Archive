@@ -215,6 +215,42 @@ public class Homework : BetterHttpClient
         public object huiswerkgemaakt { get; set; }
         public object studiewijzerId { get; set; }
     }
+    
+    public class AssemblyResult
+    {
+        public List<Link> links { get; set; }
+        public List<object> permissions { get; set; }
+        public AdditionalObjects additionalObjects { get; set; }
+        public string assemblyFileType { get; set; }
+        public string fileExtension { get; set; }
+        public string mimeType { get; set; }
+        public float fileSize { get; set; }
+        public string fileType { get; set; }
+        public string fileUrl { get; set; }
+        public string sslUrl { get; set; }
+        public string fileName { get; set; }
+    }
+
+    public class Bijlagen
+    {
+        public List<Link> links { get; set; }
+        public List<object> permissions { get; set; }
+        public AdditionalObjects additionalObjects { get; set; }
+        public string omschrijving { get; set; }
+        public UploadContext uploadContext { get; set; }
+        public List<AssemblyResult> assemblyResults { get; set; }
+        public int sortering { get; set; }
+        public bool zichtbaarVoorLeerling { get; set; }
+    }
+    
+    public class UploadContext
+    {
+        public List<Link> links { get; set; }
+        public List<object> permissions { get; set; }
+        public AdditionalObjects additionalObjects { get; set; }
+        public string fileState { get; set; }
+        public string assemblyId { get; set; }
+    }
 
     public class Item
     {
@@ -312,7 +348,7 @@ public class Homework : BetterHttpClient
         public bool inleverperiodes { get; set; }
         public bool lesmateriaal { get; set; }
         public bool projectgroepen { get; set; }
-        public List<object> bijlagen { get; set; }
+        public List<Bijlagen> bijlagen { get; set; }
         public List<object> externeMaterialen { get; set; }
         public List<object> inlevermomenten { get; set; }
         public bool tonen { get; set; }

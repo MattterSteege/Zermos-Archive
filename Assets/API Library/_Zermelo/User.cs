@@ -1,9 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using TMPro;
-using UnityEngine;
-using UnityEngine.Networking;
 
 public class User : BetterHttpClient
 {

@@ -111,8 +111,7 @@ namespace UI.Views
 
                 homeworkItem.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    ViewManager.Instance.ShowNewView<HomeworkItemView>(homeworkItem.GetComponent<HomeworkInfo>()
-                        .homeworkInfo);
+                    ViewManager.Instance.ShowNewView<HomeworkItemView>(homeworkItem.GetComponent<HomeworkInfo>().homeworkInfo);
                 });
 
                 homeworkItem.GetComponent<HomeworkInfo>().gemaakt.onValueChanged.AddListener((isOn) =>

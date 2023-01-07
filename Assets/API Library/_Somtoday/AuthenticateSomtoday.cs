@@ -110,7 +110,7 @@ public class AuthenticateSomtoday : BetterHttpClient
             SomtodayAuthentication somtodayAuthentication =
                 JsonConvert.DeserializeObject<SomtodayAuthentication>(response4.Content.ReadAsStringAsync().Result);
 
-            GetCookies(username, password);
+            GetComponent<Leermiddelen>().GetCookies(username, password);
             
             yield return somtodayAuthentication;
         }
@@ -202,73 +202,4 @@ public class AuthenticateSomtoday : BetterHttpClient
     }
 
     #endregion
-
-    public void GetCookies(string username, string password)
-    {
-        WWWForm form = new WWWForm();
-        form.AddField("nextLink", "x");
-        form.AddField("organisatieSearchField--selected-value-1", "c23fbb99-be4b-4c11-bbf5-57e7fc4f4388"); //uuid of carmelcollege Gouda
-        form.AddField("organisatieSearchFieldPanel:organisatieSearchFieldPanel_body:organisatieSearchField", "Carmelcollege Gouda");
-        
-        Dictionary<string, string> headers = new Dictionary<string, string>();
-        headers.Add("referer", "https://inloggen.somtoday.nl");
-
-        Post("https://inloggen.somtoday.nl/?-1.-panel-organisatieSelectionForm", form, headers,(response) =>
-        {
-            Uri myUri = new Uri(response.url);
-            string authToken = HttpUtility.ParseQueryString(myUri.Query).Get("auth");
-            
-            WWWForm form = new WWWForm();
-            form.AddField("loginLink", "x");
-            form.AddField("usernameFieldPanel:usernameFieldPanel_body:usernameField", username);
-            
-            Dictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("referer", "https://inloggen.somtoday.nl");
-            
-            Post($"https://inloggen.somtoday.nl/?-1.-panel-signInForm&auth={authToken}", form, headers,(response) =>
-            {
-
-                WWWForm form = new WWWForm();
-                form.AddField("loginLink", "x");
-                form.AddField("passwordFieldPanel:passwordFieldPanel_body:passwordField", password);
-
-                Dictionary<string, string> headers = new Dictionary<string, string>();
-                headers.Add("referer", "https://inloggen.somtoday.nl");
-                
-                Post("https://inloggen.somtoday.nl/login?1-1.-passwordForm", form, headers,(response) =>
-                {
-                    string saml2AcsToken = Regex.Match(response.downloadHandler.text, "(?<=<input type=\"hidden\" name=\"SAMLResponse\" value=\")(.*)(?=\")").Value;
-                    
-                    //this isn't because UnityWebRequest doesn't support cookies & disabling redirects
-                    HttpClientHandler handler = new HttpClientHandler()
-                    {
-                        AllowAutoRedirect = false
-                    };
-                    HttpClient client = new HttpClient(handler);
-                    var content = new FormUrlEncodedContent(new[]
-                    {
-                        new KeyValuePair<string, string>("SAMLResponse", saml2AcsToken)
-                    });
-                    var result = client.PostAsync("https://elo.somtoday.nl/saml2/acs", content);
-                    
-                    foreach (var header in result.Result.Headers)
-                    {
-                        if (header.Key.ToLower() == "set-cookie")
-                        {
-                            GetComponent<Leermiddelen>().SetLeermiddelen(string.Join("; ", header.Value.ToList()));
-                            Debug.Log(string.Join(";", header.Value.ToList()).Replace(" ", ""));
-                        }
-                    }
-
-                    client.Dispose();
-                    
-                    return null;
-                });
-                
-                return null;
-            });
-            
-            return null;
-        });
-    }
 }

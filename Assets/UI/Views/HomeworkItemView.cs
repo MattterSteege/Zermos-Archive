@@ -22,6 +22,9 @@ namespace UI.Views
         [SerializeField] private GameObject ToetsPill;
         [SerializeField] private GameObject GroteToetsPill;
 
+        [SerializeField] private GameObject BijlagePrefab;
+        [SerializeField] private GameObject BijlageHolder;
+        
         public override void Show(object args = null)
         {
             this.homeworkInfo = (Homework.Item) args;
@@ -88,6 +91,27 @@ namespace UI.Views
             foreach (var result in m1)
             {
                 Omschrijving.text = Omschrijving.text.Replace(result.ToString(), "<u><color=\"blue\"><link=" + result + ">" + result + "</link></color></u>");
+            }
+
+            if (homeworkInfo.studiewijzerItem.bijlagen.Count == 0)
+            {
+                BijlageHolder.transform.parent.gameObject.SetActive(false);
+                Omschrijving.transform.parent.GetComponent<RectTransform>().offsetMin = new Vector2(25f, 15f);
+            }
+            else
+            {
+                Omschrijving.transform.parent.GetComponent<RectTransform>().offsetMin = new Vector2(25f, 180f);
+                
+                foreach (Transform child in BijlageHolder.transform)
+                    Destroy(child.gameObject);
+
+                BijlageHolder.transform.parent.gameObject.SetActive(true);
+                for (int i = 0; i < homeworkInfo.studiewijzerItem.bijlagen.Count; i++)
+                {
+                    var go = Instantiate(BijlagePrefab, BijlageHolder.transform).GetComponent<BijlageInfo>();
+                    go.setInfo(homeworkInfo.studiewijzerItem.bijlagen[i].omschrijving, (homeworkInfo.studiewijzerItem.bijlagen[i].assemblyResults[0].fileSize / 1024f).ToString("0.0") + " KB");
+                    go.AddLink(homeworkInfo.studiewijzerItem.bijlagen[i].assemblyResults[0].fileUrl);
+                }
             }
         }
 
