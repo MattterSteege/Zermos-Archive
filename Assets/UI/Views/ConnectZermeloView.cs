@@ -11,62 +11,60 @@ namespace UI.Views
         [SerializeField] private TMP_InputField Wachtwoord;
         [SerializeField] private Button connectButton;
         [SerializeField] private AuthenticateZermelo zermeloAuthenticate;
+        [SerializeField] private Toggle PassToggle;
 
         public override void Initialize()
         {
             connectButton.onClick.AddListener(() =>
             {
-                StartCoroutine(Loading(true));
-
-                string gebruikersnaam = Gebruikersnaam.text;
-                string wachtwoord = Wachtwoord.text;
-
-
-                if (gebruikersnaam != "" && wachtwoord != "")
-                {
-                    AuthenticateZermelo.ZermeloAuthentication response = zermeloAuthenticate.AuthenticateUser(gebruikersnaam, wachtwoord);
-
-                    if (response.access_token != null)
-                    {
-                        zermeloAuthenticate.gameObject.GetComponent<SuccesScreen>().ShowSuccesScreen("Zermelo");
-                    }
-                    else
-                    {
-                        StartCoroutine(Loading(false));
-                        connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "inloggen mislukt";
-                    }
-                }
-                else
-                {
-                    StartCoroutine(Loading(false));
-                    connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Vul alle velden in";
-                }
-                
-                StartCoroutine(Loading(false));
+                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Inloggen!";
+                connectButton.interactable = false;
+                StartCoroutine(OnClickConnectButton());
+            });
+            
+            PassToggle.onValueChanged.AddListener((value) =>
+            {
+                Wachtwoord.contentType = value ? TMP_InputField.ContentType.Standard : TMP_InputField.ContentType.Password;
+                Wachtwoord.ForceLabelUpdate();
             });
 
             base.Initialize();
+        }
+
+        private IEnumerator OnClickConnectButton()
+        {
+            yield return null;
+            string gebruikersnaam = Gebruikersnaam.text;
+            string wachtwoord = Wachtwoord.text;
+
+            if (gebruikersnaam != "" && wachtwoord != "")
+            {
+                AuthenticateZermelo.ZermeloAuthentication response = zermeloAuthenticate.AuthenticateUser(gebruikersnaam, wachtwoord);
+
+                if (response != null && response.access_token != null)
+                {
+                    zermeloAuthenticate.gameObject.GetComponent<SuccesScreen>().ShowSuccesScreen("Zermelo");
+                    yield return new WaitForSeconds(1f);
+                    connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Inloggen!";
+                    connectButton.interactable = true;
+                }
+                else
+                {
+                    connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Inloggen mislukt";
+                    connectButton.interactable = true;
+                }
+            }
+            else
+            {
+                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Vul alles in!";
+                connectButton.interactable = true;
+            }
         }
 
         public override void Refresh(object args)
         {
             connectButton.onClick.RemoveAllListeners();
             base.Refresh(args);
-        }
-        
-        private IEnumerator Loading(bool b)
-        {
-            while (b)
-            {
-                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Laden...";
-                yield return new WaitForSeconds(0.5f);
-                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Laden.";
-                yield return new WaitForSeconds(0.5f);
-                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Laden..";
-                yield return new WaitForSeconds(0.5f);
-                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Laden...";
-                yield return new WaitForSeconds(0.5f);
-            }
         }
     }
 }

@@ -2,6 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.Networking;
 using Debug = UnityEngine.Debug;
@@ -25,6 +29,36 @@ public class BetterHttpClient : MonoBehaviour
             var errored = error.Invoke(www);
             www.Dispose();
             return errored;
+        }
+
+        var returned = callback.Invoke(www);
+        www.Dispose();
+        return returned;
+    }
+    
+    public object Get(string url, Dictionary<string, string> headers = null, Func<UnityWebRequest, object> callback = null)
+    {
+        Debug.Log("Request started");
+        UnityWebRequest www = UnityWebRequest.Get(url);
+        www.SetRequestHeader("Accept", "application/json");
+        if (headers != null)
+        {
+            foreach (var header in headers)
+            {
+                www.SetRequestHeader(header.Key, header.Value);
+            }
+        }
+        www.SendWebRequest();
+
+        while (!www.isDone)
+        {
+        }
+
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogWarning(www.error);
+            www.Dispose();
+            return null;
         }
 
         var returned = callback.Invoke(www);

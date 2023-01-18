@@ -91,7 +91,7 @@ public class ConnectInfowijsView : View
                 return false;
             }));
 
-            yield return null;
+            yield return new WaitForSeconds(1f);
         }
     }
     

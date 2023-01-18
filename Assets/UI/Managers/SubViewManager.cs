@@ -60,7 +60,6 @@ public sealed class SubViewManager : MonoBehaviour
 		
 		onLoadedView?.Invoke(1f);
 		onInitializeComplete?.Invoke(true);
-		
 	}
 	
 	[ContextMenu("Show parent view")]
@@ -69,7 +68,7 @@ public sealed class SubViewManager : MonoBehaviour
 		if (currentView == null) return;
 		RectTransform rectTransform = currentView.GetComponent<RectTransform>();
 		
-		rectTransform.DOLocalMove(new Vector3(rectTransform.rect.width, -rectTransform.rect.height / 2f, 0f), animationTime);
+		rectTransform.DOLocalMove(new Vector3(rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime * 2f);
 	}
 
 	[ContextMenu("Hide Navigation")]
@@ -78,7 +77,8 @@ public sealed class SubViewManager : MonoBehaviour
 		if (currentView == null) return;
 		RectTransform rectTransform = currentView.GetComponent<RectTransform>();
 		
-		rectTransform.DOLocalMove(new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime);
+		rectTransform.transform.position = new Vector3(rectTransform.rect.width, 0f, 0f);
+		rectTransform.DOLocalMove(new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime * 2f);
 	}
 	
 	public void ShowNewView<TView>(object args = null) where TView : SubView

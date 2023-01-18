@@ -45,7 +45,9 @@ public class Homework : BetterHttpClient
             .Replace("<li>", "\n• ").Replace("</li>", "")
             .Replace("&amp;", "&")
             .Replace("<strong>", "<b>").Replace("</strong>", "</b>")
-            .Replace("<em>", "<i>").Replace("</em>", "</i>");
+            .Replace("<em>", "<i>").Replace("</em>", "</i>")
+            .Replace("&nbsp;", " ");
+        
         
         homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
 
@@ -77,7 +79,8 @@ public class Homework : BetterHttpClient
                 .Replace("<li>", "\n• ").Replace("</li>", "")
                 .Replace("&amp;", "&").Replace("<br>", "\n")
                 .Replace("<strong>", "<b>").Replace("</strong>", "</b>")
-                .Replace("<em>", "<i>").Replace("</em>", "</i>"));
+                .Replace("<em>", "<i>").Replace("</em>", "</i>")
+                .Replace("&nbsp;", " "));
             
             if (extraHomework != null)
             {

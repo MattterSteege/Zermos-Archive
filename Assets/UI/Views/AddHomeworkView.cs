@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using UI.Dates;
 using UI.Views;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +9,7 @@ public class AddHomeworkView : View
 {
     [SerializeField] TMP_InputField titel;    
     [SerializeField] TMP_InputField omschrijving;    
-    [SerializeField] TMP_InputField datum;    
+    [SerializeField] DatePicker datum;    
     [SerializeField] Button save;    
 
     [SerializeField] private CustomHomework _CustomHomework;
@@ -27,7 +28,7 @@ public class AddHomeworkView : View
 
     private void SaveHomework()
     {
-        _CustomHomework.SaveFile(titel.text, omschrijving.text, new DateTime(Int32.Parse(datum.text.Split("-")[2]), Int32.Parse(datum.text.Split("-")[1]), Int32.Parse(datum.text.Split("-")[0])));
+        _CustomHomework.SaveFile(titel.text, omschrijving.text, datum.SelectedDate.Date);
         ViewManager.Instance.Refresh<HomeworkView>();
         ViewManager.Instance.ShowNewView<HomeworkView>();
     }

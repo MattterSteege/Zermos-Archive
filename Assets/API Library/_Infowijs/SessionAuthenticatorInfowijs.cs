@@ -8,7 +8,7 @@ public class SessionAuthenticatorInfowijs : MonoBehaviour
 {
     public InfowijsAccessToken GetAccesToken(string access_token = null)
     {
-        UnityWebRequest www = UnityWebRequest.Post("https://api.infowijs.nl/sessions/access_token", "");
+        UnityWebRequest www = UnityWebRequest.PostWwwForm("https://api.infowijs.nl/sessions/access_token", "");
         www.SetRequestHeader("authorization", "Bearer " + access_token);
         www.SetRequestHeader("Accept", "application/vnd.infowijs.v1+json");
         www.SetRequestHeader("x-infowijs-client", $"nl.infowijs.hoy.android/nl.infowijs.client.antonius");

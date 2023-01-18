@@ -93,10 +93,10 @@ namespace UI.Views
 					SchoolNieuwsButton.gameObject.SetActive(false);
 				}
 			}
-
+			
 			base.Initialize();
 		}
-
+		
 		public override void Refresh(object args)
 		{			
 			openNavigationButton.onClick.RemoveAllListeners();

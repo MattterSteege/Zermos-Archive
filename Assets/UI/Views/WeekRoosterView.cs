@@ -118,12 +118,12 @@ namespace UI.Views
                             rooster.GetComponent<Image>().color = new Color(1f, 0f, 0f, 0.5f);
                         }
 
-                        rooster.GetComponent<Button>().onClick.RemoveAllListeners();
-                        rooster.GetComponent<Button>().onClick.AddListener(() =>
-                        {
-                            ViewManager.Instance.ShowNewView<RoosterItemView>(rooster.GetComponent<AppointmentInfo>()
-                                ._appointment);
-                        });
+                        // rooster.GetComponent<Button>().onClick.RemoveAllListeners();
+                        // rooster.GetComponent<Button>().onClick.AddListener(() =>
+                        // {
+                        //     ViewManager.Instance.ShowNewView<InPlanLesView>(rooster.GetComponent<AppointmentInfo>()
+                        //         ._appointment);
+                        // });
 
                         //must be at the end
                         listIndex++;
@@ -151,7 +151,7 @@ namespace UI.Views
                         tussenUur.GetComponent<Button>().onClick.RemoveAllListeners();
                         tussenUur.GetComponent<Button>().onClick.AddListener(() =>
                         {
-                            ViewManager.Instance.ShowNewView<RoosterItemView>(tussenUur
+                            ViewManager.Instance.ShowNewView<InPlanLesView>(tussenUur
                                 .GetComponent<AppointmentInfo>()._appointment);
                         });
 

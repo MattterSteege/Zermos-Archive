@@ -52,17 +52,9 @@ public class AuthenticateZermelo : BetterHttpClient
 
                 return response;
             },
-            error =>
-            {
-                Debug.Log(error.error);
-                return null;
-            });
+            _ => null);
         }, 
-        error =>
-        {
-            Debug.Log(error.error);
-            return null;
-        });
+        _ => null);
     }
 
     private string RandomStateString()

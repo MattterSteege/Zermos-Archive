@@ -26,8 +26,6 @@ public class Grades : BetterHttpClient
         
         if (string.IsNullOrEmpty(LocalPrefs.GetString("somtoday-access_token"))) return null;
 
-        string json;
-
         string baseUrl =
             $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/resultaten/huidigVoorLeerling/{LocalPrefs.GetString("somtoday-student_id")}?begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01";
 
@@ -37,7 +35,7 @@ public class Grades : BetterHttpClient
 
         return (SomtodayGrades) Get(baseUrl, headers, (response) =>
         {
-            json = response.downloadHandler.text;
+            var sortedGrades = JsonConvert.DeserializeObject<SomtodayGrades>(response.downloadHandler.text) ?? new SomtodayGrades(){items = new List<Item>()};
 
             int total = int.Parse(response.GetResponseHeader("Content-Range").Split('/')[1]);
 
@@ -51,12 +49,14 @@ public class Grades : BetterHttpClient
 
                 Get(baseUrl, headers, (response) =>
                 {
-                    json += response.downloadHandler.text;
+                    var collection = JsonConvert.DeserializeObject<SomtodayGrades>(response.downloadHandler.text)?.items;
+                    if (collection != null)
+                        sortedGrades.items.AddRange(collection);
                     return null;
                 });
             }
             
-            var sortedGrades = Sort(JsonConvert.DeserializeObject<SomtodayGrades>(json));
+            sortedGrades = Sort(sortedGrades);
             SaveGrades(sortedGrades);
             return sortedGrades;
         });
@@ -117,9 +117,10 @@ public class Grades : BetterHttpClient
 
     public SomtodayGrades Sort(SomtodayGrades grades)
     {
-        grades.items = grades.items.OrderBy(x => x.datumInvoer).ToList();
         grades.items.RemoveAll(x => x.geldendResultaat == null);
         grades.items.RemoveAll(x => string.IsNullOrEmpty(x.omschrijving) && x.weging == 0);
+        grades.items.RemoveAll(x => x.type.ToLower() == "deeltoetskolom"); //TODO: deelcijfers moeten nog worden opgeteld
+        grades.items = grades.items.OrderBy(x => x.datumInvoer).ToList();
         return grades;
     }
 

@@ -8,6 +8,8 @@ public class CheckTokenExpirationDate
     /// false: if the token is expired</returns>
     public bool CheckToken(string token)
     {
+        if (token == null) return false;
+        
         // Split the token into header, payload, and signature parts
         var parts = token.Split('.');
         if (parts.Length != 3)

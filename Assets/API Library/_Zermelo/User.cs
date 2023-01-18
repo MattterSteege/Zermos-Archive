@@ -17,6 +17,7 @@ public class User : BetterHttpClient
         });
     }
 
+    #region models
     public class Datum
     {
         [JsonProperty("code")]
@@ -112,4 +113,5 @@ public class User : BetterHttpClient
         [JsonProperty("response")]
         public Response Response { get; set; }
     }
+    #endregion
 }

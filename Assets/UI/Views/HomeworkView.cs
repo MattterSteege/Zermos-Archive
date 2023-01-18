@@ -250,7 +250,7 @@ namespace UI.Views
                 {
                     links = new List<Link>
                     {
-                        new()
+                        new Link()
                         {
                             id = int.Parse(LocalPrefs.GetString("somtoday-student_id")),
                             rel = "self",

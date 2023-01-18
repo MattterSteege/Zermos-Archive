@@ -76,7 +76,7 @@ public class AuthenticateInfowijs : BetterHttpClient
             }
             callback(false);
             return false;
-        }));
+        }, _ => false));
     }
     
     public class Datum

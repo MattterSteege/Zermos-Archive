@@ -16,7 +16,7 @@ public class UpdateSystem : MonoBehaviour
     }
     
     [HideInInspector] public fetchType _fetchType;
-    [SerializeField, Tooltip("Vx.x.x")] public string CurrentVersion;
+    public string CurrentVersion => Application.version;
 
 #if UNITY_ANDROID
     /// <summary>
@@ -29,7 +29,7 @@ public class UpdateSystem : MonoBehaviour
     [ContextMenu("Check for update")]
     public int checkForUpdates()
     {
-        int shouldUpdate = CompareVersionStrings(CurrentVersion, GetLatestVersion());
+        int shouldUpdate = 0;//CompareVersionStrings(CurrentVersion, GetLatestVersion());
         if (shouldUpdate == -1)
         {
             return 1;
@@ -48,102 +48,6 @@ public class UpdateSystem : MonoBehaviour
         return -2;
     }
 
-    public string GetLatestVersion(fetchType type = fetchType.version)
-    {
-        UnityWebRequest request = UnityWebRequest.Get("https://api.github.com/repos/MJTSgamer/Zermos/releases");
-        request.SetRequestHeader("Accept", "application/vnd.github+json");
-        request.SetRequestHeader("Authorization",
-            "Bearer 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");
-        request.SendWebRequest();
-
-        while (!request.isDone)
-        {
-        }
-
-        var UpdateResponse = JsonConvert.DeserializeObject<List<UpdateResponse>>(request.downloadHandler.text);
-
-        if (type == fetchType.url)
-        {
-            return UpdateResponse[0].assets[0].url;
-        }
-        else if (type == fetchType.release_notes)
-        {
-            return UpdateResponse[0].body;
-        }
-        else
-        {
-            return UpdateResponse[0].tag_name;
-        }
-
-    }
-
-    public void DownloadLatestVersion()
-    {
-        string url = GetLatestVersion(fetchType.url);
-
-        UnityWebRequest request = UnityWebRequest.Get(url);
-        request.SetRequestHeader("Accept", "application/octet-stream");
-        request.SetRequestHeader("Content-Type", "application/vnd.android.package-archive");
-        request.SetRequestHeader("Authorization",
-            "Bearer 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");
-
-        request.SendWebRequest();
-
-        while (!request.isDone)
-        {
-        }
-
-        byte[] results = request.downloadHandler.data;
-
-#if UNITY_EDITOR
-        string path = Path.Combine(Application.persistentDataPath, "..", "..", "..", "..", "Downloads", "Zermos.apk");
-#elif UNITY_ANDROID && !UNITY_EDITOR
-        string path = Path.Combine(Application.persistentDataPath, "..", "..", "..", "..", "Documents", "Zermos.apk");
-#endif
-        bool success = SaveFile(path, results);
-        
-        if (success)
-        {
-            Debug.Log("Open 'Mijn Bestanden' > 'Interne opslag' > 'Documents' > 'Zermos.apk' to install the update");
-        }
-    }
-
-    private bool SaveFile(string path, byte[] results)
-    {
-        try
-        {
-            File.WriteAllBytes(path, results);
-            return true;
-        }
-        catch (IOException)
-        {
-            File.Delete(path);
-            File.WriteAllBytes(path, results);
-            return false;
-        }
-        catch (UnauthorizedAccessException)
-        {
-            Debug.Log("Downloaden mislukt, kijk of je de laatste versie wel verwijderd hebt, zo niet verwijder het dan! ('Mijn Bestanden' > 'Interne opslag' > 'Documents' > 'Zermos.apk')");
-            return false;
-        }
-    }
-
-    /// <summary>
-    /// Compare two version strings, e.g.  "3.2.1.0.b40" and "3.10.1.a".
-    /// V1 and V2 can have different number of components.
-    /// Components must be delimited by dot.
-    /// </summary>
-    /// <remarks>
-    /// This doesn't do any null/empty checks so please don't pass dumb parameters
-    /// </remarks>
-    /// <param name="v1"></param>
-    /// <param name="v2"></param>
-    /// <returns>
-    /// -1 if v1 is lower version number than v2,
-    /// 0 if v1 == v2,
-    /// 1 if v1 is higher version number than v2,
-    /// -1000 if we couldn't figure it out (something went wrong)
-    /// </returns>
     private static int CompareVersionStrings(string v1, string v2)
     {
         int rc = -1000;

@@ -15,7 +15,7 @@ namespace UI.Views
         [SerializeField] private Vakken vakkenObject;
     
         [SerializeField] private GameObject LastGradeContentGameObject;
-        private List<Grades.Item> lastGrades = new();
+        private List<Grades.Item> lastGrades = new List<Grades.Item>();
 
         [ContextMenu("Refresh")]
         public override void Initialize()
@@ -51,22 +51,23 @@ namespace UI.Views
                     grade.geldendResultaat ?? "-");
             }
             
-            foreach (Vakken.Item Vak in vakkenObject.getVakken().items ?? new List<Vakken.Item>())
+            foreach (Vakken.JsonItem Vak in vakkenObject.getVakken().items ?? new List<Vakken.JsonItem>())
             {
                 List<Grades.Item> GradesPerVak = grades.items.Where(x => x.vak.naam == Vak.naam).ToList();
                 
                 if (GradesPerVak.Count > 0)
                 {
                     int totalWeight = GradesPerVak.Sum(x => x.weging);
-                    float avarege;
+                    if (totalWeight == 0) totalWeight = GradesPerVak.Count;
+                    float totalGrade = 0f;
+
+                    for (int i = 0; i < GradesPerVak.Count; i++)
+                        totalGrade += (GradesPerVak[i].weging == 0 ? 1 : GradesPerVak[i].weging) * float.Parse(GradesPerVak[i].geldendResultaat, NumberStyles.Any);
                     
-                    if (totalWeight == 0)
-                        avarege = GradesPerVak.Sum(x => float.Parse(x.geldendResultaat));
-                    else
-                        avarege = GradesPerVak.Sum(x => x.weging * float.Parse(x.geldendResultaat) / totalWeight);
+                    float endGrade = MathF.Round(totalGrade / totalWeight, 1, MidpointRounding.AwayFromZero);
                     
                     var gradeView = Instantiate(gradePrefab, content.transform);
-                    gradeView.GetComponent<GradeInfo>().SetGradeInfo(Vak.naam ?? "", "",  "", totalWeight + "x", avarege.ToString("0.0"));
+                    gradeView.GetComponent<GradeInfo>().SetGradeInfo(Vak.naam ?? "", "",  "", GradesPerVak.Sum(x => x.weging) + "x", endGrade.ToString(CultureInfo.InvariantCulture).Replace(".", ","));
                     
                     gradeView.GetComponent<Button>().onClick.AddListener(() =>
                     {

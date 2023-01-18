@@ -46,14 +46,7 @@ namespace UI.Views
         
             delete.onClick.AddListener(() => DeleteHomework());
 
-            if (homeworkInfo.gemaakt == true)
-            {
-                delete.gameObject.SetActive(true);
-            }
-            else
-            {
-                delete.gameObject.SetActive(false);
-            }
+            delete.gameObject.SetActive(homeworkInfo.gemaakt);
 
             if (homeworkInfo == null) return;
 
@@ -93,7 +86,7 @@ namespace UI.Views
                 Omschrijving.text = Omschrijving.text.Replace(result.ToString(), "<u><color=\"blue\"><link=" + result + ">" + result + "</link></color></u>");
             }
 
-            if (homeworkInfo.studiewijzerItem.bijlagen.Count == 0)
+            if (homeworkInfo.studiewijzerItem.bijlagen?.Count > 0 )
             {
                 BijlageHolder.transform.parent.gameObject.SetActive(false);
                 Omschrijving.transform.parent.GetComponent<RectTransform>().offsetMin = new Vector2(25f, 15f);

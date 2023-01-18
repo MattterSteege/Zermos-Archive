@@ -56,7 +56,7 @@ public class CustomHomework : MonoBehaviour
                     {
                         items = new List<Homework.Item>()
                         {
-                            new()
+                            new Homework.Item()
                             {
                                 gemaakt = customHomeworkItem.gemaakt
                             }

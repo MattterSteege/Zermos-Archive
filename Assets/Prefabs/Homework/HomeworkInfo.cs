@@ -52,11 +52,7 @@ public class HomeworkInfo : MonoBehaviour
             toetsPill.SetActive(false);
             groteToetsPill.SetActive(true);
         }
-        
-        if(homeworkInfo.studiewijzerItem.bijlagen.Count > 0)
-            bijlagePill.SetActive(true);
-        else
-            bijlagePill.SetActive(false);
-        
+
+        bijlagePill.SetActive(homeworkInfo.studiewijzerItem.bijlagen?.Count > 0);
     }
 }

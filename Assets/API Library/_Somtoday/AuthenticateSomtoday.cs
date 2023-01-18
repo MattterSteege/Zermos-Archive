@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -61,7 +62,7 @@ public class AuthenticateSomtoday : BetterHttpClient
 
             Uri myUri = new Uri(values.First());
 
-            authToken = HttpUtility.ParseQueryString(myUri.Query).Get("auth");
+            authToken = ParseQueryString.ParseQuery(myUri.Query).Get("auth");
 
             FormUrlEncodedContent Content;
             Content = new FormUrlEncodedContent(new Dictionary<string, string>()
@@ -93,7 +94,7 @@ public class AuthenticateSomtoday : BetterHttpClient
 
             myUri = new Uri(values3.First());
 
-            authCode = HttpUtility.ParseQueryString(myUri.Query).Get("code");
+            authCode = ParseQueryString.ParseQuery(myUri.Query).Get("code");
             
             string ResponseHTML = response3.Content.ReadAsStringAsync().Result;
             

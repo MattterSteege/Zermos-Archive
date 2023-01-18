@@ -110,8 +110,6 @@ public class LessonNotificationManager : MonoBehaviour
         };
 
         AndroidNotificationCenter.SendNotification(notification, "lessons");
-        
-        Debug.Log($"Added notification for {timeToSend:HH:mm:ss}, {title}, {body}");
     }
     
     [ContextMenu("Test")]

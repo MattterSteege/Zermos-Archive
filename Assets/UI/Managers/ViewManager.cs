@@ -18,6 +18,7 @@ public sealed class ViewManager : MonoBehaviour
 	[SerializeField] private bool autoInitialize;
 	[SerializeField] public bool isShowingNavigation;
 	[SerializeField] private View Loginview;
+	[SerializeField] private View NewUserView;
 	[SerializeField] private View[] views;
 	[SerializeField] private View[] defaultViews;
 
@@ -55,7 +56,7 @@ public sealed class ViewManager : MonoBehaviour
 	float viewsLoaded;
 	Stopwatch _timer;
 	float passedTime;
-	List<float> times = new();
+	List<float> times = new List<float>();
 	public IEnumerator Initialize()
 	{
 		_timer = new Stopwatch();
@@ -88,6 +89,12 @@ public sealed class ViewManager : MonoBehaviour
 			passedTime = _timer.ElapsedMilliseconds / 1000f;
 #endif
 		}
+		if(LocalPrefs.GetBool("first_time", false) == false)
+		{
+			NewUserView.Show();
+			yield break;
+		}
+		
 		if(string.IsNullOrEmpty(LocalPrefs.GetString("zermelo-access_token")))
 		{
 			Loginview.Show();
@@ -108,6 +115,9 @@ public sealed class ViewManager : MonoBehaviour
 		
 		onLoadedView?.Invoke(1f);
 		onInitializeComplete?.Invoke(true);
+		
+		SwipeDetector.onSwipeRight += ShowNavigation;
+		SwipeDetector.onSwipeLeft += HideNavigation;
 
 #if UNITY_EDITOR
 		if (saveLoadingTimes == true)		
@@ -126,7 +136,7 @@ public sealed class ViewManager : MonoBehaviour
 		}
 #endif
 	}
-	
+
 	[ContextMenu("Show Navigation")]
 	public void ShowNavigation()
 	{

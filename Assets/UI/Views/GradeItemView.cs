@@ -1,6 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
+using E2C;
 using TMPro;
 using UI.Views;
 using UnityEngine;
@@ -13,8 +12,7 @@ public class GradeItemView : View
     [SerializeField] private TMP_Text TitleText;
     [SerializeField] private GameObject GradeContent;
     [SerializeField] private Button welkCijferMoetIkHalenButton;
-    [SerializeField] private UnityEngine.UI.Extensions.UILineRenderer UILineRenderer;
-    [SerializeField] private UnityEngine.UI.Extensions.UIGridRenderer UIGridRenderer;
+    [SerializeField] private E2Chart _chart;
 
     public override void Show(object args = null)
     {
@@ -23,11 +21,9 @@ public class GradeItemView : View
         if (Grades.Count == 0) return;
         
         TitleText.text = Grades[0].vak.naam;
+        
+        _chart.chartData.series[0].dataY.Clear();
 
-        UIGridRenderer.GridColumns = Grades.Count;
-        UIGridRenderer.GridRows = 10;
-        UILineRenderer.Points = new Vector2[Grades.Count + 1];
-        UILineRenderer.Points[0] = new Vector2(0, float.Parse(Grades[0].geldendResultaat) / 10f);
 
         foreach (Transform gameObject in GradeContent.transform)
         {
@@ -42,9 +38,10 @@ public class GradeItemView : View
                 grade.datumInvoer.ToString("d MMMM"), /*grade.omschrijving*/ "", grade.weging + "x",
                 grade.geldendResultaat ?? "-");
             
-            UILineRenderer.Points[i + 1] = new Vector2((1f / Grades.Count) * (i + 1), float.Parse(Grades[i].geldendResultaat) / 10f);
+            _chart.chartData.series[0].dataY.Add(float.Parse(Grades[Grades.Count - i - 1].geldendResultaat));
         }
 
+        _chart.UpdateChart();
         base.Show(args);
     }
 

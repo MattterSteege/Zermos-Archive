@@ -9,11 +9,11 @@ public class Student : BetterHttpClient
     [SerializeField, Tooltip("'*' means Application.persistentDataPath.")]
     private string savePath = "*/Student.json";
     
-    public SomtodayStudent getStudent()
+    public SomtodayStudent getStudent(bool fetchNew = false)
     {
         string destination = savePath.Replace("*", Application.persistentDataPath);
 
-        if (!File.Exists(destination))
+        if (!File.Exists(destination) || fetchNew)
         {
             Debug.LogWarning("File not found, creating new file.");
             return DownloadStudent();

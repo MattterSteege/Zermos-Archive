@@ -31,7 +31,7 @@ namespace UI.Views
         List<Schedule.Appointment> appointments = new List<Schedule.Appointment>();
         [SerializeField] private Vakken _vakken;
 
-        private Vakken.SomtodayVakken vakken;
+        private Vakken.JsonSomtodayVakken vakken;
     
 
     
@@ -294,7 +294,7 @@ namespace UI.Views
 
             try
             {
-                tijdText2.text = span.ToString(@"hh\:mm\:ss") + " tot " + (currentAppointment.subjects[0] ?? "error");
+                tijdText2.text = span.ToString(@"hh\:mm\:ss") + " tot " + (currentAppointment.subjects[0] ?? "error")  + " in " + (currentAppointment.locations[0] ?? "error");
             }
             catch (Exception) { }
 
