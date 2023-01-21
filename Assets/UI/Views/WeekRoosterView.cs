@@ -9,7 +9,8 @@ namespace UI.Views
 {
     public class WeekRoosterView : View
     {
-        [SerializeField] private GameObject[] dagenVanDeWeek;
+        //[SerializeField] private GameObject[] dagenVanDeWeek;
+        [SerializeField] private TimeTable[] _timeTables;
         [SerializeField] private GameObject RoosterPrefab;
         [SerializeField] private GameObject TussenUurPrefab;
         [SerializeField] private Button RefreshButton;
@@ -65,9 +66,9 @@ namespace UI.Views
                 Refresh(false);
             });
 
-            for (int i = 0; i < dagenVanDeWeek.Length; i++)
+            for (int i = 0; i < _timeTables.Length; i++)
             {
-                foreach (Transform child in dagenVanDeWeek[i].transform)
+                foreach (Transform child in _timeTables[i].transform)
                 {
                     Destroy(child.gameObject);
                     NoLessonHours.Clear();
@@ -83,7 +84,7 @@ namespace UI.Views
             NoLessonHours = new List<int>();
             RoosterItems = new List<GameObject>();
         
-            for (int x = 0; x < dagenVanDeWeek.Length; x++)
+            for (int x = 0; x < _timeTables.Length; x++)
             {
                 appointments = new List<Schedule.Appointment>();
             
@@ -92,8 +93,12 @@ namespace UI.Views
                 if (appointments == null)
                     appointments = new List<Schedule.Appointment>();
                 
+                _timeTables[x].Initialize();
+                
                 for (int i = 1, listIndex = 0; i < maxNumberOfLessons + 1; i++)
                 {
+                    NoLessonHours.Add(i);
+
                     if ((!(listIndex >= appointments.Count) && appointments[listIndex]?.appointmentType == "lesson" &&
                          int.Parse(appointments[listIndex].startTimeSlotName) == i) ||
                         (!(i >= appointments.Count) && appointments[i - 1]?.appointmentType == "lesson" &&
@@ -101,15 +106,24 @@ namespace UI.Views
                     {
                         //les
 
-                        var rooster = Instantiate(RoosterPrefab, dagenVanDeWeek[x].transform);
+                        var rooster = Instantiate(RoosterPrefab, _timeTables[x].transform);
                         rooster.GetComponent<AppointmentInfo>().SetAppointmentInfo(
                             String.Join(", ", appointments[listIndex].locations),
-                            TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start), TimeZoneInfo.Local).ToString("HH:mm") + " - " +
-                            TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end), TimeZoneInfo.Local).ToString("HH:mm"),
-                            appointments[listIndex].teachers[0],
-                            String.Join(", ", appointments[listIndex].subjects),
-                            appointments[listIndex].startTimeSlotName,
+                            TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start).DateTime, TimeZoneInfo.Local).AddHours(1).ToString("HH:mm") + " - " + 
+                            TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end).DateTime, TimeZoneInfo.Local).AddHours(1).ToString("HH:mm"),
+                            String.Join(", ", appointments[listIndex].teachers),
+                            String.Join(", ", appointments[listIndex].subjects), appointments[listIndex].startTimeSlotName,
                             appointments[listIndex]);
+
+                        var timeTableItem = new TimeTable.TimeTableItem
+                        {
+                            startTimeHour = TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start).DateTime, TimeZoneInfo.Local).AddHours(1).Hour,
+                            startTimeMinute = TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start).DateTime, TimeZoneInfo.Local).AddHours(1).Minute,
+                            endTimeHour = TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end).DateTime, TimeZoneInfo.Local).AddHours(1).Hour,
+                            endTimeMinute = TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end).DateTime, TimeZoneInfo.Local).AddHours(1).Minute,
+                        };
+                        
+                        
 
                         RoosterItems.Add(rooster);
 
@@ -118,23 +132,32 @@ namespace UI.Views
                             rooster.GetComponent<Image>().color = new Color(1f, 0f, 0f, 0.5f);
                         }
 
-                        // rooster.GetComponent<Button>().onClick.RemoveAllListeners();
-                        // rooster.GetComponent<Button>().onClick.AddListener(() =>
-                        // {
-                        //     ViewManager.Instance.ShowNewView<InPlanLesView>(rooster.GetComponent<AppointmentInfo>()
-                        //         ._appointment);
-                        // });
+                        try
+                        {
+                            string id = ParseQueryString.ParseQuery("https://ccg.zportal.nl"+ appointments?[listIndex]?.actions?[0]?.post ?? string.Empty).Get("unenroll");
+                            if (!string.IsNullOrEmpty(id))
+                            {
+                                rooster.GetComponent<Button>().onClick.RemoveAllListeners();
+                                rooster.GetComponent<Button>().onClick.AddListener(() =>
+                                {
+                                    ViewManager.Instance.ShowNewView<InPlanLesView>(rooster
+                                        .GetComponent<AppointmentInfo>()._appointment);
+                                });
+                            }
+                        }
+                        catch (Exception) { }
+                        
 
                         //must be at the end
+                        NoLessonHours.Remove(i);
                         listIndex++;
+                        _timeTables[x].addItem(rooster.GetComponent<RectTransform>(), timeTableItem);
                     }
                     else
                     {
-                        NoLessonHours.Add(i);
-                    
                         //no lesson
-                        var tussenUur = Instantiate(TussenUurPrefab, dagenVanDeWeek[x].transform);
-
+                        var tussenUur = Instantiate(TussenUurPrefab, _timeTables[x].transform);
+                    
                         Schedule.Appointment appointment;
                         if (appointments.Count <= listIndex)
                         {
@@ -144,38 +167,38 @@ namespace UI.Views
                         {
                             appointment = appointments[listIndex];
                         }
-
+                    
                         tussenUur.GetComponent<AppointmentInfo>()
                             .SetAppointmentInfo("Geen les", "", "", "", i.ToString(), appointment);
-
+                        
                         tussenUur.GetComponent<Button>().onClick.RemoveAllListeners();
                         tussenUur.GetComponent<Button>().onClick.AddListener(() =>
                         {
-                            ViewManager.Instance.ShowNewView<InPlanLesView>(tussenUur
-                                .GetComponent<AppointmentInfo>()._appointment);
+                            ViewManager.Instance.ShowNewView<InPlanLesView>(tussenUur.GetComponent<AppointmentInfo>()._appointment);
                         });
-
+                    
                         RoosterItems.Add(tussenUur);
-
+                    
                         if (!(listIndex >= appointments.Count) && appointments[listIndex].startTimeSlotName == (i).ToString())
                         {
                             listIndex++;
                         }
-                    }
 
-                    foreach (Transform child in dagenVanDeWeek[x].transform)
-                    {
-                        bool contains = RoosterItems.Contains(child.gameObject);
-
-                        if (!contains)
+                        if (appointment != null && appointment.appointmentType == "choice")
                         {
-                            Destroy(child.gameObject);
+                            var timeTableItem = new TimeTable.TimeTableItem
+                            {
+                                startTimeHour = TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex - 1].start).DateTime, TimeZoneInfo.Local).AddHours(1).Hour,
+                                startTimeMinute = TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex - 1].start).DateTime, TimeZoneInfo.Local).AddHours(1).Minute,
+                                endTimeHour = TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex - 1].end).DateTime, TimeZoneInfo.Local).AddHours(1).Hour,
+                                endTimeMinute = TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex - 1].end).DateTime, TimeZoneInfo.Local).AddHours(1).Minute,
+                            };
+                            _timeTables[x].addItem(tussenUur.GetComponent<RectTransform>(), timeTableItem);   
                         }
-                    }
-
-                    if (!LocalPrefs.GetBool("show_tussenuren", true))
-                    {
-                        hideTussenUren();
+                        else
+                        {
+                            DestroyImmediate(tussenUur);
+                        }
                     }
                 }
 

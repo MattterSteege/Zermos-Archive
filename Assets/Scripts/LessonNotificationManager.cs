@@ -14,6 +14,7 @@ public class LessonNotificationManager : MonoBehaviour
 
     [SerializeField] Schedule schedule;
     List<Schedule.Appointment> _appointments;
+    [SerializeField] NotificationsManager _notificationManager;
     
     const string CHANNEL_ID = "lessons";
 
@@ -100,16 +101,17 @@ public class LessonNotificationManager : MonoBehaviour
 
     void ScheduleLocalNotification(string title, string body, DateTime timeToSend)
     {
-        AndroidNotification notification = new AndroidNotification
-        {
-            Title = title,
-            Text = body,
-            ShouldAutoCancel = true,
-            FireTime = timeToSend,
-            ShowTimestamp = true,
-        };
+        // AndroidNotification notification = new AndroidNotification
+        // {
+        //     Title = title,
+        //     Text = body,
+        //     ShouldAutoCancel = true,
+        //     FireTime = timeToSend,
+        //     ShowTimestamp = true,
+        //};
 
-        AndroidNotificationCenter.SendNotification(notification, "lessons");
+        //AndroidNotificationCenter.SendNotification(notification, "lessons");
+        _notificationManager.ScheduleLocalNotification(title, body, timeToSend);
     }
     
     [ContextMenu("Test")]

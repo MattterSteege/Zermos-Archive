@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Timers;
 using DG.Tweening;
 using UI.Views;
@@ -21,6 +22,7 @@ public sealed class ViewManager : MonoBehaviour
 	[SerializeField] private View NewUserView;
 	[SerializeField] private View[] views;
 	[SerializeField] private View[] defaultViews;
+	[SerializeField] private View[] view_at_startup;
 
 	[SerializeField] private Image Background;
 	[SerializeField] private float animationTime = 0.5f;
@@ -100,6 +102,15 @@ public sealed class ViewManager : MonoBehaviour
 			Loginview.Show();
 			yield break;
 		}
+
+		var viewToShow = view_at_startup[LocalPrefs.GetInt("view_at_startup", 0)];
+
+		if (!defaultViews.Contains(viewToShow))
+		{
+			List<View> defaultViewsList = defaultViews.ToList();
+			defaultViewsList.Add(viewToShow);
+			defaultViews = defaultViewsList.ToArray();
+		}
 		
 		if (defaultViews != null)
 		{
@@ -108,8 +119,8 @@ public sealed class ViewManager : MonoBehaviour
 				view.Show(null);
 			}
 		}
-		
-		currentView = defaultViews[0];
+
+		currentView = defaultViews[1];
 		
 		HideNavigation();
 		

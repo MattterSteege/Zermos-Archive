@@ -36,17 +36,8 @@ namespace UI.Views
         {
             if (args == null) args = false;
             if (LocalPrefs.GetString("zermelo-access_token") == null) return;
-            
-            if (TimeManager.Instance.DateTime.AddDays(addedDays).DayOfWeek == DayOfWeek.Saturday)
-            {
-                addedDays += 2;
-                Refresh(false);
-            }
-            else if (TimeManager.Instance.DateTime.AddDays(addedDays).DayOfWeek == DayOfWeek.Sunday)
-            {
-                addedDays += 1;
-                Refresh(false);
-            }
+
+            _timeTable.Initialize();
 
             openNavigationButton.onClick.AddListener(() =>
             {

@@ -34,6 +34,8 @@ namespace UI.Views
         
             var grades = gradesObject.getGrades();
             if (grades == null) return;
+            
+            grades.items.RemoveAll(x => x.type.ToLower() == "deeltoetskolom"); //TODO: deelcijfers moeten nog worden opgeteld
 
             lastGrades = grades.items.TakeLast(2).Reverse().ToList();
         

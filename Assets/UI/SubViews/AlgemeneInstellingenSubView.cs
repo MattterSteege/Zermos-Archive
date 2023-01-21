@@ -1,3 +1,4 @@
+using TMPro;
 using UI.Views;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,7 @@ namespace UI.SubViews
 
         [Space, SerializeField] WeekRoosterView weekRoosterView;
         [SerializeField] DagRoosterView dagRoosterView;
+        [SerializeField] private TMP_Dropdown view_at_startup;
         
         public override void Initialize()
         {
@@ -91,6 +93,12 @@ namespace UI.SubViews
             
             //---
             
+            view_at_startup.value = LocalPrefs.GetInt("view_at_startup", 1);
+            view_at_startup.onValueChanged.AddListener((value) =>
+            {
+                LocalPrefs.SetInt("view_at_startup", value);
+            });
+
             base.Initialize();
         }
     }

@@ -16,7 +16,7 @@ public class TimeTable : MonoBehaviour
 
     [Space, SerializeField] private float minuteIsHeightValue = 0f;
     
-    public void Start()
+    public void Initialize()
     {
         minuteIsHeightValue = GetComponent<RectTransform>().rect.height / ((endHour - startHour) * 60 + (endMinute - startMinute));
     }

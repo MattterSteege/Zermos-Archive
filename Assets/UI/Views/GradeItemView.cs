@@ -20,6 +20,8 @@ public class GradeItemView : View
 
         if (Grades.Count == 0) return;
         
+        Grades.Reverse();
+        
         TitleText.text = Grades[0].vak.naam;
         
         _chart.chartData.series[0].dataY.Clear();

@@ -18,6 +18,7 @@ namespace UI.Views
         [SerializeField] GameObject homeworkPrefab;
         [SerializeField] GameObject content;
         [SerializeField] GameObject DividerPrefab;
+        [SerializeField] GameObject dayContainterPrefab;
 
         [SerializeField] private CustomHomework _CustomHomework;
         [SerializeField] private ScrollRect _ScrollRect;
@@ -68,13 +69,18 @@ namespace UI.Views
                 return;
             }
 
-            int day = 0;
+            int day = -1;
+            GameObject dayContainer = null;
 
             foreach (Homework.Item HomeworkItem in homework)
             {
                 if (HomeworkItem.datumTijd.Day > day)
                 {
-                    var go = Instantiate(DividerPrefab, content.transform);
+                    dayContainer = Instantiate(dayContainterPrefab, content.transform);
+#if UNITY_EDITOR
+                    dayContainer.name = "DayContainer " + ((DateTimeOffset) HomeworkItem.datumTijd).DateTime.ToString("d MMMM");
+#endif
+                    var go = Instantiate(DividerPrefab, dayContainer.transform);
                     go.GetComponent<homeworkDivider>().Datum.text =
                         ((DateTimeOffset) HomeworkItem.datumTijd).DateTime.ToString("d MMMM");
                     _Dates.Add(((DateTimeOffset) HomeworkItem.datumTijd).DateTime.Date);
@@ -83,14 +89,15 @@ namespace UI.Views
 
                 if (HomeworkItem.datumTijd.Day < day)
                 {
-                    var go = Instantiate(DividerPrefab, content.transform);
+                    dayContainer = Instantiate(dayContainterPrefab, content.transform);
+                    var go = Instantiate(DividerPrefab, dayContainer.transform);
                     go.GetComponent<homeworkDivider>().Datum.text =
                         ((DateTimeOffset) HomeworkItem.datumTijd).DateTime.ToString("d MMMM");
                     _Dates.Add(((DateTimeOffset) HomeworkItem.datumTijd).DateTime.Date);
                     _homeworkDateDividers.Add(go);
                 }
 
-                var homeworkItem = Instantiate(homeworkPrefab, content.transform);
+                var homeworkItem = Instantiate(homeworkPrefab, dayContainer.transform);
 
                 string onderwerp = HomeworkItem.studiewijzerItem.onderwerp ?? "";
 
@@ -221,6 +228,20 @@ namespace UI.Views
                     if (!homeworkInfo.gemaakt.isOn && status.HasFlag(HomeworkStatus.niet_gemaakt)) homeworkInfo.gameObject.SetActive(true);
                 }
 
+                var parent = homeworkInfo.gameObject.transform.parent.gameObject;
+                bool allActive = false;
+                foreach (Transform child in parent.transform)
+                {
+                    if (child.gameObject.name == "HomeworkViewDivider(Clone)") continue;
+                    if (child.gameObject.activeSelf)
+                    {
+                        allActive = true;
+                        break;
+                    }
+                
+                }
+                
+                parent.gameObject.SetActive(allActive);
                 yield return null;
             }
         }
@@ -290,6 +311,7 @@ namespace UI.Views
             }
 
             www.Dispose();
+            AndroidUIToast.ShowToast("Kon de huiswerk status niet updaten");
             return false;
         }
         

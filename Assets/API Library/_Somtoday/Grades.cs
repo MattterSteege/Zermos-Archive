@@ -119,7 +119,6 @@ public class Grades : BetterHttpClient
     {
         grades.items.RemoveAll(x => x.geldendResultaat == null);
         grades.items.RemoveAll(x => string.IsNullOrEmpty(x.omschrijving) && x.weging == 0);
-        grades.items.RemoveAll(x => x.type.ToLower() == "deeltoetskolom"); //TODO: deelcijfers moeten nog worden opgeteld
         grades.items = grades.items.OrderBy(x => x.datumInvoer).ToList();
         return grades;
     }

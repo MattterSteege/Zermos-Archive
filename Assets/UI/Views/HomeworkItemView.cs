@@ -28,14 +28,8 @@ namespace UI.Views
         public override void Show(object args = null)
         {
             this.homeworkInfo = (Homework.Item) args;
-
-            Refresh(args);
-
-            base.Show();
-        }
-
-        public override void Initialize()
-        {
+            
+            openNavigationButton.onClick.RemoveAllListeners();
             openNavigationButton.onClick.AddListener(() =>
             {
                 ViewManager.Instance.ShowNewView<HomeworkView>();
@@ -58,7 +52,7 @@ namespace UI.Views
             if (Omschrijving.text.Length == 0)
                 Omschrijving.text = homeworkInfo.studiewijzerItem.onderwerp;
         
-            Gemaakt.isOn = homeworkInfo.additionalObjects.swigemaaktVinkjes?.items?[0].gemaakt ?? false;
+            //Gemaakt.isOn = homeworkInfo.additionalObjects.swigemaaktVinkjes?.items?[0].gemaakt ?? false;
 
             if (homeworkInfo.studiewijzerItem.huiswerkType == "HUISWERK")
             {
@@ -86,7 +80,7 @@ namespace UI.Views
                 Omschrijving.text = Omschrijving.text.Replace(result.ToString(), "<u><color=\"blue\"><link=" + result + ">" + result + "</link></color></u>");
             }
 
-            if (homeworkInfo.studiewijzerItem.bijlagen?.Count > 0 )
+            if (homeworkInfo.studiewijzerItem.bijlagen?.Count <= 0 )
             {
                 BijlageHolder.transform.parent.gameObject.SetActive(false);
                 Omschrijving.transform.parent.GetComponent<RectTransform>().offsetMin = new Vector2(25f, 15f);
@@ -99,13 +93,18 @@ namespace UI.Views
                     Destroy(child.gameObject);
 
                 BijlageHolder.transform.parent.gameObject.SetActive(true);
-                for (int i = 0; i < homeworkInfo.studiewijzerItem.bijlagen.Count; i++)
-                {
-                    var go = Instantiate(BijlagePrefab, BijlageHolder.transform).GetComponent<BijlageInfo>();
-                    go.setInfo(homeworkInfo.studiewijzerItem.bijlagen[i].omschrijving, (homeworkInfo.studiewijzerItem.bijlagen[i].assemblyResults[0].fileSize / 1024f).ToString("0.0") + " KB");
-                    go.AddLink(homeworkInfo.studiewijzerItem.bijlagen[i].assemblyResults[0].fileUrl);
-                }
+                if (homeworkInfo.studiewijzerItem.bijlagen != null)
+                    for (int i = 0; i < homeworkInfo.studiewijzerItem.bijlagen.Count; i++)
+                    {
+                        var go = Instantiate(BijlagePrefab, BijlageHolder.transform).GetComponent<BijlageInfo>();
+                        go.setInfo(homeworkInfo.studiewijzerItem.bijlagen[i].omschrijving,
+                            (homeworkInfo.studiewijzerItem.bijlagen[i].assemblyResults[0].fileSize / 1024f).ToString(
+                                "0.0") + " KB");
+                        go.AddLink(homeworkInfo.studiewijzerItem.bijlagen[i].assemblyResults[0].fileUrl);
+                    }
             }
+            
+            base.Show(args);
         }
 
         public override void Refresh(object args)

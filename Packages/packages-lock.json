@@ -71,7 +71,7 @@
       "dependencies": {}
     },
     "com.unity.ide.rider": {
-      "version": "3.0.17",
+      "version": "3.0.18",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -103,7 +103,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.mobile.notifications": {
-      "version": "2.1.0",
+      "version": "2.1.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -189,7 +189,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "9fadad0f729068b360ce4257df39850a3349f0a4"
+      "hash": "c3fd580886fa0e39afe07c477559d3e2908170c2"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
