@@ -10,11 +10,6 @@ public class AuthenticateZermelo : BetterHttpClient
 
     public ZermeloAuthentication AuthenticateUser(string username = "", string password = "") 
     {
-        if (username == "" || password == "")
-        {
-            return null;
-        }
-
         WWWForm form = new WWWForm();
         form.AddField("username", username);
         form.AddField("password", password);
@@ -26,35 +21,34 @@ public class AuthenticateZermelo : BetterHttpClient
         form.AddField("tenant", "ccg");
 
         string baseURL = $"https://ccg.zportal.nl/api/v3/oauth";
-
-        return (ZermeloAuthentication) Post(baseURL, form,www =>
+        return (ZermeloAuthentication) Post(baseURL, form, www =>
         {
             string accessToken = Regex.Matches(www.downloadHandler.text, "[a-zA-Z0-9]{20}")[0].Value;
 
-            
+
             WWWForm form = new WWWForm();
             form.AddField("code", accessToken);
             form.AddField("client_id", "ZermeloPortal");
             form.AddField("client_secret", "42");
             form.AddField("grant_type", "authorization_code");
             form.AddField("rememberMe", "true");
-        
+
             baseURL = $"https://ccg.zportal.nl/api/v3/oauth/token";
             return (ZermeloAuthentication) Post(baseURL, form, www =>
-            {
+                {
 
-                ZermeloAuthentication response = JsonConvert.DeserializeObject<ZermeloAuthentication>(www.downloadHandler.text);
+                    ZermeloAuthentication response =
+                        JsonConvert.DeserializeObject<ZermeloAuthentication>(www.downloadHandler.text);
 
-                LocalPrefs.SetString("zermelo-access_token", response.access_token);
-                LocalPrefs.SetString("zermelo-school_code", "ccg");
+                    LocalPrefs.SetString("zermelo-access_token", response.access_token);
+                    LocalPrefs.SetString("zermelo-school_code", "ccg");
 
-                GetComponent<User>().GetUser();
+                    GetComponent<User>().GetUser();
 
-                return response;
-            },
-            _ => null);
-        }, 
-        _ => null);
+                    return response;
+                },
+                _ => AndroidUIToast.ShowToast("Er is iets fout gegaan bij het inloggen, probeer (later) het opnieuw."));
+        });
     }
 
     private string RandomStateString()

@@ -53,6 +53,7 @@ namespace UI.Views
                 if (timesCLicked >= ClicksNeeded)
                 {
                     timesCLicked = 0;
+                    AndroidUIToast.ShowToast("WEES VOORZICHTIG!");
                     ViewManager.Instance.ShowNewView<SecretSettingsView>();
                 }
             });

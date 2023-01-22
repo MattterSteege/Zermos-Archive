@@ -101,7 +101,7 @@ public sealed class SubViewManager : MonoBehaviour
 				rectTransform.transform.position = new Vector3(rectTransform.rect.width, 0f, 0f);
 				view.Show(args);
 
-				rectTransform.DOLocalMove(new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime * 2f);
+				rectTransform.DOLocalMove(new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime * 2f).SetDelay(0.1f);
 			}
 		}
 	}

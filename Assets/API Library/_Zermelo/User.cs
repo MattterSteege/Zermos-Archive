@@ -14,7 +14,7 @@ public class User : BetterHttpClient
             LocalPrefs.SetString("zermelo-user_code", zermeloUser.Response.Data[0].Code);
             LocalPrefs.SetString("zermelo-full_name", zermeloUser.Response.Data[0].FirstName + " " + zermeloUser.Response.Data[0].Prefix + " " + zermeloUser.Response.Data[0].LastName);
             return zermeloUser.Response.Data[0];
-        });
+        }, _ => AndroidUIToast.ShowToast("Er kon geen verbinding worden gemaakt met Zermelo."));
     }
 
     #region models

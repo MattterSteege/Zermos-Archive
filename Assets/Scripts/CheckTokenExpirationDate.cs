@@ -1,12 +1,12 @@
 using System;
 using System.Text;
 
-public class CheckTokenExpirationDate
+public static class CheckTokenExpirationDate
 {
     /// <param name="token">the token that you want to check</param>
     /// <returns>true: if token is valid or doesn't expire<br></br>
-    /// false: if the token is expired</returns>
-    public bool CheckToken(string token)
+    /// false: if the token is expired or invalid</returns>
+    public static bool CheckToken(string token)
     {
         if (token == null) return false;
         

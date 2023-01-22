@@ -10,10 +10,11 @@ public class SchoolNews : MonoBehaviour
     [SerializeField] private TMP_Text dateText;
     [SerializeField] private Button OpenMessageButton;
     
-    public void Initialize(Message message)
+    public void Initialize(object message)
     {
-        messageText.text = message.content;
-        dateText.text = message.createdAt.ToDateTime().ToString("d MMMM yyyy");
-        OpenMessageButton.onClick.AddListener(() => ViewManager.Instance.ShowNewView<SchoolNewsItemView>(message));
+        return;
+        //messageText.text = message.content;
+        //dateText.text = message.createdAt.ToDateTime().ToString("d MMMM yyyy");
+        //OpenMessageButton.onClick.AddListener(() => ViewManager.Instance.ShowNewView<SchoolNewsItemView>(message));
     }
 }

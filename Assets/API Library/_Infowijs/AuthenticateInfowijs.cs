@@ -66,7 +66,7 @@ public class AuthenticateInfowijs : BetterHttpClient
         Dictionary<string, string> headers = new Dictionary<string, string>();
         headers.Add("accept", "application/vnd.infowijs.v1+json");
         headers.Add("x-infowijs-client", "nl.infowijs.hoy.android/nl.infowijs.client.antonius");
-        yield return StartCoroutine(Post($"https://api.infowijs.nl/sessions/{id}/{custom_product_id}/{user_id}", new WWWForm(), headers, (response) =>
+        yield return StartCoroutine(CustomPost($"https://api.infowijs.nl/sessions/{id}/{custom_product_id}/{user_id}", new WWWForm(), headers, (response) =>
         {
             if (int.Parse(response.GetResponseHeader("content-length")) > 500)
             {
@@ -77,6 +77,36 @@ public class AuthenticateInfowijs : BetterHttpClient
             callback(false);
             return false;
         }, _ => false));
+    }
+    
+    public IEnumerator CustomPost(string url, WWWForm form, Dictionary<string, string> headers, Func<UnityWebRequest, object> callback, Func<UnityWebRequest, object> error = null)
+    {
+        Debug.Log("Request started");
+        UnityWebRequest www = UnityWebRequest.Post(url, form);
+        www.SetRequestHeader("Accept", "application/json");
+        if (headers != null)
+        {
+            foreach (var header in headers)
+            {
+                www.SetRequestHeader(header.Key, header.Value);
+            }
+        }
+        www.SendWebRequest();
+
+        while (!www.isDone)
+            yield return null;
+
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogWarning(www.error);
+            var errored = error.Invoke(www);
+            www.Dispose();
+            yield return errored;
+        }
+
+        var returned = callback.Invoke(www);
+        www.Dispose();
+        yield return returned;
     }
     
     public class Datum

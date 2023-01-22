@@ -26,12 +26,12 @@ public class BetterHttpClient : MonoBehaviour
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.LogWarning(www.error);
-            var errored = error.Invoke(www);
+            var errored = error?.Invoke(www);
             www.Dispose();
             return errored;
         }
 
-        var returned = callback.Invoke(www);
+        var returned = callback?.Invoke(www);
         www.Dispose();
         return returned;
     }
@@ -153,7 +153,7 @@ public class BetterHttpClient : MonoBehaviour
     }
     
     //with headers
-    public IEnumerator Post(string url, WWWForm form, Dictionary<string, string> headers, Func<UnityWebRequest, object> callback, Func<UnityWebRequest, object> error = null)
+    public object Post(string url, WWWForm form, Dictionary<string, string> headers, Func<UnityWebRequest, object> callback, Func<UnityWebRequest, object> error = null)
     {
         Debug.Log("Request started");
         UnityWebRequest www = UnityWebRequest.Post(url, form);
@@ -167,19 +167,18 @@ public class BetterHttpClient : MonoBehaviour
         }
         www.SendWebRequest();
 
-        while (!www.isDone)
-            yield return null;
+        while (!www.isDone) { }
 
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.LogWarning(www.error);
             var errored = error.Invoke(www);
             www.Dispose();
-            yield return errored;
+            return errored;
         }
 
         var returned = callback.Invoke(www);
         www.Dispose();
-        yield return returned;
+        return returned;
     }
 }

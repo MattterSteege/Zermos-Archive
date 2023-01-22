@@ -96,7 +96,7 @@ public class Schedule : BetterHttpClient
                              $"&student={LocalPrefs.GetString("zermelo-user_code")}" +
                              $"&week={date}";
             
-            var scheduleResponse = (ZermeloSchedule) Get(baseURL, callback => JsonConvert.DeserializeObject<ZermeloSchedule>(callback.downloadHandler.text));
+            var scheduleResponse = (ZermeloSchedule) Get(baseURL, callback => JsonConvert.DeserializeObject<ZermeloSchedule>(callback.downloadHandler.text), (error) => AndroidUIToast.ShowToast("Het rooster kon niet opgehaald, probeer het later opnieuw."));
 
             if (scheduleResponse != null)
             {

@@ -4,34 +4,44 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class SessionAuthenticatorInfowijs : MonoBehaviour
+public class SessionAuthenticatorInfowijs : BetterHttpClient
 {
-    public InfowijsAccessToken GetAccesToken(string access_token = null)
+    public InfowijsAccessToken GetSessionToken()
     {
-        UnityWebRequest www = UnityWebRequest.PostWwwForm("https://api.infowijs.nl/sessions/access_token", "");
-        www.SetRequestHeader("authorization", "Bearer " + access_token);
-        www.SetRequestHeader("Accept", "application/vnd.infowijs.v1+json");
-        www.SetRequestHeader("x-infowijs-client", $"nl.infowijs.hoy.android/nl.infowijs.client.antonius");
-        www.SendWebRequest();
+        string mainAccessToken = LocalPrefs.GetString("infowijs-access_token");
 
-        while (!www.isDone)
+        if (string.IsNullOrEmpty(mainAccessToken))
         {
+            AndroidUIToast.ShowToast("Je hebt momenteel geen geldige Infowijs token, herstart de app. Als dit probleem zich blijft voordoen, koppel dan infowijs opnieuw.");
+            return null;
         }
 
-        var response = JsonConvert.DeserializeObject<InfowijsAccessToken>(www.downloadHandler.text);
-        
-        www.Dispose();
-        
-        if (response.data != null)
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+        headers.Add("Authorization", "Bearer " + mainAccessToken);
+        headers.Add("Accept", "application/vnd.infowijs.v1+json");
+        headers.Add("x-infowijs-client", $"nl.infowijs.hoy.android/nl.infowijs.client.antonius");
+        return (InfowijsAccessToken) Post("https://api.infowijs.nl/sessions/access_token", null, headers, (response) =>
         {
-            LocalPrefs.SetString("infowijs-session_token", response.data);
-            return response;
-        }
-        
-        return null;
-        
+            InfowijsAccessToken infowijsAccessToken = JsonConvert.DeserializeObject<InfowijsAccessToken>(response.downloadHandler.text);
+            
+            if (infowijsAccessToken.data != null)
+            {
+                LocalPrefs.SetString("infowijs-session_token", infowijsAccessToken.data);
+                return infowijsAccessToken;
+            }
+            return null;
+        }, _ =>
+        {
+            if (CheckTokenExpirationDate.CheckToken(mainAccessToken))
+                AndroidUIToast.ShowToast("Er is iets fout gegaan bij het ophalen van een nieuwe sessie token, probeer (later) het opnieuw.");
+            else
+                AndroidUIToast.ShowToast("Je hebt momenteel geen geldige Infowijs token, herstart de app. Als dit probleem zich blijft voordoen, koppel dan infowijs opnieuw.");
+
+
+            return null;
+        });
     }
-    
+
     public class Error
     {
         public int status { get; set; }
@@ -44,4 +54,3 @@ public class SessionAuthenticatorInfowijs : MonoBehaviour
         public string data { get; set; }
     }
 }
-

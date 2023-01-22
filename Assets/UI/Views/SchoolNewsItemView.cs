@@ -13,8 +13,8 @@ public class SchoolNewsItemView : View
         openNavigationButton.onClick.RemoveAllListeners();
         openNavigationButton.onClick.AddListener(() => ViewManager.Instance.ShowNewView<SchoolNewsView>());
         
-        var message = (Message) args;
-        messageText.text = message.content ?? "Fetching error";
+        //var message = (Message) args;
+        //messageText.text = message.content ?? "Fetching error";
         
         base.Show(args);
     }

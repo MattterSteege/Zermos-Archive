@@ -24,7 +24,7 @@ public class AuthenticateSomtoday : BetterHttpClient
 
     public void Awake()
     {
-        if (!new CheckTokenExpirationDate().CheckToken(LocalPrefs.GetString("somtoday-access_token")))
+        if (!CheckTokenExpirationDate.CheckToken(LocalPrefs.GetString("somtoday-access_token")))
             RefreshToken();
     }
 

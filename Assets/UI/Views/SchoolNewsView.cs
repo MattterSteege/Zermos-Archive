@@ -79,13 +79,13 @@ namespace UI.Views
             yield return new WaitForSeconds(0.5f);
             beschrijving.DOFade(0f, 0.1f);
             yield return new WaitForSeconds(0.05f);
-            var messages = new CoroutineWithData<List<Message>>(this, InfowijsMessages.GetBetterInfowijsMessages()).result;
-            foreach (Message message in messages)
-            {
-                GameObject newsItem = Instantiate(_newsItemPrefab, _newsItemContainer.transform);
-                newsItem.GetComponent<SchoolNews>().Initialize(message);
-                yield return new WaitForEndOfFrame();
-            }
+            // var messages = new CoroutineWithData<List<Message>>(this, InfowijsMessages.GetBetterInfowijsMessages()).result;
+            // foreach (Message message in messages)
+            // {
+            //     GameObject newsItem = Instantiate(_newsItemPrefab, _newsItemContainer.transform);
+            //     newsItem.GetComponent<SchoolNews>().Initialize(message);
+            //     yield return new WaitForEndOfFrame();
+            // }
         }
         
         public override void Refresh(object args)
