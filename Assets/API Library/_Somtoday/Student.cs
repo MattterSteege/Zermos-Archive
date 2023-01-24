@@ -65,6 +65,10 @@ public class Student : BetterHttpClient
                 return student;
             }
             return null;        
+        }, (error) =>
+        {
+            AndroidUIToast.ShowToast("Er is iets misgegaan tijdens het opvragen van je gegevens. Probeer het later opnieuw.");
+            return null;
         });
     }
     

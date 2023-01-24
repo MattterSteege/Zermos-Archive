@@ -75,9 +75,9 @@ public class ConnectInfowijsView : View
             {
                 if (success)
                 {
-                    buttonTextField.text = "Inloggen!";
                     StopCoroutine(FetchToken(false));
                     callback(true);
+                    buttonTextField.text = "Inloggen!";
                     return true;
                 }
 
@@ -85,8 +85,10 @@ public class ConnectInfowijsView : View
                 if (maxLoadingTime <= 0)
                 {
                     b = false;
+                    AndroidUIToast.ShowToast("Sorry je was niet op tijd, probeer het opnieuw");
                     callback(false);
                     return false;
+
                 }
                 return false;
             }));

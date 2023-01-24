@@ -19,70 +19,7 @@ public class Vakken : BetterHttpClient
             Debug.Log("Missing SOMtoday token");
             return null;
         }
-        
-        //somtoday -- end\
-        
-        // Dictionary<string, string> headers = new Dictionary<string,string>();
-        // headers.Add("Authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
-        // return (SomtodayVakken) Get("https://api.somtoday.nl/rest/v1/vakken", headers, (response) =>
-        // {
-        //     vakSom = JsonConvert.DeserializeObject<SomtodayVakken>(response.downloadHandler.text);
-        //     
-        //     Dictionary<string, string> headers = new Dictionary<string,string>();
-        //     headers.Add("Authorization", "Bearer " + LocalPrefs.GetString("zermelo-access_token"));
-        //     return (SomtodayVakken)Get($"https://ccg.zportal.nl/api/v3/courses?schoolYear={GetComponent<Schooljaar>().getCurrentSchooljaarStartDate().Year}&student=~me", headers, (response) =>
-        //     {
-        //         ZermeloVakken vakZer = JsonConvert.DeserializeObject<ZermeloVakken>(response.downloadHandler.text);
-        //         
-        //         List<Item> vakken = new List<Item>();
-        //
-        //         foreach (Item somVak in vakSom.items)
-        //         {
-        //             foreach (Datum zerVak in vakZer.response.data)
-        //             {
-        //                 if (somVak.afkorting == zerVak.subjectCode)
-        //                 {
-        //                     vakken.Add(new Item {afkorting = somVak.afkorting, naam = somVak.naam});
-        //                 }
-        //             }
-        //         }
-        //
-        //         if (vakken.Count != 0)
-        //         {
-        //             var convertedJson = JsonConvert.SerializeObject(
-        //                 new SomtodayVakken()
-        //                 {
-        //                     items = vakken.OrderBy(x => x.afkorting).ToList(),
-        //                     laatsteWijziging = TimeManager.Instance.CurrentDateTime.ToUnixTime()
-        //                 },
-        //                 Formatting.Indented);
-        //
-        //             string destination = savePath.Replace("*", Application.persistentDataPath);
-        //
-        //             File.WriteAllText(destination, "//In dit bestand staan alle vakken die je school aanbied.\r\n");
-        //             File.AppendAllText(destination, convertedJson);
-        //
-        //             return new SomtodayVakken
-        //             {
-        //                 items = vakken.OrderBy(x => x.afkorting).ToList(),
-        //                 laatsteWijziging = TimeManager.Instance.CurrentDateTime.ToUnixTime()
-        //             };
-        //         }
-        //
-        //         return null;
-        //     },
-        //     (error) =>
-        //     {
-        //         Debug.LogWarning(error.error);
-        //         return null;
-        //     });
-        // },
-        // (error) =>
-        // {
-        //     Debug.LogWarning(error.error);
-        //     return null;
-        // });
-        
+
         Dictionary<string, string> headers = new Dictionary<string,string>();
         headers.Add("Authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
         return (JsonSomtodayVakken) Get($"https://api.somtoday.nl/rest/v1/vakkeuzes?actiefOpPeildatum={TimeManager.Instance.CurrentDateTime:yyyy-MM-dd}", headers, (response) =>
@@ -118,6 +55,10 @@ public class Vakken : BetterHttpClient
                 };
             }
             
+            return null;
+        }, (error) =>
+        {
+            AndroidUIToast.ShowToast("Er is iets mis gegaan bij het opvragen van de vakken. hierdoor zullen aardig wat delen van de app niet meer werken. probeer over 10 minuten opnieuw de app op te starten.");
             return null;
         });
     }

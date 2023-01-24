@@ -6,15 +6,14 @@ using UnityEngine.UI;
 
 public class SchoolNews : MonoBehaviour
 {
-    [SerializeField] private TMP_Text messageText;
-    [SerializeField] private TMP_Text dateText;
-    [SerializeField] private Button OpenMessageButton;
+    [SerializeField] public TMP_Text titleText;
+    [SerializeField] public TMP_Text messageText;
+    [SerializeField] public TMP_Text dateText;
+    [SerializeField] public Button OpenMessageButton;
+    [SerializeField] public List<Messages.Message> messages;
     
-    public void Initialize(object message)
+    public void Initialize()
     {
-        return;
-        //messageText.text = message.content;
-        //dateText.text = message.createdAt.ToDateTime().ToString("d MMMM yyyy");
-        //OpenMessageButton.onClick.AddListener(() => ViewManager.Instance.ShowNewView<SchoolNewsItemView>(message));
+        OpenMessageButton.onClick.AddListener(() => ViewManager.Instance.ShowNewView<SchoolNewsItemView>(messages));
     }
 }

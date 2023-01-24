@@ -20,7 +20,7 @@ public class SessionAuthenticatorInfowijs : BetterHttpClient
         headers.Add("Authorization", "Bearer " + mainAccessToken);
         headers.Add("Accept", "application/vnd.infowijs.v1+json");
         headers.Add("x-infowijs-client", $"nl.infowijs.hoy.android/nl.infowijs.client.antonius");
-        return (InfowijsAccessToken) Post("https://api.infowijs.nl/sessions/access_token", null, headers, (response) =>
+        return (InfowijsAccessToken) Post("https://api.infowijs.nl/sessions/access_token", new WWWForm(), headers, (response) =>
         {
             InfowijsAccessToken infowijsAccessToken = JsonConvert.DeserializeObject<InfowijsAccessToken>(response.downloadHandler.text);
             

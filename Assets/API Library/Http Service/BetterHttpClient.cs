@@ -151,8 +151,69 @@ public class BetterHttpClient : MonoBehaviour
         www.Dispose();
         return returned;
     }
+
+    public object Post(string url, string json, Func<UnityWebRequest, object> callback, Func<UnityWebRequest, object> error = null)
+    {
+        Debug.Log("Request started");
+        UnityWebRequest www = UnityWebRequest.PostWwwForm(url, "POST");
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+        www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        www.downloadHandler = new DownloadHandlerBuffer();
+        www.SetRequestHeader("Content-Type", "application/json");
+        www.SendWebRequest();
+
+        while (!www.isDone)
+        {
+        }
+
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogWarning(www.error);
+            var errored = error.Invoke(www);
+            www.Dispose();
+            return errored;
+        }
+
+        var returned = callback.Invoke(www);
+        www.Dispose();
+        return returned;
+    }
+
+    public object Post(string url, string json, Dictionary<string, string> headers, Func<UnityWebRequest, object> callback, Func<UnityWebRequest, object> error = null)
+    {
+        Debug.Log("Request started");
+        UnityWebRequest www = UnityWebRequest.PostWwwForm(url, "POST");
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+        www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        www.downloadHandler = new DownloadHandlerBuffer();
+        www.SetRequestHeader("Content-Type", "application/json");
+        if (headers != null)
+        {
+            foreach (var header in headers)
+            {
+                www.SetRequestHeader(header.Key, header.Value);
+            }
+        }
+        www.SendWebRequest();
+
+        while (!www.isDone)
+        {
+        }
+
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogWarning(www.error);
+            var errored = error.Invoke(www);
+            www.Dispose();
+            return errored;
+        }
+
+        var returned = callback.Invoke(www);
+        www.Dispose();
+
+        return returned;
+    }
     
-    //with headers
     public object Post(string url, WWWForm form, Dictionary<string, string> headers, Func<UnityWebRequest, object> callback, Func<UnityWebRequest, object> error = null)
     {
         Debug.Log("Request started");

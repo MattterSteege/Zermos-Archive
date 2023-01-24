@@ -1,32 +1,34 @@
 #pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Messages : BetterHttpClient
+public class Messages : MonoBehaviour
 {
     [SerializeField] SessionAuthenticatorInfowijs authenticator;
     [SerializeField] private int HardTriesCap = 5;
-    
-    [ContextMenu("Test")]
-    public void test()
-    {
-        getMessages();
-    }
 
-    public InfowijsMessage getMessages()
+    /// <summary>
+    /// The messages are sorted by date, then by type. So when using these messages, keep an int start at 30 keep setting it to the next number, so then (might come 2) and then 1. reset the int and instamtiate an new gameobject.
+    /// </summary>
+    /// <returns>InfowijsMessage</returns>
+    public IEnumerator getMessages()
     {
         InfowijsMessage message = new InfowijsMessage();
-        message = DownloadMessages();
+        message = new CoroutineWithData<InfowijsMessage>(this, DownloadMessages()).result;
         
         while (message.Data.HasMore && HardTriesCap > 0)
         {
-            InfowijsMessage tempMessage = DownloadMessages(true, message.Data.Since);
+            yield return null;
+            
+            InfowijsMessage tempMessage = new CoroutineWithData<InfowijsMessage>(this, DownloadMessages(true, message.Data.Since)).result;
             message.Data.Messages.AddRange(tempMessage.Data.Messages);
             message.Data.Since = tempMessage.Data.Since;
             message.Data.HasMore = tempMessage.Data.HasMore;
@@ -34,8 +36,89 @@ public class Messages : BetterHttpClient
         }
         
         HardTriesCap = 5;
+        
+        yield return new CoroutineWithData<InfowijsMessage>(this, sortMessages(message)).result;
+    }
+    
+    
+    public IEnumerator DownloadMessages(bool includeArchived = true, long since = 0)
+    {
+        string baseUrl = $"https://antonius.hoyapp.nl/hoy/v3/messages?include_archived={(includeArchived ? 1 : 0)}&since={since}";
+        
+        string sessionToken = authenticator.GetSessionToken().data;
+        if (sessionToken == null)
+        {
+            AndroidUIToast.ShowToast("Er ging iets mis tijdens het ophalen van een nieuwe sessie token, probeer het (later) opnieuw.");
+            yield return null;
+        }
 
-        return message;
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+        headers.Add("Authorization", $"Bearer {sessionToken}");
+        yield return new CoroutineWithData<InfowijsMessage>(this, CustomGet(baseUrl, headers, (response) =>
+        {
+            InfowijsMessage infowijsMessage = JsonConvert.DeserializeObject<InfowijsMessage>(response.downloadHandler.text, Converter.Settings);
+            return infowijsMessage;
+        }, _ =>
+        {
+            AndroidUIToast.ShowToast("Er ging iets mis tijdens het ophalen van je schoolberichten, probeer het (later) opnieuw.");
+            return null;
+        })).result;
+    }
+
+    private IEnumerator sortMessages(InfowijsMessage message)
+    {
+        if (message.Data.Messages.Count == 0) 
+        {
+            AndroidUIToast.ShowToast("Er zijn geen berichten gevonden.");
+            yield return null;
+        }
+
+        yield return null;
+        
+        message.Data.Messages.RemoveAll(x => x.Type == 12);               // remove all dividers
+        message.Data.Messages.Reverse();                                                   // reverse the list so the newest messages are on top                               
+
+        message.Data.Messages = message.Data.Messages.OrderByDescending(x => x.Type) // sort the list so the messages are on top
+                                                     .GroupBy(x => x.GroupId)        // group the messages by group id
+                                                     .SelectMany(x => x) // flatten the grouped messages
+                                                     .ToList();                             // convert the grouped messages back to a list
+        
+        //message.Data.Messages.RemoveAll(x => x.Type == 2); // TODO: add support for attachments
+        //message.Data.Messages.RemoveAll(x => x.Type == 3); // TODO: add support for foto's
+        //message.Data.Messages.RemoveAll(x => x.Type == 30);
+        
+        
+        yield return message;
+    }
+    
+    private IEnumerator CustomGet(string url, Dictionary<string, string> headers, Func<UnityWebRequest, object> callback, Func<UnityWebRequest, object> error = null)
+    {
+        Debug.Log("Request started");
+        UnityWebRequest www = UnityWebRequest.Get(url);
+        www.SetRequestHeader("Accept", "application/json");
+        if (headers != null)
+        {
+            foreach (var header in headers)
+            {
+                www.SetRequestHeader(header.Key, header.Value);
+            }
+        }
+        www.SendWebRequest();
+
+        while (!www.isDone)
+            yield return null;
+
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogWarning(www.error);
+            var errored = error.Invoke(www);
+            www.Dispose();
+            yield return errored;
+        }
+
+        var returned = callback.Invoke(www);
+        www.Dispose();
+        yield return returned;
     }
     
     /*
@@ -48,30 +131,6 @@ public class Messages : BetterHttpClient
         
         30: contains information about sender/reader and the title of the post 
     */
-    
-    public InfowijsMessage DownloadMessages(bool includeArchived = true, long since = 0)
-    {
-        string baseUrl = $"https://antonius.hoyapp.nl/hoy/v3/messages?include_archived={(includeArchived ? 1 : 0)}&since={since}";
-        
-        string sessionToken = authenticator.GetSessionToken().data;
-        if (sessionToken == null)
-        {
-            AndroidUIToast.ShowToast("Er ging iets mis tijdens het ophalen van een nieuwe sessie token, probeer het (later) opnieuw.");
-            return null;
-        }
-
-        Dictionary<string, string> headers = new Dictionary<string, string>();
-        headers.Add("Authorization", $"Bearer {sessionToken}");
-        return (InfowijsMessage) Get(baseUrl, null, headers, (response) =>
-        {
-            InfowijsMessage infowijsMessage = JsonConvert.DeserializeObject<InfowijsMessage>(response.downloadHandler.text, Converter.Settings);
-            return infowijsMessage;
-        }, _ =>
-        {
-            AndroidUIToast.ShowToast("Er ging iets mis tijdens het ophalen van je schoolberichten, probeer het (later) opnieuw.");
-            return null;
-        });
-    }
 
 #region Model
 public partial class InfowijsMessage

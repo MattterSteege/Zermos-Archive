@@ -26,13 +26,12 @@ public class Grades : BetterHttpClient
         
         if (string.IsNullOrEmpty(LocalPrefs.GetString("somtoday-access_token"))) return null;
 
-        string baseUrl =
-            $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/resultaten/huidigVoorLeerling/{LocalPrefs.GetString("somtoday-student_id")}?begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01";
-
+        string baseUrl = $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/resultaten/huidigVoorLeerling/{LocalPrefs.GetString("somtoday-student_id")}?begintNaOfOp={TimeManager.Instance.DateTime:yyyy}-01-01";
+        
         Dictionary<string, string> headers = new Dictionary<string, string>();
         headers.Add("Authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
         headers.Add("Range", "items=0-99");
-
+        
         return (SomtodayGrades) Get(baseUrl, headers, (response) =>
         {
             var sortedGrades = JsonConvert.DeserializeObject<SomtodayGrades>(response.downloadHandler.text) ?? new SomtodayGrades(){items = new List<Item>()};
@@ -53,12 +52,20 @@ public class Grades : BetterHttpClient
                     if (collection != null)
                         sortedGrades.items.AddRange(collection);
                     return null;
+                }, (error) =>
+                {
+                    AndroidUIToast.ShowToast("Er is iets fout gegaan bij het ophalen van je cijfers. Probeer het later opnieuw.");
+                    return null;
                 });
             }
             
             sortedGrades = Sort(sortedGrades);
             SaveGrades(sortedGrades);
             return sortedGrades;
+        }, (error) =>
+        {
+            AndroidUIToast.ShowToast("Er is iets fout gegaan bij het ophalen van je cijfers. Probeer het later opnieuw.");
+            return null;
         });
     }
     

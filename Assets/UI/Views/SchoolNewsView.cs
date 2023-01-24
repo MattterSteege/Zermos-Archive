@@ -14,6 +14,7 @@ namespace UI.Views
         [SerializeField] private Messages InfowijsMessages;
         [SerializeField] private TMP_Text beschrijving;
         [SerializeField] private bool loaded = false;
+        [SerializeField] private int messagesToLoad = 25;
     
         public override void Initialize()
         {
@@ -74,18 +75,82 @@ namespace UI.Views
             }
         }
 
+        
+        
         private IEnumerator PopulateNewsItems()
         {
             yield return new WaitForSeconds(0.5f);
+            var messages = new CoroutineWithData<Messages.InfowijsMessage>(this, InfowijsMessages.getMessages()).result;
             beschrijving.DOFade(0f, 0.1f);
-            yield return new WaitForSeconds(0.05f);
-            // var messages = new CoroutineWithData<List<Message>>(this, InfowijsMessages.GetBetterInfowijsMessages()).result;
-            // foreach (Message message in messages)
+            yield return new WaitForSeconds(0.1f);
+            SchoolNews CurrentItem = null; 
+            int CurrentItemType = 0;
+            // foreach (Messages.Message message in messages.Data.Messages)
             // {
-            //     GameObject newsItem = Instantiate(_newsItemPrefab, _newsItemContainer.transform);
-            //     newsItem.GetComponent<SchoolNews>().Initialize(message);
+            //     if (CurrentItemType < message.Type)
+            //     {
+            //         if (CurrentItem != null)
+            //             CurrentItem.Initialize();
+            //         CurrentItemType = 30;
+            //         var go = Instantiate(_newsItemPrefab, _newsItemContainer.transform);
+            //         CurrentItem = go.GetComponent<SchoolNews>();
+            //         go.GetComponent<CanvasGroup>().alpha = 0;
+            //         go.GetComponent<CanvasGroup>().DOFade(1f, 1f);
+            //         CurrentItem.messages = new List<Messages.Message>();
+            //     }
+            //
+            //     if (message.Type == 30)
+            //     {
+            //         CurrentItem.titleText.text = message.Content.ContentClass.Title;
+            //         CurrentItem.dateText.text = message.CreatedAt.ToDateTime().ToString("d MMMM");
+            //     }
+            //     
+            //     if (message.Type == 1)
+            //     {
+            //         CurrentItem.messageText.text = message.Content.String;
+            //     }
+            //     
+            //     CurrentItem.messages.Add(message);
+            //     CurrentItemType = (int) message.Type;
             //     yield return new WaitForEndOfFrame();
             // }
+            //
+            // //do this in a for loop where i > 100
+
+
+            int i = 0;
+            for (int x = 0; x < messagesToLoad; i++)
+            {
+                Messages.Message message = messages.Data.Messages[i];
+                
+                if (CurrentItemType < message.Type)
+                {
+                    if (CurrentItem != null)
+                        CurrentItem.Initialize();
+                    CurrentItemType = 30;
+                    var go = Instantiate(_newsItemPrefab, _newsItemContainer.transform);
+                    CurrentItem = go.GetComponent<SchoolNews>();
+                    go.GetComponent<CanvasGroup>().alpha = 0;
+                    go.GetComponent<CanvasGroup>().DOFade(1f, 1f);
+                    CurrentItem.messages = new List<Messages.Message>();
+                    x++;
+                }
+
+                if (message.Type == 30)
+                {
+                    CurrentItem.titleText.text = message.Content.ContentClass.Title;
+                    CurrentItem.dateText.text = message.CreatedAt.ToDateTime().ToString("d MMMM");
+                }
+                
+                if (message.Type == 1)
+                {
+                    CurrentItem.messageText.text = message.Content.String;
+                }
+                
+                CurrentItem.messages.Add(message);
+                CurrentItemType = (int) message.Type;
+                yield return new WaitForEndOfFrame();
+            }
         }
         
         public override void Refresh(object args)

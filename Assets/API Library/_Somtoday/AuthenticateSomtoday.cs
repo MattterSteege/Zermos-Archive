@@ -137,6 +137,10 @@ public class AuthenticateSomtoday : BetterHttpClient
             LocalPrefs.SetString("somtoday-refresh_token", somtodayAuthentication.refresh_token);
             LocalPrefs.SetString("somtoday-access_token", somtodayAuthentication.access_token);
             return somtodayAuthentication;
+        }, (error) =>
+        {
+            AndroidUIToast.ShowToast("Er is iets fout gegaan bij het ophalen van een nieuwe SOMtoday token. Probeer het later opnieuw.");
+            return null;
         });
         return SomAuthToken;
         

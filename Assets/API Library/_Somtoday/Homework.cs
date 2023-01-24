@@ -10,7 +10,9 @@ using UnityEngine.Networking;
 public class Homework : BetterHttpClient
 {
     [SerializeField] private CustomHomework _CustomHomework;
+    [SerializeField] private int StartFrom = 0;
     
+    #region appointment homework
     [ContextMenu("get homework")]
     public List<Item> getHomework()
     {
@@ -19,88 +21,88 @@ public class Homework : BetterHttpClient
         string json = "";
         var homework = new SomtodayHomework();
 
-        int rangemin = 0;
-        int rangemax = 99;
+        int rangemin = StartFrom + 0;
+        int rangemax = StartFrom + 99;
 
         string startDate = GetComponent<global::Schooljaar>().getCurrentSchooljaarStartDate().ToString("yyyy-MM-dd");
         
-        string baseurl =
-            string.Format(
-                $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={startDate}&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen&additional=studiewijzerId");
+        string baseurl = $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={startDate}&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen&additional=studiewijzerId";
 
-        
-        UnityWebRequest www = UnityWebRequest.Get(baseurl);
-        www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
-        www.SetRequestHeader("Accept", "application/json");
-        www.SetRequestHeader("Range", $"items={rangemin}-{rangemax}");
-        www.SendWebRequest();
-
-        while (!www.isDone)
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+        headers.Add("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
+        headers.Add("Accept", "application/json");
+        headers.Add("Range", $"items={rangemin}-{rangemax}");
+        return (List<Item>) Get(baseurl, headers, (response) =>
         {
-        }
-
-        json = www.downloadHandler.text
-            .Replace("<p>", "").Replace("</p>", "")
-            .Replace("<ul>", "").Replace("</ul>", "")
-            .Replace("<li>", "\n• ").Replace("</li>", "")
-            .Replace("&amp;", "&")
-            .Replace("<strong>", "<b>").Replace("</strong>", "</b>")
-            .Replace("<em>", "<i>").Replace("</em>", "</i>")
-            .Replace("&nbsp;", " ");
-        
-        
-        homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
-
-        var header = www.GetResponseHeader("Content-Range");
-        var total = int.Parse(header.Split('/')[1]);
-
-        while (rangemax < total)
-        {
-            rangemin += 100;
-            rangemax += 100;
-            
-            www = UnityWebRequest.Get(baseurl);
-            www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
-            www.SetRequestHeader("Accept", "application/json");
-            www.SetRequestHeader("Range", $"items={rangemin}-{rangemax}");
-            www.SendWebRequest();
-
-            while (!www.isDone)
-            {
-            }
-
-            json += www.downloadHandler.text;
-            header = www.GetResponseHeader("Content-Range");
-            total = int.Parse(header.Split('/')[1]);
-
-            var extraHomework = JsonConvert.DeserializeObject<SomtodayHomework>(www.downloadHandler.text
+            json = response.downloadHandler.text
                 .Replace("<p>", "").Replace("</p>", "")
                 .Replace("<ul>", "").Replace("</ul>", "")
                 .Replace("<li>", "\n• ").Replace("</li>", "")
-                .Replace("&amp;", "&").Replace("<br>", "\n")
+                .Replace("&amp;", "&")
                 .Replace("<strong>", "<b>").Replace("</strong>", "</b>")
                 .Replace("<em>", "<i>").Replace("</em>", "</i>")
-                .Replace("&nbsp;", " "));
+                .Replace("&nbsp;", " ").Replace("&gt;", ">");;
             
-            if (extraHomework != null)
+            homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
+
+            var header = response.GetResponseHeader("Content-Range");
+            var total = int.Parse(header.Split('/')[1]);
+
+            while (rangemax < total)
             {
-                for (int i = 0; i < extraHomework.items.Count; i++)
+                rangemin += 100;
+                rangemax += 100;
+
+                Dictionary<string, string> headers = new Dictionary<string, string>();
+                headers.Add("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
+                headers.Add("Accept", "application/json");
+                headers.Add("Range", $"items={rangemin}-{rangemax}");
+                
+                Get(baseurl, headers, (response) =>
                 {
-                    homework.items.Add(extraHomework.items[i]);
-                }
+                    json = response.downloadHandler.text
+                        .Replace("<p>", "").Replace("</p>", "")
+                        .Replace("<ul>", "").Replace("</ul>", "")
+                        .Replace("<li>", "\n• ").Replace("</li>", "")
+                        .Replace("&amp;", "&")
+                        .Replace("<strong>", "<b>").Replace("</strong>", "</b>")
+                        .Replace("<em>", "<i>").Replace("</em>", "</i>")
+                        .Replace("&nbsp;", " ").Replace("&gt;", ">");;
+                    
+                    homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
+                    
+                    if (homework != null)
+                    {
+                        for (int i = 0; i < homework.items.Count; i++)
+                        {
+                            homework.items.AddRange(homework.items);
+                        }
+                    }
+
+                    return null;
+                }, (error) =>
+                {
+                    AndroidUIToast.ShowToast("Er is iets fout gegaan bij het ophalen van je huiswerk. Probeer het later opnieuw.");
+                    return null;
+                });
             }
-        }
-        
-        var weekHomework = GetWeekHomework();
-        
-        homework?.items.AddRange(weekHomework);
-        homework?.items.AddRange(_CustomHomework.GetCustomHomeWork());
-        
-        homework = Sort(homework);
 
-        return homework.items;
+            homework?.items.AddRange(GetWeekHomework());
+            homework?.items.AddRange(GetDagHomework());
+            homework?.items.AddRange(_CustomHomework.GetCustomHomeWork());
+
+            homework = Sort(homework);
+
+            return homework.items;
+        }, (error) =>
+        {
+            AndroidUIToast.ShowToast("Er is iets fout gegaan bij het ophalen van je huiswerk. Probeer het later opnieuw.");
+            return null;
+        });
     }
+    #endregion
 
+    #region week homework
     [ContextMenu("get week homework")]
     public List<Item> GetWeekHomework()
     {
@@ -109,78 +111,164 @@ public class Homework : BetterHttpClient
         string json = "";
         var homework = new SomtodayHomework();
 
-        int rangemin = 0;
-        int rangemax = 99;
+        int rangemin = StartFrom + 0;
+        int rangemax = StartFrom + 99;
 
         string startDate = GetComponent<global::Schooljaar>().getCurrentSchooljaarStartDate().ToString("yyyy-MM-dd");
+        string baseurl = $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemweektoekenningen?schooljaar=&begintNaOfOp={startDate}&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen";
 
-        string baseurl =
-            string.Format(
-                $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemweektoekenningen?schooljaar=&begintNaOfOp={startDate}&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen");
-
-        UnityWebRequest www = UnityWebRequest.Get(baseurl);
-        www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
-        www.SetRequestHeader("Accept", "application/json");
-        www.SetRequestHeader("Range", $"items={rangemin}-{rangemax}");
-        www.SendWebRequest();
-
-        while (!www.isDone)
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+        headers.Add("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
+        headers.Add("Accept", "application/json");
+        headers.Add("Range", $"items={rangemin}-{rangemax}");
+        return (List<Item>) Get(baseurl, headers, (response) =>
         {
-        }
-
-        json = www.downloadHandler.text
-            .Replace("<p>", "").Replace("</p>", "")
-            .Replace("<ul>", "").Replace("</ul>", "")
-            .Replace("<li>", "").Replace("</li>", "")
-            .Replace("&amp;", "&");
-        
-        homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
-
-        var header = www.GetResponseHeader("Content-Range");
-        var total = int.Parse(header.Split('/')[1]);
-
-        while (rangemax < total)
-        {
-            rangemin += 100;
-            rangemax += 100;
+            json = response.downloadHandler.text
+                .Replace("<p>", "").Replace("</p>", "")
+                .Replace("<ul>", "").Replace("</ul>", "")
+                .Replace("<li>", "\n• ").Replace("</li>", "")
+                .Replace("&amp;", "&")
+                .Replace("<strong>", "<b>").Replace("</strong>", "</b>")
+                .Replace("<em>", "<i>").Replace("</em>", "</i>")
+                .Replace("&nbsp;", " ").Replace("&gt;", ">");;
             
-            www = UnityWebRequest.Get(baseurl);
-            www.SetRequestHeader("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
-            www.SetRequestHeader("Accept", "application/json");
-            www.SetRequestHeader("Range", $"items={rangemin}-{rangemax}");
-            www.SendWebRequest();
-
-            while (!www.isDone)
+            homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
+            
+            var header = response.GetResponseHeader("Content-Range");
+            var total = int.Parse(header.Split('/')[1]);
+            
+            while (rangemax < total)
             {
-            }
+                rangemin += 100;
+                rangemax += 100;
 
-            json += www.downloadHandler.text;
-            header = www.GetResponseHeader("Content-Range");
-            total = int.Parse(header.Split('/')[1]);
-
-            var extraHomework = JsonConvert.DeserializeObject<SomtodayHomework>(www.downloadHandler.text
-                                                                                .Replace("<p>", "").Replace("</p>", "")
-                                                                                .Replace("<ul>", "").Replace("</ul>", "")
-                                                                                .Replace("<li>", "").Replace("</li>", "")
-                                                                                .Replace("&amp;", "&"));
-            if (extraHomework != null)
-            {
-                for (int i = 0; i < extraHomework.items.Count; i++)
+                Dictionary<string, string> headers = new Dictionary<string, string>();
+                headers.Add("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
+                headers.Add("Accept", "application/json");
+                headers.Add("Range", $"items={rangemin}-{rangemax}");
+                
+                Get(baseurl, headers, (response) =>
                 {
-                    homework.items.Add(extraHomework.items[i]);
-                }
+                    json = response.downloadHandler.text
+                        .Replace("<p>", "").Replace("</p>", "")
+                        .Replace("<ul>", "").Replace("</ul>", "")
+                        .Replace("<li>", "\n• ").Replace("</li>", "")
+                        .Replace("&amp;", "&")
+                        .Replace("<strong>", "<b>").Replace("</strong>", "</b>")
+                        .Replace("<em>", "<i>").Replace("</em>", "</i>")
+                        .Replace("&nbsp;", " ").Replace("&gt;", ">");;
+                    
+                    homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
+                    
+                    if (homework != null)
+                    {
+                        for (int i = 0; i < homework.items.Count; i++)
+                        {
+                            homework.items.AddRange(homework.items);
+                        }
+                    }
+
+                    return null;
+
+                }, (error) =>
+                {
+                    AndroidUIToast.ShowToast("Er is iets fout gegaan bij het ophalen van je week huiswerk. Probeer het later opnieuw.");
+                    return null;
+                });
             }
-        }
-
-        // foreach (Item homeworkItem in homework.items)
-        // {
-        //     homeworkItem.datumTijd = getDateFromWeeknumber(homeworkItem.weeknummerVanaf, TimeManager.Instance.DateTime.Year);
-        // }
-
-        homework = Sort(homework);
-
-        return homework.items;
+            
+            return homework.items;
+        }, (error) =>
+        {
+            AndroidUIToast.ShowToast("Er is iets fout gegaan bij het ophalen van je week huiswerk. Probeer het later opnieuw.");
+            return null;
+        });
     }
+    #endregion
+
+    #region Dag Huiswerk
+    [ContextMenu("get dag homework")]
+    public List<Item> GetDagHomework()
+    {
+        
+        if (string.IsNullOrEmpty(LocalPrefs.GetString("somtoday-access_token"))) return null;
+
+        string json = "";
+        var homework = new SomtodayHomework();
+
+        int rangemin = StartFrom + 0;
+        int rangemax = StartFrom + 99;
+
+        string startDate = GetComponent<global::Schooljaar>().getCurrentSchooljaarStartDate().ToString("yyyy-MM-dd");
+        string baseurl = $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemdagtoekenningen?schooljaar=&begintNaOfOp={startDate}&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen";
+
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+        headers.Add("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
+        headers.Add("Accept", "application/json");
+        headers.Add("Range", $"items={rangemin}-{rangemax}");
+        return (List<Item>) Get(baseurl, headers, (response) =>
+        {
+            json = response.downloadHandler.text
+                .Replace("<p>", "").Replace("</p>", "")
+                .Replace("<ul>", "").Replace("</ul>", "")
+                .Replace("<li>", "\n• ").Replace("</li>", "")
+                .Replace("&amp;", "&")
+                .Replace("<strong>", "<b>").Replace("</strong>", "</b>")
+                .Replace("<em>", "<i>").Replace("</em>", "</i>")
+                .Replace("&nbsp;", " ").Replace("&gt;", ">");;
+            
+            homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
+            
+            var header = response.GetResponseHeader("Content-Range");
+            var total = int.Parse(header.Split('/')[1]);
+            
+            while (rangemax < total)
+            {
+                rangemin += 100;
+                rangemax += 100;
+
+                Dictionary<string, string> headers = new Dictionary<string, string>();
+                headers.Add("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
+                headers.Add("Accept", "application/json");
+                headers.Add("Range", $"items={rangemin}-{rangemax}");
+                
+                Get(baseurl, headers, (response) =>
+                {
+                    json = response.downloadHandler.text
+                        .Replace("<p>", "").Replace("</p>", "")
+                        .Replace("<ul>", "").Replace("</ul>", "")
+                        .Replace("<li>", "\n• ").Replace("</li>", "")
+                        .Replace("&amp;", "&").
+                        Replace("<strong>", "<b>").Replace("</strong>", "</b>")
+                        .Replace("<em>", "<i>").Replace("</em>", "</i>")
+                        .Replace("&nbsp;", " ").Replace("&gt;", ">");;
+                    
+                    homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
+                    
+                    if (homework != null)
+                    {
+                        for (int i = 0; i < homework.items.Count; i++)
+                        {
+                            homework.items.AddRange(homework.items);
+                        }
+                    }
+                    
+                    return null;
+                }, (error) =>
+                {
+                    AndroidUIToast.ShowToast("Er is iets fout gegaan bij het ophalen van je dag huiswerk. Probeer het later opnieuw.");
+                    return null;
+                });
+            }
+            
+            return homework.items;
+        }, (error) =>
+        {
+            AndroidUIToast.ShowToast("Er is iets fout gegaan bij het ophalen van je dag huiswerk. Probeer het later opnieuw.");
+            return null;
+        });
+    }
+    #endregion
 
     public SomtodayHomework Sort(SomtodayHomework homework)
     {
@@ -189,20 +277,6 @@ public class Homework : BetterHttpClient
         homework.items.RemoveAll(x=> x.datumTijd < TimeManager.Instance.DateTime.AddDays(-LocalPrefs.GetInt("homework_stays_till", 14)));
         homework.items.RemoveAll(x=> x.studiewijzerItem.huiswerkType == "LESSTOF");
         return homework;
-    }
-    
-    public static DateTime getDateFromWeeknumber(int weeknumber, int year)
-    {
-        DateTime jan1 = new DateTime(year, 1, 1);
-        int daysOffset = DayOfWeek.Monday - jan1.DayOfWeek;
-        DateTime firstMonday = jan1.AddDays(daysOffset);
-        int firstWeek = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(jan1, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
-        if (firstWeek <= 1)
-        {
-            weeknumber -= 1;
-        }
-        DateTime result = firstMonday.AddDays(weeknumber * 7);
-        return result.AddDays(4);
     }
 
     #region Models

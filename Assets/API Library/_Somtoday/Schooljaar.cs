@@ -78,6 +78,10 @@ public class Schooljaar : BetterHttpClient
             File.AppendAllText(destination, convertedJson);
 
             return schooljaar;
+        }, (error) =>
+        {
+            AndroidUIToast.ShowToast("Er is iets misgegaan tijdens het opvragen van de schooljaren. Probeer het later opnieuw.");
+            return null;
         });
     }
 
