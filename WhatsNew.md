@@ -1,4 +1,4 @@
-# V0.7.9.3 - Vertraagd!
+# V0.7.9.3
 **Tijdens het testen van de app kwam ik een groot probleem tegen, zegmaar kan je telefoon chrasen groot. Ik moet dit natuurlijk gelijk fixen, dus daarom is de komende update vertraagd. Ik weet niet hoelang het duurt om de oplossing te vinden, maar ik ben bezig. In de tussentijd kan je alvast jezelf hyped maken voor alle nieuwe features!**
 
 1. Grote veranderingen
@@ -19,7 +19,7 @@
 3. bug fixes
     * Recente cijfers zijn nu niet meer je eerst gehaalde cijfers. (ik had perongeluk omgedraaide sortering aangezet...)
     * omgedraaide cijfers in de grafiek staan nu weer goed
-    
+    * huiswerk opvragen veroorzaakt nu geen crashes meer
 ---
 
 # V0.7.9.2
