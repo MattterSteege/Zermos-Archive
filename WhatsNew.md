@@ -1,6 +1,14 @@
 # V0.7.9.3
 **Tijdens het testen van de app kwam ik een groot probleem tegen, zegmaar kan je telefoon chrasen groot. Ik moet dit natuurlijk gelijk fixen, dus daarom is de komende update vertraagd. Ik weet niet hoelang het duurt om de oplossing te vinden, maar ik ben bezig. In de tussentijd kan je alvast jezelf hyped maken voor alle nieuwe features!**
 
+3. Bug fixes
+    * je informatie staat nu niet emer in de dev console, dit was ik vergeten weg te halen uit V0.7.9.3
+    * de status bar (top bar) op telefoons staat nu niet over de UI
+---
+
+# V0.7.9.3
+**Tijdens het testen van de app kwam ik een groot probleem tegen, zegmaar kan je telefoon chrasen groot. Ik moet dit natuurlijk gelijk fixen, dus daarom is de komende update vertraagd. Ik weet niet hoelang het duurt om de oplossing te vinden, maar ik ben bezig. In de tussentijd kan je alvast jezelf hyped maken voor alle nieuwe features!**
+
 1. Grote veranderingen
     * Je kan nu gewoon een datum aanklikken bij het inplannen van huiswerk.
     * Je dag rooster is nu tijdsgebonden dus, wow.
@@ -16,7 +24,7 @@
     * Huiswerk datum divider verdwijnt nu als er geen huiswerk op die datum staat
     * De UI bij dag- en weekrooster is lichtelijk angepast
 
-3. bug fixes
+3. Bug fixes
     * Recente cijfers zijn nu niet meer je eerst gehaalde cijfers. (ik had perongeluk omgedraaide sortering aangezet...)
     * omgedraaide cijfers in de grafiek staan nu weer goed
     * huiswerk opvragen veroorzaakt nu geen crashes meer
@@ -35,7 +43,7 @@
     * Je wachtwoorden zijn nu wel veilig. Voer je wachtwoorden in en klik op het oogje om ze te zien.
     * Bij "De tijd tot..." staat nu ook in welk lokaal ze volgende les is.
 
-3. bug fixes
+3. Bug fixes
     * Antonius app koppelen is nu duidelijker
     * de knoppen bij het filteren voor huiswerk overlappen niet meer
     * Het sluiten van een bericht van school laat de app niet meer gek doen.
