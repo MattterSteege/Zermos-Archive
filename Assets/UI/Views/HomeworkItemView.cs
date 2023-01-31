@@ -12,6 +12,7 @@ namespace UI.Views
 
         [SerializeField] TMP_Text Vak;
         [SerializeField] TMP_Text Datum;
+        [SerializeField] TMP_Text LaatstAangepast;
         [SerializeField] TMP_Text Omschrijving;
         [SerializeField] Toggle Gemaakt;
 
@@ -47,6 +48,8 @@ namespace UI.Views
             Vak.text = homeworkInfo.lesgroep.vak.naam ?? "";
 
             Datum.text = homeworkInfo.datumTijd.ToString("d MMMM");
+            
+            //LaatstAangepast.text = homeworkInfo. .ToString("dd-MM HH:mm");
 
             Omschrijving.text = homeworkInfo.studiewijzerItem.omschrijving;
             if (Omschrijving.text.Length == 0)

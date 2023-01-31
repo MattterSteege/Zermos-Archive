@@ -61,20 +61,33 @@ namespace UI.Views
                 {
                     int totalWeight = GradesPerVak.Sum(x => x.weging);
                     if (totalWeight == 0) totalWeight = GradesPerVak.Count;
-                    float totalGrade = 0f;
+                    
+                    grade[] Grades = new grade[GradesPerVak.Count];
 
                     for (int i = 0; i < GradesPerVak.Count; i++)
-                        totalGrade += (GradesPerVak[i].weging == 0 ? 1 : GradesPerVak[i].weging) * float.Parse(GradesPerVak[i].geldendResultaat, NumberStyles.Any);
+                    {
+                        Grades[i] = new grade()
+                        {
+                            weging = GradesPerVak[i].weging,
+                            resultaat = Convert.ToDouble(GradesPerVak[i].geldendResultaat)
+                        };
+                    }
                     
-                    float endGrade = MathF.Round(totalGrade / totalWeight, 1, MidpointRounding.AwayFromZero);
+                    double totalGrade = 0f;
+                    
+                    for (int i = 0; i < Grades.Length; i++)
+                        totalGrade += Convert.ToDouble((Grades[i].weging == 0 ? 1 : Grades[i].weging)) * Grades[i].resultaat;
+                    
+                    float endGrade = MathF.Round((float) (totalGrade / totalWeight), 1, MidpointRounding.AwayFromZero);
                     
                     var gradeView = Instantiate(gradePrefab, content.transform);
-                    gradeView.GetComponent<GradeInfo>().SetGradeInfo(Vak.naam ?? "", "",  "", GradesPerVak.Sum(x => x.weging) + "x", endGrade.ToString(CultureInfo.InvariantCulture).Replace(".", ","));
+                    gradeView.GetComponent<GradeInfo>().SetGradeInfo(Vak.naam ?? "", "",  "", Grades.Sum(x => x.weging) + "x", endGrade.ToString(CultureInfo.InvariantCulture).Replace(".", ","));
                     
                     gradeView.GetComponent<Button>().onClick.AddListener(() =>
                     {
                         ViewManager.Instance.ShowNewView<GradeItemView>(GradesPerVak);
                     });
+                    
                 }
             }
         
@@ -86,6 +99,12 @@ namespace UI.Views
             openNavigationButton.onClick.RemoveAllListeners();
             closeButtonWholePage.onClick.RemoveAllListeners();
             base.Refresh(args);
+        }
+        
+        class grade
+        {
+            public int weging;
+            public double resultaat;
         }
     }
 

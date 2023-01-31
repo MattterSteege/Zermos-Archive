@@ -68,17 +68,21 @@ namespace UI.SubViews
             
             //---
                         
-            homework_stays_till.valueText.text = LocalPrefs.GetInt("homework_stays_till", 1).ToString();
             int dagen = LocalPrefs.GetInt("homework_stays_till", 14);
+            homework_stays_till.valueText.text = dagen.ToString();
             homework_stays_till.plusButton.onClick.AddListener(() =>
             {
                 dagen++;
+                dagen = dagen > 99 ? 99 : dagen;
+                dagen = dagen < 1 ? 1 : dagen;
                 LocalPrefs.SetInt("homework_stays_till", dagen);
                 homework_stays_till.valueText.text = dagen.ToString();
             });
             homework_stays_till.minusButton.onClick.AddListener(() =>
             {
                 dagen--;
+                dagen = dagen > 99 ? 99 : dagen;
+                dagen = dagen < 1 ? 1 : dagen;
                 LocalPrefs.SetInt("homework_stays_till", dagen);
                 homework_stays_till.valueText.text = dagen.ToString();
             });
@@ -86,7 +90,8 @@ namespace UI.SubViews
             {
                 if (int.TryParse(value, out int result))
                 {
-                    dagen = result;
+                    dagen = result > 99 ? 99 : result;
+                    dagen = dagen < 1 ? 1 : dagen;
                     LocalPrefs.SetInt("homework_stays_till", dagen);
                 }
             });

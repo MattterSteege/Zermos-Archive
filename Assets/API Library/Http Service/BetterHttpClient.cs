@@ -86,13 +86,12 @@ public class BetterHttpClient : MonoBehaviour
 
         if (www.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogWarning(www.error);
-            var errored = error.Invoke(www);
+            var errored = error?.Invoke(www);
             www.Dispose();
             return errored;
         }
 
-        var returned = callback.Invoke(www);
+        var returned = callback?.Invoke(www);
         www.Dispose();
         return returned;
     }
@@ -155,10 +154,7 @@ public class BetterHttpClient : MonoBehaviour
     public object Post(string url, string json, Func<UnityWebRequest, object> callback, Func<UnityWebRequest, object> error = null)
     {
         Debug.Log("Request started");
-        UnityWebRequest www = UnityWebRequest.PostWwwForm(url, "POST");
-        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
-        www.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        www.downloadHandler = new DownloadHandlerBuffer();
+        UnityWebRequest www = UnityWebRequest.Post(url, json);
         www.SetRequestHeader("Content-Type", "application/json");
         www.SendWebRequest();
 
@@ -182,10 +178,7 @@ public class BetterHttpClient : MonoBehaviour
     public object Post(string url, string json, Dictionary<string, string> headers, Func<UnityWebRequest, object> callback, Func<UnityWebRequest, object> error = null)
     {
         Debug.Log("Request started");
-        UnityWebRequest www = UnityWebRequest.PostWwwForm(url, "POST");
-        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
-        www.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        www.downloadHandler = new DownloadHandlerBuffer();
+        UnityWebRequest www = UnityWebRequest.Post(url, json);
         www.SetRequestHeader("Content-Type", "application/json");
         if (headers != null)
         {

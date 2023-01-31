@@ -7,8 +7,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using DG.Tweening;
-using NUnit.Framework;
-using Unity.Mathematics;
 
 namespace UI.Views
 {
@@ -51,7 +49,7 @@ namespace UI.Views
             {
                 float decelerationRate = _ScrollRect.decelerationRate;
                 _ScrollRect.decelerationRate = 0f;
-                _ScrollRect.content.DOLocalMove(_ScrollRect.GetSnapToPositionToBringChildIntoView(_rectTransformDefault), 0.1f, true).onComplete += () => _ScrollRect.decelerationRate = decelerationRate;
+                _ScrollRect.content.DOLocalMove(_ScrollRect.GetSnapToPositionToBringChildIntoView((RectTransform) _rectTransformDefault), 0.1f, true).onComplete += () => _ScrollRect.decelerationRate = decelerationRate;
             };
             
             _FilterButton.onValueChanged.AddListener((ctx) =>
@@ -61,7 +59,7 @@ namespace UI.Views
                 StartCoroutine(lerpTo(rectTransform, ctx ? -185f : -40f, 0.5f));
             });
 
-            List<Homework.Item> homework = homeworkObject.getHomework();
+            List<Homework.Item> homework = homeworkObject.GetHomework();
 
             if (homework == null)
             {
@@ -130,7 +128,7 @@ namespace UI.Views
             }
             
             int closestTimeIndex = _Dates.IndexOf(_Dates.OrderBy(t => Math.Abs((t - TimeManager.Instance.CurrentDateTime).Ticks)).First());
-            _ScrollRect.content.position = _ScrollRect.GetSnapToPositionToBringChildIntoView(_rectTransformDefault = _homeworkDateDividers[closestTimeIndex].GetComponent<RectTransform>());
+            _ScrollRect.content.position = _ScrollRect.GetSnapToPositionToBringChildIntoView(_rectTransformDefault = (RectTransform) _homeworkDateDividers[closestTimeIndex].GetComponent<RectTransform>().parent);
 
             #region Sorting Shit
             huiswerk.onValueChanged.AddListener((isOn) =>
@@ -260,9 +258,9 @@ namespace UI.Views
         {
             float decelerationRate = _ScrollRect.decelerationRate;
             _ScrollRect.decelerationRate = 0f;
-            _ScrollRect.content.DOLocalMove(_ScrollRect.GetSnapToPositionToBringChildIntoView(_rectTransformDefault), 0.5f, true).onComplete += () => _ScrollRect.decelerationRate = decelerationRate;
+            _ScrollRect.content.DOLocalMove(_ScrollRect.GetSnapToPositionToBringChildIntoView((RectTransform) _rectTransformDefault), 0.5f, true).onComplete += () => _ScrollRect.decelerationRate = decelerationRate;
         }
-        
+
         private bool UpdateGemaaktStatus(long huiswerkId, bool gemaakt)
         {
             SomtodayHoweworkStatus root = new SomtodayHoweworkStatus
@@ -377,9 +375,13 @@ namespace UI.Views
                 0 - (viewportLocalPosition.x + childLocalPosition.x),
                 0 - (viewportLocalPosition.y + childLocalPosition.y)
             );
-            result.y += (instance.viewport.rect.height -10) / 2 - 5;
+            result.y += ((instance.viewport.rect.height -10) / 2) - (child.rect.height / 2);
             result.x = 0f;
             return result;
         }
     }
+
+
+
+
 }

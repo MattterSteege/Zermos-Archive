@@ -745,6 +745,7 @@ MonoBehaviour:
   vak: {fileID: 8719360726315077447}
   docent: {fileID: 3848596336019958048}
   lesUur: {fileID: 1591833003679769353}
+  kwtUurAvailable: {fileID: 0}
 --- !u!114 &5438074145438941305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -802,7 +803,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9294118, g: 0.9490197, b: 0.9607844, a: 1}
+  m_Color: {r: 0.93333334, g: 0.972549, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

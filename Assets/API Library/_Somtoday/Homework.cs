@@ -10,23 +10,23 @@ using UnityEngine.Networking;
 public class Homework : BetterHttpClient
 {
     [SerializeField] private CustomHomework _CustomHomework;
-    [SerializeField] private int StartFrom = 0;
-    
+    private string _startDate = "";
+
     #region appointment homework
     [ContextMenu("get homework")]
-    public List<Item> getHomework()
+    public List<Item> GetHomework()
     {
         if (string.IsNullOrEmpty(LocalPrefs.GetString("somtoday-access_token"))) return null;
 
         string json = "";
         var homework = new SomtodayHomework();
 
-        int rangemin = StartFrom + 0;
-        int rangemax = StartFrom + 99;
+        int rangemin = 0;
+        int rangemax = 99;
 
-        string startDate = GetComponent<global::Schooljaar>().getCurrentSchooljaarStartDate().ToString("yyyy-MM-dd");
+        _startDate = TimeManager.Instance.DateTime.AddDays(-LocalPrefs.GetInt("homework_stays_till", 14)).ToString("yyyy-MM-dd");
         
-        string baseurl = $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={startDate}&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen&additional=studiewijzerId";
+        string baseurl = $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={_startDate}&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen&additional=studiewijzerId";
 
         Dictionary<string, string> headers = new Dictionary<string, string>();
         headers.Add("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
@@ -111,11 +111,10 @@ public class Homework : BetterHttpClient
         string json = "";
         var homework = new SomtodayHomework();
 
-        int rangemin = StartFrom + 0;
-        int rangemax = StartFrom + 99;
-
-        string startDate = GetComponent<global::Schooljaar>().getCurrentSchooljaarStartDate().ToString("yyyy-MM-dd");
-        string baseurl = $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemweektoekenningen?schooljaar=&begintNaOfOp={startDate}&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen";
+        int rangemin = 0;
+        int rangemax = 99;
+        
+        string baseurl = $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemweektoekenningen?schooljaar=&begintNaOfOp={_startDate}&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen";
 
         Dictionary<string, string> headers = new Dictionary<string, string>();
         headers.Add("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
@@ -196,11 +195,10 @@ public class Homework : BetterHttpClient
         string json = "";
         var homework = new SomtodayHomework();
 
-        int rangemin = StartFrom + 0;
-        int rangemax = StartFrom + 99;
-
-        string startDate = GetComponent<global::Schooljaar>().getCurrentSchooljaarStartDate().ToString("yyyy-MM-dd");
-        string baseurl = $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemdagtoekenningen?schooljaar=&begintNaOfOp={startDate}&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen";
+        int rangemin = 0;
+        int rangemax = 99;
+        
+        string baseurl = $"{LocalPrefs.GetString("somtoday-api_url")}/rest/v1/studiewijzeritemdagtoekenningen?schooljaar=&begintNaOfOp={_startDate}&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen";
 
         Dictionary<string, string> headers = new Dictionary<string, string>();
         headers.Add("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
