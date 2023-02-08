@@ -1,7 +1,6 @@
-Zermos heeft, net als elke andere app, updates nodig. Dit doe je redelijk makkelijk. Als er een update is komt er een oranje bolletje bij instellingen knop in het menu. 
+Als Zermos een update heeft krijg je duidelijk te zien, dan is het ook aan te raden om de nieuwe update te downloaden. Dit zorgt voor een stabielere app en een betere gebruikservaring. 
 
-### Downloaden
-Je klikt dan op instellingen en ga naar updates. daarna zie je wat er nieuw is. daarna klik je 'Update gevonden, downloaden?'. dan word de nieuwe versie gedownload, wacht todat de update is gedownload. daarna komt er 'klaar' te staan op de knop.
-
+### Ik wil meedoen
+Als je interesse hebt om Zermos te gebruiken, en dus te downloaden, dan doe je dat in de google play store (Dit is alle voor android gebruikers). Dan volg je de normale stappen om een app te downloaden en open dan de app, alles is daar kort uitgelegd.
 ### gedownload, en nu?
-als de knop 'klaar' weergeeft, ga dan naar je bestanden en klik op 'interne opslag'. Scroll naar benede en klik op 'Documents'. Klik op Zermos.apk. daarna komt er een pop-up met 'Annuleren' en 'Udpaten', klik dan op Updaten en dan word de app geupdate. daarna klik je op 'Openen' om de app te openen of op 'Klaar' als je de app niet wilt openen.
+Zermos word af en toe bijgewerkt, de nieuwe update krijg je door in de Google play store op 'bijwerken' te klikken.
