@@ -1,3 +1,26 @@
+# V0.8
+1. Grote veranderingen
+    * Wow, a wild informatie tabje appeared! Je kan nu nog makkelijker zien of er vandaag een cijfer is binnengekomen
+    * As je op de grafiek klikt bij je cijfers krijg je een nieuwe weergave. Hier zie je ook je gemiddelde, maar wees gerust er komt waarschijnlijk nog meer bij!
+    * Wist je dat de Antonius app een jaarkalender had? Nee. LOL, nee ik ook niet, maar Zermos heeft het nu ook.
+
+2.  Details
+    * Tekst die je te zien krijgt als je nieuw bent is nu wél gecentreerd
+    * De titel van school berichten bestaan nu ook
+    * Bij de berichten van school staan er nu ook knoppen voor de meegeleverde bijlage, als die er zijn natuurlijk ;)
+    * De animatie bij instellingen is nu wel smooth, dus geen halve epileptische aanval als je iets wil aanpassen :)
+    * De namen van vakken bij cijfers & huiswerk staan nu beter en fokken niet het hele scherm op.
+    * Ik heb het kleurenschema aangepast... niet gemerkt? Dat kan best, ik heb namelijk e helft van de achtergrond 2 verschillende kleuren gegeven, maar dat is lelijk dus nu zijn ze hetzelfde. Er zat 5% verschil tussen de kleuren...
+    * Het verversen van je rooster is nu veranderd, ten minste, visueel. Als je op de refreshknop klikt verdwijnt hij tijdelijk, als hij weer terug is weet je dat je rooster helemaal 'fresh' is.
+
+3. bug Fixes
+    * De tekst van school berichten is nu niet meer de tekst van Never gonna give you up...
+    * Huiswerk scroll functie werkt weer!
+    * Als je de app inlaadt krijg je niet meer dat welkom bericht te zien. Nice!
+    * Je kan nu weer inloggen bij de Antonius app :) yeey, meer spammen
+    * Als je tussen je meetellende cijfers van een vak een 0 keer meetellend cijfer had gehaald werd dat meegeteld met weging 1, maar daarna verwerkt als weging 0. Foutje, kan gebeuren, maar nu is dat verleden tijd! YES!
+---
+
 # V0.7.9.3
 **Tijdens het testen van de app kwam ik een groot probleem tegen, zegmaar kan je telefoon chrasen groot. Ik moet dit natuurlijk gelijk fixen, dus daarom is de komende update vertraagd. Ik weet niet hoelang het duurt om de oplossing te vinden, maar ik ben bezig. In de tussentijd kan je alvast jezelf hyped maken voor alle nieuwe features!**
 
