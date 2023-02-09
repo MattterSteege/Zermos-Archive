@@ -12,6 +12,7 @@ public class GradeItemView : View
     [SerializeField] private TMP_Text TitleText;
     [SerializeField] private GameObject GradeContent;
     [SerializeField] private Button welkCijferMoetIkHalenButton;
+    [SerializeField] private Button StatestiekenButton;
     [SerializeField] private E2Chart _chart;
 
     public override void Show(object args = null)
@@ -51,12 +52,17 @@ public class GradeItemView : View
     {
         openNavigationButton.onClick.AddListener(() =>
         {
-          ViewManager.Instance.ShowNewView<GradeView>();  
+            ViewManager.Instance.ShowNewView<GradeView>();  
         });
-        
+
         welkCijferMoetIkHalenButton.onClick.AddListener(() =>
         {
             ViewManager.Instance.ShowNewView<WatMoetIkHalenView>(Grades);
+        });
+        
+        StatestiekenButton.onClick.AddListener(() =>
+        {
+            ViewManager.Instance.ShowNewView<GradeStatisticsView>(Grades);
         });
         
         base.Initialize();
@@ -66,6 +72,7 @@ public class GradeItemView : View
     {
         openNavigationButton.onClick.RemoveAllListeners();
         welkCijferMoetIkHalenButton.onClick.RemoveAllListeners();
+        StatestiekenButton.onClick.RemoveAllListeners();
         base.Refresh(args);
     }
 }

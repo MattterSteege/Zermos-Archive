@@ -53,14 +53,13 @@ namespace UI.Views
                     grade.geldendResultaat ?? "-");
             }
             
-            foreach (Vakken.JsonItem Vak in vakkenObject.getVakken().items ?? new List<Vakken.JsonItem>())
+            foreach (Vakken.Item Vak in vakkenObject.getVakken().items ?? new List<Vakken.Item>())
             {
-                List<Grades.Item> GradesPerVak = grades.items.Where(x => x.vak.naam == Vak.naam).ToList();
+                List<Grades.Item> GradesPerVak = grades.items.Where(x => x.vak.naam == Vak.vak.naam).ToList();
                 
                 if (GradesPerVak.Count > 0)
                 {
                     int totalWeight = GradesPerVak.Sum(x => x.weging);
-                    if (totalWeight == 0) totalWeight = GradesPerVak.Count;
                     
                     grade[] Grades = new grade[GradesPerVak.Count];
 
@@ -76,12 +75,13 @@ namespace UI.Views
                     double totalGrade = 0f;
                     
                     for (int i = 0; i < Grades.Length; i++)
-                        totalGrade += Convert.ToDouble((Grades[i].weging == 0 ? 1 : Grades[i].weging)) * Grades[i].resultaat;
+                        totalGrade += Convert.ToDouble((Grades[i].weging == 0 && totalWeight == 0) ? 1 : Grades[i].weging) * Grades[i].resultaat;
                     
+                    if (totalWeight == 0) totalWeight = GradesPerVak.Count;
                     float endGrade = MathF.Round((float) (totalGrade / totalWeight), 1, MidpointRounding.AwayFromZero);
                     
                     var gradeView = Instantiate(gradePrefab, content.transform);
-                    gradeView.GetComponent<GradeInfo>().SetGradeInfo(Vak.naam ?? "", "",  "", Grades.Sum(x => x.weging) + "x", endGrade.ToString(CultureInfo.InvariantCulture).Replace(".", ","));
+                    gradeView.GetComponent<GradeInfo>().SetGradeInfo(Vak.vak.naam ?? "", "",  "", Grades.Sum(x => x.weging) + "x", endGrade.ToString(CultureInfo.InvariantCulture).Replace(".", ","));
                     
                     gradeView.GetComponent<Button>().onClick.AddListener(() =>
                     {

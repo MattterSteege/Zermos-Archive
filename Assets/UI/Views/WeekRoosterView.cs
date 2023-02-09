@@ -47,7 +47,12 @@ namespace UI.Views
                 ViewManager.Instance.HideNavigation();
             });
 
-            RefreshButton.onClick.AddListener(() => Refresh(false));
+            RefreshButton.enabled = true;
+            RefreshButton.onClick.AddListener(() =>
+            {
+                RefreshButton.enabled = false;
+                Refresh(true);
+            });
 
             DagRoosterButton.onClick.AddListener(() =>
             {
@@ -229,20 +234,20 @@ namespace UI.Views
         [ContextMenu("Hide Tussenuren")]
         public void hideTussenUren()
         {
-            List<int> temp = new List<int>();
-            temp = NoLessonHours;
-        
-            for (int i = 0, x = 0; i < NoLessonHours.Count; i++)
-            {
-                if (temp[i] != -1)
-                {
-                    RoosterItems[temp[i] - 1 + (x * maxNumberOfLessons)].GetComponent<CanvasGroup>().alpha = 0f;
-                }
-                else
-                {
-                    x++;
-                }
-            }
+            // List<int> temp = new List<int>();
+            // temp = NoLessonHours;
+            //
+            // for (int i = 0, x = 0; i < NoLessonHours.Count; i++)
+            // {
+            //     if (temp[i] != -1)
+            //     {
+            //         RoosterItems[temp[i] - 1 + (x * maxNumberOfLessons)].GetComponent<CanvasGroup>().alpha = 0f;
+            //     }
+            //     else
+            //     {
+            //         x++;
+            //     }
+            // }
         }
 
         public override void Refresh(object args)

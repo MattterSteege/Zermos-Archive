@@ -178,7 +178,10 @@ public class BetterHttpClient : MonoBehaviour
     public object Post(string url, string json, Dictionary<string, string> headers, Func<UnityWebRequest, object> callback, Func<UnityWebRequest, object> error = null)
     {
         Debug.Log("Request started");
-        UnityWebRequest www = UnityWebRequest.Post(url, json);
+        UnityWebRequest www = new UnityWebRequest(url, "POST");
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
+        www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        www.downloadHandler = new DownloadHandlerBuffer();
         www.SetRequestHeader("Content-Type", "application/json");
         if (headers != null)
         {
@@ -203,7 +206,6 @@ public class BetterHttpClient : MonoBehaviour
 
         var returned = callback.Invoke(www);
         www.Dispose();
-
         return returned;
     }
     

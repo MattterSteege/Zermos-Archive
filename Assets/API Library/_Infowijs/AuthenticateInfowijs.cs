@@ -15,10 +15,10 @@ public class AuthenticateInfowijs : BetterHttpClient
 
         string baseUrl = "https://api.infowijs.nl/sessions/customer-products";
         string json = "{\"username\": \"" + username + "\"}";
-        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
 
         Dictionary<string, string> headers = new Dictionary<string, string>();
         headers.Add("accept", "application/vnd.infowijs.v1+json");
+        headers.Add("x-infowijs-client", "nl.infowijs.hoy.android/nl.infowijs.client.antonius");
         headers.Add("content-type", "application/json");
         return (InfowijsAuthenticateFase1_2) Post(baseUrl, json, headers, (response) =>
         {
@@ -26,8 +26,7 @@ public class AuthenticateInfowijs : BetterHttpClient
 
             string baseUrl = "https://api.infowijs.nl/sessions";
             string json = "{\"customerProductId\": \"" + auth1_1.data[0].id + "\", \"username\": \"" + username + "\"}";
-            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
-            
+
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("accept", "application/vnd.infowijs.v1+json");
             headers.Add("x-infowijs-client", "nl.infowijs.hoy.android/nl.infowijs.client.antonius");

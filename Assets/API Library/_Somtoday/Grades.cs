@@ -11,6 +11,7 @@ public class Grades : BetterHttpClient
 {
     [SerializeField, Tooltip("'*' means Application.persistentDataPath.")]
     private string savePath = "*/Grades.json";
+    [SerializeField] private int MinutesBeforeRedownload = 10;
 
     [ContextMenu("get Grades")]
     public SomtodayGrades getGrades(bool savedIsGood = true)
@@ -85,7 +86,7 @@ public class Grades : BetterHttpClient
             try
             {
                 SomtodayGrades gradesObject = JsonConvert.DeserializeObject<SomtodayGrades>(json);
-                if (gradesObject?.laatsteWijziging.ToDateTime().AddMinutes(10) < TimeManager.Instance.CurrentDateTime)
+                if (gradesObject?.laatsteWijziging.ToDateTime().AddMinutes(MinutesBeforeRedownload) < TimeManager.Instance.CurrentDateTime)
                 {
                     r.Close();
                     Debug.LogWarning("Local file is outdated, downloading new file.");
@@ -116,9 +117,8 @@ public class Grades : BetterHttpClient
                 Formatting.Indented);
 
             string destination = savePath.Replace("*", Application.persistentDataPath);
-
-            File.WriteAllText(destination, "//In dit bestand staan alle cijfers die je dit jaar hebt gehaald.\r\n");
-            File.AppendAllText(destination, convertedJson);
+            
+            File.WriteAllText(destination, convertedJson);
         }
     }
 

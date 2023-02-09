@@ -36,7 +36,7 @@ namespace E2C
                 E2ChartBuilderUtility.Destroy(previewInstance.gameObject);
         }
 
-        IEnumerator Start()
+        public IEnumerator Start()
         {
             yield return null;
             if (previewInstance != null) ClearPreview();

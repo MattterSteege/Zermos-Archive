@@ -36,7 +36,7 @@ namespace UI.Views
         List<Schedule.Appointment> appointments = new List<Schedule.Appointment>();
         [SerializeField] private Vakken _vakken;
 
-        private Vakken.JsonSomtodayVakken vakken;
+        private Vakken.SomtodayVakken vakken;
     
 
     
@@ -89,7 +89,7 @@ namespace UI.Views
                             string vak = item.subjects[0];
                             try
                             {
-                                vak = vakken.items.Find(x => x.afkorting == item.subjects[0]).naam ??
+                                vak = vakken.items.Find(x => x.vak.afkorting == item.subjects[0]).vak.naam ??
                                       item.subjects[0];
                             }
                             catch (Exception)
@@ -266,51 +266,53 @@ namespace UI.Views
             
             #region laatste cijfer
             {
-                List<Grades.Item> AllGrades = grades.getGrades().items;
-
-                StringBuilder sb = new StringBuilder();
-
-                var TodaysGrade = AllGrades.Where(x => x.datumInvoer.Date == TimeManager.Instance.CurrentDateTime.Date).ToList();
-                int count = TodaysGrade.Count;
-                
-
-                //lessen
-                if (count == 0)
+                List<Grades.Item> AllGrades = grades.getGrades()?.items;
+                if (AllGrades != null)
                 {
-                    string[] GeenCijferString =
+                    StringBuilder sb = new StringBuilder();
+
+                    var TodaysGrade = AllGrades
+                        .Where(x => x.datumInvoer.Date == TimeManager.Instance.CurrentDateTime.Date).ToList();
+                    int count = TodaysGrade.Count;
+
+
+                    //lessen
+                    if (count == 0)
                     {
-                        "Nee, je hebt je cijfer nogsteeds niet terug",
-                        "Je cijfer is nog steeds niet binnen, gelukkig?",
-                        "Helaas, geen nieuwe cijfers te melden.",
-                        "Wat duurt naklijken laaaaaaaaaaang"
-                    };
+                        string[] GeenCijferString =
+                        {
+                            "Nee, je hebt je cijfer nogsteeds niet terug",
+                            "Je cijfer is nog steeds niet binnen, gelukkig?",
+                            "Helaas, geen nieuwe cijfers te melden.",
+                            "Wat duurt naklijken laaaaaaaaaaang",
+                            "Nee, je hebt je cijfer nogsteeds niet terug",
+                        };
 
-                    sb.Append(GeenCijferString[Random.Range(0, GeenCijferString.Length)]);
-                }
-                else if (count == 1)
-                {
-                    sb.Append(
-                        $"Je hebt één cijfer binnen gekregen, dat is: {TodaysGrade[0].vak.naam} met een {TodaysGrade[0].geldendResultaat}.");
+                        sb.Append(GeenCijferString[Random.Range(0, GeenCijferString.Length)]);
+                    }
+                    else if (count == 1)
+                    {
+                        sb.Append(
+                            $"Je hebt één cijfer binnen gekregen, dat is: {TodaysGrade[0].vak.naam} met een {TodaysGrade[0].geldendResultaat}.");
+                    }
+                    else if (count > 1)
+                    {
+                        sb.Append($"Je hebt {count} cijfers binnen gekregen, dat zijn: ");
+                        for (int i = 0; i < count; i++)
+                        {
+                            sb.Append(
+                                i == count - 1
+                                    ? $"en {AllGrades[i].vak.naam} met een {AllGrades.Where(x => x.datumInvoer.Date == TimeManager.Instance.CurrentDateTime).ToList()[i].geldendResultaat}."
+                                    : $"{AllGrades[i].vak.naam} met een {AllGrades.Where(x => x.datumInvoer.Date == TimeManager.Instance.CurrentDateTime).ToList()[i].geldendResultaat}, ");
+                        }
+                    }
+
+                    LaatsteCijferText.text = sb.ToString();
                 }
                 else
                 {
-                    sb.Append($"Je hebt {count} cijfers binnen gekregen, dat zijn: ");
-                    for (int i = 0; i < count; i++)
-                    {
-                        if (i == count - 1)
-                        {
-                            sb.Append(
-                                $"en {AllGrades[i].vak.naam} met een {AllGrades.Where(x => x.datumInvoer.Date == TimeManager.Instance.CurrentDateTime).ToList()[i].geldendResultaat}.");
-                        }
-                        else
-                        {
-                            sb.Append(
-                                $"{AllGrades[i].vak.naam} met een {AllGrades.Where(x => x.datumInvoer.Date == TimeManager.Instance.CurrentDateTime).ToList()[i].geldendResultaat}, ");
-                        }
-                    }
+                    LaatsteCijferText.transform.parent.parent.parent.gameObject.SetActive(false);
                 }
-                
-                LaatsteCijferText.text = sb.ToString();
             }
             #endregion
         }

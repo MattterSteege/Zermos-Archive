@@ -47,9 +47,8 @@ namespace UI.Views
             _recenterButton.onClick.AddListener(() => Recenter());
             ViewManager.onInitializeComplete += ctx =>
             {
-                float decelerationRate = _ScrollRect.decelerationRate;
                 _ScrollRect.decelerationRate = 0f;
-                _ScrollRect.content.DOLocalMove(_ScrollRect.GetSnapToPositionToBringChildIntoView((RectTransform) _rectTransformDefault), 0.1f, true).onComplete += () => _ScrollRect.decelerationRate = decelerationRate;
+                _ScrollRect.content.DOLocalMove(_ScrollRect.GetSnapToPositionToBringChildIntoView((RectTransform) _rectTransformDefault), 0.5f, true).onComplete += () => _ScrollRect.decelerationRate = 0.135f;
             };
             
             _FilterButton.onValueChanged.AddListener((ctx) =>
@@ -256,9 +255,8 @@ namespace UI.Views
 
         private void Recenter()
         {
-            float decelerationRate = _ScrollRect.decelerationRate;
             _ScrollRect.decelerationRate = 0f;
-            _ScrollRect.content.DOLocalMove(_ScrollRect.GetSnapToPositionToBringChildIntoView((RectTransform) _rectTransformDefault), 0.5f, true).onComplete += () => _ScrollRect.decelerationRate = decelerationRate;
+            _ScrollRect.content.DOLocalMove(_ScrollRect.GetSnapToPositionToBringChildIntoView((RectTransform) _rectTransformDefault), 0.5f, true).onComplete += () => _ScrollRect.decelerationRate = 0.135f;
         }
 
         private bool UpdateGemaaktStatus(long huiswerkId, bool gemaakt)

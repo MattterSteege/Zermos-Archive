@@ -113,9 +113,8 @@ public class Schedule : BetterHttpClient
             Formatting.Indented);
 
         string destination = savePath.Replace("*", Application.persistentDataPath);
-
-        File.WriteAllText(destination, $"//In dit bestand staan alle lessen voor de komende {weeksSaved} weken\r\n");
-        File.AppendAllText(destination, convertedJson);
+        
+        File.WriteAllText(destination, convertedJson);
         
         return schedule;
     }

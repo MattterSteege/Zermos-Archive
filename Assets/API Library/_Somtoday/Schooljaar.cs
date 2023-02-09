@@ -7,8 +7,8 @@ using UnityEngine;
 
 public class Schooljaar : BetterHttpClient
 {
-    [SerializeField, Tooltip("'*' means Application.persistentDataPath.")]
-    public string savePath = "*/SchoolYears.json";
+    [SerializeField, Tooltip("'*' means Application.persistentDataPath.")] public string savePath = "*/SchoolYears.json";
+    [SerializeField] private int DagenBeforeRedownload = 28;
 
     public DateTime getCurrentSchooljaarStartDate()
     {
@@ -24,7 +24,7 @@ public class Schooljaar : BetterHttpClient
         {
             string json = r.ReadToEnd();
             var vakkenObject = JsonConvert.DeserializeObject<SomtodaySchooljaar>(json);
-            if (vakkenObject?.laatsteWijziging.ToDateTime().AddDays(28) < TimeManager.Instance.CurrentDateTime)
+            if (vakkenObject?.laatsteWijziging.ToDateTime().AddDays(DagenBeforeRedownload) < TimeManager.Instance.CurrentDateTime)
             {
                 r.Close();
                 Debug.LogWarning("Local file is outdated, downloading new file.");
@@ -48,7 +48,7 @@ public class Schooljaar : BetterHttpClient
         {
             string json = r.ReadToEnd();
             var vakkenObject = JsonConvert.DeserializeObject<SomtodaySchooljaar>(json);
-            if (vakkenObject?.laatsteWijziging.ToDateTime().AddDays(28) < TimeManager.Instance.CurrentDateTime)
+            if (vakkenObject?.laatsteWijziging.ToDateTime().AddDays(DagenBeforeRedownload) < TimeManager.Instance.CurrentDateTime)
             {
                 r.Close();
                 Debug.LogWarning("Local file is outdated, downloading new file.");
@@ -73,9 +73,8 @@ public class Schooljaar : BetterHttpClient
             var convertedJson = JsonConvert.SerializeObject(schooljaar, Formatting.Indented);
 
             string destination = savePath.Replace("*", Application.persistentDataPath);
-
-            File.WriteAllText(destination, "//In dit bestand staan alle vakken die je school aanbied.\r\n");
-            File.AppendAllText(destination, convertedJson);
+            
+            File.WriteAllText(destination, convertedJson);
 
             return schooljaar;
         }, (error) =>

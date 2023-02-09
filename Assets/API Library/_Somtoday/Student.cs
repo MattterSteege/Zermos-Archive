@@ -8,6 +8,7 @@ public class Student : BetterHttpClient
 {
     [SerializeField, Tooltip("'*' means Application.persistentDataPath.")]
     private string savePath = "*/Student.json";
+    [SerializeField] private int DagenBeforeRedownload = 50;
     
     public SomtodayStudent getStudent(bool fetchNew = false)
     {
@@ -23,7 +24,7 @@ public class Student : BetterHttpClient
         {
             string json = r.ReadToEnd();
             var vakkenObject = JsonConvert.DeserializeObject<SomtodayStudent>(json);
-            if (vakkenObject?.laatsteWijziging.ToDateTime().AddDays(50) < TimeManager.Instance.CurrentDateTime)
+            if (vakkenObject?.laatsteWijziging.ToDateTime().AddDays(DagenBeforeRedownload) < TimeManager.Instance.CurrentDateTime)
             {
                 r.Close();
                 Debug.LogWarning("Local file is outdated, downloading new file.");
@@ -58,9 +59,8 @@ public class Student : BetterHttpClient
                     Formatting.Indented);
 
                 string destination = savePath.Replace("*", Application.persistentDataPath);
-
-                File.WriteAllText(destination, "//In dit bestand staat al jouw informatie.\r\n");
-                File.AppendAllText(destination, convertedJson);
+                
+                File.WriteAllText(destination, convertedJson);
 
                 return student;
             }

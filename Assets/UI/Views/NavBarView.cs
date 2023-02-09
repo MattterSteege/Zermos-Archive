@@ -13,6 +13,7 @@ namespace UI.Views
 		[SerializeField] private Button CijfersButton;
 		[SerializeField] private Button LeermiddelenButton;
 		[SerializeField] private Button SchoolNieuwsButton;
+		[SerializeField] private Button SchoolJaarKalenderButton;
 		[SerializeField] private Button SettingsButton;
 		[SerializeField] private TMP_Text UsernameText;
 
@@ -50,18 +51,18 @@ namespace UI.Views
 					HomeworkButton.gameObject.SetActive(false);
 				}
 
-				if (LocalPrefs.GetBool("show_leermiddelen"))
-				{
-					LeermiddelenButton.gameObject.SetActive(true);
-					LeermiddelenButton.onClick.AddListener(() =>
-					{
-						ViewManager.Instance.ShowNewView<LeermiddelenView>();
-					});
-				}
-				else
-				{
+				// if (LocalPrefs.GetBool("show_leermiddelen"))
+				// {
+				// 	LeermiddelenButton.gameObject.SetActive(true);
+				// 	LeermiddelenButton.onClick.AddListener(() =>
+				// 	{
+				// 		ViewManager.Instance.ShowNewView<LeermiddelenView>();
+				// 	});
+				// }
+				// else
+				// {
 					LeermiddelenButton.gameObject.SetActive(false);
-				}
+				//}
 			
 				RoosterButton.gameObject.SetActive(true);
 				SettingsButton.gameObject.SetActive(true);
@@ -87,10 +88,17 @@ namespace UI.Views
 					{
 						ViewManager.Instance.ShowNewView<SchoolNewsView>();
 					});
+					
+					SchoolJaarKalenderButton.gameObject.SetActive(true);
+					SchoolJaarKalenderButton.onClick.AddListener(() =>
+					{
+						ViewManager.Instance.ShowNewView<JaarKalenderView>();
+					});
 				}
 				else
 				{
 					SchoolNieuwsButton.gameObject.SetActive(false);
+					SchoolJaarKalenderButton.gameObject.SetActive(false);
 				}
 			}
 			

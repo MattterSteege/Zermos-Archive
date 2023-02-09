@@ -61,17 +61,8 @@ namespace UI.Views
             ToggleLeermiddelen.isOn = LocalPrefs.GetBool("show_leermiddelen", false);
             ToggleLeermiddelen.onValueChanged.AddListener((enabled) =>
             {
-                if (enabled)
-                {
-                    LocalPrefs.SetBool("show_leermiddelen", true);
-                    _vakken.Downloadvakken();
-                }
-                else
-                {
-                    LocalPrefs.SetBool("show_leermiddelen", false);
-                }
-                
-                ViewManager.Instance.Refresh<NavBarView>();
+                LocalPrefs.SetBool("show_leermiddelen", enabled);
+                ViewManager.Instance.ShowNewView<LeermiddelenView>();
             });
 
             

@@ -51,7 +51,12 @@ namespace UI.Views
                 ViewManager.Instance.HideNavigation();
             });
             
-            RefreshButton.onClick.AddListener(() => Refresh(true));
+            RefreshButton.enabled = true;
+            RefreshButton.onClick.AddListener(() =>
+            {
+                RefreshButton.enabled = false;
+                Refresh(true);
+            });
             
             WeekRoosterButton.onClick.AddListener(() =>
             {
@@ -206,10 +211,10 @@ namespace UI.Views
                 }
             }
 
-            if (!LocalPrefs.GetBool("show_tussenuren", true))
-            {
-                hideTussenUren();
-            }
+            // if (!LocalPrefs.GetBool("show_tussenuren", true))
+            // {
+            //     hideTussenUren();
+            // }
         
             base.Initialize();
         }
@@ -226,10 +231,10 @@ namespace UI.Views
         [ContextMenu("Hide Tussenuren")]
         public void hideTussenUren()
         {
-            for (int i = 0; i < NoLessonHours.Count; i++)
-            {
-                RoosterItems[NoLessonHours[i] - 1].SetActive(false);
-            }
+            // for (int i = 0; i < NoLessonHours.Count; i++)
+            // {
+            //     RoosterItems[NoLessonHours[i] - 1].SetActive(false);
+            // }
         }
         
         public override void Refresh(object args)
