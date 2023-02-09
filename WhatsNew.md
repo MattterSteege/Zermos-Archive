@@ -19,7 +19,7 @@
     * Als je de app inlaadt krijg je niet meer dat welkom bericht te zien. Nice!
     * Je kan nu weer inloggen bij de Antonius app :) yeey, meer spammen
     * Als je tussen je meetellende cijfers van een vak een 0 keer meetellend cijfer had gehaald werd dat meegeteld met weging 1, maar daarna verwerkt als weging 0. Foutje, kan gebeuren, maar nu is dat verleden tijd! YES!
----
+<br>
 
 # V0.7.9.3
 **Tijdens het testen van de app kwam ik een groot probleem tegen, zegmaar kan je telefoon chrasen groot. Ik moet dit natuurlijk gelijk fixen, dus daarom is de komende update vertraagd. Ik weet niet hoelang het duurt om de oplossing te vinden, maar ik ben bezig. In de tussentijd kan je alvast jezelf hyped maken voor alle nieuwe features!**
@@ -43,7 +43,7 @@
     * Recente cijfers zijn nu niet meer je eerst gehaalde cijfers. (ik had perongeluk omgedraaide sortering aangezet...)
     * omgedraaide cijfers in de grafiek staan nu weer goed
     * huiswerk opvragen veroorzaakt nu geen crashes meer
----
+<br>
 
 # V0.7.9.2
 1. Grote veranderingen
