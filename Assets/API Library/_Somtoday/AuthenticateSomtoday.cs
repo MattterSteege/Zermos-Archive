@@ -131,7 +131,7 @@ public class AuthenticateSomtoday : BetterHttpClient
         form.AddField("scope", "openid");
         form.AddField("client_id", "D50E0C06-32D1-4B41-A137-A9A850C892C2");
 
-        var SomAuthToken = (SomtodayAuthentication) Post("https://inloggen.somtoday.nl/oauth2/token", form, (response) =>
+        return (SomtodayAuthentication) Post("https://inloggen.somtoday.nl/oauth2/token", form, (response) =>
         {
             SomtodayAuthentication somtodayAuthentication = JsonConvert.DeserializeObject<SomtodayAuthentication>(response.downloadHandler.text);
             LocalPrefs.SetString("somtoday-refresh_token", somtodayAuthentication.refresh_token);
@@ -142,9 +142,6 @@ public class AuthenticateSomtoday : BetterHttpClient
             AndroidUIToast.ShowToast("Er is iets fout gegaan bij het ophalen van een nieuwe SOMtoday token. Probeer het later opnieuw.");
             return null;
         });
-        return SomAuthToken;
-        
-        
     }
     #endregion
 

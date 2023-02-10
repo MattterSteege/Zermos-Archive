@@ -11,7 +11,7 @@ public class Vakken : BetterHttpClient
     [SerializeField] private int DagenBeforeRedownload = 7;
     
 
-    public SomtodayVakken getVakken()
+    public SomtodayVakken getVakken(bool savedIsGood = true)
     {
         string destination = savePath.Replace("*", Application.persistentDataPath);
 
@@ -27,8 +27,7 @@ public class Vakken : BetterHttpClient
             {
                 string json = r.ReadToEnd();
                 var vakkenObject = JsonConvert.DeserializeObject<SomtodayVakken>(json);
-                if (vakkenObject?.laatsteWijziging.ToDateTime().AddDays(DagenBeforeRedownload) <
-                    TimeManager.Instance.CurrentDateTime)
+                if (vakkenObject?.laatsteWijziging.ToDateTime().AddDays(DagenBeforeRedownload) < TimeManager.Instance.CurrentDateTime || savedIsGood == false)
                 {
                     r.Close();
                     Debug.LogWarning("Local file is outdated, downloading new file.");
