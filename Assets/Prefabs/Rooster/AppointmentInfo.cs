@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -39,11 +36,11 @@ public class AppointmentInfo : MonoBehaviour
         }
         
         if (kwtUurAvailable != null)
-            kwtUurAvailable.SetActive(appointment?.actions?.Count > 0);
+            kwtUurAvailable.SetActive(appointment?.actions?.Count > 0 && appointment.actions[0]?.allowed == true);
         
         if (appointment != null)
         {
-            this._appointment = appointment;
+            this.Appointment = appointment;
         }
     }
 
@@ -53,7 +50,7 @@ public class AppointmentInfo : MonoBehaviour
     [SerializeField] TMP_Text docent;
     [SerializeField] TMP_Text lesUur;
     [SerializeField] GameObject kwtUurAvailable;
-    public Schedule.Appointment _appointment;
+    public Schedule.Appointment Appointment;
     
     public void hide()
     {

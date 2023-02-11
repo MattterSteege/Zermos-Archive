@@ -105,7 +105,6 @@ public class LessonNotificationManager : MonoBehaviour
              Title = title,
              Text = body,
              ShouldAutoCancel = true,
-             UsesStopwatch = true,
              GroupAlertBehaviour = GroupAlertBehaviours.GroupAlertAll,
              FireTime = timeToSend,
              ShowTimestamp = true,

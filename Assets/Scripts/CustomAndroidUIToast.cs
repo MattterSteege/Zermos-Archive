@@ -12,9 +12,12 @@ public class CustomAndroidUIToast : MonoBehaviour
 
     public static CustomAndroidUIToast Instance { get; private set; }
     
-    void Start()
+    public void Start()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
     }
 
     public void ShowToast(string message)
@@ -39,6 +42,9 @@ public static class AndroidUIToast
 {
     public static object ShowToast(string message)
     {
+        if (CustomAndroidUIToast.Instance == null)
+            CustomAndroidUIToast.Instance.Start();
+        
         CustomAndroidUIToast.Instance.ShowToast(message);
         return null;
     }

@@ -140,7 +140,7 @@ namespace UI.Views
                             rooster.GetComponent<Button>().onClick.AddListener(() =>
                             {
                                 ViewManager.Instance.ShowNewView<InPlanLesView>(rooster
-                                    .GetComponent<AppointmentInfo>()._appointment);
+                                    .GetComponent<AppointmentInfo>().Appointment);
                             });
                         }
                     }
@@ -173,7 +173,7 @@ namespace UI.Views
                     tussenUur.GetComponent<Button>().onClick.RemoveAllListeners();
                     tussenUur.GetComponent<Button>().onClick.AddListener(() =>
                     {
-                        ViewManager.Instance.ShowNewView<InPlanLesView>(tussenUur.GetComponent<AppointmentInfo>()._appointment);
+                        ViewManager.Instance.ShowNewView<InPlanLesView>(tussenUur.GetComponent<AppointmentInfo>().Appointment);
                     });
                 
                     RoosterItems.Add(tussenUur);

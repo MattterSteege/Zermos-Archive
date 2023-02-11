@@ -11,7 +11,7 @@ namespace UI.Views
         [SerializeField] private TMP_InputField Wachtwoord;
         [SerializeField] private Button connectButton;
         [SerializeField] private AuthenticateZermelo zermeloAuthenticate;
-        [SerializeField] private Toggle PassToggle;
+        [SerializeField] private ExtendedToggle PassToggle;
 
         public override void Initialize()
         {

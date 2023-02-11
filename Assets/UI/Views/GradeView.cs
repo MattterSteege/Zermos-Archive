@@ -53,7 +53,11 @@ namespace UI.Views
                     grade.geldendResultaat ?? "-");
             }
             
-            foreach (Vakken.Item Vak in vakkenObject.getVakken().items ?? new List<Vakken.Item>())
+            var vakken = vakkenObject.getVakken();
+
+            if (vakken.items.Count == 0) vakken = vakkenObject.getVakken(false);
+            
+            foreach (Vakken.Item Vak in vakken.items ?? new List<Vakken.Item>())
             {
                 List<Grades.Item> GradesPerVak = grades.items.Where(x => x.vak.naam == Vak.vak.naam).ToList();
                 
