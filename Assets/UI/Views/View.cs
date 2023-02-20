@@ -3,19 +3,23 @@ using UnityEngine.UI;
 
 namespace UI.Views
 {
-	[RequireComponent(typeof(Image))]
 	[RequireComponent(typeof(Button))]
 	public abstract class View : MonoBehaviour
 	{
-		[Header("View buttons"), SerializeField] public Button closeButtonWholePage;
+		[Header("View buttons")]
+		[SerializeField] public Button closeButtonWholePage;
 		[SerializeField] public Button openNavigationButton;
+		[SerializeField] public string viewName;
 
 		[Header("Own component fields"), HideInInspector] public bool isInitialized;
 		[HideInInspector] public bool isVisible;
 		public object args;
+		
+		public object Instance;
 	
 		public virtual void Initialize()
 		{
+			Instance = this;
 			isInitialized = true;
 		}
 		
@@ -36,6 +40,19 @@ namespace UI.Views
 		{
 			gameObject.SetActive(false);
 			isVisible = false;
+		}
+
+		public virtual View GetInstance()
+		{
+			if (Instance == null)
+				Instance = this;
+			
+			return Instance as View;
+		}
+		
+		public virtual void SetInstance(View view)
+		{
+			Instance = view;
 		}
 	}
 }

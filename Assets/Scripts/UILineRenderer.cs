@@ -1,103 +1,95 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// from "Creating a UI Line Renderer in Unity" by Game Dev Guide : https://www.youtube.com/watch?v=--LB7URk60A&ab_channel=GameDevGuide
-
-public class UILineRenderer : Graphic
+[RequireComponent(typeof(Image))]
+public class UILineRenderer : MonoBehaviour
 {
-    public Vector2Int gridSize;
-    public UIGridRenderer grid;
-
-    public List<Vector2> points;
-
-    float width, height, unitWidth, unitHeight;
-
-    public float thickness = 1f;
-
-    protected override void OnPopulateMesh(VertexHelper vh)
-    {
-        vh.Clear();
-
-        width = rectTransform.rect.width;
-        height = rectTransform.rect.height;
-
-        unitWidth = width / (float)gridSize.x;
-        unitHeight = height / (float)gridSize.y;
-
-        if (points.Count < 2)
-        {
-            return;
-        }
-
-        float angle = 0;
-
-        for (int i = 0; i < points.Count; i++)
-        {
-            Vector2 point = points[i];
-            point.x = i;
-
-            if (i < points.Count - 1 && i > 1)
-            {
-                angle = 90f;
-            }
-            else
-            {
-                angle = 90f;
-            }
-            
-
-            DrawVerticesForPoint(point, vh, angle);
-
-        }
-
-        for (int i = 0; i < points.Count - 1; i++)
-        {
-            int index = i * 2;
-            vh.AddTriangle(index + 0, index + 1, index + 3);
-            vh.AddTriangle(index + 3, index + 2, index + 0);
-        }
-    }
-
-    void DrawVerticesForPoint(Vector2 point, VertexHelper vh, float angle)
-    {
-        UIVertex vertex = UIVertex.simpleVert;
-        vertex.color = color;
-
-        vertex.position = Quaternion.Euler(0, 0, angle) * new Vector3(-thickness / 2, 0);
-        vertex.position += new Vector3(unitWidth * point.x, unitHeight * point.y);
-        vh.AddVert(vertex);
-        
-        vertex.position = Quaternion.Euler(0, 0, angle) * new Vector3(thickness / 2, 0);
-        vertex.position += new Vector3(unitWidth * point.x, unitHeight * point.y);
-        vh.AddVert(vertex);
-    }
-
-    private void Update()
-    {
-        if (grid != null)
-        {
-            if (gridSize != grid.gridSize)
-            {
-                //GetComponent<RectTransform>().rect.width = grid.gridSize.x;
-                gridSize = grid.gridSize;
-                SetVerticesDirty();
-            }
-        }
-    }
-    
-    [ContextMenu("Add y = 7")]
-    void testAddPoint()
-    {
-        AddPoint(7f);
-    }
-    
-    public void AddPoint(float yValue = 7f)
-    {
-        points.Add(new Vector2(points.Count, yValue));
-        SetVerticesDirty();
-        grid.gridSize = new Vector2Int(points.Count - 1, gridSize.y);
-    }
+    // public List<Vector2> points;
+    //
+    // [SerializeField] private RectTransform rectTransform;
+    // [SerializeField] private Image image;
+    //
+    // private void Awake()
+    // {
+    //     rectTransform = GetComponent<RectTransform>();
+    //     image = GetComponent<Image>();
+    // }
+    //
+    // [ContextMenu("update")]
+    // public void Update()
+    // {
+    //     if (points.Count < 2)
+    //     {
+    //         return;
+    //     }
+    //
+    //     var vertices = new List<UIVertex>();
+    //     for (int i = 1; i < points.Count; i++)
+    //     {
+    //         Vector2 start = points[i - 1];
+    //         Vector2 end = points[i];
+    //         Vector2 direction = (end - start).normalized;
+    //         float distance = Vector2.Distance(start, end);
+    //         Vector2 perpendicular = new Vector2(-direction.y, direction.x);
+    //         float thickness = rectTransform.rect.width;
+    //
+    //         vertices.Add(CreateVertex(start + perpendicular * thickness / 2f, image.color));
+    //         vertices.Add(CreateVertex(start - perpendicular * thickness / 2f, image.color));
+    //         vertices.Add(CreateVertex(end + perpendicular * thickness / 2f, image.color));
+    //         vertices.Add(CreateVertex(end - perpendicular * thickness / 2f, image.color));
+    //
+    //         if (i < points.Count - 1)
+    //         {
+    //             Vector2 next = points[i + 1];
+    //             Vector2 prev = points[i - 2];
+    //             Vector2 startControl = start + direction * (distance / 3f);
+    //             Vector2 endControl = end - direction * (distance / 3f);
+    //             Vector2 startControl2 = startControl + (perpendicular + direction) * thickness / 8f;
+    //             Vector2 endControl2 = endControl + (perpendicular - direction) * thickness / 8f;
+    //
+    //             for (int j = 0; j <= 10; j++)
+    //             {
+    //                 float t = (float)j / 10f;
+    //                 Vector2 point = Bezier(start, startControl, startControl2, endControl2, end, t);
+    //                 vertices.Add(CreateVertex(point + perpendicular * thickness / 2f, image.color));
+    //                 vertices.Add(CreateVertex(point - perpendicular * thickness / 2f, image.color));
+    //             }
+    //         }
+    //     }
+    //
+    //     List<UIVertex> uiVertices = new List<UIVertex>();
+    //     for (int i = 0; i < vertices.Count; i++)
+    //     {
+    //         uiVertices[i] = vertices[i];
+    //     }
+    //
+    //     var canvasRenderer = GetComponent<CanvasRenderer>();
+    //     canvasRenderer.SetVertices(uiVertices);
+    // }
+    //
+    // private static Vector2 Bezier(Vector2 start, Vector2 startControl, Vector2 endControl, Vector2 endControl2, Vector2 end, float t)
+    // {
+    //     float u = 1f - t;
+    //     float tt = t * t;
+    //     float uu = u * u;
+    //     float uuu = uu * u;
+    //     float ttt = tt * t;
+    //
+    //     Vector2 point = uuu * start;
+    //     point += 3f * uu * t * startControl;
+    //     point += 3f * u * tt * endControl;
+    //     point += ttt * end;
+    //
+    //     return point;
+    // }
+    //
+    // private static UIVertex CreateVertex(Vector2 position, Color color)
+    // {
+    //     var vertex = new UIVertex();
+    //     vertex.position = position;
+    //     vertex.color = color;
+    //     return vertex;
+    // }
 }
+       

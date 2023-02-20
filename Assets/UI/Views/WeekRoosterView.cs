@@ -116,7 +116,6 @@ namespace UI.Views
                             String.Join(", ", appointments[listIndex].locations),
                             TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start).DateTime, TimeZoneInfo.Local).AddHours(1).ToString("HH:mm") + " - " + 
                             TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end).DateTime, TimeZoneInfo.Local).AddHours(1).ToString("HH:mm"),
-                            String.Join(", ", appointments[listIndex].teachers),
                             String.Join(", ", appointments[listIndex].subjects), appointments[listIndex].startTimeSlotName,
                             appointments[listIndex]);
 
@@ -174,7 +173,7 @@ namespace UI.Views
                         }
                     
                         tussenUur.GetComponent<AppointmentInfo>()
-                            .SetAppointmentInfo("Geen les", "", "", "", i.ToString(), appointment);
+                            .SetAppointmentInfo("Geen les", "", "", i.ToString(), appointment);
                         
                         tussenUur.GetComponent<Button>().onClick.RemoveAllListeners();
                         tussenUur.GetComponent<Button>().onClick.AddListener(() =>

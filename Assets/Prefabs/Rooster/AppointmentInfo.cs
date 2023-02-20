@@ -3,55 +3,29 @@ using UnityEngine;
 
 public class AppointmentInfo : MonoBehaviour
 {
-    public void SetAppointmentInfo(string lokaal = "", string tijd = null, string docent = null, string vak = null, string lesUur = null, Schedule.Appointment appointment = null)
+    public void SetAppointmentInfo(string _lokaal = "", string _tijd = null, string _vak = null, string _lesUur = null, Schedule.Appointment _appointment = null)
     {
-        this.lokaal.text = !string.IsNullOrEmpty(lokaal) ? lokaal : "Geen lokaal";
-        this.tijd.text = tijd;
+        if (vak != null)
+            vak.text = _vak;
+        if(tijdLokaal != null)
+            tijdLokaal.text = "Lokaal " + _lokaal + " // " + _tijd;
+        if(lesUur != null)
+            lesUur.text = _lesUur;
 
-        if (!string.IsNullOrEmpty(docent))
-        {
-            this.docent.text = docent;
-        }
-        else
-        {
-            this.docent.gameObject.SetActive(false);
-        }
-        
-        if (!string.IsNullOrEmpty(vak))
-        {
-            this.vak.text = vak;
-        }
-        else
-        {
-            this.vak.gameObject.SetActive(false);
-        }
-        
-        if (!string.IsNullOrEmpty(lesUur))
-        {
-            this.lesUur.text = lesUur;
-        }
-        else
-        {
-            this.lesUur.gameObject.SetActive(false);
-        }
-        
         if (kwtUurAvailable != null)
-            kwtUurAvailable.SetActive(appointment?.actions?.Count > 0 && appointment.actions[0]?.allowed == true);
+            kwtUurAvailable.SetActive(_appointment?.actions?.Count > 0 && _appointment.actions[0]?.allowed == true);
+
+        if (_appointment != null)
+            Appointment = _appointment;
         
-        if (appointment != null)
-        {
-            this.Appointment = appointment;
-        }
     }
 
-    [SerializeField] TMP_Text lokaal;
-    [SerializeField] TMP_Text tijd;
     [SerializeField] TMP_Text vak;
-    [SerializeField] TMP_Text docent;
+    [SerializeField] TMP_Text tijdLokaal;
     [SerializeField] TMP_Text lesUur;
     [SerializeField] GameObject kwtUurAvailable;
     public Schedule.Appointment Appointment;
-    
+
     public void hide()
     {
         this.gameObject.SetActive(false);

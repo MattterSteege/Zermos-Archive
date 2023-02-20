@@ -7,6 +7,7 @@ public class HomeworkInfo : MonoBehaviour
 {
     [SerializeField] TMP_Text vak;
     [SerializeField] TMP_Text details;
+    [SerializeField] TMP_Text Datum;
     [SerializeField] public Toggle gemaakt;
     
     [Space, SerializeField] private GameObject toetsPill;
@@ -15,7 +16,7 @@ public class HomeworkInfo : MonoBehaviour
 
     public Homework.Item homeworkInfo;
     
-    public void SetHomeworkInfo(string vak = null, string details = null, bool gemaakt = false, Homework.Item homeworkInfo = null)
+    public void SetHomeworkInfo(string vak = null, string details = null, DateTime date = default, bool gemaakt = false, Homework.Item homeworkInfo = null)
     {
         if (vak?.Length > 40)
         {
@@ -35,6 +36,31 @@ public class HomeworkInfo : MonoBehaviour
             this.details.text = details ?? "";
         }
         
+        if (date.Date == TimeManager.Instance.DateTime.Date)
+        {
+            this.Datum.text = "Vandaag";
+        }
+        else if (date.Date == TimeManager.Instance.DateTime.Date.AddDays(1))
+        {
+            this.Datum.text = "Morgen";
+        }
+        else if (date.Date == TimeManager.Instance.DateTime.Date.AddDays(2))
+        {
+            this.Datum.text = "Overmorgen";
+        }
+        else if (date.Date == TimeManager.Instance.DateTime.Date.AddDays(-1))
+        {
+            this.Datum.text = "Gisteren";
+        }
+        else if (date.Date == TimeManager.Instance.DateTime.Date.AddDays(-2))
+        {
+            this.Datum.text = "Eergisteren";
+        }
+        else
+        {
+            this.Datum.text = date.ToString("dd-MM-yyyy");
+        }
+
         this.gemaakt.isOn = gemaakt;
         
         if (homeworkInfo != null)

@@ -43,7 +43,7 @@ namespace UI.Views
 
                 if (response != null && response.access_token != null)
                 {
-                    zermeloAuthenticate.gameObject.GetComponent<SuccesScreen>().ShowSuccesScreen("Zermelo");
+                    SuccesScreen.Instance.ShowSuccesScreen(SuccesScreen.LoginType.zermelo);
                     yield return new WaitForSeconds(1f);
                     connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Inloggen!";
                     connectButton.interactable = true;

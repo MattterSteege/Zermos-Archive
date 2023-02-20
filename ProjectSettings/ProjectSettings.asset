@@ -814,7 +814,7 @@ PlayerSettings:
   webGLPowerPreference: 2
   scriptingDefineSymbols:
     : ODIN_INSPECTOR;ODIN_INSPECTOR_3
-    Android: CHART_TMPRO;VUPLEX_CCU
+    Android: CHART_TMPRO;VUPLEX_CCU;LETAI_TRUESHADOW
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

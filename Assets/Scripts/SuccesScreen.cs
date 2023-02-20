@@ -11,22 +11,24 @@ public class SuccesScreen : MonoBehaviour
     [SerializeField] private GameObject succesScreen;
     [SerializeField] private string succesText;
     [SerializeField] private TMP_Text screenText;
-    [SerializeField] private LoginType loginType;
+    private LoginType loginType;
     [SerializeField] private Image backgroundOfEverything;
-    [SerializeField] private Image koppelingAdded;
 
+    public static SuccesScreen Instance { get; private set; }
+    
     // Start is called before the first frame update
     void Start()
     {
         //succesScreen.SetActive(false);
         RectTransform rect = succesScreen.GetComponent<RectTransform>();
         rect.anchoredPosition = new Vector2(0f, -Screen.height * 2f);
+        Instance = this;
     }
 
-    public void ShowSuccesScreen(string koppelingName = "")
+    public void ShowSuccesScreen(LoginType connection)
     {
         succesScreen.SetActive(true);
-        StartCoroutine(IShowSuccesScreen(koppelingName));
+        StartCoroutine(IShowSuccesScreen(connection));
     }
     
     public enum LoginType
@@ -36,12 +38,17 @@ public class SuccesScreen : MonoBehaviour
         infowijs
     }
 
-    public IEnumerator IShowSuccesScreen(string screenText)
+    public IEnumerator IShowSuccesScreen(LoginType connection)
     {
         succesScreen.transform.SetAsLastSibling();
         
-        this.screenText.text = succesText.Replace("{koppeling name}", screenText);
-        
+        if (connection == LoginType.somtoday)
+            screenText.text = succesText.Replace("{koppeling name}","Somtoday");
+        else if (connection == LoginType.zermelo)
+            screenText.text = succesText.Replace("{koppeling name}","Zermelo");
+        else if (connection == LoginType.infowijs)
+            screenText.text = succesText.Replace("{koppeling name}","Antonius app");
+
         RectTransform rect = succesScreen.GetComponent<RectTransform>();
         
         rect.anchoredPosition = new Vector2(0f, -Screen.height * 2f);
@@ -60,7 +67,6 @@ public class SuccesScreen : MonoBehaviour
         backgroundOfEverything.color = new Color(0.06666667f, 0.1529412f, 0.4352941f);
         ViewManager.Instance.Show<NavBarView>();
         ViewManager.Instance.Refresh<NavBarView>();
-        koppelingAdded.color = new Color(0.172549f, 0.9333333f, 0.5568628f);
         switch (loginType)
         {
             case LoginType.somtoday:

@@ -33,7 +33,7 @@ RectTransform:
   m_Children:
   - {fileID: 7613936705571836011}
   m_Father: {fileID: 7613936705277920533}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -137,7 +137,7 @@ RectTransform:
   m_Children:
   - {fileID: 7613936704670702130}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -227,7 +227,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7613936704670702130}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -262,7 +262,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Dit is een test bericht, je zou dit niet moeten zien, maar weet je alles
+  m_text: Dit is een test bericht, je zou dit niet moeten zien, maar weet je, alles
     kan fout gaan...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 94077e3c1aca5d44ab1fd2f23564497a, type: 2}

@@ -25,25 +25,26 @@ namespace UI.Views
         [SerializeField] private Button _AddHomeworkButton;
         [SerializeField] private Button _recenterButton;
         [SerializeField] private Toggle _FilterButton;
+        [SerializeField] private RectTransform _filterObject;
 
         private List<DateTime> _Dates = new List<DateTime>();
         private List<GameObject> _homeworkDateDividers = new List<GameObject>();
 
         public override void Initialize()
         {
-            openNavigationButton.onClick.AddListener(() =>
-            {
-                openNavigationButton.enabled = false;
-                ViewManager.Instance.ShowNavigation();
-            });
+            // openNavigationButton.onClick.AddListener(() =>
+            // {
+            //     openNavigationButton.enabled = false;
+            //     ViewManager.Instance.ShowNavigation();
+            // });
+            //
+            // closeButtonWholePage.onClick.AddListener(() =>
+            // {
+            //     openNavigationButton.enabled = true;
+            //     ViewManager.Instance.HideNavigation();
+            // });
 
-            closeButtonWholePage.onClick.AddListener(() =>
-            {
-                openNavigationButton.enabled = true;
-                ViewManager.Instance.HideNavigation();
-            });
-
-            _AddHomeworkButton.onClick.AddListener(() => ViewManager.Instance.ShowNewView<AddHomeworkView>());
+            //_AddHomeworkButton.onClick.AddListener(() => ViewManager.Instance.ShowNewView<AddHomeworkView>());
             _recenterButton.onClick.AddListener(() => Recenter());
             ViewManager.onInitializeComplete += ctx =>
             {
@@ -53,9 +54,11 @@ namespace UI.Views
             
             _FilterButton.onValueChanged.AddListener((ctx) =>
             {
-                RectTransform rectTransform = _ScrollRect.GetComponent<RectTransform>();
-                rectTransform.offsetMin = new Vector2(rectTransform.offsetMin.x, 20f);
-                StartCoroutine(lerpTo(rectTransform, ctx ? -185f : -40f, 0.5f));
+                // _filterObject.offsetMin = new Vector2(_filterObject.offsetMin.x, 20f);
+                // StartCoroutine(lerpTo(_filterObject, ctx ? 173f : 0f, 0.5f));
+                _filterObject.DOAnchorPosY(ctx ? -173f : 150, 0.5f);
+                
+                _ScrollRect.viewport.DOAnchorPosY(ctx ? -148f : 0f, 0.4f);
             });
 
             List<Homework.Item> homework = homeworkObject.GetHomework();
@@ -111,7 +114,7 @@ namespace UI.Views
                     vak = "error";
                 }
 
-                homeworkItem.GetComponent<HomeworkInfo>().SetHomeworkInfo(vak, onderwerp, HomeworkItem.additionalObjects.swigemaaktVinkjes?.items[0].gemaakt ?? false, HomeworkItem);
+                homeworkItem.GetComponent<HomeworkInfo>().SetHomeworkInfo(vak, onderwerp, HomeworkItem.datumTijd, HomeworkItem.additionalObjects.swigemaaktVinkjes?.items[0].gemaakt ?? false, HomeworkItem);
 
                 homeworkItem.GetComponent<Button>().onClick.AddListener(() =>
                 {

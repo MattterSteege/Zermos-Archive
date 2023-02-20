@@ -20,7 +20,7 @@ public sealed class ViewManager : MonoBehaviour
 	[SerializeField] public bool isShowingNavigation;
 	[SerializeField] private View Loginview;
 	[SerializeField] private View NewUserView;
-	[SerializeField] private View[] views;
+	[SerializeField] public View[] views;
 	[SerializeField] private View[] defaultViews;
 	[SerializeField] private View[] view_at_startup;
 
@@ -72,6 +72,7 @@ public sealed class ViewManager : MonoBehaviour
 				try
 				{
 					view.Initialize();
+					view.SetInstance(view);
 				}
 				catch (Exception e)
 				{
@@ -120,15 +121,12 @@ public sealed class ViewManager : MonoBehaviour
 			}
 		}
 
-		currentView = defaultViews[1];
+		currentView = defaultViews[0];
 		
 		HideNavigation();
 		
 		onLoadedView?.Invoke(1f);
 		onInitializeComplete?.Invoke(true);
-		
-		SwipeDetector.onSwipeRight += ShowNavigation;
-		SwipeDetector.onSwipeLeft += HideNavigation;
 
 #if UNITY_EDITOR
 		if (saveLoadingTimes == true)		
@@ -151,8 +149,10 @@ public sealed class ViewManager : MonoBehaviour
 	[ContextMenu("Show Navigation")]
 	public void ShowNavigation()
 	{
-		currentView.closeButtonWholePage.enabled = true;
-		currentView.openNavigationButton.enabled = false;
+		if (currentView.closeButtonWholePage != null)
+			currentView.closeButtonWholePage.enabled = true;
+		if(currentView.openNavigationButton != null)
+			currentView.openNavigationButton.enabled = false;
 		
 		RectTransform rectTransform = currentView.GetComponent<RectTransform>();
 		
@@ -169,14 +169,16 @@ public sealed class ViewManager : MonoBehaviour
 	[ContextMenu("Hide Navigation")]
 	public void HideNavigation()
 	{
-		currentView.closeButtonWholePage.enabled = false;
-		currentView.openNavigationButton.enabled = true;
+		if (currentView.closeButtonWholePage != null)
+			currentView.closeButtonWholePage.enabled = false;
+		if(currentView.openNavigationButton != null)
+			currentView.openNavigationButton.enabled = true;
 		
 		RectTransform rectTransform = currentView.GetComponent<RectTransform>();
 		
 		rectTransform.DOLocalMove(new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime);
 		rectTransform.DOLocalRotate(new Vector3(0f, 0f, 0f), animationTime).WaitForCompletion();
-		Background.DOColor(currentView.GetComponent<Image>().color, animationTime).onComplete += () =>
+		Background.DOColor(currentView.GetComponent<Image>()?.color ?? Color.white, animationTime).onComplete += () =>
 		{
 			isShowingNavigation = false;
 		};
@@ -353,6 +355,19 @@ public sealed class ViewManager : MonoBehaviour
 			}
 		}
 	}
+	
+	public TView GetInstance<TView>() where TView : View
+	{
+		foreach (View view in views)
+		{
+			if (view is TView)
+			{
+				return (TView) view.GetInstance().Instance;
+			}
+		}
+		
+		return null;
+	}
 
 #if UNITY_EDITOR
 	// Add a menu item to create custom GameObjects.
@@ -382,5 +397,10 @@ public sealed class ViewManager : MonoBehaviour
 		}
 
 		return false;
+	}
+
+	public void HideCurrentView()
+	{
+		currentView.Hide();
 	}
 }

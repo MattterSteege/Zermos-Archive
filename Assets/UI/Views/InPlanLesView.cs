@@ -38,7 +38,7 @@ namespace UI.Views
                             DateTimeOffset.FromUnixTimeSeconds(appointment.appointment.start).AddHours(2).UtcDateTime
                                 .ToShortTimeString() + " - " + DateTimeOffset.FromUnixTimeSeconds(appointment.appointment.end)
                                 .AddHours(2).UtcDateTime
-                                .ToShortTimeString(), String.Join(", ", appointment.appointment.teachers), String.Join(", ", appointment.appointment.subjects), appointment.appointment.startTimeSlotName, appointment.appointment);
+                                .ToShortTimeString(), String.Join(", ", appointment.appointment.subjects), appointment.appointment.startTimeSlotName, appointment.appointment);
                     
                         inplanLes.GetComponent<Button>().onClick.AddListener(() =>
                         {

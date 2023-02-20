@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using DG.Tweening;
+using Michsky.MUIP;
 using TMPro;
 using UnityEngine;
 
@@ -9,16 +11,16 @@ namespace UI.Views
     {
         [SerializeField] TMP_Text loadingText;
         [SerializeField] TMP_Text versionText;
-        [SerializeField] TMP_Text loadingInfoText;
-        [SerializeField] UpdateSystem updateSystem;
         [SerializeField] GameObject loadingScreen;
+        [SerializeField] ProgressBar progressBar;
+        [SerializeField] OpenMenu openMenu;
 
         void Awake()
         {
             gameObject.SetActive(true);
             loadingScreen.GetComponent<CanvasGroup>().alpha = 1;
         
-            versionText.text = updateSystem.CurrentVersion;
+            versionText.text = Application.version;
             
             ViewManager.onLoadedView += OnLoadedView;
             ViewManager.onInitializeComplete += Complete;
@@ -28,6 +30,7 @@ namespace UI.Views
         {
             loadingScreen.SetActive(true);
             loadingText.text = "Laden: " + loadingcomplete.ToString("P0");
+            progressBar.ChangeValue(loadingcomplete * 100f);
             //loadingInfoText.text = viewName;
         
             if (Math.Abs(loadingcomplete - 1) < 0.05f)
@@ -40,14 +43,11 @@ namespace UI.Views
 
         private void Complete(bool done)
         {
+            progressBar.currentPercent = 100;
             loadingScreen.GetComponent<CanvasGroup>().DOFade(1, 0.5f).onComplete += () =>
             {
                 loadingScreen.GetComponent<CanvasGroup>().blocksRaycasts = false;
-                loadingScreen.GetComponent<CanvasGroup>().DOFade(0, 1.5f).onComplete += () =>
-                {
-                    gameObject.SetActive(false);
-                    Destroy(gameObject);
-                };
+                openMenu._CloseMenu();
             };
         }
     }

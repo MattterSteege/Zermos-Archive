@@ -307,29 +307,6 @@ public class Homework : BetterHttpClient
             return GetHomework(false);
         }
         
-        // using (StreamReader r = new StreamReader(destination))
-        // {
-        //     string json = r.ReadToEnd();
-        //     try
-        //     {
-        //         var homeworkObject = JsonConvert.DeserializeObject<SomtodayHomework>(json);
-        //         if (homeworkObject?.laatsteWijziging.ToDateTime().AddMinutes(MinutesBeforeRedownload) < TimeManager.Instance.CurrentDateTime)
-        //         {
-        //             r.Close();
-        //             Debug.LogWarning("Local file is outdated, downloading new file.");
-        //             return GetHomework(false);
-        //         }
-        //
-        //         if (homeworkObject != null) return homeworkObject.items;
-        //     }
-        //     catch(Exception)
-        //     {
-        //         r.Close();
-        //         AndroidUIToast.ShowToast("Je huiswerk is corrupt, opnieuw downloaden...");
-        //         return GetHomework(false);
-        //     }
-        // }
-        
         try
         {
             using (StreamReader r = new StreamReader(destination))
@@ -353,6 +330,16 @@ public class Homework : BetterHttpClient
         }
     }
     
+    //get today's homework
+    public List<Item> GetTodaysHomework(bool savedIsGood = true)
+    {
+        var homework = GetHomework(savedIsGood);
+        if (homework == null) return null;
+        homework.RemoveAll(x => x.datumTijd.Date != TimeManager.Instance.CurrentDateTime.Date);
+        return homework;
+    }
+
+
     public SomtodayHomework Sort(SomtodayHomework homework)
     {
         homework.items = homework.items.OrderBy(x => x.datumTijd).ToList();

@@ -8,6 +8,9 @@ public class SwipeDetector : MonoBehaviour
 {
 	private Vector2 fingerDownPos;
 	private Vector2 fingerUpPos;
+	
+	private Touch fingerStartPos;
+	private Touch fingerEndPos;
 
 	public bool detectSwipeAfterRelease = false;
 
@@ -21,6 +24,7 @@ public class SwipeDetector : MonoBehaviour
 			if (touch.phase == TouchPhase.Began) {
 				fingerUpPos = touch.position;
 				fingerDownPos = touch.position;
+				fingerStartPos = touch;
 			}
 
 			//Detects Swipe while finger is still moving on screen
@@ -34,6 +38,7 @@ public class SwipeDetector : MonoBehaviour
 			//Detects swipe after finger is released from screen
 			if (touch.phase == TouchPhase.Ended) {
 				fingerDownPos = touch.position;
+				fingerEndPos = touch;
 				DetectSwipe ();
 			}
 		}
@@ -44,17 +49,17 @@ public class SwipeDetector : MonoBehaviour
 		
 		if (VerticalMoveValue () > SWIPE_THRESHOLD && VerticalMoveValue () > HorizontalMoveValue ()) {
 			if (fingerDownPos.y - fingerUpPos.y > 0) {
-				SwipeUp ();
+				SwipeUp(fingerStartPos, fingerEndPos);
 			} else if (fingerDownPos.y - fingerUpPos.y < 0) {
-				SwipeDown ();
+				SwipeDown(fingerStartPos, fingerEndPos);
 			}
 			fingerUpPos = fingerDownPos;
 
 		} else if (HorizontalMoveValue () > SWIPE_THRESHOLD && HorizontalMoveValue () > VerticalMoveValue ()) {
 			if (fingerDownPos.x - fingerUpPos.x > 0) {
-				SwipeRight ();
+				SwipeRight();
 			} else if (fingerDownPos.x - fingerUpPos.x < 0) {
-				SwipeLeft ();
+				SwipeLeft();
 			}
 			fingerUpPos = fingerDownPos;
 
@@ -78,14 +83,14 @@ public class SwipeDetector : MonoBehaviour
 	public delegate void OnSwipeRight();
 	public static event OnSwipeRight onSwipeRight;
 	
-	public delegate void OnSwipeUp();
+	public delegate void OnSwipeUp(Touch start, Touch end);
 	public static event OnSwipeUp onSwipeUp;
 	
-	public delegate void OnSwipeDown();
+	public delegate void OnSwipeDown(Touch start, Touch end);
 	public static event OnSwipeDown onSwipeDown;
 
 	void SwipeLeft() => onSwipeLeft?.Invoke();
 	void SwipeRight() => onSwipeRight?.Invoke();
-	void SwipeUp() => onSwipeUp?.Invoke();
-	void SwipeDown() => onSwipeDown?.Invoke();
+	void SwipeUp(Touch start, Touch end) => onSwipeUp?.Invoke(start, end);
+	void SwipeDown(Touch start, Touch end) => onSwipeDown?.Invoke(start, end);
 }

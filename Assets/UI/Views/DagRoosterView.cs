@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Web;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,13 +16,13 @@ namespace UI.Views
         [SerializeField] private Button RefreshButton;
         [SerializeField] private Button WeekRoosterButton;
         [SerializeField] private Schedule _schedule;
-        [SerializeField] private int _date;
-    
+        [SerializeField] private Homework _homework;
+        [SerializeField] private ScrollRect _scrollRect;
+
         [Space, Header("UI controls")]
-        [SerializeField] private TMP_Text _dateText;
-        [SerializeField] private Button nextDayButton;
-        [SerializeField] private Button previousDayButton;
-    
+        [SerializeField] private TMP_Text _dateTextNumber;
+        [SerializeField] private TMP_Text _dateTextDayName;
+
         [Space]
         private List<Schedule.Appointment> appointments;
         [SerializeField] private List<int> NoLessonHours;
@@ -29,21 +30,29 @@ namespace UI.Views
         [SerializeField] private int maxNumberOfLessons;
         [SerializeField] private int addedDays = 0;
 
-        [Space] [SerializeField] private TimeTable _timeTable;
-    
+
+        [Header("RoosterPart")] 
+        [SerializeField] private GameObject HomeworkParent;
+        [SerializeField] private GameObject HomeworkPrefab;
+        [SerializeField] private RectTransform _HomeworkToShow;
+        [SerializeField] private ScrollRect _HomeworkScrollRect;
+        
+        bool hasLoaded = false;
+        
+        DateTime closestLessonDate;
+        Transform closestLessonTransform;
 
         public override void Initialize()
         {
             if (args == null) args = false;
             if (LocalPrefs.GetString("zermelo-access_token") == null) return;
 
-            _timeTable.Initialize();
-
-            openNavigationButton.onClick.AddListener(() =>
+            addedDays = TimeManager.Instance.DateTime.DayOfWeek switch
             {
-                openNavigationButton.enabled = false;
-                ViewManager.Instance.ShowNavigation();
-            });
+                DayOfWeek.Saturday => 2,
+                DayOfWeek.Sunday => 1,
+                _ => addedDays
+            };
             
             closeButtonWholePage.onClick.AddListener(() =>
             {
@@ -55,40 +64,46 @@ namespace UI.Views
             RefreshButton.onClick.AddListener(() =>
             {
                 RefreshButton.enabled = false;
-                Refresh(true);
+                RoosterRefresh(TimeManager.Instance.DateTime.AddDays(addedDays));
             });
             
             WeekRoosterButton.onClick.AddListener(() =>
             {
-                ViewManager.Instance.ShowNewView<WeekRoosterView>();
+                SwitchView.Instance.Show<DagRoosterView>();
             });
             
-            nextDayButton.onClick.AddListener(() =>
+            // SwipeDetector.onSwipeRight += () =>
+            // {
+            //     addedDays--;
+            //     RoosterRefresh(TimeManager.Instance.DateTime.AddDays(addedDays), true);
+            // };
+            //
+            // SwipeDetector.onSwipeLeft += () => 
+            // { 
+            //     addedDays++;
+            //     RoosterRefresh(TimeManager.Instance.DateTime.AddDays(addedDays), true);
+            // };
+
+            if (hasLoaded == false)
             {
-                addedDays++;
-                Refresh(false);
-            });
-            
-            previousDayButton.onClick.AddListener(() => 
-            { 
-                addedDays--;
-                Refresh(false);
-            });
-            
-            foreach (Transform child in content.transform)
-            {
-                Destroy(child.gameObject);
+                RoosterRefresh(TimeManager.Instance.DateTime.AddDays(addedDays));
+                hasLoaded = true;
             }
 
+            base.Initialize();
+        }
+
+        private void RoosterRefresh(DateTime date, bool savedIsGood = false)
+        {
+            _dateTextNumber.text = date.ToString("dd");
+            _dateTextDayName.text = date.ToString("dddd").Substring(0, 3);
+            closestLessonDate = date;
+            
             NoLessonHours = new List<int>();
             appointments = new List<Schedule.Appointment>();
             RoosterItems = new List<GameObject>();
 
-            DateTime extraDays = TimeManager.Instance.DateTime.AddDays(addedDays);
-
-            _dateText.text = extraDays.ToString("d MMMM");
-            
-            appointments = _schedule.GetScheduleOfDay(extraDays, (bool) args);
+            appointments = _schedule.GetScheduleOfDay(date, savedIsGood);
 
             if (appointments == null)
                 appointments = new List<Schedule.Appointment>();
@@ -109,20 +124,10 @@ namespace UI.Views
                     rooster.GetComponent<AppointmentInfo>().SetAppointmentInfo(
                         String.Join(", ", appointments[listIndex].locations),
                         TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start).DateTime, TimeZoneInfo.Local).AddHours(1).ToString("HH:mm") + " - " + 
-                        TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end).DateTime, TimeZoneInfo.Local).AddHours(1).ToString("HH:mm"),
-                        String.Join(", ", appointments[listIndex].teachers),
+                            TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end).DateTime, TimeZoneInfo.Local).AddHours(1).ToString("HH:mm"),
                         String.Join(", ", appointments[listIndex].subjects), appointments[listIndex].startTimeSlotName,
                         appointments[listIndex]);
 
-                    var timeTableItem = new TimeTable.TimeTableItem
-                    {
-                        startTimeHour = TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start).DateTime, TimeZoneInfo.Local).AddHours(1).Hour,
-                        startTimeMinute = TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].start).DateTime, TimeZoneInfo.Local).AddHours(1).Minute,
-                        endTimeHour = TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end).DateTime, TimeZoneInfo.Local).AddHours(1).Hour,
-                        endTimeMinute = TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex].end).DateTime, TimeZoneInfo.Local).AddHours(1).Minute,
-                    };
-                    
-                    
 
                     RoosterItems.Add(rooster);
 
@@ -146,11 +151,15 @@ namespace UI.Views
                     }
                     catch (Exception) { }
                     
+                    closestLessonDate = closestLessonDate.IsDateCloser(appointments[listIndex].start.ToDateTime());
+                    if (closestLessonDate == appointments[listIndex].start.ToDateTime())
+                    {
+                        closestLessonTransform = rooster.transform;
+                    }
 
                     //must be at the end
                     NoLessonHours.Remove(i);
                     listIndex++;
-                    _timeTable.addItem(rooster.GetComponent<RectTransform>(), timeTableItem);
                 }
                 else
                 {
@@ -167,8 +176,7 @@ namespace UI.Views
                         appointment = appointments[listIndex];
                     }
                 
-                    tussenUur.GetComponent<AppointmentInfo>()
-                        .SetAppointmentInfo("Geen les", "", "", "", i.ToString(), appointment);
+                    tussenUur.GetComponent<AppointmentInfo>().SetAppointmentInfo("Geen les", "", "", i.ToString(), appointment);
                     
                     tussenUur.GetComponent<Button>().onClick.RemoveAllListeners();
                     tussenUur.GetComponent<Button>().onClick.AddListener(() =>
@@ -180,19 +188,17 @@ namespace UI.Views
                 
                     if (!(listIndex >= appointments.Count) && appointments[listIndex].startTimeSlotName == (i).ToString())
                     {
+                        closestLessonDate = closestLessonDate.IsDateCloser(appointments[listIndex].start.ToDateTime());
+                        if (closestLessonDate == appointments[listIndex].start.ToDateTime())
+                        {
+                            closestLessonTransform = tussenUur.transform;
+                        }
                         listIndex++;
                     }
 
                     if (appointment != null && appointment.appointmentType == "choice")
                     {
-                        var timeTableItem = new TimeTable.TimeTableItem
-                        {
-                            startTimeHour = TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex - 1].start).DateTime, TimeZoneInfo.Local).AddHours(1).Hour,
-                            startTimeMinute = TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex - 1].start).DateTime, TimeZoneInfo.Local).AddHours(1).Minute,
-                            endTimeHour = TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex - 1].end).DateTime, TimeZoneInfo.Local).AddHours(1).Hour,
-                            endTimeMinute = TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(appointments[listIndex - 1].end).DateTime, TimeZoneInfo.Local).AddHours(1).Minute,
-                        };
-                        _timeTable.addItem(tussenUur.GetComponent<RectTransform>(), timeTableItem);   
+                        
                     }
                     else
                     {
@@ -211,12 +217,44 @@ namespace UI.Views
                 }
             }
 
+            _scrollRect.decelerationRate = 0f;
+            _scrollRect.content.DOLocalMove(_scrollRect.GetSnapToPositionToBringChildIntoView((RectTransform) closestLessonTransform), 0.1f, true).onComplete += () => _scrollRect.decelerationRate = 0.135f;
+            
+            //HomeworkRefresh();
             // if (!LocalPrefs.GetBool("show_tussenuren", true))
             // {
             //     hideTussenUren();
             // }
-        
-            base.Initialize();
+            
+            
+        }
+
+        private void HomeworkRefresh()
+        {
+            foreach (Transform child in HomeworkParent.transform)
+            {
+                Destroy(child.gameObject);
+            }
+            
+            var homework = _homework.GetTodaysHomework();
+            if (homework == null)
+                homework = new List<Homework.Item>();
+
+            Instantiate(HomeworkPrefab, HomeworkParent.transform).AddComponent<CanvasGroup>().alpha = 0;
+            
+            foreach (Homework.Item homeworkItem in homework)
+            {
+                var HomeworkItem = Instantiate(HomeworkPrefab, HomeworkParent.transform);
+                HomeworkItem.GetComponent<HomeworkInfo>().SetHomeworkInfo(homeworkItem.lesgroep.vak.naam, homeworkItem.studiewijzerItem.onderwerp, homeworkItem.datumTijd,false, homeworkItem);
+                
+                if (_HomeworkToShow == null)
+                {
+                    _HomeworkToShow = HomeworkItem.GetComponent<RectTransform>();
+                }
+            }
+            
+            _HomeworkScrollRect.decelerationRate = 0f;
+            _HomeworkScrollRect.content.DOLocalMove(_HomeworkScrollRect.GetSnapToPositionToBringChildIntoView(_HomeworkToShow), 0.1f, true).onComplete += () => _HomeworkScrollRect.decelerationRate = 0.135f;
         }
 
         [ContextMenu("Show Tussenuren")]
@@ -243,8 +281,6 @@ namespace UI.Views
             closeButtonWholePage.onClick.RemoveAllListeners();
             RefreshButton.onClick.RemoveAllListeners();
             WeekRoosterButton.onClick.RemoveAllListeners();
-            nextDayButton.onClick.RemoveAllListeners(); 
-            previousDayButton.onClick.RemoveAllListeners();
             base.Refresh(args);
         }
     }

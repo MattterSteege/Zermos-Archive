@@ -45,7 +45,7 @@ public class ConnectInfowijsView : View
                 if (success && !istweening)
                 {
                     istweening = true;
-                    succesScreen.ShowSuccesScreen("Antonius app");
+                    succesScreen.ShowSuccesScreen(SuccesScreen.LoginType.infowijs);
                     emailInputField.text = "";
                 }
                 else
