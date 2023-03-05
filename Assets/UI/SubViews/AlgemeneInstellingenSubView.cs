@@ -3,7 +3,7 @@ using UI.Views;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.SubViews
+namespace UI.Views
 {
     public class AlgemeneInstellingenSubView : SubView
     {

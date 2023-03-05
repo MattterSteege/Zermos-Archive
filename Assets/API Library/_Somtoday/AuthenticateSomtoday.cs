@@ -12,27 +12,94 @@ using System.Text.RegularExpressions;
 using System.Web;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 public class AuthenticateSomtoday : BetterHttpClient
 {
     private string authToken;
-    private string authCode;
+    public string authCode;
     private string CodeVerifier;
     private string CodeChallenge;
     private object cookies;
+    
+    public delegate void authenticateSomtoday(SomtodayAuthentication somtodayAuthentication);
+    public UnityEvent<SomtodayAuthentication> onAuthenticateSomtoday = new UnityEvent<SomtodayAuthentication>();
 
     public void Awake()
     {
         if (!CheckTokenExpirationDate.CheckToken(LocalPrefs.GetString("somtoday-access_token")))
             RefreshToken();
     }
+    
+    #region inloggen met SOMtoday
+    [ContextMenu("Create URL")]
+    public string InloggenMetSomtodayURL()
+    {
+        Debug.Log("debug works");
+
+        GenerateTokens();
+
+        string URL = string.Format("https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling://oauth/callback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state={0}&scope=openid&tenant_uuid={1}&session=no_session&code_challenge={2}&code_challenge_method=S256",
+            generateRandomString(8), "c23fbb99-be4b-4c11-bbf5-57e7fc4f4388", CodeChallenge);
+        
+        #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+        TextEditor te = new TextEditor();
+        te.text = URL;
+        te.SelectAll();
+        te.Copy();
+        #endif
+        
+        return URL;
+    }
+    
+    #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+    [ContextMenu("InloggenMetSomtodayAuthenticate")]
+    public void InloggenMetSomtodayAuthenticate()
+    {
+        InloggenMetSomtodayAuthenticate(authCode);
+    }
+    #endif
+    
+    public void InloggenMetSomtodayAuthenticate(string deepLinkCode = "")
+    {
+        if (deepLinkCode == "")
+        {
+            if (authCode == null)
+                return;
+            deepLinkCode = authCode;
+        }
+
+        var content = new FormUrlEncodedContent(new Dictionary<string, string> {{"", ""}});
+        var handler = new HttpClientHandler {AllowAutoRedirect = false};
+
+        var client = new HttpClient(handler, false);
+
+        using (client)
+        {
+            client.DefaultRequestHeaders.Remove("origin");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
+            HttpResponseMessage response4 = client.PostAsync(
+                $"https://inloggen.somtoday.nl/oauth2/token?grant_type=authorization_code&session=no_session&scope=openid&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&code={deepLinkCode}&code_verifier={CodeVerifier}",
+                content).Result;
+
+            string repsone = response4.Content.ReadAsStringAsync().Result;
+            
+            SomtodayAuthentication somtodayAuthentication = JsonConvert.DeserializeObject<SomtodayAuthentication>(repsone);
+            
+            LocalPrefs.SetString("somtoday-access_token", somtodayAuthentication.access_token);
+            LocalPrefs.SetString("somtoday-refresh_token", somtodayAuthentication.refresh_token);
+            LocalPrefs.SetString("somtoday-api_url", somtodayAuthentication.somtoday_api_url);
+            onAuthenticateSomtoday.Invoke(somtodayAuthentication);
+        }
+        
+    }
+    #endregion
 
     #region authenticate user
-    public SomtodayAuthentication startAuthentication(string tenantUuid, string username, string password)
+    public void startAuthentication(string tenantUuid, string username, string password)
     {
-        return new CoroutineWithData<SomtodayAuthentication>(this, AuthenticateUser(tenantUuid, username, password))
-            .result;
+        StartCoroutine(AuthenticateUser(tenantUuid, username, password));
     }
 
     public IEnumerator AuthenticateUser(string TENANT_UUID, string username, string password)
@@ -111,9 +178,11 @@ public class AuthenticateSomtoday : BetterHttpClient
             SomtodayAuthentication somtodayAuthentication =
                 JsonConvert.DeserializeObject<SomtodayAuthentication>(response4.Content.ReadAsStringAsync().Result);
 
-            GetComponent<Leermiddelen>().GetCookies(username, password);
+            LocalPrefs.SetString("somtoday-access_token", somtodayAuthentication.access_token);
+            LocalPrefs.SetString("somtoday-refresh_token", somtodayAuthentication.refresh_token);
+            LocalPrefs.SetString("somtoday-api_url", somtodayAuthentication.somtoday_api_url);
             
-            yield return somtodayAuthentication;
+            onAuthenticateSomtoday.Invoke(somtodayAuthentication);
         }
     }
 

@@ -92,17 +92,8 @@ public sealed class ViewManager : MonoBehaviour
 			passedTime = _timer.ElapsedMilliseconds / 1000f;
 #endif
 		}
-		if(LocalPrefs.GetBool("first_time", false) == false)
-		{
-			NewUserView.Show();
-			yield break;
-		}
 		
-		if(string.IsNullOrEmpty(LocalPrefs.GetString("zermelo-access_token")))
-		{
-			Loginview.Show();
-			yield break;
-		}
+
 
 		var viewToShow = view_at_startup[LocalPrefs.GetInt("view_at_startup", 0)];
 
@@ -125,9 +116,27 @@ public sealed class ViewManager : MonoBehaviour
 		
 		HideNavigation();
 		
+		if(string.IsNullOrEmpty(LocalPrefs.GetString("zermelo-access_token")))
+		{
+			Loginview.Show();
+			yield break;
+		}
+		
+		// if(LocalPrefs.GetBool("first_time", false) == false)
+		// {
+		// 	NewUserView.Show();
+		// 	yield break;
+		// }
+		
+		if(LocalPrefs.GetString("what_new_version", "0") != Application.version)
+		{
+			Show<WhatsNew>();
+		}
+		
 		onLoadedView?.Invoke(1f);
 		onInitializeComplete?.Invoke(true);
 
+		
 #if UNITY_EDITOR
 		if (saveLoadingTimes == true)		
 		{

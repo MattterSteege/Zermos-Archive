@@ -10,10 +10,25 @@ public class GradeInfo : MonoBehaviour
     public void SetGradeInfo(string vak = null, string datum = null, string details = null, string weging = null, string cijfer = null)
     {
         this.vak.text = vak ?? "";
-        this.datum.text = datum ?? "";
-        this.details.text = details ?? "";
         this.weging.text = weging ?? "";
         this.cijfer.text = cijfer ?? "";
+        
+        if (details?.Length > 0 && datum?.Length > 0)
+        {
+            this.datum.text = details;
+        }
+        else if (details?.Length > 0)
+        {
+            this.datum.text = details;
+        }
+        else if (datum?.Length > 0)
+        {
+            this.datum.text = datum;
+        }
+        else
+        {
+            this.datum.gameObject.SetActive(false);
+        }
 
         if (float.Parse(cijfer ?? "0.0") >= 8.0f)
         {
@@ -31,7 +46,6 @@ public class GradeInfo : MonoBehaviour
 
     [SerializeField] TMP_Text vak;
     [SerializeField] TMP_Text datum;
-    [SerializeField] TMP_Text details;
     [SerializeField] TMP_Text weging;
     [SerializeField] TMP_Text cijfer;
 }

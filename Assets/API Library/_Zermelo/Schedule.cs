@@ -7,21 +7,31 @@ using UnityEngine;
 
 public class Schedule : BetterHttpClient
 {
-    public List<Appointment> TodaysScheduledAppointments;
+    [HideInInspector]public ZermeloSchedule TodaysScheduledAppointments;
+    [HideInInspector] public DateTime LastUpdatedTodaysScheduledAppointments;
+    [HideInInspector] public ZermeloSchedule SavedzermeloSchedule; //this is a place that a random week can be saved to, so every schedule date change will not have to download a new version, only when the week changes
+    [HideInInspector] public int weeknumber;
+
 
     [SerializeField, Tooltip("'*' means Application.persistentDataPath.")]
-    private string savePath = "*/Lessons.json";
+    private string savePath = "*/Schedule.json";
 
     public List<Appointment> GetScheduleOfDay(DateTime date, bool shouldRefreshFile)
     {
-        int weeknumber = GetWeekOfYear(date);
+        int weeknumber = date.GetWeekOfYear();
 
+        if (TodaysScheduledAppointments != null && TodaysScheduledAppointments.response.data[0].appointments.Count != 0 && LastUpdatedTodaysScheduledAppointments.AddMinutes(10) < TimeManager.Instance.CurrentDateTime && shouldRefreshFile == false)
+        {
+            return TodaysScheduledAppointments.response.data[0].appointments;
+        }
+        
         Items schedule = GetSchedule(weeknumber.ToString(), date.Year.ToString(), shouldRefreshFile);
 
         if (schedule == null)
         {
             return null;
         }
+
 
         List<Appointment> TodaySchedule = new List<Appointment>();
 
@@ -32,11 +42,6 @@ public class Schedule : BetterHttpClient
             {
                 TodaySchedule.Add(appointment);
             }
-        }
-
-        if (date == TimeManager.Instance.DateTime)
-        {
-            TodaysScheduledAppointments = TodaySchedule;
         }
 
         return TodaySchedule;
@@ -51,58 +56,75 @@ public class Schedule : BetterHttpClient
         if (!File.Exists(destination))
         {
             Debug.LogWarning("File not found, creating new file.");
+            File.Create(destination).Dispose();
             return DownloadLessons(week, year)?.response.data[0] ?? new Items{appointments = new List<Appointment>()};
+        }
+        
+        if (weeknumber == int.Parse(week))
+        {
+            return SavedzermeloSchedule.response.data[0];
         }
 
         using (StreamReader r = new StreamReader(destination))
         {
             string json = r.ReadToEnd();
             var scheduleObject = JsonConvert.DeserializeObject<Items>(json);
-            if ((scheduleObject?.laatsteWijziging.ToDateTime().AddMinutes(10) < TimeManager.Instance.CurrentDateTime && tries < 2) || (ShouldRefreshFile && scheduleObject?.laatsteWijziging.ToDateTime().AddSeconds(15) < TimeManager.Instance.CurrentDateTime && tries < 2))
+            r.Dispose();
+
+            int currentUnixTime = TimeManager.Instance.CurrentDateTime.ToUnixTime();
+            
+            if (scheduleObject.laatsteWijziging + 600 < currentUnixTime || ShouldRefreshFile)
             {
-                r.Close();
-                Debug.LogWarning("Local file is outdated, downloading new file.");
+                if (scheduleObject.laatsteWijziging + 15 < currentUnixTime && TimeManager.Instance.DateTime.IsSameWeek(DateTimeUtils.GetMondayOfWeekAndYear(week, year)))
+                {
+                    //Debug.Log("Schedule is semi-outdated, it's okay to use it");
+                    return scheduleObject;
+                }
+                //Debug.Log("Schedule is outdated, refreshing...");
                 return DownloadLessons(week, year)?.response.data[0] ?? new Items{appointments = new List<Appointment>()};
             }
+            //Debug.Log("Schedule is up to date.");
             return scheduleObject;
         }
     }
-
-    [SerializeField] private int weeksSaved = 5;
+    
     private ZermeloSchedule DownloadLessons(string week, string year)
     {
         if (LocalPrefs.GetString("zermelo-access_token") == null || LocalPrefs.GetString("zermelo-user_code") == null)
             return null;
 
         ZermeloSchedule schedule = new ZermeloSchedule {response = new Response {data = new List<Items> {new() {appointments = new List<Appointment>()}}}};
-        for (int i = 0; i < weeksSaved; i++)
-        {
-            string date = $"{year}-{week}";
-            
-            //check if week plus i is bigger than 52, if so, add 1 to year
-            int weeknumber = int.Parse(week) + i;
-            if (weeknumber > 52)
-            {
-                weeknumber -= 52;
-                date = (int.Parse(year) + 1).ToString() + (weeknumber.ToString().ToCharArray().Length == 1 ? "0" + weeknumber : weeknumber.ToString());
-            }
-            else
-            {
-                date = year + (weeknumber.ToString().ToCharArray().Length == 1 ? "0" + weeknumber : weeknumber.ToString());
-            }
-            
-            string baseURL = $"https://ccg.zportal.nl/api/v3/liveschedule" +
-                             $"?access_token={LocalPrefs.GetString("zermelo-access_token")}" +
-                             $"&student={LocalPrefs.GetString("zermelo-user_code")}" +
-                             $"&week={date}";
-            
-            var scheduleResponse = (ZermeloSchedule) Get(baseURL, callback => JsonConvert.DeserializeObject<ZermeloSchedule>(callback.downloadHandler.text), (error) => AndroidUIToast.ShowToast("Het rooster kon niet opgehaald, probeer het later opnieuw."));
 
-            if (scheduleResponse != null)
-            {
-                schedule.response.data[0].appointments.AddRange(scheduleResponse.response.data[0].appointments);
-            }
+        string date = $"{year}-{week}";
+        
+        date = year + (week.ToCharArray().Length == 1 ? "0" + week : week);
+
+        string baseURL = $"https://ccg.zportal.nl/api/v3/liveschedule" +
+                         $"?access_token={LocalPrefs.GetString("zermelo-access_token")}" +
+                         $"&student={LocalPrefs.GetString("zermelo-user_code")}" +
+                         $"&week={date}";
+        
+        var scheduleResponse = (ZermeloSchedule) Get(baseURL, callback => JsonConvert.DeserializeObject<ZermeloSchedule>(callback.downloadHandler.text), (error) =>
+        {
+
+            AndroidUIToast.ShowToast("Het rooster kon niet opgehaald, probeer het later opnieuw.");
+            return null;
+        });
+
+        if (scheduleResponse != null)
+        {
+            schedule.response.data[0].appointments.AddRange(scheduleResponse.response.data[0].appointments);
         }
+
+        if (DateTimeUtils.GetMondayOfWeekAndYear(week, year) != TimeManager.Instance.CurrentDateTime.GetMondayOfWeek())
+        {
+            SavedzermeloSchedule = schedule;
+            weeknumber = int.Parse(week);
+            return schedule;
+        }
+
+        TodaysScheduledAppointments = schedule;
+        LastUpdatedTodaysScheduledAppointments = TimeManager.Instance.CurrentDateTime;
 
         var convertedJson = JsonConvert.SerializeObject(
             new Items()
@@ -113,38 +135,12 @@ public class Schedule : BetterHttpClient
             Formatting.Indented);
 
         string destination = savePath.Replace("*", Application.persistentDataPath);
-        
+
         File.WriteAllText(destination, convertedJson);
         
         return schedule;
     }
-    
-    private int GetWeekOfYear(DateTime date)
-    {
-        // Get the day of the year for the date
-        int dayOfYear = date.DayOfYear;
 
-        // Get the day of the week for the first day of the year
-        DateTime firstDayOfYear = new DateTime(date.Year, 1, 1);
-        DayOfWeek firstDayOfWeek = firstDayOfYear.DayOfWeek;
-
-        // Calculate the number of days between the first day of the year and the date
-        int daysSinceFirstDay = dayOfYear - 1;
-        if (firstDayOfWeek > DayOfWeek.Sunday)
-        {
-            daysSinceFirstDay -= (int)firstDayOfWeek;
-        }
-
-        // Calculate the week of the year
-        int week = daysSinceFirstDay / 7 + 1;
-        if (firstDayOfWeek > DayOfWeek.Sunday)
-        {
-            week += 1;
-        }
-
-        return week;
-    }
-    
     #region models
 
     public class Action

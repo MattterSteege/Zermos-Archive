@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 namespace UI.Views
 {
@@ -19,16 +21,12 @@ namespace UI.Views
 		[SerializeField] private Button SchoolNieuwsButton;
 		[SerializeField] private Button SchoolJaarKalenderButton;
 		[SerializeField] private Button SettingsButton;
-		[SerializeField] private TMP_Text UsernameText;
 		[SerializeField] private RectTransform NavigationPanel;
 		[SerializeField] private RectTransform FirstRow;
-		[SerializeField] private RectTransform contentRectTransform;
-		private Camera _camera;
 		float LayerHeight = 0f;
 
 		private void Awake()
 		{
-			_camera = Camera.main;
 			LayerHeight = FirstRow.rect.height;
 		}
 
@@ -49,18 +47,18 @@ namespace UI.Views
 
 			SwipeDetector.onSwipeUp += (start, end) =>
 			{
-				ShowNavigation(start, end);
+				ShowNavigation(start);
 			};
 			
 			SwipeDetector.onSwipeDown += (start, end) =>
 			{
-				HideNavigation(start, end);
+				HideNavigation(start);
 			};
 			
 			base.Initialize();
 		}
 
-		private void ShowNavigation(Touch start, Touch end)
+		public void ShowNavigation(Touch start, bool force = false)
 		{
 			Vector2 touchPos = start.position;
 			//touchPos.y = Screen.height - touchPos.y; // Flip Y coordinate to match UI coordinates
@@ -71,17 +69,17 @@ namespace UI.Views
 			float highestY = FirstRow.rect.height / 2;
 
 			// Check if touch is below the highest Y value of the UI element
-			if (touchPos.y < highestY)
+			if (touchPos.y < highestY || force)
 			{
 				int childCount = NavigationPanel.childCount - 2;
 				float spacing = NavigationPanel.GetComponent<VerticalLayoutGroup>().spacing;
 				float HeightToMove = LayerHeight * childCount;
 				HeightToMove += spacing * (childCount - 1);
-				NavigationPanel.DOAnchorPosY(HeightToMove, 0.5f);
+				NavigationPanel.DOAnchorPosY(HeightToMove, force ? 0.01f : 0.5f);
 			}
 		}
 
-		private void HideNavigation(Touch start, Touch end)
+		public void HideNavigation(Touch start, bool force = false)
 		{
 			Vector2 touchPos = start.position;
 			//touchPos.y = Screen.height - touchPos.y; // Flip Y coordinate to match UI coordinates
@@ -92,9 +90,9 @@ namespace UI.Views
 			float highestY = FirstRow.rect.height / 2;
 
 			// Check if touch is below the highest Y value of the UI element
-			if (touchPos.y < highestY)
+			if (touchPos.y < highestY || force)
 			{
-				NavigationPanel.DOAnchorPosY(LayerHeight, 0.5f);
+				NavigationPanel.DOAnchorPosY(LayerHeight, force ? 0.01f : 0.5f);
 			}
 		}
 
@@ -111,12 +109,12 @@ namespace UI.Views
             });
             SettingsButton.onClick.AddListener(() =>
             {
-            	ViewManager.Instance.ShowNewView<SettingsView>();
+	            SwitchView.Instance.Show<SettingsView>();
             });
 
             HomeButton.onClick.AddListener(() =>
             {
-            	ViewManager.Instance.ShowNewView<NewsAndInformationView>();
+            	SwitchView.Instance.Show<NewsAndInformationView>();
             });
 
             #region IfSomtoday
@@ -145,13 +143,13 @@ namespace UI.Views
             	SchoolNieuwsButton.gameObject.SetActive(true);
             	SchoolNieuwsButton.onClick.AddListener(() =>
             	{
-            		ViewManager.Instance.ShowNewView<SchoolNewsView>();
+	                SwitchView.Instance.Show<SchoolNewsView>("Alle items worden nu ingeladen...");
             	});
             	
             	SchoolJaarKalenderButton.gameObject.SetActive(true);
             	SchoolJaarKalenderButton.onClick.AddListener(() =>
             	{
-            		ViewManager.Instance.ShowNewView<JaarKalenderView>();
+            		SwitchView.Instance.Show<JaarKalenderView>();
             	});
             }
             else
@@ -160,11 +158,6 @@ namespace UI.Views
             	SchoolJaarKalenderButton.gameObject.SetActive(false);
             }
             #endregion
-		}
-
-		public override void Hide()
-		{
-			Debug.Log("You can't hide me! I'm the NavBar! :D");	
 		}
 
 		public override void Refresh(object args)
@@ -178,6 +171,22 @@ namespace UI.Views
 			HomeButton.onClick.RemoveAllListeners();
 			SchoolNieuwsButton.onClick.RemoveAllListeners();
 			base.Refresh(args);
+		}
+
+		public override void Show(object args = null)
+		{
+			Debug.Log("Showing Navigation");
+			gameObject.SetActive(true);
+			base.Show(args);
+		}
+
+		public override void Hide()
+		{
+			string caller = new StackTrace().GetFrame(1).GetMethod().Name;
+			if (caller != "MoveNext" && caller != "Show")
+			{
+				base.Hide();
+			}
 		}
 	}
 }

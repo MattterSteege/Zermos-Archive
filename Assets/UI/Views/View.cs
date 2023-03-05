@@ -13,7 +13,7 @@ namespace UI.Views
 
 		[Header("Own component fields"), HideInInspector] public bool isInitialized;
 		[HideInInspector] public bool isVisible;
-		public object args;
+		public object args = null;
 		
 		public object Instance;
 	

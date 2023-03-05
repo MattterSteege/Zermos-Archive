@@ -16,10 +16,10 @@ public class ConnectInfowijsView : View
     
     public override void Initialize()
     {
-        openNavigationButton.onClick.AddListener(() =>
-        {
-            ViewManager.Instance.ShowNewView<SettingsView>();
-        });
+        // openNavigationButton.onClick.AddListener(() =>
+        // {
+        //     ViewManager.Instance.ShowNewView<SettingsView>();
+        // });
         connectButton.onClick.AddListener(() =>
         {
             StartCoroutine(OnClickConnectButton());

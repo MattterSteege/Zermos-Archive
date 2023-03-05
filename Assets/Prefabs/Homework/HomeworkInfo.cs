@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class HomeworkInfo : MonoBehaviour
 {
     [SerializeField] TMP_Text vak;
+    [SerializeField] TMP_Text tijd;
     [SerializeField] TMP_Text details;
     [SerializeField] TMP_Text Datum;
     [SerializeField] public Toggle gemaakt;
@@ -60,6 +61,8 @@ public class HomeworkInfo : MonoBehaviour
         {
             this.Datum.text = date.ToString("dd-MM-yyyy");
         }
+
+        this.tijd.text = TimeManager.Instance.DateTime.GetDateDifference(date).GetTimeDifferenceString();
 
         this.gemaakt.isOn = gemaakt;
         

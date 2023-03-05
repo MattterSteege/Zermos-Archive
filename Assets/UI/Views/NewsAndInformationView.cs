@@ -63,7 +63,7 @@ namespace UI.Views
 
             if (zermeloSchedule.TodaysScheduledAppointments != null)
             {
-                appointments = zermeloSchedule.TodaysScheduledAppointments;
+                appointments = zermeloSchedule.TodaysScheduledAppointments.response.data[0].appointments;
             }
             else
             {

@@ -12,15 +12,11 @@ using Debug = UnityEngine.Debug;
 public sealed class SubViewManager : MonoBehaviour
 {
 	public static SubViewManager Instance { get; private set; }
-	
-	[SerializeField] private View ParentView;
 	[SerializeField] private SubView[] views;
-	
 	[SerializeField] private float animationTime = 0.5f;
-	
 	[Space, SerializeField] public SubView currentView;
 
-	[Space, SerializeField] private static GameObject ViewPrefab;
+	private static GameObject ViewPrefab;
 	
 	private void Awake()
 	{
@@ -68,7 +64,7 @@ public sealed class SubViewManager : MonoBehaviour
 		if (currentView == null) return;
 		RectTransform rectTransform = currentView.GetComponent<RectTransform>();
 		
-		rectTransform.DOLocalMove(new Vector3(rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime * 2f);
+		rectTransform.DOLocalMove(new Vector3(rectTransform.rect.width, -rectTransform.rect.height / 2f, 0f), animationTime * 2f);
 	}
 
 	[ContextMenu("Hide Navigation")]
@@ -77,7 +73,7 @@ public sealed class SubViewManager : MonoBehaviour
 		if (currentView == null) return;
 		RectTransform rectTransform = currentView.GetComponent<RectTransform>();
 		
-		rectTransform.DOLocalMove(new Vector3(rectTransform.rect.width, -rectTransform.rect.height / 2f, 0f), 0.001f);
+		//rectTransform.DOLocalMove(new Vector3(rectTransform.rect.width, -rectTransform.rect.height / 2f, 0f), 0.001f);
 		rectTransform.DOLocalMove(new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime * 2f);
 	}
 	
@@ -265,4 +261,17 @@ public sealed class SubViewManager : MonoBehaviour
 		Selection.activeObject = go;
 	}
 #endif
+	
+	public TView GetView<TView>() where TView : SubView
+	{
+		foreach (SubView view in views)
+		{
+			if (view is TView)
+			{
+				return view as TView;
+			}
+		}
+
+		return null;
+	}
 }

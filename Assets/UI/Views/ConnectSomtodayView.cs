@@ -12,24 +12,32 @@ namespace UI.Views
     {
         [SerializeField] private TMP_InputField username;
         [SerializeField] private TMP_InputField password;
-        [SerializeField] private Button connectButton;
+        [SerializeField] private Button credentialsConnectButton;
+        [SerializeField] private Button somtodayConnectButton;
         [SerializeField] private AuthenticateSomtoday somtodayAuthenticate;
         [SerializeField] private Student student;
-        [SerializeField] private Toggle PassToggle;
+        [SerializeField] private ExtendedToggle PassToggle;
         private Schools schools;
+        
+        bool usingCredentials = false;
+        bool usingSomtoday = false;
     
         public override void Initialize()
         {
-            openNavigationButton.onClick.AddListener(() =>
+            credentialsConnectButton.onClick.AddListener(() =>
             {
-                ViewManager.Instance.ShowNewView<SettingsView>();
+                credentialsConnectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Inloggen!";
+                credentialsConnectButton.interactable = false;
+                usingCredentials = true;
+                StartCoroutine(OnClickCredentialsConnectButton());
             });
-
-            connectButton.onClick.AddListener(() =>
+            
+            somtodayConnectButton.onClick.AddListener(() =>
             {
-                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Inloggen!";
-                connectButton.interactable = false;
-                StartCoroutine(OnClickConnectButton());
+                somtodayConnectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Inloggen met SOMtoday!";
+                somtodayConnectButton.interactable = false;
+                usingSomtoday = true;
+                StartCoroutine(OnClickSomtodayConnectButton());
             });
             
             PassToggle.onValueChanged.AddListener((value) =>
@@ -37,44 +45,83 @@ namespace UI.Views
                 password.contentType = value ? TMP_InputField.ContentType.Standard : TMP_InputField.ContentType.Password;
                 password.ForceLabelUpdate();
             });
+            
+            somtodayAuthenticate.onAuthenticateSomtoday.AddListener(processSuccessOrFailure);
 
             base.Initialize();
         }
 
-        private IEnumerator OnClickConnectButton()
+        private IEnumerator OnClickCredentialsConnectButton()
         {
-            
             yield return null;
-            AuthenticateSomtoday.SomtodayAuthentication response = somtodayAuthenticate.startAuthentication("c23fbb99-be4b-4c11-bbf5-57e7fc4f4388", username.text, password.text);
-            
-            if (response?.access_token != null)
+            somtodayAuthenticate.startAuthentication("c23fbb99-be4b-4c11-bbf5-57e7fc4f4388", username.text, password.text);
+        }
+        
+        private IEnumerator OnClickSomtodayConnectButton()
+        {
+            yield return null;
+            Application.OpenURL(somtodayAuthenticate.InloggenMetSomtodayURL());
+        }
+        
+        private void processSuccessOrFailure(AuthenticateSomtoday.SomtodayAuthentication somtodayAuthentication)
+        {
+            if (usingCredentials)
             {
-                somtodayAuthenticate.gameObject.GetComponent<SuccesScreen>().ShowSuccesScreen(SuccesScreen.LoginType.somtoday);
-                LocalPrefs.SetString("somtoday-access_token", response.access_token);
-                LocalPrefs.SetString("somtoday-refresh_token", response.refresh_token);
-                LocalPrefs.SetString("somtoday-api_url", response.somtoday_api_url);
-
-                Student.SomtodayStudent user = student.getStudent(true);
-
-                if (user?.items[0].links[0].id != 0)
+                if (somtodayAuthentication?.access_token != null)
                 {
-                    LocalPrefs.SetString("somtoday-student_id", user.items[0].links[0].id.ToString());
+                    SuccesScreen.Instance.ShowSuccesScreen(SuccesScreen.LoginType.somtoday);
+                    LocalPrefs.SetString("somtoday-access_token", somtodayAuthentication.access_token);
+                    LocalPrefs.SetString("somtoday-refresh_token", somtodayAuthentication.refresh_token);
+                    LocalPrefs.SetString("somtoday-api_url", somtodayAuthentication.somtoday_api_url);
+
+                    Student.SomtodayStudent user = student.getStudent(true);
+
+                    if (user?.items[0].links[0].id != 0)
+                    {
+                        LocalPrefs.SetString("somtoday-student_id", user.items[0].links[0].id.ToString());
+                    }
+
+                    credentialsConnectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Inloggen!";
+                    credentialsConnectButton.interactable = true;
                 }
-                
-                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Inloggen!";
-                connectButton.interactable = true;
+                else
+                {
+                    credentialsConnectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Inloggen mislukt";
+                    credentialsConnectButton.interactable = true;
+                }
             }
-            else
+            if (usingSomtoday)
             {
-                connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Inloggen mislukt";
-                connectButton.interactable = true;
+                if (somtodayAuthentication?.access_token != null)
+                {
+                    SuccesScreen.Instance.ShowSuccesScreen(SuccesScreen.LoginType.somtoday);
+                    LocalPrefs.SetString("somtoday-access_token", somtodayAuthentication.access_token);
+                    LocalPrefs.SetString("somtoday-refresh_token", somtodayAuthentication.refresh_token);
+                    LocalPrefs.SetString("somtoday-api_url", somtodayAuthentication.somtoday_api_url);
+
+                    Student.SomtodayStudent user = student.getStudent(true);
+
+                    if (user?.items[0].links[0].id != 0)
+                    {
+                        LocalPrefs.SetString("somtoday-student_id", user.items[0].links[0].id.ToString());
+                    }
+
+                    somtodayConnectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Inloggen met SOMtoday!";
+                    somtodayConnectButton.interactable = true;
+                }
+                else
+                {
+                    somtodayConnectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Inloggen mislukt";
+                    somtodayConnectButton.interactable = true;
+                }
             }
         }
 
         public override void Refresh(object args)
         {
             openNavigationButton.onClick.RemoveAllListeners();
-            connectButton.onClick.RemoveAllListeners();
+            credentialsConnectButton.onClick.RemoveAllListeners();
+            somtodayConnectButton.onClick.RemoveAllListeners();
             base.Refresh(args);
         }
 

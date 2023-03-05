@@ -26,24 +26,14 @@ namespace UI.Views
         [SerializeField] private Button somtodayButton;
         [SerializeField] private Button OfficeButton;
         [SerializeField] private Button schoolwikiButton;
+        
+        [SerializeField] RectTransform SourceRectTransform;
 
         public override void Initialize()
         {
             MonoBehaviour camMono = ViewManager.Instance.GetComponent<MonoBehaviour>();
             camMono.StartCoroutine(subViewManager.Initialize());
-            
-            openNavigationButton.onClick.AddListener(() =>
-            {
-                openNavigationButton.enabled = false;
-                ViewManager.Instance.ShowNavigation();
-            });
 
-            closeButtonWholePage.onClick.AddListener(() =>
-            {
-                openNavigationButton.enabled = true;
-                ViewManager.Instance.HideNavigation();
-            });
-            
 #if !UNITY_EDITOR
             int timesCLicked = 0;
 
@@ -82,13 +72,13 @@ namespace UI.Views
             // });
 
             hulpNodigButton.onClick.AddListener(() => Application.OpenURL(@"https://mjtsgamer.github.io/Zermos/"));
-            zermeloButton.onClick.AddListener(() => Application.OpenURL(@"https://ccg.zportal.nl/"));
-            somtodayButton.onClick.AddListener(() => Application.OpenURL(@"https://carmelcollegegouda.somtoday.nl/"));
-            OfficeButton.onClick.AddListener(() => Application.OpenURL(@"https://portal.office.com/"));
-            schoolwikiButton.onClick.AddListener(() => Application.OpenURL(@"https://antonius.schoolwiki.nl/antoniuscollege"));
+            // zermeloButton.onClick.AddListener(() => Application.OpenURL(@"https://ccg.zportal.nl/"));
+            // somtodayButton.onClick.AddListener(() => Application.OpenURL(@"https://carmelcollegegouda.somtoday.nl/"));
+            // OfficeButton.onClick.AddListener(() => Application.OpenURL(@"https://portal.office.com/"));
+            // schoolwikiButton.onClick.AddListener(() => Application.OpenURL(@"https://antonius.schoolwiki.nl/antoniuscollege"));
             #endregion
         }
-        
+
         public override void Refresh(object args)
         {
             openNavigationButton.onClick.RemoveAllListeners();

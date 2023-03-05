@@ -12,7 +12,9 @@ public class SwitchView : MonoBehaviour
     [SerializeField] float waitTime = 0.1f;
     [SerializeField] float MovementSpeed = 0.5f;
     [SerializeField] TMP_Text ViewText;
+    [SerializeField] TMP_Text DescriptionText;
     public static SwitchView Instance;
+    [SerializeField] private bool isAnimating = false;
 
     void Awake()
     {
@@ -26,54 +28,63 @@ public class SwitchView : MonoBehaviour
         }
     }
 
-    public void Show<TView>(object args = null) where TView : View
+    public void Show<TView>(string description = "", object args = null) where TView : View
     {
         foreach (View view in ViewManager.Instance.views)
         {
             if (view is TView)
             {
-                StartCoroutine(Animate(view, args));
+                StartCoroutine(Animate(view, description, args));
             }
         }
+        
     }
     
-    IEnumerator Animate(View view, object args)
+    IEnumerator Animate(View view, string description, object args)
     {
         if (view == ViewManager.Instance.currentView)
             yield break;
-        
-        //random number either -1 or 1
-        Random.InitState(TimeManager.Instance.CurrentDateTime.ToUnixTime());
-        float random = Random.Range(-2f, 2f);
-        ViewText.text = view.viewName;
-        yield return null;
-        for (int i = 0; i < MenuParts.Length; i++)
+
+        if (!isAnimating)
         {
-            MenuParts[i].anchoredPosition = new Vector2((Screen.width + 80) * (random > 0 ? 1 : -1), MenuParts[i].anchoredPosition.y);
-            Vector2 pos = _MenuPartsPos[i];
-            pos.x = 0;
+            isAnimating = true;
+            //random number either -1 or 1
+            Random.InitState(TimeManager.Instance.CurrentDateTime.ToUnixTime());
+            float random = Random.Range(-2f, 2f);
+            ViewText.text = view.viewName;
+            DescriptionText.text = description;
+            yield return null;
+            for (int i = 0; i < MenuParts.Length; i++)
+            {
+                MenuParts[i].anchoredPosition = new Vector2((Screen.width + 80) * (random > 0 ? 1 : -1), MenuParts[i].anchoredPosition.y);
+                Vector2 pos = _MenuPartsPos[i];
+                pos.x = 0;
 
-            MenuParts[i].DOAnchorPos(pos, MovementSpeed);
-            yield return new WaitForSeconds(waitTime);
-        }
+                MenuParts[i].DOAnchorPos(pos, MovementSpeed);
+                yield return new WaitForSeconds(waitTime);
+            }
 
-        yield return new WaitForSeconds(waitTime * MenuParts.Length);
+            yield return new WaitForSeconds(waitTime * MenuParts.Length);
+            ViewManager.Instance.GetInstance<NavBarView>().HideNavigation(new Touch(), true);
 
-        ViewManager.Instance.HideCurrentView();
-        view.Show(args);
-        ViewManager.Instance.currentView = view;
+            ViewManager.Instance.HideCurrentView();
+            view.Show(args);
+            ViewManager.Instance.currentView = view;
         
-        Random.InitState(TimeManager.Instance.CurrentDateTime.ToUnixTime());
-        random = Random.Range(-1f, 1f);
-        yield return null;
+            Random.InitState(TimeManager.Instance.CurrentDateTime.ToUnixTime());
+            random = Random.Range(-1f, 1f);
+            yield return null;
         
-        for (int i = 0; i < MenuParts.Length; i++)
-        {
-            Vector2 pos = _MenuPartsPos[i];
-            pos.x = -(Screen.width + 80) * (random > 0 ? 1 : -1);
+            for (int i = 0; i < MenuParts.Length; i++)
+            {
+                Vector2 pos = _MenuPartsPos[i];
+                pos.x = -(Screen.width + 80) * (random > 0 ? 1 : -1);
 
-            MenuParts[i].DOAnchorPos(pos, MovementSpeed);
-            yield return new WaitForSeconds(waitTime);
+                MenuParts[i].DOAnchorPos(pos, MovementSpeed);
+                yield return new WaitForSeconds(waitTime);
+            }   
+            yield return new WaitForSeconds(MovementSpeed - waitTime);
+            isAnimating = false;
         }
     }
 }

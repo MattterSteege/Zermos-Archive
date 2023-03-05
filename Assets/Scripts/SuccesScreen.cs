@@ -57,17 +57,15 @@ public class SuccesScreen : MonoBehaviour
         
         rect.DOAnchorPosY(0f, 2f);
         yield return new WaitForSeconds(2f);
-        Refresh();
+        Refresh(connection);
         yield return new WaitForSeconds(1f);
         rect.DOAnchorPosY(-Screen.height * 2f, 2f);
     }
 
-    private void Refresh()
+    private void Refresh(LoginType connection)
     {
-        backgroundOfEverything.color = new Color(0.06666667f, 0.1529412f, 0.4352941f);
-        ViewManager.Instance.Show<NavBarView>();
         ViewManager.Instance.Refresh<NavBarView>();
-        switch (loginType)
+        switch (connection)
         {
             case LoginType.somtoday:
                 ViewManager.Instance.Refresh<HomeworkView>();
@@ -81,5 +79,7 @@ public class SuccesScreen : MonoBehaviour
                 ViewManager.Instance.Refresh<SchoolNewsView>();
                 break;
         }
+        ViewManager.Instance.Show<NavBarView>();
+        ViewManager.Instance.Show<DagRoosterView>(false);
     }
 }

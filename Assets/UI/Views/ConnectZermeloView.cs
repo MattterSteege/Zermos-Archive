@@ -44,7 +44,9 @@ namespace UI.Views
                 if (response != null && response.access_token != null)
                 {
                     SuccesScreen.Instance.ShowSuccesScreen(SuccesScreen.LoginType.zermelo);
-                    yield return new WaitForSeconds(1f);
+                    yield return new WaitForSeconds(3f);
+                    ViewManager.Instance.Hide<ConnectZermeloView>();
+                    ViewManager.Instance.Show<DagRoosterView>();
                     connectButton.GetComponentInChildren<TextMeshProUGUI>().text = "Inloggen!";
                     connectButton.interactable = true;
                 }
@@ -65,6 +67,13 @@ namespace UI.Views
         {
             connectButton.onClick.RemoveAllListeners();
             base.Refresh(args);
+        }
+        
+        public override void Show(object args = null)
+        {
+            gameObject.transform.SetAsLastSibling();
+            ViewManager.Instance.Hide<NavBarView>();
+            base.Show(args);
         }
     }
 }

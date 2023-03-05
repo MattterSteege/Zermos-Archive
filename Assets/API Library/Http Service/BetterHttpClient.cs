@@ -10,11 +10,12 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Debug = UnityEngine.Debug;
 
-public class BetterHttpClient : MonoBehaviour
+public class BetterHttpClient : GlobalHttpVariables
 {
     public object Get(string url, Func<UnityWebRequest, object> callback = null, Func<UnityWebRequest, object> error = null)
     {
-        Debug.Log("Request started");
+        IncrementTotalRequests();
+        Debug.Log("Request started - " + TotalRequests + " - " + new StackTrace().GetFrame(1).GetMethod().Name);
         UnityWebRequest www = UnityWebRequest.Get(url);
         www.SetRequestHeader("Accept", "application/json");
         www.SendWebRequest();
@@ -38,7 +39,8 @@ public class BetterHttpClient : MonoBehaviour
     
     public object Get(string url, Dictionary<string, string> headers = null, Func<UnityWebRequest, object> callback = null)
     {
-        Debug.Log("Request started");
+        IncrementTotalRequests();
+        Debug.Log("Request started - " + TotalRequests + " - " + new StackTrace().GetFrame(1).GetMethod().Name);
         UnityWebRequest www = UnityWebRequest.Get(url);
         www.SetRequestHeader("Accept", "application/json");
         if (headers != null)
@@ -68,7 +70,8 @@ public class BetterHttpClient : MonoBehaviour
     
     public object Get(string url, Dictionary<string, string> headers = null, Func<UnityWebRequest, object> callback = null, Func<UnityWebRequest, object> error = null)
     {
-        Debug.Log("Request started");
+        IncrementTotalRequests();
+        Debug.Log("Request started - " + TotalRequests + " - " + new StackTrace().GetFrame(1).GetMethod().Name);
         UnityWebRequest www = UnityWebRequest.Get(url);
         www.SetRequestHeader("Accept", "application/json");
         if (headers != null)
@@ -98,7 +101,8 @@ public class BetterHttpClient : MonoBehaviour
 
     public object Get(string url, WWWForm form, Dictionary<string, string> headers = null, Func<UnityWebRequest, object> callback = null, Func<UnityWebRequest, object> error = null)
     {
-        Debug.Log("Request started");
+        IncrementTotalRequests();
+        Debug.Log("Request started - " + TotalRequests + " - " + new StackTrace().GetFrame(1).GetMethod().Name);
         UnityWebRequest www = UnityWebRequest.Get(url);
         //www.SetRequestHeader("Accept", "application/json");
         if (headers != null)
@@ -129,7 +133,8 @@ public class BetterHttpClient : MonoBehaviour
     
     public object Post(string url, WWWForm form, Func<UnityWebRequest, object> callback, Func<UnityWebRequest, object> error = null)
     {
-        Debug.Log("Request started");
+        IncrementTotalRequests();
+        Debug.Log("Request started - " + TotalRequests + " - " + new StackTrace().GetFrame(1).GetMethod().Name);
         UnityWebRequest www = UnityWebRequest.Post(url, form);
         www.SetRequestHeader("Accept", "application/json");
         www.SendWebRequest();
@@ -153,7 +158,8 @@ public class BetterHttpClient : MonoBehaviour
 
     public object Post(string url, string json, Func<UnityWebRequest, object> callback, Func<UnityWebRequest, object> error = null)
     {
-        Debug.Log("Request started");
+        IncrementTotalRequests();
+        Debug.Log("Request started - " + TotalRequests + " - " + new StackTrace().GetFrame(1).GetMethod().Name);
         UnityWebRequest www = UnityWebRequest.Post(url, json);
         www.SetRequestHeader("Content-Type", "application/json");
         www.SendWebRequest();
@@ -177,7 +183,8 @@ public class BetterHttpClient : MonoBehaviour
 
     public object Post(string url, string json, Dictionary<string, string> headers, Func<UnityWebRequest, object> callback, Func<UnityWebRequest, object> error = null)
     {
-        Debug.Log("Request started");
+        IncrementTotalRequests();
+        Debug.Log("Request started - " + TotalRequests + " - " + new StackTrace().GetFrame(1).GetMethod().Name);
         UnityWebRequest www = new UnityWebRequest(url, "POST");
         byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
         www.uploadHandler = new UploadHandlerRaw(bodyRaw);
@@ -211,7 +218,8 @@ public class BetterHttpClient : MonoBehaviour
     
     public object Post(string url, WWWForm form, Dictionary<string, string> headers, Func<UnityWebRequest, object> callback, Func<UnityWebRequest, object> error = null)
     {
-        Debug.Log("Request started");
+        IncrementTotalRequests();
+        Debug.Log("Request started - " + TotalRequests + " - " + new StackTrace().GetFrame(1).GetMethod().Name);
         UnityWebRequest www = UnityWebRequest.Post(url, form);
         www.SetRequestHeader("Accept", "application/json");
         if (headers != null)
@@ -237,4 +245,16 @@ public class BetterHttpClient : MonoBehaviour
         www.Dispose();
         return returned;
     }
+    
 }
+
+public class GlobalHttpVariables : MonoBehaviour
+{
+    public static  int TotalRequests { get; private set; }
+
+    public static  void IncrementTotalRequests()
+    {
+        TotalRequests++;
+    }
+}
+

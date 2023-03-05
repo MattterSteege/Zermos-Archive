@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,27 +13,11 @@ namespace UI.Views
         [SerializeField] private GameObject _newsItemPrefab;
         [SerializeField] private GameObject _newsItemContainer;
         [SerializeField] private Messages InfowijsMessages;
-        [SerializeField] private TMP_Text beschrijving;
         [SerializeField] private bool loaded = false;
         [SerializeField] private int messagesToLoad = 25;
-    
-        public override void Initialize()
-        {
-            openNavigationButton.onClick.AddListener(() =>
-            {
-                openNavigationButton.enabled = false;
-                ViewManager.Instance.ShowNavigation();
-            });
-        
-            closeButtonWholePage.onClick.AddListener(() =>
-            {
-                openNavigationButton.enabled = true;
-                ViewManager.Instance.HideNavigation();
-            });
-
-            base.Initialize();
-        }
-
+        [SerializeField] GameObject DividerPrefab;
+        [SerializeField] GameObject dayContainterPrefab;
+   
         public override void Show(object args = null)
         {
             base.Show(args);
@@ -75,65 +60,36 @@ namespace UI.Views
             }
         }
 
-        
-        
         private IEnumerator PopulateNewsItems()
         {
-            yield return new WaitForSeconds(0.5f);
             var messages = new CoroutineWithData<Messages.InfowijsMessage>(this, InfowijsMessages.getMessages()).result;
-            beschrijving.DOFade(0f, 0.1f);
-            yield return new WaitForSeconds(0.1f);
+            messages.Data.Messages = messages.Data.Messages.Take(messagesToLoad).ToList();
+            yield return null;
             SchoolNews CurrentItem = null; 
             int CurrentItemType = 0;
-            // foreach (Messages.Message message in messages.Data.Messages)
-            // {
-            //     if (CurrentItemType < message.Type)
-            //     {
-            //         if (CurrentItem != null)
-            //             CurrentItem.Initialize();
-            //         CurrentItemType = 30;
-            //         var go = Instantiate(_newsItemPrefab, _newsItemContainer.transform);
-            //         CurrentItem = go.GetComponent<SchoolNews>();
-            //         go.GetComponent<CanvasGroup>().alpha = 0;
-            //         go.GetComponent<CanvasGroup>().DOFade(1f, 1f);
-            //         CurrentItem.messages = new List<Messages.Message>();
-            //     }
-            //
-            //     if (message.Type == 30)
-            //     {
-            //         CurrentItem.titleText.text = message.Content.ContentClass.Title;
-            //         CurrentItem.dateText.text = message.CreatedAt.ToDateTime().ToString("d MMMM");
-            //     }
-            //     
-            //     if (message.Type == 1)
-            //     {
-            //         CurrentItem.messageText.text = message.Content.String;
-            //     }
-            //     
-            //     CurrentItem.messages.Add(message);
-            //     CurrentItemType = (int) message.Type;
-            //     yield return new WaitForEndOfFrame();
-            // }
-            //
-            // //do this in a for loop where i > 100
-
-
-            int i = 0;
-            for (int x = 0; x < messagesToLoad; i++)
+            int day = -1;
+            GameObject dayContainer = null;
+            
+            foreach (Messages.Message message in messages.Data.Messages)
             {
-                Messages.Message message = messages.Data.Messages[i];
+                if (message.CreatedAt.ToDateTime().Day != day)
+                {
+                    dayContainer = Instantiate(dayContainterPrefab, _newsItemContainer.transform);
+#if UNITY_EDITOR
+                    dayContainer.name = "DayContainer " + message.CreatedAt.ToDateTime().ToString("d MMMM");
+#endif
+                    var go = Instantiate(DividerPrefab, dayContainer.transform);
+                    go.GetComponent<homeworkDivider>().Datum.text = message.CreatedAt.ToDateTime().ToString("d MMMM");
+                    day = message.CreatedAt.ToDateTime().Day;
+                }
                 
                 if (CurrentItemType < message.Type)
                 {
                     if (CurrentItem != null)
                         CurrentItem.Initialize();
-                    CurrentItemType = 30;
-                    var go = Instantiate(_newsItemPrefab, _newsItemContainer.transform);
+                    var go = Instantiate(_newsItemPrefab, dayContainer.transform);
                     CurrentItem = go.GetComponent<SchoolNews>();
-                    go.GetComponent<CanvasGroup>().alpha = 0;
-                    go.GetComponent<CanvasGroup>().DOFade(1f, 1f);
                     CurrentItem.messages = new List<Messages.Message>();
-                    x++;
                 }
 
                 if (message.Type == 30)

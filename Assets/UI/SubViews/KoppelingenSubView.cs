@@ -9,31 +9,28 @@ namespace UI.Views
         [Header("Koppelingen")]
         [SerializeField] private Button SomtodayKoppeling;
         [SerializeField] private Image Somtodaygekoppeld;
-        [SerializeField] private Student student;
         [SerializeField] private Button ZermeloKoppeling;
         [SerializeField] private Image Zermelogekoppeld;
-        [SerializeField] private User user;
         [SerializeField] private Button InfowijsKoppeling;
         [SerializeField] private Image Infowijsgekoppeld;
-        [SerializeField] private SessionAuthenticatorInfowijs sessionAuthenticatorInfowijs;
-    
+
         public override void Initialize()
         {
             CheckKoppelingen();
             
             SomtodayKoppeling.onClick.AddListener(() =>
             {
-                ViewManager.Instance.ShowNewView<ConnectSomtodayView>();
+                SwitchView.Instance.Show<ConnectSomtodayView>();
             });
     
             ZermeloKoppeling.onClick.AddListener(() =>
             {
-                ViewManager.Instance.ShowNewView<ConnectZermeloView>();
+                SwitchView.Instance.Show<ConnectZermeloView>();
             });
         
             InfowijsKoppeling.onClick.AddListener(() =>
             {
-                ViewManager.Instance.ShowNewView<ConnectInfowijsView>();
+                SwitchView.Instance.Show<ConnectInfowijsView>();
             });
         
             base.Initialize();

@@ -467,6 +467,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vak: {fileID: 5834202737724758420}
+  tijd: {fileID: 3337880218929109163}
   details: {fileID: 3354577117807384567}
   Datum: {fileID: 8110010084167703596}
   gemaakt: {fileID: 504990981772096352}
@@ -559,7 +560,7 @@ GameObject:
   - component: {fileID: 5701935234776917618}
   - component: {fileID: 3337880218929109163}
   m_Layer: 5
-  m_Name: Lokaal // tijd
+  m_Name: tijd
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

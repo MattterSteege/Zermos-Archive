@@ -25,7 +25,7 @@ public class LessonNotificationManager : MonoBehaviour
     [ContextMenu("Test real")]
     public void ScheduleNotifications()
     {
-        Debug.Log("Adding notifications");
+        //Debug.Log("Adding notifications");
         
 #region Permissions & Channel
         var channels = AndroidNotificationCenter.GetNotificationChannels();
@@ -40,7 +40,7 @@ public class LessonNotificationManager : MonoBehaviour
                 Description = "Notifications for lessons"
             };
             AndroidNotificationCenter.RegisterNotificationChannel(channel);
-            Debug.Log("channel created");
+            //Debug.Log("channel created");
         }
 #endregion
 
