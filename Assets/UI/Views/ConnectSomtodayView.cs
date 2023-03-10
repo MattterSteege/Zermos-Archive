@@ -125,6 +125,20 @@ namespace UI.Views
             base.Refresh(args);
         }
 
+        public override void Show(object args = null)
+        {
+            if (LocalPrefs.GetString("zermelo-user_code", null) != null)
+            {
+                username.text = LocalPrefs.GetString("zermelo-user_code", null) + "@ccg-leerling.nl";
+            }
+            else
+            {
+                username.text = "";
+            }
+            
+            base.Show(args);
+        }
+
         #region model
         public class Instellingen
         {

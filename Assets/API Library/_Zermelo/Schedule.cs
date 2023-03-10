@@ -18,7 +18,7 @@ public class Schedule : BetterHttpClient
 
     public List<Appointment> GetScheduleOfDay(DateTime date, bool shouldRefreshFile)
     {
-        int weeknumber = date.GetWeekOfYear();
+        int weeknumber = date.GetWeekNumber();
 
         if (TodaysScheduledAppointments != null && TodaysScheduledAppointments.response.data[0].appointments.Count != 0 && LastUpdatedTodaysScheduledAppointments.AddMinutes(10) < TimeManager.Instance.CurrentDateTime && shouldRefreshFile == false)
         {

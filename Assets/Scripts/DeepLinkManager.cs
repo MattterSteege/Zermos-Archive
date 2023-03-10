@@ -58,6 +58,10 @@ public class DeepLinkManager : MonoBehaviour
         {
             processZermos(url);
         }
+        else if (url.StartsWith("nl.infowijs.client.antonius://"))
+        {
+            processInfowijs(url);
+        }
     }
 
     private void processSomtoday(string url)
@@ -75,6 +79,11 @@ public class DeepLinkManager : MonoBehaviour
     private void processZermos(string url)
     {
         Debug.Log(url);
+    }
+    
+    private void processInfowijs(string url)
+    {
+        //Alleen nodig om de app te openen.
     }
     
     public static NameValueCollection ParseQuery(string query)

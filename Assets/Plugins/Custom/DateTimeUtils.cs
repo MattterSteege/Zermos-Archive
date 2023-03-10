@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 public static class DateTimeUtils
 {
@@ -46,30 +47,43 @@ public static class DateTimeUtils
         return date.GetMondayOfWeek() == date2.GetMondayOfWeek();
     }
     
-    public static int GetWeekOfYear(this DateTime date)
+    // public static int GetWeekOfYear(this DateTime date)
+    // {
+    //     // Get the day of the year for the date
+    //     int dayOfYear = date.DayOfYear;
+    //
+    //     // Get the day of the week for the first day of the year
+    //     DateTime firstDayOfYear = new DateTime(date.Year, 1, 1);
+    //     DayOfWeek firstDayOfWeek = firstDayOfYear.DayOfWeek;
+    //
+    //     // Calculate the number of days between the first day of the year and the date
+    //     int daysSinceFirstDay = dayOfYear - 1;
+    //     if (firstDayOfWeek > DayOfWeek.Sunday)
+    //     {
+    //         daysSinceFirstDay -= (int)firstDayOfWeek;
+    //     }
+    //
+    //     // Calculate the week of the year
+    //     int week = daysSinceFirstDay / 7 + 1;
+    //     if (firstDayOfWeek > DayOfWeek.Sunday)
+    //     {
+    //         week += 1;
+    //     }
+    //
+    //     return week;
+    // }
+    
+    //when monday is the first day of the week
+    public static int GetWeekNumber(this DateTime date)
     {
-        // Get the day of the year for the date
-        int dayOfYear = date.DayOfYear;
+        // Set the culture to use Netherlands (Dutch) culture
+        var culture = new CultureInfo("nl-NL");
+        culture.DateTimeFormat.FirstDayOfWeek = DayOfWeek.Monday;
 
-        // Get the day of the week for the first day of the year
-        DateTime firstDayOfYear = new DateTime(date.Year, 1, 1);
-        DayOfWeek firstDayOfWeek = firstDayOfYear.DayOfWeek;
+        // Calculate the week number using Netherlands (Dutch) calendar rules
+        int weekNum = culture.Calendar.GetWeekOfYear(date, culture.DateTimeFormat.CalendarWeekRule, culture.DateTimeFormat.FirstDayOfWeek);
 
-        // Calculate the number of days between the first day of the year and the date
-        int daysSinceFirstDay = dayOfYear - 1;
-        if (firstDayOfWeek > DayOfWeek.Sunday)
-        {
-            daysSinceFirstDay -= (int)firstDayOfWeek;
-        }
-
-        // Calculate the week of the year
-        int week = daysSinceFirstDay / 7 + 1;
-        if (firstDayOfWeek > DayOfWeek.Sunday)
-        {
-            week += 1;
-        }
-
-        return week;
+        return weekNum;
     }
     
     public static DateTime GetMondayOfWeekAndYear(string week, string year)

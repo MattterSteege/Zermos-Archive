@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -101,7 +102,7 @@ public class AuthenticateSomtoday : BetterHttpClient
     {
         StartCoroutine(AuthenticateUser(tenantUuid, username, password));
     }
-
+    
     public IEnumerator AuthenticateUser(string TENANT_UUID, string username, string password)
     {
         GenerateTokens();
@@ -126,6 +127,7 @@ public class AuthenticateSomtoday : BetterHttpClient
             HttpHeaders headers = response.Headers;
             IEnumerable<string> values;
             if (!headers.TryGetValues("Location", out values)) yield return null;
+            
 
             Uri myUri = new Uri(values.First());
 
@@ -144,7 +146,6 @@ public class AuthenticateSomtoday : BetterHttpClient
             HttpResponseMessage response2 = client
                 .PostAsync($"https://inloggen.somtoday.nl/?-1.-panel-signInForm&auth={authToken}", Content).Result;
 
-
             Content = new FormUrlEncodedContent(new Dictionary<string, string>()
             {
                 {"passwordFieldPanel:passwordFieldPanel_body:passwordField", password},
@@ -153,7 +154,6 @@ public class AuthenticateSomtoday : BetterHttpClient
             
             HttpResponseMessage response3 = client
                 .PostAsync($"https://inloggen.somtoday.nl/login?1-1.-passwordForm&auth={authToken}", Content).Result;
-
 
             headers = response3.Headers;
             IEnumerable<string> values3;
@@ -177,16 +177,14 @@ public class AuthenticateSomtoday : BetterHttpClient
                 Content).Result;
             SomtodayAuthentication somtodayAuthentication =
                 JsonConvert.DeserializeObject<SomtodayAuthentication>(response4.Content.ReadAsStringAsync().Result);
-
             LocalPrefs.SetString("somtoday-access_token", somtodayAuthentication.access_token);
             LocalPrefs.SetString("somtoday-refresh_token", somtodayAuthentication.refresh_token);
             LocalPrefs.SetString("somtoday-api_url", somtodayAuthentication.somtoday_api_url);
             
             onAuthenticateSomtoday.Invoke(somtodayAuthentication);
+            GetComponent<Leermiddelen>().GetCookies(username, password);
         }
     }
-
-
     #endregion
 
     #region Refresh token
@@ -212,6 +210,41 @@ public class AuthenticateSomtoday : BetterHttpClient
             return null;
         });
     }
+    #endregion
+
+    #region custom requests
+    
+    private async Task<HttpResponseMessage> Get(string url, FormUrlEncodedContent content = null, Dictionary<string, string> headers = null, int redirects = 0)
+    {
+        HttpClientHandler handler = new HttpClientHandler()
+        {
+            MaxAutomaticRedirections = redirects
+        };
+        
+        var client = new HttpClient(handler);
+
+        if (headers != null)
+        {
+            foreach (var header in headers)
+            {
+                client.DefaultRequestHeaders.Add(header.Key, header.Value);
+            }
+        }
+
+        HttpResponseMessage response;
+
+        if (content != null)
+        {
+            response = await client.PostAsync(url, content);
+        }
+        else
+        {
+            response = await client.GetAsync(url);
+        }
+
+        return response;
+    }
+
     #endregion
 
     #region model

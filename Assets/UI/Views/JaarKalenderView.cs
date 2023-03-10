@@ -12,27 +12,13 @@ namespace UI.Views
         [SerializeField] private GameObject _kalenderItemPrefab;
         [SerializeField] private GameObject _kalenderItemContainer;
         [SerializeField] private JaarKalender InfowijsJaarKalender;
-        [SerializeField] private TMP_Text beschrijving;
         private bool loaded = false;
         [SerializeField] private GameObject CurrentDateDiver;
         [SerializeField] private ScrollRect _ScrollRect;
-    
-        public override void Initialize()
-        {
-            openNavigationButton.onClick.AddListener(() =>
-            {
-                openNavigationButton.enabled = false;
-                ViewManager.Instance.ShowNavigation();
-            });
-        
-            closeButtonWholePage.onClick.AddListener(() =>
-            {
-                openNavigationButton.enabled = true;
-                ViewManager.Instance.HideNavigation();
-            });
+        [SerializeField] GameObject DividerPrefab;
+        [SerializeField] GameObject dayContainterPrefab;
+        [SerializeField] AnimationCurve _curve;
 
-            base.Initialize();
-        }
 
         public override void Show(object args = null)
         {
@@ -78,36 +64,28 @@ namespace UI.Views
 
         private IEnumerator PopulateKalenderItems()
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return null;
             var messages = new CoroutineWithData<JaarKalender.InfowijsKalender>(this, InfowijsJaarKalender.DownloadMessages()).result;
-            beschrijving.DOFade(0f, 0.1f);
-            yield return new WaitForSeconds(0.1f);
+            yield return null;
             foreach (JaarKalender.Datum afspraak in messages.data)
             {
+                GameObject dayContainer = Instantiate(dayContainterPrefab, _kalenderItemContainer.transform);
+                
+                var go = Instantiate(DividerPrefab, dayContainer.transform);
+                go.GetComponent<homeworkDivider>().Datum.text = afspraak.startsAt.ToDateTime().ToString("dd MMMM") + " t/m " + afspraak.endsAt.ToDateTime().ToString("dd MMMM");
+                
+                go = Instantiate(_kalenderItemPrefab, dayContainer.transform);
+                go.GetComponent<JaarKalenderPrefab>().Initialize(afspraak);
+                
                 if (afspraak.endsAt.ToDateTime() > TimeManager.Instance.DateTime && CurrentDateDiver == null)
                 {
-                    CurrentDateDiver = new GameObject("CurrentDate");
-                    CurrentDateDiver.transform.SetParent(_kalenderItemContainer.transform);
-                    //set height to 1
-                    CurrentDateDiver.AddComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1);
+                    CurrentDateDiver = dayContainer;
                 }
-                
-                var go = Instantiate(_kalenderItemPrefab, _kalenderItemContainer.transform);
-                go.GetComponent<JaarKalenderPrefab>().Initialize(afspraak);
-                go.GetComponent<CanvasGroup>().alpha = 0;
-                go.GetComponent<CanvasGroup>().DOFade(1f, 1f);
-                
             }
 
-            yield return new WaitForSeconds(0.1f);
+            yield return null;
             
-            _ScrollRect.decelerationRate = 0f;
-            _ScrollRect.vertical = false;
-            _ScrollRect.content.DOLocalMove(_ScrollRect.GetSnapToPositionToBringChildIntoView(CurrentDateDiver.GetComponent<RectTransform>()), 1f, true).onComplete += () => 
-            {
-                _ScrollRect.decelerationRate = 0.135f;
-                _ScrollRect.vertical = true;
-            };
+            _ScrollRect.ScrollToTop(CurrentDateDiver.GetComponent<RectTransform>(), _curve);
         }
         
         public override void Refresh(object args)

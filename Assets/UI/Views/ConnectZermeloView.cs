@@ -73,6 +73,16 @@ namespace UI.Views
         {
             gameObject.transform.SetAsLastSibling();
             ViewManager.Instance.Hide<NavBarView>();
+            
+            if (LocalPrefs.GetString("zermelo-user_code", null) != null)
+            {
+                Gebruikersnaam.text = LocalPrefs.GetString("zermelo-user_code", null);
+            }
+            else
+            {
+                Gebruikersnaam.text = "";
+            }
+            
             base.Show(args);
         }
     }

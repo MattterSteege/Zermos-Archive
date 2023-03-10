@@ -195,59 +195,39 @@ public sealed class ViewManager : MonoBehaviour
 	
 	public void ShowNewView<TView>(object args = null) where TView : View
 	{
-		
 		foreach (View view in views)
 		{
 			if (view == currentView && view is TView)
-			{
-				HideNavigation();
 				return;
-			}
+			
 			
 			if (view is TView)
 			{
-				lastView = currentView;
 				currentView = view;	
 				view.transform.SetAsLastSibling();
 				
 				RectTransform rectTransform = view.GetComponent<RectTransform>();
 				
-				rectTransform.transform.position = new Vector3(Screen.width * 2.4f, -100f, 0f);
-				rectTransform.transform.rotation = Quaternion.Euler(0f, 0f, 16.6f);
+				rectTransform.DOLocalMove(new Vector3(rectTransform.rect.width, -rectTransform.rect.height / 2f, 0f), 0.001f);
 				view.Show(args);
 
-				rectTransform.DOLocalMove(new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime * 2f);
-				rectTransform.DOLocalRotate(new Vector3(0f, 0f, 0f), animationTime * 2f).WaitForCompletion();
-				Background.DOColor(view.GetComponent<Image>().color, animationTime * 2f);
-				
-				Invoke("HideLastView", animationTime * 2f);
+				rectTransform.DOLocalMove(new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f), animationTime * 2f).SetDelay(0.1f);
 			}
 		}
 	}
-	private void HideLastView()
-	{
-		lastView.Hide();
-	}
-	
 
 	public void HideView<TView>() where TView : View
 	{
-		View LastView = currentView;
-		
 		foreach (View view in views)
 		{
 			if (view is TView)
 			{
-				currentView = view;	
 				view.transform.SetAsLastSibling();
 				
 				RectTransform rectTransform = view.GetComponent<RectTransform>();
 				
-				rectTransform.transform.position = new Vector3(-rectTransform.rect.width / 2f, -rectTransform.rect.height / 2f, 0f);
-				rectTransform.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-				
-				Background.DOColor(view.GetComponent<Image>().color, animationTime);
-				
+				rectTransform.transform.position = new Vector3(rectTransform.rect.width, 0f, 0f);
+
 				new WaitForSeconds(animationTime);
 				
 				Invoke(nameof(changeView), animationTime);

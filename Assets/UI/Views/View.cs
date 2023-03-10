@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 namespace UI.Views
 {
-	[RequireComponent(typeof(Button))]
 	public abstract class View : MonoBehaviour
 	{
 		[Header("View buttons")]

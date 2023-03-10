@@ -20,17 +20,17 @@ namespace UI.Views
             
             SomtodayKoppeling.onClick.AddListener(() =>
             {
-                SwitchView.Instance.Show<ConnectSomtodayView>();
+                ViewManager.Instance.ShowNewView<ConnectSomtodayView>();
             });
     
             ZermeloKoppeling.onClick.AddListener(() =>
             {
-                SwitchView.Instance.Show<ConnectZermeloView>();
+                ViewManager.Instance.ShowNewView<ConnectZermeloView>();
             });
         
             InfowijsKoppeling.onClick.AddListener(() =>
             {
-                SwitchView.Instance.Show<ConnectInfowijsView>();
+                ViewManager.Instance.ShowNewView<ConnectInfowijsView>();
             });
         
             base.Initialize();

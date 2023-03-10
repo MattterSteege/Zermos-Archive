@@ -149,7 +149,7 @@ namespace UI.Views
             	SchoolJaarKalenderButton.gameObject.SetActive(true);
             	SchoolJaarKalenderButton.onClick.AddListener(() =>
             	{
-            		SwitchView.Instance.Show<JaarKalenderView>();
+            		SwitchView.Instance.Show<JaarKalenderView>("Alle items worden nu ingeladen...");
             	});
             }
             else
@@ -170,6 +170,7 @@ namespace UI.Views
 			SettingsButton.onClick.RemoveAllListeners();
 			HomeButton.onClick.RemoveAllListeners();
 			SchoolNieuwsButton.onClick.RemoveAllListeners();
+			SchoolJaarKalenderButton.onClick.RemoveAllListeners();
 			base.Refresh(args);
 		}
 

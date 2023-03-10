@@ -16,6 +16,16 @@ public class SessionAuthenticatorInfowijs : BetterHttpClient
             return null;
         }
 
+        string SessionToken = LocalPrefs.GetString("infowijs-session_token");
+        
+        if (SessionToken != null)
+        {
+            if (CheckTokenExpirationDate.CheckToken(SessionToken))
+            {
+                return new InfowijsAccessToken {data = SessionToken};
+            }
+        }
+
         Dictionary<string, string> headers = new Dictionary<string, string>();
         headers.Add("Authorization", "Bearer " + mainAccessToken);
         headers.Add("Accept", "application/vnd.infowijs.v1+json");

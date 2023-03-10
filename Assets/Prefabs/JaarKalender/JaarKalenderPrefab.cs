@@ -11,7 +11,7 @@ public class JaarKalenderPrefab : MonoBehaviour
 
     public void Initialize(JaarKalender.Datum datum)
     {
-        titleText.text = datum.startsAt.ToDateTime().ToString("dd MMMM") + " t/m " + datum.endsAt.ToDateTime().ToString("dd MMMM");
+        //titleText.text = datum.startsAt.ToDateTime().ToString("dd MMMM") + " t/m " + datum.endsAt.ToDateTime().ToString("dd MMMM");
         messageText.text = datum.title;
     }
 }

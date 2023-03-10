@@ -28,6 +28,20 @@ public class ConnectInfowijsView : View
         base.Initialize();
     }
 
+    public override void Show(object args = null)
+    {
+        if (LocalPrefs.GetString("zermelo-user_code", null) != null)
+        {
+            emailInputField.text = LocalPrefs.GetString("zermelo-user_code", null) + "@ccg-leerling.nl";
+        }
+        else
+        {
+            emailInputField.text = "";
+        }
+        
+        base.Show(args);
+    }
+
     private IEnumerator OnClickConnectButton()
     {
         yield return null;
@@ -64,7 +78,6 @@ public class ConnectInfowijsView : View
         }
     }
     
-
     float maxLoadingTime = 30f;
     private IEnumerator FetchToken(bool b, string id = "", string custom_product_id = "", string user_id = "", Func<bool, object> callback = null)
     {
