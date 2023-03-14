@@ -31,8 +31,8 @@ namespace UI.Views
 
         public override void Initialize()
         {
-            MonoBehaviour camMono = ViewManager.Instance.GetComponent<MonoBehaviour>();
-            camMono.StartCoroutine(subViewManager.Initialize());
+            MonoBehaviour Mono = ViewManager.Instance.GetComponent<MonoBehaviour>();
+            Mono.StartCoroutine(subViewManager.Initialize());
 
 #if !UNITY_EDITOR
             int timesCLicked = 0;

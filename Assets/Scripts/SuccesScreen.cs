@@ -70,6 +70,7 @@ public class SuccesScreen : MonoBehaviour
             case LoginType.somtoday:
                 ViewManager.Instance.Refresh<HomeworkView>();
                 ViewManager.Instance.Refresh<GradeView>();
+                ViewManager.Instance.Refresh<LeermiddelenView>();
                 break;
             case LoginType.zermelo:
                 ViewManager.Instance.Refresh<DagRoosterView>(false);

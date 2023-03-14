@@ -9,8 +9,15 @@ public class Vakken : BetterHttpClient
 {
     [SerializeField, Tooltip("'*' means Application.persistentDataPath.")] private string savePath = "*/Subjects.json";
     [SerializeField] private int DagenBeforeRedownload = 7;
-    
 
+
+    [ContextMenu("Download vakken")]
+    public void test()
+    {
+        getVakken();
+    }
+    
+    [ParameterizedContextMenu("getVakken", "savedIsGood")]
     public SomtodayVakken getVakken(bool savedIsGood = true)
     {
         string destination = savePath.Replace("*", Application.persistentDataPath);
@@ -61,6 +68,7 @@ public class Vakken : BetterHttpClient
             if (vakken.items.Count != 0)
             {
                 vakken.items = vakken.items.OrderBy(x => x.vak.naam).ToList();
+                vakken.laatsteWijziging = TimeManager.Instance.CurrentDateTime.ToUnixTime();
 
                 var convertedJson = JsonConvert.SerializeObject(vakken, Formatting.Indented);
 
@@ -80,6 +88,22 @@ public class Vakken : BetterHttpClient
         });
     }
 
+    public string GetVakNaam(string vakAfkorting)
+    {
+        var vakken = getVakken();
+        if (vakken == null)
+        {
+            return vakAfkorting;
+        }
+
+        var vak = vakken.items.FirstOrDefault(x => x.vak.afkorting == vakAfkorting);
+        if (vak == null)
+        {
+            return vakAfkorting;
+        }
+
+        return vak.vak.naam;
+    }
 
     #region models - somtoday
 

@@ -136,6 +136,19 @@ namespace UI.Views
             	CijfersButton.gameObject.SetActive(false);
             	HomeworkButton.gameObject.SetActive(false);
             }
+            
+            if (LocalPrefs.GetBool("leermiddelen_activated") == true)
+            {
+	            LeermiddelenButton.gameObject.SetActive(true);
+	            LeermiddelenButton.onClick.AddListener(() =>
+	            {
+		            SwitchView.Instance.Show<LeermiddelenView>();
+	            });
+            }
+            else
+            {
+	            LeermiddelenButton.gameObject.SetActive(false);
+            }
             #endregion
             #region IfAntoniusApp
             if (!string.IsNullOrEmpty(LocalPrefs.GetString("infowijs-access_token")))

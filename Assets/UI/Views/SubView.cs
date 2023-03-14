@@ -14,11 +14,6 @@ namespace UI.Views
 	
         public virtual void Initialize()
         {
-            backButton.onClick.AddListener(() =>
-            {
-                gameObject.GetComponentInParent<SubViewManager>().ShowParentView();
-            });
-            
             GetComponent<RectTransform>().DOLocalMove(new Vector3(GetComponent<RectTransform>().rect.width, -GetComponent<RectTransform>().rect.height / 2f, 0f), 0.001f);
             
             isInitialized = true;
