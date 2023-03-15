@@ -1,3 +1,9 @@
+---
+layout: default
+title: koppelingen
+nav_exclude: true
+---
+
 ## Zermelo
 Zermelo is een verplichte koppeling, het geeft je toegang tot je rooster, je vakken en je lessen. Zonder deze koppeling kan je de app niet gebruiken.
 
@@ -44,3 +50,11 @@ SOMtoday kan je op de volgende manier inloggen, met je inloggegevens of met SSO*
 ** Leermiddelen is een functie die je alleen kan gebruiken als je inlogd met je inloggegevens. De app moet namelijk een token opvragen met gegevens die ik alleen krijg als je inlogd met je SOMtoday inloggegevns.
 
 ## De Antonius app
+De Antonius app biedt toegang tot de schoolkalender en schoolberichten, maar heeft verder weinig essentiële functies. Het is handig om te hebben, maar niet noodzakelijk.
+
+| Toegang tot        |
+|--------------------|
+| Je schoolkalender  |
+| Je schoolberichten |
+
+Met de app kun je gemakkelijk je schoolkalender inzien en op de hoogte blijven van belangrijke schoolberichten. Om in te loggen, vul je jouw schoolmail in en druk je op de knop 'inloggen'. Vervolgens ontvang je een mail in Outlook waarop je kunt klikken om in te loggen. Je wordt dan automatisch doorgestuurd naar je browser, waar je wordt ingelogd op de Antonius app. Let op: om toegang te krijgen tot de app, moet je op 'openen met...' klikken en Zermos selecteren.
