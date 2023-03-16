@@ -27,7 +27,11 @@ namespace UI.Views
         {
             MonoBehaviour Mono = ViewManager.Instance.GetComponent<MonoBehaviour>();
             Mono.StartCoroutine(subViewManager.Initialize());
+
+            foreach (Transform child in content.transform)
+                Destroy(child.gameObject);
             
+
             try
             {
                 AddleermiddelButton.onClick.AddListener(() =>

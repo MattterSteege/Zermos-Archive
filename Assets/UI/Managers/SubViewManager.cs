@@ -1,13 +1,9 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using DG.Tweening;
 using UI.Views;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
 
 public sealed class SubViewManager : MonoBehaviour
 {
@@ -15,6 +11,7 @@ public sealed class SubViewManager : MonoBehaviour
 	[SerializeField] private SubView[] views;
 	[SerializeField] private float animationTime = 0.5f;
 	[Space, SerializeField] public SubView currentView;
+	[Space, SerializeField] public bool ShowEventOnEveryView = false;
 
 	private static GameObject ViewPrefab;
 	
@@ -79,13 +76,31 @@ public sealed class SubViewManager : MonoBehaviour
 	
 	public void ShowNewView<TView>(object args = null) where TView : SubView
 	{
+		
 		foreach (SubView view in views)
 		{
-			if (view == currentView && view is TView)
+			if (view == currentView && view is TView && !ShowEventOnEveryView)
 			{
 				HideParentView();
 				return;
 			}
+			
+			// if(OpendCurrentViewFromView == view)
+			// {
+			// 	OpendCurrentViewFromView = null;
+			// 	
+			// 	RectTransform rectTransform = view.GetComponent<RectTransform>();
+			// 	rectTransform.SetAsLastSibling();
+			// 	rectTransform.DOLocalMove(new Vector3(rectTransform.rect.width, -rectTransform.rect.height / 2f, 0f), 0.001f);
+			// 		
+			// 	RectTransform currentRectTransform = currentView.GetComponent<RectTransform>();
+			// 	currentRectTransform.SetAsLastSibling();
+			// 	currentRectTransform.DOLocalMove(new Vector3(-currentRectTransform.rect.width / 2f, -currentRectTransform.rect.height / 2f, 0f), animationTime * 2f).onComplete += () =>
+			// 	{
+			// 		currentView.Hide();
+			// 	};
+			// 	
+			// }
 			
 			if (view is TView)
 			{
@@ -108,20 +123,12 @@ public sealed class SubViewManager : MonoBehaviour
 		{
 			if (view is TView)
 			{
-				view.transform.SetAsLastSibling();
-				
-				RectTransform rectTransform = view.GetComponent<RectTransform>();
-				
-				rectTransform.transform.position = new Vector3(rectTransform.rect.width, 0f, 0f);
-
-				new WaitForSeconds(animationTime);
-				
-				Invoke(nameof(changeView), animationTime);
-
-				void changeView()
+				RectTransform currentRectTransform = view.GetComponent<RectTransform>();
+				currentRectTransform.SetAsLastSibling();
+				currentRectTransform.DOLocalMove(new Vector3(currentRectTransform.rect.width / 2f, -currentRectTransform.rect.height / 2f, 0f), animationTime * 2f).onComplete += () =>
 				{
 					view.Hide();
-				}
+				};
 			}
 		}
 	}

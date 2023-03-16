@@ -10,6 +10,7 @@ namespace UI.Views
 {
     public class GradeView : View
     {
+        [SerializeField] SubViewManager subViewManager;
         [SerializeField] private GameObject content;
         [SerializeField] private GameObject gradePrefab;
         [SerializeField] private Grades gradesObject;
@@ -24,6 +25,9 @@ namespace UI.Views
         [ContextMenu("Refresh")]
         public override void Initialize()
         {
+            MonoBehaviour Mono = ViewManager.Instance.GetComponent<MonoBehaviour>();
+            Mono.StartCoroutine(subViewManager.Initialize());
+            
             // openNavigationButton.onClick.AddListener(() =>
             // {
             //     openNavigationButton.enabled = false;
@@ -109,7 +113,7 @@ namespace UI.Views
 
                     gradeView.GetComponent<Button>().onClick.AddListener(() =>
                     {
-                        ViewManager.Instance.ShowNewView<GradeItemView>(GradesPerVak);
+                        subViewManager.ShowNewView<GradeItemView>(GradesPerVak);
                     });
 
                 }

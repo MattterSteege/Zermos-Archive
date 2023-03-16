@@ -72,18 +72,24 @@ public class Schedule : BetterHttpClient
             r.Dispose();
 
             int currentUnixTime = TimeManager.Instance.CurrentDateTime.ToUnixTime();
-            
-            if (scheduleObject.laatsteWijziging + 600 < currentUnixTime || ShouldRefreshFile)
+            int lastUpdatedUnixTime = scheduleObject.laatsteWijziging;
+            bool isSameWeek = TimeManager.Instance.CurrentDateTime.IsSameWeek(DateTimeUtils.GetMondayOfWeekAndYear(week, year));
+
+            TimeSpan timeSinceLastUpdate = TimeSpan.FromSeconds(currentUnixTime - lastUpdatedUnixTime);
+
+            if (timeSinceLastUpdate.TotalMinutes > 10 || ShouldRefreshFile)
             {
-                if (scheduleObject.laatsteWijziging + 15 < currentUnixTime && TimeManager.Instance.DateTime.IsSameWeek(DateTimeUtils.GetMondayOfWeekAndYear(week, year)))
+                if (isSameWeek)
                 {
-                    //Debug.Log("Schedule is semi-outdated, it's okay to use it");
-                    return scheduleObject;
+                    if (timeSinceLastUpdate.TotalSeconds < 15 && ShouldRefreshFile)
+                        return scheduleObject;
+                    
+                    if (!ShouldRefreshFile)
+                        return scheduleObject;
+                    
                 }
-                //Debug.Log("Schedule is outdated, refreshing...");
-                return DownloadLessons(week, year)?.response.data[0] ?? new Items{appointments = new List<Appointment>()};
+                return DownloadLessons(week, year)?.response.data[0] ?? new Items {appointments = new List<Appointment>()};
             }
-            //Debug.Log("Schedule is up to date.");
             return scheduleObject;
         }
     }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace UI.Views
 {
-    public class WatMoetIkHalenView : View
+    public class WatMoetIkHalenView : SubView
     {
         [SerializeField] private List<Grades.Item> Grades;
         [SerializeField] private TMP_InputField cijferInput;
@@ -39,9 +39,9 @@ namespace UI.Views
 
         public override void Initialize()
         {
-            openNavigationButton.onClick.AddListener(() =>
+            backButton.onClick.AddListener(() =>
             {
-                ViewManager.Instance.ShowNewView<GradeItemView>(Grades);  
+                gameObject.GetComponentInParent<SubViewManager>().HideView<GradeStatisticsView>();
             });
 
             cijferInput.onValueChanged.AddListener( (x) =>
@@ -71,7 +71,7 @@ namespace UI.Views
         
         public override void Refresh(object args)
         {
-            openNavigationButton.onClick.RemoveAllListeners();
+            backButton.onClick.RemoveAllListeners();
             base.Refresh(args);
         }
     }
