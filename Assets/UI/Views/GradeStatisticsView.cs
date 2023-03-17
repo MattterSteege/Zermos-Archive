@@ -25,7 +25,7 @@ public class GradeStatisticsView : SubView
 
         if (Grades.Count == 0) return;
         
-        Grades = Grades.OrderByDescending(x => x.datumInvoer).ToList();
+        Grades = Grades.OrderBy(x => x.datumInvoer).ToList();
 
         Cijferoverzicht.GetChartData().DataSets.Clear();
         GemiddeldeVoortgangsgrafiek.GetChartData().DataSets.Clear();
@@ -43,11 +43,12 @@ public class GradeStatisticsView : SubView
         for (var i = 0; i < Grades.Count; i++)
         {
             var gradeItem = Grades[i];
-            average += Convert.ToDouble(gradeItem.geldendResultaat) * gradeItem.weging;
-            weight += gradeItem.weging;
+            double geldendResultaat = Convert.ToDouble(gradeItem.geldendResultaat);
+            average += geldendResultaat * (gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging);
+            weight += gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging;
             
             //charting
-            setCijferoverzicht.AddEntry(new LineEntry(i, (float) Convert.ToDouble(gradeItem.geldendResultaat)));
+            setCijferoverzicht.AddEntry(new LineEntry(i, (float) geldendResultaat));
             setGemiddeldeVoortgangsgrafiek.AddEntry(new LineEntry(i, MathF.Round((float) (average / weight), 1, MidpointRounding.AwayFromZero)));
             setVoldoendeOnvoldoendeRatio.Entries[Convert.ToDouble(gradeItem.geldendResultaat) >= 5.5 ? 0 : 1].Value += 1f;
         }

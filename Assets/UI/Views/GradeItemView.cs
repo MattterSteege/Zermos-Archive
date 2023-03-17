@@ -58,7 +58,7 @@ public class GradeItemView : SubView
 
         welkCijferMoetIkHalenButton.onClick.AddListener(() =>
         {
-            //gameObject.GetComponentInParent<SubViewManager>().ShowNewView<WatMoetIkHalenView>(Grades);
+            gameObject.GetComponentInParent<SubViewManager>().ShowNewView<WatMoetIkHalenView>(Grades);
         });
         
         StatestiekenButton.onClick.AddListener(() =>

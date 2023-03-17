@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Views
 {
@@ -11,9 +12,8 @@ namespace UI.Views
         [SerializeField] private List<Grades.Item> Grades;
         [SerializeField] private TMP_InputField cijferInput;
         [SerializeField] private TMP_InputField wegingInput;
-        [SerializeField] private TMP_Text cijfersText;
-        [SerializeField] private TMP_Text wegingText;
-
+        [SerializeField] private GameObject WatMoetIkHalenPrefab;
+        [SerializeField] private GameObject content;
 
         public override void Show(object args = null)
         {
@@ -28,20 +28,32 @@ namespace UI.Views
 
         private void UpdateTable()
         {
-            cijfersText.text = "";
-            cijfersText.text = "cijfers‏‏‎ ‎‎ ‎\n" + string.Join("‎ ‎‎ ‎\n", Grades.Select(x => x.geldendResultaat.ToString().Replace(",", "."))) + "‎ ‎‎ ‎\n‾‾‾‾‾‾‾‾‾‾";
-            cijfersText.text += $"\n{WatMoetIkHalen(Grades, Convert.ToInt32(wegingInput.text), float.Parse(cijferInput.text.Replace(".", ",")))}‎ ‎‎ ‎";
+            foreach (Transform gameObject in content.transform)
+            {
+                Destroy(gameObject.gameObject);
+            }
+
+            foreach (Grades.Item grade in Grades)
+            {
+                var gradeItem = Instantiate(WatMoetIkHalenPrefab, content.transform);
+                gradeItem.GetComponent<WatMoetIkHalenPrefab>().SetGradeInfo(grade.geldendResultaat, grade.weging.ToString());
+            }
+
+            var go = new GameObject("Spacing - 8");
+            go.AddComponent<LayoutElement>().minHeight = 8;
+            go.GetComponent<LayoutElement>().preferredHeight = 8;
+            go.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 8);
+            go.transform.SetParent(content.transform, false);
             
-            wegingText.text = "";
-            wegingText.text = "weging‏‏‎ ‎‎ ‎\n" + string.Join("‎ ‎‎ ‎\n", Grades.Select(x => x.weging.ToString())) + "‎ ‎‎ ‎\n‾‾‾‾‾‾‾‾‾‾";
-            wegingText.text += $"\n{wegingInput.text}‎ ‎‎ ‎";
+            var watMoetIkHalen = Instantiate(WatMoetIkHalenPrefab, content.transform);
+            watMoetIkHalen.GetComponent<WatMoetIkHalenPrefab>().SetGradeInfo(WatMoetIkHalen(Grades, Convert.ToInt32(wegingInput.text), float.Parse(cijferInput.text.Replace(".", ","))), wegingInput.text);
         }
 
         public override void Initialize()
         {
             backButton.onClick.AddListener(() =>
             {
-                gameObject.GetComponentInParent<SubViewManager>().HideView<GradeStatisticsView>();
+                gameObject.GetComponentInParent<SubViewManager>().HideView<WatMoetIkHalenView>();
             });
 
             cijferInput.onValueChanged.AddListener( (x) =>
