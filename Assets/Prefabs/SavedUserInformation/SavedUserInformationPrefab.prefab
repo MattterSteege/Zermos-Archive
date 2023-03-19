@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6710982792399698167}
   - component: {fileID: 6947500697363749130}
   m_Layer: 5
-  m_Name: Details
+  m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Oefen SE afmaken
+  m_text: Wat_Er_Bij_De_key_Hoort_:)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 388664146620586154}
   - component: {fileID: 3546798924592322106}
   m_Layer: 5
-  m_Name: Vak
+  m_Name: Key
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -201,7 +201,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Nederlands
+  m_text: Key
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 239eaf08dcf333e49851e01446b32483, type: 2}
   m_sharedMaterial: {fileID: 21498551263709160, guid: 239eaf08dcf333e49851e01446b32483,
@@ -281,12 +281,12 @@ GameObject:
   m_Component:
   - component: {fileID: 7745373774041731231}
   - component: {fileID: 7745373774041731229}
-  - component: {fileID: 6681890421998459085}
   - component: {fileID: 8442966016904178070}
   - component: {fileID: 4424665090319257461}
   - component: {fileID: 2397304830477404188}
+  - component: {fileID: 3059893429437427253}
   m_Layer: 5
-  m_Name: BijlagePrefab
+  m_Name: SavedUserInformationPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -322,21 +322,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7745373774041731224}
   m_CullTransparentMesh: 1
---- !u!114 &6681890421998459085
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7745373774041731224}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20cb89cc7d9d37748aa086a9e132f29f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  openLinkButton: {fileID: 8442966016904178070}
-  titleText: {fileID: 3546798924592322106}
-  descriptionText: {fileID: 6947500697363749130}
 --- !u!114 &8442966016904178070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -437,3 +422,17 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &3059893429437427253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7745373774041731224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5a26f5ae79e9fc4b84c3549135ad17a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: {fileID: 3546798924592322106}
+  value: {fileID: 6947500697363749130}

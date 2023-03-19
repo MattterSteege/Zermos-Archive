@@ -66,10 +66,10 @@ namespace UI.Views
                 subViewManager.ShowNewView<KoppelingenSubView>();
             });
             
-            // userInfoButton.onClick.AddListener(() =>
-            // {
-            //     subViewManager.ShowNewView<UserInfoSubView>();
-            // });
+            userInfoButton.onClick.AddListener(() =>
+            {
+                subViewManager.ShowNewView<SavedUserInformationSubView>();
+            });
 
             hulpNodigButton.onClick.AddListener(() => Application.OpenURL(@"https://mjtsgamer.github.io/Zermos/"));
             // zermeloButton.onClick.AddListener(() => Application.OpenURL(@"https://ccg.zportal.nl/"));

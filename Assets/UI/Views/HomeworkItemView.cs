@@ -6,13 +6,14 @@ using UnityEngine.UI;
 
 namespace UI.Views
 {
-    public class HomeworkItemView : View
+    public class HomeworkItemView : SubView
     {
         private Homework.Item homeworkInfo;
 
         [SerializeField] TMP_Text Vak;
         [SerializeField] TMP_Text Datum;
         [SerializeField] TMP_Text LaatstAangepast;
+        [SerializeField] TMP_Text Titel;
         [SerializeField] TMP_Text Omschrijving;
         [SerializeField] Toggle Gemaakt;
 
@@ -29,23 +30,17 @@ namespace UI.Views
         public override void Show(object args = null)
         {
             this.homeworkInfo = (Homework.Item) args;
-            
-            openNavigationButton.onClick.RemoveAllListeners();
-            openNavigationButton.onClick.AddListener(() =>
-            {
-                ViewManager.Instance.ShowNewView<HomeworkView>();
-            });
 
-        
             if (homeworkInfo == null) return;
         
-            delete.onClick.AddListener(() => DeleteHomework());
+            //delete.onClick.AddListener(() => DeleteHomework());
 
-            delete.gameObject.SetActive(homeworkInfo.gemaakt);
+            //delete.gameObject.SetActive(homeworkInfo.gemaakt);
 
             if (homeworkInfo == null) return;
 
             Vak.text = homeworkInfo.lesgroep.vak.naam ?? "";
+            Titel.text = homeworkInfo.studiewijzerItem.omschrijving ?? "";
 
             Datum.text = homeworkInfo.datumTijd.ToString("d MMMM");
             
@@ -57,24 +52,24 @@ namespace UI.Views
         
             //Gemaakt.isOn = homeworkInfo.additionalObjects.swigemaaktVinkjes?.items?[0].gemaakt ?? false;
 
-            if (homeworkInfo.studiewijzerItem.huiswerkType == "HUISWERK")
-            {
-                HuiswerkPill.SetActive(true); //
-                ToetsPill.SetActive(false);
-                GroteToetsPill.SetActive(false);
-            }
-            else if (homeworkInfo.studiewijzerItem.huiswerkType == "TOETS")
-            {
-                HuiswerkPill.SetActive(false);
-                ToetsPill.SetActive(true); //
-                GroteToetsPill.SetActive(false);
-            }
-            else if (homeworkInfo.studiewijzerItem.huiswerkType == "GROTE_TOETS")
-            {
-                HuiswerkPill.SetActive(false);
-                ToetsPill.SetActive(false);
-                GroteToetsPill.SetActive(true); //
-            }
+            // if (homeworkInfo.studiewijzerItem.huiswerkType == "HUISWERK")
+            // {
+            //     HuiswerkPill.SetActive(true); //
+            //     ToetsPill.SetActive(false);
+            //     GroteToetsPill.SetActive(false);
+            // }
+            // else if (homeworkInfo.studiewijzerItem.huiswerkType == "TOETS")
+            // {
+            //     HuiswerkPill.SetActive(false);
+            //     ToetsPill.SetActive(true); //
+            //     GroteToetsPill.SetActive(false);
+            // }
+            // else if (homeworkInfo.studiewijzerItem.huiswerkType == "GROTE_TOETS")
+            // {
+            //     HuiswerkPill.SetActive(false);
+            //     ToetsPill.SetActive(false);
+            //     GroteToetsPill.SetActive(true); //
+            // }
         
             var m1 = Regex.Matches(Omschrijving.text, @"(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])");
         
@@ -85,12 +80,13 @@ namespace UI.Views
 
             if (homeworkInfo.studiewijzerItem.bijlagen?.Count <= 0 )
             {
-                BijlageHolder.transform.parent.gameObject.SetActive(false);
-                Omschrijving.transform.parent.GetComponent<RectTransform>().offsetMin = new Vector2(25f, 15f);
+                BijlageHolder.transform.parent.parent.parent.gameObject.SetActive(false);
+               // Omschrijving.transform.parent.GetComponent<RectTransform>().offsetMin = new Vector2(25f, 15f);
             }
             else
             {
-                Omschrijving.transform.parent.GetComponent<RectTransform>().offsetMin = new Vector2(25f, 180f);
+                BijlageHolder.transform.parent.parent.parent.gameObject.SetActive(true);
+                //Omschrijving.transform.parent.GetComponent<RectTransform>().offsetMin = new Vector2(25f, 180f);
                 
                 foreach (Transform child in BijlageHolder.transform)
                     Destroy(child.gameObject);
@@ -110,9 +106,19 @@ namespace UI.Views
             base.Show(args);
         }
 
+        public override void Initialize()
+        {
+            backButton.onClick.AddListener(() =>
+            {
+                gameObject.GetComponentInParent<SubViewManager>().HideView<HomeworkItemView>();
+            });
+
+            base.Initialize();
+        }
+    
         public override void Refresh(object args)
         {
-            openNavigationButton.onClick.RemoveAllListeners();
+            backButton.onClick.RemoveAllListeners();
             base.Refresh(args);
         }
         

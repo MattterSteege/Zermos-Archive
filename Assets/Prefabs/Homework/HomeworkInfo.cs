@@ -6,14 +6,12 @@ using UnityEngine.UI;
 public class HomeworkInfo : MonoBehaviour
 {
     [SerializeField] TMP_Text vak;
-    [SerializeField] TMP_Text tijd;
+    //[SerializeField] TMP_Text tijd;
     [SerializeField] TMP_Text details;
     [SerializeField] TMP_Text Datum;
     [SerializeField] public Toggle gemaakt;
     
-    [Space, SerializeField] private GameObject toetsPill;
-    [SerializeField] private GameObject groteToetsPill;
-    [SerializeField] private GameObject bijlagePill;
+    [Space, SerializeField] private GameObject notificationPill;
 
     public Homework.Item homeworkInfo;
     
@@ -62,26 +60,17 @@ public class HomeworkInfo : MonoBehaviour
             this.Datum.text = date.ToString("dd-MM-yyyy");
         }
 
-        this.tijd.text = TimeManager.Instance.DateTime.GetDateDifference(date).GetTimeDifferenceString();
+        //this.tijd.text = TimeManager.Instance.DateTime.GetDateDifference(date).GetTimeDifferenceString();
 
         this.gemaakt.isOn = gemaakt;
+        this.gemaakt.GetComponentInChildren<TMP_Text>().text = gemaakt ? "Voltooid" : "Onvoltooid";
         
         if (homeworkInfo != null)
         {
             this.homeworkInfo = homeworkInfo;
         }
         
-        if (homeworkInfo.studiewijzerItem.huiswerkType == "TOETS")
-        {
-            toetsPill.SetActive(true);
-            groteToetsPill.SetActive(false);
-        }
-        else if (homeworkInfo.studiewijzerItem.huiswerkType == "GROTE_TOETS")
-        {
-            toetsPill.SetActive(false);
-            groteToetsPill.SetActive(true);
-        }
-
-        bijlagePill.SetActive(homeworkInfo.studiewijzerItem.bijlagen?.Count > 0);
+        //true when: test, big test, or 1 or more attachments
+        notificationPill.SetActive(homeworkInfo.studiewijzerItem.huiswerkType == "TOETS" || homeworkInfo.studiewijzerItem.huiswerkType == "GROTE_TOETS" || homeworkInfo.studiewijzerItem.bijlagen?.Count > 0);
     }
 }

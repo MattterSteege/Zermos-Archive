@@ -7,11 +7,14 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 namespace UI.Views
 {
     public class HomeworkView : View
     {
+        [SerializeField] SubViewManager subViewManager;
+        
         [SerializeField] Homework homeworkObject;
         [SerializeField] GameObject homeworkPrefab;
         [SerializeField] GameObject content;
@@ -34,17 +37,8 @@ namespace UI.Views
 
         public override void Initialize()
         {
-            // openNavigationButton.onClick.AddListener(() =>
-            // {
-            //     openNavigationButton.enabled = false;
-            //     ViewManager.Instance.ShowNavigation();
-            // });
-            //
-            // closeButtonWholePage.onClick.AddListener(() =>
-            // {
-            //     openNavigationButton.enabled = true;
-            //     ViewManager.Instance.HideNavigation();
-            // });
+            MonoBehaviour Mono = ViewManager.Instance.GetComponent<MonoBehaviour>();
+            Mono.StartCoroutine(subViewManager.Initialize());
 
             //_AddHomeworkButton.onClick.AddListener(() => ViewManager.Instance.ShowNewView<AddHomeworkView>());
             _recenterButton.onClick.AddListener(() => Recenter());
@@ -119,13 +113,14 @@ namespace UI.Views
 
                 homeworkItem.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    ViewManager.Instance.ShowNewView<HomeworkItemView>(homeworkItem.GetComponent<HomeworkInfo>()
+                    subViewManager.ShowNewView<HomeworkItemView>(homeworkItem.GetComponent<HomeworkInfo>()
                         .homeworkInfo);
                 });
 
                 homeworkItem.GetComponent<HomeworkInfo>().gemaakt.onValueChanged.AddListener((isOn) =>
                 {
-                    UpdateGemaaktStatus((long) HomeworkItem.links[0].id, isOn);
+                    bool done = UpdateGemaaktStatus((long) HomeworkItem.links[0].id, isOn);
+                    homeworkItem.GetComponent<HomeworkInfo>().gemaakt.GetComponentInChildren<TMP_Text>().text = done ? "Voltooid" : "Onvoltooid";
                 });
 
                 day = HomeworkItem.datumTijd.Day;
