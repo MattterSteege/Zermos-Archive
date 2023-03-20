@@ -3,35 +3,24 @@ using System.IO;
 using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
 namespace UI.Views
 {
-    public class SecretSettingsView : View
+    public class SecretSettingsView : SubView
     {
         [SerializeField] TMP_Text output;
         [SerializeField] Button deletePlayerPrefsButton;
-        [SerializeField] Toggle ToggleLeermiddelen;
-        [SerializeField] Vakken _vakken;
-        
+
         [Header("Send notif")]
         [SerializeField] private Button SendNotifButton;
         [SerializeField] private LessonNotificationManager lessonNotificationManager;
 
         public override void Initialize()
         {
-            openNavigationButton.onClick.AddListener(() =>
+            backButton.onClick.AddListener(() =>
             {
-                openNavigationButton.enabled = false;
-                ViewManager.Instance.ShowNavigation();
-            });
-
-            closeButtonWholePage.onClick.AddListener(() =>
-            {
-                openNavigationButton.enabled = true;
-                ViewManager.Instance.HideNavigation();
+                gameObject.GetComponentInParent<SubViewManager>().ShowParentView();
             });
             
             int timesClicked = 0;
@@ -43,28 +32,19 @@ namespace UI.Views
                 }
                 else
                 {
-                    File.Delete(Application.persistentDataPath + @"/zermos-encrypted.encrypted");
-                    File.Delete(Application.persistentDataPath + @"/zermos.encrypted");
-                    File.Delete(Application.persistentDataPath + @"/Vakken.json");
-                    File.Delete(Application.persistentDataPath + @"/Grades.json");
-                    File.Delete(Application.persistentDataPath + @"/Lessons.json");
-                    File.Delete(Application.persistentDataPath + @"/CustomHomework.json");
-                    File.Delete(Application.persistentDataPath + @"/Leermiddelen.json");
+                    string[] filePaths = Directory.GetFiles(Application.persistentDataPath);
+                    foreach (string filePath in filePaths)
+                    {
+                        File.Delete(filePath);
+                    }
+                    
                     LocalPrefs.Load();
-
                     ViewManager.Instance.ShowNewView<ConnectZermeloView>();
 
                     timesClicked = 0;
                 }
             });
-
-            ToggleLeermiddelen.isOn = LocalPrefs.GetBool("show_leermiddelen", false);
-            ToggleLeermiddelen.onValueChanged.AddListener((enabled) =>
-            {
-                LocalPrefs.SetBool("show_leermiddelen", enabled);
-                ViewManager.Instance.ShowNewView<LeermiddelenView>();
-            });
-
+            
             
 #if UNITY_ANDROID
             SendNotifButton.onClick.AddListener(() =>
@@ -73,18 +53,23 @@ namespace UI.Views
             });
 #endif
 
-            output.text = "Log:\n\n";
-            Application.logMessageReceived += HandleLog;
-            
+            if (output.text == "")
+                output.text = "Log:\n\n";
+
             base.Initialize();
+        }
+
+        public override void Show(object args = null)
+        {
+            Application.logMessageReceived -= HandleLog;
+            Application.logMessageReceived += HandleLog;
+            base.Show(args);
         }
 
         public override void Refresh(object args)
         {
-            openNavigationButton.onClick.RemoveAllListeners();
-            closeButtonWholePage.onClick.RemoveAllListeners();
+            backButton.onClick.RemoveAllListeners();
             deletePlayerPrefsButton.onClick.RemoveAllListeners();
-            ToggleLeermiddelen.onValueChanged.RemoveAllListeners();
             SendNotifButton.onClick.RemoveAllListeners();
             base.Refresh(args);
         }

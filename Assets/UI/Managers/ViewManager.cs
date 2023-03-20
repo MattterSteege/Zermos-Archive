@@ -30,11 +30,13 @@ public sealed class ViewManager : MonoBehaviour
 	[Space, SerializeField] public View currentView;
 	[SerializeField] public View lastView;
 
-	[Space, SerializeField] private static GameObject ViewPrefab;
-	
+	[Space] private static GameObject ViewPrefab;
+	[Space, SerializeField] private SubView secretSettingsSubView;
+
 	private void Awake()
 	{
 		Instance = this;
+		secretSettingsSubView.Show();
 		LocalPrefs.Load();
 	}
 
@@ -44,10 +46,14 @@ public sealed class ViewManager : MonoBehaviour
 
 		if (autoInitialize)
 		{
+			beforeInitialize?.Invoke();
 			StartCoroutine(Initialize());
 		}
 	}
 
+	public delegate void BeforeInitialize();
+	public static event BeforeInitialize beforeInitialize;
+	
 	public delegate void OnIntializeComplete(bool done = false);
 	public static event OnIntializeComplete onInitializeComplete;
 	

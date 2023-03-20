@@ -44,13 +44,13 @@ namespace UI.Views
                 {
                     timesCLicked = 0;
                     AndroidUIToast.ShowToast("WEES VOORZICHTIG!");
-                    ViewManager.Instance.ShowNewView<SecretSettingsView>();
+                    subViewManager.ShowNewView<SecretSettingsView>();
                 }
             });
 #else
             SecretSettingsButton.onClick.AddListener(() =>
             {
-                ViewManager.Instance.ShowNewView<SecretSettingsView>();
+                subViewManager.ShowNewView<SecretSettingsView>();
             });
 #endif
             
