@@ -58,3 +58,11 @@ De Antonius app biedt toegang tot de schoolkalender en schoolberichten, maar hee
 | Je schoolberichten |
 
 Met de app kun je gemakkelijk je schoolkalender inzien en op de hoogte blijven van belangrijke schoolberichten. Om in te loggen, vul je jouw schoolmail in en druk je op de knop 'inloggen'. Vervolgens ontvang je een mail in Outlook waarop je kunt klikken om in te loggen. Je wordt dan automatisch doorgestuurd naar je browser, waar je wordt ingelogd op de Antonius app. Let op: om toegang te krijgen tot de app, moet je op 'openen met...' klikken en Zermos selecteren.
+
+## Antonius
+
+Hierbij hoef je geen gegevens in te vullen, er word dus automatisch een link gelegd met school. 
+
+| Toegang tot                            |
+|----------------------------------------|
+| Het nieuws op de TV op het carmelplein |
