@@ -9,11 +9,11 @@ public class SchoolNews : MonoBehaviour
     [SerializeField] public TMP_Text titleText;
     [SerializeField] public TMP_Text messageText;
     [SerializeField] public TMP_Text dateText;
-    [SerializeField] public Button OpenMessageButton;
-    [SerializeField] public List<Messages.Message> messages;
-    
+    public List<Messages.Message> messages;
+    public SubViewManager subViewManager;
+
     public void Initialize()
     {
-        OpenMessageButton.onClick.AddListener(() => ViewManager.Instance.ShowNewView<SchoolNewsItemView>(messages));
+        GetComponent<Button>().onClick.AddListener(() =>  subViewManager.ShowNewView<SchoolNewsItemView>(messages));
     }
 }

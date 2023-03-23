@@ -13,7 +13,7 @@ namespace UI.Views
         [SerializeField] private GameObject _kalenderItemContainer;
         [SerializeField] private JaarKalender InfowijsJaarKalender;
         private bool loaded = false;
-        [SerializeField] private GameObject CurrentDateDiver;
+        [SerializeField] private RectTransform CurrentDateDiver;
         [SerializeField] private ScrollRect _ScrollRect;
         [SerializeField] GameObject DividerPrefab;
         [SerializeField] GameObject dayContainterPrefab;
@@ -51,6 +51,7 @@ namespace UI.Views
                 child.gameObject.SetActive(true);
                 yield return new WaitForEndOfFrame();
             }
+            Recenter();
         }
         
         private IEnumerator HideKalenderItems()
@@ -79,13 +80,12 @@ namespace UI.Views
                 
                 if (afspraak.endsAt.ToDateTime() > TimeManager.Instance.DateTime && CurrentDateDiver == null)
                 {
-                    CurrentDateDiver = dayContainer;
+                    CurrentDateDiver = dayContainer.GetComponent<RectTransform>();
                 }
             }
-
-            yield return null;
             
-            _ScrollRect.ScrollToTop(CurrentDateDiver.GetComponent<RectTransform>(), _curve);
+            yield return null;
+            Recenter();
         }
         
         public override void Refresh(object args)
@@ -93,6 +93,18 @@ namespace UI.Views
             openNavigationButton.onClick.RemoveAllListeners();
             closeButtonWholePage.onClick.RemoveAllListeners();
             base.Refresh(args);
+        }
+        
+        //context menu recenter _> _ScrollRect.decelerationRate = 0f;
+        //_ScrollRect.vertical = false;
+        //_ScrollRect.ScrollToTop(CurrentDateDiver, _curve);
+        
+        [ContextMenu("Recenter")]
+        public void Recenter()
+        {
+            _ScrollRect.decelerationRate = 0f;
+            _ScrollRect.vertical = false;
+            _ScrollRect.ScrollToTop(CurrentDateDiver, _curve);
         }
     }
 }

@@ -1,25 +1,23 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UI.Views;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SchoolNewsItemView : View
+public class SchoolNewsItemView : SubView
 {
     [SerializeField] private TMP_Text messageText;
     [SerializeField] private TMP_Text messageTitleText;
+    [SerializeField] private TMP_Text MessageDateText;
     [SerializeField] private GameObject BijlagePrefab;
     [SerializeField] private GameObject Content;
-    [SerializeField] public List<Messages.Message> messages;
-    
+
     public override void Show(object args = null)
     {
-        openNavigationButton.onClick.RemoveAllListeners();
-        openNavigationButton.onClick.AddListener(() => ViewManager.Instance.ShowNewView<SchoolNewsView>());
-        
         var message = (List<Messages.Message>) args;
+
+        foreach (Transform child in Content.transform)
+            Destroy(child.gameObject);
         
         if (message != null)
             foreach (var x in message)
@@ -28,7 +26,11 @@ public class SchoolNewsItemView : View
                     messageText.text = x.Content.String;
 
                 if (x.Type == 30)
+                {
                     messageTitleText.text = x.Content.ContentClass.Title;
+                    if (x.Content.ContentClass.Timestamp != null)
+                        MessageDateText.text = x.Content.ContentClass.Timestamp.Value.ToDateTime().ToString("d MMMM yyyy");
+                }
 
                 if (x.Type == 2)
                 {
@@ -40,10 +42,20 @@ public class SchoolNewsItemView : View
 
         base.Show(args);
     }
-    
+
+    public override void Initialize()
+    {
+        backButton.onClick.AddListener(() =>
+        {
+            gameObject.GetComponentInParent<SubViewManager>().ShowParentView();
+        });
+        
+        base.Initialize();
+    }
+
     public override void Refresh(object args)
     {
-        openNavigationButton.onClick.RemoveAllListeners();
+        backButton.onClick.RemoveAllListeners();
         base.Refresh(args);
     }
 }

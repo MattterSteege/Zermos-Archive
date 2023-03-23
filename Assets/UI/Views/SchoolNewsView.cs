@@ -5,11 +5,13 @@ using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Views
 {
     public class SchoolNewsView : View
     {
+        [SerializeField] SubViewManager subViewManager;
         [SerializeField] private GameObject _newsItemPrefab;
         [SerializeField] private GameObject _newsItemContainer;
         [SerializeField] private Messages InfowijsMessages;
@@ -17,7 +19,14 @@ namespace UI.Views
         [SerializeField] private int messagesToLoad = 25;
         [SerializeField] GameObject DividerPrefab;
         [SerializeField] GameObject dayContainterPrefab;
-   
+
+        public override void Initialize()
+        {
+            MonoBehaviour Mono = ViewManager.Instance.GetComponent<MonoBehaviour>();
+            Mono.StartCoroutine(subViewManager.Initialize());
+            base.Initialize();
+        }
+
         public override void Show(object args = null)
         {
             base.Show(args);
@@ -78,18 +87,22 @@ namespace UI.Views
 #if UNITY_EDITOR
                     dayContainer.name = "DayContainer " + message.CreatedAt.ToDateTime().ToString("d MMMM");
 #endif
+                    if(CurrentItem != null)
+                        CurrentItem.Initialize();
+                    
                     var go = Instantiate(DividerPrefab, dayContainer.transform);
                     go.GetComponent<homeworkDivider>().Datum.text = message.CreatedAt.ToDateTime().ToString("d MMMM");
                     day = message.CreatedAt.ToDateTime().Day;
+                    
                 }
                 
                 if (CurrentItemType < message.Type)
                 {
-                    if (CurrentItem != null)
-                        CurrentItem.Initialize();
                     var go = Instantiate(_newsItemPrefab, dayContainer.transform);
                     CurrentItem = go.GetComponent<SchoolNews>();
                     CurrentItem.messages = new List<Messages.Message>();
+                    CurrentItem.subViewManager = subViewManager;
+
                 }
 
                 if (message.Type == 30)

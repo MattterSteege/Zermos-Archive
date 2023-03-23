@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Networking;
 
 
 public class CoroutineWithData<T>
@@ -18,7 +19,7 @@ public class CoroutineWithData<T>
     {
         while (_target.MoveNext())
         {
-            if (_target.Current != null && _target.Current is not WaitForSeconds)
+            if (_target.Current != null && _target.Current is not WaitForSeconds && _target.Current is not UnityWebRequestAsyncOperation)
             {
                 result = (T) _target.Current;
                 yield return result;

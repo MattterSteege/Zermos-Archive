@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AwesomeCharts;
 using E2C;
@@ -18,6 +19,7 @@ public class GradeStatisticsView : SubView
     [SerializeField] private PieChart VoldoendeOnvoldoendeRatio;
     [SerializeField] private TMP_Text voldoendeText;
     [SerializeField] private TMP_Text onvoldoendeText;
+    [SerializeField] private TMP_Text GemiddeldeText;
 
     public override void Show(object args = null)
     {
@@ -51,6 +53,7 @@ public class GradeStatisticsView : SubView
             setCijferoverzicht.AddEntry(new LineEntry(i, (float) geldendResultaat));
             setGemiddeldeVoortgangsgrafiek.AddEntry(new LineEntry(i, MathF.Round((float) (average / weight), 1, MidpointRounding.AwayFromZero)));
             setVoldoendeOnvoldoendeRatio.Entries[Convert.ToDouble(gradeItem.geldendResultaat) >= 5.5 ? 0 : 1].Value += 1f;
+            GemiddeldeText.text = MathF.Round((float) (average / weight), 2, MidpointRounding.AwayFromZero).ToString("0.00", CultureInfo.InvariantCulture);
         }
         
         

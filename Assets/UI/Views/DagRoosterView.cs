@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Web;
 using DG.Tweening;
@@ -27,6 +28,11 @@ namespace UI.Views
         [SerializeField] private List<GameObject> RoosterItems;
         [SerializeField] private int maxNumberOfLessons;
         [SerializeField] private int addedDays = 0;
+        
+        [Space(30f)]
+        [SerializeField] private AntoniusNews antoniusNews;
+        [SerializeField] private GameObject NieuwsPrefab;
+        [SerializeField] private Transform NieuwsParent;
 
         bool hasLoaded = false;
         int CurrentIndex = 1;
@@ -94,6 +100,8 @@ namespace UI.Views
             }
 
             base.Initialize();
+            
+            StartCoroutine(FetchSchoolNieuws());
         }
 
         private void UpdateRooster(int CurrentPanel, bool savedIsGood = false)
@@ -264,6 +272,28 @@ namespace UI.Views
             RefreshButton.onClick.RemoveAllListeners();
             WeekRoosterButton.onClick.RemoveAllListeners();
             base.Refresh(args);
+        }
+
+        
+        private IEnumerator FetchSchoolNieuws()
+        {
+            List<AntoniusNews.AntoniusNewsItem> newsItems = antoniusNews.GetNews();
+            if (newsItems == null)
+            {
+                var newsItemObject = Instantiate(NieuwsPrefab, NieuwsParent.transform);
+                newsItemObject.GetComponent<AntoniusNieuwsPaneel>().SetTitleAndDescription("Niets te melden", "");
+                yield break;
+            }
+
+            foreach (AntoniusNews.AntoniusNewsItem newsItem in newsItems)
+            {
+                if (newsItem.Title == "Weerbericht Gouda") continue;
+                
+                var newsItemObject = Instantiate(NieuwsPrefab, NieuwsParent.transform);
+                newsItemObject.GetComponent<AntoniusNieuwsPaneel>().SetTitleAndDescription(newsItem.Title, newsItem.Content);
+            }
+            
+            yield return null;
         }
     }
 }
