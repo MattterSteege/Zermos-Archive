@@ -12,14 +12,25 @@ using UnityEngine.UI;
 public class GradeStatisticsView : SubView
 {
     [SerializeField] private List<Grades.Item> Grades;
-
-    [Header("Charts")]
-    [SerializeField] private LineChart Cijferoverzicht;
-    [SerializeField] private LineChart GemiddeldeVoortgangsgrafiek;
-    [SerializeField] private PieChart VoldoendeOnvoldoendeRatio;
+    
+    [Header("Cijferoverzicht"), SerializeField] private LineChart Cijferoverzicht;
+    
+    [Header("Gemiddelde voortgangsgrafiek"), SerializeField] private LineChart GemiddeldeVoortgangsgrafiek;
+    
+    [Header("Voldoende - onvoldoende ratio"), SerializeField] private PieChart VoldoendeOnvoldoendeRatio;
     [SerializeField] private TMP_Text voldoendeText;
     [SerializeField] private TMP_Text onvoldoendeText;
-    [SerializeField] private TMP_Text GemiddeldeText;
+    
+    [Header("Gemiddelde"), SerializeField] private TMP_Text GemiddeldeText;
+    
+    [Header("Wat moet ik halen"), SerializeField] private TMP_InputField watMoetIkHalenCijferInput;
+    [SerializeField] private TMP_InputField watMoetIkHalenWegingInput;
+    [SerializeField] private TMP_Text watMoetIkHalenText;
+    
+    [Header("Wat moet ik halen"), SerializeField] private TMP_InputField WatGaIkStaanCijferInput;
+    [SerializeField] private TMP_InputField WatGaIkStaanWegingInput;
+    [SerializeField] private TMP_Text WatGaIkStaanText;
+    
 
     public override void Show(object args = null)
     {
@@ -82,6 +93,15 @@ public class GradeStatisticsView : SubView
         VoldoendeOnvoldoendeRatio.GetChartData().DataSet = setVoldoendeOnvoldoendeRatio;
         VoldoendeOnvoldoendeRatio.SetDirty();
 
+        //wat moet ik halen
+        if (TryParseFloat(watMoetIkHalenCijferInput.text, out var result))
+            watMoetIkHalenText.text = WatMoetIkHalen(Grades, Convert.ToInt32(watMoetIkHalenWegingInput.text), result);
+        
+        
+        //wat ga ik staan
+        if (TryParseFloat(WatGaIkStaanCijferInput.text, out var result2))
+            WatGaIkStaanText.text = WatGaIkStaan(Grades, Convert.ToInt32(WatGaIkStaanWegingInput.text), result2);
+        
         base.Show(args);
     }
 
@@ -92,12 +112,101 @@ public class GradeStatisticsView : SubView
             gameObject.GetComponentInParent<SubViewManager>().HideView<GradeStatisticsView>();
         });
 
+        watMoetIkHalenCijferInput.onValueChanged.AddListener( (x) =>
+        {
+            if (watMoetIkHalenCijferInput.text == "" || watMoetIkHalenWegingInput.text == "") return;
+
+                if (TryParseFloat(watMoetIkHalenCijferInput.text, out var result))
+            {
+                watMoetIkHalenText.text = WatMoetIkHalen(Grades, Convert.ToInt32(watMoetIkHalenWegingInput.text), result);
+            }
+        });
+        watMoetIkHalenWegingInput.onValueChanged.AddListener( (x) =>
+        {
+            if (watMoetIkHalenWegingInput.text == "" || watMoetIkHalenCijferInput.text == "") return;
+
+            if (TryParseFloat(watMoetIkHalenCijferInput.text, out var result))
+            {
+                watMoetIkHalenText.text = WatMoetIkHalen(Grades, Convert.ToInt32(watMoetIkHalenWegingInput.text), result);
+            }
+        });
+        
+        WatGaIkStaanCijferInput.onValueChanged.AddListener( (x) =>
+        {
+            if (WatGaIkStaanCijferInput.text == "" || WatGaIkStaanWegingInput.text == "") return;
+
+            if (TryParseFloat(WatGaIkStaanCijferInput.text, out var result))
+            {
+                WatGaIkStaanText.text = WatGaIkStaan(Grades, Convert.ToInt32(WatGaIkStaanWegingInput.text), result);
+            }
+        });
+        
+        WatGaIkStaanWegingInput.onValueChanged.AddListener( (x) =>
+        {
+            if (WatGaIkStaanWegingInput.text == "" || WatGaIkStaanCijferInput.text == "") return;
+
+            if (TryParseFloat(WatGaIkStaanCijferInput.text, out var result))
+            {
+                WatGaIkStaanText.text = WatGaIkStaan(Grades, Convert.ToInt32(WatGaIkStaanWegingInput.text), result);
+            }
+        });
+        
         base.Initialize();
     }
-    
+
     public override void Refresh(object args)
     {
         backButton.onClick.RemoveAllListeners();
         base.Refresh(args);
     }
+    
+    private string WatMoetIkHalen(List<Grades.Item> cijfers, int weging, float gewenstCijfer = 5.5f)
+    {
+        int totaleWeging = cijfers.Sum(x => x.weging);
+
+        float alBehaaldePunten = cijfers.Sum(x => x.weging * float.Parse(x.geldendResultaat));
+        
+        float nogTeBehalen = gewenstCijfer * totaleWeging - alBehaaldePunten;
+
+        return (gewenstCijfer + nogTeBehalen / weging).ToString("0.0");
+    }
+    
+    private string WatGaIkStaan(List<Grades.Item> cijfers, int weging, float bijkomendCijfer = 5.5f)
+    {
+        int totaleWeging = cijfers.Sum(x => x.weging) + weging;
+        float totalePunten = cijfers.Sum(x => x.weging * float.Parse(x.geldendResultaat)) + weging * bijkomendCijfer;
+        
+        return (totalePunten / totaleWeging).ToString("0.0");
+    }
+    
+    public static bool TryParseFloat(string input, out float result)
+    {
+        // Check if the input is null or empty
+        if (string.IsNullOrEmpty(input))
+        {
+            result = 0f;
+            return false;
+        }
+
+        // Replace commas with dots, and remove any additional dots
+        input = input.Replace(",", ".");
+        int dotIndex = input.IndexOf('.');
+        if (dotIndex != -1)
+        {
+            input = input.Remove(dotIndex, 1);
+            input = input.Insert(dotIndex, ".");
+        }
+
+        // Try to parse the input as a float
+        if (float.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out result))
+        {
+            return true;
+        }
+        else
+        {
+            result = 0f;
+            return false;
+        }
+    }
+
 }

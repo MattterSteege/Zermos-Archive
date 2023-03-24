@@ -51,6 +51,9 @@ namespace UI.Views
 
         public override void Initialize()
         {
+            base.Initialize();
+            return;
+            
             backButton.onClick.AddListener(() =>
             {
                 gameObject.GetComponentInParent<SubViewManager>().HideView<WatMoetIkHalenView>();
@@ -67,7 +70,6 @@ namespace UI.Views
                 UpdateTable();
             });
             
-            base.Initialize();
         }
 
         private string WatMoetIkHalen(List<Grades.Item> cijfers, int weging, float gewenstCijfer = 5.5f)

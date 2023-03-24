@@ -12,9 +12,7 @@ public class GradeItemView : SubView
     [SerializeField] private GameObject gradePrefab;
     [SerializeField] private TMP_Text TitleText;
     [SerializeField] private GameObject GradeContent;
-    [SerializeField] private Button welkCijferMoetIkHalenButton;
     [SerializeField] private Button StatestiekenButton;
-    //[SerializeField] private E2Chart _chart;
 
     public override void Show(object args = null)
     {
@@ -25,9 +23,6 @@ public class GradeItemView : SubView
         Grades = Grades.OrderByDescending(x => x.datumInvoer).ToList();
 
         TitleText.text = Grades[0].vak.naam;
-        
-        //_chart.chartData.series[0].dataY.Clear();
-
 
         foreach (Transform gameObject in GradeContent.transform)
         {
@@ -41,11 +36,8 @@ public class GradeItemView : SubView
             gradeView.GetComponent<GradeInfo>().SetGradeInfo(grade.vak.naam ?? "",
                 grade.datumInvoer.ToString("d MMMM"), /*grade.omschrijving*/ "", grade.weging + "x",
                 grade.geldendResultaat ?? "-");
-            
-            //_chart.chartData.series[0].dataY.Add(float.Parse(Grades[Grades.Count - i - 1].geldendResultaat));
         }
 
-        //_chart.UpdateChart();
         base.Show(args);
     }
 
@@ -56,11 +48,6 @@ public class GradeItemView : SubView
             gameObject.GetComponentInParent<SubViewManager>().HideView<GradeItemView>();
         });
 
-        welkCijferMoetIkHalenButton.onClick.AddListener(() =>
-        {
-            gameObject.GetComponentInParent<SubViewManager>().ShowNewView<WatMoetIkHalenView>(Grades);
-        });
-        
         StatestiekenButton.onClick.AddListener(() =>
         {
             gameObject.GetComponentInParent<SubViewManager>().ShowNewView<GradeStatisticsView>(Grades);
@@ -72,7 +59,6 @@ public class GradeItemView : SubView
     public override void Refresh(object args)
     {
         backButton.onClick.RemoveAllListeners();
-        welkCijferMoetIkHalenButton.onClick.RemoveAllListeners();
         StatestiekenButton.onClick.RemoveAllListeners();
         base.Refresh(args);
     }

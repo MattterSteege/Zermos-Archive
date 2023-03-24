@@ -101,7 +101,8 @@ namespace UI.Views
 
             base.Initialize();
             
-            StartCoroutine(FetchSchoolNieuws());
+            MonoBehaviour Mono = ViewManager.Instance.GetComponent<MonoBehaviour>();
+            Mono.StartCoroutine(FetchSchoolNieuws());
         }
 
         private void UpdateRooster(int CurrentPanel, bool savedIsGood = false)

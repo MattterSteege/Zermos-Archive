@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 997
   m_ShowMode: 4
-  m_Title: Inspector
+  m_Title: Git for Unity
   m_RootView: {fileID: 7}
   m_MinSize: {x: 875, y: 350}
   m_MaxSize: {x: 10000, y: 10000}
@@ -43,8 +43,8 @@ MonoBehaviour:
     y: 0
     width: 242
     height: 561
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 202, y: 221}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 15}
   m_Panes:
   - {fileID: 15}
@@ -74,7 +74,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 200}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 2619
+  controlID: 67
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -85,7 +85,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: InspectorWindow
+  m_Name: Window
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -94,15 +94,15 @@ MonoBehaviour:
     y: 0
     width: 454
     height: 947
-  m_MinSize: {x: 276, y: 71}
+  m_MinSize: {x: 101, y: 121}
   m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 17}
+  m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 17}
   - {fileID: 14}
   - {fileID: 13}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -251,7 +251,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 1
-  controlID: 2620
+  controlID: 25
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 8096}
   vertical: 0
-  controlID: 2621
+  controlID: 26
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -364,10 +364,10 @@ MonoBehaviour:
   notificationClearTime: -1
   timeSinceLastRotation: -1
   currentBranchAndRemoteHasUpdate: 0
-  currentTrackingStatusHasUpdate: 1
-  currentStatusEntriesHasUpdate: 1
-  repositoryProgressHasUpdate: 1
-  appManagerProgressHasUpdate: 1
+  currentTrackingStatusHasUpdate: 0
+  currentStatusEntriesHasUpdate: 0
+  repositoryProgressHasUpdate: 0
+  appManagerProgressHasUpdate: 0
   changeTab: 3
   activeTab: 3
   initProjectView:
@@ -452,514 +452,20 @@ MonoBehaviour:
     localBranches: []
     remoteBranches: []
   changesView:
-    currentBranchHasUpdate: 1
-    currentStatusEntriesHasUpdate: 1
-    currentLocksHasUpdate: 1
+    currentBranchHasUpdate: 0
+    currentStatusEntriesHasUpdate: 0
+    currentLocksHasUpdate: 0
     commitBody: 
     commitMessage: 
     currentBranch: main
     treeScroll: {x: 0, y: 0}
     treeChanges:
       assets:
-        keys:
-        - 00000000000000001000000000000000
-        - dac28868b0c37e34dac433050d4e2834
-        - 4cd83d00b51ef00478d702b1f778fb56
-        - db2bf474c32af904ca3dd99b90c21de9
-        - f922f0b1a9874f042a7ba2786e28acce
-        - be013a2f39c156349bc0e8664a5c7377
-        - 1088a4cfb26a9ba4bab34b6a8239f3de
-        - 02ed1a9a40d8f90448ba485918f4908d
-        - 82ab49781fefa2e41a5efd1b7525019b
-        - 67d4e26761d36a445be0346bfeff4d07
-        - a39d03618b1bb2047b3531ac87a7746a
-        - bd4120fdc6f26b5438a94d7a8c2553ca
-        - 385e5acba03b12045be0bdf06a2c4464
-        - 1c23ede5499a4b74c89f2dc54955741c
-        - b38a5f975e96e0d4bb0a537aa61fd5d2
-        - bd285a0bec27cce4ea60c3f4d55a3938
-        - 563cc546a71cec54eb0dd91aeaff71ed
-        values:
-        - path: Assets
-          label: Assets
-          level: 0
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\AntoniusNews.cs
-          label: AntoniusNews.cs
-          level: 1
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\AntoniusNews.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\AntoniusNews.cs
-            projectPath: Assets\AntoniusNews.cs
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Prefabs
-          label: Prefabs
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Prefabs\SchoolNews
-          label: SchoolNews
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs
-          label: AntoniusNieuwsPaneel.cs
-          level: 3
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs
-            projectPath: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab
-          label: AntoniusNieuwsPaneel.prefab
-          level: 3
-          isFolder: 0
-          isContainer: 1
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab
-            projectPath: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab
-            originalPath: 
-            indexStatus: 1
-            workTreeStatus: 1
-        - path: Assets\Prefabs\SchoolNews\BijlagePrefab.prefab
-          label: BijlagePrefab.prefab
-          level: 3
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Prefabs\SchoolNews\BijlagePrefab.prefab
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\SchoolNews\BijlagePrefab.prefab
-            projectPath: Assets\Prefabs\SchoolNews\BijlagePrefab.prefab
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
-        - path: Assets\Prefabs\SchoolNews\SchoolNews.cs
-          label: SchoolNews.cs
-          level: 3
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Prefabs\SchoolNews\SchoolNews.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\SchoolNews\SchoolNews.cs
-            projectPath: Assets\Prefabs\SchoolNews\SchoolNews.cs
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
-        - path: Assets\Scripts
-          label: Scripts
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Scripts\CoroutineWithData.cs
-          label: CoroutineWithData.cs
-          level: 2
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Scripts\CoroutineWithData.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Scripts\CoroutineWithData.cs
-            projectPath: Assets\Scripts\CoroutineWithData.cs
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
-        - path: Assets\Tests
-          label: Tests
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Tests\_MainScene.unity
-          label: _MainScene.unity
-          level: 2
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\Tests\_MainScene.unity
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Tests\_MainScene.unity
-            projectPath: Assets\Tests\_MainScene.unity
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
-        - path: Assets\UI
-          label: UI
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\UI\Views
-          label: Views
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\UI\Views\DagRoosterView.cs
-          label: DagRoosterView.cs
-          level: 3
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\UI\Views\DagRoosterView.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\DagRoosterView.cs
-            projectPath: Assets\UI\Views\DagRoosterView.cs
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
-        - path: Assets\UI\Views\SchoolNewsItemView.cs
-          label: SchoolNewsItemView.cs
-          level: 3
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\UI\Views\SchoolNewsItemView.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\SchoolNewsItemView.cs
-            projectPath: Assets\UI\Views\SchoolNewsItemView.cs
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
-        - path: Assets\UI\Views\SchoolNewsView.cs
-          label: SchoolNewsView.cs
-          level: 3
-          isFolder: 0
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: Assets\UI\Views\SchoolNewsView.cs
-            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\SchoolNewsView.cs
-            projectPath: Assets\UI\Views\SchoolNewsView.cs
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 3
+        keys: []
+        values: []
       folders:
-        keys:
-        - Assets
-        - Assets\Prefabs
-        - Assets\Prefabs\SchoolNews
-        - Assets\Scripts
-        - Assets\Tests
-        - Assets\UI
-        - Assets\UI\Views
-        - UserSettings
-        - UserSettings\Layouts
-        values:
-        - path: Assets
-          label: Assets
-          level: 0
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Prefabs
-          label: Prefabs
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Prefabs\SchoolNews
-          label: SchoolNews
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Scripts
-          label: Scripts
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\Tests
-          label: Tests
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\UI
-          label: UI
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: Assets\UI\Views
-          label: Views
-          level: 2
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: UserSettings
-          label: UserSettings
-          level: 0
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
-        - path: UserSettings\Layouts
-          label: Layouts
-          level: 1
-          isFolder: 1
-          isContainer: 0
-          isCollapsed: 0
-          isHidden: 0
-          isActive: 0
-          treeIsCheckable: 1
-          checkState: 0
-          isLocked: 0
-          gitStatusEntry:
-            path: 
-            fullPath: 
-            projectPath: 
-            originalPath: 
-            indexStatus: 0
-            workTreeStatus: 0
+        keys: []
+        values: []
       checkedFileNodes:
         keys: []
         values: []
@@ -988,420 +494,6 @@ MonoBehaviour:
           originalPath: 
           indexStatus: 0
           workTreeStatus: 0
-      - path: Assets
-        label: Assets
-        level: 0
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\AntoniusNews.cs
-        label: AntoniusNews.cs
-        level: 1
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\AntoniusNews.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\AntoniusNews.cs
-          projectPath: Assets\AntoniusNews.cs
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\AntoniusNews.cs.meta
-        label: AntoniusNews.cs.meta
-        level: 2
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\AntoniusNews.cs.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\AntoniusNews.cs.meta
-          projectPath: Assets\AntoniusNews.cs.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs
-        label: Prefabs
-        level: 1
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\Prefabs\SchoolNews
-        label: SchoolNews
-        level: 2
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs
-        label: AntoniusNieuwsPaneel.cs
-        level: 3
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs
-          projectPath: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs.meta
-        label: AntoniusNieuwsPaneel.cs.meta
-        level: 4
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs.meta
-          projectPath: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab
-        label: AntoniusNieuwsPaneel.prefab
-        level: 3
-        isFolder: 0
-        isContainer: 1
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab
-          projectPath: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab.meta
-        label: AntoniusNieuwsPaneel.prefab.meta
-        level: 4
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab.meta
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab.meta
-          projectPath: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab.meta
-          originalPath: 
-          indexStatus: 1
-          workTreeStatus: 1
-      - path: Assets\Prefabs\SchoolNews\BijlagePrefab.prefab
-        label: BijlagePrefab.prefab
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\SchoolNews\BijlagePrefab.prefab
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\SchoolNews\BijlagePrefab.prefab
-          projectPath: Assets\Prefabs\SchoolNews\BijlagePrefab.prefab
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: Assets\Prefabs\SchoolNews\SchoolNews.cs
-        label: SchoolNews.cs
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Prefabs\SchoolNews\SchoolNews.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\SchoolNews\SchoolNews.cs
-          projectPath: Assets\Prefabs\SchoolNews\SchoolNews.cs
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: Assets\Scripts
-        label: Scripts
-        level: 1
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\Scripts\CoroutineWithData.cs
-        label: CoroutineWithData.cs
-        level: 2
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Scripts\CoroutineWithData.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Scripts\CoroutineWithData.cs
-          projectPath: Assets\Scripts\CoroutineWithData.cs
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: Assets\Tests
-        label: Tests
-        level: 1
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\Tests\_MainScene.unity
-        label: _MainScene.unity
-        level: 2
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\Tests\_MainScene.unity
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Tests\_MainScene.unity
-          projectPath: Assets\Tests\_MainScene.unity
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: Assets\UI
-        label: UI
-        level: 1
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\UI\Views
-        label: Views
-        level: 2
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: Assets\UI\Views\DagRoosterView.cs
-        label: DagRoosterView.cs
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\UI\Views\DagRoosterView.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\DagRoosterView.cs
-          projectPath: Assets\UI\Views\DagRoosterView.cs
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: Assets\UI\Views\SchoolNewsItemView.cs
-        label: SchoolNewsItemView.cs
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\UI\Views\SchoolNewsItemView.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\SchoolNewsItemView.cs
-          projectPath: Assets\UI\Views\SchoolNewsItemView.cs
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: Assets\UI\Views\SchoolNewsView.cs
-        label: SchoolNewsView.cs
-        level: 3
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: Assets\UI\Views\SchoolNewsView.cs
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\SchoolNewsView.cs
-          projectPath: Assets\UI\Views\SchoolNewsView.cs
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
-      - path: UserSettings
-        label: UserSettings
-        level: 0
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: UserSettings\Layouts
-        label: Layouts
-        level: 1
-        isFolder: 1
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: 
-          fullPath: 
-          projectPath: 
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 0
-      - path: UserSettings\Layouts\default-2021.dwlt
-        label: default-2021.dwlt
-        level: 2
-        isFolder: 0
-        isContainer: 0
-        isCollapsed: 0
-        isHidden: 0
-        isActive: 0
-        treeIsCheckable: 1
-        checkState: 0
-        isLocked: 0
-        gitStatusEntry:
-          path: UserSettings\Layouts\default-2021.dwlt
-          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\UserSettings\Layouts\default-2021.dwlt
-          projectPath: UserSettings\Layouts\default-2021.dwlt
-          originalPath: 
-          indexStatus: 0
-          workTreeStatus: 3
       selectedNode:
         path: 
         label: 
@@ -1421,100 +513,16 @@ MonoBehaviour:
           originalPath: 
           indexStatus: 0
           workTreeStatus: 0
-    gitStatusEntries:
-    - path: Assets\AntoniusNews.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\AntoniusNews.cs
-      projectPath: Assets\AntoniusNews.cs
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\AntoniusNews.cs.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\AntoniusNews.cs.meta
-      projectPath: Assets\AntoniusNews.cs.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs
-      projectPath: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs.meta
-      projectPath: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.cs.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab
-      projectPath: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab.meta
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab.meta
-      projectPath: Assets\Prefabs\SchoolNews\AntoniusNieuwsPaneel.prefab.meta
-      originalPath: 
-      indexStatus: 1
-      workTreeStatus: 1
-    - path: Assets\Prefabs\SchoolNews\BijlagePrefab.prefab
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\SchoolNews\BijlagePrefab.prefab
-      projectPath: Assets\Prefabs\SchoolNews\BijlagePrefab.prefab
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: Assets\Prefabs\SchoolNews\SchoolNews.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\SchoolNews\SchoolNews.cs
-      projectPath: Assets\Prefabs\SchoolNews\SchoolNews.cs
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: Assets\Scripts\CoroutineWithData.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Scripts\CoroutineWithData.cs
-      projectPath: Assets\Scripts\CoroutineWithData.cs
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: Assets\Tests\_MainScene.unity
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Tests\_MainScene.unity
-      projectPath: Assets\Tests\_MainScene.unity
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: Assets\UI\Views\DagRoosterView.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\DagRoosterView.cs
-      projectPath: Assets\UI\Views\DagRoosterView.cs
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: Assets\UI\Views\SchoolNewsItemView.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\SchoolNewsItemView.cs
-      projectPath: Assets\UI\Views\SchoolNewsItemView.cs
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: Assets\UI\Views\SchoolNewsView.cs
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\SchoolNewsView.cs
-      projectPath: Assets\UI\Views\SchoolNewsView.cs
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    - path: UserSettings\Layouts\default-2021.dwlt
-      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\UserSettings\Layouts\default-2021.dwlt
-      projectPath: UserSettings\Layouts\default-2021.dwlt
-      originalPath: 
-      indexStatus: 0
-      workTreeStatus: 3
-    changedFilesText: 14 changed files
+    gitStatusEntries: []
+    changedFilesText: No changed files
     lastCurrentBranchChangedEvent:
-      updatedTimeString: 2023-03-23T19:51:49.183+01:00
+      updatedTimeString: 2023-03-23T20:53:14.191+01:00
       cacheType: 1
     lastStatusEntriesChangedEvent:
-      updatedTimeString: 2023-03-23T20:13:11.366+01:00
+      updatedTimeString: 2023-03-23T20:53:01.542+01:00
       cacheType: 6
     lastLocksChangedEvent:
-      updatedTimeString: 2023-03-23T20:12:08.303+01:00
+      updatedTimeString: 2023-03-23T20:47:39.676+01:00
       cacheType: 7
   historyView:
     currentLogHasUpdate: 0
@@ -1659,7 +667,7 @@ MonoBehaviour:
   currentRemoteUrl: https://github.com/MJTSgamer/Zermelo-Somtoday
   statusAhead: 0
   statusBehind: 0
-  hasItemsToCommit: 1
+  hasItemsToCommit: 0
   isTrackingRemoteBranch: 1
   currentBranchContent:
     m_Text: main
@@ -1670,13 +678,13 @@ MonoBehaviour:
     m_Image: {fileID: 0}
     m_Tooltip: Url of the origin remote
   lastCurrentBranchAndRemoteChangedEvent:
-    updatedTimeString: 2023-03-23T16:02:49.596+01:00
+    updatedTimeString: 2023-03-23T20:53:14.191+01:00
     cacheType: 1
   lastTrackingStatusChangedEvent:
-    updatedTimeString: 2023-03-23T16:26:17.681+01:00
+    updatedTimeString: 2023-03-23T20:53:17.232+01:00
     cacheType: 5
   lastStatusEntriesChangedEvent:
-    updatedTimeString: 2023-03-23T16:26:17.123+01:00
+    updatedTimeString: 2023-03-23T20:53:01.542+01:00
     cacheType: 6
   pullButtonContent:
     m_Text: Pull
@@ -1696,7 +704,7 @@ MonoBehaviour:
     m_Tooltip: 
   repositoryProgressValue: 0
   repositoryProgressMessage: 
-  appManagerProgressValue: 0.8
+  appManagerProgressValue: 1
   appManagerProgressMessage: 
   primaryConnectionUsername: 
 --- !u!114 &15
@@ -1816,7 +824,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 39}
     m_SelectedIDs: 886e0000
     m_LastClickedID: 28296
-    m_ExpandedIDs: 00000000aa6e0000
+    m_ExpandedIDs: 00000000e8720000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1844,7 +852,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000aa6e0000
+    m_ExpandedIDs: 00000000e8720000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1973,24 +981,24 @@ MonoBehaviour:
     m_SaveData: []
   m_SceneHierarchy:
     m_TreeViewState:
-      scrollPos: {x: 0, y: 180}
-      m_SelectedIDs: 9c670000
-      m_LastClickedID: 26524
-      m_ExpandedIDs: b8d9ffff86ecffff32fbffff6257000090580000f85d0000545e0000a65e000084610000c86100002664000062670000
+      scrollPos: {x: 0, y: 365}
+      m_SelectedIDs: de630000
+      m_LastClickedID: 25566
+      m_ExpandedIDs: f6ebffff32fbffff70560000cc5700003c590000065c000046600000a8600000d662000038640000b66400007a670000346800001e690000606a0000546b0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: Text
+        m_OriginalName: Text
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 0
+        m_UserData: 26482
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 4
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 5}
       m_SearchString: 
@@ -2259,9 +1267,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 529.5797, y: 1647.9044, z: 12.442497}
+    m_Target: {x: 461.17303, y: 1591.7805, z: 4.495965}
     speed: 2
-    m_Value: {x: 529.5797, y: 1647.9044, z: 12.442497}
+    m_Value: {x: 461.17303, y: 1591.7805, z: 4.495965}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -2312,9 +1320,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 503.3757
+    m_Target: 891.5648
     speed: 2
-    m_Value: 503.3757
+    m_Value: 891.5648
   m_Ortho:
     m_Target: 1
     speed: 2
