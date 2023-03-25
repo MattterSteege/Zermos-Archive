@@ -27,9 +27,9 @@ namespace UI.Views
         [SerializeField] private GameObject BijlagePrefab;
         [SerializeField] private GameObject BijlageHolder;
         
-        public override void Show(object args = null)
+        public virtual void Show(params object[] args)
         {
-            this.homeworkInfo = (Homework.Item) args;
+            this.homeworkInfo = (Homework.Item) args[0];
 
             if (homeworkInfo == null) return;
         

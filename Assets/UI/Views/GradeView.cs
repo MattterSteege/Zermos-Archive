@@ -72,7 +72,7 @@ namespace UI.Views
 
             foreach (Transform child in LastGradeContentGameObject.transform)
                 Destroy(child.gameObject);
-
+            
             foreach (var grade in lastGrades)
             {
                 var gradeView = Instantiate(gradePrefab, LastGradeContentGameObject.transform);
@@ -85,6 +85,10 @@ namespace UI.Views
 
             if (vakken.items.Count == 0) vakken = vakkenObject.getVakken(false);
 
+            grade[] AllGrades = new grade[grades.items.Count];
+            int index = 0;
+            float average;
+            
             foreach (Vakken.Item Vak in vakken.items ?? new List<Vakken.Item>())
             {
                 List<Grades.Item> GradesPerVak = grades.items.Where(x => x.vak.naam == Vak.vak.naam).ToList();
@@ -102,9 +106,15 @@ namespace UI.Views
                             weging = weging,
                             resultaat = (float)double.Parse(GradesPerVak[i].resultaat.Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture)
                         };
+                        AllGrades[index] = new grade
+                        {
+                            weging = weging,
+                            resultaat = (float)double.Parse(GradesPerVak[i].resultaat.Replace(",", "."), NumberStyles.Float, CultureInfo.InvariantCulture)
+                        };
+                        index++;
                     }
 
-                    float average = CalculateWeightedAverage(Grades.Select(x => x.resultaat).ToList(),
+                    average = CalculateWeightedAverage(Grades.Select(x => x.resultaat).ToList(),
                         Grades.Select(x => x.weging).ToList());
 
                     var gradeView = Instantiate(gradePrefab, content.transform);
@@ -118,7 +128,18 @@ namespace UI.Views
 
                 }
             }
-
+            
+            average = CalculateWeightedAverage(AllGrades.Select(x => x.resultaat).ToList(), AllGrades.Select(x => x.weging).ToList());
+            var totaalCijferGradeView = Instantiate(gradePrefab, content.transform);
+            totaalCijferGradeView.GetComponent<RectTransform>().SetAsFirstSibling();
+            totaalCijferGradeView.GetComponent<GradeInfo>().SetGradeInfo("Totaalcijfers", "", "", AllGrades.Sum(x => x.weging) + "x", MathF.Round(average, LocalPrefs.GetInt("decimals_grades", 1)).ToString());
+            totaalCijferGradeView.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                subViewManager.Refresh<GradeStatisticsView>(true);
+                subViewManager.ShowNewView<GradeStatisticsView>(grades.items);
+                subViewManager.Refresh<GradeStatisticsView>(false);
+            });
+            
             base.Initialize();
         }
 

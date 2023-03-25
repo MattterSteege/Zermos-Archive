@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 
 public class SaveLocalPrefs : AssetModificationProcessor
@@ -8,3 +9,4 @@ public class SaveLocalPrefs : AssetModificationProcessor
         return paths;
     }
 }
+#endif

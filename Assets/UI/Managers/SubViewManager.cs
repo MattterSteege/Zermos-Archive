@@ -233,7 +233,7 @@ public sealed class SubViewManager : MonoBehaviour
 		{
 			if (view is TView)
 			{
-				view.Initialize();
+				view.Refresh(args);
 			}
 		}
 	}

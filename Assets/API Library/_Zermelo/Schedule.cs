@@ -37,8 +37,8 @@ public class Schedule : BetterHttpClient
 
         foreach (Appointment appointment in schedule.appointments)
         {
-            if (appointment.start >= ((DateTimeOffset) date).ToUnixTimeSeconds() &&
-                appointment.start <= ((DateTimeOffset) date.AddDays(1)).ToUnixTimeSeconds())
+            if (appointment.start >= date.ToDayTimeSavingDate().ToUnixTime() &&
+                appointment.start <= date.AddDays(1).ToDayTimeSavingDate().ToUnixTime())
             {
                 TodaySchedule.Add(appointment);
             }
@@ -77,7 +77,7 @@ public class Schedule : BetterHttpClient
 
             TimeSpan timeSinceLastUpdate = TimeSpan.FromSeconds(currentUnixTime - lastUpdatedUnixTime);
 
-            if (timeSinceLastUpdate.TotalMinutes > 10 || ShouldRefreshFile)
+            if (timeSinceLastUpdate.TotalMinutes > 10 || ShouldRefreshFile || !isSameWeek)
             {
                 if (isSameWeek)
                 {

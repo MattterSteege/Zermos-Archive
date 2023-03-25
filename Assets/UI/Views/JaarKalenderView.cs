@@ -34,6 +34,9 @@ namespace UI.Views
                 MonoBehaviour camMono = ViewManager.Instance.GetComponent<MonoBehaviour>();
                 camMono.StartCoroutine(ShowKalenderItems());
             }
+            
+            MonoBehaviour camMono2 = ViewManager.Instance.GetComponent<MonoBehaviour>();
+            camMono2.StartCoroutine(Recenter());
         }
         
         public override void Hide()
@@ -51,7 +54,6 @@ namespace UI.Views
                 child.gameObject.SetActive(true);
                 yield return new WaitForEndOfFrame();
             }
-            Recenter();
         }
         
         private IEnumerator HideKalenderItems()
@@ -70,6 +72,9 @@ namespace UI.Views
             yield return null;
             foreach (JaarKalender.Datum afspraak in messages.data)
             {
+                if (afspraak.endsAt.ToDateTime() < TimeManager.Instance.DateTime)
+                    continue;
+                
                 GameObject dayContainer = Instantiate(dayContainterPrefab, _kalenderItemContainer.transform);
                 
                 var go = Instantiate(DividerPrefab, dayContainer.transform);
@@ -85,7 +90,6 @@ namespace UI.Views
             }
             
             yield return null;
-            Recenter();
         }
         
         public override void Refresh(object args)
@@ -100,8 +104,9 @@ namespace UI.Views
         //_ScrollRect.ScrollToTop(CurrentDateDiver, _curve);
         
         [ContextMenu("Recenter")]
-        public void Recenter()
+        private IEnumerator Recenter()
         {
+            yield return null;
             _ScrollRect.decelerationRate = 0f;
             _ScrollRect.vertical = false;
             _ScrollRect.ScrollToTop(CurrentDateDiver, _curve);

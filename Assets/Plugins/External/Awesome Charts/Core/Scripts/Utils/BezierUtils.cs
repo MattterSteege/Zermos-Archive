@@ -2,20 +2,23 @@
 using System.Linq;
 using UnityEngine;
 
-namespace AwesomeCharts {
-
-    public static class BezierUtils {
-
-        public static Vector2[] CreateBezierPointsFromLinePoints(Vector2[] points) {
+namespace AwesomeCharts
+{
+    public static class BezierUtils
+    {
+        public static Vector2[] CreateBezierPointsFromLinePoints(Vector2[] points)
+        {
             Vector2[] firstControlPoints;
             Vector2[] secondControlPoints;
 
             GetCurveControlPoints(points, out firstControlPoints, out secondControlPoints);
 
             Vector2[] result = new Vector2[(points.Length * 3) - 2];
-            for (int i = 0; i < points.Length; i++) {
+            for (int i = 0; i < points.Length; i++)
+            {
                 result[i * 3] = points[i];
-                if (i < points.Length - 1) {
+                if (i < points.Length - 1)
+                {
                     result[(i * 3) + 1] = firstControlPoints[i];
                     result[(i * 3) + 2] = secondControlPoints[i];
                 }
@@ -25,14 +28,16 @@ namespace AwesomeCharts {
         }
 
         public static void GetCurveControlPoints(Vector2[] knots,
-        out Vector2[] firstControlPoints, out Vector2[] secondControlPoints) {
+            out Vector2[] firstControlPoints, out Vector2[] secondControlPoints)
+        {
             if (knots == null)
                 throw new ArgumentNullException("knots");
             int n = knots.Length - 1;
             if (n < 1)
                 throw new ArgumentException
-                ("At least two knot points required", "knots");
-            if (n == 1) { 
+                    ("At least two knot points required", "knots");
+            if (n == 1)
+            {
                 firstControlPoints = new Vector2[1];
                 firstControlPoints[0].x = (2 * knots[0].x + knots[1].x) / 3;
                 firstControlPoints[0].y = (2 * knots[0].y + knots[1].y) / 3;
@@ -44,7 +49,7 @@ namespace AwesomeCharts {
                     firstControlPoints[0].y - knots[0].y;
                 return;
             }
-             
+
             float[] valuesX = knots.Select(knot => knot.x).ToArray();
             float[] valuesY = knots.Select(knot => knot.y).ToArray();
             float[] x = GetFirstControlPoints(CreateRightHandVectors(valuesX));
@@ -52,20 +57,27 @@ namespace AwesomeCharts {
 
             firstControlPoints = new Vector2[n];
             secondControlPoints = new Vector2[n];
-            for (int i = 0; i < n; ++i) {
+            for (int i = 0; i < n; ++i)
+            {
                 firstControlPoints[i] = new Vector2(x[i], y[i]);
                 if (i < n - 1)
-                    secondControlPoints[i] = new Vector2(2 * knots
-                        [i + 1].x - x[i + 1], 2 *
-                        knots[i + 1].y - y[i + 1]);
+                {
+                    // Make sure the control points are within the range of the corresponding knot points
+                    secondControlPoints[i] = new Vector2(
+                        Mathf.Clamp(2 * knots[i + 1].x - x[i + 1], knots[i].x, knots[i + 1].x),
+                        Mathf.Clamp(2 * knots[i + 1].y - y[i + 1], knots[i].y, knots[i + 1].y));
+                }
                 else
-                    secondControlPoints[i] = new Vector2((knots
-                        [n].x + x[n - 1]) / 2,
+                {
+                    // Use the midpoint between the last knot point and its control point
+                    secondControlPoints[i] = new Vector2((knots[n].x + x[n - 1]) / 2,
                         (knots[n].y + y[n - 1]) / 2);
+                }
             }
         }
 
-        private static float[] CreateRightHandVectors(float[] knotValues){
+        private static float[] CreateRightHandVectors(float[] knotValues)
+        {
             int n = knotValues.Length - 1;
             float[] rightVectors = new float[n];
 
@@ -77,19 +89,21 @@ namespace AwesomeCharts {
             return rightVectors;
         }
 
-        private static float[] GetFirstControlPoints(float[] rightVectors) {
+        private static float[] GetFirstControlPoints(float[] rightVectors)
+        {
             int length = rightVectors.Length;
-            float[] result = new float[length]; 
-            float[] tmp = new float[length]; 
+            float[] result = new float[length];
+            float[] tmp = new float[length];
 
             float b = 2.0f;
             result[0] = rightVectors[0] / b;
-            for (int i = 1; i < length; i++) 
+            for (int i = 1; i < length; i++)
             {
                 tmp[i] = 1 / b;
                 b = (i < length - 1 ? 4.0f : 3.5f) - tmp[i];
                 result[i] = (rightVectors[i] - result[i - 1]) / b;
             }
+
             for (int i = 1; i < length; i++)
                 result[length - i - 1] -= tmp[length - i] * result[length - i];
 

@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 997
   m_ShowMode: 4
-  m_Title: Git for Unity
+  m_Title: Inspector
   m_RootView: {fileID: 7}
   m_MinSize: {x: 875, y: 350}
   m_MaxSize: {x: 10000, y: 10000}
@@ -39,9 +39,9 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 1224
+    x: 1225
     y: 0
-    width: 242
+    width: 241
     height: 561
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
@@ -74,7 +74,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 200}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 67
+  controlID: 96
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -85,7 +85,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: Window
+  m_Name: InspectorWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -94,15 +94,15 @@ MonoBehaviour:
     y: 0
     width: 454
     height: 947
-  m_MinSize: {x: 101, y: 121}
+  m_MinSize: {x: 276, y: 71}
   m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 14}
+  m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
   - {fileID: 14}
   - {fileID: 13}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 2
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ConsoleWindow
+  m_Name: ProjectBrowser
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -148,14 +148,14 @@ MonoBehaviour:
     y: 561
     width: 1466
     height: 386
-  m_MinSize: {x: 101, y: 121}
-  m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 20}
+  m_MinSize: {x: 231, y: 271}
+  m_MaxSize: {x: 10001, y: 10021}
+  m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}
   - {fileID: 20}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -251,7 +251,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 1
-  controlID: 25
+  controlID: 97
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 8096}
   vertical: 0
-  controlID: 26
+  controlID: 98
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -295,7 +295,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 361
     y: 0
-    width: 863
+    width: 864
     height: 561
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
@@ -363,11 +363,11 @@ MonoBehaviour:
   progressMessageClearTime: -1
   notificationClearTime: -1
   timeSinceLastRotation: -1
-  currentBranchAndRemoteHasUpdate: 0
-  currentTrackingStatusHasUpdate: 0
-  currentStatusEntriesHasUpdate: 0
-  repositoryProgressHasUpdate: 0
-  appManagerProgressHasUpdate: 0
+  currentBranchAndRemoteHasUpdate: 1
+  currentTrackingStatusHasUpdate: 1
+  currentStatusEntriesHasUpdate: 1
+  repositoryProgressHasUpdate: 1
+  appManagerProgressHasUpdate: 1
   changeTab: 3
   activeTab: 3
   initProjectView:
@@ -452,20 +452,936 @@ MonoBehaviour:
     localBranches: []
     remoteBranches: []
   changesView:
-    currentBranchHasUpdate: 0
-    currentStatusEntriesHasUpdate: 0
-    currentLocksHasUpdate: 0
-    commitBody: 
-    commitMessage: 
+    currentBranchHasUpdate: 1
+    currentStatusEntriesHasUpdate: 1
+    currentLocksHasUpdate: 1
+    commitBody: '"wat moet ik halen" is move to statisctics and "wat ga ik halen"
+      is added'
+    commitMessage: reworked some grade statisctics
     currentBranch: main
     treeScroll: {x: 0, y: 0}
     treeChanges:
       assets:
-        keys: []
-        values: []
+        keys:
+        - 00000000000000001000000000000000
+        - 2cda990e2423bbf4892e6590ba056729
+        - 1693e7f62ae10b442bbba2b0bdb1197c
+        - 8aa8db521bad80a4389f21b711c941a7
+        - 0b821085c6b14084eb3290730b4e649f
+        - e6ab01e7782636c45b6e9027a9ccfc8a
+        - dac28868b0c37e34dac433050d4e2834
+        - ffb746b3692094e4ba3528c73b61d48b
+        - 2f75e5c369b4d98498bf89ef9cddccad
+        - 25c9c2ae06dab224c894fcb372dc09cd
+        - e0c587c6fb313764f8974c58ee7760a5
+        - 47588e823c6f7ac4ca3f95cd07261cf1
+        - 4cd83d00b51ef00478d702b1f778fb56
+        - 21523655e410e8943aca678fb73e6e9a
+        - 54e3ef5d66b15c747be0c5ff8513f6f3
+        - 82ab49781fefa2e41a5efd1b7525019b
+        - 6bdc83370e9297f47850afa9439eef2b
+        - a39d03618b1bb2047b3531ac87a7746a
+        - bd4120fdc6f26b5438a94d7a8c2553ca
+        - 385e5acba03b12045be0bdf06a2c4464
+        - bf75e05e2d685af479576ddf19d7b330
+        - fc9d54bf1d4b45b3b079edcfdc91ca6b
+        - 1c23ede5499a4b74c89f2dc54955741c
+        - b38a5f975e96e0d4bb0a537aa61fd5d2
+        - b5af8a73096092e43ade6e77e861adfb
+        - fca78733e2dcc974db5ad27fb387bffe
+        - 3d2c76f7ff0c1a94a9c6f646b4d3496d
+        - fa5c24a3c0df11c47a9d77df850b2b97
+        - 129654e92c2caf74babed5320b948a0b
+        - bd285a0bec27cce4ea60c3f4d55a3938
+        - 0fdf42af2bde7f24b9650db1b5d9e73c
+        - 7377b0e9280edc740bbeefda48b8c579
+        values:
+        - path: Assets
+          label: Assets
+          level: 0
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\_MainScene.unity
+          label: _MainScene.unity
+          level: 1
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\_MainScene.unity
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\_MainScene.unity
+            projectPath: Assets\_MainScene.unity
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 3
+        - path: Assets\API Library
+          label: API Library
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\API Library\_Zermelo
+          label: _Zermelo
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\API Library\_Zermelo\Schedule.cs
+          label: Schedule.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\API Library\_Zermelo\Schedule.cs
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\API
+              Library\_Zermelo\Schedule.cs
+            projectPath: Assets\API Library\_Zermelo\Schedule.cs
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 3
+        - path: Assets\API Library\Antonius
+          label: Antonius
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\API Library\Antonius\AntoniusNews.cs
+          label: AntoniusNews.cs
+          level: 3
+          isFolder: 0
+          isContainer: 1
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\API Library\Antonius\AntoniusNews.cs
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\API
+              Library\Antonius\AntoniusNews.cs
+            projectPath: Assets\API Library\Antonius\AntoniusNews.cs
+            originalPath: 
+            indexStatus: 1
+            workTreeStatus: 1
+        - path: Assets\Plugins
+          label: Plugins
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\Plugins\Custom
+          label: Custom
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\Plugins\Custom\DateTimeUtils.cs
+          label: DateTimeUtils.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\Plugins\Custom\DateTimeUtils.cs
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\Custom\DateTimeUtils.cs
+            projectPath: Assets\Plugins\Custom\DateTimeUtils.cs
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 3
+        - path: Assets\Plugins\Custom\LocalPreferences
+          label: LocalPreferences
+          level: 3
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\Plugins\Custom\LocalPreferences\SaveLocalPrefs.cs
+          label: SaveLocalPrefs.cs
+          level: 4
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\Plugins\Custom\LocalPreferences\SaveLocalPrefs.cs
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\Custom\LocalPreferences\SaveLocalPrefs.cs
+            projectPath: Assets\Plugins\Custom\LocalPreferences\SaveLocalPrefs.cs
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 3
+        - path: Assets\Prefabs
+          label: Prefabs
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\Prefabs\News And Information
+          label: News And Information
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\Prefabs\News And Information\PaklijstPrefab.prefab
+          label: PaklijstPrefab.prefab
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\Prefabs\News And Information\PaklijstPrefab.prefab
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\News
+              And Information\PaklijstPrefab.prefab
+            projectPath: Assets\Prefabs\News And Information\PaklijstPrefab.prefab
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 3
+        - path: Assets\Scripts
+          label: Scripts
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\Scripts\ChartInfoGameObjects.cs
+          label: ChartInfoGameObjects.cs
+          level: 2
+          isFolder: 0
+          isContainer: 1
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\Scripts\ChartInfoGameObjects.cs
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Scripts\ChartInfoGameObjects.cs
+            projectPath: Assets\Scripts\ChartInfoGameObjects.cs
+            originalPath: 
+            indexStatus: 1
+            workTreeStatus: 1
+        - path: Assets\Tests
+          label: Tests
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\Tests\_MainScene.unity
+          label: _MainScene.unity
+          level: 2
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\Tests\_MainScene.unity
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Tests\_MainScene.unity
+            projectPath: Assets\Tests\_MainScene.unity
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 3
+        - path: Assets\UI
+          label: UI
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\UI\Managers
+          label: Managers
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\UI\Managers\SubViewManager.cs
+          label: SubViewManager.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\UI\Managers\SubViewManager.cs
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Managers\SubViewManager.cs
+            projectPath: Assets\UI\Managers\SubViewManager.cs
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 3
+        - path: Assets\UI\Views
+          label: Views
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\UI\Views\DagRoosterView.cs
+          label: DagRoosterView.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\UI\Views\DagRoosterView.cs
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\DagRoosterView.cs
+            projectPath: Assets\UI\Views\DagRoosterView.cs
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 3
+        - path: Assets\UI\Views\GradeStatisticsView.cs
+          label: GradeStatisticsView.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\UI\Views\GradeStatisticsView.cs
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\GradeStatisticsView.cs
+            projectPath: Assets\UI\Views\GradeStatisticsView.cs
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 3
+        - path: Assets\UI\Views\GradeView.cs
+          label: GradeView.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\UI\Views\GradeView.cs
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\GradeView.cs
+            projectPath: Assets\UI\Views\GradeView.cs
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 3
+        - path: Assets\UI\Views\HomeworkItemView.cs
+          label: HomeworkItemView.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\UI\Views\HomeworkItemView.cs
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\HomeworkItemView.cs
+            projectPath: Assets\UI\Views\HomeworkItemView.cs
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 3
+        - path: Assets\UI\Views\JaarKalenderView.cs
+          label: JaarKalenderView.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\UI\Views\JaarKalenderView.cs
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\JaarKalenderView.cs
+            projectPath: Assets\UI\Views\JaarKalenderView.cs
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 3
+        - path: Assets\UI\Views\NewsAndInformationView.cs
+          label: NewsAndInformationView.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\UI\Views\NewsAndInformationView.cs
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\NewsAndInformationView.cs
+            projectPath: Assets\UI\Views\NewsAndInformationView.cs
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 3
+        - path: Assets\UI\Views\SchoolNewsItemView.cs
+          label: SchoolNewsItemView.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\UI\Views\SchoolNewsItemView.cs
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\SchoolNewsItemView.cs
+            projectPath: Assets\UI\Views\SchoolNewsItemView.cs
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 3
+        - path: Assets\UI\Views\SecretSettingsView.cs
+          label: SecretSettingsView.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\UI\Views\SecretSettingsView.cs
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\SecretSettingsView.cs
+            projectPath: Assets\UI\Views\SecretSettingsView.cs
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 3
+        - path: Assets\UI\Views\WatMoetIkHalenView.cs
+          label: WatMoetIkHalenView.cs
+          level: 3
+          isFolder: 0
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: Assets\UI\Views\WatMoetIkHalenView.cs
+            fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\WatMoetIkHalenView.cs
+            projectPath: Assets\UI\Views\WatMoetIkHalenView.cs
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 3
       folders:
-        keys: []
-        values: []
+        keys:
+        - Assets
+        - Assets\API Library
+        - Assets\API Library\_Zermelo
+        - Assets\API Library\Antonius
+        - Assets\Plugins
+        - Assets\Plugins\Custom
+        - Assets\Plugins\Custom\LocalPreferences
+        - Assets\Prefabs
+        - Assets\Prefabs\News And Information
+        - Assets\Scripts
+        - Assets\Tests
+        - Assets\UI
+        - Assets\UI\Managers
+        - Assets\UI\Views
+        - UserSettings
+        - UserSettings\Layouts
+        values:
+        - path: Assets
+          label: Assets
+          level: 0
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\API Library
+          label: API Library
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\API Library\_Zermelo
+          label: _Zermelo
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\API Library\Antonius
+          label: Antonius
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\Plugins
+          label: Plugins
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\Plugins\Custom
+          label: Custom
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\Plugins\Custom\LocalPreferences
+          label: LocalPreferences
+          level: 3
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\Prefabs
+          label: Prefabs
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\Prefabs\News And Information
+          label: News And Information
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\Scripts
+          label: Scripts
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\Tests
+          label: Tests
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\UI
+          label: UI
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\UI\Managers
+          label: Managers
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: Assets\UI\Views
+          label: Views
+          level: 2
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: UserSettings
+          label: UserSettings
+          level: 0
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
+        - path: UserSettings\Layouts
+          label: Layouts
+          level: 1
+          isFolder: 1
+          isContainer: 0
+          isCollapsed: 0
+          isHidden: 0
+          isActive: 0
+          treeIsCheckable: 1
+          checkState: 0
+          isLocked: 0
+          gitStatusEntry:
+            path: 
+            fullPath: 
+            projectPath: 
+            originalPath: 
+            indexStatus: 0
+            workTreeStatus: 0
       checkedFileNodes:
         keys: []
         values: []
@@ -494,6 +1410,749 @@ MonoBehaviour:
           originalPath: 
           indexStatus: 0
           workTreeStatus: 0
+      - path: Assets
+        label: Assets
+        level: 0
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 0
+      - path: Assets\_MainScene.unity
+        label: _MainScene.unity
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\_MainScene.unity
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\_MainScene.unity
+          projectPath: Assets\_MainScene.unity
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 3
+      - path: Assets\AntoniusNews.cs
+        label: AntoniusNews.cs
+        level: 1
+        isFolder: 0
+        isContainer: 1
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\AntoniusNews.cs
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\AntoniusNews.cs
+          projectPath: Assets\AntoniusNews.cs
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 5
+      - path: Assets\AntoniusNews.cs.meta
+        label: AntoniusNews.cs.meta
+        level: 2
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\AntoniusNews.cs.meta
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\AntoniusNews.cs.meta
+          projectPath: Assets\AntoniusNews.cs.meta
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 5
+      - path: Assets\API Library
+        label: API Library
+        level: 1
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 0
+      - path: Assets\API Library\_Zermelo
+        label: _Zermelo
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 0
+      - path: Assets\API Library\_Zermelo\Schedule.cs
+        label: Schedule.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\API Library\_Zermelo\Schedule.cs
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\API
+            Library\_Zermelo\Schedule.cs
+          projectPath: Assets\API Library\_Zermelo\Schedule.cs
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 3
+      - path: Assets\API Library\Antonius.meta
+        label: Antonius.meta
+        level: 2
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\API Library\Antonius.meta
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\API
+            Library\Antonius.meta
+          projectPath: Assets\API Library\Antonius.meta
+          originalPath: 
+          indexStatus: 1
+          workTreeStatus: 1
+      - path: Assets\API Library\Antonius
+        label: Antonius
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 0
+      - path: Assets\API Library\Antonius\AntoniusNews.cs
+        label: AntoniusNews.cs
+        level: 3
+        isFolder: 0
+        isContainer: 1
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\API Library\Antonius\AntoniusNews.cs
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\API
+            Library\Antonius\AntoniusNews.cs
+          projectPath: Assets\API Library\Antonius\AntoniusNews.cs
+          originalPath: 
+          indexStatus: 1
+          workTreeStatus: 1
+      - path: Assets\API Library\Antonius\AntoniusNews.cs.meta
+        label: AntoniusNews.cs.meta
+        level: 4
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\API Library\Antonius\AntoniusNews.cs.meta
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\API
+            Library\Antonius\AntoniusNews.cs.meta
+          projectPath: Assets\API Library\Antonius\AntoniusNews.cs.meta
+          originalPath: 
+          indexStatus: 1
+          workTreeStatus: 1
+      - path: Assets\editor.meta
+        label: editor.meta
+        level: 1
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\editor.meta
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\editor.meta
+          projectPath: Assets\editor.meta
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 5
+      - path: Assets\Plugins
+        label: Plugins
+        level: 1
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 0
+      - path: Assets\Plugins\Custom
+        label: Custom
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 0
+      - path: Assets\Plugins\Custom\DateTimeUtils.cs
+        label: DateTimeUtils.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\Plugins\Custom\DateTimeUtils.cs
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\Custom\DateTimeUtils.cs
+          projectPath: Assets\Plugins\Custom\DateTimeUtils.cs
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 3
+      - path: Assets\Plugins\Custom\LocalPreferences
+        label: LocalPreferences
+        level: 3
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 0
+      - path: Assets\Plugins\Custom\LocalPreferences\SaveLocalPrefs.cs
+        label: SaveLocalPrefs.cs
+        level: 4
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\Plugins\Custom\LocalPreferences\SaveLocalPrefs.cs
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\Custom\LocalPreferences\SaveLocalPrefs.cs
+          projectPath: Assets\Plugins\Custom\LocalPreferences\SaveLocalPrefs.cs
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 3
+      - path: Assets\Prefabs
+        label: Prefabs
+        level: 1
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 0
+      - path: Assets\Prefabs\News And Information
+        label: News And Information
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 0
+      - path: Assets\Prefabs\News And Information\PaklijstPrefab.prefab
+        label: PaklijstPrefab.prefab
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\Prefabs\News And Information\PaklijstPrefab.prefab
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\News
+            And Information\PaklijstPrefab.prefab
+          projectPath: Assets\Prefabs\News And Information\PaklijstPrefab.prefab
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 3
+      - path: Assets\Scripts
+        label: Scripts
+        level: 1
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 0
+      - path: Assets\Scripts\ChartInfoGameObjects.cs
+        label: ChartInfoGameObjects.cs
+        level: 2
+        isFolder: 0
+        isContainer: 1
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\Scripts\ChartInfoGameObjects.cs
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Scripts\ChartInfoGameObjects.cs
+          projectPath: Assets\Scripts\ChartInfoGameObjects.cs
+          originalPath: 
+          indexStatus: 1
+          workTreeStatus: 1
+      - path: Assets\Scripts\ChartInfoGameObjects.cs.meta
+        label: ChartInfoGameObjects.cs.meta
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\Scripts\ChartInfoGameObjects.cs.meta
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Scripts\ChartInfoGameObjects.cs.meta
+          projectPath: Assets\Scripts\ChartInfoGameObjects.cs.meta
+          originalPath: 
+          indexStatus: 1
+          workTreeStatus: 1
+      - path: Assets\Tests
+        label: Tests
+        level: 1
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 0
+      - path: Assets\Tests\_MainScene.unity
+        label: _MainScene.unity
+        level: 2
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\Tests\_MainScene.unity
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Tests\_MainScene.unity
+          projectPath: Assets\Tests\_MainScene.unity
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 3
+      - path: Assets\UI
+        label: UI
+        level: 1
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 0
+      - path: Assets\UI\Managers
+        label: Managers
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 0
+      - path: Assets\UI\Managers\SubViewManager.cs
+        label: SubViewManager.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\UI\Managers\SubViewManager.cs
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Managers\SubViewManager.cs
+          projectPath: Assets\UI\Managers\SubViewManager.cs
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 3
+      - path: Assets\UI\Views
+        label: Views
+        level: 2
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 0
+      - path: Assets\UI\Views\DagRoosterView.cs
+        label: DagRoosterView.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\UI\Views\DagRoosterView.cs
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\DagRoosterView.cs
+          projectPath: Assets\UI\Views\DagRoosterView.cs
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 3
+      - path: Assets\UI\Views\GradeStatisticsView.cs
+        label: GradeStatisticsView.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\UI\Views\GradeStatisticsView.cs
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\GradeStatisticsView.cs
+          projectPath: Assets\UI\Views\GradeStatisticsView.cs
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 3
+      - path: Assets\UI\Views\GradeView.cs
+        label: GradeView.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\UI\Views\GradeView.cs
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\GradeView.cs
+          projectPath: Assets\UI\Views\GradeView.cs
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 3
+      - path: Assets\UI\Views\HomeworkItemView.cs
+        label: HomeworkItemView.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\UI\Views\HomeworkItemView.cs
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\HomeworkItemView.cs
+          projectPath: Assets\UI\Views\HomeworkItemView.cs
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 3
+      - path: Assets\UI\Views\JaarKalenderView.cs
+        label: JaarKalenderView.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\UI\Views\JaarKalenderView.cs
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\JaarKalenderView.cs
+          projectPath: Assets\UI\Views\JaarKalenderView.cs
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 3
+      - path: Assets\UI\Views\NewsAndInformationView.cs
+        label: NewsAndInformationView.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\UI\Views\NewsAndInformationView.cs
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\NewsAndInformationView.cs
+          projectPath: Assets\UI\Views\NewsAndInformationView.cs
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 3
+      - path: Assets\UI\Views\SchoolNewsItemView.cs
+        label: SchoolNewsItemView.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\UI\Views\SchoolNewsItemView.cs
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\SchoolNewsItemView.cs
+          projectPath: Assets\UI\Views\SchoolNewsItemView.cs
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 3
+      - path: Assets\UI\Views\SecretSettingsView.cs
+        label: SecretSettingsView.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\UI\Views\SecretSettingsView.cs
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\SecretSettingsView.cs
+          projectPath: Assets\UI\Views\SecretSettingsView.cs
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 3
+      - path: Assets\UI\Views\WatMoetIkHalenView.cs
+        label: WatMoetIkHalenView.cs
+        level: 3
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: Assets\UI\Views\WatMoetIkHalenView.cs
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\WatMoetIkHalenView.cs
+          projectPath: Assets\UI\Views\WatMoetIkHalenView.cs
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 3
+      - path: UserSettings
+        label: UserSettings
+        level: 0
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 0
+      - path: UserSettings\Layouts
+        label: Layouts
+        level: 1
+        isFolder: 1
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: 
+          fullPath: 
+          projectPath: 
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 0
+      - path: UserSettings\Layouts\default-2021.dwlt
+        label: default-2021.dwlt
+        level: 2
+        isFolder: 0
+        isContainer: 0
+        isCollapsed: 0
+        isHidden: 0
+        isActive: 0
+        treeIsCheckable: 1
+        checkState: 0
+        isLocked: 0
+        gitStatusEntry:
+          path: UserSettings\Layouts\default-2021.dwlt
+          fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\UserSettings\Layouts\default-2021.dwlt
+          projectPath: UserSettings\Layouts\default-2021.dwlt
+          originalPath: 
+          indexStatus: 0
+          workTreeStatus: 3
       selectedNode:
         path: 
         label: 
@@ -513,16 +2172,171 @@ MonoBehaviour:
           originalPath: 
           indexStatus: 0
           workTreeStatus: 0
-    gitStatusEntries: []
-    changedFilesText: No changed files
+    gitStatusEntries:
+    - path: Assets\_MainScene.unity
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\_MainScene.unity
+      projectPath: Assets\_MainScene.unity
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 3
+    - path: Assets\AntoniusNews.cs
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\AntoniusNews.cs
+      projectPath: Assets\AntoniusNews.cs
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 5
+    - path: Assets\AntoniusNews.cs.meta
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\AntoniusNews.cs.meta
+      projectPath: Assets\AntoniusNews.cs.meta
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 5
+    - path: Assets\API Library\_Zermelo\Schedule.cs
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\API
+        Library\_Zermelo\Schedule.cs
+      projectPath: Assets\API Library\_Zermelo\Schedule.cs
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 3
+    - path: Assets\API Library\Antonius.meta
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\API
+        Library\Antonius.meta
+      projectPath: Assets\API Library\Antonius.meta
+      originalPath: 
+      indexStatus: 1
+      workTreeStatus: 1
+    - path: Assets\API Library\Antonius\AntoniusNews.cs
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\API
+        Library\Antonius\AntoniusNews.cs
+      projectPath: Assets\API Library\Antonius\AntoniusNews.cs
+      originalPath: 
+      indexStatus: 1
+      workTreeStatus: 1
+    - path: Assets\API Library\Antonius\AntoniusNews.cs.meta
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\API
+        Library\Antonius\AntoniusNews.cs.meta
+      projectPath: Assets\API Library\Antonius\AntoniusNews.cs.meta
+      originalPath: 
+      indexStatus: 1
+      workTreeStatus: 1
+    - path: Assets\editor.meta
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\editor.meta
+      projectPath: Assets\editor.meta
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 5
+    - path: Assets\Plugins\Custom\DateTimeUtils.cs
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\Custom\DateTimeUtils.cs
+      projectPath: Assets\Plugins\Custom\DateTimeUtils.cs
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 3
+    - path: Assets\Plugins\Custom\LocalPreferences\SaveLocalPrefs.cs
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Plugins\Custom\LocalPreferences\SaveLocalPrefs.cs
+      projectPath: Assets\Plugins\Custom\LocalPreferences\SaveLocalPrefs.cs
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 3
+    - path: Assets\Prefabs\News And Information\PaklijstPrefab.prefab
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Prefabs\News
+        And Information\PaklijstPrefab.prefab
+      projectPath: Assets\Prefabs\News And Information\PaklijstPrefab.prefab
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 3
+    - path: Assets\Scripts\ChartInfoGameObjects.cs
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Scripts\ChartInfoGameObjects.cs
+      projectPath: Assets\Scripts\ChartInfoGameObjects.cs
+      originalPath: 
+      indexStatus: 1
+      workTreeStatus: 1
+    - path: Assets\Scripts\ChartInfoGameObjects.cs.meta
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Scripts\ChartInfoGameObjects.cs.meta
+      projectPath: Assets\Scripts\ChartInfoGameObjects.cs.meta
+      originalPath: 
+      indexStatus: 1
+      workTreeStatus: 1
+    - path: Assets\Tests\_MainScene.unity
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\Tests\_MainScene.unity
+      projectPath: Assets\Tests\_MainScene.unity
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 3
+    - path: Assets\UI\Managers\SubViewManager.cs
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Managers\SubViewManager.cs
+      projectPath: Assets\UI\Managers\SubViewManager.cs
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 3
+    - path: Assets\UI\Views\DagRoosterView.cs
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\DagRoosterView.cs
+      projectPath: Assets\UI\Views\DagRoosterView.cs
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 3
+    - path: Assets\UI\Views\GradeStatisticsView.cs
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\GradeStatisticsView.cs
+      projectPath: Assets\UI\Views\GradeStatisticsView.cs
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 3
+    - path: Assets\UI\Views\GradeView.cs
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\GradeView.cs
+      projectPath: Assets\UI\Views\GradeView.cs
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 3
+    - path: Assets\UI\Views\HomeworkItemView.cs
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\HomeworkItemView.cs
+      projectPath: Assets\UI\Views\HomeworkItemView.cs
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 3
+    - path: Assets\UI\Views\JaarKalenderView.cs
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\JaarKalenderView.cs
+      projectPath: Assets\UI\Views\JaarKalenderView.cs
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 3
+    - path: Assets\UI\Views\NewsAndInformationView.cs
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\NewsAndInformationView.cs
+      projectPath: Assets\UI\Views\NewsAndInformationView.cs
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 3
+    - path: Assets\UI\Views\SchoolNewsItemView.cs
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\SchoolNewsItemView.cs
+      projectPath: Assets\UI\Views\SchoolNewsItemView.cs
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 3
+    - path: Assets\UI\Views\SecretSettingsView.cs
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\SecretSettingsView.cs
+      projectPath: Assets\UI\Views\SecretSettingsView.cs
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 3
+    - path: Assets\UI\Views\WatMoetIkHalenView.cs
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\Assets\UI\Views\WatMoetIkHalenView.cs
+      projectPath: Assets\UI\Views\WatMoetIkHalenView.cs
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 3
+    - path: UserSettings\Layouts\default-2021.dwlt
+      fullPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday\UserSettings\Layouts\default-2021.dwlt
+      projectPath: UserSettings\Layouts\default-2021.dwlt
+      originalPath: 
+      indexStatus: 0
+      workTreeStatus: 3
+    changedFilesText: 25 changed files
     lastCurrentBranchChangedEvent:
-      updatedTimeString: 2023-03-23T20:53:14.191+01:00
+      updatedTimeString: 2023-03-24T20:00:27.630+01:00
       cacheType: 1
     lastStatusEntriesChangedEvent:
-      updatedTimeString: 2023-03-23T20:53:01.542+01:00
+      updatedTimeString: 2023-03-24T20:13:38.142+01:00
       cacheType: 6
     lastLocksChangedEvent:
-      updatedTimeString: 2023-03-23T20:47:39.676+01:00
+      updatedTimeString: 2023-03-24T20:09:46.490+01:00
       cacheType: 7
   historyView:
     currentLogHasUpdate: 0
@@ -667,7 +2481,7 @@ MonoBehaviour:
   currentRemoteUrl: https://github.com/MJTSgamer/Zermelo-Somtoday
   statusAhead: 0
   statusBehind: 0
-  hasItemsToCommit: 0
+  hasItemsToCommit: 1
   isTrackingRemoteBranch: 1
   currentBranchContent:
     m_Text: main
@@ -678,13 +2492,13 @@ MonoBehaviour:
     m_Image: {fileID: 0}
     m_Tooltip: Url of the origin remote
   lastCurrentBranchAndRemoteChangedEvent:
-    updatedTimeString: 2023-03-23T20:53:14.191+01:00
+    updatedTimeString: 2023-03-24T20:00:27.630+01:00
     cacheType: 1
   lastTrackingStatusChangedEvent:
-    updatedTimeString: 2023-03-23T20:53:17.232+01:00
+    updatedTimeString: 2023-03-24T20:01:15.114+01:00
     cacheType: 5
   lastStatusEntriesChangedEvent:
-    updatedTimeString: 2023-03-23T20:53:01.542+01:00
+    updatedTimeString: 2023-03-24T20:01:14.971+01:00
     cacheType: 6
   pullButtonContent:
     m_Text: Pull
@@ -702,7 +2516,7 @@ MonoBehaviour:
     m_Text: Fetch
     m_Image: {fileID: 0}
     m_Tooltip: 
-  repositoryProgressValue: 0
+  repositoryProgressValue: 0.9991327
   repositoryProgressMessage: 
   appManagerProgressValue: 1
   appManagerProgressMessage: 
@@ -728,9 +2542,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1224
+    x: 1225
     y: 73
-    width: 240
+    width: 239
     height: 540
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
@@ -809,22 +2623,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/UI/Views
+    - Assets/Prefabs/News And Information
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/UI/Views
+  - Assets/Prefabs/News And Information
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\mattt\AppData\Roaming\Unity\Games\Zermelo+Somtoday
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 39}
-    m_SelectedIDs: 886e0000
-    m_LastClickedID: 28296
-    m_ExpandedIDs: 00000000e8720000
+    scrollPos: {x: 0, y: 31}
+    m_SelectedIDs: daf00300
+    m_LastClickedID: 258266
+    m_ExpandedIDs: 000000007a74000044a803004ca8030052a80300
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -852,7 +2666,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000e8720000
+    m_ExpandedIDs: 000000007a740000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -981,24 +2795,24 @@ MonoBehaviour:
     m_SaveData: []
   m_SceneHierarchy:
     m_TreeViewState:
-      scrollPos: {x: 0, y: 365}
-      m_SelectedIDs: de630000
-      m_LastClickedID: 25566
-      m_ExpandedIDs: f6ebffff32fbffff70560000cc5700003c590000065c000046600000a8600000d662000038640000b66400007a670000346800001e690000606a0000546b0000
+      scrollPos: {x: 0, y: 32}
+      m_SelectedIDs: f669faff
+      m_LastClickedID: -366090
+      m_ExpandedIDs: e06efaffc8dcfaff1412fbff687afbff6a7afbffc286fbfff488fbff688afbff90a5fbff90a6fbff70a9fbff76a9fbff02b6fbff80b8fbff14befbff12c5fbffc2c5fbffdac5fbffdcc5fbffe6c5fbffecc5fbfff8cefbff00cffbff76cffbff30fbffff1c6100007e610000b865000018660000e2680000cc6c0000d26c00001ebf0300d6c20300b2c4030048c50300f0ce030014d0030020d50300b2d8030010dc03003adc03008cdd030028e403006ae4030002e6030048eb0300c8090400b20c0400800d0400f20f0400861504009a190400be1a0400da1d0400303b0400a63e0400f83f040098460400da4604007c480400ba4d0400
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: Text
-        m_OriginalName: Text
+        m_Name: 
+        m_OriginalName: 
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 26482
+        m_UserData: 0
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 4
+        m_OriginalEventType: 11
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 5}
       m_SearchString: 
@@ -1031,7 +2845,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 361
     y: 73
-    width: 861
+    width: 862
     height: 540
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
@@ -1267,9 +3081,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 461.17303, y: 1591.7805, z: 4.495965}
+    m_Target: {x: 528.5858, y: 1538.7614, z: -10.454506}
     speed: 2
-    m_Value: {x: 461.17303, y: 1591.7805, z: 4.495965}
+    m_Value: {x: 528.5858, y: 1538.7614, z: -10.454506}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1320,9 +3134,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 891.5648
+    m_Target: 1257.5433
     speed: 2
-    m_Value: 891.5648
+    m_Value: 1257.5433
   m_Ortho:
     m_Target: 1
     speed: 2

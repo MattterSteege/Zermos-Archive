@@ -59,7 +59,7 @@ namespace UI.Views
             base.Initialize();
         }
 
-        public override void Show(object args = null)
+        public virtual void Show(params object[] args)
         {
             Application.logMessageReceived -= HandleLog;
             Application.logMessageReceived += HandleLog;

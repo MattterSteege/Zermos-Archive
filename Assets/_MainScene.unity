@@ -6939,10 +6939,10 @@ RectTransform:
   m_Father: {fileID: 366192891}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 165.28348, y: -33}
-  m_SizeDelta: {x: 300.56696, y: 66}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &244806136
 MonoBehaviour:
@@ -7439,6 +7439,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButtonWholePage: {fileID: 256314119}
   openNavigationButton: {fileID: 954719953}
+  viewName: 
   isInitialized: 0
   isVisible: 0
   inplanLesPrefab: {fileID: 7745373774041731224, guid: ec47d33fcea717440bf1679516ebd84c,
@@ -7957,10 +7958,10 @@ RectTransform:
   m_Father: {fileID: 1371450051}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 165.28348, y: -12.5}
-  m_SizeDelta: {x: 330.56696, y: 15}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &275221198
 MonoBehaviour:
@@ -9043,6 +9044,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButtonWholePage: {fileID: 297110264}
   openNavigationButton: {fileID: 0}
+  viewName: 
   isInitialized: 0
   isVisible: 0
   Gebruikersnaam: {fileID: 1990765984}
@@ -9729,6 +9731,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButtonWholePage: {fileID: 0}
   openNavigationButton: {fileID: 0}
+  viewName: 
   isInitialized: 0
   isVisible: 0
   ToZermelo: {fileID: 1336590291}
@@ -10863,13 +10866,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d2c76f7ff0c1a94a9c6f646b4d3496d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  closeButtonWholePage: {fileID: 362887865}
-  openNavigationButton: {fileID: 1069561331}
+  backButton: {fileID: 0}
   isInitialized: 0
   isVisible: 0
   Vak: {fileID: 919919339}
   Datum: {fileID: 1081753566}
   LaatstAangepast: {fileID: 644301361}
+  Titel: {fileID: 0}
   Omschrijving: {fileID: 978957112}
   Gemaakt: {fileID: 0}
   delete: {fileID: 1967264768}
@@ -11338,10 +11341,10 @@ RectTransform:
   m_Father: {fileID: 1893935593}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 165.28348, y: -53}
-  m_SizeDelta: {x: 330.56696, y: 66}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &366192892
 MonoBehaviour:
@@ -15702,6 +15705,7 @@ MonoBehaviour:
   versionText: {fileID: 1651418443}
   loadingScreen: {fileID: 501444026}
   progressBar: {fileID: 908443732}
+  openMenu: {fileID: 0}
 --- !u!114 &501444029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19773,9 +19777,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButtonWholePage: {fileID: 610253622}
   openNavigationButton: {fileID: 1947561082}
+  viewName: 
   isInitialized: 0
   isVisible: 0
-  content: {fileID: 2011294373}
   RoosterPrefab: {fileID: 7745373774041731224, guid: 704f7953e6332af40bddc5466bd52c6e,
     type: 3}
   TussenUurPrefab: {fileID: 7745373774041731224, guid: 7a4bbe309a4c4cd4484f7d077027a7b0,
@@ -19783,15 +19787,16 @@ MonoBehaviour:
   RefreshButton: {fileID: 1153604365}
   WeekRoosterButton: {fileID: 237726964}
   _schedule: {fileID: 1516145119}
-  _date: 0
-  _dateText: {fileID: 560994253}
-  nextDayButton: {fileID: 1681593215}
-  previousDayButton: {fileID: 311104171}
+  scrollRect: {fileID: 0}
+  currentDate: {fileID: 0}
+  _dagRoosterObjects: []
   NoLessonHours: 
   RoosterItems: []
   maxNumberOfLessons: 9
   addedDays: 0
-  _timeTable: {fileID: 2011294374}
+  antoniusNews: {fileID: 0}
+  NieuwsPrefab: {fileID: 0}
+  NieuwsParent: {fileID: 0}
 --- !u!222 &610253621
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20273,10 +20278,10 @@ RectTransform:
   m_Father: {fileID: 2135614506}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 165.28348, y: -43}
-  m_SizeDelta: {x: 330.56696, y: 86}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 151.3931, y: 0}
+  m_SizeDelta: {x: 302.7862, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &639079418
 CanvasRenderer:
@@ -21163,10 +21168,10 @@ RectTransform:
   m_Father: {fileID: 933799172}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 165.28348, y: -33}
-  m_SizeDelta: {x: 300.56696, y: 66}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &653816558
 MonoBehaviour:
@@ -24975,12 +24980,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5af8a73096092e43ade6e77e861adfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  closeButtonWholePage: {fileID: 0}
-  openNavigationButton: {fileID: 238793902}
+  backButton: {fileID: 0}
   isInitialized: 0
   isVisible: 0
-  gradeChart: {fileID: 1172106425}
-  TitleText: {fileID: 570488837}
+  Cijferoverzicht: {fileID: 0}
+  GemiddeldeVoortgangsgrafiek: {fileID: 0}
+  VoldoendeOnvoldoendeRatio: {fileID: 0}
+  voldoendeText: {fileID: 0}
+  onvoldoendeText: {fileID: 0}
+  GemiddeldeText: {fileID: 0}
+  watMoetIkHalenCijferInput: {fileID: 0}
+  watMoetIkHalenWegingInput: {fileID: 0}
+  watMoetIkHalenText: {fileID: 0}
+  WatGaIkStaanCijferInput: {fileID: 0}
+  WatGaIkStaanWegingInput: {fileID: 0}
+  WatGaIkStaanText: {fileID: 0}
+  BovenEnOnderGemiddeldeCijfers: {fileID: 0}
+  BovenGemiddeldeText: {fileID: 0}
+  OnderGemiddeldeText: {fileID: 0}
+  MeestBehaaldeCijfers: {fileID: 0}
 --- !u!222 &740307202
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -27979,6 +27997,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButtonWholePage: {fileID: 836496271}
   openNavigationButton: {fileID: 491615303}
+  viewName: 
   isInitialized: 0
   isVisible: 0
   subViewManager: {fileID: 1683510829}
@@ -27991,6 +28010,7 @@ MonoBehaviour:
   somtodayButton: {fileID: 221419581}
   OfficeButton: {fileID: 1161283323}
   schoolwikiButton: {fileID: 1942881031}
+  SourceRectTransform: {fileID: 0}
 --- !u!1 &845011564
 GameObject:
   m_ObjectHideFlags: 0
@@ -28050,14 +28070,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButtonWholePage: {fileID: 845011568}
   openNavigationButton: {fileID: 681716911}
+  viewName: 
   isInitialized: 0
   isVisible: 0
   AddleermiddelButton: {fileID: 750358703}
+  subViewManager: {fileID: 0}
   content: {fileID: 1531920942}
   leermiddelPrefab: {fileID: 3221322131778838946, guid: 0f4b7c763789a4047920b00922badd9a,
     type: 3}
   descriptionText: {fileID: 0}
   _leermiddelen: {fileID: 1147355070}
+  _customLeermiddelen: {fileID: 0}
+  vakContainterPrefab: {fileID: 0}
+  vakNameDivider: {fileID: 0}
 --- !u!222 &845011567
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -29166,10 +29191,10 @@ RectTransform:
   m_Father: {fileID: 1627452463}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 180.28348, y: -260}
-  m_SizeDelta: {x: 330.56696, y: 86}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 166.3931, y: 0}
+  m_SizeDelta: {x: 302.7862, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &875875597
 MonoBehaviour:
@@ -31924,15 +31949,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButtonWholePage: {fileID: 932769401}
   openNavigationButton: {fileID: 671307830}
+  viewName: 
   isInitialized: 0
   isVisible: 0
+  subViewManager: {fileID: 0}
   _newsItemPrefab: {fileID: 6358633317826539430, guid: 8f4f8386eebe95d4dac52aeced7f4d6e,
     type: 3}
   _newsItemContainer: {fileID: 1214467506}
   InfowijsMessages: {fileID: 748369143}
-  beschrijving: {fileID: 1495849827}
   loaded: 0
   messagesToLoad: 50
+  DividerPrefab: {fileID: 0}
+  dayContainterPrefab: {fileID: 0}
 --- !u!222 &932769400
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -32202,10 +32230,10 @@ RectTransform:
   m_Father: {fileID: 1371450051}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 165.28348, y: -53}
-  m_SizeDelta: {x: 330.56696, y: 66}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &933799173
 MonoBehaviour:
@@ -34962,13 +34990,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButtonWholePage: {fileID: 1023376584}
   openNavigationButton: {fileID: 1406324557}
+  viewName: 
   isInitialized: 0
   isVisible: 0
+  subViewManager: {fileID: 0}
   content: {fileID: 1059621130}
   gradePrefab: {fileID: 7745373774041731224, guid: a6daffb58583c3c44a160d392af5c9f7,
     type: 3}
   gradesObject: {fileID: 1147355065}
   vakkenObject: {fileID: 1147355069}
+  _FilterButton: {fileID: 0}
+  _filterObject: {fileID: 0}
+  _ScrollRect: {fileID: 0}
   LastGradeContentGameObject: {fileID: 1186065401}
 --- !u!1 &1024927300
 GameObject:
@@ -38461,6 +38494,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButtonWholePage: {fileID: 1119981741}
   openNavigationButton: {fileID: 695274551}
+  viewName: 
   isInitialized: 0
   isVisible: 0
   titel: {fileID: 941696617}
@@ -38940,17 +38974,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14e374a95552e5b44ab71b968e01626c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  closeButtonWholePage: {fileID: 1126134848}
-  openNavigationButton: {fileID: 676087283}
+  backButton: {fileID: 0}
   isInitialized: 0
   isVisible: 0
   gradePrefab: {fileID: 7745373774041731224, guid: a6daffb58583c3c44a160d392af5c9f7,
     type: 3}
   TitleText: {fileID: 1789567985}
   GradeContent: {fileID: 1674328275}
-  welkCijferMoetIkHalenButton: {fileID: 226539986}
   StatestiekenButton: {fileID: 1430899269}
-  _chart: {fileID: 921155124}
 --- !u!222 &1126134847
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -39374,6 +39405,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButtonWholePage: {fileID: 1130585568}
   openNavigationButton: {fileID: 1744280616}
+  viewName: 
   isInitialized: 0
   isVisible: 0
   _timeTables:
@@ -39972,6 +40004,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a1f23aba0f43224f8644e11f0f696df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  authCode: 
+  onAuthenticateSomtoday:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1147355063
 Transform:
   m_ObjectHideFlags: 0
@@ -40820,10 +40856,10 @@ RectTransform:
   m_Father: {fileID: 1627452463}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 180.28348, y: -159}
-  m_SizeDelta: {x: 330.56696, y: 86}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 166.3931, y: 0}
+  m_SizeDelta: {x: 302.7862, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1162804933
 MonoBehaviour:
@@ -45189,14 +45225,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7377b0e9280edc740bbeefda48b8c579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  closeButtonWholePage: {fileID: 1262380172}
-  openNavigationButton: {fileID: 1095788742}
+  backButton: {fileID: 0}
   isInitialized: 0
   isVisible: 0
-  cijferInput: {fileID: 1641325684}
-  wegingInput: {fileID: 389839206}
-  cijfersText: {fileID: 1813892047}
-  wegingText: {fileID: 945960514}
 --- !u!1 &1270133295
 GameObject:
   m_ObjectHideFlags: 0
@@ -45914,10 +45945,10 @@ RectTransform:
   m_Father: {fileID: 639079416}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 165.28348, y: -12.5}
-  m_SizeDelta: {x: 330.56696, y: 15}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1295070653
 MonoBehaviour:
@@ -47650,10 +47681,10 @@ RectTransform:
   m_Father: {fileID: 875875596}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 165.28348, y: -43}
-  m_SizeDelta: {x: 330.56696, y: 86}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 151.3931, y: 0}
+  m_SizeDelta: {x: 302.7862, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1371450052
 MonoBehaviour:
@@ -48018,12 +48049,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd285a0bec27cce4ea60c3f4d55a3938, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  closeButtonWholePage: {fileID: 1377697870}
-  openNavigationButton: {fileID: 554714019}
+  backButton: {fileID: 0}
   isInitialized: 1
   isVisible: 1
   messageText: {fileID: 647092877}
   messageTitleText: {fileID: 1372854438}
+  MessageDateText: {fileID: 0}
   BijlagePrefab: {fileID: 6358633317826539430, guid: 1088a4cfb26a9ba4bab34b6a8239f3de,
     type: 3}
   Content: {fileID: 1720664889}
@@ -49224,13 +49255,10 @@ MonoBehaviour:
   isVisible: 0
   SomtodayKoppeling: {fileID: 381843613}
   Somtodaygekoppeld: {fileID: 1148461781}
-  student: {fileID: 1147355066}
   ZermeloKoppeling: {fileID: 1242233763}
   Zermelogekoppeld: {fileID: 1092126376}
-  user: {fileID: 1516145122}
   InfowijsKoppeling: {fileID: 2105889046}
   Infowijsgekoppeld: {fileID: 1882211881}
-  sessionAuthenticatorInfowijs: {fileID: 748369145}
 --- !u!1 &1401925715
 GameObject:
   m_ObjectHideFlags: 0
@@ -50613,6 +50641,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButtonWholePage: {fileID: 1428338747}
   openNavigationButton: {fileID: 1876738073}
+  viewName: 
   isInitialized: 0
   isVisible: 0
   NaamText: {fileID: 846622938}
@@ -53959,8 +53988,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b821085c6b14084eb3290730b4e649f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weeknumber: 0
   savePath: '*/Lessons.json'
-  weeksSaved: 5
 --- !u!114 &1516145120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54075,6 +54104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButtonWholePage: {fileID: 1587973681}
   openNavigationButton: {fileID: 1587973681}
+  viewName: 
   isInitialized: 0
   isVisible: 0
   HomeButton: {fileID: 905726499}
@@ -54085,7 +54115,8 @@ MonoBehaviour:
   SchoolNieuwsButton: {fileID: 45880547}
   SchoolJaarKalenderButton: {fileID: 1371990583}
   SettingsButton: {fileID: 681809541}
-  UsernameText: {fileID: 997794039}
+  NavigationPanel: {fileID: 0}
+  FirstRow: {fileID: 0}
 --- !u!114 &1517513251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54187,7 +54218,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1517975298
 RectTransform:
   m_ObjectHideFlags: 0
@@ -54307,20 +54338,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButtonWholePage: {fileID: 1517975300}
   openNavigationButton: {fileID: 540774849}
+  viewName: 
   isInitialized: 0
   isVisible: 0
   paklijstGameObject: {fileID: 2135614505}
   tijdenGameObject: {fileID: 1162804931}
-  samenvattingsGameObject: {fileID: 1876379600}
   paklijstContentGameObject: {fileID: 2037891330}
   paklijstPrefab: {fileID: 5908220290660200438, guid: 54e3ef5d66b15c747be0c5ff8513f6f3,
     type: 3}
   zermeloSchedule: {fileID: 1516145119}
-  tijdText1: {fileID: 244806136}
-  tijdText2: {fileID: 118748262}
-  dagSamenvattingText: {fileID: 686479462}
-  LaatsteCijferText: {fileID: 653816558}
-  grades: {fileID: 1147355065}
+  tijdTotVertrekkenText: {fileID: 0}
+  tijdTotVolgendeLesText: {fileID: 0}
   updateTime: 0.2
   _vakken: {fileID: 1147355069}
 --- !u!1 &1523582026
@@ -60258,15 +60286,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButtonWholePage: {fileID: 1673151340}
   openNavigationButton: {fileID: 1198088141}
+  viewName: 
   isInitialized: 0
   isVisible: 0
   _kalenderItemPrefab: {fileID: 7613936705277920534, guid: a8574fc26004b2f4396c453f3ada01a9,
     type: 3}
   _kalenderItemContainer: {fileID: 145565851}
   InfowijsJaarKalender: {fileID: 748369146}
-  beschrijving: {fileID: 1499574855}
   CurrentDateDiver: {fileID: 0}
   _ScrollRect: {fileID: 1412303663}
+  DividerPrefab: {fileID: 0}
+  dayContainterPrefab: {fileID: 0}
+  _curve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!222 &1673151339
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -60568,6 +60604,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButtonWholePage: {fileID: 1679175195}
   openNavigationButton: {fileID: 1809712488}
+  viewName: 
   isInitialized: 0
   isVisible: 0
   connectButton: {fileID: 1750145617}
@@ -61039,13 +61076,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc9d54bf1d4b45b3b079edcfdc91ca6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ParentView: {fileID: 836496273}
   views:
   - {fileID: 1129510185}
   - {fileID: 1401600211}
   - {fileID: 1878003860}
   animationTime: 0.4
   currentView: {fileID: 0}
+  ShowEventOnEveryView: 0
 --- !u!114 &1683510830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63638,10 +63675,10 @@ RectTransform:
   m_Father: {fileID: 1893935593}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 165.28348, y: -12.5}
-  m_SizeDelta: {x: 330.56696, y: 15}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1758154819
 MonoBehaviour:
@@ -64879,14 +64916,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButtonWholePage: {fileID: 1798758668}
   openNavigationButton: {fileID: 1748398100}
+  viewName: 
   isInitialized: 0
   isVisible: 0
   username: {fileID: 1047311253}
   password: {fileID: 1742334388}
-  connectButton: {fileID: 1665322445}
+  credentialsConnectButton: {fileID: 0}
+  somtodayConnectButton: {fileID: 0}
   somtodayAuthenticate: {fileID: 1147355062}
   student: {fileID: 1147355066}
-  PassToggle: {fileID: 1177401627}
+  PassToggle: {fileID: 0}
 --- !u!222 &1798758667
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -65196,23 +65235,23 @@ MonoBehaviour:
   Loginview: {fileID: 297110262}
   NewUserView: {fileID: 314818677}
   views:
-  - {fileID: 1966621808}
+  - {fileID: 0}
   - {fileID: 1517513250}
   - {fileID: 1517975302}
   - {fileID: 1023376586}
-  - {fileID: 1126134846}
-  - {fileID: 740307201}
-  - {fileID: 1262380174}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 845011566}
-  - {fileID: 2078795118}
+  - {fileID: 0}
   - {fileID: 2012503131}
-  - {fileID: 362887863}
+  - {fileID: 0}
   - {fileID: 610253620}
   - {fileID: 1130585566}
   - {fileID: 256314117}
   - {fileID: 1119981743}
   - {fileID: 932769399}
-  - {fileID: 1377697868}
+  - {fileID: 0}
   - {fileID: 1673151338}
   - {fileID: 836496273}
   - {fileID: 297110262}
@@ -65234,6 +65273,7 @@ MonoBehaviour:
   saveLoadingTimes: 0
   currentView: {fileID: 1517513250}
   lastView: {fileID: 1517513250}
+  secretSettingsSubView: {fileID: 0}
 --- !u!4 &1800581814
 Transform:
   m_ObjectHideFlags: 0
@@ -68218,6 +68258,7 @@ MonoBehaviour:
   isInitialized: 0
   isVisible: 0
   content: {fileID: 0}
+  prefab: {fileID: 0}
 --- !u!1 &1882211879
 GameObject:
   m_ObjectHideFlags: 0
@@ -68603,10 +68644,10 @@ RectTransform:
   m_Father: {fileID: 1162804932}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 165.28348, y: -43}
-  m_SizeDelta: {x: 330.56696, y: 86}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 151.3931, y: 0}
+  m_SizeDelta: {x: 302.7862, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1893935594
 MonoBehaviour:
@@ -70167,14 +70208,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fdf42af2bde7f24b9650db1b5d9e73c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  closeButtonWholePage: {fileID: 1966621806}
-  openNavigationButton: {fileID: 891133153}
+  backButton: {fileID: 0}
   isInitialized: 0
   isVisible: 0
   output: {fileID: 1802488284}
   deletePlayerPrefsButton: {fileID: 531213176}
-  ToggleLeermiddelen: {fileID: 7773716334378620625}
-  _vakken: {fileID: 1147355069}
   SendNotifButton: {fileID: 1936487868}
   lessonNotificationManager: {fileID: 241821420}
 --- !u!1 &1967264766
@@ -72061,8 +72099,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeButtonWholePage: {fileID: 2012503129}
   openNavigationButton: {fileID: 1239090723}
+  viewName: 
   isInitialized: 0
   isVisible: 0
+  subViewManager: {fileID: 0}
   homeworkObject: {fileID: 1147355067}
   homeworkPrefab: {fileID: 7745373774041731224, guid: 96215e80b05d96e47b264e9445f3817a,
     type: 3}
@@ -72073,9 +72113,23 @@ MonoBehaviour:
     type: 3}
   _CustomHomework: {fileID: 241821416}
   _ScrollRect: {fileID: 1698246723}
+  _rectTransformDefault: {fileID: 0}
   _AddHomeworkButton: {fileID: 1914083146}
   _recenterButton: {fileID: 390286046}
   _FilterButton: {fileID: 1184396182}
+  _filterObject: {fileID: 0}
+  Maincurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  Loadingcurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _HomeworkTypes: -1
   _HomeworkStatus: -1
   huiswerk: {fileID: 551993779}
@@ -72084,30 +72138,6 @@ MonoBehaviour:
   gemaakt: {fileID: 57350983}
   niet_gemaakt: {fileID: 716728025}
   sorteerButton: {fileID: 6763913709977316865}
-  curve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.5
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1 &2015901927
 GameObject:
   m_ObjectHideFlags: 0
@@ -72656,10 +72686,10 @@ RectTransform:
   m_Father: {fileID: 639079416}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 165.28348, y: -53}
-  m_SizeDelta: {x: 330.56696, y: 66}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2037891333
 CanvasRenderer:
@@ -73364,13 +73394,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec89ccd0a3f3115428b2a9f6d3963d3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  closeButtonWholePage: {fileID: 2078795120}
-  openNavigationButton: {fileID: 659292429}
+  backButton: {fileID: 0}
   isInitialized: 0
   isVisible: 0
   url: {fileID: 2062247358}
   vak: {fileID: 390125474}
+  beschrijving: {fileID: 0}
   save: {fileID: 2000092640}
+  filling: {fileID: 0}
   _customLeermiddelen: {fileID: 241821419}
   _vakken: {fileID: 1147355069}
 --- !u!222 &2078795119
@@ -74958,10 +74989,10 @@ RectTransform:
   m_Father: {fileID: 1627452463}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 180.28348, y: -58}
-  m_SizeDelta: {x: 330.56696, y: 86}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 166.3931, y: 0}
+  m_SizeDelta: {x: 302.7862, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2135614508
 MonoBehaviour:

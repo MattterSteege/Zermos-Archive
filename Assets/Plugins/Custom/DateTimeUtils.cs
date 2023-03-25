@@ -128,4 +128,10 @@ public static class DateTimeUtils
             return $"{diff.Days / 30} maand{(diff.Days / 30 > 1 ? "en" : "")}";
         return $"{diff.Days / 365} jaar";
     }
+    
+    public static DateTime ToDayTimeSavingDate(this DateTime date)
+    {
+        TimeZoneInfo dutchTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id);
+        return (TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id).IsDaylightSavingTime(date) ? TimeZoneInfo.ConvertTimeFromUtc(date.ToUniversalTime(), dutchTimeZone) : TimeZoneInfo.ConvertTime(date, dutchTimeZone)).AddHours(-1);
+    }
 }
