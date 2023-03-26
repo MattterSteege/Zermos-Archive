@@ -12,9 +12,9 @@ public class SchoolNewsItemView : SubView
     [SerializeField] private GameObject BijlagePrefab;
     [SerializeField] private GameObject Content;
 
-    public virtual void Show(params object[] args)
+    public override void Show(object args = null)
     {
-        var message = (List<Messages.Message>) args[0];
+        var message = (List<Messages.Message>) args;
 
         foreach (Transform child in Content.transform)
             Destroy(child.gameObject);

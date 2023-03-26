@@ -87,19 +87,19 @@ namespace UI.Views
 #if UNITY_EDITOR
                     dayContainer.name = "DayContainer " + message.CreatedAt.ToDateTime().ToString("d MMMM");
 #endif
-                    if(CurrentItem != null)
-                        CurrentItem.Initialize();
-                    
                     var go = Instantiate(DividerPrefab, dayContainer.transform);
                     go.GetComponent<homeworkDivider>().Datum.text = message.CreatedAt.ToDateTime().ToString("d MMMM");
                     day = message.CreatedAt.ToDateTime().Day;
                     
                 }
-                
+
                 if (CurrentItemType < message.Type)
                 {
                     var go = Instantiate(_newsItemPrefab, dayContainer.transform);
                     CurrentItem = go.GetComponent<SchoolNews>();
+                    
+                    if (CurrentItem != null)
+                        CurrentItem.Initialize();
                     CurrentItem.messages = new List<Messages.Message>();
                     CurrentItem.subViewManager = subViewManager;
 

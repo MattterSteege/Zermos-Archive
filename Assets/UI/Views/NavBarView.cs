@@ -24,10 +24,12 @@ namespace UI.Views
 		[SerializeField] private RectTransform NavigationPanel;
 		[SerializeField] private RectTransform FirstRow;
 		float LayerHeight = 0f;
+		private float heightWhenDown;
 
 		private void Awake()
 		{
 			LayerHeight = FirstRow.rect.height;
+			heightWhenDown = NavigationPanel.anchoredPosition.y;
 		}
 
 		public override void Initialize()
@@ -92,7 +94,7 @@ namespace UI.Views
 			// Check if touch is below the highest Y value of the UI element
 			if (touchPos.y < highestY || force)
 			{
-				NavigationPanel.DOAnchorPosY(LayerHeight, force ? 0.01f : 0.5f);
+				NavigationPanel.DOAnchorPosY(heightWhenDown, force ? 0.01f : 0.5f);
 			}
 		}
 

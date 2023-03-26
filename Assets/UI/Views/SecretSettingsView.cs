@@ -59,88 +59,12 @@ namespace UI.Views
             base.Initialize();
         }
 
-        public virtual void Show(params object[] args)
-        {
-            Application.logMessageReceived -= HandleLog;
-            Application.logMessageReceived += HandleLog;
-            base.Show(args);
-        }
-
         public override void Refresh(object args)
         {
             backButton.onClick.RemoveAllListeners();
             deletePlayerPrefsButton.onClick.RemoveAllListeners();
             SendNotifButton.onClick.RemoveAllListeners();
             base.Refresh(args);
-        }
-
-        void HandleLog(string logString, string stackTrace, LogType type)
-        {
-            if (type == LogType.Log)
-            {
-                output.text += $"<color=black>{logString}</color>\n";
-                output.text += $"-----------------\n";
-            }
-            else if (type == LogType.Warning)
-            {
-                output.text += $"<color=orange>{logString}</color>\n";
-
-                string stacktrace = stackTrace;
-                var m1 = Regex.Matches(stacktrace, @"((([A-Za-z]+\/)+)?[A-Z-a-z]+?(.[A-Za-z]+:[0-9]+))");
-
-                foreach (Match match in m1)
-                {
-                    stacktrace = stacktrace.Replace(match.Value, $"<color=blue>{match.Value}</color>");
-                }
-
-                output.text += $"{stacktrace}";
-                output.text += $"-----------------\n";
-            }
-            else if (type == LogType.Error)
-            {
-                output.text += $"<color=red>{logString}</color>\n";
-
-                string stacktrace = stackTrace;
-                var m1 = Regex.Matches(stacktrace, @"((([A-Za-z]+\/)+)?[A-Z-a-z]+?(.[A-Za-z]+:[0-9]+))");
-
-                foreach (Match match in m1)
-                {
-                    stacktrace = stacktrace.Replace(match.Value, $"<color=blue>{match.Value}</color>");
-                }
-
-                output.text += $"{stacktrace}";
-                output.text += $"-----------------\n";
-            }
-            else if (type == LogType.Exception)
-            {
-                output.text += $"<color=red>{logString}</color>\n";
-
-                string stacktrace = stackTrace;
-                var m1 = Regex.Matches(stacktrace, @"((([A-Za-z]+\/)+)?[A-Z-a-z]+?(.[A-Za-z]+:[0-9]+))");
-
-                foreach (Match match in m1)
-                {
-                    stacktrace = stacktrace.Replace(match.Value, $"<color=blue>{match.Value}</color>");
-                }
-
-                output.text += $"{stacktrace}";
-                output.text += $"-----------------\n";
-            }
-            else if (type == LogType.Assert)
-            {
-                output.text += $"<color=red>{logString}</color>\n";
-
-                string stacktrace = stackTrace;
-                var m1 = Regex.Matches(stacktrace, @"((([A-Za-z]+\/)+)?[A-Z-a-z]+?(.[A-Za-z]+:[0-9]+))");
-
-                foreach (Match match in m1)
-                {
-                    stacktrace = stacktrace.Replace(match.Value, $"<color=blue>{match.Value}</color>");
-                }
-
-                output.text += $"{stacktrace}";
-                output.text += $"-----------------\n";
-            }
         }
     }
 }

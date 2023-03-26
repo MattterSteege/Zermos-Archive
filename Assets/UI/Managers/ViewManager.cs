@@ -31,12 +31,10 @@ public sealed class ViewManager : MonoBehaviour
 	[SerializeField] public View lastView;
 
 	[Space] private static GameObject ViewPrefab;
-	[Space, SerializeField] private SubView secretSettingsSubView;
 
 	private void Awake()
 	{
 		Instance = this;
-		secretSettingsSubView.Show();
 		LocalPrefs.Load();
 	}
 

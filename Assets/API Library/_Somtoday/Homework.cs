@@ -47,53 +47,9 @@ public class Homework : BetterHttpClient
         headers.Add("Range", $"items={rangemin}-{rangemax}");
         return (List<Item>) Get(baseurl, headers, (response) =>
         {
-            json = response.downloadHandler.text
-                .Replace("<p>", "").Replace("</p>", "")
-                .Replace("<ul>", "").Replace("</ul>", "")
-                .Replace("<li>", "\n• ").Replace("</li>", "")
-                .Replace("&amp;", "&")
-                .Replace("<strong>", "<b>").Replace("</strong>", "</b>")
-                .Replace("<em>", "<i>").Replace("</em>", "</i>")
-                .Replace("&nbsp;", " ").Replace("&gt;", ">");;
+            json = HTMLUtils.StripHTML(HTMLUtils.ReplaceHtmlEntities(response.downloadHandler.text));
             
             homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
-
-            // var header = response.GetResponseHeader("Content-Range");
-            // var total = int.Parse(header.Split('/')[1]);
-            //
-            // while (rangemax < total)
-            // {
-            //     rangemin += 100;
-            //     rangemax += 100;
-            //
-            //     Dictionary<string, string> headers = new Dictionary<string, string>();
-            //     headers.Add("authorization", "Bearer " + LocalPrefs.GetString("somtoday-access_token"));
-            //     headers.Add("Accept", "application/json");
-            //     headers.Add("Range", $"items={rangemin}-{rangemax}");
-            //     
-            //     Get(baseurl, headers, (response) =>
-            //     {
-            //         json = response.downloadHandler.text
-            //             .Replace("<p>", "").Replace("</p>", "")
-            //             .Replace("<ul>", "").Replace("</ul>", "")
-            //             .Replace("<li>", "\n• ").Replace("</li>", "")
-            //             .Replace("&amp;", "&")
-            //             .Replace("<strong>", "<b>").Replace("</strong>", "</b>")
-            //             .Replace("<em>", "<i>").Replace("</em>", "</i>")
-            //             .Replace("&nbsp;", " ").Replace("&gt;", ">");;
-            //         
-            //         homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
-            //
-            //         homework?.items.AddRange(homework.items);
-            //
-            //
-            //         return null;
-            //     }, (error) =>
-            //     {
-            //         AndroidUIToast.ShowToast("Er is iets fout gegaan bij het ophalen van je huiswerk. Probeer het later opnieuw.");
-            //         return null;
-            //     });
-            //}
 
             homework?.items.AddRange(GetWeekHomework());
             homework?.items.AddRange(GetDagHomework());
@@ -132,14 +88,7 @@ public class Homework : BetterHttpClient
         headers.Add("Range", $"items={rangemin}-{rangemax}");
         return (List<Item>) Get(baseurl, headers, (response) =>
         {
-            json = response.downloadHandler.text
-                .Replace("<p>", "").Replace("</p>", "")
-                .Replace("<ul>", "").Replace("</ul>", "")
-                .Replace("<li>", "\n• ").Replace("</li>", "")
-                .Replace("&amp;", "&")
-                .Replace("<strong>", "<b>").Replace("</strong>", "</b>")
-                .Replace("<em>", "<i>").Replace("</em>", "</i>")
-                .Replace("&nbsp;", " ").Replace("&gt;", ">");;
+            json = HTMLUtils.StripHTML(HTMLUtils.ReplaceHtmlEntities(response.downloadHandler.text));
             
             homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
             
@@ -158,14 +107,7 @@ public class Homework : BetterHttpClient
                 
                 Get(baseurl, headers, (response) =>
                 {
-                    json = response.downloadHandler.text
-                        .Replace("<p>", "").Replace("</p>", "")
-                        .Replace("<ul>", "").Replace("</ul>", "")
-                        .Replace("<li>", "\n• ").Replace("</li>", "")
-                        .Replace("&amp;", "&")
-                        .Replace("<strong>", "<b>").Replace("</strong>", "</b>")
-                        .Replace("<em>", "<i>").Replace("</em>", "</i>")
-                        .Replace("&nbsp;", " ").Replace("&gt;", ">");;
+                    json = HTMLUtils.StripHTML(HTMLUtils.ReplaceHtmlEntities(response.downloadHandler.text));
                     
                     homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
                     
@@ -216,14 +158,7 @@ public class Homework : BetterHttpClient
         headers.Add("Range", $"items={rangemin}-{rangemax}");
         return (List<Item>) Get(baseurl, headers, (response) =>
         {
-            json = response.downloadHandler.text
-                .Replace("<p>", "").Replace("</p>", "")
-                .Replace("<ul>", "").Replace("</ul>", "")
-                .Replace("<li>", "\n• ").Replace("</li>", "")
-                .Replace("&amp;", "&")
-                .Replace("<strong>", "<b>").Replace("</strong>", "</b>")
-                .Replace("<em>", "<i>").Replace("</em>", "</i>")
-                .Replace("&nbsp;", " ").Replace("&gt;", ">");;
+            json = HTMLUtils.StripHTML(HTMLUtils.ReplaceHtmlEntities(response.downloadHandler.text));
             
             homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
             
@@ -242,14 +177,7 @@ public class Homework : BetterHttpClient
                 
                 Get(baseurl, headers, (response) =>
                 {
-                    json = response.downloadHandler.text
-                        .Replace("<p>", "").Replace("</p>", "")
-                        .Replace("<ul>", "").Replace("</ul>", "")
-                        .Replace("<li>", "\n• ").Replace("</li>", "")
-                        .Replace("&amp;", "&").
-                        Replace("<strong>", "<b>").Replace("</strong>", "</b>")
-                        .Replace("<em>", "<i>").Replace("</em>", "</i>")
-                        .Replace("&nbsp;", " ").Replace("&gt;", ">");;
+                    json = HTMLUtils.StripHTML(HTMLUtils.ReplaceHtmlEntities(response.downloadHandler.text));
                     
                     homework = JsonConvert.DeserializeObject<SomtodayHomework>(json);
                     
@@ -280,7 +208,6 @@ public class Homework : BetterHttpClient
 
     private void SaveHomework(SomtodayHomework homework)
     {
-        
         if (homework.items.Count != 0)
         {
             var convertedJson = JsonConvert.SerializeObject(
@@ -307,12 +234,12 @@ public class Homework : BetterHttpClient
             return GetHomework(false);
         }
         
-        try
+        using (StreamReader r = new StreamReader(destination))
         {
-            using (StreamReader r = new StreamReader(destination))
+            string json = r.ReadToEnd();
+            try
             {
-                string json = r.ReadToEnd();
-                var homeworkObject = JsonConvert.DeserializeObject<SomtodayHomework>(json);
+                SomtodayHomework homeworkObject = JsonConvert.DeserializeObject<SomtodayHomework>(json);
                 if (homeworkObject?.laatsteWijziging.ToDateTime().AddMinutes(MinutesBeforeRedownload) < TimeManager.Instance.CurrentDateTime)
                 {
                     r.Close();
@@ -320,13 +247,14 @@ public class Homework : BetterHttpClient
                     return GetHomework(false);
                 }
 
-                return homeworkObject.items;
+                return homeworkObject?.items;
             }
-        }
-        catch (Exception)
-        {
-            //AndroidUIToast.ShowToast("Je huiswerk is corrupt, opnieuw downloaden...");
-            return GetHomework(false);
+            catch(Exception)
+            {
+                r.Close();
+                Debug.LogWarning("Local file is corrupt, downloading new file.");
+                return GetHomework(false);
+            }
         }
     }
     
@@ -363,7 +291,7 @@ public class Homework : BetterHttpClient
         public object huiswerkgemaakt { get; set; }
         public object studiewijzerId { get; set; }
     }
-    
+
     public class AssemblyResult
     {
         public List<Link> links { get; set; }
@@ -372,7 +300,7 @@ public class Homework : BetterHttpClient
         public string assemblyFileType { get; set; }
         public string fileExtension { get; set; }
         public string mimeType { get; set; }
-        public float fileSize { get; set; }
+        public double fileSize { get; set; }
         public string fileType { get; set; }
         public string fileUrl { get; set; }
         public string sslUrl { get; set; }
@@ -390,20 +318,11 @@ public class Homework : BetterHttpClient
         public int sortering { get; set; }
         public bool zichtbaarVoorLeerling { get; set; }
     }
-    
-    public class UploadContext
-    {
-        public List<Link> links { get; set; }
-        public List<object> permissions { get; set; }
-        public AdditionalObjects additionalObjects { get; set; }
-        public string fileState { get; set; }
-        public string assemblyId { get; set; }
-    }
 
     public class Item
     {
         [JsonProperty("$type")]
-        public string Type { get; set; }
+        public object type { get; set; }
         public List<Link> links { get; set; }
         public List<Permission> permissions { get; set; }
         public AdditionalObjects additionalObjects { get; set; }
@@ -412,15 +331,15 @@ public class Homework : BetterHttpClient
         public Lesgroep lesgroep { get; set; }
         public DateTime datumTijd { get; set; }
         public DateTime aangemaaktOpDatumTijd { get; set; }
-        public Leerling leerling { get; set; }
+        public object leerling { get; set; }
         public object swiToekenningId { get; set; }
         public bool gemaakt { get; set; }
         public int weeknummerVanaf { get; set; }
         public string UUID { get; set; }
         public int leerlingnummer { get; set; }
-        public string roepnaam { get; set; }
-        public string voorvoegsel { get; set; }
-        public string achternaam { get; set; }
+        public object roepnaam { get; set; }
+        public object voorvoegsel { get; set; }
+        public object achternaam { get; set; }
     }
 
     public class Leerling
@@ -434,11 +353,11 @@ public class Homework : BetterHttpClient
         public string voorvoegsel { get; set; }
         public string achternaam { get; set; }
     }
-    
+
     public class Leerlingen
     {
         [JsonProperty("$type")]
-        public string Type { get; set; }
+        public object type { get; set; }
         public List<Item> items { get; set; }
     }
 
@@ -475,7 +394,7 @@ public class Homework : BetterHttpClient
     public class Schooljaar
     {
         [JsonProperty("$type")]
-        public string Type { get; set; }
+        public object type { get; set; }
         public List<Link> links { get; set; }
         public List<Permission> permissions { get; set; }
         public AdditionalObjects additionalObjects { get; set; }
@@ -507,8 +426,17 @@ public class Homework : BetterHttpClient
     public class SwigemaaktVinkjes
     {
         [JsonProperty("$type")]
-        public string Type { get; set; }
+        public object type { get; set; }
         public List<Item> items { get; set; }
+    }
+
+    public class UploadContext
+    {
+        public List<Link> links { get; set; }
+        public List<object> permissions { get; set; }
+        public AdditionalObjects additionalObjects { get; set; }
+        public string fileState { get; set; }
+        public string assemblyId { get; set; }
     }
 
     public class Vak
@@ -527,6 +455,5 @@ public class Homework : BetterHttpClient
         public AdditionalObjects additionalObjects { get; set; }
         public string naam { get; set; }
     }
-
     #endregion
 }

@@ -36,9 +36,6 @@ namespace UI.Views
 
         bool hasLoaded = false;
         int CurrentIndex = 1;
-        
-        DateTime closestLessonDate;
-        Transform closestLessonTransform;
 
         private object ProvidedArgs;
 
@@ -113,7 +110,6 @@ namespace UI.Views
 
             currentPanel._dateTextNumber.text = date.ToString("dd");
             currentPanel._dateTextDayName.text = date.ToString("dddd").Substring(0, 3);
-            closestLessonDate = date;
 
             foreach (Transform child in currentPanel.content.transform)
                 Destroy(child.gameObject);
@@ -175,12 +171,6 @@ namespace UI.Views
                     {
                     }
 
-                    closestLessonDate = closestLessonDate.IsDateCloser(appointments[listIndex].start.ToDateTime());
-                    if (closestLessonDate == appointments[listIndex].start.ToDateTime())
-                    {
-                        closestLessonTransform = rooster.transform;
-                    }
-
                     //must be at the end
                     NoLessonHours.Remove(i);
                     listIndex++;
@@ -218,30 +208,10 @@ namespace UI.Views
                     if (!(listIndex >= appointments.Count) &&
                         appointments[listIndex].startTimeSlotName == (i).ToString())
                     {
-                        closestLessonDate =
-                            closestLessonDate.IsDateCloser(appointments[listIndex].start.ToDateTime());
-                        if (closestLessonDate == appointments[listIndex].start.ToDateTime())
-                        {
-                            closestLessonTransform = tussenUur.transform;
-                        }
-                    
                         listIndex++;
                     }
                 }
             }
-
-            // foreach (Transform child in currentPanel.content.transform)
-            // {
-            //     bool contains = RoosterItems.Contains(child.gameObject);
-            //
-            //     if (!contains)
-            //     {
-            //         Destroy(child.gameObject);
-            //     }
-            // }
-
-            currentPanel._scrollRect.decelerationRate = 0f;
-            currentPanel._scrollRect.content.DOLocalMove(currentPanel._scrollRect.GetSnapToPositionToBringChildIntoView((RectTransform) closestLessonTransform), 0.1f, true).onComplete += () => currentPanel._scrollRect.decelerationRate = 0.135f;
         }
 
         [ContextMenu("Show Tussenuren")]

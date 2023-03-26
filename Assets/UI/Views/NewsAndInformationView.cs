@@ -191,7 +191,7 @@ namespace UI.Views
             weerDataSet.LineColor = new Color(0.3921569f, 0.572549f, 0.9764706f, 1f);
             weerDataSet.FillColor = new Color(0.3921569f, 0.572549f, 0.9764706f, 1f);
             weerDataSet.LineThickness = 3f;
-            weerDataSet.UseBezier = true;
+            weerDataSet.UseBezier = false;
             weerChart.GetChartData().DataSets.Add(weerDataSet);
             weerChart.SetDirty();
             
