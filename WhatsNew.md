@@ -1,3 +1,36 @@
+# V0.8.1 - De UI-update
+
+1. Grote veranderingen
+    * Hmmmm, wat is er nou echt veranderd in deze update? Even denken hoor... Misschien de UI en UX een beetje.
+    * Je ziet nu voor elke update een "What's new" scherm.
+    * Vertrouw je mij niet? Nou, dan is dit iets voor jou. Je kunt nu inloggen op de website van Somtoday, en dan word je automatisch doorgestuurd. Je inloggegevens komen dus niet in Zermos terecht.
+    * JAAA, als je dacht dat deze update niet beter kon worden, dan heb ik nieuws voor jou! Leermiddelen staan nu in de app! Je kunt ze alleen bereiken door in te loggen met je inlogcodes voor Somtoday, maar het is het zeker waard!
+    * Als de school de leermiddelen niet toevoegt, dan doe je het zelf maar.
+        * Je kunt nu zelf leermiddelen toevoegen.
+        * Je kunt ze ook verwijderen (nog niet).
+    * De school heeft een grote tv bij de kluisjes hangen met informatie/nieuws erop. Raad eens, ook in de app! WOW.
+    * Je hebt nu bij je cijfers een tabje "Totaalcijfers" hierin zie je de statestieken van al je behaalde cijfers.
+    * Cijfers zijn ook verbeterd:
+        * Je ziet nu een lijn van je cijfers behaald dit schooljaar (dat is niet nieuw).
+        * Je ziet nu een lijn van je gemiddelde over de tijd van dit schooljaar (ook niet nieuw).
+        * Je ziet nu je gemiddelde op 2 decimalen afgerond.
+        * Je ziet nu ook je voldoende-onvoldoende ratio.
+        * "Er is een tijd van komen en een tijd van gaan" en "Wat moet ik halen?" gaat vertrekken... uit zijn eigen weergave, je vindt hem nu tussen je cijferstatistieken (onderaan).
+        * Je kunt nu heel simpel berekenen wat je komt te staan als je een 7 haalt, of als je een 3 haalt.
+        * Je kunt nu zien wat je meest behaald cijfer is.
+        * **alleen bij Totaalcijfers!!** Je kunt nu zien hoeveel van je cijfers boven je gemiddelde zijn en hoevel er onder
+    * *@#$#@#*, helemaal natgeregent. Nu zie je in Zermos ook wat het weer word voor de komende 2 uur.
+2. Details
+    * Er staat nu alleen een plusje als je daadwerkelijk daar een les kunt inplannen.
+    * Je rooster wordt nu per week opgevraagd en alleen je huidige week wordt opgeslagen, dit maakt het laden 5x sneller (eerst werden 5 weken achter elkaar opgevraagd en dat is traag).
+    * Hoor je dat? Nee? Dat klopt. Door je rooster heen swipen gaat nu zo soepel dat je een speld kan horen vallen.
+    * Hmm, 23 februari? Het is toch handiger om te zien hoeveel dagen je nog hebt tot je geschiedenis PO, dan kan je nog efficiënter uitstellen ;).
+    * Weet je wel, je tijd, batterij, wifi, 4g alles, dat stond eerst over de UI heen, nu is dat niet meer. NICE!
+3. Bugfixes
+    * Een foutje met zomer- en winter tijd is verholpen. Je begint dus niet om 7:20
+    * Een foutje in het rooster is verholpen, je krijgt nu wel weer een nieuw rooster binnen ;).
+<br>
+
 # V0.8
 1. Grote veranderingen
     * Wow, a wild informatie tabje appeared! Je kan nu nog makkelijker zien of er vandaag een cijfer is binnengekomen
