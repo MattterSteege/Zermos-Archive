@@ -70,6 +70,12 @@ public class Schedule : BetterHttpClient
             string json = r.ReadToEnd();
             var scheduleObject = JsonConvert.DeserializeObject<Items>(json);
             r.Dispose();
+            
+            if (scheduleObject == null)
+            {
+                Debug.LogWarning("File is empty, creating new file.");
+                return DownloadLessons(week, year)?.response.data[0] ?? new Items{appointments = new List<Appointment>()};
+            }
 
             int currentUnixTime = TimeManager.Instance.CurrentDateTime.ToUnixTime();
             int lastUpdatedUnixTime = scheduleObject.laatsteWijziging;

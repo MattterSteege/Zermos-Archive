@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using UI.Views;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,12 +11,13 @@ public class HomeworkInfo : MonoBehaviour
     [SerializeField] TMP_Text details;
     [SerializeField] TMP_Text Datum;
     [SerializeField] public Toggle gemaakt;
+    public SubViewManager subViewManager;
     
     [Space, SerializeField] private GameObject notificationPill;
 
     public Homework.Item homeworkInfo;
     
-    public void SetHomeworkInfo(string vak = null, string details = null, DateTime date = default, bool gemaakt = false, Homework.Item homeworkInfo = null)
+    public void SetHomeworkInfo(string vak = null, string details = null, DateTime date = default, bool gemaakt = false, Homework.Item homeworkInfo = null, SubViewManager subViewManager = null)
     {
         if (vak?.Length > 40)
         {
@@ -70,7 +72,14 @@ public class HomeworkInfo : MonoBehaviour
             this.homeworkInfo = homeworkInfo;
         }
         
+        if (subViewManager != null)
+        {
+            this.subViewManager = subViewManager;
+        }
+        
         //true when: test, big test, or 1 or more attachments
         notificationPill.SetActive(homeworkInfo.studiewijzerItem.huiswerkType == "TOETS" || homeworkInfo.studiewijzerItem.huiswerkType == "GROTE_TOETS" || homeworkInfo.studiewijzerItem.bijlagen?.Count > 0);
+        
+        GetComponent<Button>().onClick.AddListener(() =>  subViewManager.ShowNewView<HomeworkItemView>(this.homeworkInfo));
     }
 }

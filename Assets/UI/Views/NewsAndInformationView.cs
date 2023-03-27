@@ -132,7 +132,7 @@ namespace UI.Views
                     if (minutesbeforeclass != 0)
                     {
                         var firstlesson =
-                            appointments.Find(x => x.appointmentType == "lesson" && x.status[0].code != 4007);
+                            appointments.Find(x => x.appointmentType == "lesson" && x.status.FindAll(x => x.code == 4007).Count > 0);
 
                         if (firstlesson != null)
                         {
@@ -199,7 +199,7 @@ namespace UI.Views
             string timeString = times[2].ToString().Substring(0, times[2].ToString().Length - 2) + ":" + times[2].ToString().Substring(times[2].ToString().Length - 2, 2);
             weerText.text = timeString + " - " + entry.Value + " mm/u";
             
-            slider.maxValue = weerDataSet.Entries.Count;
+            slider.maxValue = weerDataSet.Entries.Count - 1;
             slider.value = 2f;
             
             slider.onValueChanged.AddListener((float value) =>

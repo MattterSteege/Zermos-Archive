@@ -86,7 +86,7 @@ namespace UI.Views
                     dayContainer = Instantiate(dayContainterPrefab, content.transform);
                     var go = Instantiate(DividerPrefab, dayContainer.transform);
                     go.GetComponent<homeworkDivider>().Datum.text =
-                        ((DateTimeOffset) HomeworkItem.datumTijd).DateTime.ToString("d MMMM");
+                        ((DateTimeOffset) HomeworkItem.datumTijd).DateTime.ToString("dddd d MMMM");
                     _Dates.Add(((DateTimeOffset) HomeworkItem.datumTijd).DateTime.Date);
                     _homeworkDateDividers.Add(go);
                 }
@@ -109,13 +109,13 @@ namespace UI.Views
                 }
 
                 homeworkItem.GetComponent<HomeworkInfo>().SetHomeworkInfo(vak, onderwerp, HomeworkItem.datumTijd,
-                    HomeworkItem.additionalObjects.swigemaaktVinkjes?.items[0].gemaakt ?? false, HomeworkItem);
+                    HomeworkItem.additionalObjects.swigemaaktVinkjes?.items[0].gemaakt ?? false, HomeworkItem, subViewManager);
 
-                homeworkItem.GetComponent<Button>().onClick.AddListener(() =>
-                {
-                    subViewManager.ShowNewView<HomeworkItemView>(homeworkItem.GetComponent<HomeworkInfo>()
-                        .homeworkInfo);
-                });
+                // homeworkItem.GetComponent<Button>().onClick.AddListener(() =>
+                // {
+                //     subViewManager.ShowNewView<HomeworkItemView>(homeworkItem.GetComponent<HomeworkInfo>()
+                //         .homeworkInfo);
+                // });
 
                 homeworkItem.GetComponent<HomeworkInfo>().gemaakt.onValueChanged.AddListener((isOn) =>
                 {

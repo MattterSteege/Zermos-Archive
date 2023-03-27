@@ -26,25 +26,17 @@ namespace UI.Views
 
         [SerializeField] private GameObject BijlagePrefab;
         [SerializeField] private GameObject BijlageHolder;
-        
-        public virtual void Show(params object[] args)
+
+        public override void Show(object args = null)
         {
-            this.homeworkInfo = (Homework.Item) args[0];
-
-            if (homeworkInfo == null) return;
-        
-            //delete.onClick.AddListener(() => DeleteHomework());
-
-            //delete.gameObject.SetActive(homeworkInfo.gemaakt);
+            this.homeworkInfo = (Homework.Item) args;
 
             if (homeworkInfo == null) return;
 
             Vak.text = homeworkInfo.lesgroep.vak.naam ?? "";
-            Titel.text = homeworkInfo.studiewijzerItem.omschrijving ?? "";
+            Titel.text = homeworkInfo.studiewijzerItem.onderwerp == "" ? homeworkInfo.lesgroep.vak.naam : homeworkInfo.studiewijzerItem.onderwerp;
 
-            Datum.text = homeworkInfo.datumTijd.ToString("d MMMM");
-            
-            //LaatstAangepast.text = homeworkInfo. .ToString("dd-MM HH:mm");
+            Datum.text = homeworkInfo.datumTijd.ToString("dddd dd MMMM");
 
             Omschrijving.text = homeworkInfo.studiewijzerItem.omschrijving;
             if (Omschrijving.text.Length == 0)
@@ -81,13 +73,11 @@ namespace UI.Views
             if (homeworkInfo.studiewijzerItem.bijlagen?.Count <= 0 )
             {
                 BijlageHolder.transform.parent.parent.parent.gameObject.SetActive(false);
-               // Omschrijving.transform.parent.GetComponent<RectTransform>().offsetMin = new Vector2(25f, 15f);
             }
             else
             {
                 BijlageHolder.transform.parent.parent.parent.gameObject.SetActive(true);
-                //Omschrijving.transform.parent.GetComponent<RectTransform>().offsetMin = new Vector2(25f, 180f);
-                
+
                 foreach (Transform child in BijlageHolder.transform)
                     Destroy(child.gameObject);
 

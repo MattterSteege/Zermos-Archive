@@ -32,7 +32,7 @@ public class OpenMenu : MonoBehaviour
         for (int i = 0; i < MenuParts.Length; i++)
         {
             Vector2 pos = _MenuPartsPos[i];
-            pos.x -= 400;
+            pos.x -= 1000;
 
             MenuParts[i].DOAnchorPos(pos, MovementSpeed);
             yield return new WaitForSeconds(waitTime);
