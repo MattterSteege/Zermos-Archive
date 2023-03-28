@@ -1,3 +1,18 @@
+# V0.8.1.1 - De After UI update - bugfixes dus...
+
+1. Grote veranderingen
+    * Als je de link van Infowijs opent, dan kan je nu gewoon op 'openen in Zermos' klikken en dan opent de app wel weer correct.
+
+2. Bugfixes
+    * Spelling is aangepast.
+    * Je kan nu weer op **alle** nieuwsitems klikken.
+    * Navbar zakt nu niet te ver naar beneden.
+    * Huiswerkitems werken weer als normaal, ik had een foutje in de code niet goed teruggedraaid :(
+    * Ik heb een fout met het rooster gefixt, nu kan je Zermelo wel weer koppelen 👍 
+    * Cijfers werken weer, ik had ze "invisible" gezet 🤦‍♂️ 
+    * Het scrollprobleem in het hoofdmenu is nu opgelost.
+<br>
+
 # V0.8.1 - De UI-update
 
 1. Grote veranderingen
