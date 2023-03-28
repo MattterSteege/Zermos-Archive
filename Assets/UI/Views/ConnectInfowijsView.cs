@@ -52,30 +52,33 @@ public class ConnectInfowijsView : View
         {
             buttonTextField.text = "Check je mail!";
             yield return null;
-
-            bool istweening = false;
+            
             StartCoroutine(FetchToken(true, success.data.id, success.data.customer_product_id, success.data.user_id, success =>
             {
-                if (success && !istweening)
-                {
-                    istweening = true;
-                    succesScreen.ShowSuccesScreen(SuccesScreen.LoginType.infowijs);
-                    emailInputField.text = "";
-                }
-                else
-                {
-                    buttonTextField.text = "Probeer opnieuw";
-                }
-
-                return null;
+                return onReturnFetchedToken(success);
             }));
-            
-            istweening = false;
         }
         else
         {
             buttonTextField.text = "Probeer opnieuw";
         }
+    }
+
+    public object onReturnFetchedToken(bool success)
+    {
+        bool istweening = false;
+        if (success && !istweening)
+        {
+            istweening = true;
+            succesScreen.ShowSuccesScreen(SuccesScreen.LoginType.infowijs);
+            emailInputField.text = "";
+        }
+        else
+        {
+            buttonTextField.text = "Probeer opnieuw";
+        }
+        istweening = false;
+        return null;
     }
     
     float maxLoadingTime = 30f;

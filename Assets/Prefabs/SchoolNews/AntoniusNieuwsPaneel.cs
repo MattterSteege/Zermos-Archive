@@ -11,6 +11,7 @@ public class AntoniusNieuwsPaneel : MonoBehaviour
     public void SetTitle(string title)
     {
         this.title.text = title;
+        this.title.gameObject.SetActive(title.Length > 0);
     }
     
     public void SetDescription(string description)
