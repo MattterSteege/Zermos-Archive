@@ -31,19 +31,19 @@ body {
 }
 
 
-#header {
+.header {
     height: 66px;
     display: flex;
     align-items: center;
 }
 
-#line {
+.line {
     height: 1px;
     background: #bbbbbb;
     margin: 0 20px;
 }
 
-#headerContent {
+.headerContent {
     position: fixed;
     padding-top: 0.3125rem;
     padding-bottom: 0.3125rem;
@@ -54,12 +54,12 @@ body {
     font-size: 1rem;
 }
 
-#page {
+.page {
     display: flex;
     height: 100%
 }
 
-#sideBar {
+.sideBar {
     margin: 15px 20px -5px;
     width: 230px;
     background: linear-gradient(180deg, #E14ECA, #BE54F2);
@@ -70,7 +70,7 @@ body {
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
 }
 
-#content {
+.content {
     height: 1000px;
     flex: 1 0;
     background: #27293D;
@@ -78,7 +78,7 @@ body {
     border-radius: 5px;
 }
 
-#sidebar-header {
+.sidebar-header {
     margin: 14px 20px;
     padding: 10px 20px;
     color: #fff;
@@ -86,7 +86,7 @@ body {
     align-self: center;
 }
 
-#logo {
+.logo {
     height: 62px;
     align-content: center;
     color: white;
@@ -94,13 +94,13 @@ body {
     text-align: center;
 }
 
-#divider {
+.divider {
     height: 1px;
     background: #ffffff;
     margin: 0 20px;
 }
 
-#navbar {
+.navbar {
     margin-top: 20px;
     display: block;
 }
@@ -118,7 +118,7 @@ a {
     color: #fff;
 }
 
-#navbar-item {
+.navbar-item {
     width: 100%;
     margin-top: 30px;
     margin-bottom: 10px;
@@ -127,7 +127,7 @@ a {
     font-size: 1rem;
 }
 
-#icon-image {
+.icon-image {
     width: 25px;
     height: 25px;
     vertical-align: middle;
