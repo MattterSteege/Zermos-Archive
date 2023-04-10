@@ -1,0 +1,65 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <link rel="stylesheet" href="~/css/style.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="//fonts.googleapis.com/css?family=Ubuntu"
+    />
+    <title>@ViewData["Title"]</title>
+  </head>
+  <body>
+    <div class="top-of-page"></div>
+<!--TOP BAR-->
+    <nav class="site-nav-top">
+      <div class="page-title">
+        <h1>@ViewData["Title"]</h1>
+      </div>
+    </nav>
+
+<!--SIDE BAR-->
+    <nav class="site-nav">
+      <a asp-action="Index" asp-controller="Home">
+        <div class="site-nav-header">
+          <p class="z">Z</p>
+          <p class="ermos">ERMOS</p>
+        </div>
+      </a>
+      <ul>
+        <li class="@(ViewData["ActivePage"] == "Home" ? "active" : "")">
+          <a asp-action="Index" asp-controller="Home">
+            <img src="~/images/Home.png"  alt=""/>
+            <p>Hoofdmenu</p>
+          </a>
+        </li>
+
+        <li class="@(ViewData["ActivePage"] == "DaySchedule" ? "active" : "")">
+          <a asp-action="Dagrooster" asp-controller="Zermelo">
+            <img src="~/images/List View.png"  alt=""/>
+            <p>Rooster</p>
+          </a>
+        </li>
+
+        <li class="@(ViewData["ActivePage"] == "Homework" ? "active" : "")">
+          <a asp-action="NotImplementedYet" asp-controller="Home">
+            <img src="~/images/StandartIcon_5.png"  alt=""/>
+            <p>Huiswerk</p>
+          </a>
+        </li>
+
+        <li class="@(ViewData["ActivePage"] == "Settings" ? "active" : "")">
+          <a asp-action="NotImplementedYet" asp-controller="Home">
+            <img src="~/images/settings.png"  alt=""/>
+            <p>Instellingen</p>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <main class="content">
+      @RenderBody()
+    </main>
+  </body>
+</html>

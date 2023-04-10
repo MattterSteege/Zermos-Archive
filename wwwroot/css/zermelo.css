@@ -1,0 +1,12 @@
+﻿.appointment {
+    border-radius: 10px;
+    background-color: #eaf5fc;
+    border: 2px solid #0080ff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.appointment-table {
+    width: 100%;
+    table-layout: fixed;
+}

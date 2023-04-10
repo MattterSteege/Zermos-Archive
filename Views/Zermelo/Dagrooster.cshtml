@@ -1,0 +1,31 @@
+﻿@model List<Zermos.Models.ZermeloScheduleModel.Appointment>
+
+@{
+    ViewData["Title"] = "Dagrooster";
+    Layout = "_Layout";
+}
+
+
+<link rel="stylesheet" href="~/css/Zermelo.css"/>
+@{int index = 0;}
+@foreach (var item in Model)
+{
+    <div class="appointment">
+        <table class="appointment-table">
+            <tr>
+                <td>
+                    <h2>@(item.subjects.Count > 0 ? item.subjects[0] : "No subject")</h2>
+                    <h2>@(item.locations.Count > 0 ? item.locations[0] : "No location")</h2>
+                </td>
+                <td>
+                    <h2>@(item.teachers.Count > 0 ? item.teachers[0] : "No teacher")</h2>
+                    <h2>@item.startTimeSlotName</h2>
+                </td>
+                <td>
+                    <h2>@item.start.ToDateTime().ToDayTimeSavingDate().ToString("f")</h2>
+                    <h2>@item.end.ToDateTime().ToDayTimeSavingDate().ToString("f")</h2>
+                </td>
+            </tr>
+        </table>
+    </div>
+}
