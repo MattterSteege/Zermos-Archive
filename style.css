@@ -183,7 +183,9 @@ nav.site-nav ul li.active {
 
 /*CONTENT*/
 .content {
-    width: calc(100% - 120px);
+    --content-view-width: calc(100vw - 120px);
+    --content-view-height: calc(100vh - 80px);
+    width: var(--content-view-width);
     top: 80px;
     height: max-content;
     float: right;
@@ -191,4 +193,55 @@ nav.site-nav ul li.active {
     z-index: -1;
     background: #131220;
     overflow: hidden;
+}
+
+/*CONTENT ROOSTER TEST*/
+.grid-container {
+    margin: 10px;
+    display: grid;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 0;
+    grid-template-columns: 80px repeat(5, 1fr);
+    height: calc(var(--content-view-height) - 20px);
+    max-width: 100%;
+    grid-template-rows: repeat(9, 1fr);
+}
+
+.grid-column {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 0;
+    font-size: 30px;
+    text-align: center;
+    display: grid;
+    grid-template-rows: repeat(9, 1fr);
+    height: calc(var(--content-view-height) - 20px);
+}
+
+.grid-column-numbering {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 0;
+    font-size: 30px;
+    text-align: center;
+    width: 80px;
+    display: grid;
+    max-height: 100%;
+    grid-template-rows: repeat(9, 1fr);
+    grid-template-columns: 80px;
+    height: calc(var(--content-view-height) - 20px);
+}
+
+.grid-column-numbering .grid-item {
+    max-height: 100%;
+    grid-template-rows: repeat(9, 1fr);
+    aspect-ratio: auto;
+}
+
+.grid-item {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
 }
