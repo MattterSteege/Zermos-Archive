@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Zermos\\Zermos.csproj": {}
+    "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Zermos\\Zermos\\Zermos.csproj": {}
   },
   "projects": {
-    "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Zermos\\Zermos.csproj": {
+    "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Zermos\\Zermos\\Zermos.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Zermos\\Zermos.csproj",
+        "projectUniqueName": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Zermos\\Zermos\\Zermos.csproj",
         "projectName": "Zermos",
-        "projectPath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Zermos\\Zermos.csproj",
+        "projectPath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Zermos\\Zermos\\Zermos.csproj",
         "packagesPath": "C:\\Users\\mattt\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Zermos\\obj\\",
+        "outputPath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Zermos\\Zermos\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\mattt\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -26,7 +26,6 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -38,7 +37,6 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
@@ -69,17 +67,10 @@
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[3.1.32, 3.1.32]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -88,7 +79,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.417\\RuntimeIdentifierGraph.json"
         }
       }
     }

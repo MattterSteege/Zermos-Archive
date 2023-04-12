@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -25,8 +27,24 @@ namespace Zermos.Controllers
             var data = await response.Content.ReadAsStringAsync();
             ZermeloScheduleModel.ZermeloSchedule model = JsonConvert.DeserializeObject<ZermeloScheduleModel.ZermeloSchedule>(data);
     
+            int dag = 0;
+            int index = 0;
+
+            List<List<ZermeloScheduleModel.Appointment>> dagroosters = new List<List<ZermeloScheduleModel.Appointment>>(5);
+            //add 5 lists to the list
+            for (int i = 0; i < 5; i++)
+            {
+                dagroosters.Add(new List<ZermeloScheduleModel.Appointment>());
+            }
+
+            foreach (ZermeloScheduleModel.Appointment appointment in model.response.data[0].appointments)
+            {
+                int currentDay = (int) appointment.start.ToDateTime().ToDayTimeSavingDate().DayOfWeek;
+                dagroosters[currentDay - 1].Add(appointment);
+            }
+
             ViewData["ActivePage"] = "DaySchedule";
-            return View("Dagrooster", model.response.data[0].appointments);
+            return View("Dagrooster", dagroosters);
         }
     }
 }
