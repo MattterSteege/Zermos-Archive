@@ -67,6 +67,9 @@
     align-items:center;
     justify-content:center;
     font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    color: #000;
 }
 
 .grid-column-days
@@ -134,4 +137,17 @@
 {
     background-color: #ff674e !important;
     color: white;
+}
+
+/*css for lessons are below*/
+
+.lesson-container{
+    margin: 0;
+    padding: 0;
+    background: #ff674e;
+    display:grid;
+    top:80px;
+    bottom:0;
+    width:calc(var(--content-view-width));
+    height:calc(var(--content-view-height));
 }

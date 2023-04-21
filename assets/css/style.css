@@ -196,7 +196,7 @@ nav.site-nav ul li.active
 
 .content
 {
-    --content-view-width:calc(100vw - 120px);
+    --content-view-width:calc(100vw - 130px);
     --content-view-height:calc(100vh - 80px);
     width:var(--content-view-width);
     top:80px;
