@@ -99,9 +99,9 @@ function getDagrooster(){
                             gridItem.classList.add("cancelled");
                         }
 
-                        //href to ./lesson?id=[id]
+                        //href to the ./lesson?id=appointmentDay[i].id
                         gridItem.addEventListener("click", function(){
-                            window.location.href = "./lesson/?id=" + appointmentDay[i].id;
+                            window.location.href = "./lesson/?lesson=" + JSON.stringify(appointmentDay[i])
                         });
 
                         gridColumn.appendChild(gridItem);
@@ -146,7 +146,13 @@ getWeekYear = function() {
     return date.getFullYear();
 }
 
+function decodeUrl(url) {
+    return decodeURIComponent(url.replace(/\+/g, " "));
+}
+
+
+
 function getLessonFromParameter(){
     //add div with content: window.location.search.replace("?id=", "")
-    document.getElementById("lesson").textContent = window.location.search.replace("?id=", "");
+    document.getElementById("lesson").textContent = decodeUrl(window.location.search.replace("?lesson=", ""));
 }

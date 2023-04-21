@@ -182,11 +182,10 @@ nav.site-nav ul li.active
 
 .page-title
 {
-    width:300px;
     height:80px;
     position:fixed;
     top:0;
-    left:120px;
+    left:150px;
     display:flex;
     justify-content:center;
     align-items:center;
