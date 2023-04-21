@@ -153,6 +153,40 @@ function decodeUrl(url) {
 
 
 function getLessonFromParameter(){
-    //add div with content: window.location.search.replace("?id=", "")
-    document.getElementById("lesson").textContent = decodeUrl(window.location.search.replace("?lesson=", ""));
+    const appointmentJSON = decodeUrl(window.location.search.replace("?lesson=", ""))
+    const appointment = JSON.parse(appointmentJSON);
+
+    const model = {
+            status: appointment.status.map(status => ({
+                code: status.code,
+                nl: status.nl,
+                en: status.en
+            })),
+            actions: appointment.actions,
+            start: appointment.start,
+            end: appointment.end,
+            cancelled: appointment.cancelled,
+            appointmentType: appointment.appointmentType,
+            online: appointment.online,
+            optional: appointment.optional,
+            appointmentInstance: appointment.appointmentInstance,
+            startTimeSlotName: appointment.startTimeSlotName,
+            endTimeSlotName: appointment.endTimeSlotName,
+            subjects: appointment.subjects,
+            groups: appointment.groups,
+            locations: appointment.locations,
+            teachers: appointment.teachers,
+            onlineTeachers: appointment.onlineTeachers,
+            onlineLocationUrl: appointment.onlineLocationUrl,
+            capacity: appointment.capacity,
+            expectedStudentCount: appointment.expectedStudentCount,
+            expectedStudentCountOnline: appointment.expectedStudentCountOnline,
+            changeDescription: appointment.changeDescription,
+            schedulerRemark: appointment.schedulerRemark,
+            content: appointment.content,
+            id: appointment.id
+        };
+
+    //write to the html
+    document.getElementById("lesson").innerHTML = model.subjects[0] + " - " + model.teachers[0] + " - " + model.locations[0];
 }

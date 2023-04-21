@@ -65,7 +65,8 @@
     text-align:center;
     display:flex;
     align-items:center;
-    justify-content:center
+    justify-content:center;
+    font-weight: bold;
 }
 
 .grid-column-days
@@ -131,5 +132,6 @@
 
 .cancelled
 {
-    background-color: #D0321D !important
+    background-color: #ff674e !important;
+    color: white;
 }
