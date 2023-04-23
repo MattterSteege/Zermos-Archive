@@ -12,8 +12,15 @@ html
 
 body
 {
-    background:#292F42;
-    margin:0
+    background: var(--oxford-blue);
+    margin:0;
+
+    --atomic-tangerine: #F7996Aff;
+    --prussian-blue: #23354Fff;
+    --oxford-blue: #1B2A40ff;
+    --columbia-blue: #C0D4F2ff;
+    --royal-blue-web-color: #3063DAff;
+    --apricot: #FEDABF;
 }
 
 ::-webkit-scrollbar
@@ -39,10 +46,10 @@ body
 
 .site-nav
 {
-    width:120px;
+    width: calc(120px + 2rem);
     height:100%;
     position:fixed;
-    background:#353541
+    background: var(--atomic-tangerine);
 }
 
 .site-nav-header
@@ -58,7 +65,6 @@ body
     top:0;
     position:fixed;
     font-weight:700;
-    background:#2A2937
 }
 
 .site-nav-header .z
@@ -74,6 +80,7 @@ body
     font-size:24px;
     transition:.5s ease;
     transform:translate(-300%,0)
+    rotate(180deg);
 }
 
 .site-nav-header .ermos
@@ -81,14 +88,16 @@ body
     font-size:24px;
     transition:.4s ease;
     transform:translate(200%,0);
-    z-index:-1
+    z-index:-1;
+    opacity: 0;
 }
 
 .site-nav-header:hover .ermos
 {
     font-size:24px;
     transition:.5s ease;
-    transform:translate(8%,0)
+    transform:translate(8%,0);
+    opacity: 1;
 }
 
 .site-nav ul
@@ -108,12 +117,15 @@ body
 
 .site-nav li
 {
-    width:100%;
+    margin: 5px;
     height:80px;
     display:flex;
     justify-content:center;
-    color:#fff;
-    transition:.25s ease
+    color: var(--apricot);
+    transition:.25s ease;
+    backdrop-filter: blur(10px);
+    border-radius: 1rem;
+    width: 100px;
 }
 
 .site-nav li:last-child
@@ -123,19 +135,22 @@ body
     bottom:20px;
     display:flex;
     justify-content:center;
-    color:#fff;
+    color: var(--apricot);
     transition:.25s ease;
     position:absolute
 }
 
 nav.site-nav ul li.active
 {
-    background:#4D4D59
+    background-color: rgba(255,255,255,0.13);
+    backdrop-filter: blur(10px);
+    border-radius: 1rem;
+    width: 100px;
 }
 
 .site-nav li:hover
 {
-    background:#4D4D59;
+    background-color: rgba(255,255,255,0.13);
     transition:.5s ease
 }
 
@@ -150,13 +165,14 @@ nav.site-nav ul li.active
 {
     margin:0;
     padding:0;
-    font-size:12px;
+    font-size:15px;
     height:auto;
     width:auto;
-    color:#fff;
+    color: var(--apricot);
     position:absolute;
     left:50%;
-    transform:translate(-50%,450%)
+    transform:translate(-50%, 55px);
+    font-weight: bold;
 }
 
 .site-nav li img
@@ -189,7 +205,7 @@ nav.site-nav ul li.active
     display:flex;
     justify-content:center;
     align-items:center;
-    color:#fff;
+    color: var(--apricot);
     font-size:14px;
     background:#1F1E2C
 }
@@ -197,19 +213,19 @@ nav.site-nav ul li.active
 .content
 {
     --content-view-width:calc(100vw - 120px);
-    --content-view-height:calc(100vh - 80px);
-    width:var(--content-view-width);
-    top:80px;
+    --content-view-height: 100vh;
+    width: var(--content-view-width);
     height:max-content;
     float:right;
     position:relative;
-    z-index:-1;
-    background:#131220;
+    z-index: 1;
+    background: var(--oxford-blue);
     overflow:hidden;
     display:grid;
     grid-template-columns:4fr 1fr;
     grid-gap:10px;
-    max-height:calc(100vh - 80px);
+    border-top-left-radius: 2rem;
+    border-bottom-left-radius: 2rem;
 }
 
 a:hover {

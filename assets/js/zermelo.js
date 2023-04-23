@@ -1,7 +1,16 @@
+
+
+
+/*dagrooster  \/   */
 function getDagrooster() {
   let ajaxRequest = new XMLHttpRequest();
   const access_token = localStorage.getItem("zermelo-access_token");
   const student = localStorage.getItem("zermelo-student_id");
+
+  if (access_token === null || student === null) {
+    console.log("No access token or student id found, redirecting to login page...");
+    window.location.href = "./inloggen/";
+  }
 
   let currentDate = new Date();
   let startDate = new Date(currentDate.getFullYear(), 0, 1);
@@ -98,9 +107,7 @@ function getDagrooster() {
         // Loop through the appointments in the current day and create a new grid item for each one
         for (let i = 0; i < appointmentDay.length; i++) {
           if (appointmentDay[i].startTimeSlotName === lessonNumber.toString()) {
-            const gridItem = document.createElement("a");
-            gridItem.setAttribute("href", "./lesson/?lesson=" + JSON.stringify(appointmentDay[i]));
-
+            const gridItem = document.createElement("div");
             gridItem.classList.add("grid-item");
             gridItem.textContent =
                 (appointmentDay[i].subjects.length > 0 ?
@@ -118,6 +125,11 @@ function getDagrooster() {
             } else if (gridItem.textContent !== "") {
               gridItem.href = "";
             }
+
+            //log subject[0] when the mouse hovers over the grid item
+            gridItem.addEventListener("mouseover", function() {
+              getLessonFromParameter(appointmentDay[i]);
+            });
 
 
             gridColumn.appendChild(gridItem);
@@ -168,57 +180,19 @@ function decodeUrl(url) {
 
 /*Lesson information \/   */
 
-function getLessonFromParameter() {
-  const appointmentJSON = decodeUrl(
-      window.location.search.replace("?lesson=", "")
-  );
-  const appointment = JSON.parse(appointmentJSON);
-
-  const model = {
-    status: appointment.status.map((status) => ({
-      code: status.code,
-      nl: status.nl,
-      en: status.en,
-    })),
-    actions: appointment.actions,
-    start: appointment.start,
-    end: appointment.end,
-    cancelled: appointment.cancelled,
-    appointmentType: appointment.appointmentType,
-    online: appointment.online,
-    optional: appointment.optional,
-    appointmentInstance: appointment.appointmentInstance,
-    startTimeSlotName: appointment.startTimeSlotName,
-    endTimeSlotName: appointment.endTimeSlotName,
-    subjects: appointment.subjects,
-    groups: appointment.groups,
-    locations: appointment.locations,
-    teachers: appointment.teachers,
-    onlineTeachers: appointment.onlineTeachers,
-    onlineLocationUrl: appointment.onlineLocationUrl,
-    capacity: appointment.capacity,
-    expectedStudentCount: appointment.expectedStudentCount,
-    expectedStudentCountOnline: appointment.expectedStudentCountOnline,
-    changeDescription: appointment.changeDescription,
-    schedulerRemark: appointment.schedulerRemark,
-    content: appointment.content,
-    id: appointment.id,
-  };
-
-  //page logic
-
-  document.getElementById("vak").innerHTML = model.subjects[0];
+function getLessonFromParameter(model) {
   document.getElementById("lesson-title").innerHTML = model.subjects[0];
   document.getElementById("lesson-teacher").innerHTML = model.teachers[0];
 
   const lessonDescription = document.getElementById("lesson-description");
+    lessonDescription.innerHTML = "";
 
   const a = document.createElement("li");
   a.classList.add("list");
-  a.innerHTML = unixToDatetime(appointment.start).toLocaleString('nl-NL', {
+  a.innerHTML = unixToDatetime(model.start).toLocaleString('nl-NL', {
     hour: '2-digit',
     minute: '2-digit'
-  }) + " - " + unixToDatetime(appointment.end).toLocaleString('nl-NL', {
+  }) + " - " + unixToDatetime(model.end).toLocaleString('nl-NL', {
     hour: '2-digit',
     minute: '2-digit'
   });
@@ -232,13 +206,8 @@ function getLessonFromParameter() {
 
   const c = document.createElement("li");
   c.classList.add("list");
-  c.innerHTML = model.groups[0];
+  c.innerHTML =  model.teachers[0];
   lessonDescription.appendChild(c);
-
-  const d = document.createElement("li");
-  d.classList.add("list");
-  d.innerHTML = model.appointmentType;
-  lessonDescription.appendChild(d);
 }
 
 function unixToDatetime(unix) {
@@ -312,47 +281,49 @@ function authenticateZermelo_step_2(code) {
 
 function getZermeloUser() {
 //GET: https://ccg.zportal.nl/api/v3/users/~me?access_token=[localstorage.getItem("zermelo-access_token")]
-    let xhr = new XMLHttpRequest();
+  let xhr = new XMLHttpRequest();
 
-    xhr.addEventListener("readystatechange", function() {
+  xhr.addEventListener("readystatechange", function () {
 
-      //console.log(this.responseText);
+    //console.log(this.responseText);
 
-      if (this.readyState === 4) {
+    if (this.readyState === 4) {
 
-        const data = JSON.parse(this.responseText);
-        const model = {
-          response: {
-            status: data.response.status,
-            message: data.response.message,
-            details: data.response.details,
-            eventId: data.response.eventId,
-            startRow: data.response.startRow,
-            endRow: data.response.endRow,
-            totalRows: data.response.totalRows,
-            data: data.response.data.map((item) => ({
-              code: item.code,
-              firstName: item.firstName,
-              prefix: item.prefix,
-              lastName: item.lastName,
-              gender: item.gender,
-              email: item.email,
-              street: item.street,
-              city: item.city,
-              dateOfBirth: item.dateOfBirth,
-              schoolInSchoolYears: item.schoolInSchoolYears,
-              houseNumber: item.houseNumber,
-              postalCode: item.postalCode,
-            })),
-          },
-        };
+      const data = JSON.parse(this.responseText);
+      const model = {
+        response: {
+          status: data.response.status,
+          message: data.response.message,
+          details: data.response.details,
+          eventId: data.response.eventId,
+          startRow: data.response.startRow,
+          endRow: data.response.endRow,
+          totalRows: data.response.totalRows,
+          data: data.response.data.map((item) => ({
+            code: item.code,
+            firstName: item.firstName,
+            prefix: item.prefix,
+            lastName: item.lastName,
+            gender: item.gender,
+            email: item.email,
+            street: item.street,
+            city: item.city,
+            dateOfBirth: item.dateOfBirth,
+            schoolInSchoolYears: item.schoolInSchoolYears,
+            houseNumber: item.houseNumber,
+            postalCode: item.postalCode,
+          })),
+        },
+      };
 
-        //console.log(model);
+      //console.log(model);
 
-        localStorage.setItem("zermelo-student_id", model.response.data[0].code);
-      }
-    });
+      localStorage.setItem("zermelo-student_id", model.response.data[0].code);
 
-    xhr.open("GET", "https://ccg.zportal.nl/api/v3/users/~me?access_token=" + localStorage.getItem("zermelo-access_token"), true);
-    xhr.send();
+      window.location.href = "../";
+    }
+  });
+
+  xhr.open("GET", "https://ccg.zportal.nl/api/v3/users/~me?access_token=" + localStorage.getItem("zermelo-access_token"), true);
+  xhr.send();
 }
