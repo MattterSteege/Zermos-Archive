@@ -3,7 +3,9 @@
     display:grid;
     grid-template-rows:40px 1fr;
     max-height:calc(100vh - 80px);
-    grid-gap:10px
+    grid-gap:10px;
+    margin-bottom:10px;
+    padding-bottom:10px;
 }
 
 .rooster-times-container
@@ -139,15 +141,61 @@
     color: white;
 }
 
-/*css for lessons are below*/
+/*css for lessons is below*/
 
 .lesson-container{
-    margin: 0;
-    padding: 0;
-    background: #ff674e;
-    display:grid;
-    top:80px;
-    bottom:0;
-    width:calc(var(--content-view-width));
-    height:calc(var(--content-view-height));
+    width:var(--content-view-width);
+    height:var(--content-view-height);
+}
+
+.lesson-content{
+    width: calc(var(--content-view-width) - 40px);
+    height: calc(var(--content-view-height) - 40px);
+    border-radius: 1rem;
+    background: #D0D0D2;
+    margin: 10px;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.list{
+    margin: 0 auto;
+    list-style-type: none;
+    float: left;
+    padding-right: 10px;
+}
+
+/*css for login page is below*/
+
+.login-main-parent{
+    width: calc(100vw * 0.4);
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    height: calc(100vh - 20px);
+    margin: 0 auto;
+
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.background{
+    background: linear-gradient(45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
+    background-size: 400% 400%;
+    animation: gradient 30s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0 50%;
+
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
 }

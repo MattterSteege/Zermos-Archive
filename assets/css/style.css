@@ -196,7 +196,7 @@ nav.site-nav ul li.active
 
 .content
 {
-    --content-view-width:calc(100vw - 130px);
+    --content-view-width:calc(100vw - 120px);
     --content-view-height:calc(100vh - 80px);
     width:var(--content-view-width);
     top:80px;
@@ -210,6 +210,12 @@ nav.site-nav ul li.active
     grid-template-columns:4fr 1fr;
     grid-gap:10px;
     max-height:calc(100vh - 80px);
-    margin-bottom:10px;
-    padding-bottom:10px;
+}
+
+a:hover {
+    color: blue;
+    text-decoration: underline;
+    /* Set the tooltip to be transparent */
+    background-color: transparent;
+    border: none;
 }
