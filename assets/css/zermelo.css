@@ -150,3 +150,146 @@
     float: left;
     padding-right: 10px;
 }
+
+/*inlog pagina*/
+
+.login-page {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.password-based{
+    background-color: var(--foreground-color);
+    border-radius: 2rem;
+    padding: 2rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.password-based-username {
+    margin-top: 2rem;
+    font-size: 14px;
+    color: var(--text-color);
+    text-align: center;
+}
+
+.password-based-username label {
+    font-size: 14px;
+    color: var(--text-color);
+    text-align: center;
+    height: 25px;
+    width: 100px;
+}
+
+.password-based-username input {
+    font-size: 14px;
+    color: var(--text-color);
+    text-align: center;
+    height: 50px;
+    width: 100%;
+    border-radius: 2rem;
+}
+
+
+
+.password-based-password {
+    margin-top: 2rem;
+    font-size: 14px;
+    color: var(--text-color);
+    text-align: center;
+    height: 75px;
+    width: 100%;
+}
+
+.password-based-password label {
+    font-size: 14px;
+    color: var(--text-color);
+    text-align: center;
+    height: 25px;
+    width: 100px;
+}
+
+.password-based-password input {
+    font-size: 14px;
+    color: var(--text-color);
+    text-align: center;
+    height: 50px;
+    width: 100%;
+    border-radius: 2rem;
+}
+
+
+
+.password-based-login-button {
+    width:100%;
+    /*align at the end of parent*/
+    margin-top: auto;
+    margin-bottom: 0;
+}
+
+.password-based-login-button button {
+    background-color: var(--accent-color);
+    border-radius: 2rem;
+    padding: 1rem 2rem;
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: bold;
+    transition: .5s;
+    width: 100%;
+}
+
+.password-based-login-button button:hover {
+    background-color: var(--accent-color-hover);
+    transition: .5s;
+}
+
+.qr-based{
+    background-color: var(--foreground-color);
+    border-radius: 2rem;
+    padding-top: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+
+
+.information-page {
+    background-color: var(--foreground-color);
+    border-radius: 2rem;
+    padding-top: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.information-page-heading {
+
+    font-size: 30px;
+    font-weight: bold;
+    color: var(--text-color);
+    text-align: center;
+
+}
+
+.information-page-text {
+    margin-top: 1rem;
+    font-size: 14px;
+    color: var(--text-color);
+    text-align: center;
+}
+
+.information-page-table {
+    margin-top: 2rem;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    width: calc(100% - 2rem);
+    outline: 2px solid var(--foreground-color);
+    outline-offset: -2px;
+    color: var(--text-color);
+}
+
+.information-page-table td {
+    padding: 1rem;
+    outline: 1px solid var(--text-color);
+    text-align: center;
+}

@@ -21,6 +21,7 @@ body
     --text-color: #EEEEEE;
     --foreground-color: #393E46;
     --accent-color: #00ADB5;
+    --accent-color-hover: #00D8D6;
 }
 
 ::-webkit-scrollbar
@@ -102,13 +103,14 @@ body
     transform:translate(200%,0);
     z-index:-100;
     opacity: 0;
+    pointer-events: none;
 }
 
 .site-nav-header:hover .ermos
 {
     font-size:24px;
     transition:.75s ease;
-    transform:translate(8%,0);
+    transform:translate(9%,1px);
     opacity: 1;
 }
 
@@ -279,8 +281,8 @@ body
 }
 
 .site-nav:hover + #background {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(1rem);
+    background-color: rgba(255,255,255,0.13);
     transition: 1s ease;
 }
 
