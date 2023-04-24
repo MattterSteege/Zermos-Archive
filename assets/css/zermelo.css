@@ -1,10 +1,7 @@
 .rooster-container
 {
     display:grid;
-    grid-template-rows:40px 1fr;
-    max-height: calc(100vh - 20px);
     grid-gap:10px;
-    margin: 10px 0 10px 10px;
 }
 
 .rooster-times-container
@@ -12,8 +9,6 @@
     display:grid;
     grid-template-columns:1fr 1fr;
     grid-gap:10px;
-    top:80px;
-    bottom:0
 }
 
 .grid-container
@@ -25,10 +20,9 @@
     padding:0;
     grid-template-columns:repeat(5,1fr);
     max-width:100%;
-    grid-template-rows:repeat(9,1fr);
     width:calc(var(--content-view-width) * 0.75);
     grid-gap:1px;
-    height:calc(var(--content-view-height) - 70px)
+    height:calc(var(--content-view-height) - 40px)
 }
 
 .grid-column
@@ -39,7 +33,6 @@
     text-align:center;
     display:grid;
     grid-template-rows:repeat(9,1fr);
-    height:calc(var(--content-view-height) - 60px);
     grid-gap:1px
 }
 
@@ -54,7 +47,11 @@
     max-height:100%;
     grid-template-rows:repeat(9,1fr);
     grid-template-columns:80px;
-    height:calc(var(--content-view-height) - 70px)
+    height:calc(var(--content-view-height) - 40px);
+    border-radius: 2rem;
+    overflow:hidden;
+    grid-gap:1px;
+    color: var(--text-color);
 }
 
 .grid-column .grid-item
@@ -74,7 +71,6 @@
 
 .grid-column-days
 {
-    margin-top:10px;
     margin-left:100px;
     background-color: var(--foreground-color);
     border-radius: 2rem;
@@ -104,23 +100,10 @@
 {
     border-radius: 2rem;
     overflow:hidden;
-    margin: 20px 10px 10px 0;
     display:grid;
     background-color: var(--foreground-color);
     padding:0;
     max-height: calc(100vh - 30px);
-}
-
-.grid-column-numbering
-{
-    border-radius: 2rem;
-    overflow:hidden;
-    margin:0 0 0 10px;
-    display:grid;
-    background-color: var(--foreground-color);
-    padding:0;
-    grid-gap:1px;
-    color: var(--text-color);
 }
 
 .grid-column-numbering .grid-item
@@ -166,39 +149,4 @@
     list-style-type: none;
     float: left;
     padding-right: 10px;
-}
-
-/*css for login page is below*/
-
-.login-main-parent{
-    width: calc(100vw * 0.4);
-    display: grid;
-    align-items: center;
-    justify-items: center;
-    height: calc(100vh - 20px);
-    margin: 0 auto;
-
-    background-color: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(10px);
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-}
-
-.background{
-    background: linear-gradient(45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
-    background-size: 400% 400%;
-    animation: gradient 30s ease infinite;
-}
-
-@keyframes gradient {
-    0% {
-        background-position: 0 50%;
-
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0 50%;
-    }
 }

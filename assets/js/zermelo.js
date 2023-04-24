@@ -3,6 +3,7 @@
 
 /*dagrooster  \/   */
 function getDagrooster() {
+  console.log("Getting dagrooster...");
   let ajaxRequest = new XMLHttpRequest();
   const access_token = localStorage.getItem("zermelo-access_token");
   const student = localStorage.getItem("zermelo-student_id");
@@ -15,7 +16,7 @@ function getDagrooster() {
   let currentDate = new Date();
   let startDate = new Date(currentDate.getFullYear(), 0, 1);
   let days = Math.floor((currentDate - startDate) / (24 * 60 * 60 * 1000));
-  const weekNumber = Math.ceil(days / 7);
+  const weekNumber = 16; //Math.ceil(days / 7);
 
   ajaxRequest.open(
       "GET",
@@ -79,6 +80,8 @@ function getDagrooster() {
           })),
         },
       };
+
+      console.log(model);
 
       let appointmentsByDay = {
         1: [], // Monday

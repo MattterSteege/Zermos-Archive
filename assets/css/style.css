@@ -9,7 +9,7 @@
 
 html
 {
-    font-family:Ubuntu,sans-serif
+    font-family:Poppins,sans-serif
 }
 
 body
@@ -53,6 +53,7 @@ body
     left: 1rem;
     position:fixed;
     background: var(--foreground-color);
+    z-index: 1000;
 }
 
 .site-nav-header
@@ -99,7 +100,7 @@ body
     font-size:24px;
     transition:.6s ease;
     transform:translate(200%,0);
-    z-index:-1;
+    z-index:-100;
     opacity: 0;
 }
 
@@ -138,7 +139,7 @@ body
     transition:.5s ease;
     cursor:pointer;
     position:relative;
-    z-index:1
+    z-index:100
 }
 
 .site-nav-links-parent ul {
@@ -155,7 +156,7 @@ body
     align-items: center;
     transition: .5s ease;
     position: relative;
-    z-index: 1;
+    z-index: 100;
 }
 
 .site-nav-links-parent ul li:hover {
@@ -174,7 +175,7 @@ body
     align-items: center;
     opacity: 0;
     transition: .5s ease;
-    z-index: -1;
+    z-index: -100;
     pointer-events: none;
 }
 
@@ -221,7 +222,7 @@ body
     left: 120px;
     background: var(--foreground-color);
     border-radius: 0 2rem 2rem 0;
-    z-index: 1;
+    z-index: 100;
     transition: 5s ease;
     flex-direction: column;
 }
@@ -255,7 +256,7 @@ body
     align-items: center;
     transition: .5s ease;
     position: relative;
-    z-index: 1;
+    z-index: 100;
 }
 
 .sub-menu-item:hover{
@@ -277,7 +278,23 @@ body
     width: 25px;
 }
 
+.site-nav:hover + #background {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    transition: 1s ease;
+}
 
+
+#background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1000;
+    pointer-events: none;
+    transition: .5s ease;
+}
 
 
 
@@ -314,20 +331,19 @@ body
 
 .content
 {
-    --content-view-width:calc(100vw - 120px);
-    --content-view-height: 100vh;
+    --content-view-width:calc(100vw - 120px - 4rem);
+    --content-view-height: calc(100vh - 2rem);
+    top: 1rem;
+    right: 1rem;
     width: var(--content-view-width);
-    height:max-content;
+    height: var(--content-view-height);
     float:right;
     position:relative;
-    z-index: 1;
-    background: var(--background-color);
+    z-index: -10000;
     overflow:hidden;
     display:grid;
     grid-template-columns:4fr 1fr;
     grid-gap:10px;
-    border-top-left-radius: 2rem;
-    border-bottom-left-radius: 2rem;
 }
 
 a:hover {
