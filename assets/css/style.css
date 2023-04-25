@@ -114,21 +114,6 @@ body
     opacity: 1;
 }
 
-.site-nav .site-nav-links
-{
-    top:80px;
-    position:fixed;
-    padding:0;
-    margin:0;
-    width:120px;
-    height:calc(100% - 80px);
-    list-style:none;
-    display:flex;
-    flex-direction:column;
-    justify-content:flex-start;
-    align-items:center
-}
-
 .site-nav-links-parent {
     top: 80px;
     width:100%;
@@ -181,7 +166,7 @@ body
     pointer-events: none;
 }
 
-/*img element move bit up when hoverd over li*/
+/*img element move bit up when hovered over li*/
 .site-nav-links-parent ul li img{
     transition: .5s ease;
 }
@@ -317,19 +302,6 @@ body
 
 
 
-.page-title
-{
-    height:80px;
-    position:fixed;
-    top:0;
-    left:150px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    color: var(--accent-color);
-    font-size:14px;
-    background:#1F1E2C
-}
 
 .content
 {
@@ -346,12 +318,4 @@ body
     display:grid;
     grid-template-columns:4fr 1fr;
     grid-gap:10px;
-}
-
-a:hover {
-    color: blue;
-    text-decoration: underline;
-    /* Set the tooltip to be transparent */
-    background-color: transparent;
-    border: none;
 }

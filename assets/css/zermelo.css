@@ -153,10 +153,24 @@
 
 /*inlog pagina*/
 
-.login-page {
+.container {
     display: grid;
+    grid-template-columns: repeat(6, 1fr);
     grid-template-rows: 1fr 1fr;
     grid-gap: 10px;
+    width: var(--content-view-width);
+    height: var(--content-view-height);
+}
+
+.child {
+    background-color: var(--foreground-color);
+    border-radius: 2rem;
+    padding: 2rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    width: 1fr;
+    height: 1fr;
+    grid-column:span 3;
 }
 
 .password-based{
@@ -180,15 +194,18 @@
     text-align: center;
     height: 25px;
     width: 100px;
+    font-weight: bold;
 }
 
 .password-based-username input {
     font-size: 14px;
-    color: var(--text-color);
+    color: var(--accent-color);
+    font-weight: bold;
     text-align: center;
     height: 50px;
     width: 100%;
     border-radius: 2rem;
+    margin-top: 1rem;
 }
 
 
@@ -208,15 +225,18 @@
     text-align: center;
     height: 25px;
     width: 100px;
+    font-weight: bold;
 }
 
 .password-based-password input {
     font-size: 14px;
-    color: var(--text-color);
+    color: var(--accent-color);
+    font-weight: bold;
     text-align: center;
     height: 50px;
     width: 100%;
     border-radius: 2rem;
+    margin-top: 1rem;
 }
 
 
@@ -247,9 +267,9 @@
 .qr-based{
     background-color: var(--foreground-color);
     border-radius: 2rem;
-    padding-top: 2rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding: 2rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -260,15 +280,6 @@
     padding-top: 2rem;
     padding-left: 1rem;
     padding-right: 1rem;
-}
-
-.information-page-heading {
-
-    font-size: 30px;
-    font-weight: bold;
-    color: var(--text-color);
-    text-align: center;
-
 }
 
 .information-page-text {

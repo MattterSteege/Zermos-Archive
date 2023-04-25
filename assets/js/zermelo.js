@@ -276,6 +276,7 @@ function authenticateZermelo_step_2(code) {
       //console.log(model);
       //console.log(model.access_token);
       localStorage.setItem("zermelo-access_token", model.access_token);
+      localStorage.setItem("zermelo-kwt_allowed", "true");
 
       getZermeloUser();
     }
@@ -287,8 +288,46 @@ function authenticateZermelo_step_2(code) {
   xhr.send(data);
 }
 
+function authenticateZermelo_connect_code(code){
+    code = code.replace(/\s/g, '');
+    if(code.length === 12){
+
+      let xhr = new XMLHttpRequest();
+
+      xhr.addEventListener("readystatechange", function() {
+        if (this.readyState === 4) {
+          console.log("real > " + this.responseText);
+
+            const zermeloAuthModel = JSON.parse(this.responseText);
+            const model = {
+                access_token: zermeloAuthModel.access_token,
+                token_type: zermeloAuthModel.token_type,
+                expires_in: zermeloAuthModel.expires_in
+            };
+            console.log(model);
+            console.log(model.access_token);
+            localStorage.setItem("zermelo-access_token", model.access_token);
+            localStorage.setItem("zermelo-kwt_allowed", "false");
+
+              getZermeloUser();
+        }
+
+      });
+
+      xhr.open("POST", "https://ccg.zportal.nl/api/v3/oauth/token?grant_type=authorization_code&code=" + code);
+      xhr.send();
+    }
+}
+
+
+
+
+
+
+
+
+
 function getZermeloUser() {
-//GET: https://ccg.zportal.nl/api/v3/users/~me?access_token=[localstorage.getItem("zermelo-access_token")]
   let xhr = new XMLHttpRequest();
 
   xhr.addEventListener("readystatechange", function () {

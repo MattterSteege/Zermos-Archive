@@ -51,14 +51,14 @@
 
         <ul class="sub-menu multi">
           <li class="sub-menu-item">
-            <a onclick="location.href='http://www.google.com'">
+            <a onclick="location.href='https://www.google.com'">
               <img src="../../assets/images/List View.png"/>
               <p>Cijfers</p>
             </a>
           </li>
 
           <li class="sub-menu-item">
-            <a onclick="location.href='http://www.google.com'">
+            <a onclick="location.href='https://www.google.com'">
               <img src="../../assets/images/List View.png"/>
               <p>Huiswerk</p>
             </a>
@@ -69,7 +69,7 @@
 
       <li>
         <a href="index.html">
-          <img src="../../assets/images/StandartIcon_5.png" alt="" height="25px" width="25px"/>
+          <img src="../../assets/images/StandardIcon_5.png" alt="" height="25px" width="25px"/>
           <p>Instellingen</p>
         </a>
       </li>
@@ -78,59 +78,81 @@
 </nav>
 <div class="background" id="background"></div>
 <main class="content" id="content" style="grid-template-columns: 1fr 1fr;">
+<div class="container">
 
-  <div class="login-page">
-
+  <div class="child">
     <div class="password-based">
-      <h1 class="information-page-heading">Koppelen met je inloggegevens</h1>
+      <h1 class="information-page-heading">Waarom een koppeling met Zermelo</h1>
+      <p class="information-page-text">
+        Als je Zermelo koppel met Zermos, dan krijg je toegang tot je rooster en het inplannen van KWT uren.<br>Zermelo kan je op de volgende manier inloggen, met je inlog gegevens of met een koppelcode. Ik snap dat je misschien sceptisch ben over het geven van je inloggegevens aan een app, daarom heb ik de koppelcode methode toegevoegd, deze laat je inloggen zonder je inloggegevens te geven, dit komt wel met een prijs.
+      </p>
 
-      <div class="password-based-username">
-        <label for="username">Username</label>
-        <input type="text" placeholder="Email or Phone" id="username">
-      </div>
-
-      <div class="password-based-password">
-        <label for="password">Password</label>
-        <input type="password" placeholder="Password" id="password">
-      </div>
-
-      <div class="password-based-login-button">
-        <button onclick="authenticateZermelo_step_1(document.getElementById('username').value, document.getElementById('password').value)">
-          Log in
-        </button>
-      </div>
+      <table class="information-page-table">
+        <tr>
+          <td>Toegang tot</td>
+          <td>Inloggen met je inlog gegevens</td>
+          <td>koppelcode</td>
+        </tr>
+        <tr>
+          <td>Je dag en week rooster</td>
+          <td><img src="../../assets/images/Checkmark.png" alt="" height="25px" width="25px"/></td>
+          <td><img src="../../assets/images/Checkmark.png" alt="" height="25px" width="25px"/></td>
+        </tr>
+        <tr>
+          <td>Lessen/KWT uren inplannen</td>
+          <td><img src="../../assets/images/Checkmark.png" alt="" height="25px" width="25px"/></td>
+          <td><img src="../../assets/images/Cross.png" alt="" height="25px" width="25px"/></td>
+        </tr>
+      </table>
     </div>
+  </div>
 
+  <div class="child">
     <div class="qr-based">
-
+      <h1 class="information-page-heading">Hoe koppel je een koppelcode?</h1>
+      <p class="information-page-text">
+        Open de Zermelo Portal <a onclick="window.open('https://ccg.zportal.nl/main/')" style="text-decoration: underline; color: var(--accent-color); cursor: pointer">hier</a> en log in met je inloggegevens. <br>Als je bent ingelogd, klik dan op de tweede knop in de rode linker balk (een 'share' icoontje), klik dan op "koppel externe applicatie" kopieer de 12 cijferige code en plak deze in het 'koppelcode' veld hiernaast
+      </p>
     </div>
   </div>
 
-  <div class="information-page">
 
-    <h1 class="information-page-heading">Waarom een koppeling met Zermelo</h1>
-    <p class="information-page-text">
-      Als je Zermelo koppel met Zermos, dan krijg je toegang tot je rooster en het inplannen van KWT uren.<br>Zermelo kan je op de volgende manier inloggen, met je inlog gegevens of met een QR code. Ik snap dat je misschien skeptisch ben over het geven van je inloggegevens aan een app, daarom heb ik de QR methode toegevoegd, deze laat je inloggen zonder je inloggegevens te geven, dit komt wel met een prijs.
-    </p>
+  <div class="child">
+    <h1 class="information-page-heading">Koppelen met je inloggegevens</h1>
 
-    <table class="information-page-table">
-      <tr>
-        <td>Toegang tot</td>
-        <td>Inloggen met je inlog gegevens</td>
-        <td>Met QR code / koppelcode</td>
-      </tr>
-      <tr>
-        <td>Je dag en week rooster</td>
-        <td><img src="../../assets/images/Checkmark.png" alt="" height="25px" width="25px"/></td>
-        <td><img src="../../assets/images/Checkmark.png" alt="" height="25px" width="25px"/></td>
-      </tr>
-      <tr>
-        <td>Lessen/KWT uren inplannen</td>
-        <td><img src="../../assets/images/Checkmark.png" alt="" height="25px" width="25px"/></td>
-        <td><img src="../../assets/images/Cross.png" alt="" height="25px" width="25px"/></td>
-      </tr>
-    </table>
+    <div class="password-based-username">
+      <label for="username">Gebruikersnaam van Zermelo</label>
+      <input type="text" placeholder="Gebruikersnaam" id="username">
+    </div>
+
+    <div class="password-based-password">
+      <label for="password">Wachtwoord van Zermelo</label>
+      <input type="password" placeholder="Wachtwoord" id="password">
+    </div>
+
+    <div class="password-based-login-button">
+      <button onclick="authenticateZermelo_step_1(document.getElementById('username').value, document.getElementById('password').value)">
+        Log in
+      </button>
+    </div>
   </div>
+
+  <div class="child">
+    <h1 class="information-page-heading">Koppelen met een koppelcode</h1>
+
+    <div class="password-based-username">
+      <label for="connect-code">Koppelcode van zermelo</label>
+      <input type="text" placeholder="xxx xxx xxx xxx" id="connect-code">
+    </div>
+
+    <div class="password-based-login-button">
+      <button onclick="authenticateZermelo_connect_code(document.getElementById('connect-code').value)">
+        Log in
+      </button>
+    </div>
+  </div>
+
+</div>
 </main>
 </body>
 </html>
