@@ -1,4 +1,4 @@
-
+console.log("zermelo.js loaded");
 
 
 /*dagrooster  \/   */
