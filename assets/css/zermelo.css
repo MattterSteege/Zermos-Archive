@@ -176,7 +176,6 @@
 .password-based{
     background-color: var(--foreground-color);
     border-radius: 2rem;
-    padding: 2rem 1rem 1rem;
     display: flex;
     flex-direction: column;
 }
@@ -267,12 +266,16 @@
 .qr-based{
     background-color: var(--foreground-color);
     border-radius: 2rem;
-    padding: 2rem 1rem 1rem;
     display: flex;
     flex-direction: column;
 }
 
-
+.information-page-heading {
+    font-size: 30px;
+    color: var(--text-color);
+    text-align: center;
+    font-weight: bold;
+}
 
 .information-page {
     background-color: var(--foreground-color);

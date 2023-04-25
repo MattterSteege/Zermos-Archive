@@ -3,13 +3,13 @@
 
 /*dagrooster  \/   */
 function getDagrooster() {
-  console.log("Getting dagrooster...");
+  //console.log("Getting dagrooster...");
   let ajaxRequest = new XMLHttpRequest();
   const access_token = localStorage.getItem("zermelo-access_token");
   const student = localStorage.getItem("zermelo-student_id");
 
   if (access_token === null || student === null) {
-    console.log("No access token or student id found, redirecting to login page...");
+    //console.log("No access token or student id found, redirecting to login page...");
     window.location.href = "./inloggen/";
   }
 
@@ -17,6 +17,7 @@ function getDagrooster() {
   let startDate = new Date(currentDate.getFullYear(), 0, 1);
   let days = Math.floor((currentDate - startDate) / (24 * 60 * 60 * 1000));
   const weekNumber = 16; //Math.ceil(days / 7);
+  console.warn("FIXED WEEK NUMBER TO 16 (DUE TO VACATION)\n\nzermelo.js:L19: const weekNumber = 16; //Math.ceil(days / 7);");
 
   ajaxRequest.open(
       "GET",
@@ -81,7 +82,7 @@ function getDagrooster() {
         },
       };
 
-      console.log(model);
+      //console.log(model);
 
       let appointmentsByDay = {
         1: [], // Monday
@@ -296,7 +297,7 @@ function authenticateZermelo_connect_code(code){
 
       xhr.addEventListener("readystatechange", function() {
         if (this.readyState === 4) {
-          console.log("real > " + this.responseText);
+          //console.log("real > " + this.responseText);
 
             const zermeloAuthModel = JSON.parse(this.responseText);
             const model = {
@@ -304,8 +305,8 @@ function authenticateZermelo_connect_code(code){
                 token_type: zermeloAuthModel.token_type,
                 expires_in: zermeloAuthModel.expires_in
             };
-            console.log(model);
-            console.log(model.access_token);
+            //console.log(model);
+            //console.log(model.access_token);
             localStorage.setItem("zermelo-access_token", model.access_token);
             localStorage.setItem("zermelo-kwt_allowed", "false");
 
@@ -389,7 +390,7 @@ function openWindow() {
 // Attach an event listener to the iframe's onload event
   iframe.onload = function() {
     // Handle the callback here
-    console.log('Callback URL loaded!');
+    //console.log('Callback URL loaded!');
   };
 
 }
