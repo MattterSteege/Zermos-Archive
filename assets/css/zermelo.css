@@ -315,3 +315,10 @@
     outline: 1px solid var(--text-color);
     text-align: center;
 }
+
+@media screen and (max-width: calc(600px + 120px + 2rem)) {
+
+    .information-page-table{
+        display: none;
+    }
+}

@@ -40,9 +40,15 @@ function getInfoboord() {
             }
 
             let row = 1;
+            //log true if the screen width is more than 600px + 120px + 2rem
+            const width = document.body.clientWidth
+            console.log(width)
+            const newsItemGridChildrenCount = width > 600 + 120 + 32 ? 3 : 2
+            console.log(newsItemGridChildrenCount)
 
             for (const newsItem of newsItems) {
-                if (row > 3) { row = 1 }
+
+                if (row > newsItemGridChildrenCount) { row = 1 }
                 const rowElement = document.getElementById("" + row)
 
                 row++;

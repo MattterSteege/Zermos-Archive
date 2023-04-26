@@ -54,3 +54,15 @@
   height: auto;
   border-radius: 2rem;
 }
+
+@media screen and (max-width: calc(600px + 120px + 2rem)) {
+
+  #3 {
+    display: none;
+  }
+
+  .news-item-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding-bottom: calc(80px + 2rem);
+  }
+}
