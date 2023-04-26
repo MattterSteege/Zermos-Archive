@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+
+  <link rel="stylesheet" href="/Zermos/assets/css/style.css"/>
+  <link rel="stylesheet" href="/Zermos/assets/css/zermelo.css"/>
+  <title>Zermos</title>
+  <script src="/Zermos/assets/js/zermelo.js"></script>
+
+</head>
+<body onload="getDagrooster()">
+<div class="top-of-page"></div>
+
+<!--SIDE BAR-->
+<nav class="site-nav">
+  <a href="/Zermos/">
+    <div class="site-nav-header">
+      <p class="z">Z</p>
+      <p class="ermos">ERMOS</p>
+    </div>
+  </a>
+
+  <div class="site-nav-links-parent">
+    <ul>
+      <li class="active">
+        <a onclick="location.href='../'">
+          <img src="/Zermos/assets/images/Zermelo_logo_albedo.png" height="35" width="35" alt=""/>
+          <p>Zermelo</p>
+        </a>
+
+        <ul class="sub-menu">
+          <li class="sub-menu-item">
+            <a onclick="location.href='../'">
+              <img src="/Zermos/assets/images/List View.png" alt=""/>
+              <p>Rooster</p>
+            </a>
+          </li>
+        </ul>
+
+      </li>
+
+      <!--SOMTODAY
+      <li>
+        <a href="/Zermos">
+          <img src="/Zermos/assets/images/List%20View.png" alt="" height="25px" width="25px"/>
+          <p>Somtoday</p>
+        </a>
+
+        <ul class="sub-menu multi">
+          <li class="sub-menu-item">
+            <a onclick="location.href='https://www.google.com'">
+              <img src="/Zermos/assets/images/List View.png"/>
+              <p>Cijfers</p>
+            </a>
+          </li>
+
+          <li class="sub-menu-item">
+            <a onclick="location.href='https://www.google.com'">
+              <img src="/Zermos/assets/images/List View.png"/>
+              <p>Huiswerk</p>
+            </a>
+          </li>
+        </ul>
+
+      </li>
+      -->
+
+<!--INSTELLINGEN
+      <li>
+        <a href="/Zermos">
+          <img src="/Zermos/assets/images/Homework.png" alt="" height="25px" width="25px"/>
+          <p>Instellingen</p>
+        </a>
+      </li>
+          -->
+    </ul>
+  </div>
+
+</nav>
+<div class="background" id="background"></div>
+<main class="content" id="content">
+      <div class="rooster-container">
+        <div class="grid-column-days">
+          <div class="grid-item">
+            Maandag
+          </div>
+          <div class="grid-item">
+            Dinsdag
+          </div>
+          <div class="grid-item">
+            Woensdag
+          </div>
+          <div class="grid-item">
+            Donderdag
+          </div>
+          <div class="grid-item">
+            Vrijdag
+          </div>
+        </div>
+
+        <div class="rooster-times-container">
+          <div class="grid-column-numbering">
+            <div class="grid-item">
+              1<br>8:20<br>9:10
+            </div>
+            <div class="grid-item">
+              2
+            </div>
+            <div class="grid-item">
+              3
+            </div>
+            <div class="grid-item">
+              4
+            </div>
+            <div class="grid-item">
+              5
+            </div>
+            <div class="grid-item">
+              6
+            </div>
+            <div class="grid-item">
+              7
+            </div>
+            <div class="grid-item">
+              8
+            </div>
+            <div class="grid-item">
+              9
+            </div>
+          </div>
+
+          <div class="grid-container" id="grid-container">
+          <!--Here are your appointments-->
+          </div>
+        </div>
+      </div>
+      <div class="grid-item-info">
+        <div class="lesson-container">
+          <div class="lesson-content">
+            <div class="lesson-content-header">
+              <h1 id="lesson-title">
+
+              </h1>
+              <p id="lesson-teacher">
+              </p>
+            </div>
+            <div class="lesson-content-body">
+              <ul id="lesson-description">
+                <li class="list"><div>sleep je muis over een les voor meer informatie</div></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

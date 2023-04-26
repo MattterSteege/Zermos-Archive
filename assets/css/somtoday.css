@@ -1,0 +1,21 @@
+.content{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.content .huiswerk{
+
+    background: var(--foreground-color);
+    width: 100%;
+    border-top-left-radius: 2rem;
+    border-bottom-left-radius: 2rem;
+}
+
+.content .cijfers{
+
+    background: var(--foreground-color);
+    width: 100%;
+    border-top-right-radius: 2rem;
+    border-bottom-right-radius: 2rem;
+}

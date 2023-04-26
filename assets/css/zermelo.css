@@ -1,7 +1,14 @@
+.content{
+    display:grid;
+    grid-template-columns:4fr 1fr;
+    grid-column-gap :10px;
+}
+
 .rooster-container
 {
     display:grid;
     grid-gap:10px;
+    height: var(--content-view-height);
 }
 
 .rooster-times-container
@@ -64,9 +71,14 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    font-weight: bold;
+    font-weight: 400;
     text-decoration: none;
     color: var(--text-color);
+}
+
+.grid-column .grid-item
+{
+
 }
 
 .grid-column-days
@@ -93,7 +105,7 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    font-weight:700
+    font-weight: 400;
 }
 
 .grid-item-info
@@ -103,7 +115,6 @@
     display:grid;
     background-color: var(--foreground-color);
     padding:0;
-    max-height: calc(100vh - 30px);
 }
 
 .grid-column-numbering .grid-item
@@ -129,17 +140,14 @@
 /*css for lessons is below*/
 
 .lesson-container{
-    width:var(--content-view-width);
     height:var(--content-view-height);
 }
 
 .lesson-content{
-    width: calc(var(--content-view-width) - 40px);
     height: calc(var(--content-view-height) - 40px);
     border-radius: 1rem;
     margin: 10px;
-    padding: 10px;
-    font-weight: bold;
+    font-weight: 400;
     background-color: var(--foreground-color);
     color: var(--text-color);
 }
@@ -193,13 +201,13 @@
     text-align: center;
     height: 25px;
     width: 100px;
-    font-weight: bold;
+    font-weight: 400;
 }
 
 .password-based-username input {
     font-size: 14px;
     color: var(--accent-color);
-    font-weight: bold;
+    font-weight: 400;
     text-align: center;
     height: 50px;
     width: 100%;
@@ -224,13 +232,13 @@
     text-align: center;
     height: 25px;
     width: 100px;
-    font-weight: bold;
+    font-weight: 400;
 }
 
 .password-based-password input {
     font-size: 14px;
     color: var(--accent-color);
-    font-weight: bold;
+    font-weight: 400;
     text-align: center;
     height: 50px;
     width: 100%;
@@ -253,7 +261,7 @@
     padding: 1rem 2rem;
     color: var(--text-color);
     font-size: 14px;
-    font-weight: bold;
+    font-weight: 400;
     transition: .5s;
     width: 100%;
 }
@@ -274,7 +282,7 @@
     font-size: 30px;
     color: var(--text-color);
     text-align: center;
-    font-weight: bold;
+    font-weight: 400;
 }
 
 .information-page {

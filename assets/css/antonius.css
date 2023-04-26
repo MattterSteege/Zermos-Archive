@@ -1,0 +1,56 @@
+/*  <div class="news-item-grid">
+    <div class="news-item">
+      <h1 class="news-item-title">Infoboord</h1>
+      <h2 class="news-item-subtitle">Laatste nieuws</h2>
+      <p class="news-item-text" id="infoboord"></p>
+      <img src="" alt="" class="news-item-image">*/
+
+.news-item-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+
+  grid-gap: 10px;
+  margin-right: 1rem;
+  padding-bottom: 1rem;
+  width: calc(var(--content-view-width) - 10px);
+  right: 10px;
+  height: fit-content;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  grid-gap: 10px;
+}
+
+.news-item {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-gap: 10px;
+  padding: 2rem;
+  border-radius: 2rem;
+  background: var(--foreground-color);
+  height: fit-content;
+}
+
+.news-item-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.news-item-text {
+  font-size: 1rem;
+  font-weight: normal;
+  color: var(--text-color);
+}
+
+.news-item-image {
+  width: 100%;
+  height: auto;
+  border-radius: 2rem;
+}

@@ -10,7 +10,7 @@ function getDagrooster() {
 
   if (access_token === null || student === null) {
     //console.log("No access token or student id found, redirecting to login page...");
-    window.location.href = "./inloggen/";
+    window.location.href = "/Zermos/zermelo/inloggen/";
   }
 
   let currentDate = new Date();
@@ -121,7 +121,7 @@ function getDagrooster() {
                     " - " + appointmentDay[i].locations[0] :
                     "") +
                 (appointmentDay[i].teachers[0] ?
-                    " - " + appointmentDay[i].teachers[0] :
+                    " - " + appointmentDay[i].teachers.join(", ") :
                     "");
 
             if (appointmentDay[i].cancelled === true && gridItem.textContent !== "") {
@@ -191,7 +191,6 @@ function decodeUrl(url) {
 
 function getLessonFromParameter(model) {
   document.getElementById("lesson-title").innerHTML = model.subjects[0];
-  document.getElementById("lesson-teacher").innerHTML = model.teachers[0];
 
   const lessonDescription = document.getElementById("lesson-description");
     lessonDescription.innerHTML = "";
@@ -215,7 +214,7 @@ function getLessonFromParameter(model) {
 
   const c = document.createElement("li");
   c.classList.add("list");
-  c.innerHTML =  model.teachers[0];
+  c.innerHTML =  model.teachers.join(", ");
   lessonDescription.appendChild(c);
 }
 
@@ -368,7 +367,7 @@ function getZermeloUser() {
 
       localStorage.setItem("zermelo-student_id", model.response.data[0].code);
 
-      window.location.href = "../";
+      window.location.href = "/Zermos/zermelo/rooster/";
     }
   });
 
