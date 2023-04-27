@@ -1,20 +1,11 @@
-/*  <div class="news-item-grid">
-    <div class="news-item">
-      <h1 class="news-item-title">Infoboord</h1>
-      <h2 class="news-item-subtitle">Laatste nieuws</h2>
-      <p class="news-item-text" id="infoboord"></p>
-      <img src="" alt="" class="news-item-image">*/
-
 .news-item-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  align-items: start;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 
   grid-gap: 10px;
   margin-right: 1rem;
-  padding-bottom: 1rem;
-  width: calc(var(--content-view-width) - 10px);
-  right: 10px;
+  width: var(--content-view-width);
   height: fit-content;
 }
 
@@ -29,12 +20,15 @@
 .news-item {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: auto;
+  grid-auto-flow: row;
   grid-gap: 10px;
   padding: 2rem;
   border-radius: 2rem;
   background: var(--foreground-color);
   height: fit-content;
+  max-width: calc(720px + 2rem);
+  min-width: calc(250px);
+  flex: 1;
 }
 
 .news-item-title {
@@ -53,16 +47,4 @@
   width: 100%;
   height: auto;
   border-radius: 2rem;
-}
-
-@media screen and (max-width: calc(600px + 120px + 2rem)) {
-
-  #3 {
-    display: none;
-  }
-
-  .news-item-grid {
-    grid-template-columns: repeat(2, 1fr);
-    padding-bottom: calc(80px + 2rem);
-  }
 }

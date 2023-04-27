@@ -39,19 +39,10 @@ function getInfoboord() {
                 newsItems.push(model)
             }
 
-            let row = 1;
-            //log true if the screen width is more than 600px + 120px + 2rem
-            const width = document.body.clientWidth
-            console.log(width)
-            const newsItemGridChildrenCount = width > 600 + 120 + 32 ? 3 : 2
-            console.log(newsItemGridChildrenCount)
+            console.log(newsItems)
 
             for (const newsItem of newsItems) {
-
-                if (row > newsItemGridChildrenCount) { row = 1 }
-                const rowElement = document.getElementById("" + row)
-
-                row++;
+                const rowElement = document.getElementById("1")
 
                 const newsItemElement = document.createElement("div")
                 newsItemElement.className = "news-item"
@@ -76,7 +67,7 @@ function getInfoboord() {
                 if (newsItem.content.length > 0) {
                     const newsItemText = document.createElement("p")
                     newsItemText.className = "news-item-text"
-                    newsItemText.textContent = newsItem.content.join("\n")
+                    newsItemText.textContent = newsItem.content.join("<br><br>")
 
                     newsItemElement.appendChild(newsItemText)
                 }
