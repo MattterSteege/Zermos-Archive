@@ -5,6 +5,7 @@ function getInfoboord() {
     const request = new XMLHttpRequest();
     request.open('GET', 'https://corsproxy.io/?https://www.carmelcollegegouda.nl/vestigingen/antoniuscollege-gouda/infoscherm', true);
 
+
     request.onreadystatechange = function() {
         if (this.readyState === 4) {
             //console.log(this.responseText);
@@ -39,7 +40,7 @@ function getInfoboord() {
                 newsItems.push(model)
             }
 
-            console.log(newsItems)
+            //console.log(newsItems)
 
             for (const newsItem of newsItems) {
                 const rowElement = document.getElementById("1")

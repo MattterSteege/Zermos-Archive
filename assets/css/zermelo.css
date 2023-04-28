@@ -179,6 +179,7 @@
     flex-wrap: wrap;
     width: 100%;
     grid-gap: 10px;
+    padding-bottom: calc(80px + 2rem);
 }
 
 .child {
@@ -332,7 +333,6 @@
 
     .content-container {
         display: unset;
-        --content-view-height: calc(100vh - 9rem);
     }
 
     .rooster-times-container {
@@ -358,8 +358,9 @@
     }
 
     .grid-column-numbering {
-        max-height: calc(calc(100vh - 9rem) - 40px);
+        height: auto;
         width: 40px;
+        grid-template-columns: 40px;
     }
 
     .grid-column-numbering > .grid-item{
@@ -367,7 +368,7 @@
     }
 
     .grid-container {
-        max-height: calc(calc(100vh - 9rem) - 40px);
+        height: auto;
         width: auto;
     }
 

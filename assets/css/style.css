@@ -10,6 +10,8 @@
 html
 {
     font-family:Poppins,sans-serif;
+
+    --vh: vh
 }
 
 body
@@ -401,15 +403,15 @@ body
 
     .content {
         --content-view-width:calc(100vw - 2rem);
-        --content-view-height: unset;
+        --content-view-height: calc(var(--vh) * 100 - 3rem - 80px);
         top: 1rem;
         right: 1rem;
         left: 1rem;
-        padding-bottom: calc(2rem + 80px);
         width: var(--content-view-width);
         height: var(--content-view-height);
         float:right;
         position:absolute;
         z-index: -10000;
+        padding-bottom: 0;
     }
 }
