@@ -1,9 +1,9 @@
 console.log("Antonius.js loaded successfully");
 
 function getInfoboord() {
+
     const request = new XMLHttpRequest();
-    request.open('GET', 'https://cors-anywhere.herokuapp.com/https://www.carmelcollegegouda.nl/vestigingen/antoniuscollege-gouda/infoscherm', true);
-    request.setRequestHeader('Access-Control-Allow-Origin', 'no-cors');
+    request.open('GET', 'https://corsproxy.io/?https://www.carmelcollegegouda.nl/vestigingen/antoniuscollege-gouda/infoscherm', true);
 
     request.onreadystatechange = function() {
         if (this.readyState === 4) {

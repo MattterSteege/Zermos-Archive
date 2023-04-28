@@ -1,4 +1,4 @@
-.content{
+.content-container{
     display:grid;
     grid-template-columns:4fr 1fr;
     grid-column-gap :10px;
@@ -174,8 +174,11 @@
 }
 
 .container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     width: 100%;
-    height: 100%;
+    grid-gap: 10px;
 }
 
 .child {
@@ -187,8 +190,7 @@
     border-radius: 2rem;
     background: var(--foreground-color);
     height: fit-content;
-    max-width: calc(720px + 2rem);
-    min-width: calc(250px);
+    min-width: calc(var(--content-view-width) / 3);
     flex: 1;
 }
 
@@ -233,7 +235,6 @@
     font-size: 14px;
     color: var(--text-color);
     text-align: center;
-    height: 75px;
     width: 100%;
 }
 
@@ -329,9 +330,13 @@
 
 @media screen and (max-width: calc(600px + 120px + 2rem)) {
 
-    .content {
+    .content-container {
         display: unset;
-        --content-view-height: calc(100vh - 6rem);
+        --content-view-height: calc(100vh - 9rem);
+    }
+
+    .rooster-times-container {
+        grid-template-columns: 40px 1fr;
     }
 
     .grid-item-info {
@@ -341,27 +346,33 @@
     .grid-column-days {
         justify-items: center;
         height: 40px;
+        margin-left: 50px;
     }
 
     .grid-column-days > .grid-item{
         font-family: monospace;
         font-weight: bold;
-        width: 15px;
+        width: 16px;
         white-space: normal;
         justify-content: start;
     }
 
     .grid-column-numbering {
-        max-height: calc(calc(100vh - 8rem) - 40px);
+        max-height: calc(calc(100vh - 9rem) - 40px);
+        width: 40px;
+    }
+
+    .grid-column-numbering > .grid-item{
+        width: 30px;
     }
 
     .grid-container {
-        max-height: calc(calc(100vh - 8rem) - 40px);
+        max-height: calc(calc(100vh - 9rem) - 40px);
         width: auto;
     }
 
     .grid-column {
-        max-height: calc(calc(100vh - 8rem) - 40px);
+        max-height: calc(calc(100vh - 9rem) - 40px);
     }
 
     .grid-item {
@@ -373,7 +384,7 @@
     }
 
     .rooster-container {
-        height: calc(calc(100vh - 6rem) - 40px);
+        height: var(--content-view-height);
         grid-template-rows: 40px 1fr;
     }
 }

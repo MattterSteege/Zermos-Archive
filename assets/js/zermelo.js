@@ -230,7 +230,7 @@ function authenticateZermelo_step_1(username, password) {
   const data = "username=" + username + "&password=" + password + "&client_id=OAuthPage&redirect_uri=/main/&scope=&state=" + generateString(6) + "&response_type=code&tenant=ccg";
 
   let xhr = new XMLHttpRequest();
-  //xhr.withCredentials = true;
+  xhr.withCredentials = true;
 
   xhr.addEventListener("readystatechange", function() {
     if (this.readyState === 4) {
