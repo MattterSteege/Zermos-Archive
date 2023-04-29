@@ -113,33 +113,49 @@ function getDagrooster() {
           if (appointmentDay[i].startTimeSlotName === lessonNumber.toString()) {
             const gridItem = document.createElement("div");
             gridItem.classList.add("grid-item");
-            gridItem.textContent =
-                (appointmentDay[i].subjects.length > 0 ?
-                    appointmentDay[i].subjects[0] :
-                    "") +
-                (appointmentDay[i].locations[0] ?
-                    " - " + appointmentDay[i].locations[0] :
-                    "") +
-                (appointmentDay[i].teachers[0] ?
-                    " - " + appointmentDay[i].teachers.join(", ") :
-                    "");
+
+            if (window.innerWidth < 753) {
+              gridItem.innerHTML =
+                  (appointmentDay[i].subjects.length > 0 ?
+                      appointmentDay[i].subjects[0] :
+                      "");
+
+              /*add <br>*/
+                gridItem.innerHTML += "<br>";
+
+
+              gridItem.innerHTML +=
+                  (appointmentDay[i].locations[0] ?
+                      appointmentDay[i].locations[0] :
+                      "");
+            }
+            else {
+              gridItem.textContent =
+                  (appointmentDay[i].subjects.length > 0 ?
+                      appointmentDay[i].subjects[0] :
+                      "") +
+                  (appointmentDay[i].locations[0] ?
+                      " - " + appointmentDay[i].locations[0] :
+                      "") +
+                  (appointmentDay[i].teachers[0] ?
+                      " - " + appointmentDay[i].teachers.join(", ") :
+                      "");
+
+              //log subject[0] when the mouse hovers over the grid item
+              gridItem.addEventListener("mouseover", function () {
+                if (appointmentDay[i].subjects[0] !== undefined) {
+                  getLessonFromParameter(appointmentDay[i]);
+                } else {
+
+                }
+              });
+            }
 
             if (appointmentDay[i].cancelled === true && gridItem.textContent !== "") {
               gridItem.classList.add("cancelled");
             } else if (gridItem.textContent !== "") {
               gridItem.href = "";
             }
-
-            //log subject[0] when the mouse hovers over the grid item
-            gridItem.addEventListener("mouseover", function() {
-              if (appointmentDay[i].subjects[0] !== undefined) {
-                getLessonFromParameter(appointmentDay[i]);
-              }
-              else {
-
-              }
-            });
-
 
             gridColumn.appendChild(gridItem);
           } else {

@@ -10,8 +10,6 @@
 html
 {
     font-family:Poppins,sans-serif;
-
-    --vh: vh
 }
 
 body
@@ -50,7 +48,7 @@ body
 .site-nav
 {
     width: 120px;
-    height:calc(100vh - 2rem);
+    height:calc(100% - 2rem);
     border-radius: 2rem;
     top: 1rem;
     left: 1rem;
@@ -133,7 +131,7 @@ body
 
 .site-nav-links-parent ul {
     width: 100%;
-    height: calc(100vh - 2rem - 80px);
+    height: calc(100% - 2rem - 80px);
 }
 
 .site-nav-links-parent ul li {
@@ -285,18 +283,19 @@ body
     pointer-events: none;
     transition: .5s ease;
     width: 100vw;
-    height: 100vh;
+    height: 100%;
 }
 
 .content
 {
     --content-view-width:calc(100vw - 120px - 4rem);
-    --content-view-height: calc(100vh - 2rem);
+    --content-view-height: calc(100% - 2rem);
     top: 1rem;
     right: 1rem;
     width: var(--content-view-width);
+    height: var(--content-view-height);
     float:right;
-    position:relative;
+    position:absolute;
     z-index: -10000;
     padding-bottom: 1rem;
 }
@@ -403,7 +402,7 @@ body
 
     .content {
         --content-view-width:calc(100vw - 2rem);
-        --content-view-height: calc(var(--vh) * 100 - 3rem - 80px);
+        --content-view-height: calc(100% - 3rem - 80px);
         top: 1rem;
         right: 1rem;
         left: 1rem;
