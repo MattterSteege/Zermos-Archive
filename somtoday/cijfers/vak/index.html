@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <!--      height=viewport height/ the height of the visible part of the webpage-->
+  <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/Zermos/assets/css/style.css"/>
+  <link rel="stylesheet" href="/Zermos/assets/css/somtoday.css"/>
+  <script defer src="/Zermos/assets/js/global.js"></script>
+  <script defer src="/Zermos/assets/js/somtoday.js"></script>
+  <title>Zermos</title>
+
+</head>
+<!--get the id after the ? in the URL-->
+<body onload="getGradesById(document.URL.substring(document.URL.indexOf('?') + 1, document.URL.length))">
+<div class="top-of-page"></div>
+
+<!--SIDE BAR-->
+<nav class="site-nav" id="site-nav">
+  <a href="/Zermos/">
+    <div class="site-nav-header">
+      <p class="z">Z</p>
+      <p class="ermos">ERMOS</p>
+    </div>
+  </a>
+
+  <div class="site-nav-links-parent">
+    <ul>
+      <li class="active">
+        <a>
+          <img src="/Zermos/assets/images/Zermelo_logo_albedo.png" height="35" width="35" alt=""/>
+          <p>Zermelo</p>
+        </a>
+
+        <ul class="sub-menu">
+          <li class="sub-menu-item">
+            <a onclick="location.href='/Zermos/zermelo/'">
+              <img src="/Zermos/assets/images/List View.png" alt=""/>
+              <p>Rooster</p>
+            </a>
+          </li>
+        </ul>
+
+      </li>
+
+      <li>
+        <a>
+          <img src="/Zermos/assets/images/SOMtoday_logo_albedo.png" alt="" height="35px" width="35px"/>
+          <p>Somtoday</p>
+        </a>
+
+        <ul class="sub-menu multi">
+          <li class="sub-menu-item">
+            <a onclick="location.href='/Zermos/somtoday/huiswerk/'">
+              <img src="/Zermos/assets/images/Homework.png" alt=""/>
+              <p>Huiswerk</p>
+            </a>
+          </li>
+
+          <li class="sub-menu-item">
+            <a onclick="location.href='/Zermos/somtoday/cijfers/'">
+              <img src="/Zermos/assets/images/Grades.png" alt=""/>
+              <p>Cijfers</p>
+            </a>
+          </li>
+        </ul>
+
+      </li>
+
+      <li class="active">
+        <a>
+          <img src="/Zermos/assets/images/ACG_logo_albedo.png" height="35" width="35" alt=""/>
+          <p>Zermelo</p>
+        </a>
+
+        <ul class="sub-menu">
+          <li class="sub-menu-item">
+            <a onclick="location.href='/Zermos/antonius/'">
+              <p>Info boord</p>
+            </a>
+          </li>
+        </ul>
+
+      </li>
+
+
+    </ul>
+  </div>
+</nav>
+<div class="background" id="background"></div>
+<main class="content" id="content">
+  <div class="row-vak" id="grade-container">
+
+    <!--This is where the grades will be displayed-->
+
+  </div>
+</main>
+</body>
+</html>
