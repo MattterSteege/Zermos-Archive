@@ -246,7 +246,7 @@ function authenticateZermelo_step_1(username, password) {
   const data = "username=" + username + "&password=" + password + "&client_id=OAuthPage&redirect_uri=/main/&scope=&state=" + generateString(6) + "&response_type=code&tenant=ccg";
 
   let xhr = new XMLHttpRequest();
-  xhr.withCredentials = true;
+  //xhr.withCredentials = true;
 
   xhr.addEventListener("readystatechange", function() {
     if (this.readyState === 4) {
@@ -264,7 +264,7 @@ function authenticateZermelo_step_1(username, password) {
 
 function generateString(number) {
   let text = "";
-  const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
   for (let i = 0; i < number; i++)
     text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -389,58 +389,4 @@ function getZermeloUser() {
 
   xhr.open("GET", "https://ccg.zportal.nl/api/v3/users/~me?access_token=" + localStorage.getItem("zermelo-access_token"), true);
   xhr.send();
-}
-
-
-//SOMTODAY LOGIN
-function openWindow() {
-// Create a new iframe
-  const iframe = document.createElement('iframe');
-  iframe.style.display = 'none';
-  document.body.appendChild(iframe);
-
-// Set the iframe source to the callback URL
-  iframe.src = "https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling://oauth/callback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state=" + generateRandomString(8) + "&scope=openid&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&session=no_session&code_challenge=" + generateCodeChallenge(generateNonce()) + "&code_challenge_method=S256";
-
-// Attach an event listener to the iframe's onload event
-  iframe.onload = function() {
-    // Handle the callback here
-    //console.log('Callback URL loaded!');
-  };
-
-}
-
-
-function generateNonce() {
-  const chars = "abcdefghijklmnopqrstuvwxyz123456789";
-  var nonce = "";
-  for (let i = 0; i < 128; i++) {
-    nonce += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return nonce;
-}
-
-async function generateCodeChallenge(codeVerifier) {
-  const sha256 = crypto.subtle.digest("SHA-256", new TextEncoder().encode(codeVerifier));
-  const b64Hash = base64urlencode(await sha256);
-  return b64Hash.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-}
-
-async function base64urlencode(data) {
-  const base64 = await new Promise(resolve => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result);
-    reader.readAsDataURL(new Blob([data]));
-  });
-  const b64u = base64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-  return b64u.substr(0, b64u.length - 2);
-}
-
-function generateRandomString(length) {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
-    let nonce = "";
-    for (let i = 0; i < length; i++) {
-        nonce += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return nonce;
 }

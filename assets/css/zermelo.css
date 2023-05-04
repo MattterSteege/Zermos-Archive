@@ -193,8 +193,9 @@
     border-radius: 2rem;
     background: var(--foreground-color);
     height: fit-content;
-    width: 100%;
     flex: 1;
+    /*set desired width to be half of the parent element*/
+    width: calc(50% - 10px);
 }
 
 .password-based{
