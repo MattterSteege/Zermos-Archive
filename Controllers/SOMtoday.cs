@@ -315,6 +315,26 @@ namespace zermos_authentication_service.Controllers
             public string naam { get; set; }
         }
         #endregion
+
+        #region homework
+        [Route("huiswerk")]
+        public string getHomework(string token, string begintNaOfOp)
+        {
+            if (token == null) return "set token";
+
+            string baseUrl = $"https://api.somtoday.nl/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={begintNaOfOp}&additional=swigemaaktVinkjes&additional=huiswerkgemaakt&additional=leerlingen";
+
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+            client.DefaultRequestHeaders.Add("Range", "items=0-99");
+            
+            HttpResponseMessage response = client.GetAsync(baseUrl).Result;
+
+            return response.Content.ReadAsStringAsync().Result;
+        }
+
+        #endregion
         
         #region student
         [Route("student")]
