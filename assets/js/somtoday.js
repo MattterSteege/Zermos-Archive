@@ -36,14 +36,22 @@ function authenticateUser(username, password) {
 function CheckIfSOmTodayTokenIsExpired() {
     //decode the token with base64
     const token = localStorage.getItem("somtoday-access_token");
+
+    if (token === null) {
+        window.location.href = "/Zermos/somtoday/inloggen/"
+    }
+
     const decodedToken = atob(token.split('.')[1]);
     const parsedToken = JSON.parse(decodedToken);
     const expirationDate = parsedToken.exp;
-    //if the token is expired, refresh it
-    if (expirationDate < Date.now()) {
+    //console.log(expirationDate - Date.now().valueOf() / 1000);
+    if (expirationDate < (Date.now().valueOf() / 1000)) {
+        console.log("Token is expired, refreshing token...");
         const refreshToken = localStorage.getItem("somtoday-refresh_token");
+        console.log(refreshToken);
         const xhr = new XMLHttpRequest();
         const url = `https://localhost:44333/SOMtoday/refresh?refreshToken=${refreshToken}`;
+        console.log(url);
         xhr.open("GET", url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
 
@@ -68,6 +76,8 @@ function CheckIfSOmTodayTokenIsExpired() {
 
             getStudent();
         }
+
+        xhr.send();
     }
 }
 
@@ -77,6 +87,11 @@ function getGrades() {
 
     const token = localStorage.getItem("somtoday-access_token");
     const studentId = localStorage.getItem("somtoday-student_id");
+
+    if (studentId === null) {
+        getStudent();
+    }
+
     const begintNaOfOp = "2022-01-01";
 
     if (token === null) {
@@ -266,6 +281,11 @@ function getGradesById(vakId) {
     CheckIfSOmTodayTokenIsExpired();
     const token = localStorage.getItem("somtoday-access_token");
     const studentId = localStorage.getItem("somtoday-student_id");
+
+    if (studentId === null) {
+        getStudent();
+    }
+
     const begintNaOfOp = "2022-01-01";
 
     if (token === null) {

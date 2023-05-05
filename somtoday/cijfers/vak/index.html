@@ -16,7 +16,6 @@
   <title>Zermos</title>
 
 </head>
-<!--get the id after the ? in the URL-->
 <body onload="getGradesById(document.URL.substring(document.URL.indexOf('?') + 1, document.URL.length))">
 <div class="top-of-page"></div>
 
@@ -31,7 +30,7 @@
 
   <div class="site-nav-links-parent">
     <ul>
-      <li class="active">
+      <li>
         <a>
           <img src="/Zermos/assets/images/Zermelo_logo_albedo.png" height="35" width="35" alt=""/>
           <p>Zermelo</p>
@@ -72,10 +71,10 @@
 
       </li>
 
-      <li class="active">
+      <li>
         <a>
           <img src="/Zermos/assets/images/ACG_logo_albedo.png" height="35" width="35" alt=""/>
-          <p>Zermelo</p>
+          <p>Antonius</p>
         </a>
 
         <ul class="sub-menu">
@@ -88,6 +87,12 @@
 
       </li>
 
+      <li class="last">
+        <a onclick="location.href='/Zermos/instellingen/'">
+          <img src="/Zermos/assets/images/Settings_icon.png" height="35" width="35" alt=""/>
+          <p>Instellingen</p>
+        </a>
+      </li>
 
     </ul>
   </div>

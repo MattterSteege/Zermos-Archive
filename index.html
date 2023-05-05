@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="nl">
-  <head>
-<!--      height=viewport heigt/ the height of the visable part of the webpage-->
-      <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0">
+<head>
+    <!--      height=viewport height/ the height of the visible part of the webpage-->
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
 
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="/Zermos/assets/css/style.css"/>
     <script defer src="/Zermos/assets/js/global.js"></script>
     <title>Zermos</title>
 
-  </head>
-  <body onload="">
-    <div class="top-of-page"></div>
+</head>
+<body onload="">
+<div class="top-of-page"></div>
 
 <!--SIDE BAR-->
-    <nav class="site-nav" id="site-nav">
-      <a href="/Zermos/">
+<nav class="site-nav" id="site-nav">
+    <a href="/Zermos/">
         <div class="site-nav-header">
-          <p class="z">Z</p>
-          <p class="ermos">ERMOS</p>
+            <p class="z">Z</p>
+            <p class="ermos">ERMOS</p>
         </div>
-      </a>
+    </a>
 
-      <div class="site-nav-links-parent">
+    <div class="site-nav-links-parent">
         <ul>
-            <li class="active">
-            <a>
-                <img src="/Zermos/assets/images/Zermelo_logo_albedo.png" height="35" width="35" alt=""/>
-                <p>Zermelo</p>
-            </a>
+            <li>
+                <a>
+                    <img src="/Zermos/assets/images/Zermelo_logo_albedo.png" height="35" width="35" alt=""/>
+                    <p>Zermelo</p>
+                </a>
 
                 <ul class="sub-menu">
                     <li class="sub-menu-item">
@@ -44,35 +45,34 @@
 
             </li>
 
+            <li>
+                <a>
+                    <img src="/Zermos/assets/images/SOMtoday_logo_albedo.png" alt="" height="35px" width="35px"/>
+                    <p>Somtoday</p>
+                </a>
 
-<!--            <li>-->
-<!--              <a>-->
-<!--                <img src="/Zermos/assets/images/SOMtoday_logo_albedo.png" alt="" height="35px" width="35px"/>-->
-<!--                <p>Somtoday</p>-->
-<!--              </a>-->
+                <ul class="sub-menu multi">
+                    <li class="sub-menu-item">
+                        <a onclick="location.href='/Zermos/somtoday/huiswerk/'">
+                            <img src="/Zermos/assets/images/Homework.png" alt=""/>
+                            <p>Huiswerk</p>
+                        </a>
+                    </li>
 
-<!--              <ul class="sub-menu multi">-->
-<!--                <li class="sub-menu-item">-->
-<!--                  <a onclick="location.href='https://www.google.com'">-->
-<!--                    <img src="/Zermos/assets/images/Homework.png" alt=""/>-->
-<!--                    <p>Huiswerk</p>-->
-<!--                  </a>-->
-<!--                </li>-->
+                    <li class="sub-menu-item">
+                        <a onclick="location.href='/Zermos/somtoday/cijfers/'">
+                            <img src="/Zermos/assets/images/Grades.png" alt=""/>
+                            <p>Cijfers</p>
+                        </a>
+                    </li>
+                </ul>
 
-<!--                <li class="sub-menu-item">-->
-<!--                  <a onclick="location.href='https://www.google.com'">-->
-<!--                    <img src="/Zermos/assets/images/Grades.png" alt=""/>-->
-<!--                    <p>Cijfers</p>-->
-<!--                  </a>-->
-<!--                </li>-->
-<!--              </ul>-->
+            </li>
 
-<!--            </li>-->
-
-            <li class="active">
+            <li>
                 <a>
                     <img src="/Zermos/assets/images/ACG_logo_albedo.png" height="35" width="35" alt=""/>
-                    <p>Zermelo</p>
+                    <p>Antonius</p>
                 </a>
 
                 <ul class="sub-menu">
@@ -85,38 +85,91 @@
 
             </li>
 
+            <li class="last">
+                <a onclick="location.href='/Zermos/instellingen/'">
+                    <img src="/Zermos/assets/images/Settings_icon.png" height="35" width="35" alt=""/>
+                    <p>Instellingen</p>
+                </a>
+            </li>
 
         </ul>
-      </div>
-    </nav>
-    <div class="background" id="background"></div>
-    <main class="content" id="content">
+    </div>
+</nav>
+<div class="background" id="background"></div>
+<main class="content" id="content">
 
-        <div style="width:100%; height: 100%; background: linear-gradient(var(--foreground-color), var(--accent-color)); border-radius: 2rem;">
-            <br>Op deze pagina is nu nog niks... (duh), maar kijk zeker even rond, want er is nog veel meer te zien! Voor nu zijn de volgende dingen al gemaakt:
-            <ul style="margin-left: 30px; margin-top: 10px">
-                <li style="margin-top: 10px">
-                    Zermelo
-                    <ul style="margin-left: 30px">
-                        <li>Rooster</li>
-                    </ul>
-                </li>
 
-                <li style="margin-top: 10px">
-                    SOMtoday
-                    <ul style="margin-left: 30px">
+<!--        AFTER THIS SHOULD NOT BE COPIED-->
 
-                    </ul>
-                </li>
+        <div style="width:100%; height: 100%; border-radius: 2rem;" class="grid">
+            <div class="child">
 
-                <li style="margin-top: 10px">
-                    Antonius College Gouda
-                    <ul style="margin-left: 30px">
-                        <li>Info boord</li>
-                    </ul>
-                </li>
-            </ul>
+                <h1>Zermelo</h1><br>
+                <h2>Rooster</h2>
+                <h2>inloggen</h2>
+                <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;met koppelcode</h2>
+                <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;met inloggegevens</h2>
+
+            </div>
+
+            <div class="child">
+
+                <h1>SOMtoday</h1>
+                <h4>Is bijna werkend, een paar dingen regelen en dan is het klaar</h4><br>
+                <h2>cijfers</h2>
+                <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meer detail per vak</h2>
+                <h2>huiswerk</h2>
+                <h2>inloggen</h2>
+                <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;met inloggegevens</h2>
+
+            </div>
+
+            <div class="child">
+
+                <h1>Antonius</h1><br>
+                <h2>infobord van school</h2>
+
+            </div>
+
+            <div class="child">
+                <h1>De Antonius app</h1>
+                <h4>Komt er aan (hopelijk)</h4><br>
+                <h2>school nieuws</h2>
+                <h2>school kalender</h2>
+            </div>
+
         </div>
     </main>
   </body>
+  <style>
+      .grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 1fr 1fr;
+          grid-auto-flow: row;
+          grid-gap: 1rem;
+          padding-bottom: 1rem;
+          color: var(--text-color);
+          font-size: 0.8rem;
+      }
+
+      .grid .child {
+          height: auto;
+          width: auto;
+          background-color: var(--foreground-color);
+          display: flex;
+          flex-direction: column;
+          border-radius: 2rem;
+          transition: .5s;
+          align-items: start;
+          padding-top: 2rem;
+          padding-left: 2rem;
+      }
+      .grid .child ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+      }
+
+  </style>
 </html>

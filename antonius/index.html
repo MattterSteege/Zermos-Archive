@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
+  <!--      height=viewport height/ the height of the visible part of the webpage-->
   <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -9,9 +11,8 @@
 
   <link rel="stylesheet" href="/Zermos/assets/css/style.css"/>
   <link rel="stylesheet" href="/Zermos/assets/css/antonius.css"/>
-  <script src="/Zermos/assets/js/antonius.js"></script>
   <script defer src="/Zermos/assets/js/global.js"></script>
-
+  <script defer src="/Zermos/assets/js/antonius.js"></script>
   <title>Zermos</title>
 
 </head>
@@ -29,7 +30,7 @@
 
   <div class="site-nav-links-parent">
     <ul>
-      <li class="active">
+      <li>
         <a>
           <img src="/Zermos/assets/images/Zermelo_logo_albedo.png" height="35" width="35" alt=""/>
           <p>Zermelo</p>
@@ -46,23 +47,52 @@
 
       </li>
 
-      <li class="active">
+      <li>
         <a>
-          <img src="/Zermos/assets/images/ACG_logo_albedo.png" height="35" width="35" alt=""/>
-          <p>Zermelo</p>
+          <img src="/Zermos/assets/images/SOMtoday_logo_albedo.png" alt="" height="35px" width="35px"/>
+          <p>Somtoday</p>
         </a>
 
-        <ul class="sub-menu">
+        <ul class="sub-menu multi">
           <li class="sub-menu-item">
-            <a onclick="location.href='/Zermos/antonius/'">
-              <img src="/Zermos/assets/images/ACG_logo_albedo.png" alt=""/>
-              <p>Rooster</p>
+            <a onclick="location.href='/Zermos/somtoday/huiswerk/'">
+              <img src="/Zermos/assets/images/Homework.png" alt=""/>
+              <p>Huiswerk</p>
+            </a>
+          </li>
+
+          <li class="sub-menu-item">
+            <a onclick="location.href='/Zermos/somtoday/cijfers/'">
+              <img src="/Zermos/assets/images/Grades.png" alt=""/>
+              <p>Cijfers</p>
             </a>
           </li>
         </ul>
 
       </li>
 
+      <li>
+        <a>
+          <img src="/Zermos/assets/images/ACG_logo_albedo.png" height="35" width="35" alt=""/>
+          <p>Antonius</p>
+        </a>
+
+        <ul class="sub-menu">
+          <li class="sub-menu-item">
+            <a onclick="location.href='/Zermos/antonius/'">
+              <p>Info boord</p>
+            </a>
+          </li>
+        </ul>
+
+      </li>
+
+      <li class="last">
+        <a onclick="location.href='/Zermos/instellingen/'">
+          <img src="/Zermos/assets/images/Settings_icon.png" height="35" width="35" alt=""/>
+          <p>Instellingen</p>
+        </a>
+      </li>
 
     </ul>
   </div>
