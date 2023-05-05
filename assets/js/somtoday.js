@@ -23,6 +23,7 @@ function authenticateUser(username, password) {
 
             localStorage.setItem("somtoday-access_token", model.access_token);
             localStorage.setItem("somtoday-refresh_token", model.refresh_token);
+            localStorage.setItem("somtoday-access_token_expiration_date", model.expires_in + (Date.now().valueOf() / 1000));
 
             getStudent();
 
@@ -41,17 +42,17 @@ function CheckIfSOmTodayTokenIsExpired() {
         window.location.href = "/Zermos/somtoday/inloggen/"
     }
 
-    const decodedToken = atob(token.split('.')[1]);
-    const parsedToken = JSON.parse(decodedToken);
-    const expirationDate = parsedToken.exp;
-    //console.log(expirationDate - Date.now().valueOf() / 1000);
+    const expirationDate = Number(localStorage.getItem("somtoday-access_token_expiration_date"));
+
+    console.log(expirationDate - (Date.now().valueOf() / 1000));
+
     if (expirationDate < (Date.now().valueOf() / 1000)) {
-        console.log("Token is expired, refreshing token...");
+
         const refreshToken = localStorage.getItem("somtoday-refresh_token");
-        console.log(refreshToken);
+        //console.log(refreshToken);
         const xhr = new XMLHttpRequest();
         const url = `https://localhost:44333/SOMtoday/refresh?refreshToken=${refreshToken}`;
-        console.log(url);
+        //console.log(url);
         xhr.open("GET", url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
 
@@ -72,6 +73,7 @@ function CheckIfSOmTodayTokenIsExpired() {
 
                 localStorage.setItem("somtoday-access_token", model.access_token);
                 localStorage.setItem("somtoday-refresh_token", model.refresh_token);
+                localStorage.setItem("somtoday-access_token_expiration_date", model.expires_in + (Date.now().valueOf() / 1000));
             }
 
             getStudent();

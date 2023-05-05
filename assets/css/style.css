@@ -349,6 +349,7 @@ body
 
     .site-nav-links-parent > ul > li:last-child {
         border-bottom-right-radius: 2rem;
+        border-top-right-radius: 2rem;
     }
 
     .site-nav-links-parent ul li:hover .sub-menu {
@@ -371,6 +372,7 @@ body
     .sub-menu-item:last-child{
         border-top-right-radius: 2rem;
         border-bottom-right-radius: unset;
+        /*clip-path: inset(-20px -20px -20px 0px);*/
     }
 
     .sub-menu-item{
