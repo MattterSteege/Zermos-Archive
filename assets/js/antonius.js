@@ -3,7 +3,7 @@ console.log("Antonius.js loaded successfully");
 function getInfoboord() {
 
     const request = new XMLHttpRequest();
-    request.open('GET', 'https://cors-proxy.mjtsgamer.workers.dev/https://www.carmelcollegegouda.nl/vestigingen/antoniuscollege-gouda/infoscherm', true);
+    request.open('GET', 'https://cors-proxy.mjtsgamer.workers.dev/?url=https://www.carmelcollegegouda.nl/vestigingen/antoniuscollege-gouda/infoscherm', true);
 
     request.onreadystatechange = function() {
         if (this.readyState === 4) {
