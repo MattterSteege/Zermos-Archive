@@ -10,7 +10,7 @@ function getDagrooster() {
 
   if (access_token === null || student === null) {
     //console.log("No access token or student id found, redirecting to login page...");
-    window.location.href = "/Zermos/zermelo/inloggen/";
+    window.location.href = "/zermelo/inloggen/";
   }
 
   let currentDate = new Date();
@@ -383,7 +383,7 @@ function getZermeloUser() {
 
       localStorage.setItem("zermelo-student_id", model.response.data[0].code);
 
-      window.location.href = "/Zermos/zermelo/rooster/";
+      window.location.href = "/zermelo/rooster/";
     }
   });
 

@@ -27,7 +27,7 @@ function authenticateUser(username, password) {
 
             getStudent();
 
-            window.location.href = "/Zermos/somtoday/";
+            window.location.href = "/somtoday/";
         }
     }
 
@@ -39,7 +39,7 @@ function CheckIfSOmTodayTokenIsExpired() {
     const token = localStorage.getItem("somtoday-access_token");
 
     if (token === null) {
-        window.location.href = "/Zermos/somtoday/inloggen/"
+        window.location.href = "/somtoday/inloggen/"
     }
 
     const expirationDate = Number(localStorage.getItem("somtoday-access_token_expiration_date"));
@@ -98,7 +98,7 @@ function getGrades() {
 
     if (token === null) {
         //console.log("No access token or student id found, redirecting to login page...");
-        window.location.href = "/Zermos/somtoday/inloggen/";
+        window.location.href = "/somtoday/inloggen/";
     }
 
     var xhr = new XMLHttpRequest();
@@ -269,7 +269,7 @@ function getGrades() {
                 gradeContainer.appendChild(gradeChild);
                 /*on click gradeChild*/
                 gradeChild.addEventListener("click", () => {
-                    window.location.href = "/Zermos/somtoday/cijfers/vak/?" + grade.id;
+                    window.location.href = "/somtoday/cijfers/vak/?" + grade.id;
                 });
             });
         }
@@ -292,7 +292,7 @@ function getGradesById(vakId) {
 
     if (token === null) {
         //console.log("No access token or student id found, redirecting to login page...");
-        window.location.href = "/Zermos/somtoday/inloggen/";
+        window.location.href = "/somtoday/inloggen/";
     }
 
     var xhr = new XMLHttpRequest();
