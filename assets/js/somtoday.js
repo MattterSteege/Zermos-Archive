@@ -1,4 +1,4 @@
-console.log("SOMtoday.js loaded successfully");
+//console.log("SOMtoday.js loaded successfully");
 
 function authenticateUser(username, password) {
     const xhr = new XMLHttpRequest();
@@ -35,7 +35,6 @@ function authenticateUser(username, password) {
 }
 
 function CheckIfSOmTodayTokenIsExpired() {
-    //decode the token with base64
     const token = localStorage.getItem("somtoday-access_token");
 
     if (token === null) {
@@ -44,17 +43,13 @@ function CheckIfSOmTodayTokenIsExpired() {
 
     const expirationDate = Number(localStorage.getItem("somtoday-access_token_expiration_date"));
 
-    console.log(expirationDate - (Date.now().valueOf() / 1000));
+    if (expirationDate - (Date.now().valueOf() / 1000) < 0) {
+        var data = "grant_type=refresh_token&" +
+            "refresh_token=" + localStorage.getItem("somtoday-refresh_token") +
+            "&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2" +
+            "&scope=openid";
 
-    if (expirationDate < (Date.now().valueOf() / 1000)) {
-
-        const refreshToken = localStorage.getItem("somtoday-refresh_token");
-        //console.log(refreshToken);
-        const xhr = new XMLHttpRequest();
-        const url = `https://localhost:44333/SOMtoday/refresh?refreshToken=${refreshToken}`;
-        //console.log(url);
-        xhr.open("GET", url, true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
+        var xhr = new XMLHttpRequest();
 
         xhr.onreadystatechange = function() {
             if (this.readyState === 4) {
@@ -74,17 +69,18 @@ function CheckIfSOmTodayTokenIsExpired() {
                 localStorage.setItem("somtoday-access_token", model.access_token);
                 localStorage.setItem("somtoday-refresh_token", model.refresh_token);
                 localStorage.setItem("somtoday-access_token_expiration_date", model.expires_in + (Date.now().valueOf() / 1000));
-            }
+          }
+        };
 
-            getStudent();
-        }
+        xhr.open("POST", "https://cors-proxy.mjtsgamer.workers.dev/?url=https://inloggen.somtoday.nl/oauth2/token");
+        xhr.setRequestHeader("Accept", "application/json");
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-        xhr.send();
+        xhr.send(data);
     }
 }
 
 function getGrades() {
-//XMLHttpRequest https://localhost:44333/SOMtoday/grades?token=${token}&studentId=${studentId}&begintNaOfOp=${begintNaOfOp}
     CheckIfSOmTodayTokenIsExpired();
 
     const token = localStorage.getItem("somtoday-access_token");
@@ -102,11 +98,12 @@ function getGrades() {
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", `https://localhost:44333/SOMtoday/grades?token=${token}&studentId=${studentId}&begintNaOfOp=${begintNaOfOp}`, true);
+    xhr.open("GET", `https://somtoday-grades.mjtsgamer.workers.dev/?studentId=${studentId}&begintNaOfOp=${begintNaOfOp}&token=${token}`);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onreadystatechange = function() {
         if (this.readyState === 4) {
+            //console.log(this.responseText);
             const response = JSON.parse(this.responseText);
             const model = response.items.map(item => ({
                 type: item.type,
@@ -169,7 +166,8 @@ function getGrades() {
             // </div>
             // parent id = grade-container
 
-            model.sort((a, b) => a.vak.naam.localeCompare(b.vak.naam));
+            const toetskolomOrSamengesteldeToetsKolom = model.filter(grade => grade.type === "Toetskolom" || grade.type === "SamengesteldeToetsKolom");
+            toetskolomOrSamengesteldeToetsKolom.sort((a, b) => a.vak.naam.localeCompare(b.vak.naam));
 
             //create a list of all grades with the same vak.naam
             let ListOfGradesWithSameVakNaam = [];
@@ -178,15 +176,11 @@ function getGrades() {
             let currentVakGradeTotal = 0;
             let currentVakId = 0;
 
-            model.forEach(grade => {
-                if (grade.type === "DeeltoetsKolom"){
-                    return;
-                }
-
+            toetskolomOrSamengesteldeToetsKolom.forEach(grade => {
                 if (grade.vak.naam === currentVak) {
                     currentVak = grade.vak.naam;
                     currentVakWeight += Number(grade.weging) === 0 ? Number(grade.examenWeging) : Number(grade.weging);
-                    currentVakGradeTotal += (Number(grade.geldendResultaat.replace(",", "")) / 10) * (Number(grade.weging) === 0 ? Number(grade.examenWeging) : Number(grade.weging));
+                    currentVakGradeTotal += (Number(grade.geldendResultaat?.replace(",", "")) / 10) * (Number(grade.weging) === 0 ? Number(grade.examenWeging) : Number(grade.weging));
                     currentVakId = Number(grade.vak.links[0].id);
                 } else {
                     if (currentVak !== "") {
@@ -200,7 +194,7 @@ function getGrades() {
 
                     currentVak = grade.vak.naam;
                     currentVakWeight = Number(grade.weging) === 0 ? Number(grade.examenWeging) : Number(grade.weging);
-                    currentVakGradeTotal = (Number(grade.geldendResultaat.replace(",", "")) / 10) * (Number(grade.weging) === 0 ? Number(grade.examenWeging) : Number(grade.weging));
+                    currentVakGradeTotal = (Number(grade.geldendResultaat?.replace(",", "")) / 10) * (Number(grade.weging) === 0 ? Number(grade.examenWeging) : Number(grade.weging));
                     currentVakId = Number(grade.vak.links[0].id);
                 }
             });
@@ -278,9 +272,11 @@ function getGrades() {
     xhr.send();
 }
 
-
 function getGradesById(vakId) {
     CheckIfSOmTodayTokenIsExpired();
+
+    //console.log("Getting grades by id... : " + vakId);
+
     const token = localStorage.getItem("somtoday-access_token");
     const studentId = localStorage.getItem("somtoday-student_id");
 
@@ -296,11 +292,12 @@ function getGradesById(vakId) {
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", `https://localhost:44333/SOMtoday/gradesById?token=${token}&studentId=${studentId}&begintNaOfOp=${begintNaOfOp}&vakId=${vakId}`, true);
+    xhr.open("GET", `https://somtoday-grades.mjtsgamer.workers.dev/?studentId=${studentId}&begintNaOfOp=${begintNaOfOp}&token=${token}`);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = function() {
         if (this.readyState === 4) {
+            //console.log(this.responseText);
             const response = JSON.parse(this.responseText);
             const model = response.items.map(item => ({
                 type: item.type,
@@ -349,8 +346,29 @@ function getGradesById(vakId) {
                 omschrijving: item.omschrijving,
             }));
 
+            //model.sort((a, b) => a.vak.naam.localeCompare(b.vak.naam));
+            const toetskolomOrSamengesteldeToetsKolom = model.filter(grade => grade.type === "Toetskolom" || grade.type === "SamengesteldeToetsKolom");
+            //console.log(toetskolomOrSamengesteldeToetsKolom);
+            const gradesWithSameVakId = toetskolomOrSamengesteldeToetsKolom.filter(grade => grade.vak.links[0].id == vakId);
+            //console.log(gradesWithSameVakId);
 
-            model.forEach(grade => {
+            //create a list of all grades with the same vak.naam
+            let ListOfGradesWithSameVakNaam = [];
+
+            gradesWithSameVakId.forEach(grade => {
+                //console.log(grade);
+
+                ListOfGradesWithSameVakNaam.push({
+                    vak: grade.vak.naam,
+                    weight: Number(grade.weging) === 0 ? Number(grade.examenWeging) : Number(grade.weging),
+                    grade: Math.round(((Number(grade.geldendResultaat.replace(",", "")) / 10)) * 10) / 10,
+                });
+            });
+
+            //console.log(ListOfGradesWithSameVakNaam);
+
+
+            ListOfGradesWithSameVakNaam.forEach(grade => {
                 //console.log(grade);
                 const gradeContainer = document.getElementById("grade-container");
 
@@ -360,19 +378,19 @@ function getGradesById(vakId) {
                 const left = document.createElement("div");
                 left.className = "left";
 
-                const subject = document.createElement("p");
-                subject.className = "description";
-                subject.innerText = grade.omschrijving;
+                const subject = document.createElement("h2");
+                subject.className = "subject";
+                subject.innerText = grade.vak;
                 left.appendChild(subject);
 
                 const weight = document.createElement("div");
                 weight.className = "weight";
-                weight.innerText = `${Number(grade.weging) === 0 ? Number(grade.examenWeging) : Number(grade.weging)}x`;
+                weight.innerText = `${grade.weight}x`;
 
                 const right = document.createElement("div");
                 right.className = "right";
-                right.innerText = grade.geldendResultaat;
-                if (grade.geldendResultaat >= 5.5 || isNaN(grade.geldendResultaat)) {
+                right.innerText = grade.grade;
+                if (grade.grade >= 5.5 || isNaN(grade.grade)) {
                     right.classList.add("passed");
                 }
                 else {
@@ -386,7 +404,7 @@ function getGradesById(vakId) {
                 gradeContainer.appendChild(gradeChild);
             });
         }
-    }
+    };
 
     xhr.send();
 }
