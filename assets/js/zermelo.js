@@ -160,6 +160,11 @@ function getDagrooster() {
             gridColumn.appendChild(gridItem);
           } else {
             i--;
+            //new empty lesson
+            const gridItem = document.createElement("div");
+            gridItem.classList.add("grid-item");
+
+            gridColumn.appendChild(gridItem);
           }
 
           lessonNumber++;
