@@ -16,8 +16,8 @@ function getDagrooster() {
   let currentDate = new Date();
   let startDate = new Date(currentDate.getFullYear(), 0, 1);
   let days = Math.floor((currentDate - startDate) / (24 * 60 * 60 * 1000));
-  const weekNumber = 16; //Math.ceil(days / 7);
-  console.warn("FIXED WEEK NUMBER TO 16 (DUE TO VACATION)\n\nzermelo.js:L19: const weekNumber = 16; //Math.ceil(days / 7);");
+  const weekNumber = Math.ceil(days / 7);
+  //console.warn("FIXED WEEK NUMBER TO 16 (DUE TO VACATION)\n\nzermelo.js:L19: const weekNumber = 16; //Math.ceil(days / 7);");
 
   ajaxRequest.open(
       "GET",
@@ -160,6 +160,11 @@ function getDagrooster() {
             gridColumn.appendChild(gridItem);
           } else {
             i--;
+            //new empty lesson
+            const gridItem = document.createElement("div");
+            gridItem.classList.add("grid-item");
+
+            gridColumn.appendChild(gridItem);
           }
 
           lessonNumber++;
