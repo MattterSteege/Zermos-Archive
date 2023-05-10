@@ -2,7 +2,7 @@
 
 function authenticateUser(username, password) {
     const xhr = new XMLHttpRequest();
-    const url = `https://localhost:44333/SOMtoday/authenticate?username=${username}&password=${password}`;
+    const url = `https://localhost:5001/SOMtoday/authenticate?username=${username}&password=${password}`;
     xhr.open("GET", url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
@@ -410,9 +410,8 @@ function getGradesById(vakId) {
 }
 
 function getStudent() {
-//XMLHttpRequest https://localhost:44333/SOMtoday/student?token=${token}
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", `https://localhost:44333/SOMtoday/student?token=${localStorage.getItem("somtoday-access_token")}`, true);
+    xhr.open("GET", `https://somtoday-student.mjtsgamer.workers.dev/?token=${localStorage.getItem("somtoday-access_token")}`, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onreadystatechange = function() {
@@ -442,15 +441,13 @@ function getStudent() {
 
 function getHomework(){
     CheckIfSOmTodayTokenIsExpired();
-    //GET: https://localhost:44333/SOMtoday/huiswerk?begintNaOfOp=2022-01-10&token=
-    CheckIfSOmTodayTokenIsExpired();
     //const begintNaOfOp = current date yyyy-mm-dd minus 14 days
     const begintNaOfOp = new Date();
     begintNaOfOp.setDate(begintNaOfOp.getDate() - 14);
     const begintNaOfOpString = `${begintNaOfOp.getFullYear()}-${begintNaOfOp.getMonth() + 1}-${begintNaOfOp.getDate()}`;
 
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", `https://localhost:44333/SOMtoday/huiswerk?begintNaOfOp=${begintNaOfOpString}&token=${localStorage.getItem("somtoday-access_token")}`, true);
+    xhr.open("GET", `https://somtoday-homework.mjtsgamer.workers.dev/?begintNaOfOp=${begintNaOfOpString}&token=${localStorage.getItem("somtoday-access_token")}`, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onreadystatechange = function() {
