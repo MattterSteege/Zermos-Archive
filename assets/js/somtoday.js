@@ -35,7 +35,7 @@ function authenticateUser(username, password) {
 }
 
 function CheckIfSOmTodayTokenIsExpired() {
-    const token = localStorage.getItem("somtoday-access_token");
+    const token = localStorage.getItem("somtoday-refresh_token");
 
     if (token === null) {
         window.location.href = "/somtoday/inloggen/"
@@ -44,12 +44,8 @@ function CheckIfSOmTodayTokenIsExpired() {
     const expirationDate = Number(localStorage.getItem("somtoday-access_token_expiration_date"));
 
     if (expirationDate - (Date.now().valueOf() / 1000) < 0) {
-        var data = "grant_type=refresh_token&" +
-            "refresh_token=" + localStorage.getItem("somtoday-refresh_token") +
-            "&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2" +
-            "&scope=openid";
-
         var xhr = new XMLHttpRequest();
+        xhr.open("GET", `https://somtoday-refresh-token.mjtsgamer.workers.dev/?refresh_token=${token}`);
 
         xhr.onreadystatechange = function() {
             if (this.readyState === 4) {
@@ -66,22 +62,20 @@ function CheckIfSOmTodayTokenIsExpired() {
                     expires_in: response.expires_in,
                 }
 
+                //console.log(model);
+
                 localStorage.setItem("somtoday-access_token", model.access_token);
                 localStorage.setItem("somtoday-refresh_token", model.refresh_token);
                 localStorage.setItem("somtoday-access_token_expiration_date", model.expires_in + (Date.now().valueOf() / 1000));
           }
         };
 
-        xhr.open("POST", "https://cors-proxy.mjtsgamer.workers.dev/?url=https://inloggen.somtoday.nl/oauth2/token");
-        xhr.setRequestHeader("Accept", "application/json");
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-        xhr.send(data);
+        xhr.send();
     }
 }
 
-function getGrades() {
-    CheckIfSOmTodayTokenIsExpired();
+async function getGrades() {
+    await CheckIfSOmTodayTokenIsExpired();
 
     const token = localStorage.getItem("somtoday-access_token");
     const studentId = localStorage.getItem("somtoday-student_id");
@@ -101,7 +95,7 @@ function getGrades() {
     xhr.open("GET", `https://somtoday-grades.mjtsgamer.workers.dev/?studentId=${studentId}&begintNaOfOp=${begintNaOfOp}&token=${token}`);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
         if (this.readyState === 4) {
             //console.log(this.responseText);
             const response = JSON.parse(this.responseText);
@@ -211,7 +205,6 @@ function getGrades() {
             //console.log(ListOfGradesWithSameVakNaam);
 
 
-
             //loop through the list and log the values
             //create the html elements
             // <div className="grade-child">
@@ -251,8 +244,7 @@ function getGrades() {
                 right.innerText = grade.grade;
                 if (grade.grade >= 5.5 || isNaN(grade.grade)) {
                     right.classList.add("passed");
-                }
-                else {
+                } else {
                     right.classList.add("failed");
                 }
 
@@ -272,8 +264,8 @@ function getGrades() {
     xhr.send();
 }
 
-function getGradesById(vakId) {
-    CheckIfSOmTodayTokenIsExpired();
+async function getGradesById(vakId) {
+    await CheckIfSOmTodayTokenIsExpired();
 
     //console.log("Getting grades by id... : " + vakId);
 
@@ -409,7 +401,7 @@ function getGradesById(vakId) {
     xhr.send();
 }
 
-function getStudent() {
+async function getStudent() {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", `https://somtoday-student.mjtsgamer.workers.dev/?token=${localStorage.getItem("somtoday-access_token")}`, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -439,8 +431,8 @@ function getStudent() {
     xhr.send();
 }
 
-function getHomework(){
-    CheckIfSOmTodayTokenIsExpired();
+async function getHomework(){
+    await CheckIfSOmTodayTokenIsExpired();
     //const begintNaOfOp = current date yyyy-mm-dd minus 14 days
     const begintNaOfOp = new Date();
     begintNaOfOp.setDate(begintNaOfOp.getDate() - 14);
