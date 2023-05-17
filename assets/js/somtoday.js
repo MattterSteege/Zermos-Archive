@@ -1,37 +1,60 @@
 //console.log("SOMtoday.js loaded successfully");
 
 function authenticateUser(username, password) {
-    const xhr = new XMLHttpRequest();
-    const url = `https://localhost:5001/SOMtoday/authenticate?username=${username}&password=${password}`;
-    xhr.open("GET", url, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
+    // const xhr = new XMLHttpRequest();
+    // const url = `https://localhost:5001/SOMtoday/authenticate?username=${username}&password=${password}`;
+    // xhr.open("GET", url, true);
+    // xhr.setRequestHeader('Content-Type', 'application/json');
+    //
+    // xhr.onreadystatechange = function() {
+    //     if (this.readyState === 4) {
+    //         const response = JSON.parse(this.responseText);
+    //         const model = {
+    //             access_token: response.access_token,
+    //             refresh_token: response.refresh_token,
+    //             somtoday_api_url: response.somtoday_api_url,
+    //             somtoday_oop_url: response.somtoday_oop_url,
+    //             scope: response.scope,
+    //             somtoday_organisatie_afkorting: response.somtoday_organisatie_afkorting,
+    //             id_token: response.id_token,
+    //             token_type: response.token_type,
+    //             expires_in: response.expires_in,
+    //         }
+    //
+    //         localStorage.setItem("somtoday-access_token", model.access_token);
+    //         localStorage.setItem("somtoday-refresh_token", model.refresh_token);
+    //         localStorage.setItem("somtoday-access_token_expiration_date", model.expires_in + (Date.now().valueOf() / 1000));
+    //
+    //         getStudent();
+    //
+    //         window.location.href = "/somtoday/";
+    //     }
+    // }
+    //
+    // xhr.send();
 
-    xhr.onreadystatechange = function() {
-        if (this.readyState === 4) {
-            const response = JSON.parse(this.responseText);
-            const model = {
-                access_token: response.access_token,
-                refresh_token: response.refresh_token,
-                somtoday_api_url: response.somtoday_api_url,
-                somtoday_oop_url: response.somtoday_oop_url,
-                scope: response.scope,
-                somtoday_organisatie_afkorting: response.somtoday_organisatie_afkorting,
-                id_token: response.id_token,
-                token_type: response.token_type,
-                expires_in: response.expires_in,
-            }
+    const url = `https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling://oauth/callback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&state=${generateRandomString(8)}&response_type=code&scope=openid&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&session=no_session&code_challenge=aI-eTBHqG4Ot1rYuetz8hP3c57gZu88aPOUbhPtynw0&code_challenge_method=S256`;
 
-            localStorage.setItem("somtoday-access_token", model.access_token);
-            localStorage.setItem("somtoday-refresh_token", model.refresh_token);
-            localStorage.setItem("somtoday-access_token_expiration_date", model.expires_in + (Date.now().valueOf() / 1000));
-
-            getStudent();
-
-            window.location.href = "/somtoday/";
+    //fetch
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Origin': 'https://inloggen.somtoday.nl'
+        },
+        redirect: 'manual'
+    }).then(response => {
+        console.log(response);
+        if (response.status === 200) {
+            console.log("Successfully authenticated user");
+            //window.location.href = "/somtoday/";
+        } else {
+            console.log("Failed to authenticate user");
         }
-    }
+    }).catch(error => {
+        console.log(error);
+    });
 
-    xhr.send();
 }
 
 function CheckIfSOmTodayTokenIsExpired() {
@@ -561,3 +584,15 @@ async function getHomework(){
 function removeHTMLTags(text) {
     return text.replace(/<[^>]*>/g, '');
 }
+
+const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+const charsLength = chars.length;
+
+function generateRandomString(count) {
+    let stringChars = "";
+    while (count--) {
+        stringChars += chars.charCodeAt((Math.random() * charsLength) | 0);
+    }
+    return stringChars;
+}
+

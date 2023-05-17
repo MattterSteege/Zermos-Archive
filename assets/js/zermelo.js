@@ -170,13 +170,13 @@ function getDagrooster() {
           lessonNumber++;
         }
 
-        // Add empty grid items for any remaining slots
-        for (let i = 0; i < 9 - appointmentDay.length; i++) {
-          const gridItem = document.createElement("div");
-          gridItem.classList.add("grid-item");
-
-          gridColumn.appendChild(gridItem);
-        }
+        // // Add empty grid items for any remaining slots
+        // for (let i = 0; i < 9 - appointmentDay.length; i++) {
+        //   const gridItem = document.createElement("div");
+        //   gridItem.classList.add("grid-item");
+        //
+        //   gridColumn.appendChild(gridItem);
+        // }
 
         //add the column to grid-container
         document.getElementById("grid-container").appendChild(gridColumn);
