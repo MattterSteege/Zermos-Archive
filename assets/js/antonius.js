@@ -41,46 +41,47 @@ function getInfoboord() {
 
             //console.log(newsItems)
 
+            const newsItemsHolder = document.getElementById("news-items-holder")
+
             for (const newsItem of newsItems) {
-                const rowElement = document.getElementById("1")
 
                 const newsItemElement = document.createElement("div")
-                newsItemElement.className = "news-item"
+                newsItemElement.className = "child"
 
                 if (newsItem.title !== "" && newsItem.title !== undefined) {
 
                     const newsItemTitle = document.createElement("h1")
-                    newsItemTitle.className = "news-item-title"
+                    newsItemTitle.className = "heading"
                     newsItemTitle.textContent = newsItem.title
 
                     newsItemElement.appendChild(newsItemTitle)
                 }
 
-                if (newsItem.subTitle !== "" && newsItem.subTitle !== undefined) {
-                    const newsItemSubTitle = document.createElement("h2")
-                    newsItemSubTitle.className = "news-item-sub-title"
-                    newsItemSubTitle.textContent = newsItem.subTitle
-
-                    newsItemElement.appendChild(newsItemSubTitle)
-                }
-
                 if (newsItem.content.length > 0) {
                     const newsItemText = document.createElement("p")
-                    newsItemText.className = "news-item-text"
+                    newsItemText.className = "text"
                     newsItemText.textContent = newsItem.content.join("<br><br>")
 
                     newsItemElement.appendChild(newsItemText)
                 }
 
                 if (newsItem.image !== "" && newsItem.image !== undefined) {
+                    const newsItemImageOverlay = document.createElement("div")
+                    newsItemImageOverlay.className = "image-overlay"
+
                     const newsItemImage = document.createElement("img")
-                    newsItemImage.className = "news-item-image"
                     newsItemImage.src = newsItem.image
 
-                    newsItemElement.appendChild(newsItemImage)
+                    const newsItemImageOverlayOverlay = document.createElement("div")
+                    newsItemImageOverlayOverlay.className = "overlay"
+
+                    newsItemImageOverlay.appendChild(newsItemImage)
+                    newsItemImageOverlay.appendChild(newsItemImageOverlayOverlay)
+
+                    newsItemElement.appendChild(newsItemImageOverlay)
                 }
 
-                rowElement.appendChild(newsItemElement)
+                newsItemsHolder.appendChild(newsItemElement)
             }
         }
     }
