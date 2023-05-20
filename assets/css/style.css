@@ -280,7 +280,7 @@ body {
 main.main {
     left: 282px;
     transition: 0.3s;
-    width: calc(100% - 282px - 16px);
+    width: calc(100% - 282px);
     height: 100%;
     position: fixed;
     padding-bottom: 16px;

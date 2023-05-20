@@ -1,0 +1,104 @@
+<!--https://demos.creative-tim.com/soft-ui-dashboard-tailwind/pages/dashboard.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zermos</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/052f5fa8f8.js" crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/assets/js/global.js"></script>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+<div class="sidebar">
+  <div class="top">
+    <!--        6 SVG's with the letters Z,E,R,M,O & S width should be 1/6 of 100%-->
+    <svg viewBox="0 0 700 200">
+      <text class="svgText" x="100" y="100">Z</text>
+      <text class="svgText" x="200" y="100">E</text>
+      <text class="svgText" x="300" y="100">R</text>
+      <text class="svgText" x="400" y="100">M</text>
+      <text class="svgText" x="500" y="100">O</text>
+      <text class="svgText" x="600" y="100">S</text>
+    </svg>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="bottom">
+    <ul>
+      <li>
+        <div class="menu-item">
+          <i class="fa-solid fa-house menu-icons fa-fw active"></i>
+          <p>Hoofdmenu</p>
+        </div>
+      </li>
+
+      <h5 class="Heading">Zermelo</h5>
+
+      <li onclick="window.location.href='/rooster'">
+        <div class="menu-item">
+          <i class="fa-solid fa-calendar menu-icons fa-fw"></i>
+          <p>Rooster</p>
+        </div>
+      </li>
+
+      <h5 class="Heading">SOMtoday</h5>
+
+      <li>
+        <div class="menu-item">
+          <i class="fa-solid fa-pen-to-square menu-icons fa-fw"></i>
+          <p>Huiswerk</p>
+        </div>
+      </li>
+
+      <li>
+        <div class="menu-item">
+          <i class="fa-solid fa-line-chart menu-icons fa-fw"></i>
+          <p>Cijfers</p>
+        </div>
+      </li>
+
+      <h5 class="Heading">School</h5>
+
+      <li>
+        <div class="menu-item">
+          <i class="fa-solid fa-info-circle menu-icons fa-fw"></i>
+          <p>Informatie bord</p>
+        </div>
+      </li>
+
+      <h5 class="Heading">De Antonius app</h5>
+
+      <li>
+        <div class="menu-item">
+          <i class="fa-solid fa-newspaper menu-icons fa-fw"></i>
+          <p>School nieuws</p>
+        </div>
+      </li>
+
+      <li>
+        <div class="menu-item">
+          <i class="fa-solid fa-calendar menu-icons fa-fw"></i>
+          <p>School kalender</p>
+        </div>
+      </li>
+
+      <div class="spacer"></div>
+    </ul>
+  </div>
+  <div class="docs">
+    <img class="docs-image background-tint"/>
+    <h4>Hulp nodig?</h4>
+    <p>Check hoe je Zermos kunt gebruiken</p>
+    <button>Bekijk de documentatie</button>
+  </div>
+</div>
+
+<main class="main">
+  <div class="child1" style="height: 10000px; width: 100%; background: var(--dark-gradient)"></div>
+</main>
+</body>
+</html>
