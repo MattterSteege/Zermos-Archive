@@ -1,0 +1,308 @@
+﻿/* begin setting default values */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 1rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 1rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+  border-radius: 1rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+}
+
+a:link { text-decoration: none; }
+a:visited { text-decoration: none; }
+a:hover { text-decoration: none; }
+a:active { text-decoration: none; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background-color);
+  /*    var background: #ffffff*/
+  --webkit-font-smoothing: antialiased;
+  --moz-osx-font-smoothing: grayscale;
+
+  --background-color: #f8f9fa;
+  --overlay-color: #ffffff;
+  --text-color: #344767;
+  --text-color-light: #6c757d;
+  --accent-color: linear-gradient(335deg, rgb(121, 40, 202), rgb(255, 0, 128));
+  --active-color: linear-gradient(335deg, rgb(121, 40, 202), rgb(255, 0, 128));
+  --dark-gradient: linear-gradient(335deg, rgba(20, 23, 39, 0.8), rgba(58, 65, 111, 0.6));
+  --inactive-color: #e8e8e8;
+  --tint-color: #01befe;
+}
+
+/* End setting default values */
+
+.sidebar {
+  display: flex;
+  background: var(--overlay-color);
+  width: 250px;
+  height: calc(100vh - 32px);
+  position: fixed;
+  top: 0;
+  flex-direction: column;
+  justify-content: center;
+  left: 0;
+  border-radius: 1rem;
+  margin-left: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  align-items: center;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.divider {
+  position: absolute;
+  top: 80px;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0), rgba(142, 142, 142, 0.25), rgba(0, 0, 0, 0));
+  margin-bottom: 16px;
+}
+
+.sidebar .docs {
+  position: absolute;
+  bottom: 16px;
+  width: calc(100% - 32px);
+  height: 160px;
+  border-radius: 1rem;
+}
+
+.docs .docs-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-size: cover;
+  border-radius: 1rem;
+  background-image:
+          linear-gradient( rgba(58,65,111, 0.5), rgba(58,65,111, 0.5) ),
+          url('../images/white-curved.jpeg');
+}
+
+.sidebar .docs h4 {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.sidebar .docs p {
+  position: absolute;
+  top: 48px;
+  left: 16px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.sidebar .docs button {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  width: calc(100% - 32px);
+  height: 40px;
+  border-radius: 0.5rem;
+  background: #fff;
+  border: none;
+  color: var(--text-color);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sidebar .docs button:hover {
+  background: #f8f9fa;
+}
+
+
+
+
+.sidebar .top {
+  height: 80px;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  position: absolute;
+  width: 100%;
+  font-weight: 600;
+  font-size: 14px;
+  color: #344767;
+  border-top-right-radius: 1rem;
+  border-top-left-radius: 1rem;
+}
+
+.sidebar .top .svgText{
+  fill: var(--text-color);
+  font-size: 3rem;
+  dominant-baseline: middle;
+  text-anchor: middle;
+
+  text-shadow: none;
+}
+
+/*Begin of the animation*/
+
+.sidebar .top .svgText  {
+  position: relative;
+  display: inline-block;
+
+  text-shadow: none;
+
+  transition: transform 0.3s;
+  transform: translateY(10px);
+  cursor: default;
+}
+
+.sidebar .top .svgText.animating {
+  transform: translateY(-10px);
+}
+
+/*End of the animation*/
+
+.sidebar .bottom {
+  height: auto;
+  top: 96px;
+  bottom: 176px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  position: absolute;
+  width: 100%;
+  font-weight: 600;
+  overflow-y: auto;
+}
+
+.sidebar .spacer {
+  height: 100%;
+  width: 100%;
+}
+
+.sidebar .bottom ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 100%;
+  width: 100%;
+}
+
+.menu-item {
+
+  padding: 10px 16px 10px 32px;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  transition: 0.3s;
+}
+
+.menu-item:hover {
+  background: var(--background-color);
+  color: #ffffff;
+  transition: 0.3s;
+}
+
+.sidebar .bottom ul li {
+  height: 3.5rem;
+  width: auto;
+}
+
+.sidebar .bottom ul li p {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 55px;
+  transition: 0.3s;
+}
+
+.menu-icons {
+  background: var(--inactive-color);
+  color: var(--text-color-light);
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: 0.3s;
+  box-shadow: unset;
+  width: 32px !important;
+  height: 32px;
+  margin-right: 16px;
+}
+
+.menu-icons::before {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.active {
+  background: var(--accent-color);
+  color: #ffffff;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+.bottom .Heading {
+  font-size: 14px;
+  margin-left: 32px;
+  margin-top: 20px;
+  margin-bottom: 4px;
+  color: var(--text-color-light);
+}
+
+main.main {
+  left: 282px;
+  transition: 0.3s;
+  width: calc(100% - 282px);
+  height: 100%;
+  position: fixed;
+  padding-bottom: 16px;
+  padding-top: 96px;
+  overflow-y: auto;
+  padding-right: 16px;
+  scrollbar-gutter: stable;
+}
+
+/*change the scrollbar from main.main to have the same padding*/
+main.main::-webkit-scrollbar {
+  width: 8px;
+}
+
+main.main::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #F2F2F2;
+  border-radius: 8px;
+  margin-block-start: 96px;
+  margin-block-end: 16px;
+}

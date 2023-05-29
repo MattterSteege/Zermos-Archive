@@ -1,0 +1,126 @@
+﻿                @* ReSharper disable Mvc.ControllerNotResolved *@
+                @* ReSharper disable Mvc.ActionNotResolved *@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zermos</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"/>
+    <script src="https://kit.fontawesome.com/052f5fa8f8.js" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="~/js/global.js"></script>
+    <link rel="stylesheet" href="~/css/style.css">
+    @if(!string.IsNullOrEmpty(ViewData["add_css"]?.ToString()))
+    {
+        <link rel="stylesheet" href="~/css/@(ViewData["add_css"]).css">
+    }
+</head>
+<body>
+<div class="sidebar">
+    <div class="top">
+        <!--        6 SVG's with the letters Z,E,R,M,O & S width should be 1/6 of 100%-->
+        <svg viewBox="0 0 700 200">
+            <text class="svgText" x="100" y="100">Z</text>
+            <text class="svgText" x="200" y="100">E</text>
+            <text class="svgText" x="300" y="100">R</text>
+            <text class="svgText" x="400" y="100">M</text>
+            <text class="svgText" x="500" y="100">O</text>
+            <text class="svgText" x="600" y="100">S</text>
+        </svg>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="bottom">
+        <ul>
+            <li>
+                <a asp-controller="Hoofdmenu" asp-action="index">
+                    <div class="menu-item">
+                        <i class="fa-solid fa-house menu-icons fa-fw active"></i>
+                        <p>Hoofdmenu</p>
+                    </div>
+                </a>
+            </li>
+
+            <h5 class="Heading">Zermelo</h5>
+
+            <li>
+                <a asp-controller="Zermelo" asp-action="rooster">
+                    <div class="menu-item">
+                        <i class="fa-solid fa-calendar menu-icons fa-fw"></i>
+                        <p>Rooster</p>
+                    </div>
+                </a>
+            </li>
+
+            <h5 class="Heading">SOMtoday</h5>
+
+            <li>
+                <a asp-controller="Somtoday" asp-action="huiswerk">
+                    <div class="menu-item">
+                        <i class="fa-solid fa-pen-to-square menu-icons fa-fw"></i>
+                        <p>Huiswerk</p>
+                    </div>
+                </a>
+            </li>
+
+            <li>
+                <a asp-controller="Somtoday" asp-action="cijfers">
+                    <div class="menu-item">
+                        <i class="fa-solid fa-line-chart menu-icons fa-fw"></i>
+                        <p>Cijfers</p>
+                    </div>
+                </a>
+            </li>
+
+            <h5 class="Heading">School</h5>
+
+            <li>
+                <a asp-controller="School" asp-action="InformatieBoord">
+                    <div class="menu-item">
+                        <i class="fa-solid fa-info-circle menu-icons fa-fw"></i>
+                        <p>Informatie bord</p>
+                    </div>
+                </a>
+            </li>
+
+            <h5 class="Heading">De Antonius app</h5>
+
+            <li>
+                <a asp-controller="DeAntoniusApp" asp-action="SchoolNieuws">
+                    <div class="menu-item">
+                        <i class="fa-solid fa-newspaper menu-icons fa-fw"></i>
+                        <p>School nieuws</p>
+                    </div>
+                </a>
+            </li>
+
+            <li>
+                <a asp-controller="DeAntoniusApp" asp-action="SchoolKalender">
+                    <div class="menu-item">
+                        <i class="fa-solid fa-calendar menu-icons fa-fw"></i>
+                        <p>School kalender</p>
+                    </div>
+                </a>
+            </li>
+
+            <div class="spacer"></div>
+        </ul>
+    </div>
+    <div class="docs">
+        <img class="docs-image background-tint"/>
+        <h4>Hulp nodig?</h4>
+        <p>Check hoe je Zermos kunt gebruiken</p>
+        <button>Bekijk de documentatie</button>
+    </div>
+</div>
+
+<main class="main">
+    @RenderBody()
+</main>
+
+<script src="~/js/global.js" asp-append-version="true"></script>
+@RenderSection("Scripts", required: false)
+</body>
+</html>
