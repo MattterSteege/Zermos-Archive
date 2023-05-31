@@ -1,8 +1,106 @@
 ﻿@model ZermeloRoosterModel
 
 @{
-    ViewBag.Title = "title";
+    ViewData["title"] = "title";
     Layout = "_Layout";
 }
 
 
+<div class="main-container">
+    <div class="times-container">
+        <ul>
+            <!--        20 horizontal lines-->
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <div class="days-container">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <div class="hours-container">
+        <ul>
+            <li></li>
+            <li>08:20</li> <!-- 1st hour -->
+            <li>09:10</li> <!-- 2nd hour -->
+            <li>10:00</li> <!-- break -->
+            <li>10:15</li> <!-- 3rd hour -->
+            <li>11:05</li> <!-- 4th hour -->
+            <li>11:55</li> <!-- break -->
+            <li>12:25</li> <!-- 5th hour -->
+            <li>13:15</li> <!-- 6th hour -->
+            <li>14:05</li> <!-- 7th hour -->
+            <li>14:55</li> <!-- break -->
+            <li>15:10</li> <!-- 8th hour -->
+            <li>16:00</li> <!-- 9th hour -->
+            <li></li> <!-- end schoolday -->
+        </ul>
+    </div>
+    <div class="lessons-container">
+        <ul>
+            @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+            {
+                if (day != DayOfWeek.Saturday && day != DayOfWeek.Sunday)
+                {
+                    <li class="lesdag">
+                        @{
+                            var lesson = 1;
+                            var appointments = Model.response.data[0].appointments;
+                            var dayAppointments = appointments.Where(a => a.start.ToDateTime().DayOfWeek == day);
+                            var nextDayBeginsOnIndex = 0;
+                        }
+                        @for (var i = 0; i < 9; i++)
+                        {
+                            if (nextDayBeginsOnIndex < dayAppointments.Count() && dayAppointments.ElementAt(nextDayBeginsOnIndex).startTimeSlotName == lesson.ToString())
+                            {
+                                var appointment = dayAppointments.ElementAt(nextDayBeginsOnIndex);
+
+                                if (appointment.cancelled)
+                                {
+                                    <div style="background: red"></div>
+                                }
+                                else
+                                {
+                                    <div style="background: darkgray">
+                                        @appointment.subjects[0] - @appointment.teachers[0] - @appointment.locations[0]
+                                    </div>
+                                }
+
+                                nextDayBeginsOnIndex++;
+                            }
+                            else
+                            {
+                                <div></div>
+                            }
+
+                            if (lesson == 2 || lesson == 4 || lesson == 7)
+                            {
+                                <div style="background: var(--inactive-color)"></div>
+                            }
+
+                            lesson++;
+                        }
+                    </li>
+                }
+            }
+        </ul>
+
+    </div>
+</div>

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "g8zEkRwavTvpYyjf1lqTKpQdExAMk4TNVDKFstCP9XTP1mSjDF5zoHEiq5pcDl44fk5YGiEguYZps+aggUGTZg==",
+  "dgSpecHash": "zV1dKEjz+L53wpyWfYFw8vPMe7sMdmKfqkXr+3qi7ELDe0sHBHZ4XFZHnbK5htb/XCBqN+G8bvMLY7rCEIWEug==",
   "success": true,
   "projectFilePath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos-2\\Infrastructure\\Infrastructure.csproj",
   "expectedPackageFiles": [
@@ -28,6 +28,7 @@
     "C:\\Users\\mattt\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "C:\\Users\\mattt\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.18.1\\microsoft.visualstudio.azure.containers.tools.targets.1.18.1.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\mysql.data\\8.0.33\\mysql.data.8.0.33.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\mysql.entityframeworkcore\\5.0.17.2\\mysql.entityframeworkcore.5.0.17.2.nupkg.sha512",

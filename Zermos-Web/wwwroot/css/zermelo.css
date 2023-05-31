@@ -1,0 +1,132 @@
+.main-container {
+    width: 100%;
+    height: 100%;
+}
+
+.rooster {
+    height: 100%;
+    width: 100%;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+}
+
+.times-container {
+    width: 100%;
+    height: 100%;
+}
+
+.times-container ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 40px 10fr 10fr 3fr 10fr 10fr 6fr 10fr 10fr 10fr 3fr 10fr 10fr;
+}
+
+.times-container ul li {
+    width: 100%;
+    border-bottom: 1px solid var(--inactive-color);
+    border-left: 1px solid var(--inactive-color);
+    border-right: 1px solid var(--inactive-color);
+    padding: 8px 0;
+}
+
+.times-container ul li:first-child {
+    border-top: 1px solid var(--inactive-color);
+}
+
+.days-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 16px;
+    padding-top: 96px;
+    padding-right: 16px;
+}
+
+.days-container ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 60px repeat(5, 1fr);
+}
+
+.days-container ul li {
+    height: 100%;
+    border-right: 1px solid var(--inactive-color);
+    padding: 8px 0;
+    float: left;
+}
+
+.days-container ul li:first-child {
+    border-left: 1px solid var(--inactive-color);
+}
+
+.hours-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 96px 16px 16px 0;
+}
+
+.hours-container ul {
+    list-style-type: none;
+    padding: 0;
+    width: 58px;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 30px 10fr 10fr 3fr 10fr 10fr 6fr 10fr 10fr 10fr 3fr 10fr 9fr;
+    background-color: var(--background-color);
+    margin: 1px;
+}
+
+.hours-container ul li {
+    width: 58px;
+    height: 20px;
+    padding-left: 8px;
+    font-weight: 600;
+    background-color: var(--background-color);
+}
+
+.hours-container ul li:first-child,  .hours-container ul li:last-child{
+    background-color: transparent;
+}
+
+
+.lessons-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 136px 16px 16px 60px;
+    --height-of-5-minutes: calc(100% / 102);
+}
+
+.lessons-container ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.lesdag {
+    display: grid;
+    height: 100%;
+    grid-template-rows: 10fr 10fr 3fr 10fr 10fr 6fr 10fr 10fr 10fr 3fr 10fr 10fr;
+}

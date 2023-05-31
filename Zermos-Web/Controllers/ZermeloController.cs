@@ -26,9 +26,10 @@ namespace Zermos_Web.Controllers
         }
 
         
-        public async Task<IActionResult> Rooster(string year, string week)
+        public async Task<IActionResult> Rooster(string year, string week, string settings = "")
         {
             ViewData["add_css"] = "zermelo";
+            ViewData["rooster-layout"] = settings;
             
             year ??= DateTime.Now.Year.ToString();
             week ??= DateTime.Now.GetWeekNumber().ToString();
