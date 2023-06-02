@@ -6,17 +6,20 @@
 }
 
 <div class="news-items-holder" id="news-items-holder">
-    
+
     @foreach (var informatieBoordItem in Model)
     {
+        //go to the InformatieBoord controller and the InformatieBoord action with the model as paramaters (title=, content=, image=)
         <div class="child">
-            <h1 class="heading">@informatieBoordItem.Title</h1>
-            <p class="text">@informatieBoordItem.Content</p>
-            <div class="image-overlay">
-                <img src="@informatieBoordItem.Image">
-                <div class="overlay"></div>
-            </div>
+            <a asp-controller="school" asp-action="Message" asp-route-title="@informatieBoordItem.Title" asp-route-content="@informatieBoordItem.Content" asp-route-image="@informatieBoordItem.Image">
+                <h1 class="heading">@informatieBoordItem.Title</h1>
+                <p class="text">@informatieBoordItem.Content</p>
+                <div class="image-overlay">
+                    <img src="@informatieBoordItem.Image">
+                    <div class="overlay"></div>
+                </div>
+            </a>
         </div>
     }
-    
+
 </div>

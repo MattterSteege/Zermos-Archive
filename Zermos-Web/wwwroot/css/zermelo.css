@@ -1,6 +1,9 @@
 .main-container {
     width: 100%;
     height: 100%;
+    
+    --rooster-item-background-color: #c6c6c6;
+    --rooster-item-cancellation-color: #EB3628;
 }
 
 .rooster {
@@ -129,4 +132,23 @@
     display: grid;
     height: 100%;
     grid-template-rows: 10fr 10fr 3fr 10fr 10fr 6fr 10fr 10fr 10fr 3fr 10fr 10fr;
+}
+
+.lesson {
+    width: calc(100% - 16px);
+    height: calc(100% - 16px);
+    margin: 8px;
+    border-radius: 4px;
+    background-color: var(--rooster-item-background-color);
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-weight: 600;
+}
+
+.canceled {
+    background-color: var(--rooster-item-cancellation-color);
+    color: #ffffff;
 }

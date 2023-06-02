@@ -1,0 +1,11 @@
+﻿@model SomtodayGradesModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+@foreach (var grade in Model.items)
+{
+    <h1>@grade.vak.naam  -  @grade.geldendResultaat  -  @grade.datumInvoer.ToString("dddd dd-mm-yyyy")</h1>
+}

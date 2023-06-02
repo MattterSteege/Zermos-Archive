@@ -116,3 +116,6 @@ C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\Micr
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Zermelo\Rooster.cshtml.g.cs
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Zermelo\Inloggen.cshtml.g.cs
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\School\message.cshtml.g.cs
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Somtoday\Huiswerk.cshtml.g.cs
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Somtoday\Cijfers.cshtml.g.cs

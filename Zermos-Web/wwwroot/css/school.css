@@ -23,6 +23,12 @@
     width: 100%;
 }
 
+.child a {
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+}
+
 .child .image-overlay img, .child .image-overlay .overlay {
     width: calc(100% - 32px);
     height: calc(100% - 32px);
@@ -71,4 +77,80 @@
     left: 16px;
     padding-bottom: 48px;
     overflow: hidden;
+}
+
+/*Specefic message*/
+/*<div class="message-container">
+    <div class="message">
+        <h1 class="message-heading">@Model.Title</h1>
+        <p class="message-text">@Model.Content</p>
+        <div class="message-image-overlay">
+            <img src="@Model.Image">
+        </div>
+    </div>
+</div>
+*/
+
+.message-container {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 10px;
+    border-radius: 1rem;
+    background: var(--overlay-color);
+    height: 100%;
+    min-width: calc(360px);
+    width: 100%;
+}
+
+.message-container .message {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding-bottom: 48px;
+    overflow: hidden;
+}
+
+.message-container .message .message-heading {
+    position: relative;
+    width: calc(100% - 32px);
+    font-weight: 700;
+    font-size: 1.2rem;
+    line-height: 1.5rem;
+    color: #fff;
+    z-index: 1;
+    top: 32px;
+    left: 16px;
+}
+
+.message-container .message .message-text {
+    position: relative;
+    width: calc(100% - 32px);
+    font-weight: 200;
+    line-height: 1.5rem;
+    color: #fff;
+    z-index: 1;
+    top: 32px;
+    left: 16px;
+}
+
+.message-container .message .message-image-overlay {
+    width: calc(100% - 32px);
+    height: calc(100% - 32px);
+    position: absolute;
+    object-fit: cover;
+    background-size: cover;
+    border-radius: 8px;
+    top: 16px;
+    left: 16px;
+    transition: 0.3s;
+}
+
+.message-container .message .message-image-overlay img {
+    height: 100%;
+    border-radius: 8px;
+/*    Change width to keep w/h ratio*/
+    width: auto;
+    
+    
 }

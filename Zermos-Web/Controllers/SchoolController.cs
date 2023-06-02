@@ -37,7 +37,7 @@ namespace Zermos_Web.Controllers
                 {
                     string title = element.SelectSingleNode(".//h1[contains(@class, 'text-black')]")?.InnerText ?? "";
                     string subTitle = element.SelectSingleNode(".//h2[contains(@class, 'text-black')]")?.InnerText ?? "";
-                    string image = "https://www.carmelcollegegouda.nl" + element.SelectSingleNode(".//img")?.Attributes["src"]?.Value ?? "";
+                    string image = element.SelectSingleNode(".//img")?.Attributes["src"]?.Value ?? "";
 
                     var contentNodes = element.SelectNodes(".//div[contains(@class, 'content')]");
                     string contentText = "";
@@ -50,12 +50,25 @@ namespace Zermos_Web.Controllers
                     }
                     
                     contentText = Utilities.HTMLUtils.ReplaceHtmlEntities(contentText);
+                    
+                    //if image is not a full url, add the base url
+                    if (!image.StartsWith("http"))
+                    {
+                        image = "https://www.carmelcollegegouda.nl" + image;
+                    }
 
                     model.Add(new InformatieBoordModel(title, subTitle, image, contentText));
                 }
             }
 
             return View(model);
+        }
+
+        public async Task<IActionResult> Message(string title, string content, string image)
+        {
+            ViewData["add_css"] = "school";
+
+            return View(new InformatieBoordModel(title, "", image, content));
         }
     }
 }

@@ -74,11 +74,13 @@
 
                                 if (appointment.cancelled)
                                 {
-                                    <div style="background: red"></div>
+                                    <div class="lesson canceled">
+                                        @appointment.subjects[0] - @appointment.teachers[0] - @appointment.locations[0]
+                                    </div>
                                 }
                                 else
                                 {
-                                    <div style="background: darkgray">
+                                    <div class="lesson">
                                         @appointment.subjects[0] - @appointment.teachers[0] - @appointment.locations[0]
                                     </div>
                                 }

@@ -1,0 +1,20 @@
+﻿@model InformatieBoordModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+@* <h2>@Model.Title</h2> *@
+@* <h2>@Model.Content</h2> *@
+@* <h2>@Model.Image</h2> *@
+
+<div class="message-container">
+    <div class="message">
+        <h1 class="message-heading">@Model.Title</h1>
+        <p class="message-text">@Model.Content</p>
+        <div class="message-image-overlay">
+            <img src="@Model.Image">
+        </div>
+    </div>
+</div>
