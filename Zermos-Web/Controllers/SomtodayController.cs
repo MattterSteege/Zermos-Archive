@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -16,49 +17,57 @@ namespace Zermos_Web.Controllers
     {
         private readonly ILogger<SomtodayController> _logger;
         private readonly Users _users;
+        private readonly HttpClient _httpClient;
 
         public SomtodayController(ILogger<SomtodayController> logger, Users users)
         {
             _logger = logger;
             _users = users;
+            _httpClient = new HttpClient();
         }
 
         public async Task<IActionResult> Cijfers()
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            
             ViewData["add_css"] = "somtoday";
             user user = await _users.GetUserAsync("8f3e7598-615f-4b43-9705-ba301c6e2fcd");
 
             string baseUrl = $"https://api.somtoday.nl/rest/v1/resultaten/huidigVoorLeerling/{user.somtoday_student_id}?begintNaOfOp={DateTime.Now:yyyy}-01-01";
 
-            //GET request
-            using var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
-            httpClient.DefaultRequestHeaders.Add("Range", "items=0-99");
-            httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-            
-            var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, baseUrl));
-            
+            _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
+            _httpClient.DefaultRequestHeaders.Add("Range", "items=0-99");
+            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+
+            var response = await _httpClient.GetAsync(baseUrl);
+
             var grades = JsonConvert.DeserializeObject<SomtodayGradesModel>(await response.Content.ReadAsStringAsync());
-            
-            int total = int.Parse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1]);
 
-            int requests = (total / 100) * 100;
-
-            for (int i = 100; i < requests; i += 100)
+            if (int.TryParse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1], out int total))
             {
-                httpClient.DefaultRequestHeaders.Clear();
-                httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
-                httpClient.DefaultRequestHeaders.Add("Range", $"items={i}-{i + 99}");
-                httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+                int requests = (total / 100) * 100;
 
-                string _response = await httpClient.GetStringAsync(baseUrl);
-                
-                var _grades = JsonConvert.DeserializeObject<SomtodayGradesModel>(_response);
-                
-                grades.items.AddRange(_grades.items);
+                for (int i = 100; i < requests; i += 100)
+                {
+                    _httpClient.DefaultRequestHeaders.Clear();
+                    _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
+                    _httpClient.DefaultRequestHeaders.Add("Range", $"items={i}-{i + 99}");
+                    _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+
+                    response = await _httpClient.GetAsync(baseUrl);
+                    var _grades = JsonConvert.DeserializeObject<SomtodayGradesModel>(await response.Content.ReadAsStringAsync());
+                    grades.items.AddRange(_grades.items);
+                }
             }
             
-            return View(Sort(grades));
+            grades = Sort(grades);
+            
+            stopwatch.Stop();
+            TimeSpan timeSpan = stopwatch.Elapsed;
+            Console.WriteLine($"Somtoday grades request took {timeSpan.Seconds}.{timeSpan.Milliseconds} seconds");
+            
+            return View(grades);
         }
         
         public SomtodayGradesModel Sort(SomtodayGradesModel grades)
