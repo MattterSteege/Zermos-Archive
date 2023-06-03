@@ -1,4 +1,4 @@
-﻿namespace Zermos_Web.Controllers
+﻿namespace Zermos_Web.Models
 {
     public class SomtodayAuthenticatieModel
     {

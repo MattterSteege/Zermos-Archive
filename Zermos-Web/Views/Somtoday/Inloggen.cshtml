@@ -1,0 +1,13 @@
+﻿@model object
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<form asp-controller="Somtoday" asp-action="Inloggen" method="post">
+    <!--Add username input with text 'gebruikersnaame' and password input with text 'wachtwoord'-->
+    <input type="text" name="username" placeholder="gebruikersnaam">
+    <input type="password" name="password" placeholder="wachtwoord">
+    <input type="submit" value="Inloggen">
+</form>

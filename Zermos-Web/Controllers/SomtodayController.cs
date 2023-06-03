@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
@@ -19,37 +23,41 @@ namespace Zermos_Web.Controllers
         private readonly ILogger<SomtodayController> _logger;
         private readonly Users _users;
         private readonly HttpClient _httpClient;
+        private readonly HttpClient _httpClientWithoutRedirect;
 
         public SomtodayController(ILogger<SomtodayController> logger, Users users)
         {
             _logger = logger;
             _users = users;
             _httpClient = new HttpClient();
+            _httpClientWithoutRedirect = new HttpClient(new HttpClientHandler {AllowAutoRedirect = false});
         }
 
+        #region Cijfers
         public async Task<IActionResult> Cijfers(bool refresh_token = false)
         {
             ViewData["add_css"] = "somtoday";
             //the request was by ajax, so return the partial view
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                
                 user user = await _users.GetUserAsync("8f3e7598-615f-4b43-9705-ba301c6e2fcd");
 
                 if (TokenUtils.CheckToken(user.somtoday_access_token) == false && refresh_token == false)
                 {
                     ViewData["redirected_from_loadingpage"] = "true";
                     ViewData["laad_tekst"] = "Cijfers worden geladen nadat je SOMtoday token is ververst";
-                    ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" + ControllerContext.RouteData.Values["action"] + "?refresh_token=true";
+                    ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
+                                      ControllerContext.RouteData.Values["action"] + "?refresh_token=true";
                     return View("_Loading");
                 }
-                
+
                 if (refresh_token)
                 {
                     await RefreshToken(user.somtoday_refresh_token);
                     ViewData["redirected_from_loadingpage"] = "true";
                     ViewData["laad_tekst"] = "SOMtoday token is ververst, cijfers worden geladen";
-                    ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" + ControllerContext.RouteData.Values["action"];
+                    ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
+                                      ControllerContext.RouteData.Values["action"];
                     return View("_Loading");
                 }
 
@@ -68,9 +76,10 @@ namespace Zermos_Web.Controllers
 
                 if (response.IsSuccessStatusCode == false)
                 {
-                    return NotFound("Er is iets fout gegaan bij het ophalen van de cijfers, het is mogelijk dat je SOMtoday token verlopen is.");
+                    return NotFound(
+                        "Er is iets fout gegaan bij het ophalen van de cijfers, het is mogelijk dat je SOMtoday token verlopen is.");
                 }
-                
+
                 if (int.TryParse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1],
                         out int total))
                 {
@@ -96,7 +105,8 @@ namespace Zermos_Web.Controllers
 
             ViewData["laad_tekst"] = "Cijfers worden geladen";
             //the request was by a legitimate user, so return the loading view
-            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" + ControllerContext.RouteData.Values["action"];
+            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
+                              ControllerContext.RouteData.Values["action"];
             return View("_Loading");
         }
 
@@ -106,7 +116,7 @@ namespace Zermos_Web.Controllers
 
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-            
+
             var form = new Dictionary<string, string>
             {
                 {"grant_type", "refresh_token"},
@@ -114,11 +124,17 @@ namespace Zermos_Web.Controllers
                 {"scope", "openid"},
                 {"client_id", "D50E0C06-32D1-4B41-A137-A9A850C892C2"}
             };
-            
-            var response = _httpClient.PostAsync("https://inloggen.somtoday.nl/oauth2/token", new FormUrlEncodedContent(form)).Result;
-            var somtodayAuthentication = JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(response.Content.ReadAsStringAsync().Result);
-            
-            user user = new user {somtoday_access_token = somtodayAuthentication.access_token, somtoday_refresh_token = somtodayAuthentication.refresh_token};
+
+            var response = _httpClient
+                .PostAsync("https://inloggen.somtoday.nl/oauth2/token", new FormUrlEncodedContent(form)).Result;
+            var somtodayAuthentication =
+                JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(response.Content.ReadAsStringAsync().Result);
+
+            user user = new user
+            {
+                somtoday_access_token = somtodayAuthentication.access_token,
+                somtoday_refresh_token = somtodayAuthentication.refresh_token
+            };
             await _users.UpdateUserAsync("8f3e7598-615f-4b43-9705-ba301c6e2fcd", user);
         }
 
@@ -129,5 +145,92 @@ namespace Zermos_Web.Controllers
             grades.items = grades.items.OrderBy(x => x.datumInvoer).ToList();
             return grades;
         }
+        #endregion
+
+        #region inloggen
+        [HttpGet]
+        public IActionResult Inloggen()
+        {
+            ViewData["add_css"] = "somtoday";
+
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Inloggen(string username, string password)
+        {
+            //code challenge: __JVhs4cj-iqe8ha5750d9QSWJMpV49SXHPqBgFulkk
+            //code verifier: 16BBJMtEJe8blIJY848ROvvO02F5V205l5A10x_DqFE
+            
+            _httpClientWithoutRedirect.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
+
+            string baseurl = string.Format("https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling://oauth/callback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state={0}&scope=openid&tenant_uuid={1}&session=no_session&code_challenge={2}&code_challenge_method=S256",
+                RandomStateString(), "c23fbb99-be4b-4c11-bbf5-57e7fc4f4388", "__JVhs4cj-iqe8ha5750d9QSWJMpV49SXHPqBgFulkk");
+            
+            var response = await _httpClientWithoutRedirect.GetAsync(baseurl);
+            string authCode = response.Headers.Location.Query.Remove(0, 6);
+
+            
+            
+            _httpClientWithoutRedirect.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
+            
+            
+            
+            baseurl = "https://inloggen.somtoday.nl/?-1.-panel-signInForm&auth=" + authCode;
+            
+            var Content = new FormUrlEncodedContent(new Dictionary<string, string>()
+            {
+                {"loginLink", "x"},
+                {"usernameFieldPanel:usernameFieldPanel_body:usernameField", username}
+            });
+            
+            await _httpClientWithoutRedirect.PostAsync(baseurl, Content);
+
+            baseurl = "https://inloggen.somtoday.nl/login?1-1.-passwordForm&auth=" + authCode;
+            
+            Content = new FormUrlEncodedContent(new Dictionary<string, string>()
+            {
+                {"passwordFieldPanel:passwordFieldPanel_body:passwordField", password},
+                {"loginLink", "x"}
+            });
+            
+            response = await _httpClientWithoutRedirect.PostAsync(baseurl, Content);
+            
+            string finalAuthCode = HTMLUtils.ParseQuery(response.Headers.Location.Query)["code"];
+            
+            
+            
+            baseurl = "https://inloggen.somtoday.nl/oauth2/token?grant_type=authorization_code&session=no_session&scope=openid&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&code=" + finalAuthCode + "&code_verifier=16BBJMtEJe8blIJY848ROvvO02F5V205l5A10x_DqFE";
+            
+            response = await _httpClientWithoutRedirect.PostAsync(baseurl, new FormUrlEncodedContent(new Dictionary<string, string> {{"", ""}}));
+            
+            SomtodayAuthenticatieModel somtodayAuthentication =
+                JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(response.Content.ReadAsStringAsync().Result);
+            
+            user user = new user
+            {
+                somtoday_access_token = somtodayAuthentication.access_token,
+                somtoday_refresh_token = somtodayAuthentication.refresh_token
+            };
+            
+            await _users.UpdateUserAsync("8f3e7598-615f-4b43-9705-ba301c6e2fcd", user);
+            return RedirectToAction("cijfers", "Somtoday");
+        }
+
+        Random random = new Random();
+
+        private string RandomStateString(int length = 8)
+        {
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            string result = "";
+            for (int i = 0; i < length; i++)
+                result += chars[random.Next(0, chars.Length)];
+
+
+            return result;
+        }
+        #endregion
     }
 }
