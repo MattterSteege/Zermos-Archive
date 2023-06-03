@@ -119,3 +119,4 @@ C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razo
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\School\message.cshtml.g.cs
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Somtoday\Huiswerk.cshtml.g.cs
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Somtoday\Cijfers.cshtml.g.cs
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Loading.cshtml.g.cs

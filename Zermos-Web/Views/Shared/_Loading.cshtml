@@ -1,0 +1,170 @@
+﻿<style>
+
+    #content {
+        width: 100%;
+        height: 100%;
+    }
+
+    .loader {
+      display: inline-block;
+      position: relative;
+      width: 80px;
+      height: 80px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(3);
+    }
+
+    .loader-line {
+      position: absolute;
+      height: 8px;
+      width: 100%;
+      background-color: #000;
+      border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+
+    .loader-line-wrap {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      transform-origin: center;
+      animation: loader-line-wrap-animation 2.4s linear infinite;
+    }
+    
+    .loader-line-wrap:nth-child(1) {
+        animation-delay: 0s;
+    }
+    
+    .loader-line-wrap:nth-child(2) {
+        animation-delay: 0.3s;
+    }
+    
+    .loader-line-wrap:nth-child(3) {
+        animation-delay: 0.6s;
+    }
+    
+    .loader-line-wrap:nth-child(4) {
+        animation-delay: 0.9s;
+    }
+    
+    .loader-line-wrap:nth-child(5) {
+        animation-delay: 1.2s;
+    }
+    
+    .loader-line-wrap:nth-child(6) {
+        animation-delay: 1.5s;
+    }
+    
+    .loader-line-wrap:nth-child(7) {
+        animation-delay: 1.8s;
+    }
+    
+    .loader-line-wrap:nth-child(8) {
+        animation-delay: 2.1s;
+    }
+    
+    .loader-line-wrap:nth-child(1) .loader-line {
+        background: rgb(121, 40, 202);
+    }
+    
+    .loader-line-wrap:nth-child(2) .loader-line {
+        background: rgb(255, 0, 128);
+    }
+    
+    .loader-line-wrap:nth-child(3) .loader-line {
+         background: rgb(121, 40, 202);
+    }
+    
+    .loader-line-wrap:nth-child(4) .loader-line {
+        background: rgb(255, 0, 128);
+    }
+    
+    .loader-line-wrap:nth-child(5) .loader-line {
+        background: rgb(121, 40, 202);
+    }
+    
+    .loader-line-wrap:nth-child(6) .loader-line {
+        background: rgb(255, 0, 128);
+    }
+    
+    .loader-line-wrap:nth-child(7) .loader-line {
+        background: rgb(121, 40, 202);
+    }
+    
+    .loader-line-wrap:nth-child(8) .loader-line {
+        background: rgb(255, 0, 128);
+    }
+
+    @@keyframes loader-line-wrap-animation {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loader-inner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+
+    .loader-text {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+</style>
+
+<div id="content">
+    <div class="loader-text">
+        We zijn even je @(ViewData["pagina_naam"] ?? "data") aan het ophalen...
+    </div>
+    <div class="loader">
+        <div class="loader-inner">
+            <div class="loader-line-wrap">
+                <div class="loader-line"></div>
+            </div>
+            <div class="loader-line-wrap">
+                <div class="loader-line"></div>
+            </div>
+            <div class="loader-line-wrap">
+                <div class="loader-line"></div>
+            </div>
+            <div class="loader-line-wrap">
+                <div class="loader-line"></div>
+            </div>
+            <div class="loader-line-wrap">
+                <div class="loader-line"></div>
+            </div>
+            <div class="loader-line-wrap">
+                <div class="loader-line"></div>
+            </div>
+            <div class="loader-line-wrap">
+                <div class="loader-line"></div>
+            </div>
+            <div class="loader-line-wrap">
+                <div class="loader-line"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            $.ajax({
+                url: "@ViewData["url"]",
+                success: function (data) { $('#main').html(data); },
+                //when an error happens, alert the user with the text of the error
+                error: function (xhr, status, error) { alert(xhr.responseText); },
+                cache: false,
+                type: 'GET'
+            });
+        });
+    </script>
+}

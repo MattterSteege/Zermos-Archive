@@ -21,54 +21,70 @@ namespace Zermos_Web.Controllers
         {
             ViewData["add_css"] = "school";
             
-            List<InformatieBoordModel> model = new List<InformatieBoordModel>();
-            
-            using var httpClient = new HttpClient();
-            string baseUrl = "https://www.carmelcollegegouda.nl/vestigingen/antoniuscollege-gouda/infoscherm";
-            var response = await httpClient.GetStringAsync(baseUrl);
-
-            var doc = new HtmlAgilityPack.HtmlDocument();
-            doc.LoadHtml(response);
-            var elements = doc.DocumentNode.SelectNodes("//div[contains(@class, 'swiper-slide')]");
-
-            if (elements != null)
+            //the request was by ajax, so return the partial view
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                foreach (var element in elements)
+                List<InformatieBoordModel> model = new List<InformatieBoordModel>();
+                
+                using var httpClient = new HttpClient();
+                string baseUrl = "https://www.carmelcollegegouda.nl/vestigingen/antoniuscollege-gouda/infoscherm";
+                var response = await httpClient.GetStringAsync(baseUrl);
+
+                var doc = new HtmlAgilityPack.HtmlDocument();
+                doc.LoadHtml(response);
+                var elements = doc.DocumentNode.SelectNodes("//div[contains(@class, 'swiper-slide')]");
+
+                if (elements != null)
                 {
-                    string title = element.SelectSingleNode(".//h1[contains(@class, 'text-black')]")?.InnerText ?? "";
-                    string subTitle = element.SelectSingleNode(".//h2[contains(@class, 'text-black')]")?.InnerText ?? "";
-                    string image = element.SelectSingleNode(".//img")?.Attributes["src"]?.Value ?? "";
-
-                    var contentNodes = element.SelectNodes(".//div[contains(@class, 'content')]");
-                    string contentText = "";
-                    if (contentNodes != null)
+                    foreach (var element in elements)
                     {
-                        foreach (var contentNode in contentNodes)
+                        string title = element.SelectSingleNode(".//h1[contains(@class, 'text-black')]")?.InnerText ?? "";
+                        string subTitle = element.SelectSingleNode(".//h2[contains(@class, 'text-black')]")?.InnerText ?? "";
+                        string image = element.SelectSingleNode(".//img")?.Attributes["src"]?.Value ?? "";
+
+                        var contentNodes = element.SelectNodes(".//div[contains(@class, 'content')]");
+                        string contentText = "";
+                        if (contentNodes != null)
                         {
-                            contentText += contentNode.InnerText;
+                            foreach (var contentNode in contentNodes)
+                            {
+                                contentText += contentNode.InnerText;
+                            }
                         }
-                    }
-                    
-                    contentText = Utilities.HTMLUtils.ReplaceHtmlEntities(contentText);
-                    
-                    //if image is not a full url, add the base url
-                    if (!image.StartsWith("http"))
-                    {
-                        image = "https://www.carmelcollegegouda.nl" + image;
-                    }
+                        
+                        contentText = Utilities.HTMLUtils.ReplaceHtmlEntities(contentText);
+                        
+                        //if image is not a full url, add the base url
+                        if (!image.StartsWith("http"))
+                        {
+                            image = "https://www.carmelcollegegouda.nl" + image;
+                        }
 
-                    model.Add(new InformatieBoordModel(title, subTitle, image, contentText));
+                        model.Add(new InformatieBoordModel(title, subTitle, image, contentText));
+                    }
                 }
-            }
 
-            return View(model);
+                return PartialView(model);
+            }
+            
+            //the request was by a legitimate user, so return the loading view
+            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" + ControllerContext.RouteData.Values["action"];
+            return View("_Loading");
         }
 
         public async Task<IActionResult> Message(string title, string content, string image)
         {
             ViewData["add_css"] = "school";
-
-            return View(new InformatieBoordModel(title, "", image, content));
+            
+            //the request was by ajax, so return the partial view
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView(new InformatieBoordModel(title, "", image, content));
+            }
+            
+            //the request was by a legitimate user, so return the loading view
+            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" + ControllerContext.RouteData.Values["action"];
+            return View("_Loading");
         }
     }
 }

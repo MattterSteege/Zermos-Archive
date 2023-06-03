@@ -8,6 +8,7 @@
     <title>Zermos</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"/>
     <script src="https://kit.fontawesome.com/052f5fa8f8.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="~/js/global.js"></script>
     <link rel="stylesheet" href="~/css/style.css">
@@ -116,11 +117,11 @@
     </div>
 </div>
 
-<main class="main">
+<main class="main" id="main">
     @RenderBody()
 </main>
 
 <script src="~/js/global.js" asp-append-version="true"></script>
-@RenderSection("Scripts", required: false)
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

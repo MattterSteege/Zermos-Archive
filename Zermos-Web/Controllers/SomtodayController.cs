@@ -28,48 +28,58 @@ namespace Zermos_Web.Controllers
 
         public async Task<IActionResult> Cijfers()
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            
             ViewData["add_css"] = "somtoday";
-            user user = await _users.GetUserAsync("8f3e7598-615f-4b43-9705-ba301c6e2fcd");
-
-            string baseUrl = $"https://api.somtoday.nl/rest/v1/resultaten/huidigVoorLeerling/{user.somtoday_student_id}?begintNaOfOp={DateTime.Now:yyyy}-01-01";
-
-            _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
-            _httpClient.DefaultRequestHeaders.Add("Range", "items=0-99");
-            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-
-            var response = await _httpClient.GetAsync(baseUrl);
-
-            var grades = JsonConvert.DeserializeObject<SomtodayGradesModel>(await response.Content.ReadAsStringAsync());
-
-            if (int.TryParse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1], out int total))
+            //the request was by ajax, so return the partial view
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                int requests = (total / 100) * 100;
+                user user = await _users.GetUserAsync("8f3e7598-615f-4b43-9705-ba301c6e2fcd");
 
-                for (int i = 100; i < requests; i += 100)
+                string baseUrl =
+                    $"https://api.somtoday.nl/rest/v1/resultaten/huidigVoorLeerling/{user.somtoday_student_id}?begintNaOfOp={DateTime.Now:yyyy}-01-01";
+
+                _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
+                _httpClient.DefaultRequestHeaders.Add("Range", "items=0-99");
+                _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+
+                var response = await _httpClient.GetAsync(baseUrl);
+
+                var grades =
+                    JsonConvert.DeserializeObject<SomtodayGradesModel>(await response.Content.ReadAsStringAsync());
+
+                if (response.IsSuccessStatusCode == false)
                 {
-                    _httpClient.DefaultRequestHeaders.Clear();
-                    _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
-                    _httpClient.DefaultRequestHeaders.Add("Range", $"items={i}-{i + 99}");
-                    _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-
-                    response = await _httpClient.GetAsync(baseUrl);
-                    var _grades = JsonConvert.DeserializeObject<SomtodayGradesModel>(await response.Content.ReadAsStringAsync());
-                    grades.items.AddRange(_grades.items);
+                    return NotFound("Er is iets fout gegaan bij het ophalen van de cijfers, het is mogelijk dat je SOMtoday token verlopen is.");
                 }
+                
+                if (int.TryParse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1],
+                        out int total))
+                {
+                    int requests = (total / 100) * 100;
+
+                    for (int i = 100; i < requests; i += 100)
+                    {
+                        _httpClient.DefaultRequestHeaders.Clear();
+                        _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
+                        _httpClient.DefaultRequestHeaders.Add("Range", $"items={i}-{i + 99}");
+                        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+
+                        response = await _httpClient.GetAsync(baseUrl);
+                        var _grades =
+                            JsonConvert.DeserializeObject<SomtodayGradesModel>(
+                                await response.Content.ReadAsStringAsync());
+                        grades.items.AddRange(_grades.items);
+                    }
+                }
+
+                return PartialView(Sort(grades));
             }
-            
-            grades = Sort(grades);
-            
-            stopwatch.Stop();
-            TimeSpan timeSpan = stopwatch.Elapsed;
-            Console.WriteLine($"Somtoday grades request took {timeSpan.Seconds}.{timeSpan.Milliseconds} seconds");
-            
-            return View(grades);
+
+            //the request was by a legitimate user, so return the loading view
+            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
+                              ControllerContext.RouteData.Values["action"];
+            return View("_Loading");
         }
-        
+
         public SomtodayGradesModel Sort(SomtodayGradesModel grades)
         {
             grades.items.RemoveAll(x => x.geldendResultaat == null);
