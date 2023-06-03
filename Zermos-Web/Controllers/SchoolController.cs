@@ -64,9 +64,10 @@ namespace Zermos_Web.Controllers
                     }
                 }
 
-                return PartialView(model);
+                return View(model);
             }
             
+            ViewData["laad_tekst"] = "Nieuws word van de het informatieboord gehaald";
             //the request was by a legitimate user, so return the loading view
             ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" + ControllerContext.RouteData.Values["action"];
             return View("_Loading");

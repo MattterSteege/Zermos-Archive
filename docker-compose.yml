@@ -1,0 +1,8 @@
+﻿services:
+  zermos-web:
+    ports:
+      - "32769:3306"
+    image: zermos-web
+    build:
+      context: .
+      dockerfile: Zermos-Web/Dockerfile

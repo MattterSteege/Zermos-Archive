@@ -76,6 +76,9 @@ namespace Infrastructure
 
             if (user.somtoday_access_token != null)
                 userToUpdate.somtoday_access_token = user.somtoday_access_token;
+            
+            if (user.somtoday_refresh_token != null)
+                userToUpdate.somtoday_refresh_token = user.somtoday_refresh_token;
 
             if (user.somtoday_student_id != null)
                 userToUpdate.somtoday_student_id = user.somtoday_student_id;

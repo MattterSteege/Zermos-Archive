@@ -16,5 +16,11 @@ namespace Zermos_Web.Controllers
         {
             return View();
         }
+        
+        public IActionResult Laadscherm()
+        {
+            ViewData["laad_tekst"] = "Bezig met laden";
+            return View("_Loading");
+        }
     }
 }

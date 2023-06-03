@@ -25,15 +25,16 @@ namespace Zermos_Web.Controllers
             _users = users;
         }
 
-        public async Task<IActionResult> Rooster(string year, string week, string settings = "")
+        public async Task<IActionResult> Rooster(string year, string week)
         {
             ViewData["add_css"] = "zermelo";
             //the request was by ajax, so return the partial view
+            
+            year ??= DateTime.Now.Year.ToString();
+            week ??= DateTime.Now.GetWeekNumber().ToString();
+            
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                year ??= DateTime.Now.Year.ToString();
-                week ??= DateTime.Now.GetWeekNumber().ToString();
-
                 var date = year + (week.ToCharArray().Length == 1 ? "0" + week : week);
 
                 user user = await _users.GetUserAsync("8f3e7598-615f-4b43-9705-ba301c6e2fcd");
@@ -47,12 +48,12 @@ namespace Zermos_Web.Controllers
                 using var httpClient = new HttpClient();
                 var response = await httpClient.GetStringAsync(baseURL);
 
-                return PartialView(JsonConvert.DeserializeObject<ZermeloRoosterModel>(response));
+                return View(JsonConvert.DeserializeObject<ZermeloRoosterModel>(response));
             }
 
             //the request was by a legitimate user, so return the loading view
-            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
-                              ControllerContext.RouteData.Values["action"];
+            ViewData["laad_tekst"] = "Je rooster wordt geladen";
+            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" + ControllerContext.RouteData.Values["action"] + "?week=" + week;
             return View("_Loading");
         }
 
