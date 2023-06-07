@@ -1,6 +1,11 @@
-﻿@model object
+﻿@using Zermos_Web.Utilities
+@model Zermos_Web.Models.somtodayHomeworkModel.somtodayHomeworkModel
 
 @{
     ViewBag.Title = "title";
-    Layout = "_Layout";
+}
+
+@foreach (var homework in Model.items)
+{
+    <h1>@homework.lesgroep.vak.naam  -  @HTMLUtils.StripHTML(homework.studiewijzerItem.omschrijving)  -  @homework.datumTijd.ToString("dddd dd-mm-yyyy")</h1>
 }

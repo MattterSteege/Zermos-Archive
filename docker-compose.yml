@@ -1,7 +1,9 @@
 ﻿services:
   zermos-web:
+    container_name: zermos-web
+    restart: unless-stopped
     ports:
-      - "32769:3306"
+      - "32769:80"
     image: zermos-web
     build:
       context: .

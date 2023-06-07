@@ -1,8 +1,5 @@
 ﻿FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
 WORKDIR /app
-# add network port 32769 for docker
-EXPOSE 80
-EXPOSE 443
 EXPOSE 32769
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build

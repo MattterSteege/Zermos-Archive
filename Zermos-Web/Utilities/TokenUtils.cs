@@ -64,5 +64,18 @@ namespace Zermos_Web.Utilities
             var converted = Convert.FromBase64String(output); // Standard base64 decoder
             return converted;
         }
+
+        static readonly Random Random = new Random();
+
+        public static string RandomString(int length = 6)
+        {
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            string result = "";
+            for (int i = 0; i < length; i++)
+                result += chars[Random.Next(0, chars.Length)];
+
+
+            return result;
+        }
     }
 }

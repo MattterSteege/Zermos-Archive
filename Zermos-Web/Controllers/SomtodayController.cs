@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
@@ -14,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zermos_Web.Models;
+using Zermos_Web.Models.SomtodayGradesModel;
+using Zermos_Web.Models.somtodayHomeworkModel;
 using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
@@ -144,6 +141,71 @@ namespace Zermos_Web.Controllers
             grades.items.RemoveAll(x => string.IsNullOrEmpty(x.omschrijving) && x.weging == 0);
             grades.items = grades.items.OrderBy(x => x.datumInvoer).ToList();
             return grades;
+        }
+        #endregion
+
+        #region huiswerk
+
+        public async Task<IActionResult> Huiswerk(bool refresh_token = false)
+        {
+            ViewData["add_css"] = "somtoday";
+            //the request was by ajax, so return the partial view
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                user user = await _users.GetUserAsync("8f3e7598-615f-4b43-9705-ba301c6e2fcd");
+
+                if (TokenUtils.CheckToken(user.somtoday_access_token) == false && refresh_token == false)
+                {
+                    ViewData["redirected_from_loadingpage"] = "true";
+                    ViewData["laad_tekst"] = "Huiswerk wordt opgevraagd nadat je SOMtoday token is ververst";
+                    ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
+                                      ControllerContext.RouteData.Values["action"] + "?refresh_token=true";
+                    return View("_Loading");
+                }
+
+                if (refresh_token)
+                {
+                    await RefreshToken(user.somtoday_refresh_token);
+                    ViewData["redirected_from_loadingpage"] = "true";
+                    ViewData["laad_tekst"] = "SOMtoday token is ververst, huiswerk wordt opgevraagd";
+                    ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
+                                      ControllerContext.RouteData.Values["action"];
+                    return View("_Loading");
+                }
+                
+                string _startDate = DateTime.Now.AddDays(-14).ToString("yyyy-MM-dd");
+                string baseurl = $"https://api.somtoday.nl/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
+                
+                int rangemin = 0;
+                int rangemax = 99;
+                
+                
+                _httpClient.DefaultRequestHeaders.Clear();
+                _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
+                _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+                _httpClient.DefaultRequestHeaders.Add("Range", $"items={rangemin}-{rangemax}");
+                
+                var response = await _httpClient.GetAsync(baseurl);
+                
+                var somtodayHuiswerk = JsonConvert.DeserializeObject<somtodayHomeworkModel>(await response.Content.ReadAsStringAsync());
+                
+                return View(Sort(somtodayHuiswerk));
+            }
+
+            ViewData["laad_tekst"] = "Huiswerk wordt opgevraagd";
+            //the request was by a legitimate user, so return the loading view
+            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
+                              ControllerContext.RouteData.Values["action"];
+            return View("_Loading");
+        }
+        
+        public somtodayHomeworkModel Sort(somtodayHomeworkModel homework)
+        {
+            homework.items = homework.items.OrderBy(x => x.datumTijd).ToList();
+            homework.items.RemoveAll(x => x.studiewijzerItem == null);
+            homework.items.RemoveAll(x=> x.datumTijd < DateTime.Now.AddDays(-14));
+            homework.items.RemoveAll(x=> x.studiewijzerItem.huiswerkType == "LESSTOF");
+            return homework;
         }
         #endregion
 

@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Buffers.Text;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Zermos_Web.Models;
 
 namespace Zermos_Web.Controllers
@@ -73,18 +75,19 @@ namespace Zermos_Web.Controllers
             return View("_Loading");
         }
 
-        public async Task<IActionResult> Message(string title, string content, string image)
+        public async Task<IActionResult> Message(string content)
         {
             ViewData["add_css"] = "school";
             
             //the request was by ajax, so return the partial view
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                return PartialView(new InformatieBoordModel(title, "", image, content));
+                //turn the model into a json string turn it into bytes and encode with base64 but in reverse
+                return View(JsonConvert.DeserializeObject<InformatieBoordModel>(System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(content))));
             }
             
             //the request was by a legitimate user, so return the loading view
-            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" + ControllerContext.RouteData.Values["action"];
+            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" + ControllerContext.RouteData.Values["action"] + "?content=" + content;
             return View("_Loading");
         }
     }

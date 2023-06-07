@@ -4,6 +4,7 @@
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<RootNamespace>Zermos_Web</RootNamespace>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<UserSecretsId>4d40238e-f7f7-4df9-b365-c0b3e33ab656</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -45,6 +46,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
+	  <PackageReference Include="MailKit" Version="4.0.0" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.17">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zermos_Web.Models;
+using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
@@ -75,7 +76,7 @@ namespace Zermos_Web.Controllers
             form.Add("client_id", "OAuthPage");
             form.Add("redirect_uri", "/main/");
             form.Add("scope", "");
-            form.Add("state", RandomStateString());
+            form.Add("state", TokenUtils.RandomString(6));
             form.Add("response_type", "code");
             form.Add("tenant", "ccg");
 
@@ -111,19 +112,6 @@ namespace Zermos_Web.Controllers
             await _users.UpdateUserAsync("8f3e7598-615f-4b43-9705-ba301c6e2fcd", user);
 
             return RedirectToAction("Rooster", "Zermelo");
-        }
-
-        Random random = new Random();
-
-        private string RandomStateString(int length = 6)
-        {
-            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            string result = "";
-            for (int i = 0; i < length; i++)
-                result += chars[random.Next(0, chars.Length)];
-
-
-            return result;
         }
     }
 }

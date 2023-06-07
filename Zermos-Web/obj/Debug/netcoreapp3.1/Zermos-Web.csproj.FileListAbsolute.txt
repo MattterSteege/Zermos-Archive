@@ -121,3 +121,15 @@ C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razo
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Somtoday\Cijfers.cshtml.g.cs
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Loading.cshtml.g.cs
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Somtoday\Inloggen.cshtml.g.cs
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Account\Login.cshtml.g.cs
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Account\Register.cshtml.g.cs
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\BouncyCastle.Cryptography.dll
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\MailKit.dll
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\MimeKit.dll
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\System.Formats.Asn1.dll
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\System.Security.Cryptography.Cng.dll
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\System.Security.Cryptography.Pkcs.dll
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\System.Text.Encoding.CodePages.dll
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Security.Cryptography.Cng.dll
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.1\System.Security.Cryptography.Pkcs.dll
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.1\System.Text.Encoding.CodePages.dll

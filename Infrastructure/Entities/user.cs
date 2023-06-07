@@ -1,4 +1,6 @@
 ﻿// ReSharper disable InconsistentNaming
+
+using System;
 using System.ComponentModel.DataAnnotations;
 
 #nullable disable
@@ -8,7 +10,7 @@ namespace Infrastructure.Entities
     public partial class user
     {
         [Key]
-        public string uuid { get; set; }
+        public string email { get; set; }
         public string name { get; set; }
         public string school_id { get; set; }
         public string school_naam_code { get; set; }
@@ -18,5 +20,11 @@ namespace Infrastructure.Entities
         public string somtoday_student_id { get; set; }
         public string infowijs_access_token { get; set; }
         public string infowijs_session_token { get; set; }
+        
+        //auth related
+        public string? VerificationToken { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? VerifiedAt { get; set; }
+        public bool IsVerified => VerifiedAt.HasValue;
     }
 }

@@ -7,11 +7,21 @@ namespace Zermos_Web.Utilities
 {
     public static class HTMLUtils
     {
+        /// <summary>
+        /// Replaces all HTML entities (h1, p, etc.) in a string with their corresponding characters.
+        /// </summary>
+        /// <param name="input">The string to replace the HTML entities in.</param>
+        /// <returns>The string with the HTML entities replaced.</returns>
         public static string StripHTML(string input)
         {
             return Regex.Replace(input, "<.*?>", String.Empty);
         }
 
+        /// <summary>
+        /// Replaces all HTML entities (&quot;, &amp;, etc.) in a string with their corresponding characters (", &, etc.).
+        /// </summary>
+        /// <param name="htmlText">The string to replace the HTML entities in.</param>
+        /// <returns>The string with the HTML entities replaced.</returns>
         public static string ReplaceHtmlEntities(string htmlText)
         {
             var entityMap = new Dictionary<string, char>
@@ -132,6 +142,11 @@ namespace Zermos_Web.Utilities
             return htmlText ?? "";
         }
 
+        /// <summary>
+        /// Parses a query string into a NameValueCollection.
+        /// </summary>
+        /// <param name="query">the url query string</param>
+        /// <returns>the NameValueCollection containing the query parameters</returns>
         public static NameValueCollection ParseQuery(string query)
         {
             NameValueCollection queryParameters = new NameValueCollection();

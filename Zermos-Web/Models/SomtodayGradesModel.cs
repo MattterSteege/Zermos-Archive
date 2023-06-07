@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Zermos_Web.Models
+namespace Zermos_Web.Models.SomtodayGradesModel
 {
     public class SomtodayGradesModel
     {
