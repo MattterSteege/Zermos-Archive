@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -14,6 +14,7 @@ using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
+    [Authorize]
     public class ZermeloController : Controller
     {
         private readonly ILogger<ZermeloController> _logger;

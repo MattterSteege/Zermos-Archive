@@ -26,5 +26,6 @@ namespace Infrastructure.Entities
         public DateTime? CreatedAt { get; set; }
         public DateTime? VerifiedAt { get; set; }
         public bool IsVerified => VerifiedAt.HasValue;
+        
     }
 }
