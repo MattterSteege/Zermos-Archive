@@ -34,13 +34,13 @@ namespace Infrastructure
         /// <returns>A list of users with the specified uuid.</returns>
         public async Task<user> GetUserAsync(string email)
         {
-            var user = await _context.users.FirstOrDefaultAsync(x => x.email == email.ToLower());
-
-            return await Task.FromResult(user);
+            //detach tracking from entity
+            
+            return await _context.users.FirstOrDefaultAsync(x => x.email == email.ToLower());
         }
         
         /// <summary>
-        /// This method adds a user to the database. Note that the uuid is generated here. So even if you pass a uuid, it will be overwritten.
+        /// This method adds a user to the database.
         /// </summary>
         /// <param name="user">The user object to add to the database.</param>
         public async Task AddUserAsync(user user)

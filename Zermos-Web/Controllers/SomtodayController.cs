@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -15,6 +17,7 @@ using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
+    [Authorize]
     public class SomtodayController : Controller
     {
         private readonly ILogger<SomtodayController> _logger;
@@ -37,8 +40,13 @@ namespace Zermos_Web.Controllers
             //the request was by ajax, so return the partial view
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                user user = await _users.GetUserAsync("8f3e7598-615f-4b43-9705-ba301c6e2fcd");
+                user user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
+                if (user.somtoday_access_token == null)
+                {
+                    return RedirectToAction("Inloggen", "Somtoday");
+                }
+                
                 if (TokenUtils.CheckToken(user.somtoday_access_token) == false && refresh_token == false)
                 {
                     ViewData["redirected_from_loadingpage"] = "true";
@@ -152,8 +160,13 @@ namespace Zermos_Web.Controllers
             //the request was by ajax, so return the partial view
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                user user = await _users.GetUserAsync("8f3e7598-615f-4b43-9705-ba301c6e2fcd");
+                user user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
+                if (user.somtoday_access_token == null)
+                {
+                    return RedirectToAction("Inloggen", "Somtoday");
+                }
+                
                 if (TokenUtils.CheckToken(user.somtoday_access_token) == false && refresh_token == false)
                 {
                     ViewData["redirected_from_loadingpage"] = "true";
@@ -277,7 +290,7 @@ namespace Zermos_Web.Controllers
                 somtoday_refresh_token = somtodayAuthentication.refresh_token
             };
             
-            await _users.UpdateUserAsync("8f3e7598-615f-4b43-9705-ba301c6e2fcd", user);
+            await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
             return RedirectToAction("cijfers", "Somtoday");
         }
 

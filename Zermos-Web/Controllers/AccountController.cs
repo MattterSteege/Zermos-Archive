@@ -33,25 +33,22 @@ namespace Zermos_Web.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> Login(string returnUrl = null)
+        public async Task<IActionResult> Login()
         {
-            return Redirect(returnUrl ?? "/hoofdmenu");
+            return View();
         }
         
         [HttpPost]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login(string email = null)
         {
-            string json = await new StreamReader(Request.Body).ReadToEndAsync();
-            var requestModel = JsonConvert.DeserializeObject<UserRegisterRequestModel>(json);
-
-            var user = await _users.GetUserAsync(requestModel.Email);
-            MimeMessage email;
+            var user = await _users.GetUserAsync(email);
+            MimeMessage mimeMessage;
             SmtpClient smtp;
             if (user == null || user.IsVerified == false)
             {
                 var newUser = new user
                 {
-                    email = requestModel.Email,
+                    email = email,
                     //generate random string for verification token
                     VerificationToken = TokenUtils.RandomString(32),
                     CreatedAt = DateTime.Now
@@ -59,49 +56,50 @@ namespace Zermos_Web.Controllers
 
                 await _users.AddUserAsync(newUser);
 
-                email = new MimeMessage();
-                email.From.Add(MailboxAddress.Parse(_config.GetSection("Email:EmailUsername").Value));
-                email.To.Add(MailboxAddress.Parse(requestModel.Email));
-                email.Subject = "Test Email Subject";
-                email.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+                mimeMessage = new MimeMessage();
+                mimeMessage.From.Add(MailboxAddress.Parse(_config.GetSection("Email:EmailUsername").Value));
+                mimeMessage.To.Add(MailboxAddress.Parse(email));
+                mimeMessage.Subject = "Test Email Subject";
+                mimeMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
                 {
-                    Text = $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/Account/VerifyAccountCreation?token={newUser.VerificationToken}&email={newUser.email}\">hier</a> om je Zermos account te verifiëren. Deze link is 10 minuten geldig."
+                    Text = $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/Account/VerifyAccountCreation?token={newUser.VerificationToken}&email={newUser.email}\">hier</a> om je Zermos account te verifiëren. Deze link is 10 minuten geldig."
                 };
             
                 // send email
                 smtp = new SmtpClient();
                 smtp.Connect(_config.GetSection("Email:EmailHost").Value, 587, SecureSocketOptions.StartTls);
                 await smtp.AuthenticateAsync(_config.GetSection("Email:EmailUsername").Value, _config.GetSection("Email:EmailPassword").Value);
-                await smtp.SendAsync(email);
+                await smtp.SendAsync(mimeMessage);
                 smtp.Disconnect(true);
                 
-                return Ok("User created!");
+                return View(model: 12);
             }
 
             //update user's verification token
             user.VerificationToken = TokenUtils.RandomString(32);
             user.CreatedAt = DateTime.Now;
-            await _users.UpdateUserAsync(requestModel.Email, user);
+            await _users.UpdateUserAsync(email, user);
             
-            email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse(_config.GetSection("Email:EmailUsername").Value));
-            email.To.Add(MailboxAddress.Parse(requestModel.Email));
-            email.Subject = "Test Email Subject";
-            email.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            mimeMessage = new MimeMessage();
+            mimeMessage.From.Add(MailboxAddress.Parse(_config.GetSection("Email:EmailUsername").Value));
+            mimeMessage.To.Add(MailboxAddress.Parse(email));
+            mimeMessage.Subject = "Test Email Subject";
+            mimeMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
             {
-                Text = $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/Account/VerifyAccountLogin?token={user.VerificationToken}&email={user.email}\">hier</a> om in te loggen in je Zermos account. Deze link is 10 minuten geldig."
+                Text = $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/Account/VerifyAccountLogin?token={user.VerificationToken}&email={user.email}\">hier</a> om in te loggen in je Zermos account. Deze link is 10 minuten geldig."
             };
             
             // send email
             smtp = new SmtpClient();
             smtp.Connect(_config.GetSection("Email:EmailHost").Value, 587, SecureSocketOptions.StartTls);
             await smtp.AuthenticateAsync(_config.GetSection("Email:EmailUsername").Value, _config.GetSection("Email:EmailPassword").Value);
-            await smtp.SendAsync(email);
+            await smtp.SendAsync(mimeMessage);
             smtp.Disconnect(true);
             
-            return Ok("Check email voor de login link");
+            return View(model: 11);
         }
         
+        [HttpGet]
         public async Task<IActionResult> VerifyAccountCreation(string token, string email)
         {
             var user = await _users.GetUserAsync(email.ToLower());
@@ -134,6 +132,7 @@ namespace Zermos_Web.Controllers
             return await VerificationSuccess(email.ToLower());
         }
         
+        [HttpGet]
         public async Task<IActionResult> VerifyAccountLogin(string token, string email)
         {
             var user = await _users.GetUserAsync(email.ToLower());
@@ -163,13 +162,13 @@ namespace Zermos_Web.Controllers
         {
             var claims = new List<Claim>
             {
-                new Claim("user", email),
+                new Claim("email", email),
                 new Claim("role", "user")
             };
 
             await HttpContext.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "user", "role")));
             
-            return Redirect(Url.Action("Index", "Hoofdmenu"));
+            return View("Login", model: 13);
         }
         
         [NonAction]
@@ -178,20 +177,19 @@ namespace Zermos_Web.Controllers
             switch (code)
             {
                 case 1:
-                    return BadRequest("User not found");
+                    return View("Login", model: 21);
                 case 2:
-                    return BadRequest("Token expired");
+                    return View("Login", model: 22);
                 case 3:
-                    return BadRequest("Invalid token");
+                    return View("Login", model: 23);
                 case 4:
-                    return BadRequest("User already verified");
+                    return View("Login", model: 24);
                 default:
-                    return BadRequest("Unknown error");
+                    return View("Login", model: 3);
             }
         }
         
         
-        [HttpGet("Logout")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Infrastructure;
@@ -38,9 +39,14 @@ namespace Zermos_Web.Controllers
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 var date = year + (week.ToCharArray().Length == 1 ? "0" + week : week);
+                
+                user user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
-                user user = await _users.GetUserAsync("8f3e7598-615f-4b43-9705-ba301c6e2fcd");
-
+                if (user == null || user.zermelo_access_token == null)
+                {
+                    return RedirectToAction("Inloggen", "Zermelo");
+                }
+                
                 string baseURL = $"https://ccg.zportal.nl/api/v3/liveschedule" +
                                  $"?access_token={user.zermelo_access_token}" +
                                  $"&student={user.school_id}" +
@@ -109,8 +115,8 @@ namespace Zermos_Web.Controllers
 
             var zermeloAuthentication = JsonConvert.DeserializeObject<ZermeloAuthenticatieModel>(responseString);
 
-            user user = new user {zermelo_access_token = zermeloAuthentication.access_token};
-            await _users.UpdateUserAsync("8f3e7598-615f-4b43-9705-ba301c6e2fcd", user);
+            user user = new user {zermelo_access_token = zermeloAuthentication.access_token, school_id = username};
+            await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
 
             return RedirectToAction("Rooster", "Zermelo");
         }

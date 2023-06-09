@@ -1,8 +1,29 @@
-﻿@model object
+﻿@model int
 
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
+    
+    //whem the model is 0, show the login page
+    
+    //when model is 11, say that the email for logging in is send
+    //when model is 12, say that the email for creating an account is send
+    //when model is 13, say that you logged in succesfully
+    
+    //when model is 21, say that the user in not found
+    //when model is 22, say that the verification code is expired
+    //when model is 23, say that the verification code is wrong
+    //when model is 24, say that the user is already verified
+    //when model is 3, say that the error is unknown
+    
+    
+    
 }
 
-<h2>Login</h2>
+<h2>Login: @Model</h2>
+<p>Zermos maakt geen gebruik van wachtwoorden. Je kunt inloggen met je schoolemail.<br>Nadat je je email heb ingevult en op 'inloggen' hebt gedrukt, ontvang je een email met een link om in te loggen, als je nog geen account heb ontvang je een mail om een account aan te maken. Super simpel</p>
+@using (Html.BeginForm("Login", "Account", FormMethod.Post))
+{
+    <input type="text" name="email" placeholder="vul je schoolemail in">
+    <input type="submit" value="Inloggen">
+}
