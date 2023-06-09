@@ -121,6 +121,7 @@ namespace Zermos_Web.Controllers
 
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+            _httpClient.DefaultRequestHeaders.Add("Origin", "https://somtoday.nl");
 
             var form = new Dictionary<string, string>
             {
@@ -140,7 +141,7 @@ namespace Zermos_Web.Controllers
                 somtoday_access_token = somtodayAuthentication.access_token,
                 somtoday_refresh_token = somtodayAuthentication.refresh_token
             };
-            await _users.UpdateUserAsync("8f3e7598-615f-4b43-9705-ba301c6e2fcd", user);
+            await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
         }
 
         public SomtodayGradesModel Sort(SomtodayGradesModel grades)
@@ -162,9 +163,9 @@ namespace Zermos_Web.Controllers
             {
                 user user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
-                if (user.somtoday_access_token == null)
+                if (string.IsNullOrEmpty(user.somtoday_access_token))
                 {
-                    return RedirectToAction("Inloggen", "Somtoday");
+                    return RedirectToAction("Inloggen", "Somtoday"); 
                 }
                 
                 if (TokenUtils.CheckToken(user.somtoday_access_token) == false && refresh_token == false)
@@ -284,14 +285,35 @@ namespace Zermos_Web.Controllers
             SomtodayAuthenticatieModel somtodayAuthentication =
                 JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(response.Content.ReadAsStringAsync().Result);
             
-            user user = new user
+            if (somtodayAuthentication.access_token == null)
             {
-                somtoday_access_token = somtodayAuthentication.access_token,
-                somtoday_refresh_token = somtodayAuthentication.refresh_token
-            };
+                return View("Inloggen");
+            }
+
+            user user = await GetSomtodayStudent(somtodayAuthentication.access_token);
+            user.somtoday_access_token = somtodayAuthentication.access_token;
+            user.somtoday_refresh_token = somtodayAuthentication.refresh_token;
             
             await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
-            return RedirectToAction("cijfers", "Somtoday");
+            return RedirectToAction("Index", "Hoofdmenu");
+        }
+
+        private async Task<user> GetSomtodayStudent(string auth_token)
+        {
+            //GET: https://api.somtoday.nl/rest/v1/leerlingen?additional=pasfoto
+            string baseurl = "https://api.somtoday.nl/rest/v1/leerlingen?additional=pasfoto";
+            
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + auth_token);
+            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+            
+            var response = await _httpClient.GetAsync(baseurl);
+            var somtodayStudent = JsonConvert.DeserializeObject<SomtodayStudentModel>(await response.Content.ReadAsStringAsync());
+            return new user
+            {
+                somtoday_student_id = somtodayStudent.items[0].links[0].id.ToString(),
+                somtoday_student_profile_picture = somtodayStudent.items[0].additionalObjects.pasfoto.datauri
+            };
         }
 
         Random random = new Random();

@@ -18,6 +18,7 @@ namespace Infrastructure.Entities
         public string somtoday_access_token { get; set; }
         public string somtoday_refresh_token { get; set; }
         public string somtoday_student_id { get; set; }
+        public string somtoday_student_profile_picture { get; set; }
         public string infowijs_access_token { get; set; }
         public string infowijs_session_token { get; set; }
         

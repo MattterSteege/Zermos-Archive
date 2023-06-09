@@ -292,7 +292,27 @@ main.main {
   padding-top: 96px;
   overflow-y: auto;
   padding-right: 16px;
-  scrollbar-gutter: stable;
+}
+
+.top-right-profile-picture {
+  width: 48px;
+  height: 48px;
+  border-radius: 1rem;
+  overflow: hidden;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+}
+
+.top-right-profile-picture img {
+  position: absolute;
+  top: -0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: auto;
+  width: 100%;
+  object-fit: cover;
 }
 
 /*change the scrollbar from main.main to have the same padding*/
