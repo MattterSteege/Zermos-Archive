@@ -35,6 +35,7 @@ namespace Zermos_Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Login()
         {
+            ViewData["add_css"] = "account";
             return View();
         }
         
@@ -128,7 +129,7 @@ namespace Zermos_Web.Controllers
             user.CreatedAt = null;
             await _users.UpdateUserAsync(email.ToLower(), user);
             
-            //return Ok("User verified!");
+            ViewData["add_css"] = "account";
             return await VerificationSuccess(email.ToLower());
         }
         
@@ -154,12 +155,14 @@ namespace Zermos_Web.Controllers
             user.VerificationToken = null;
             user.CreatedAt = null;
             await _users.UpdateUserAsync(email.ToLower(), user);
+            ViewData["add_css"] = "account";
             return await VerificationSuccess(email.ToLower());
         }
         
         [NonAction]
         private async Task<IActionResult> VerificationSuccess(string email)
         {
+            ViewData["add_css"] = "account";
             var claims = new List<Claim>
             {
                 new Claim("email", email),
@@ -174,6 +177,7 @@ namespace Zermos_Web.Controllers
         [NonAction]
         private async Task<IActionResult> VerificationFailed(int code)
         {
+            ViewData["add_css"] = "account";
             switch (code)
             {
                 case 1:

@@ -13,8 +13,6 @@
 .main-container .row-1 {
     width: 100%;
     height: 80px;
-    padding-left: 12px;
-    padding-right: 12px;
     margin-bottom: 16px;
 
     /*responsive grid either 4x1 2x2 or 1x4*/
@@ -170,8 +168,6 @@
 .main-container .row-2 {
     width: 100%;
     height: 250px;
-    padding-left: 12px;
-    padding-right: 12px;
     margin-bottom: 16px;
 
     /*responsive grid either 4x1 2x2 or 1x4*/
