@@ -1,19 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Context;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 
 namespace Zermos_Web
 {
@@ -32,12 +24,28 @@ namespace Zermos_Web
             services.AddControllersWithViews();
             services.AddDbContext<ZermosContext>();
             services.AddScoped<Users>();
+            
+            //Make a timespan that spans to the end of next month
+            TimeSpan cookieExpiration = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2) - DateTime.Now;
+            
             services.AddAuthentication("EmailScheme") // Sets the default scheme to cookies
                 .AddCookie("EmailScheme", options =>
                 {
                     options.AccessDeniedPath = "/Account/Denied";
                     options.LoginPath = "/Account/Login";
+                    options.LogoutPath = "/Account/Logout";
+                    options.ExpireTimeSpan = cookieExpiration;
                 });
+            
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+            });
+            
+            services.AddProgressiveWebApp();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +63,8 @@ namespace Zermos_Web
             
             app.UseAuthentication();
             app.UseAuthorization();
+            
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

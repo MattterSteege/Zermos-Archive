@@ -1,4 +1,6 @@
-﻿@model int
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Tuple<string, int>
 
 @{
     ViewBag.Title = "title";
@@ -19,7 +21,12 @@
 //TODO: add the corresponding css file with `ViewData["add_css"] = "account";`
 
 }
-@if (Model == 0)
+
+@{
+    //if Tuple<string, int>'s int is 0, show the login page
+}
+
+@if (Model == null || Model.Item2 == 0)
 {
     <div class="login">
         <div class="login-child">
@@ -32,68 +39,70 @@
         </form>
     </div>
 }
-
-@if (Model == 11)
+else if (Model.Item2 == 11)
 {
     <div class="login">
         <div class="login-child">
             <p class="child">Welkom terug!</p>
-            <p class="child">Er is een e-mail gestuurd naar [email] met een link om in te loggen. Controleer je inbox, en klik op de link om direct toegang te krijgen. Als je de e-mail niet binnen enkele minuten ziet, controleer dan je spam map.</p>
+            <p class="child">Er is een e-mail gestuurd naar <b>@(Model.Item1 ?? "[email]")</b> met een link om in te loggen. Controleer je inbox, en klik op de link om direct toegang te krijgen. Als je de e-mail niet binnen enkele minuten ziet, controleer dan je spam map.</p>
         </div>
     </div>
 }
-
-@if (Model == 12)
+else if (Model.Item2 == 12)
 {
     <div class="login">
         <div class="login-child">
             <p class="child">Welkom bij Zermos!</p>
-            <p class="child">Geweldig! We hebben zojuist een e-mail verzonden naar [email] met de link om een account aan te maken. Ga snel naar je inbox om de e-mail te vinden. Als je de e-mail niet binnen enkele minuten ziet, controleer dan je spam map.</p>
+            <p class="child">Geweldig! We hebben zojuist een e-mail verzonden naar <b>@(Model.Item1 ?? "[email]")</b> met de link om een account aan te maken. Ga snel naar je inbox om de e-mail te vinden. Als je de e-mail niet binnen enkele minuten ziet, controleer dan je spam map.</p>
         </div>
     </div>
 }
-
-@if (Model == 13)
+else if (Model.Item2 == 13)
 {
     <div class="login">
         <div class="login-child">
             <p class="child">Succes!</p>
-            <p class="child">Je bent succesvol ingelogd op je account. Welkom terug, [email]! Je hebt nu volledige toegang tot alle functies en mogelijkheden, mits je ze gekoppeld heb.</p>
+            <p class="child">Je bent succesvol ingelogd op je account. Welkom terug, <b>@(Model.Item1 ?? "[email]")</b>! Je hebt nu volledige toegang tot alle functies en mogelijkheden, mits je ze gekoppeld heb.</p>
         </div>
     </div>
 }
-
-@if (Model == 21)
+else if (Model.Item2 == 21)
 {
-    <div class="checkout">
-        <div class="child1 child">Deze gebruiker is niet gevonden</div>
+    <div class="login">
+        <div class="login-child">
+            <p class="child">Deze gebruiker is niet gevonden.</p>
+        </div>
     </div>
 }
-
-@if (Model == 22)
+else if (Model.Item2 == 22)
 {
-    <div class="checkout">
-        <div class="child1 child">Deze verificatie code is verlopen</div>
+    <div class="login">
+        <div class="login-child">
+            <p class="child">Deze verificatie code is verlopen.</p>
+        </div>
     </div>
 }
-
-@if (Model == 23)
+else if (Model.Item2 == 23)
 {
-    <div class="checkout">
-        <div class="child1 child">Deze verificatie code is niet geldig</div>
+    <div class="login">
+        <div class="login-child">
+            <p class="child">Deze verificatie code is niet geldig.</p>
+        </div>
     </div>
 }
-
-@if (Model == 24)
+else if (Model.Item2 == 24)
 {
-    <div class="checkout">
-        <div class="child1 child">Deze gebruiker is al geverifieerd</div>
+    <div class="login">
+        <div class="login-child">
+            <p class="child">Deze gebruiker is al geverifieerd.</p>
+        </div>
     </div>
 }
-
-@if (Model == 3)
+else
 {
-    <div class="checkout">
-        <div class="child1 child">Deze gebruiker is al geverifieerd</div>
+    <div class="login">
+        <div class="login-child">
+            <p class="child" style="color: #EB3628">Er is een onbekende fout opgetreden?</p>
+        </div>
     </div>
 }

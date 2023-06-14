@@ -293,14 +293,11 @@ body {
 main.main {
   left: 266px;
   transition: 0.3s;
-  width: calc(100% - 282px);
+  width: calc(100% - 266px);
   height: 100%;
   position: fixed;
-  padding-bottom: 16px;
-  padding-top: 96px;
   overflow-y: auto;
-  padding-right: 16px;
-    padding-left: 16px;
+  padding: 96px 16px 16px;
 }
 
 .top-right-profile-picture {

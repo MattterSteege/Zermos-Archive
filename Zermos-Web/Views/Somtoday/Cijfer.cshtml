@@ -1,0 +1,28 @@
+﻿@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Zermos_Web.Utilities
+@model Zermos_Web.Models.SomtodayGradesModel.sortedGrades
+
+@{
+    ViewBag.Title = "title";
+}
+
+<div class="grades-container">
+@{
+    @foreach (var vak in Model.grades)
+    {
+        float geldendResultaat = 0;
+        NumberUtils.TryParseFloat(vak.geldendResultaat, out geldendResultaat);
+        
+        <div class="vak">
+            <a asp-controller="Somtoday" asp-action="Cijfer" asp-route-content="@vak.vak.afkorting">
+                <div class="top-30">
+                    <h1>@vak.vak.naam</h1>
+                    <p>@(vak.weging == 0 ? vak.examenWeging : vak.weging)x</p>
+                    <p class="@(geldendResultaat >= 5.5f ? "sufficient" : "insufficient ")">@(vak.resultaatLabelAfkorting == "V" ? "V" : geldendResultaat.ToString("0.0", CultureInfo.InvariantCulture))</p>
+                </div>
+            </a>
+        </div>
+    }
+}
+</div>

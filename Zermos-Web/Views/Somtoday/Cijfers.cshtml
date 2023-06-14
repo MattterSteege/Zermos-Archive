@@ -1,10 +1,62 @@
-﻿@model Zermos_Web.Models.SomtodayGradesModel.SomtodayGradesModel
+﻿@using Zermos_Web.Models.SomtodayGradesModel
+@using System.Text
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Newtonsoft.Json
+@using System.Globalization
+@model Zermos_Web.Models.SomtodayGradesModel.SomtodayGradesModel
 
 @{
     ViewBag.Title = "title";
+
+    List<sortedGrades> sortedGrades = new List<sortedGrades>();
+    foreach (Zermos_Web.Models.SomtodayGradesModel.Item grade in Model.items)
+    {
+        var vak = sortedGrades.Find(x => x.vak.naam == grade.vak.naam);
+        if (vak == null)
+        {
+            vak = new sortedGrades();
+            vak.vak = grade.vak;
+            vak.grades = new List<Zermos_Web.Models.SomtodayGradesModel.Item>();
+            sortedGrades.Add(vak);
+        }
+        vak.grades.Add(grade);
+    }
+
+    sortedGrades.Sort((x, y) => string.Compare(x.vak.naam.ToLower(), y.vak.naam.ToLower(), StringComparison.Ordinal));
 }
 
-@foreach (var grade in Model.items)
-{
-    <h1>@grade.vak.naam  -  @grade.geldendResultaat  -  @grade.datumInvoer.ToString("dddd dd-mm-yyyy")</h1>
+<div class="grades-container">
+@{
+    @foreach (var vak in sortedGrades)
+    {
+        //turn the model into a json string turn it into bytes and encode with base64
+        var encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(vak)));
+
+        double average = 0;
+        int weight = 0;
+        float Gemiddelde = 0;
+        for (var i = 0; i < vak.grades.Count; i++)
+        {
+            var gradeItem = vak.grades[i];
+            double geldendResultaat = Convert.ToDouble(gradeItem.geldendResultaat);
+            average += geldendResultaat * (gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging);
+            weight += gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging;
+            Gemiddelde = MathF.Round((float) (average / weight), 1, MidpointRounding.AwayFromZero);
+        }
+
+        <div class="vak">
+            <a asp-controller="Somtoday" asp-action="Cijfer" asp-route-content="@encoded">
+                <div class="top-30">
+                    <h1>@vak.vak.naam</h1>
+                    <p>@(weight)x</p>
+                    <p class="@(Gemiddelde >= 5.5f ? "sufficient" : "insufficient ")">@(Gemiddelde.ToString("0.0", CultureInfo.InvariantCulture))</p>
+                </div>
+                <div class="bottom-70">
+                    <p>Laatste cijfer:</p>
+                    <p style="margin-left: 16px;" class="@(Gemiddelde >= 5.5f ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</p>
+                </div>
+            </a>
+        </div>
+    }
 }
+</div>

@@ -1,0 +1,90 @@
+﻿.grades-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(355px, 100% / 5)), 1fr));
+    grid-auto-rows: minmax(244px, auto);
+    grid-auto-flow: row;
+    grid-gap: 16px;
+    color: var(--text-color);
+    font-size: 0.8rem;
+    height: max-content;
+    width: 100%;
+}
+
+/*.top-30 is 30% of the height from the top*/
+.top-30 {
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 30%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+/*first child of .top-30 can have a max width of 75%, the rest is moved to the next line*/
+.top-30 h1 {
+    max-width: 75%;
+    flex-wrap: wrap;
+}
+
+.bottom-70 {
+    position: relative;
+    left: 0;
+    height: 70%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.bottom-70:last-child {
+    margin-left: 16px;
+}
+
+.vak {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 10px;
+    border-radius: 1rem;
+    background: var(--overlay-color);
+    height: auto;
+    min-width: calc(360px);
+    width: 100%;
+    transition: 0.3s ease-in-out;
+}
+
+.vak:hover {
+    background: var(--background-color);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.vak a {
+    text-decoration: none;
+    color: var(--text-color);
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+}
+
+.vak a p {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.vak a h1 {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.sufficient {
+    color: #00ff00;
+}
+
+.insufficient {
+    color: #ff0000;
+}
+

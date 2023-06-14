@@ -2,6 +2,7 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Import Project="$(NuGetPackageRoot)system.text.encodings.web\7.0.0\buildTransitive\netcoreapp2.0\System.Text.Encodings.Web.targets" Condition="Exists('$(NuGetPackageRoot)system.text.encodings.web\7.0.0\buildTransitive\netcoreapp2.0\System.Text.Encodings.Web.targets')" />
+    <Import Project="$(NuGetPackageRoot)system.collections.immutable\7.0.0\buildTransitive\netcoreapp2.0\System.Collections.Immutable.targets" Condition="Exists('$(NuGetPackageRoot)system.collections.immutable\7.0.0\buildTransitive\netcoreapp2.0\System.Collections.Immutable.targets')" />
     <Import Project="$(NuGetPackageRoot)system.text.json\7.0.1\buildTransitive\netcoreapp2.0\System.Text.Json.targets" Condition="Exists('$(NuGetPackageRoot)system.text.json\7.0.1\buildTransitive\netcoreapp2.0\System.Text.Json.targets')" />
     <Import Project="$(NuGetPackageRoot)microsoft.visualstudio.azure.containers.tools.targets\1.18.1\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.visualstudio.azure.containers.tools.targets\1.18.1\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.targets')" />
   </ImportGroup>

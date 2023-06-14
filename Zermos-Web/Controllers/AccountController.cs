@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Infrastructure;
@@ -12,8 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
-using Newtonsoft.Json;
-using Zermos_Web.Models;
 using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
@@ -33,6 +30,13 @@ namespace Zermos_Web.Controllers
         }
         
         [HttpGet]
+        public async Task<IActionResult> LoginTest(int code = 0)
+        {
+            ViewData["add_css"] = "account";
+            return View("Login", model: new Tuple<string, int>("test@email.com", code));
+        }
+        
+        [HttpGet]
         public async Task<IActionResult> Login()
         {
             ViewData["add_css"] = "account";
@@ -42,6 +46,7 @@ namespace Zermos_Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string email = null)
         {
+            ViewData["add_css"] = "account";
             var user = await _users.GetUserAsync(email);
             MimeMessage mimeMessage;
             SmtpClient smtp;
@@ -72,8 +77,8 @@ namespace Zermos_Web.Controllers
                 await smtp.AuthenticateAsync(_config.GetSection("Email:EmailUsername").Value, _config.GetSection("Email:EmailPassword").Value);
                 await smtp.SendAsync(mimeMessage);
                 smtp.Disconnect(true);
-                
-                return View(model: 12);
+
+                return View(model: new Tuple<string, int>(email, 12));
             }
 
             //update user's verification token
@@ -97,7 +102,7 @@ namespace Zermos_Web.Controllers
             await smtp.SendAsync(mimeMessage);
             smtp.Disconnect(true);
             
-            return View(model: 11);
+            return View(model: new Tuple<string, int>(email, 11));
         }
         
         [HttpGet]
@@ -171,7 +176,7 @@ namespace Zermos_Web.Controllers
 
             await HttpContext.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "user", "role")));
             
-            return View("Login", model: 13);
+            return View("Login", model: new Tuple<string, int>(email, 13));
         }
         
         [NonAction]
@@ -181,15 +186,15 @@ namespace Zermos_Web.Controllers
             switch (code)
             {
                 case 1:
-                    return View("Login", model: 21);
+                    return View("Login", model: new Tuple<string, int>(null, 21));
                 case 2:
-                    return View("Login", model: 22);
+                    return View("Login", model: new Tuple<string, int>(null, 22));
                 case 3:
-                    return View("Login", model: 23);
+                    return View("Login", model: new Tuple<string, int>(null, 23));
                 case 4:
-                    return View("Login", model: 24);
+                    return View("Login", model: new Tuple<string, int>(null, 24));
                 default:
-                    return View("Login", model: 3);
+                    return View("Login", model: new Tuple<string, int>(null, 3));
             }
         }
         

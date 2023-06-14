@@ -1,10 +1,35 @@
-﻿services:
+﻿version: '3'
+
+networks:
+  zermos:
+
+services:
+  REDACTED_DATABASE_NAME:
+    container_name: REDACTED_DATABASE_NAME
+    restart: unless-stopped
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=REDACTED_DATABASE_PASSWORD
+    networks:
+      - zermos
+  
   zermos-web:
     container_name: zermos-web
     restart: unless-stopped
-    ports:
-      - "32769:80"
-    image: zermos-web
     build:
       context: .
       dockerfile: Zermos-Web/Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      - REDACTED_DATABASE_NAME
+    environment:
+      - DB_NAME=REDACTED_DATABASE_NAME
+      - DB_USER=root
+      - DB_PASSWORD=REDACTED_DATABASE_PASSWORD
+      - DB_HOST=REDACTED_DATABASE_NAME
+      - DB_PORT=3306
+    networks:
+      - zermos

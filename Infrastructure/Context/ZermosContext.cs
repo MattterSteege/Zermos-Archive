@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Infrastructure.Entities;
 
 #nullable disable
@@ -16,7 +17,12 @@ namespace Infrastructure.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySQL("server=REDACTED_IP_ADRESS;user=root;password=REDACTED_DATABASE_PASSWORD;database=REDACTED_DATABASE_NAME;port=32768;Connect Timeout=5;");
+                string server = Environment.GetEnvironmentVariable("DB_HOST");
+                string port = Environment.GetEnvironmentVariable("DB_PORT");
+                string user = Environment.GetEnvironmentVariable("DB_USER");
+                string password = Environment.GetEnvironmentVariable("DB_PASSWORD");
+                string database = Environment.GetEnvironmentVariable("DB_NAME");
+                optionsBuilder.UseMySQL($"server={server};user={user};password={password};database={database};port={port};Connect Timeout=5;");
             }
         }
     }

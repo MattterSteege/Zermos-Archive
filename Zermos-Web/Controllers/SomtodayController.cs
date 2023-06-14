@@ -99,8 +99,7 @@ namespace Zermos_Web.Controllers
 
                         response = await _httpClient.GetAsync(baseUrl);
                         var _grades =
-                            JsonConvert.DeserializeObject<SomtodayGradesModel>(
-                                await response.Content.ReadAsStringAsync());
+                            JsonConvert.DeserializeObject<SomtodayGradesModel>(await response.Content.ReadAsStringAsync());
                         grades.items.AddRange(_grades.items);
                     }
                 }
@@ -143,12 +142,39 @@ namespace Zermos_Web.Controllers
             };
             await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
         }
+        
+        [AllowAnonymous]
+        public IActionResult Cijfer(string content = null)
+        {
+            ViewData["add_css"] = "somtoday";
+            //the request was by ajax, so return the partial view
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                var a = Convert.FromBase64String(content ?? "");
+                var b = System.Text.Encoding.UTF8.GetString(a);
+                var c = JsonConvert.DeserializeObject<sortedGrades>(b);
+                
+                return View(c);
+            }
+
+            ViewData["laad_tekst"] = "Cijfer worden geladen";
+            //the request was by a legitimate user, so return the loading view
+            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" + ControllerContext.RouteData.Values["action"] + "?content=" + content;
+            return View("_Loading");
+        }
 
         public SomtodayGradesModel Sort(SomtodayGradesModel grades)
         {
-            grades.items.RemoveAll(x => x.geldendResultaat == null);
-            grades.items.RemoveAll(x => string.IsNullOrEmpty(x.omschrijving) && x.weging == 0);
             grades.items = grades.items.OrderBy(x => x.datumInvoer).ToList();
+            foreach (var x in grades.items.Where(x => x.resultaatLabelAfkorting == "V"))
+            {
+                x.geldendResultaat = "7";
+            }
+
+            grades.items.RemoveAll(x => string.IsNullOrEmpty(x.omschrijving) && x.weging == 0);
+            grades.items.RemoveAll(x => x.type == "SamengesteldeToetsKolom");
+            grades.items.RemoveAll(x => x.geldendResultaat == null);
+            
             return grades;
         }
         #endregion

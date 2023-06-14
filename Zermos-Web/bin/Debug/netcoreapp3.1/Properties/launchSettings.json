@@ -20,7 +20,12 @@
       "launchBrowser": false,
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DB_HOST": "REDACTED_IP_ADRESS",
+        "DB_PORT": "32768",
+        "DB_USER": "root",
+        "DB_PASSWORD": "REDACTED_DATABASE_PASSWORD",
+        "DB_NAME": "REDACTED_DATABASE_NAME"
       }
     }
   }
