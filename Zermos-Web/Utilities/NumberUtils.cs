@@ -35,6 +35,14 @@ namespace Zermos_Web.Utilities
             }
         }
         
+        public static float ParseFloat(string input) 
+        {
+            if(TryParseFloat(input, out var result)){
+                return result;
+            }
+            throw new FormatException("Input string was not in a correct format.");
+        }
+        
         public static double RoundApproximate(double dbl, int digits, double margin, MidpointRounding mode)
         {
             double fraction = dbl * Math.Pow(10, digits);

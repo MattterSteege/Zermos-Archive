@@ -24,6 +24,8 @@
     ".NETCoreApp,Version=v3.1": {
       "Zermos-Web/1.0.0": {
         "dependencies": {
+          "ChartJS": "23.1.3",
+          "ChartJSCore": "3.10.0",
           "HtmlAgilityPack": "1.11.46",
           "Infrastructure": "1.0.0",
           "MailKit": "4.0.0",
@@ -316,6 +318,27 @@
           "lib/netstandard2.0/BouncyCastle.Cryptography.dll": {}
         }
       },
+      "ChartJS/23.1.3": {
+        "dependencies": {
+          "jQuery": "3.5.1",
+          "jquery-globalize": "1.1.1"
+        }
+      },
+      "ChartJSCore/3.10.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/ChartJSCore.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.10.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/ChartJSCore.dll": {}
+        }
+      },
+      "cldrjs/0.4.4": {},
       "Google.Protobuf/3.21.9": {
         "dependencies": {
           "System.Memory": "4.5.5",
@@ -348,6 +371,12 @@
             "assemblyVersion": "2.8.0.0",
             "fileVersion": "2.8.26.1919"
           }
+        }
+      },
+      "jQuery/3.5.1": {},
+      "jquery-globalize/1.1.1": {
+        "dependencies": {
+          "cldrjs": "0.4.4"
         }
       },
       "K4os.Compression.LZ4/1.3.5": {
@@ -3916,6 +3945,27 @@
       "path": "bouncycastle.cryptography/2.1.1",
       "hashPath": "bouncycastle.cryptography.2.1.1.nupkg.sha512"
     },
+    "ChartJS/23.1.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-RbOHlw+Co2usNeSCqEDhjBxp+/msqYp/LxWFwzfHfOPMJsvB7jg5a+hnHqC20WfUluT+8xFM//r7QXFkTphx9g==",
+      "path": "chartjs/23.1.3",
+      "hashPath": "chartjs.23.1.3.nupkg.sha512"
+    },
+    "ChartJSCore/3.10.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rQ3oJoID+ZcjkDD92p6/j3PggbtdKbMvxPaUkFF38n7oUpRbMM5DC8qAuvheJLSmyFihzcgJeQsfA9qe6k/LhA==",
+      "path": "chartjscore/3.10.0",
+      "hashPath": "chartjscore.3.10.0.nupkg.sha512"
+    },
+    "cldrjs/0.4.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-QTJ2r9FpA1XOFPRguhHAFjJZZJVil5TFOUCTLpN02BjQtgXgVDpt5VFyxQp/uNwEh0InNWLdIugl2Ls1IBqfXg==",
+      "path": "cldrjs/0.4.4",
+      "hashPath": "cldrjs.0.4.4.nupkg.sha512"
+    },
     "Google.Protobuf/3.21.9": {
       "type": "package",
       "serviceable": true,
@@ -3936,6 +3986,20 @@
       "sha512": "sha512-OiKusGL20vby4uDEswj2IgkdchC1yQ6rwbIkZDVBPIR6al2b7n3pC91elBul9q33KaBgRKhbZH3+2Ur4fnWx2A==",
       "path": "humanizer.core/2.8.26",
       "hashPath": "humanizer.core.2.8.26.nupkg.sha512"
+    },
+    "jQuery/3.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ji6sm/AI0vjASXAA/AG9Yf5ypALAqIDXFFKPHMAnFL8kp3xqULIWhACjg/OXZP88C56frYlIej2nrdBnhTMYQQ==",
+      "path": "jquery/3.5.1",
+      "hashPath": "jquery.3.5.1.nupkg.sha512"
+    },
+    "jquery-globalize/1.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-tkRqYLIONjwamztg1rG+xyh2asA0ARLOPorfF3N9JW8fWr+srtPAeUNLFHF6NZAQ7Avnkzgi2OC505lK5avFag==",
+      "path": "jquery-globalize/1.1.1",
+      "hashPath": "jquery-globalize.1.1.1.nupkg.sha512"
     },
     "K4os.Compression.LZ4/1.3.5": {
       "type": "package",

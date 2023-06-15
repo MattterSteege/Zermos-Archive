@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ChartJSCore.Helpers;
 using Infrastructure;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,7 @@ using Zermos_Web.Models.SomtodayGradesModel;
 using Zermos_Web.Models.somtodayHomeworkModel;
 using Zermos_Web.Utilities;
 using Item = Zermos_Web.Models.SomtodayGradesModel.Item;
+using ChartJSCore.Models;
 
 namespace Zermos_Web.Controllers
 {
@@ -188,6 +190,83 @@ namespace Zermos_Web.Controllers
             return View("_Loading");
         }
 
+        [AllowAnonymous]
+        public IActionResult CijferStatestieken(string content = null)
+        {
+            ViewData["add_css"] = "somtoday";
+            //the request was by ajax, so return the partial view
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                var a = Convert.FromBase64String(content ?? "");
+                var b = System.Text.Encoding.UTF8.GetString(a);
+                var grades = JsonConvert.DeserializeObject<sortedGrades>(b);
+                
+                List<Chart> charts = new List<Chart>();
+
+                #region chart 1
+                Chart chart = new Chart
+                {
+                    Type = Enums.ChartType.Line,
+                    Options =
+                    {
+                        Plugins = new Plugins {Legend = new Legend {Display = false}},
+                        Scales = new Dictionary<string, Scale> {{"y", new Scale {Min = 0, Max = 10}}}
+                    }
+                };
+
+                var dataset = new LineDataset
+                {
+                    Fill = "false",
+                    Data = new List<double?>(),
+                    Tension = 0.2,
+                    BackgroundColor = new List<ChartColor> {ChartColor.FromRgba(75, 192, 192, 0.4)},
+                    BorderColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
+                    BorderCapStyle = "butt",
+                    BorderDash = new List<int> { },
+                    BorderDashOffset = 0.0,
+                    BorderJoinStyle = "miter",
+                    PointBorderColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
+                    PointBackgroundColor = new List<ChartColor> {ChartColor.FromHexString("#ffffff")},
+                    PointBorderWidth = new List<int> {1},
+                    PointHoverRadius = new List<int> {5},
+                    PointHoverBackgroundColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
+                    PointHoverBorderColor = new List<ChartColor> {ChartColor.FromRgb(220, 220, 220)},
+                    PointHoverBorderWidth = new List<int> {2},
+                    PointRadius = new List<int> {1},
+                    PointHitRadius = new List<int> {10},
+                    SpanGaps = false,
+                };
+                
+                Data data = new Data
+                {
+                    Labels = new List<string>()
+                };
+
+                data.Datasets = new List<Dataset>();
+                data.Datasets.Add(dataset);
+                chart.Data = data;
+
+                float gemiddelde = 0;
+                foreach (var grade in grades.grades)
+                {
+                    chart.Data.Datasets[0].Data.Add(NumberUtils.ParseFloat(grade.geldendResultaat));
+                    data.Labels.Add(grade.datumInvoer.ToString("dd-MM"));
+                }
+
+                charts.Add(chart);
+
+                #endregion
+
+                return View(charts);
+            }
+
+            ViewData["laad_tekst"] = "Statestieken berekenen";
+            //the request was by a legitimate user, so return the loading view
+            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
+                              ControllerContext.RouteData.Values["action"] + "?content=" + content;
+            return View("_Loading");
+        }
+
         public SomtodayGradesModel Sort(SomtodayGradesModel grades)
         {
             grades.items = grades.items.OrderBy(x => x.datumInvoer).ToList();
@@ -255,7 +334,8 @@ namespace Zermos_Web.Controllers
                 var response = await _httpClient.GetAsync(baseurl);
 
                 var somtodayHuiswerk =
-                    JsonConvert.DeserializeObject<somtodayHomeworkModel>(await response.Content.ReadAsStringAsync());
+                    JsonConvert.DeserializeObject<somtodayHomeworkModel>(
+                        await response.Content.ReadAsStringAsync());
 
                 return View(Sort(somtodayHuiswerk));
             }
@@ -341,7 +421,8 @@ namespace Zermos_Web.Controllers
                 new FormUrlEncodedContent(new Dictionary<string, string> {{"", ""}}));
 
             SomtodayAuthenticatieModel somtodayAuthentication =
-                JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(response.Content.ReadAsStringAsync().Result);
+                JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(response.Content.ReadAsStringAsync()
+                    .Result);
 
             if (somtodayAuthentication.access_token == null)
             {

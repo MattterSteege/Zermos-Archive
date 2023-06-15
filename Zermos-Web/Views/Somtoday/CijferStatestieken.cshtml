@@ -1,0 +1,31 @@
+﻿@model List<ChartJSCore.Models.Chart>
+
+@{
+    ViewData["Title"] = "Home Page";
+    string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+}
+
+<div class="stats-container">
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        <div class="stats">
+            <canvas display="block" box-sizing="border-box" height="min-content" width="min-content" id="@letters[i]"></canvas>
+        </div>
+    }
+</div>
+
+
+
+
+
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            @Html.Raw(Model[i].CreateChartCode(letters[i].ToString()));
+        }
+    </script>
+}
