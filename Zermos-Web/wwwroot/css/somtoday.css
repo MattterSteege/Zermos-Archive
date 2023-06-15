@@ -74,6 +74,8 @@
 .vak a h1 {
     font-size: 1.2rem;
     font-weight: 700;
+    transition: opacity 0.3s;
+    opacity: 1;
 }
 
 .sufficient {
@@ -103,3 +105,44 @@
     border-radius: 1rem;
 }
 
+.specific-grade .child .top-30 {
+    flex-direction: column;
+    display: unset;
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.background img {
+    position: absolute;
+    top: -1%;
+    left: -1%;
+    height: 102%;
+    width: 102%;
+    border-radius: 1rem;
+    object-fit: cover;
+    object-position: center;
+    background-image: url('../images/statisics line - 1.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 50%;
+    transition: opacity 0.3s;
+    opacity: 0.1;
+}
+
+.vak:hover .background img {
+    transition: opacity 0.3s;
+    opacity: 1;
+}
+
+.vak:hover .fade-out h1 {
+    transition: opacity 0.3s;
+    opacity: 0;
+}

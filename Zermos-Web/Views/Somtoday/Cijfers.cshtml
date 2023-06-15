@@ -26,37 +26,37 @@
 }
 
 <div class="grades-container">
-@{
-    @foreach (var vak in sortedGrades)
-    {
-        //turn the model into a json string turn it into bytes and encode with base64
-        var encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(vak)));
-
-        double average = 0;
-        int weight = 0;
-        float Gemiddelde = 0;
-        for (var i = 0; i < vak.grades.Count; i++)
+    @{
+        @foreach (var vak in sortedGrades)
         {
-            var gradeItem = vak.grades[i];
-            double geldendResultaat = Convert.ToDouble(gradeItem.geldendResultaat);
-            average += geldendResultaat * (gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging);
-            weight += gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging;
-            Gemiddelde = MathF.Round((float) (average / weight), 1, MidpointRounding.AwayFromZero);
-        }
+            //turn the model into a json string turn it into bytes and encode with base64
+            var encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(vak)));
 
-        <div class="vak">
-            <a asp-controller="Somtoday" asp-action="Cijfer" asp-route-content="@encoded">
-                <div class="top-30">
-                    <h1>@vak.vak.naam</h1>
-                    <p>@(weight)x</p>
-                    <p class="@(Gemiddelde >= 5.5f ? "sufficient" : "insufficient ")">@(Gemiddelde.ToString("0.0", CultureInfo.InvariantCulture))</p>
-                </div>
-                <div class="bottom-70">
-                    <p>Laatste cijfer:</p>
-                    <p style="margin-left: 16px;" class="@(Gemiddelde >= 5.5f ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</p>
-                </div>
-            </a>
-        </div>
+            double average = 0;
+            int weight = 0;
+            float Gemiddelde = 0;
+            for (var i = 0; i < vak.grades.Count; i++)
+            {
+                var gradeItem = vak.grades[i];
+                double geldendResultaat = Convert.ToDouble(gradeItem.geldendResultaat);
+                average += geldendResultaat * (gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging);
+                weight += gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging;
+                Gemiddelde = MathF.Round((float) (average / weight), 1, MidpointRounding.AwayFromZero);
+            }
+
+            <div class="vak">
+                <a asp-controller="Somtoday" asp-action="Cijfer" asp-route-content="@encoded">
+                    <div class="top-30">
+                        <h1>@vak.vak.naam</h1>
+                        <p>@(weight)x</p>
+                        <p class="@(Gemiddelde >= 5.5f ? "sufficient" : "insufficient ")">@(Gemiddelde.ToString("0.0", CultureInfo.InvariantCulture))</p>
+                    </div>
+                    <div class="bottom-70">
+                        <p>Laatste cijfer:</p>
+                        <p style="margin-left: 16px;" class="@(Gemiddelde >= 5.5f ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</p>
+                    </div>
+                </a>
+            </div>
+        }
     }
-}
 </div>

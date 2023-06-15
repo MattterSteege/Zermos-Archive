@@ -321,6 +321,33 @@ main.main {
   object-fit: cover;
 }
 
+.backbutton, .forewardbutton {
+  position: absolute;
+  top: 16px;
+  left: 282px;
+  width: 48px;
+  height: 48px;
+  border-radius: 1rem;
+  overflow: hidden;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: var(--overlay-color);
+}
+
+.forewardbutton {
+  left: 346px;
+}
+
+.backbutton i, .forewardbutton i {
+  color: var(--text-color);
+  font-size: 1.5rem;
+}
+
+/*250px + 16px + 16px = 282px*/
+
 /*change the scrollbar from main.main to have the same padding*/
 main.main::-webkit-scrollbar {
   width: 8px;
