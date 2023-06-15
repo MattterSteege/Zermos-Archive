@@ -14,6 +14,7 @@ using Zermos_Web.Models;
 using Zermos_Web.Models.SomtodayGradesModel;
 using Zermos_Web.Models.somtodayHomeworkModel;
 using Zermos_Web.Utilities;
+using Item = Zermos_Web.Models.SomtodayGradesModel.Item;
 
 namespace Zermos_Web.Controllers
 {
@@ -34,6 +35,7 @@ namespace Zermos_Web.Controllers
         }
 
         #region Cijfers
+
         public async Task<IActionResult> Cijfers(bool refresh_token = false)
         {
             ViewData["add_css"] = "somtoday";
@@ -46,7 +48,7 @@ namespace Zermos_Web.Controllers
                 {
                     return RedirectToAction("Inloggen", "Somtoday");
                 }
-                
+
                 if (TokenUtils.CheckToken(user.somtoday_access_token) == false && refresh_token == false)
                 {
                     ViewData["redirected_from_loadingpage"] = "true";
@@ -99,7 +101,8 @@ namespace Zermos_Web.Controllers
 
                         response = await _httpClient.GetAsync(baseUrl);
                         var _grades =
-                            JsonConvert.DeserializeObject<SomtodayGradesModel>(await response.Content.ReadAsStringAsync());
+                            JsonConvert.DeserializeObject<SomtodayGradesModel>(
+                                await response.Content.ReadAsStringAsync());
                         grades.items.AddRange(_grades.items);
                     }
                 }
@@ -142,7 +145,7 @@ namespace Zermos_Web.Controllers
             };
             await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
         }
-        
+
         [AllowAnonymous]
         public IActionResult Cijfer(string content = null)
         {
@@ -153,13 +156,35 @@ namespace Zermos_Web.Controllers
                 var a = Convert.FromBase64String(content ?? "");
                 var b = System.Text.Encoding.UTF8.GetString(a);
                 var c = JsonConvert.DeserializeObject<sortedGrades>(b);
-                
+
                 return View(c);
             }
 
             ViewData["laad_tekst"] = "Cijfer worden geladen";
             //the request was by a legitimate user, so return the loading view
-            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" + ControllerContext.RouteData.Values["action"] + "?content=" + content;
+            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
+                              ControllerContext.RouteData.Values["action"] + "?content=" + content;
+            return View("_Loading");
+        }
+
+        [AllowAnonymous]
+        public IActionResult CijferData(string content = null)
+        {
+            ViewData["add_css"] = "somtoday";
+            //the request was by ajax, so return the partial view
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                var a = Convert.FromBase64String(content ?? "");
+                var b = System.Text.Encoding.UTF8.GetString(a);
+                var c = JsonConvert.DeserializeObject<Item>(b);
+
+                return View(c);
+            }
+
+            ViewData["laad_tekst"] = "Cijfer worden geladen";
+            //the request was by a legitimate user, so return the loading view
+            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
+                              ControllerContext.RouteData.Values["action"] + "?content=" + content;
             return View("_Loading");
         }
 
@@ -174,9 +199,10 @@ namespace Zermos_Web.Controllers
             grades.items.RemoveAll(x => string.IsNullOrEmpty(x.omschrijving) && x.weging == 0);
             grades.items.RemoveAll(x => x.type == "SamengesteldeToetsKolom");
             grades.items.RemoveAll(x => x.geldendResultaat == null);
-            
+
             return grades;
         }
+
         #endregion
 
         #region huiswerk
@@ -191,9 +217,9 @@ namespace Zermos_Web.Controllers
 
                 if (string.IsNullOrEmpty(user.somtoday_access_token))
                 {
-                    return RedirectToAction("Inloggen", "Somtoday"); 
+                    return RedirectToAction("Inloggen", "Somtoday");
                 }
-                
+
                 if (TokenUtils.CheckToken(user.somtoday_access_token) == false && refresh_token == false)
                 {
                     ViewData["redirected_from_loadingpage"] = "true";
@@ -212,23 +238,25 @@ namespace Zermos_Web.Controllers
                                       ControllerContext.RouteData.Values["action"];
                     return View("_Loading");
                 }
-                
+
                 string _startDate = DateTime.Now.AddDays(-14).ToString("yyyy-MM-dd");
-                string baseurl = $"https://api.somtoday.nl/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
-                
+                string baseurl =
+                    $"https://api.somtoday.nl/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
+
                 int rangemin = 0;
                 int rangemax = 99;
-                
-                
+
+
                 _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
                 _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
                 _httpClient.DefaultRequestHeaders.Add("Range", $"items={rangemin}-{rangemax}");
-                
+
                 var response = await _httpClient.GetAsync(baseurl);
-                
-                var somtodayHuiswerk = JsonConvert.DeserializeObject<somtodayHomeworkModel>(await response.Content.ReadAsStringAsync());
-                
+
+                var somtodayHuiswerk =
+                    JsonConvert.DeserializeObject<somtodayHomeworkModel>(await response.Content.ReadAsStringAsync());
+
                 return View(Sort(somtodayHuiswerk));
             }
 
@@ -238,18 +266,20 @@ namespace Zermos_Web.Controllers
                               ControllerContext.RouteData.Values["action"];
             return View("_Loading");
         }
-        
+
         public somtodayHomeworkModel Sort(somtodayHomeworkModel homework)
         {
             homework.items = homework.items.OrderBy(x => x.datumTijd).ToList();
             homework.items.RemoveAll(x => x.studiewijzerItem == null);
-            homework.items.RemoveAll(x=> x.datumTijd < DateTime.Now.AddDays(-14));
-            homework.items.RemoveAll(x=> x.studiewijzerItem.huiswerkType == "LESSTOF");
+            homework.items.RemoveAll(x => x.datumTijd < DateTime.Now.AddDays(-14));
+            homework.items.RemoveAll(x => x.studiewijzerItem.huiswerkType == "LESSTOF");
             return homework;
         }
+
         #endregion
 
         #region inloggen
+
         [HttpGet]
         public IActionResult Inloggen()
         {
@@ -264,53 +294,55 @@ namespace Zermos_Web.Controllers
         {
             //code challenge: __JVhs4cj-iqe8ha5750d9QSWJMpV49SXHPqBgFulkk
             //code verifier: 16BBJMtEJe8blIJY848ROvvO02F5V205l5A10x_DqFE
-            
+
             _httpClientWithoutRedirect.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
 
-            string baseurl = string.Format("https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling://oauth/callback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state={0}&scope=openid&tenant_uuid={1}&session=no_session&code_challenge={2}&code_challenge_method=S256",
-                RandomStateString(), "c23fbb99-be4b-4c11-bbf5-57e7fc4f4388", "__JVhs4cj-iqe8ha5750d9QSWJMpV49SXHPqBgFulkk");
-            
+            string baseurl = string.Format(
+                "https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling://oauth/callback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state={0}&scope=openid&tenant_uuid={1}&session=no_session&code_challenge={2}&code_challenge_method=S256",
+                RandomStateString(), "c23fbb99-be4b-4c11-bbf5-57e7fc4f4388",
+                "__JVhs4cj-iqe8ha5750d9QSWJMpV49SXHPqBgFulkk");
+
             var response = await _httpClientWithoutRedirect.GetAsync(baseurl);
             string authCode = response.Headers.Location.Query.Remove(0, 6);
 
-            
-            
+
             _httpClientWithoutRedirect.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
-            
-            
-            
+
+
             baseurl = "https://inloggen.somtoday.nl/?-1.-panel-signInForm&auth=" + authCode;
-            
+
             var Content = new FormUrlEncodedContent(new Dictionary<string, string>()
             {
                 {"loginLink", "x"},
                 {"usernameFieldPanel:usernameFieldPanel_body:usernameField", username}
             });
-            
+
             await _httpClientWithoutRedirect.PostAsync(baseurl, Content);
 
             baseurl = "https://inloggen.somtoday.nl/login?1-1.-passwordForm&auth=" + authCode;
-            
+
             Content = new FormUrlEncodedContent(new Dictionary<string, string>()
             {
                 {"passwordFieldPanel:passwordFieldPanel_body:passwordField", password},
                 {"loginLink", "x"}
             });
-            
+
             response = await _httpClientWithoutRedirect.PostAsync(baseurl, Content);
-            
+
             string finalAuthCode = HTMLUtils.ParseQuery(response.Headers.Location.Query)["code"];
-            
-            
-            
-            baseurl = "https://inloggen.somtoday.nl/oauth2/token?grant_type=authorization_code&session=no_session&scope=openid&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&code=" + finalAuthCode + "&code_verifier=16BBJMtEJe8blIJY848ROvvO02F5V205l5A10x_DqFE";
-            
-            response = await _httpClientWithoutRedirect.PostAsync(baseurl, new FormUrlEncodedContent(new Dictionary<string, string> {{"", ""}}));
-            
+
+
+            baseurl =
+                "https://inloggen.somtoday.nl/oauth2/token?grant_type=authorization_code&session=no_session&scope=openid&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&code=" +
+                finalAuthCode + "&code_verifier=16BBJMtEJe8blIJY848ROvvO02F5V205l5A10x_DqFE";
+
+            response = await _httpClientWithoutRedirect.PostAsync(baseurl,
+                new FormUrlEncodedContent(new Dictionary<string, string> {{"", ""}}));
+
             SomtodayAuthenticatieModel somtodayAuthentication =
                 JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(response.Content.ReadAsStringAsync().Result);
-            
+
             if (somtodayAuthentication.access_token == null)
             {
                 return View("Inloggen");
@@ -319,7 +351,7 @@ namespace Zermos_Web.Controllers
             user user = await GetSomtodayStudent(somtodayAuthentication.access_token);
             user.somtoday_access_token = somtodayAuthentication.access_token;
             user.somtoday_refresh_token = somtodayAuthentication.refresh_token;
-            
+
             await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
             return RedirectToAction("Index", "Hoofdmenu");
         }
@@ -328,13 +360,14 @@ namespace Zermos_Web.Controllers
         {
             //GET: https://api.somtoday.nl/rest/v1/leerlingen?additional=pasfoto
             string baseurl = "https://api.somtoday.nl/rest/v1/leerlingen?additional=pasfoto";
-            
+
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + auth_token);
             _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-            
+
             var response = await _httpClient.GetAsync(baseurl);
-            var somtodayStudent = JsonConvert.DeserializeObject<SomtodayStudentModel>(await response.Content.ReadAsStringAsync());
+            var somtodayStudent =
+                JsonConvert.DeserializeObject<SomtodayStudentModel>(await response.Content.ReadAsStringAsync());
             return new user
             {
                 somtoday_student_id = somtodayStudent.items[0].links[0].id.ToString(),
@@ -354,6 +387,7 @@ namespace Zermos_Web.Controllers
 
             return result;
         }
+
         #endregion
     }
 }

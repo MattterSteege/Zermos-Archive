@@ -41,6 +41,10 @@ namespace Zermos_Web.Controllers
                     foreach (var element in elements)
                     {
                         string title = element.SelectSingleNode(".//h1[contains(@class, 'text-black')]")?.InnerText ?? "";
+
+                        if (title == "Weerbericht Gouda")
+                            continue;
+                        
                         string subTitle = element.SelectSingleNode(".//h2[contains(@class, 'text-black')]")?.InnerText ?? "";
                         string image = element.SelectSingleNode(".//img")?.Attributes["src"]?.Value ?? "";
 

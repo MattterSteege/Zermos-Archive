@@ -40,10 +40,6 @@
     align-items: center;
 }
 
-.bottom-70:last-child {
-    margin-left: 16px;
-}
-
 .vak {
     position: relative;
     display: grid;
@@ -86,5 +82,24 @@
 
 .insufficient {
     color: #ff0000;
+}
+
+.specific-grade {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    grid-column-gap: 16px;
+    grid-row-gap: 16px;
+    width: 100%;
+    height: 100%;
+}
+
+.specific-grade .child {
+    background: var(--overlay-color);
+    grid-area: 2 / 2 / 10 / 6;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 16px;
+    border-radius: 1rem;
 }
 

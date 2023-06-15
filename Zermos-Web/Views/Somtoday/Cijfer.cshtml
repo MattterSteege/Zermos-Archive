@@ -1,5 +1,7 @@
 ﻿@using System.Globalization
+@using System.Text
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Newtonsoft.Json
 @using Zermos_Web.Utilities
 @model Zermos_Web.Models.SomtodayGradesModel.sortedGrades
 
@@ -8,21 +10,25 @@
 }
 
 <div class="grades-container">
-@{
-    @foreach (var vak in Model.grades)
-    {
-        float geldendResultaat = 0;
-        NumberUtils.TryParseFloat(vak.geldendResultaat, out geldendResultaat);
-        
-        <div class="vak">
-            <a asp-controller="Somtoday" asp-action="Cijfer" asp-route-content="@vak.vak.afkorting">
-                <div class="top-30">
-                    <h1>@vak.vak.naam</h1>
-                    <p>@(vak.weging == 0 ? vak.examenWeging : vak.weging)x</p>
-                    <p class="@(geldendResultaat >= 5.5f ? "sufficient" : "insufficient ")">@(vak.resultaatLabelAfkorting == "V" ? "V" : geldendResultaat.ToString("0.0", CultureInfo.InvariantCulture))</p>
-                </div>
-            </a>
-        </div>
+    @{
+        @foreach (var vak in Model.grades)
+        {
+            float geldendResultaat = 0;
+            NumberUtils.TryParseFloat(vak.geldendResultaat, out geldendResultaat);
+            var encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(vak)));
+
+            <div class="vak">
+                <a asp-controller="Somtoday" asp-action="CijferData" asp-route-content="@encoded">
+                    <div class="top-30">
+                        <h1>@vak.vak.naam</h1>
+                        <p>@(vak.weging == 0 ? vak.examenWeging : vak.weging)x</p>
+                        <p class="@(geldendResultaat >= 5.5f ? "sufficient" : "insufficient ")">@(vak.resultaatLabelAfkorting == "V" ? "V" : geldendResultaat.ToString("0.0", CultureInfo.InvariantCulture))</p>
+                    </div>
+                    <div class="bottom-70">
+                        <p>@vak.omschrijving</p>
+                    </div>
+                </a>
+            </div>
+        }
     }
-}
 </div>

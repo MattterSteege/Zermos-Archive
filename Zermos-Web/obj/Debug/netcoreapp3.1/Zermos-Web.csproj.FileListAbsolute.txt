@@ -150,3 +150,4 @@ C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\NWeb
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\WebEssentials.AspNetCore.Pwa.dll
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zermos-Web.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Somtoday\Cijfer.cshtml.g.cs
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Somtoday\CijferData.cshtml.g.cs
