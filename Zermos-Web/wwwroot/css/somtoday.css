@@ -166,7 +166,7 @@
     grid-gap: 10px;
     border-radius: 1rem;
     background: var(--overlay-color);
-    height: auto;
+    height: 350px;
     min-width: calc(360px);
     width: 100%;
     transition: 0.3s ease-in-out;
@@ -178,6 +178,23 @@
 /*    display dead center*/
     margin: auto;
     width: 100%;
-    height: 100%;
-    
+    max-height: 250px !important;
+    height: auto !important;
+}
+
+/*    <div class="stats">
+        <p class="stats-vak">Vak: Nederlands</p>
+        <p class="gemiddelde">Gemiddelde: 7.891</p>
+        <p class="hoogste-cijfer">Hoogste cijfer: 9.5</p>
+        <p class="laagste-cijfer">Laagste cijfer: 4.5</p>
+    </div>*/
+
+.stats-container .stats .stats-vak {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.stats-container .stats .gemiddelde, .stats-container .stats .hoogste-cijfer, .stats-container .stats .laagste-cijfer {
+    font-size: 1rem;
+    font-weight: 600;
 }

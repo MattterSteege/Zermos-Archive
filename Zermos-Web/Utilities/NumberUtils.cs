@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Zermos_Web.Utilities
@@ -43,6 +44,54 @@ namespace Zermos_Web.Utilities
             throw new FormatException("Input string was not in a correct format.");
         }
         
+        public static IList<double?> CalculateWeightedAverageSnapshots(float[] grades, int[] weights)
+        {
+            if (grades.Length != weights.Length)
+            {
+                throw new ArgumentException("The number of grades must match the number of weights.");
+            }
+
+            IList<double?> snapshots = new List<double?>();
+
+            double sum = 0;
+            double weightSum = 0;
+
+            for (int i = 0; i < grades.Length; i++)
+            {
+                sum += grades[i] * weights[i];
+                weightSum += weights[i];
+
+                double currentAverage = sum / weightSum;
+                snapshots.Add(currentAverage);
+            }
+
+            return snapshots;
+        }
+        
+        public static IList<double?> CalculateStandardDeviationSnapshots(float[] grades, int[] weights)
+        {
+            if (grades.Length != weights.Length)
+            {
+                throw new ArgumentException("The number of grades must match the number of weights.");
+            }
+
+            IList<double?> snapshots = new List<double?>();
+
+            double sum = 0;
+            double weightSum = 0;
+
+            for (int i = 0; i < grades.Length; i++)
+            {
+                sum += grades[i] * weights[i];
+                weightSum += weights[i];
+
+                double currentAverage = sum / weightSum;
+                snapshots.Add(currentAverage);
+            }
+
+            return snapshots;
+        }
+
         public static double RoundApproximate(double dbl, int digits, double margin, MidpointRounding mode)
         {
             double fraction = dbl * Math.Pow(10, digits);

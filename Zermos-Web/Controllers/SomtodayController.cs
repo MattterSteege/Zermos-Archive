@@ -200,62 +200,18 @@ namespace Zermos_Web.Controllers
                 var a = Convert.FromBase64String(content ?? "");
                 var b = System.Text.Encoding.UTF8.GetString(a);
                 var grades = JsonConvert.DeserializeObject<sortedGrades>(b);
+
+                ViewData["stats"] = new Dictionary<string, string>();
+                (ViewData["stats"] as Dictionary<string, string>)?.Add("hoogste", grades.grades.Max(x => x.geldendResultaat).ToString());
+                (ViewData["stats"] as Dictionary<string, string>)?.Add("laagste", grades.grades.Min(x => x.geldendResultaat).ToString());
+                
                 
                 List<Chart> charts = new List<Chart>();
+                charts.Add(GenerateGradeOverTimeAndGradeAverage(grades));
+                charts.Add(GetVoldoendeOndervoldoendeRatio(grades));
+                charts.Add(GetMostCommonGrade(grades));
+                //charts.Add(GetStandardDeviationChart(grades));
 
-                #region chart 1
-                Chart chart = new Chart
-                {
-                    Type = Enums.ChartType.Line,
-                    Options =
-                    {
-                        Plugins = new Plugins {Legend = new Legend {Display = false}},
-                        Scales = new Dictionary<string, Scale> {{"y", new Scale {Min = 0, Max = 10}}}
-                    }
-                };
-
-                var dataset = new LineDataset
-                {
-                    Fill = "false",
-                    Data = new List<double?>(),
-                    Tension = 0.2,
-                    BackgroundColor = new List<ChartColor> {ChartColor.FromRgba(75, 192, 192, 0.4)},
-                    BorderColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
-                    BorderCapStyle = "butt",
-                    BorderDash = new List<int> { },
-                    BorderDashOffset = 0.0,
-                    BorderJoinStyle = "miter",
-                    PointBorderColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
-                    PointBackgroundColor = new List<ChartColor> {ChartColor.FromHexString("#ffffff")},
-                    PointBorderWidth = new List<int> {1},
-                    PointHoverRadius = new List<int> {5},
-                    PointHoverBackgroundColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
-                    PointHoverBorderColor = new List<ChartColor> {ChartColor.FromRgb(220, 220, 220)},
-                    PointHoverBorderWidth = new List<int> {2},
-                    PointRadius = new List<int> {1},
-                    PointHitRadius = new List<int> {10},
-                    SpanGaps = false,
-                };
-                
-                Data data = new Data
-                {
-                    Labels = new List<string>()
-                };
-
-                data.Datasets = new List<Dataset>();
-                data.Datasets.Add(dataset);
-                chart.Data = data;
-
-                float gemiddelde = 0;
-                foreach (var grade in grades.grades)
-                {
-                    chart.Data.Datasets[0].Data.Add(NumberUtils.ParseFloat(grade.geldendResultaat));
-                    data.Labels.Add(grade.datumInvoer.ToString("dd-MM"));
-                }
-
-                charts.Add(chart);
-
-                #endregion
 
                 return View(charts);
             }
@@ -265,6 +221,233 @@ namespace Zermos_Web.Controllers
             ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
                               ControllerContext.RouteData.Values["action"] + "?content=" + content;
             return View("_Loading");
+        }
+
+        private Chart GetMostCommonGrade(sortedGrades grades)
+        {
+            Chart chart = new Chart();
+            chart.Type = Enums.ChartType.Bar;
+
+            Data data = new Data();
+            data.Labels = new List<string>();
+
+            BarDataset dataset = new BarDataset
+            {
+                Data = new List<double?> {12, 19, 3, 5, 2, 3},
+                BackgroundColor = new List<ChartColor>
+                {
+                    ChartColor.FromRgb(75, 192, 192)
+                },
+                BorderColor = new List<ChartColor>
+                {
+                    ChartColor.FromRgb(75, 192, 192)
+                },
+                BorderWidth = new List<int> {1},
+                BarPercentage = 0.5,
+                BarThickness = 6,
+                MaxBarThickness = 8,
+                MinBarLength = 2
+            };
+
+            data.Datasets = new List<Dataset>();
+            data.Datasets.Add(dataset);
+
+            chart.Data = data;
+
+            var options = new Options
+            {
+                Scales = new Dictionary<string, Scale>
+                {
+                    {"y", new CartesianLinearScale {BeginAtZero = true, Ticks = new CartesianLinearTick {StepSize = 1}}},
+                    {"x", new Scale {Grid = new Grid {Offset = true}}},
+                },
+                Plugins = new Plugins
+                {
+                    Legend = new Legend {Display = false}
+                }
+            };
+
+            chart.Options = options;
+
+            chart.Options.Layout = new Layout
+            {
+                Padding = new Padding
+                {
+                    PaddingObject = new PaddingObject
+                    {
+                        Left = 10,
+                        Right = 12
+                    }
+                }
+            };
+
+            //make a list of double? spanning 1 trough 10 and make a list string with the numbers as strings
+            List<double?> doubleList = new List<double?>() {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            List<string> stringList = new List<string> {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+            int index = 0;
+            foreach (Item grade in grades.grades)
+            {
+                index = (int) NumberUtils.ParseFloat(grade.geldendResultaat) - 1;
+
+                if (doubleList[index] == null)
+                {
+                    doubleList[index] = 1;
+                }
+                else
+                {
+                    doubleList[index]++;
+                }
+            }
+
+            //purge all empty values from the lists
+            for (int i = 0; i < doubleList.Count; i++)
+            {
+                if (doubleList[i] == 0)
+                {
+                    doubleList.RemoveAt(i);
+                    stringList.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            dataset.Data = doubleList;
+            data.Labels = stringList;
+
+            return chart;
+        }
+
+        private Chart GetVoldoendeOndervoldoendeRatio(sortedGrades grades)
+        {
+            Chart chart = new Chart {Options = {Plugins = new Plugins {Legend = new Legend {Display = false}}}};
+            chart.Type = Enums.ChartType.Pie;
+
+            Data data = new Data();
+            data.Labels = new List<string>() {"Voldoende", "Onvoldoende"};
+            
+
+            PieDataset dataset = new PieDataset()
+            {
+                BackgroundColor = new List<ChartColor>()
+                {
+                    ChartColor.FromHexString("#00ff00"),
+                    ChartColor.FromHexString("#ff0000"),
+                },
+                HoverBackgroundColor = new List<ChartColor>()
+                {
+                    ChartColor.FromHexString("#00ff00"),
+                    ChartColor.FromHexString("#ff0000"),
+                },
+                Data = new List<double?>()
+            };
+
+            int voldoende = 0;
+            int onvoldoende = 0;
+
+            foreach (var grade in grades.grades)
+            {
+                if (NumberUtils.ParseFloat(grade.geldendResultaat) >= 5.5)
+                    voldoende++;
+                else
+                    onvoldoende++;
+            }
+
+            dataset.Data.Add(voldoende);
+            dataset.Data.Add(onvoldoende);
+
+            data.Datasets = new List<Dataset>();
+            data.Datasets.Add(dataset);
+
+            chart.Data = data;
+
+            return chart;
+        }
+
+        private Chart GenerateGradeOverTimeAndGradeAverage(sortedGrades grades)
+        {
+            Chart GradeOverTimeAndGradeAverage = new Chart
+            {
+                Type = Enums.ChartType.Line,
+                Options =
+                {
+                    Plugins = new Plugins {Legend = new Legend {Display = false}},
+                    Scales = new Dictionary<string, Scale> {{"y", new Scale {Min = 0, Max = 10}}}
+                }
+            };
+
+            var dataset = new LineDataset
+            {
+                Fill = "false",
+                Data = new List<double?>(),
+                Tension = 0.2,
+                BackgroundColor = new List<ChartColor> {ChartColor.FromRgba(75, 192, 192, 0.4)},
+                BorderColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
+                BorderCapStyle = "butt",
+                BorderDash = new List<int> { },
+                BorderDashOffset = 0.0,
+                BorderJoinStyle = "miter",
+                PointBorderColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
+                PointBackgroundColor = new List<ChartColor> {ChartColor.FromHexString("#ffffff")},
+                PointBorderWidth = new List<int> {1},
+                PointHoverRadius = new List<int> {5},
+                PointHoverBackgroundColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
+                PointHoverBorderColor = new List<ChartColor> {ChartColor.FromRgb(220, 220, 220)},
+                PointHoverBorderWidth = new List<int> {2},
+                PointRadius = new List<int> {1},
+                PointHitRadius = new List<int> {10},
+                SpanGaps = false,
+            };
+
+            Data data = new Data
+            {
+                Labels = new List<string>()
+            };
+
+            data.Datasets = new List<Dataset>();
+            data.Datasets.Add(dataset);
+            GradeOverTimeAndGradeAverage.Data = data;
+            
+            float[] gradesArray = new float[grades.grades.Count];
+            int[] gradesWeight = new int[grades.grades.Count];
+            foreach (var grade in grades.grades)
+            {
+                GradeOverTimeAndGradeAverage.Data.Datasets[0].Data.Add(NumberUtils.ParseFloat(grade.geldendResultaat));
+                data.Labels.Add(grade.datumInvoer.ToString("dd-MM"));
+                gradesArray[grades.grades.IndexOf(grade)] = NumberUtils.ParseFloat(grade.geldendResultaat);
+                gradesWeight[grades.grades.IndexOf(grade)] = grade.weging;
+            }
+
+            //average
+            GradeOverTimeAndGradeAverage.Data.Datasets.Add(new LineDataset
+            {
+                Fill = "false",
+                Data = NumberUtils.CalculateWeightedAverageSnapshots(gradesArray, gradesWeight),
+                Tension = 0.2,
+                BackgroundColor = new List<ChartColor> {ChartColor.FromHexString("#F2542D")},
+                BorderColor = new List<ChartColor> {ChartColor.FromHexString("#F2542D")},
+                BorderCapStyle = "butt",
+                BorderDash = new List<int> { },
+                BorderDashOffset = 0.0,
+                BorderJoinStyle = "miter",
+                PointBorderColor = new List<ChartColor> {ChartColor.FromHexString("#F2542D")},
+                PointBackgroundColor = new List<ChartColor> {ChartColor.FromHexString("#ffffff")},
+                PointBorderWidth = new List<int> {1},
+                PointHoverRadius = new List<int> {5},
+                PointHoverBackgroundColor = new List<ChartColor> {ChartColor.FromHexString("#F2542D")},
+                PointHoverBorderColor = new List<ChartColor> {ChartColor.FromRgb(220, 220, 220)},
+                PointHoverBorderWidth = new List<int> {2},
+                PointRadius = new List<int> {1},
+                PointHitRadius = new List<int> {10},
+                SpanGaps = false,
+            });
+
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("gemiddelde", GradeOverTimeAndGradeAverage.Data.Datasets[1].Data[^1]?.ToString("0.000")); 
+
+            return GradeOverTimeAndGradeAverage;
+        }
+        
+        private Chart GetStandardDeviationChart(sortedGrades grades)
+        {
+            return null;
         }
 
         public SomtodayGradesModel Sort(SomtodayGradesModel grades)

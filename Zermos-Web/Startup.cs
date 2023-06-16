@@ -35,6 +35,8 @@ namespace Zermos_Web
                     options.LoginPath = "/Account/Login";
                     options.LogoutPath = "/Account/Logout";
                     options.ExpireTimeSpan = cookieExpiration;
+                    options.Cookie.MaxAge = cookieExpiration;
+                    options.Cookie.IsEssential = true;
                 });
             
             services.AddDistributedMemoryCache();
