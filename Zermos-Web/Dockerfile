@@ -1,4 +1,6 @@
-﻿FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
+﻿ARG DOCKER_HOST=ssh://root@REDACTED_IP_ADRESS
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
 WORKDIR /app
 EXPOSE 80
 

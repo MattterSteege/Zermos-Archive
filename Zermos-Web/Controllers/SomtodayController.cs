@@ -191,83 +191,69 @@ namespace Zermos_Web.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult CijferStatestieken(string content = null)
+        public IActionResult CijferStatestieken(string content = null, bool asPFD = false)
         {
-            ViewData["add_css"] = "somtoday";
-            //the request was by ajax, so return the partial view
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            if (asPFD)
             {
-                var a = Convert.FromBase64String(content ?? "");
-                var b = System.Text.Encoding.UTF8.GetString(a);
-                var grades = JsonConvert.DeserializeObject<sortedGrades>(b);
-
-                ViewData["stats"] = new Dictionary<string, string>();
-                (ViewData["stats"] as Dictionary<string, string>)?.Add("hoogste", grades.grades.Max(x => x.geldendResultaat).ToString());
-                (ViewData["stats"] as Dictionary<string, string>)?.Add("laagste", grades.grades.Min(x => x.geldendResultaat).ToString());
-                
-                
-                List<Chart> charts = new List<Chart>();
-                charts.Add(GenerateGradeOverTimeAndGradeAverage(grades));
-                charts.Add(GetVoldoendeOndervoldoendeRatio(grades));
-                charts.Add(GetMostCommonGrade(grades));
-                //charts.Add(GetStandardDeviationChart(grades));
-
-
-                return View(charts);
+                return View("_Loading");
             }
+            else
+            {
+                ViewData["add_css"] = "somtoday";
+                //the request was by ajax, so return the partial view
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    var a = Convert.FromBase64String(content ?? "");
+                    var b = System.Text.Encoding.UTF8.GetString(a);
+                    var grades = JsonConvert.DeserializeObject<sortedGrades>(b);
 
-            ViewData["laad_tekst"] = "Statestieken berekenen";
-            //the request was by a legitimate user, so return the loading view
-            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
-                              ControllerContext.RouteData.Values["action"] + "?content=" + content;
-            return View("_Loading");
+                    ViewData["stats"] = new Dictionary<string, string>();
+                    (ViewData["stats"] as Dictionary<string, string>)?.Add("vak",
+                        grades.vak.naam);
+                    (ViewData["stats"] as Dictionary<string, string>)?.Add("hoogste",
+                        grades.grades.Max(x => x.geldendResultaat).ToString());
+                    (ViewData["stats"] as Dictionary<string, string>)?.Add("laagste",
+                        grades.grades.Min(x => x.geldendResultaat).ToString());
+
+
+                    List<Chart> charts = new List<Chart>();
+                    charts.Add(GenerateGradeOverTimeAndGradeAverage(grades));
+                    charts.Add(GetVoldoendeOndervoldoendeRatio(grades));
+                    charts.Add(GetMostCommonGrade(grades));
+                    //charts.Add(GetStandardDeviationChart(grades));
+
+
+                    return View(charts);
+                }
+
+                ViewData["laad_tekst"] = "Statestieken berekenen";
+                //the request was by a legitimate user, so return the loading view
+                ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
+                                  ControllerContext.RouteData.Values["action"] + "?content=" + content;
+                return View("_Loading");
+            }
         }
 
-        private Chart GetMostCommonGrade(sortedGrades grades)
+        private Chart CreateChart(string title, bool showHeight = true)
         {
-            Chart chart = new Chart();
-            chart.Type = Enums.ChartType.Bar;
-
-            Data data = new Data();
-            data.Labels = new List<string>();
-
-            BarDataset dataset = new BarDataset
+            var chart = new Chart
             {
-                Data = new List<double?> {12, 19, 3, 5, 2, 3},
-                BackgroundColor = new List<ChartColor>
+                Options = new Options
                 {
-                    ChartColor.FromRgb(75, 192, 192)
-                },
-                BorderColor = new List<ChartColor>
-                {
-                    ChartColor.FromRgb(75, 192, 192)
-                },
-                BorderWidth = new List<int> {1},
-                BarPercentage = 0.5,
-                BarThickness = 6,
-                MaxBarThickness = 8,
-                MinBarLength = 2
-            };
-
-            data.Datasets = new List<Dataset>();
-            data.Datasets.Add(dataset);
-
-            chart.Data = data;
-
-            var options = new Options
-            {
-                Scales = new Dictionary<string, Scale>
-                {
-                    {"y", new CartesianLinearScale {BeginAtZero = true, Ticks = new CartesianLinearTick {StepSize = 1}}},
-                    {"x", new Scale {Grid = new Grid {Offset = true}}},
-                },
-                Plugins = new Plugins
-                {
-                    Legend = new Legend {Display = false}
+                    Scales = new Dictionary<string, Scale>
+                    {
+                        {
+                            "y",
+                            new CartesianLinearScale { BeginAtZero = true, Ticks = new CartesianLinearTick { StepSize = 1 }, Display = showHeight}
+                        },
+                        { "x", new Scale { Grid = new Grid { Offset = true }, Display = showHeight } },
+                    },
+                    Plugins = new Plugins
+                    {
+                        Legend = new Legend { Display = false }
+                    }
                 }
             };
-
-            chart.Options = options;
 
             chart.Options.Layout = new Layout
             {
@@ -281,13 +267,41 @@ namespace Zermos_Web.Controllers
                 }
             };
 
-            //make a list of double? spanning 1 trough 10 and make a list string with the numbers as strings
-            List<double?> doubleList = new List<double?>() {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-            List<string> stringList = new List<string> {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
-            int index = 0;
-            foreach (Item grade in grades.grades)
+            chart.Options.Plugins.Title = new Title { Text = new List<string> { title }, Display = false };
+
+            return chart;
+        }
+
+        private Chart GetMostCommonGrade(sortedGrades grades)
+        {
+            var chart = CreateChart("Meest voorkomende cijfer");
+            chart.Type = Enums.ChartType.Bar;
+
+            var data = new Data();
+            data.Labels = new List<string>();
+
+            var dataset = new BarDataset
             {
-                index = (int) NumberUtils.ParseFloat(grade.geldendResultaat) - 1;
+                Data = new List<double?>(),
+                BackgroundColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
+                BorderColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
+                BorderWidth = new List<int> {1},
+                BarPercentage = 0.5,
+                BarThickness = 6,
+                MaxBarThickness = 8,
+                MinBarLength = 2
+            };
+
+            data.Datasets = new List<Dataset> {dataset};
+            chart.Data = data;
+
+            var doubleList = new List<double?> {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            var stringList = new List<string> {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+
+            foreach (var grade in grades.grades)
+            {
+                var index = (int) Math.Round(NumberUtils.ParseFloat(grade.geldendResultaat), 0,
+                    MidpointRounding.AwayFromZero) - 1;
 
                 if (doubleList[index] == null)
                 {
@@ -299,7 +313,6 @@ namespace Zermos_Web.Controllers
                 }
             }
 
-            //purge all empty values from the lists
             for (int i = 0; i < doubleList.Count; i++)
             {
                 if (doubleList[i] == 0)
@@ -318,25 +331,18 @@ namespace Zermos_Web.Controllers
 
         private Chart GetVoldoendeOndervoldoendeRatio(sortedGrades grades)
         {
-            Chart chart = new Chart {Options = {Plugins = new Plugins {Legend = new Legend {Display = false}}}};
+            var chart = CreateChart("Voldoende/Ondervoldoende Ratio", false);
             chart.Type = Enums.ChartType.Pie;
 
-            Data data = new Data();
-            data.Labels = new List<string>() {"Voldoende", "Onvoldoende"};
-            
+            var data = new Data();
+            data.Labels = new List<string> {"Voldoende", "Onvoldoende"};
 
-            PieDataset dataset = new PieDataset()
+            var dataset = new PieDataset()
             {
-                BackgroundColor = new List<ChartColor>()
-                {
-                    ChartColor.FromHexString("#00ff00"),
-                    ChartColor.FromHexString("#ff0000"),
-                },
-                HoverBackgroundColor = new List<ChartColor>()
-                {
-                    ChartColor.FromHexString("#00ff00"),
-                    ChartColor.FromHexString("#ff0000"),
-                },
+                BackgroundColor = new List<ChartColor>
+                    {ChartColor.FromHexString("#00ff00"), ChartColor.FromHexString("#ff0000")},
+                HoverBackgroundColor = new List<ChartColor>
+                    {ChartColor.FromHexString("#00ff00"), ChartColor.FromHexString("#ff0000")},
                 Data = new List<double?>()
             };
 
@@ -354,9 +360,7 @@ namespace Zermos_Web.Controllers
             dataset.Data.Add(voldoende);
             dataset.Data.Add(onvoldoende);
 
-            data.Datasets = new List<Dataset>();
-            data.Datasets.Add(dataset);
-
+            data.Datasets = new List<Dataset> {dataset};
             chart.Data = data;
 
             return chart;
@@ -364,15 +368,9 @@ namespace Zermos_Web.Controllers
 
         private Chart GenerateGradeOverTimeAndGradeAverage(sortedGrades grades)
         {
-            Chart GradeOverTimeAndGradeAverage = new Chart
-            {
-                Type = Enums.ChartType.Line,
-                Options =
-                {
-                    Plugins = new Plugins {Legend = new Legend {Display = false}},
-                    Scales = new Dictionary<string, Scale> {{"y", new Scale {Min = 0, Max = 10}}}
-                }
-            };
+            var chart = CreateChart("Cijfer en gemiddelde over tijd");
+            chart.Type = Enums.ChartType.Line;
+            chart.Options.Scales["y"] = new Scale {Min = 0, Max = 10};
 
             var dataset = new LineDataset
             {
@@ -382,7 +380,7 @@ namespace Zermos_Web.Controllers
                 BackgroundColor = new List<ChartColor> {ChartColor.FromRgba(75, 192, 192, 0.4)},
                 BorderColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
                 BorderCapStyle = "butt",
-                BorderDash = new List<int> { },
+                BorderDash = new List<int>(),
                 BorderDashOffset = 0.0,
                 BorderJoinStyle = "miter",
                 PointBorderColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
@@ -397,27 +395,26 @@ namespace Zermos_Web.Controllers
                 SpanGaps = false,
             };
 
-            Data data = new Data
+            var data = new Data
             {
                 Labels = new List<string>()
             };
 
-            data.Datasets = new List<Dataset>();
-            data.Datasets.Add(dataset);
-            GradeOverTimeAndGradeAverage.Data = data;
-            
-            float[] gradesArray = new float[grades.grades.Count];
-            int[] gradesWeight = new int[grades.grades.Count];
+            data.Datasets = new List<Dataset> {dataset};
+            chart.Data = data;
+
+            var gradesArray = new float[grades.grades.Count];
+            var gradesWeight = new int[grades.grades.Count];
+
             foreach (var grade in grades.grades)
             {
-                GradeOverTimeAndGradeAverage.Data.Datasets[0].Data.Add(NumberUtils.ParseFloat(grade.geldendResultaat));
+                chart.Data.Datasets[0].Data.Add(NumberUtils.ParseFloat(grade.geldendResultaat));
                 data.Labels.Add(grade.datumInvoer.ToString("dd-MM"));
                 gradesArray[grades.grades.IndexOf(grade)] = NumberUtils.ParseFloat(grade.geldendResultaat);
                 gradesWeight[grades.grades.IndexOf(grade)] = grade.weging;
             }
 
-            //average
-            GradeOverTimeAndGradeAverage.Data.Datasets.Add(new LineDataset
+            chart.Data.Datasets.Add(new LineDataset
             {
                 Fill = "false",
                 Data = NumberUtils.CalculateWeightedAverageSnapshots(gradesArray, gradesWeight),
@@ -425,7 +422,7 @@ namespace Zermos_Web.Controllers
                 BackgroundColor = new List<ChartColor> {ChartColor.FromHexString("#F2542D")},
                 BorderColor = new List<ChartColor> {ChartColor.FromHexString("#F2542D")},
                 BorderCapStyle = "butt",
-                BorderDash = new List<int> { },
+                BorderDash = new List<int>(),
                 BorderDashOffset = 0.0,
                 BorderJoinStyle = "miter",
                 PointBorderColor = new List<ChartColor> {ChartColor.FromHexString("#F2542D")},
@@ -440,11 +437,12 @@ namespace Zermos_Web.Controllers
                 SpanGaps = false,
             });
 
-            (ViewData["stats"] as Dictionary<string, string>)?.Add("gemiddelde", GradeOverTimeAndGradeAverage.Data.Datasets[1].Data[^1]?.ToString("0.000")); 
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("gemiddelde",
+                chart.Data.Datasets[1].Data[^1]?.ToString("0.000"));
 
-            return GradeOverTimeAndGradeAverage;
+            return chart;
         }
-        
+
         private Chart GetStandardDeviationChart(sortedGrades grades)
         {
             return null;
@@ -453,17 +451,20 @@ namespace Zermos_Web.Controllers
         public SomtodayGradesModel Sort(SomtodayGradesModel grades)
         {
             grades.items = grades.items.OrderBy(x => x.datumInvoer).ToList();
-            foreach (var x in grades.items.Where(x => x.resultaatLabelAfkorting == "V"))
-            {
-                x.geldendResultaat = "7";
-            }
 
-            grades.items.RemoveAll(x => string.IsNullOrEmpty(x.omschrijving) && x.weging == 0);
-            grades.items.RemoveAll(x => x.type == "SamengesteldeToetsKolom");
-            grades.items.RemoveAll(x => x.geldendResultaat == null);
+            foreach (var item in grades.items.Where(x => x.resultaatLabelAfkorting == "V"))
+                item.geldendResultaat = "7";
+            
+
+            grades.items = grades.items
+                .Where(x => !(string.IsNullOrEmpty(x.omschrijving) && x.weging == 0))
+                .Where(x => x.type != "SamengesteldeToetsKolom")
+                .Where(x => x.geldendResultaat != null)
+                .ToList();
 
             return grades;
         }
+
 
         #endregion
 
@@ -532,12 +533,16 @@ namespace Zermos_Web.Controllers
 
         public somtodayHomeworkModel Sort(somtodayHomeworkModel homework)
         {
-            homework.items = homework.items.OrderBy(x => x.datumTijd).ToList();
-            homework.items.RemoveAll(x => x.studiewijzerItem == null);
-            homework.items.RemoveAll(x => x.datumTijd < DateTime.Now.AddDays(-14));
-            homework.items.RemoveAll(x => x.studiewijzerItem.huiswerkType == "LESSTOF");
+            DateTime cutoffDate = DateTime.Now.AddDays(-14);
+
+            homework.items = homework.items
+                .Where(x => x.studiewijzerItem != null && x.datumTijd >= cutoffDate && x.studiewijzerItem.huiswerkType != "LESSTOF")
+                .OrderBy(x => x.datumTijd)
+                .ToList();
+
             return homework;
         }
+
 
         #endregion
 

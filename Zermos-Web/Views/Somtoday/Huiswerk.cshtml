@@ -1,11 +1,28 @@
-﻿@using Zermos_Web.Utilities
-@model Zermos_Web.Models.somtodayHomeworkModel.somtodayHomeworkModel
+﻿@model Zermos_Web.Models.somtodayHomeworkModel.somtodayHomeworkModel
 
 @{
     ViewBag.Title = "title";
+
+
+    var groupedHomework = Model.items.GroupBy(item => item.datumTijd.Day);
 }
 
-@foreach (var homework in Model.items)
-{
-    <h1>@homework.lesgroep.vak.naam  -  @HTMLUtils.StripHTML(homework.studiewijzerItem.omschrijving)  -  @homework.datumTijd.ToString("dddd dd-mm-yyyy")</h1>
-}
+<div class="homework-container">
+    @foreach (var dayGroup in groupedHomework)
+    {
+        <div class="homework-day-parent">
+            @foreach (var homeworkItem in dayGroup)
+            {
+                <div class="homeworkItem">
+                    <div class="homeworkItem-top">
+                        <p>@homeworkItem.lesgroep.vak.naam</p>
+                        <p>@(homeworkItem.studiewijzerItem.omschrijving ?? homeworkItem.studiewijzerItem.onderwerp)</p>
+                    </div>
+                    <div class="homeworkItem-bottom">
+                        <p>@homeworkItem.datumTijd.ToString("dddd dd MMMM")</p>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

@@ -7,7 +7,7 @@
 
 <div class="stats-container">
     <div class="stats">
-        <p class="stats-vak">Vak: Nederlands</p>
+        <p class="stats-vak">Vak: @((ViewData["stats"] as Dictionary<string, string>)?["vak"])</p>
         <p class="gemiddelde">Gemiddelde: @((ViewData["stats"] as Dictionary<string, string>)?["gemiddelde"])</p>
         <p class="hoogste-cijfer">Hoogste cijfer: @((ViewData["stats"] as Dictionary<string, string>)?["hoogste"])</p>
         <p class="laagste-cijfer">Laagste cijfer: @((ViewData["stats"] as Dictionary<string, string>)?["laagste"])</p>
@@ -16,11 +16,11 @@
     @for (int i = 0; i < Model.Count; i++)
     {
         <div class="stats">
+            <h1>@(Model[i].Options.Plugins.Title?.Text?[0] ?? "")</h1>
             <canvas display="block" box-sizing="border-box" height="min-content" width="min-content" id="@letters[i]"></canvas>
         </div>
     }
 </div>
-
 
 
 @section Scripts {
@@ -28,7 +28,7 @@
     <script>
         @for (int i = 0; i < Model.Count; i++)
         {
-            @Html.Raw(Model[i].CreateChartCode(letters[i].ToString()));
+            @Html.Raw(Model[i].CreateChartCode(letters[i].ToString()))
         }
     </script>
 }
