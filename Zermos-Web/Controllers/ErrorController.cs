@@ -19,7 +19,7 @@ namespace Zermos_Web.Controllers
             return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
     }
-    
+
     public class ErrorViewModel
     {
         public string RequestId { get; set; }
@@ -27,8 +27,6 @@ namespace Zermos_Web.Controllers
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
     }
 }
-
-
 
 
 /*

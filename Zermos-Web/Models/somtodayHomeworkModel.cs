@@ -4,12 +4,12 @@ using Newtonsoft.Json;
 
 namespace Zermos_Web.Models.somtodayHomeworkModel
 {
-      public class somtodayHomeworkModel
+    public class somtodayHomeworkModel
     {
         public int laatsteWijziging { get; set; }
         public List<Item> items { get; set; }
     }
-    
+
     public class AdditionalObjects
     {
         public SwigemaaktVinkjes swigemaaktVinkjes { get; set; }
@@ -47,8 +47,8 @@ namespace Zermos_Web.Models.somtodayHomeworkModel
 
     public class Item
     {
-        [JsonProperty("$type")]
-        public object type { get; set; }
+        [JsonProperty("$type")] public object type { get; set; }
+
         public List<Link> links { get; set; }
         public List<Permission> permissions { get; set; }
         public AdditionalObjects additionalObjects { get; set; }
@@ -82,8 +82,8 @@ namespace Zermos_Web.Models.somtodayHomeworkModel
 
     public class Leerlingen
     {
-        [JsonProperty("$type")]
-        public object type { get; set; }
+        [JsonProperty("$type")] public object type { get; set; }
+
         public List<Item> items { get; set; }
     }
 
@@ -119,8 +119,8 @@ namespace Zermos_Web.Models.somtodayHomeworkModel
 
     public class Schooljaar
     {
-        [JsonProperty("$type")]
-        public object type { get; set; }
+        [JsonProperty("$type")] public object type { get; set; }
+
         public List<Link> links { get; set; }
         public List<Permission> permissions { get; set; }
         public AdditionalObjects additionalObjects { get; set; }
@@ -151,8 +151,8 @@ namespace Zermos_Web.Models.somtodayHomeworkModel
 
     public class SwigemaaktVinkjes
     {
-        [JsonProperty("$type")]
-        public object type { get; set; }
+        [JsonProperty("$type")] public object type { get; set; }
+
         public List<Item> items { get; set; }
     }
 

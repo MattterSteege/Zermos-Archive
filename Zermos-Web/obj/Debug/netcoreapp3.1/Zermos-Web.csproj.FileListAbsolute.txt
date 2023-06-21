@@ -48,7 +48,6 @@ C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\Syst
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\System.Text.Json.dll
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\appsettings.json
-C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\Zermos-Web.exe
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\Zermos-Web.deps.json
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\Zermos-Web.runtimeconfig.json
@@ -94,12 +93,9 @@ C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\runt
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\krb5_64.dll
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\krbcc64.dll
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Security.Cryptography.Cng.dll
-C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.1\System.Security.Cryptography.Pkcs.dll
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.1\System.Text.Encoding.CodePages.dll
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\Infrastructure.dll
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\Infrastructure.pdb
-C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zermos-Web.csprojAssemblyReference.cache
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zermos-Web.AssemblyInfoInputs.cache
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zermos-Web.AssemblyInfo.cs
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zermos-Web.csproj.CoreCompileInputs.cache
@@ -109,7 +105,6 @@ C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zerm
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zermos-Web.TagHelpers.input.cache
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zermos-Web.TagHelpers.output.cache
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zermos-Web.RazorCoreGenerate.cache
-C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Account\Login.cshtml.g.cs
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Hoofdmenu\index.cshtml.g.cs
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\School\informatieboord.cshtml.g.cs
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\School\message.cshtml.g.cs
@@ -128,7 +123,6 @@ C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zerm
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zermos-Web.Views.pdb
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zermos-Web.csproj.CopyComplete
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\staticwebassets\Zermos-Web.StaticWebAssets.Manifest.cache
-C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\staticwebassets\Zermos-Web.StaticWebAssets.xml
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zermos-Web.dll
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zermos-Web.pdb
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zermos-Web.genruntimeconfig.cache
@@ -153,3 +147,6 @@ C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razo
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Somtoday\CijferData.cshtml.g.cs
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Somtoday\CijferStatestieken.cshtml.g.cs
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\ChartJSCore.dll
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zermos-Web.csproj.AssemblyReference.cache
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zermos-Web.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\AccountAuthentication\Login.cshtml.g.cs

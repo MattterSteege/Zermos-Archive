@@ -11,15 +11,15 @@
     @foreach (var dayGroup in groupedHomework)
     {
         <div class="homework-day-parent">
+            
+            <h1>@(dayGroup.First()?.datumTijd.ToString("dddd dd MMMM") ?? "Geen datum!?")</h1>
+            
             @foreach (var homeworkItem in dayGroup)
             {
                 <div class="homeworkItem">
                     <div class="homeworkItem-top">
                         <p>@homeworkItem.lesgroep.vak.naam</p>
-                        <p>@(homeworkItem.studiewijzerItem.omschrijving ?? homeworkItem.studiewijzerItem.onderwerp)</p>
-                    </div>
-                    <div class="homeworkItem-bottom">
-                        <p>@homeworkItem.datumTijd.ToString("dddd dd MMMM")</p>
+                        <div class="homework-content">@Html.Raw(homeworkItem.studiewijzerItem.omschrijving ?? homeworkItem.studiewijzerItem.onderwerp)</div>
                     </div>
                 </div>
             }

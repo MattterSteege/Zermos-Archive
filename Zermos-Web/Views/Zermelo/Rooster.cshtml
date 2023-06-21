@@ -67,7 +67,7 @@
                         }
                         @for (var i = 0; i < 9; i++)
                         {
-                            if (nextDayBeginsOnIndex < dayAppointments.Count() && dayAppointments.ElementAt(nextDayBeginsOnIndex).startTimeSlotName == lesson.ToString())
+                            if (nextDayBeginsOnIndex < dayAppointments.Count() && dayAppointments.ElementAt(nextDayBeginsOnIndex).appointmentType == "lesson" && dayAppointments.ElementAt(nextDayBeginsOnIndex).startTimeSlotName == lesson.ToString())
                             {
                                 var appointment = dayAppointments.ElementAt(nextDayBeginsOnIndex);
 

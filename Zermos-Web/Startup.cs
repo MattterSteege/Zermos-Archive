@@ -3,6 +3,7 @@ using Infrastructure;
 using Infrastructure.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,10 +25,9 @@ namespace Zermos_Web
             services.AddControllersWithViews();
             services.AddDbContext<ZermosContext>();
             services.AddScoped<Users>();
-            
-            //Make a timespan that spans to the end of next month
-            TimeSpan cookieExpiration = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2) - DateTime.Now;
-            
+
+            var cookieExpiration = TimeSpan.FromDays(60);
+
             services.AddAuthentication("EmailScheme") // Sets the default scheme to cookies
                 .AddCookie("EmailScheme", options =>
                 {
@@ -38,7 +38,7 @@ namespace Zermos_Web
                     options.Cookie.MaxAge = cookieExpiration;
                     options.Cookie.IsEssential = true;
                 });
-            
+
             services.AddDistributedMemoryCache();
 
             services.AddSession(options =>
@@ -46,8 +46,13 @@ namespace Zermos_Web
                 options.IdleTimeout = TimeSpan.FromSeconds(10);
                 options.Cookie.HttpOnly = true;
             });
-            
+
             services.AddProgressiveWebApp();
+
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,24 +60,25 @@ namespace Zermos_Web
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
-            else 
+            else
                 app.UseExceptionHandler("/Error/Error");
-            
-            
+
+            app.UseForwardedHeaders();
+
             app.UseStaticFiles();
 
             app.UseRouting();
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
             app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Hoofdmenu}/{action=Index}/{id?}");
+                    "default",
+                    "{controller=Hoofdmenu}/{action=Index}/{id?}");
             });
         }
     }

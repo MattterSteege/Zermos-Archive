@@ -7,46 +7,44 @@ public static class DateTimeUtils
     {
         return (int) ((DateTimeOffset) dateTime).ToUnixTimeSeconds();
     }
-    
+
     public static DateTime ToDateTime(this int unixTimeStamp)
     {
-        return new DateTime(1970, 1, 1, 1, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimeStamp); 
+        return new DateTime(1970, 1, 1, 1, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimeStamp);
     }
 
     public static DateTime ToDateTime(this long unixTimeStamp)
     {
-        return new DateTime(1970, 1, 1, 1, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimeStamp); 
+        return new DateTime(1970, 1, 1, 1, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimeStamp);
     }
-    
+
     public static DateTime IsDateCloser(this DateTime Current, DateTime New)
     {
         //check which of the dates is closer to the current time, and return that one
         if (Math.Abs((Current - DateTime.Now).TotalSeconds) < Math.Abs((New - DateTime.Now).TotalSeconds))
-        {
             return Current;
-        }
         return New;
     }
-    
+
     public static DateTime GetMondayOfWeek(this DateTime date)
     {
-        int delta = DayOfWeek.Monday - date.DayOfWeek;
+        var delta = DayOfWeek.Monday - date.DayOfWeek;
         if (delta > 0) delta -= 7;
         return date.AddDays(delta).Date;
     }
-    
+
     public static DateTime GetSundayOfWeek(this DateTime date)
     {
-        int delta = DayOfWeek.Sunday - date.DayOfWeek;
+        var delta = DayOfWeek.Sunday - date.DayOfWeek;
         if (delta < 0) delta += 7;
         return date.AddDays(delta);
     }
-    
+
     public static bool IsSameWeek(this DateTime date, DateTime date2)
     {
         return date.GetMondayOfWeek() == date2.GetMondayOfWeek();
     }
-    
+
     // public static int GetWeekOfYear(this DateTime date)
     // {
     //     // Get the day of the year for the date
@@ -72,7 +70,7 @@ public static class DateTimeUtils
     //
     //     return week;
     // }
-    
+
     //when monday is the first day of the week
     public static int GetWeekNumber(this DateTime date)
     {
@@ -81,35 +79,36 @@ public static class DateTimeUtils
         culture.DateTimeFormat.FirstDayOfWeek = DayOfWeek.Monday;
 
         // Calculate the week number using Netherlands (Dutch) calendar rules
-        int weekNum = culture.Calendar.GetWeekOfYear(date, culture.DateTimeFormat.CalendarWeekRule, culture.DateTimeFormat.FirstDayOfWeek);
+        var weekNum = culture.Calendar.GetWeekOfYear(date, culture.DateTimeFormat.CalendarWeekRule,
+            culture.DateTimeFormat.FirstDayOfWeek);
 
         return weekNum;
     }
-    
+
     public static DateTime GetMondayOfWeekAndYear(string week, string year)
     {
-        int weekNumber = int.Parse(week);
-        int yearNumber = int.Parse(year);
+        var weekNumber = int.Parse(week);
+        var yearNumber = int.Parse(year);
 
         // Calculate the date of the first day of the year
-        DateTime jan1 = new DateTime(yearNumber, 1, 1);
+        var jan1 = new DateTime(yearNumber, 1, 1);
 
         // Calculate the date of the first Monday of the year
-        int daysToFirstMonday = (int)DayOfWeek.Monday - (int)jan1.DayOfWeek;
+        var daysToFirstMonday = (int) DayOfWeek.Monday - (int) jan1.DayOfWeek;
         if (daysToFirstMonday < 0) daysToFirstMonday += 7;
-        DateTime firstMonday = jan1.AddDays(daysToFirstMonday);
+        var firstMonday = jan1.AddDays(daysToFirstMonday);
 
         // Calculate the date of the Monday of the specified week and year
-        DateTime result = firstMonday.AddDays((weekNumber - 1) * 7);
+        var result = firstMonday.AddDays((weekNumber - 1) * 7);
         return result;
     }
-    
+
     //diff
     public static TimeSpan GetDateDifference(this DateTime date, DateTime date2)
     {
         return date > date2 ? date - date2 : date2 - date;
     }
-    
+
     //timespan to string
     //ex: 20 min, 1 uur, 1 dag, 2 dagen, 1 week, 2 weken, 1 maand, 2 maanden, 1 jaar, ...
     public static string GetTimeDifferenceString(this TimeSpan diff)
@@ -128,10 +127,12 @@ public static class DateTimeUtils
             return $"{diff.Days / 30} maand{(diff.Days / 30 > 1 ? "en" : "")}";
         return $"{diff.Days / 365} jaar";
     }
-    
+
     public static DateTime ToDayTimeSavingDate(this DateTime date)
     {
-        TimeZoneInfo dutchTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id);
-        return (TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id).IsDaylightSavingTime(date) ? TimeZoneInfo.ConvertTimeFromUtc(date.ToUniversalTime(), dutchTimeZone) : TimeZoneInfo.ConvertTime(date, dutchTimeZone)).AddHours(-1);
+        var dutchTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id);
+        return (TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id).IsDaylightSavingTime(date)
+            ? TimeZoneInfo.ConvertTimeFromUtc(date.ToUniversalTime(), dutchTimeZone)
+            : TimeZoneInfo.ConvertTime(date, dutchTimeZone)).AddHours(-1);
     }
 }

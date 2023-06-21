@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 
@@ -8,17 +7,17 @@ namespace Zermos_Web.Utilities
     public static class HTMLUtils
     {
         /// <summary>
-        /// Replaces all HTML entities (h1, p, etc.) in a string with their corresponding characters.
+        ///     Replaces all HTML entities (h1, p, etc.) in a string with their corresponding characters.
         /// </summary>
         /// <param name="input">The string to replace the HTML entities in.</param>
         /// <returns>The string with the HTML entities replaced.</returns>
         public static string StripHTML(string input)
         {
-            return Regex.Replace(input, "<.*?>", String.Empty);
+            return Regex.Replace(input, "<.*?>", string.Empty);
         }
 
         /// <summary>
-        /// Replaces all HTML entities (&quot;, &amp;, etc.) in a string with their corresponding characters (", &, etc.).
+        ///     Replaces all HTML entities (&quot;, &amp;, etc.) in a string with their corresponding characters (", &, etc.).
         /// </summary>
         /// <param name="htmlText">The string to replace the HTML entities in.</param>
         /// <returns>The string with the HTML entities replaced.</returns>
@@ -124,7 +123,7 @@ namespace Zermos_Web.Utilities
                 {"&uuml;", 'ü'},
                 {"&yacute;", 'ý'},
                 {"&thorn;", 'þ'},
-                {"&yuml;", 'ÿ'},
+                {"&yuml;", 'ÿ'}
             };
 
             var regex = new Regex("(&[A-Za-z]+;)");
@@ -132,36 +131,29 @@ namespace Zermos_Web.Utilities
             var matches = regex.Matches(htmlText ?? "");
 
             foreach (Match match in matches)
-            {
-                if (entityMap.TryGetValue(match.Value, out char replacementChar))
-                {
+                if (entityMap.TryGetValue(match.Value, out var replacementChar))
                     htmlText = htmlText.Replace(match.Value, replacementChar.ToString());
-                }
-            }
 
             return htmlText ?? "";
         }
 
         /// <summary>
-        /// Parses a query string into a NameValueCollection.
+        ///     Parses a query string into a NameValueCollection.
         /// </summary>
         /// <param name="query">the url query string</param>
         /// <returns>the NameValueCollection containing the query parameters</returns>
         public static NameValueCollection ParseQuery(string query)
         {
-            NameValueCollection queryParameters = new NameValueCollection();
+            var queryParameters = new NameValueCollection();
             if (!string.IsNullOrEmpty(query))
             {
-                if (query.StartsWith("?"))
-                {
-                    query = query.Remove(0, 1);
-                }
+                if (query.StartsWith("?")) query = query.Remove(0, 1);
 
-                foreach (string parameter in query.Split('&'))
+                foreach (var parameter in query.Split('&'))
                 {
-                    string[] parts = parameter.Split('=');
-                    string key = parts[0];
-                    string value = parts.Length > 1 ? parts[1] : "";
+                    var parts = parameter.Split('=');
+                    var key = parts[0];
+                    var value = parts.Length > 1 ? parts[1] : "";
                     queryParameters.Add(key, value);
                 }
             }

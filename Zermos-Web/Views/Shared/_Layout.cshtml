@@ -1,5 +1,5 @@
-﻿                @* ReSharper disable Mvc.ControllerNotResolved *@
-                @* ReSharper disable Mvc.ActionNotResolved *@
+﻿@* ReSharper disable Mvc.ControllerNotResolved *@
+@* ReSharper disable Mvc.ActionNotResolved *@
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="~/js/global.js"></script>
     <link rel="stylesheet" href="~/css/style.css">
-    @if(!string.IsNullOrEmpty(ViewData["add_css"]?.ToString()))
+    @if (!string.IsNullOrEmpty(ViewData["add_css"]?.ToString()))
     {
         <link rel="stylesheet" href="~/css/@(ViewData["add_css"]).css">
     }
@@ -105,9 +105,9 @@
                     </div>
                 </a>
             </li>
-            
+
             <li style="display: none" class="hidden-account">
-                <a asp-controller="Account" asp-action="index">
+                <a asp-controller="AccountAuthentication" asp-action="index">
                     <div class="menu-item">
                         <i class="fa-solid fa-user menu-icons fa-fw"></i>
                     </div>
@@ -129,11 +129,11 @@
     <div class="top-right-profile-picture">
         <i class="fa-solid fa-user"></i>
     </div>
-    
+
     <div class="backbutton" onclick="window.history.back()">
         <i class="fa-solid fa-angle-left"></i>
     </div>
-    
+
     <div class="forewardbutton" onclick="window.history.forward()">
         <i class="fa-solid fa-angle-right"></i>
     </div>
@@ -144,6 +144,6 @@
 </main>
 
 <script src="~/js/global.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", required: false)
+@await RenderSectionAsync("Scripts", false)
 </body>
 </html>

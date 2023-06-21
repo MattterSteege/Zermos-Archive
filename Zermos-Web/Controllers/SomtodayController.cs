@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using ChartJSCore.Helpers;
+using ChartJSCore.Models;
 using Infrastructure;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -16,17 +18,16 @@ using Zermos_Web.Models.SomtodayGradesModel;
 using Zermos_Web.Models.somtodayHomeworkModel;
 using Zermos_Web.Utilities;
 using Item = Zermos_Web.Models.SomtodayGradesModel.Item;
-using ChartJSCore.Models;
 
 namespace Zermos_Web.Controllers
 {
     [Authorize]
     public class SomtodayController : Controller
     {
-        private readonly ILogger<SomtodayController> _logger;
-        private readonly Users _users;
         private readonly HttpClient _httpClient;
         private readonly HttpClient _httpClientWithoutRedirect;
+        private readonly ILogger<SomtodayController> _logger;
+        private readonly Users _users;
 
         public SomtodayController(ILogger<SomtodayController> logger, Users users)
         {
@@ -44,12 +45,9 @@ namespace Zermos_Web.Controllers
             //the request was by ajax, so return the partial view
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                user user = await _users.GetUserAsync(User.FindFirstValue("email"));
+                var user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
-                if (user.somtoday_access_token == null)
-                {
-                    return RedirectToAction("Inloggen", "Somtoday");
-                }
+                if (user.somtoday_access_token == null) return RedirectToAction("Inloggen", "Somtoday");
 
                 if (TokenUtils.CheckToken(user.somtoday_access_token) == false && refresh_token == false)
                 {
@@ -71,7 +69,7 @@ namespace Zermos_Web.Controllers
                 }
 
 
-                string baseUrl =
+                var baseUrl =
                     $"https://api.somtoday.nl/rest/v1/resultaten/huidigVoorLeerling/{user.somtoday_student_id}?begintNaOfOp={DateTime.Now:yyyy}-01-01";
 
                 _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
@@ -84,17 +82,15 @@ namespace Zermos_Web.Controllers
                     JsonConvert.DeserializeObject<SomtodayGradesModel>(await response.Content.ReadAsStringAsync());
 
                 if (response.IsSuccessStatusCode == false)
-                {
                     return NotFound(
                         "Er is iets fout gegaan bij het ophalen van de cijfers, het is mogelijk dat je SOMtoday token verlopen is.");
-                }
 
                 if (int.TryParse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1],
-                        out int total))
+                        out var total))
                 {
-                    int requests = (total / 100) * 100;
+                    var requests = total / 100 * 100;
 
-                    for (int i = 100; i < requests; i += 100)
+                    for (var i = 100; i < requests; i += 100)
                     {
                         _httpClient.DefaultRequestHeaders.Clear();
                         _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
@@ -140,7 +136,7 @@ namespace Zermos_Web.Controllers
             var somtodayAuthentication =
                 JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(response.Content.ReadAsStringAsync().Result);
 
-            user user = new user
+            var user = new user
             {
                 somtoday_access_token = somtodayAuthentication.access_token,
                 somtoday_refresh_token = somtodayAuthentication.refresh_token
@@ -156,7 +152,7 @@ namespace Zermos_Web.Controllers
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 var a = Convert.FromBase64String(content ?? "");
-                var b = System.Text.Encoding.UTF8.GetString(a);
+                var b = Encoding.UTF8.GetString(a);
                 var c = JsonConvert.DeserializeObject<sortedGrades>(b);
 
                 return View(c);
@@ -177,7 +173,7 @@ namespace Zermos_Web.Controllers
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 var a = Convert.FromBase64String(content ?? "");
-                var b = System.Text.Encoding.UTF8.GetString(a);
+                var b = Encoding.UTF8.GetString(a);
                 var c = JsonConvert.DeserializeObject<Item>(b);
 
                 return View(c);
@@ -193,45 +189,40 @@ namespace Zermos_Web.Controllers
         [AllowAnonymous]
         public IActionResult CijferStatestieken(string content = null, bool asPFD = false)
         {
-            if (asPFD)
+            if (asPFD) return View("_Loading");
+
+            ViewData["add_css"] = "somtoday";
+            //the request was by ajax, so return the partial view
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                return View("_Loading");
+                var a = Convert.FromBase64String(content ?? "");
+                var b = Encoding.UTF8.GetString(a);
+                var grades = JsonConvert.DeserializeObject<sortedGrades>(b);
+
+                ViewData["stats"] = new Dictionary<string, string>();
+                (ViewData["stats"] as Dictionary<string, string>)?.Add("vak",
+                    grades.vak.naam);
+                (ViewData["stats"] as Dictionary<string, string>)?.Add("hoogste",
+                    grades.grades.Max(x => x.geldendResultaat).ToString());
+                (ViewData["stats"] as Dictionary<string, string>)?.Add("laagste",
+                    grades.grades.Min(x => x.geldendResultaat).ToString());
+
+
+                var charts = new List<Chart>();
+                charts.Add(GenerateGradeOverTimeAndGradeAverage(grades));
+                charts.Add(GetVoldoendeOndervoldoendeRatio(grades));
+                charts.Add(GetMostCommonGrade(grades));
+                //charts.Add(GetStandardDeviationChart(grades));
+
+
+                return View(charts);
             }
-            else
-            {
-                ViewData["add_css"] = "somtoday";
-                //the request was by ajax, so return the partial view
-                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-                {
-                    var a = Convert.FromBase64String(content ?? "");
-                    var b = System.Text.Encoding.UTF8.GetString(a);
-                    var grades = JsonConvert.DeserializeObject<sortedGrades>(b);
 
-                    ViewData["stats"] = new Dictionary<string, string>();
-                    (ViewData["stats"] as Dictionary<string, string>)?.Add("vak",
-                        grades.vak.naam);
-                    (ViewData["stats"] as Dictionary<string, string>)?.Add("hoogste",
-                        grades.grades.Max(x => x.geldendResultaat).ToString());
-                    (ViewData["stats"] as Dictionary<string, string>)?.Add("laagste",
-                        grades.grades.Min(x => x.geldendResultaat).ToString());
-
-
-                    List<Chart> charts = new List<Chart>();
-                    charts.Add(GenerateGradeOverTimeAndGradeAverage(grades));
-                    charts.Add(GetVoldoendeOndervoldoendeRatio(grades));
-                    charts.Add(GetMostCommonGrade(grades));
-                    //charts.Add(GetStandardDeviationChart(grades));
-
-
-                    return View(charts);
-                }
-
-                ViewData["laad_tekst"] = "Statestieken berekenen";
-                //the request was by a legitimate user, so return the loading view
-                ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
-                                  ControllerContext.RouteData.Values["action"] + "?content=" + content;
-                return View("_Loading");
-            }
+            ViewData["laad_tekst"] = "Statestieken berekenen";
+            //the request was by a legitimate user, so return the loading view
+            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
+                              ControllerContext.RouteData.Values["action"] + "?content=" + content;
+            return View("_Loading");
         }
 
         private Chart CreateChart(string title, bool showHeight = true)
@@ -244,13 +235,16 @@ namespace Zermos_Web.Controllers
                     {
                         {
                             "y",
-                            new CartesianLinearScale { BeginAtZero = true, Ticks = new CartesianLinearTick { StepSize = 1 }, Display = showHeight}
+                            new CartesianLinearScale
+                            {
+                                BeginAtZero = true, Ticks = new CartesianLinearTick {StepSize = 1}, Display = showHeight
+                            }
                         },
-                        { "x", new Scale { Grid = new Grid { Offset = true }, Display = showHeight } },
+                        {"x", new Scale {Grid = new Grid {Offset = true}, Display = showHeight}}
                     },
                     Plugins = new Plugins
                     {
-                        Legend = new Legend { Display = false }
+                        Legend = new Legend {Display = false}
                     }
                 }
             };
@@ -267,7 +261,7 @@ namespace Zermos_Web.Controllers
                 }
             };
 
-            chart.Options.Plugins.Title = new Title { Text = new List<string> { title }, Display = false };
+            chart.Options.Plugins.Title = new Title {Text = new List<string> {title}, Display = false};
 
             return chart;
         }
@@ -304,24 +298,18 @@ namespace Zermos_Web.Controllers
                     MidpointRounding.AwayFromZero) - 1;
 
                 if (doubleList[index] == null)
-                {
                     doubleList[index] = 1;
-                }
                 else
-                {
                     doubleList[index]++;
-                }
             }
 
-            for (int i = 0; i < doubleList.Count; i++)
-            {
+            for (var i = 0; i < doubleList.Count; i++)
                 if (doubleList[i] == 0)
                 {
                     doubleList.RemoveAt(i);
                     stringList.RemoveAt(i);
                     i--;
                 }
-            }
 
             dataset.Data = doubleList;
             data.Labels = stringList;
@@ -337,7 +325,7 @@ namespace Zermos_Web.Controllers
             var data = new Data();
             data.Labels = new List<string> {"Voldoende", "Onvoldoende"};
 
-            var dataset = new PieDataset()
+            var dataset = new PieDataset
             {
                 BackgroundColor = new List<ChartColor>
                     {ChartColor.FromHexString("#00ff00"), ChartColor.FromHexString("#ff0000")},
@@ -346,16 +334,14 @@ namespace Zermos_Web.Controllers
                 Data = new List<double?>()
             };
 
-            int voldoende = 0;
-            int onvoldoende = 0;
+            var voldoende = 0;
+            var onvoldoende = 0;
 
             foreach (var grade in grades.grades)
-            {
                 if (NumberUtils.ParseFloat(grade.geldendResultaat) >= 5.5)
                     voldoende++;
                 else
                     onvoldoende++;
-            }
 
             dataset.Data.Add(voldoende);
             dataset.Data.Add(onvoldoende);
@@ -392,7 +378,7 @@ namespace Zermos_Web.Controllers
                 PointHoverBorderWidth = new List<int> {2},
                 PointRadius = new List<int> {1},
                 PointHitRadius = new List<int> {10},
-                SpanGaps = false,
+                SpanGaps = false
             };
 
             var data = new Data
@@ -434,7 +420,7 @@ namespace Zermos_Web.Controllers
                 PointHoverBorderWidth = new List<int> {2},
                 PointRadius = new List<int> {1},
                 PointHitRadius = new List<int> {10},
-                SpanGaps = false,
+                SpanGaps = false
             });
 
             (ViewData["stats"] as Dictionary<string, string>)?.Add("gemiddelde",
@@ -454,7 +440,7 @@ namespace Zermos_Web.Controllers
 
             foreach (var item in grades.items.Where(x => x.resultaatLabelAfkorting == "V"))
                 item.geldendResultaat = "7";
-            
+
 
             grades.items = grades.items
                 .Where(x => !(string.IsNullOrEmpty(x.omschrijving) && x.weging == 0))
@@ -464,7 +450,6 @@ namespace Zermos_Web.Controllers
 
             return grades;
         }
-
 
         #endregion
 
@@ -476,12 +461,9 @@ namespace Zermos_Web.Controllers
             //the request was by ajax, so return the partial view
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                user user = await _users.GetUserAsync(User.FindFirstValue("email"));
+                var user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
-                if (string.IsNullOrEmpty(user.somtoday_access_token))
-                {
-                    return RedirectToAction("Inloggen", "Somtoday");
-                }
+                if (string.IsNullOrEmpty(user.somtoday_access_token)) return RedirectToAction("Inloggen", "Somtoday");
 
                 if (TokenUtils.CheckToken(user.somtoday_access_token) == false && refresh_token == false)
                 {
@@ -502,12 +484,12 @@ namespace Zermos_Web.Controllers
                     return View("_Loading");
                 }
 
-                string _startDate = DateTime.Now.AddDays(-14).ToString("yyyy-MM-dd");
-                string baseurl =
+                var _startDate = DateTime.Now.AddDays(-14).ToString("yyyy-MM-dd");
+                var baseurl =
                     $"https://api.somtoday.nl/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
 
-                int rangemin = 0;
-                int rangemax = 99;
+                var rangemin = 0;
+                var rangemax = 99;
 
 
                 _httpClient.DefaultRequestHeaders.Clear();
@@ -533,16 +515,16 @@ namespace Zermos_Web.Controllers
 
         public somtodayHomeworkModel Sort(somtodayHomeworkModel homework)
         {
-            DateTime cutoffDate = DateTime.Now.AddDays(-14);
+            var cutoffDate = DateTime.Now.AddDays(-14);
 
             homework.items = homework.items
-                .Where(x => x.studiewijzerItem != null && x.datumTijd >= cutoffDate && x.studiewijzerItem.huiswerkType != "LESSTOF")
+                .Where(x => x.studiewijzerItem != null && x.datumTijd >= cutoffDate &&
+                            x.studiewijzerItem.huiswerkType != "LESSTOF")
                 .OrderBy(x => x.datumTijd)
                 .ToList();
 
             return homework;
         }
-
 
         #endregion
 
@@ -566,13 +548,13 @@ namespace Zermos_Web.Controllers
             _httpClientWithoutRedirect.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
 
-            string baseurl = string.Format(
+            var baseurl = string.Format(
                 "https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling://oauth/callback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state={0}&scope=openid&tenant_uuid={1}&session=no_session&code_challenge={2}&code_challenge_method=S256",
                 RandomStateString(), "c23fbb99-be4b-4c11-bbf5-57e7fc4f4388",
                 "__JVhs4cj-iqe8ha5750d9QSWJMpV49SXHPqBgFulkk");
 
             var response = await _httpClientWithoutRedirect.GetAsync(baseurl);
-            string authCode = response.Headers.Location.Query.Remove(0, 6);
+            var authCode = response.Headers.Location.Query.Remove(0, 6);
 
 
             _httpClientWithoutRedirect.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
@@ -580,7 +562,7 @@ namespace Zermos_Web.Controllers
 
             baseurl = "https://inloggen.somtoday.nl/?-1.-panel-signInForm&auth=" + authCode;
 
-            var Content = new FormUrlEncodedContent(new Dictionary<string, string>()
+            var Content = new FormUrlEncodedContent(new Dictionary<string, string>
             {
                 {"loginLink", "x"},
                 {"usernameFieldPanel:usernameFieldPanel_body:usernameField", username}
@@ -590,7 +572,7 @@ namespace Zermos_Web.Controllers
 
             baseurl = "https://inloggen.somtoday.nl/login?1-1.-passwordForm&auth=" + authCode;
 
-            Content = new FormUrlEncodedContent(new Dictionary<string, string>()
+            Content = new FormUrlEncodedContent(new Dictionary<string, string>
             {
                 {"passwordFieldPanel:passwordFieldPanel_body:passwordField", password},
                 {"loginLink", "x"}
@@ -598,7 +580,7 @@ namespace Zermos_Web.Controllers
 
             response = await _httpClientWithoutRedirect.PostAsync(baseurl, Content);
 
-            string finalAuthCode = HTMLUtils.ParseQuery(response.Headers.Location.Query)["code"];
+            var finalAuthCode = HTMLUtils.ParseQuery(response.Headers.Location.Query)["code"];
 
 
             baseurl =
@@ -608,16 +590,13 @@ namespace Zermos_Web.Controllers
             response = await _httpClientWithoutRedirect.PostAsync(baseurl,
                 new FormUrlEncodedContent(new Dictionary<string, string> {{"", ""}}));
 
-            SomtodayAuthenticatieModel somtodayAuthentication =
+            var somtodayAuthentication =
                 JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(response.Content.ReadAsStringAsync()
                     .Result);
 
-            if (somtodayAuthentication.access_token == null)
-            {
-                return View("Inloggen");
-            }
+            if (somtodayAuthentication.access_token == null) return View("Inloggen");
 
-            user user = await GetSomtodayStudent(somtodayAuthentication.access_token);
+            var user = await GetSomtodayStudent(somtodayAuthentication.access_token);
             user.somtoday_access_token = somtodayAuthentication.access_token;
             user.somtoday_refresh_token = somtodayAuthentication.refresh_token;
 
@@ -628,7 +607,7 @@ namespace Zermos_Web.Controllers
         private async Task<user> GetSomtodayStudent(string auth_token)
         {
             //GET: https://api.somtoday.nl/rest/v1/leerlingen?additional=pasfoto
-            string baseurl = "https://api.somtoday.nl/rest/v1/leerlingen?additional=pasfoto";
+            var baseurl = "https://api.somtoday.nl/rest/v1/leerlingen?additional=pasfoto";
 
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + auth_token);
@@ -644,13 +623,13 @@ namespace Zermos_Web.Controllers
             };
         }
 
-        Random random = new Random();
+        private readonly Random random = new Random();
 
         private string RandomStateString(int length = 8)
         {
-            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            string result = "";
-            for (int i = 0; i < length; i++)
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var result = "";
+            for (var i = 0; i < length; i++)
                 result += chars[random.Next(0, chars.Length)];
 
 

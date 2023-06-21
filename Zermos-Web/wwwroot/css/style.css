@@ -380,22 +380,21 @@ main.main::-webkit-scrollbar-track {
 
 /*If screen width is 700px*/
 @media only screen and (max-width: 700px) {
-    
+
     html {
         font-size: 10px;
     }
-    
+
     .sidebar {
         width: 64px;
         height: 100%;
         top: 0;
         left: 0;
         position: fixed;
-        background: var(--background-color);
         margin: 0;
         border-radius: 0;
     }
-    
+
     .sidebar .top {
         height: 96px;
         width: 100%;
@@ -412,19 +411,19 @@ main.main::-webkit-scrollbar-track {
     .sidebar .top .svgText:nth-child(n+2) {
         display: none;
     }
-    
+
     .sidebar .top .svgText:first-child {
         transform: unset;
     }
-    
+
     .sidebar .top .svgText:first-child {
         transform: scale(4) translate(-10px, -75px)
     }
-    
+
     .docs {
         display: none;
     }
-    
+
     .bottom {
         top: 96px;
         bottom: 0;
@@ -446,32 +445,32 @@ main.main::-webkit-scrollbar-track {
         justify-content: center;
         transition: 0.3s;
     }
-    
+
     .menu-item p {
         display: none !important;
     }
-    
+
     .menu-icons {
         margin-right: 0;
         position: relative;
         top: 0;
         left: 0;
     }
-    
+
     .hidden-account {
         display: unset !important;
     }
-    
+
     .Heading {
         display: none;
     }
-    
+
     .main {
         left: 64px !important;
         width: calc(100% - 64px) !important;
         padding: 16px 16px 16px !important;
     }
-    
+
     .top-bar {
         display: none;
     }

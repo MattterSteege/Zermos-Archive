@@ -9,7 +9,7 @@
 }
 
 .login-child {
-    grid-area: 2 / 2 / 4 / 3;   
+    grid-area: 2 / 2 / 4 / 3;
     font-size: 1rem;
     font-weight: 600;
 }
@@ -72,7 +72,7 @@
 }
 
 .login-child .child:nth-child(2) {
-    
+
     margin-top: 16px;
     font-weight: 500;
     font-size: 1rem;

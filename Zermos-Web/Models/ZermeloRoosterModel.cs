@@ -6,15 +6,15 @@ namespace Zermos_Web.Models
     {
         public Response response { get; set; }
     }
-    
-        public class Action
+
+    public class Action
     {
         public Appointment appointment { get; set; }
         public List<Status> status { get; set; }
         public bool allowed { get; set; }
         public string post { get; set; }
     }
-        
+
     public class Appointment
     {
         public List<Status> status { get; set; }
