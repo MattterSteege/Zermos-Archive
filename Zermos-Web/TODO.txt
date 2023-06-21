@@ -1,3 +1,4 @@
 ﻿TODO: Change the grade api call to: https://api.somtoday.nl/rest/v1/resultaten?leerling=[id]
 TODO: Depricate Somtoday_student_picture, nowbody wants to stare at there own head
 TODO: Add better UX such as errors on logging in
+TODO: check if it it possible to add multiple authentication methods to one class, so i can add [Authorize("Somtoday")] to the controller instead of checking it in the controller [SOMTODAY: DONE, ZERMELO: TODO, ANTONIUS APP: TODO]

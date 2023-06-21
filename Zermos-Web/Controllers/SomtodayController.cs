@@ -21,7 +21,6 @@ using Item = Zermos_Web.Models.SomtodayGradesModel.Item;
 
 namespace Zermos_Web.Controllers
 {
-    [Authorize]
     public class SomtodayController : Controller
     {
         private readonly HttpClient _httpClient;
@@ -38,7 +37,8 @@ namespace Zermos_Web.Controllers
         }
 
         #region Cijfers
-
+        [Authorize]
+        [Authorize(policy: "Somtoday")]
         public async Task<IActionResult> Cijfers(bool refresh_token = false)
         {
             ViewData["add_css"] = "somtoday";
@@ -143,8 +143,7 @@ namespace Zermos_Web.Controllers
             };
             await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
         }
-
-        [AllowAnonymous]
+        
         public IActionResult Cijfer(string content = null)
         {
             ViewData["add_css"] = "somtoday";
@@ -164,8 +163,7 @@ namespace Zermos_Web.Controllers
                               ControllerContext.RouteData.Values["action"] + "?content=" + content;
             return View("_Loading");
         }
-
-        [AllowAnonymous]
+        
         public IActionResult CijferData(string content = null)
         {
             ViewData["add_css"] = "somtoday";
@@ -185,8 +183,7 @@ namespace Zermos_Web.Controllers
                               ControllerContext.RouteData.Values["action"] + "?content=" + content;
             return View("_Loading");
         }
-
-        [AllowAnonymous]
+        
         public IActionResult CijferStatestieken(string content = null, bool asPFD = false)
         {
             if (asPFD) return View("_Loading");
@@ -455,6 +452,8 @@ namespace Zermos_Web.Controllers
 
         #region huiswerk
 
+        [Authorize(policy: "Somtoday")]
+        [Authorize]
         public async Task<IActionResult> Huiswerk(bool refresh_token = false)
         {
             ViewData["add_css"] = "somtoday";

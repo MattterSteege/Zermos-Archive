@@ -31,6 +31,8 @@ namespace Infrastructure.Context
 
                 optionsBuilder.UseMySQL(
                     $"server={server};user={user};password={password};database={database};port={port};Connect Timeout=5;");
+
+                optionsBuilder.EnableSensitiveDataLogging();
             }
         }
     }

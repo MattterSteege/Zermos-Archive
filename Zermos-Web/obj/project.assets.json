@@ -9809,11 +9809,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos-2\\Zermos-Web\\Zermos-Web.csproj",
+      "projectUniqueName": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Zermos-Web\\Zermos-Web.csproj",
       "projectName": "Zermos-Web",
-      "projectPath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos-2\\Zermos-Web\\Zermos-Web.csproj",
+      "projectPath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Zermos-Web\\Zermos-Web.csproj",
       "packagesPath": "C:\\Users\\mattt\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos-2\\Zermos-Web\\obj\\",
+      "outputPath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Zermos-Web\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\mattt\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -9830,8 +9830,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\mattt\\Documents\\GitHub\\Zermos-2\\Infrastructure\\Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos-2\\Infrastructure\\Infrastructure.csproj"
+            "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Infrastructure\\Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Infrastructure\\Infrastructure.csproj"
             }
           }
         }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RNhXb+RQqq/lah5AcMdRhseh3Q7Qrjn2h6m7WcBI3YZ3A5aGmx9kq7CfCqQT8AiP+LlxkMQX7t4UrL4aGe4QQQ==",
+  "dgSpecHash": "3Okj7hGe3XxsfSmZvCNg6pEsaCICljxAb+NWNnJFgSGKp7iEkM3+ptXTOLOuChLPxGGayF1aOH/cLqJTnX9yKg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos-2\\Infrastructure\\Infrastructure.csproj",
+  "projectFilePath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Infrastructure\\Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mattt\\.nuget\\packages\\google.protobuf\\3.21.9\\google.protobuf.3.21.9.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",

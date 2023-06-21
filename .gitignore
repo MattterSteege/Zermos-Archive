@@ -1,6 +1,4 @@
-﻿/Zermos-Web/appsettings.Development.json
-/Zermos-Web/appsettings.json
-.idea
+﻿.idea
 .gitignore
 .dockerignore
 /bin

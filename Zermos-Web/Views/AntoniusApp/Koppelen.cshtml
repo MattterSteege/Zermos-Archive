@@ -1,0 +1,32 @@
+﻿@model Zermos_Web.Models.AntoniusAppAuthenticatieModel
+
+@{
+    ViewBag.Title = "title";
+}
+
+@{
+    if (Model == null)
+    {
+        <form method="post" asp-controller="AntoniusApp" asp-action="Koppelen">
+            <input type="text" name="username"/>
+            <button type="submit">log in</button>
+        </form>
+    }
+    else
+    {
+        <form method="post" asp-controller="AntoniusApp" asp-action="Koppelen">
+            <input type="hidden" name="id" value="@Model.data.id"/>
+            <input type="hidden" name="customer_product_id" value="@Model.data.customer_product_id"/>
+            <input type="hidden" name="user_id" value="@Model.data.user_id"/>
+            <button type="submit">Check of je ingelogd bent</button>
+        </form>
+    }
+}
+
+@* Make a button that when clicked, send a POST request to /AntoniusApp/koppelen?a=a&b=b&c=c *@
+@* <form method="post" asp-controller="AntoniusApp" asp-action="Koppelen"> *@
+@*     <input type="hidden" name="a" value="@Model.data.id"/> *@
+@*     <input type="hidden" name="b" value="@Model.data.customer_product_id"/> *@
+@*     <input type="hidden" name="c" value="@Model.data.user_id"/> *@
+@*     <button type="submit">Check of je ingelogd bent</button> *@
+@* </form> *@

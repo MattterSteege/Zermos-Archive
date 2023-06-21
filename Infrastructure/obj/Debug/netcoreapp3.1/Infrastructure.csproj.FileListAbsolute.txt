@@ -11,3 +11,16 @@ C:\Users\mattt\Documents\GitHub\Zermos-2\Infrastructure\obj\Debug\netcoreapp3.1\
 C:\Users\mattt\Documents\GitHub\Zermos-2\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.genruntimeconfig.cache
 C:\Users\mattt\Documents\GitHub\Zermos-2\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.csproj.AssemblyReference.cache
 C:\Users\mattt\Documents\GitHub\Zermos-2\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mattt\Documents\GitHub\Zermos\Infrastructure\bin\Debug\netcoreapp3.1\Infrastructure.deps.json
+C:\Users\mattt\Documents\GitHub\Zermos\Infrastructure\bin\Debug\netcoreapp3.1\Infrastructure.runtimeconfig.json
+C:\Users\mattt\Documents\GitHub\Zermos\Infrastructure\bin\Debug\netcoreapp3.1\Infrastructure.runtimeconfig.dev.json
+C:\Users\mattt\Documents\GitHub\Zermos\Infrastructure\bin\Debug\netcoreapp3.1\Infrastructure.dll
+C:\Users\mattt\Documents\GitHub\Zermos\Infrastructure\bin\Debug\netcoreapp3.1\Infrastructure.pdb
+C:\Users\mattt\Documents\GitHub\Zermos\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.csproj.AssemblyReference.cache
+C:\Users\mattt\Documents\GitHub\Zermos\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mattt\Documents\GitHub\Zermos\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.AssemblyInfoInputs.cache
+C:\Users\mattt\Documents\GitHub\Zermos\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.AssemblyInfo.cs
+C:\Users\mattt\Documents\GitHub\Zermos\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\mattt\Documents\GitHub\Zermos\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.dll
+C:\Users\mattt\Documents\GitHub\Zermos\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.pdb
+C:\Users\mattt\Documents\GitHub\Zermos\Infrastructure\obj\Debug\netcoreapp3.1\Infrastructure.genruntimeconfig.cache

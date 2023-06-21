@@ -1,12 +1,14 @@
 using System;
 using Infrastructure;
 using Infrastructure.Context;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Zermos_Web.Models.Requirements;
 
 namespace Zermos_Web
 {
@@ -25,6 +27,9 @@ namespace Zermos_Web
             services.AddControllersWithViews();
             services.AddDbContext<ZermosContext>();
             services.AddScoped<Users>();
+            services.AddScoped<SomtodayRequirement>();
+            
+            services.AddScoped<IAuthorizationHandler, SomtodayAuthorizationHandler>();
 
             var cookieExpiration = TimeSpan.FromDays(60);
 
@@ -38,21 +43,18 @@ namespace Zermos_Web
                     options.Cookie.MaxAge = cookieExpiration;
                     options.Cookie.IsEssential = true;
                 });
-
-            services.AddDistributedMemoryCache();
-
-            services.AddSession(options =>
+            
+            services.AddAuthorization(options =>
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
-                options.Cookie.HttpOnly = true;
+                options.AddPolicy("Somtoday", policy =>
+                {
+                    var serviceProvider = services.BuildServiceProvider();
+                    var users = serviceProvider.GetRequiredService<Users>();
+                    policy.Requirements.Add(new SomtodayRequirement(users));
+                });
             });
 
             services.AddProgressiveWebApp();
-
-            services.Configure<ForwardedHeadersOptions>(options =>
-            {
-                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,8 +83,6 @@ namespace Zermos_Web
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

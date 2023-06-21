@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\mattt\\Documents\\GitHub\\Zermos-2\\Infrastructure\\Infrastructure.csproj": {}
+    "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Infrastructure\\Infrastructure.csproj": {}
   },
   "projects": {
-    "C:\\Users\\mattt\\Documents\\GitHub\\Zermos-2\\Infrastructure\\Infrastructure.csproj": {
+    "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Infrastructure\\Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos-2\\Infrastructure\\Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Infrastructure\\Infrastructure.csproj",
         "projectName": "Infrastructure",
-        "projectPath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos-2\\Infrastructure\\Infrastructure.csproj",
+        "projectPath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Infrastructure\\Infrastructure.csproj",
         "packagesPath": "C:\\Users\\mattt\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos-2\\Infrastructure\\obj\\",
+        "outputPath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\mattt\\AppData\\Roaming\\NuGet\\NuGet.Config",

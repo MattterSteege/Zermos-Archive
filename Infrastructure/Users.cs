@@ -8,7 +8,7 @@ using Infrastructure.Entities;
 namespace Infrastructure
 { public class Users
     {
-        private readonly ZermosContext _context;
+        public readonly ZermosContext _context;
 
         public Users(ZermosContext context)
         {
@@ -21,10 +21,7 @@ namespace Infrastructure
         /// <returns>A list of all users.</returns>
         public async Task<List<user>> GetUsersAsync()
         {
-            var ranks = await _context.users
-                .ToListAsync();
-
-            return await Task.FromResult(ranks);
+            return await _context.users.AsNoTracking().ToListAsync();
         }
 
         /// <summary>
@@ -34,9 +31,8 @@ namespace Infrastructure
         /// <returns>A list of users with the specified uuid.</returns>
         public async Task<user> GetUserAsync(string email)
         {
-            //detach tracking from entity
-            
-            return await _context.users.FirstOrDefaultAsync(x => x.email == email.ToLower());
+            //get the user using the email, but detach it from the context so that it can be updated later
+            return await _context.users.AsNoTracking().FirstOrDefaultAsync(x => x.email == email.ToLower());
         }
         
         /// <summary>
@@ -46,9 +42,14 @@ namespace Infrastructure
         public async Task AddUserAsync(user user)
         {
             user.email = user.email.ToLower();
+            
+            if (await _context.users.AnyAsync(x => x.email == user.email))
+                return;
+            
             await _context.users.AddAsync(user);
             await _context.SaveChangesAsync();
         }
+
 
         /// <summary>
         /// Updates a user with the specified uuid. Note that the uuid cannot be changed. If you leave any field as null, it will not be updated in the database and will keep its current value.
@@ -69,7 +70,7 @@ namespace Infrastructure
             if (user.somtoday_access_token != null) userToUpdate.somtoday_access_token = user.somtoday_access_token;
             if (user.somtoday_refresh_token != null) userToUpdate.somtoday_refresh_token = user.somtoday_refresh_token;
             if (user.somtoday_student_id != null) userToUpdate.somtoday_student_id = user.somtoday_student_id;
-            if (user.somtoday_student_profile_picture != null) userToUpdate.somtoday_student_profile_picture = user.somtoday_student_profile_picture;
+            // if (user.somtoday_student_profile_picture != null) userToUpdate.somtoday_student_profile_picture = user.somtoday_student_profile_picture;
             if (user.infowijs_access_token != null) userToUpdate.infowijs_access_token = user.infowijs_access_token;
             if (user.infowijs_session_token != null) userToUpdate.infowijs_session_token = user.infowijs_session_token;
             if (user.VerificationToken != null) userToUpdate.VerificationToken = user.VerificationToken;
