@@ -317,6 +317,11 @@ main.main {
     z-index: 100;
 }
 
+.top-right-profile-picture a {
+    height: 100%;
+    width: 100%;
+}
+
 .top-right-profile-picture i {
     height: 100%;
     width: 100%;
@@ -474,4 +479,6 @@ main.main::-webkit-scrollbar-track {
     .top-bar {
         display: none;
     }
+    
+    
 }

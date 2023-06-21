@@ -1,12 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Import Project="$(NuGetPackageRoot)system.text.encodings.web\7.0.0\buildTransitive\netcoreapp2.0\System.Text.Encodings.Web.targets" Condition="Exists('$(NuGetPackageRoot)system.text.encodings.web\7.0.0\buildTransitive\netcoreapp2.0\System.Text.Encodings.Web.targets')" />
-    <Import Project="$(NuGetPackageRoot)system.text.encoding.codepages\7.0.0\buildTransitive\netcoreapp2.0\System.Text.Encoding.CodePages.targets" Condition="Exists('$(NuGetPackageRoot)system.text.encoding.codepages\7.0.0\buildTransitive\netcoreapp2.0\System.Text.Encoding.CodePages.targets')" />
-    <Import Project="$(NuGetPackageRoot)system.formats.asn1\7.0.0\buildTransitive\netcoreapp2.0\System.Formats.Asn1.targets" Condition="Exists('$(NuGetPackageRoot)system.formats.asn1\7.0.0\buildTransitive\netcoreapp2.0\System.Formats.Asn1.targets')" />
-    <Import Project="$(NuGetPackageRoot)system.collections.immutable\7.0.0\buildTransitive\netcoreapp2.0\System.Collections.Immutable.targets" Condition="Exists('$(NuGetPackageRoot)system.collections.immutable\7.0.0\buildTransitive\netcoreapp2.0\System.Collections.Immutable.targets')" />
-    <Import Project="$(NuGetPackageRoot)system.text.json\7.0.1\buildTransitive\netcoreapp2.0\System.Text.Json.targets" Condition="Exists('$(NuGetPackageRoot)system.text.json\7.0.1\buildTransitive\netcoreapp2.0\System.Text.Json.targets')" />
-    <Import Project="$(NuGetPackageRoot)system.security.cryptography.pkcs\7.0.2\buildTransitive\netcoreapp2.0\System.Security.Cryptography.Pkcs.targets" Condition="Exists('$(NuGetPackageRoot)system.security.cryptography.pkcs\7.0.2\buildTransitive\netcoreapp2.0\System.Security.Cryptography.Pkcs.targets')" />
+    <Import Project="$(NuGetPackageRoot)system.text.json\7.0.1\buildTransitive\net6.0\System.Text.Json.targets" Condition="Exists('$(NuGetPackageRoot)system.text.json\7.0.1\buildTransitive\net6.0\System.Text.Json.targets')" />
     <Import Project="$(NuGetPackageRoot)microsoft.visualstudio.azure.containers.tools.targets\1.18.1\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.visualstudio.azure.containers.tools.targets\1.18.1\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.targets')" />
   </ImportGroup>
 </Project>

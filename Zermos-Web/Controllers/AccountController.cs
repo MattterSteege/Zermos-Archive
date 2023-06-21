@@ -26,7 +26,6 @@ namespace Zermos_Web.Controllers
         {
             var user = await _users.GetUserAsync(User.FindFirstValue("email"));
             
-            //Make a string of all the values from the user object
             var userString = "";
             foreach (var property in user.GetType().GetProperties())
             {

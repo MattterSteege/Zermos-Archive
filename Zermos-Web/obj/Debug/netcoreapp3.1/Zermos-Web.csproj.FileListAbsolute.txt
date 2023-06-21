@@ -150,3 +150,5 @@ C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\bin\Debug\netcoreapp3.1\Char
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zermos-Web.csproj.AssemblyReference.cache
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Zermos-Web.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\AccountAuthentication\Login.cshtml.g.cs
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Pages\Error\FourZeroFour.cshtml.g.cs
+C:\Users\mattt\Documents\GitHub\Zermos-2\Zermos-Web\obj\Debug\netcoreapp3.1\Razor\Views\Shared\404.cshtml.g.cs

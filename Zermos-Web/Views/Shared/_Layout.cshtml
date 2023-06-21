@@ -107,7 +107,7 @@
             </li>
 
             <li style="display: none" class="hidden-account">
-                <a asp-controller="AccountAuthentication" asp-action="index">
+                <a asp-controller="Account" asp-action="ShowAccount">
                     <div class="menu-item">
                         <i class="fa-solid fa-user menu-icons fa-fw"></i>
                     </div>
@@ -127,7 +127,9 @@
 
 <div class="top-bar">
     <div class="top-right-profile-picture">
-        <i class="fa-solid fa-user"></i>
+        <a asp-controller="Account" asp-action="ShowAccount">
+            <i class="fa-solid fa-user"></i>
+        </a>
     </div>
 
     <div class="backbutton" onclick="window.history.back()">

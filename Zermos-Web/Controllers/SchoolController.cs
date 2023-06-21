@@ -50,7 +50,8 @@ namespace Zermos_Web.Controllers
                                        "";
                         var image = element.SelectSingleNode(".//img")?.Attributes["src"]?.Value ?? "";
 
-                        var contentNodes = element.SelectNodes(".//div[contains(@class, 'content')]");
+                        var contentNodes = //div content text-black
+                            element.SelectNodes(".//div[contains(@class, 'content')]//div[contains(@class, 'text-black')]");
                         var contentText = "";
                         if (contentNodes != null)
                             foreach (var contentNode in contentNodes)

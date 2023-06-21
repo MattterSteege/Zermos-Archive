@@ -18,6 +18,12 @@ namespace Zermos_Web.Controllers
         {
             return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
+        
+        [HttpGet("/error/404")]
+        public IActionResult FourZeroFour()
+        {
+            return View("404");
+        }
     }
 
     public class ErrorViewModel
