@@ -1,31 +1,47 @@
 ﻿@using Zermos_Web.Models.SomtodayGradesModel
+@using Item = Zermos_Web.Models.SomtodayGradesModel.Item
+@using System.Globalization
 @using System.Text
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Newtonsoft.Json
-@using System.Globalization
 @model Zermos_Web.Models.SomtodayGradesModel.SomtodayGradesModel
 
 @{
     ViewBag.Title = "title";
 
-    List<sortedGrades> sortedGrades = new List<sortedGrades>();
-    foreach (Zermos_Web.Models.SomtodayGradesModel.Item grade in Model.items)
+    List<Item> LastThreeGrades = new List<Item>();
+    
+    var sortedGrades = new List<sortedGrades>();
+    foreach (var grade in Model.items)
     {
         var vak = sortedGrades.Find(x => x.vak.naam == grade.vak.naam);
         if (vak == null)
         {
             vak = new sortedGrades();
             vak.vak = grade.vak;
-            vak.grades = new List<Zermos_Web.Models.SomtodayGradesModel.Item>();
+            vak.grades = new List<Item>();
             sortedGrades.Add(vak);
         }
         vak.grades.Add(grade);
     }
 
+    LastThreeGrades = Model.items.GetRange(Model.items.Count - 3, 3);
+    LastThreeGrades.Reverse();
+
     sortedGrades.Sort((x, y) => string.Compare(x.vak.naam.ToLower(), y.vak.naam.ToLower(), StringComparison.Ordinal));
 }
 
 <div class="grades-container">
+    <div class="vak" style="padding: 16px;">
+        @foreach(var grade in LastThreeGrades)
+        {
+            <div class="top-30">
+                <p>@grade.vak.naam</p>
+                <p>@grade.geldendResultaat</p>
+            </div>
+        }
+    </div>
+    
     @{
         @foreach (var vak in sortedGrades)
         {
@@ -33,12 +49,12 @@
             var encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(vak)));
 
             double average = 0;
-            int weight = 0;
+            var weight = 0;
             float Gemiddelde = 0;
             for (var i = 0; i < vak.grades.Count; i++)
             {
                 var gradeItem = vak.grades[i];
-                double geldendResultaat = Convert.ToDouble(gradeItem.geldendResultaat);
+                var geldendResultaat = Convert.ToDouble(gradeItem.geldendResultaat);
                 average += geldendResultaat * (gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging);
                 weight += gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging;
                 Gemiddelde = MathF.Round((float) (average / weight), 1, MidpointRounding.AwayFromZero);
@@ -52,8 +68,8 @@
                         <p class="@(Gemiddelde >= 5.5f ? "sufficient" : "insufficient ")">@(Gemiddelde.ToString("0.0", CultureInfo.InvariantCulture))</p>
                     </div>
                     <div class="bottom-70">
-                        <p>Laatste cijfer:</p>
-                        <p style="margin-left: 16px;" class="@(Gemiddelde >= 5.5f ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</p>
+                        <p style="flex-grow: 1; text-align: end;">Laatste cijfer:</p>
+                        <p style="margin-left: 16px; flex-grow: 1;" class="@(Gemiddelde >= 5.5f ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</p>
                     </div>
                 </a>
             </div>

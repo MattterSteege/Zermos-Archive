@@ -22,6 +22,7 @@
     justify-content: space-between;
     align-items: flex-start;
 }
+
 /*first child of .top-30 can have a max width of 75%, the rest is moved to the next line*/
 .top-30 h1 {
     max-width: 75%;
@@ -34,9 +35,9 @@
     height: 70%;
     width: 100%;
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .vak {
@@ -64,12 +65,12 @@
     padding: 16px;
 }
 
-.vak a p {
+.vak p {
     font-size: 1.2rem;
     font-weight: 700;
 }
 
-.vak a h1 {
+.vak h1 {
     font-size: 1.2rem;
     font-weight: 700;
     transition: opacity 0.3s;
@@ -172,7 +173,7 @@
 
 .stats-container .stats canvas {
     display: grid;
-/*    display dead center*/
+    /*    display dead center*/
     margin: auto;
     width: 100%;
     max-height: 250px !important;
@@ -196,7 +197,7 @@
     font-weight: 600;
 }
 
-.stats-container .stats h1{
+.stats-container .stats h1 {
     font-size: 1.2rem;
     font-weight: 700;
 }
@@ -232,16 +233,32 @@
     padding: 16px;
 }
 
+.homework-content {
+    height: 100%;
+    min-width: calc(360px);
+    width: 100%;
+}
+
+.homework-content ul {
+    padding-left: 20px;
+}
+
+.homework-day-parent h1 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
 @media only screen and (max-width: 700px) {
 
     .vak {
         height: 75px;
     }
-    
+
     .stats-container .stats {
         height: 250px;
     }
-    
+
     .background img {
         display: none;
     }

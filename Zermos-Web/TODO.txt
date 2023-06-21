@@ -1,0 +1,3 @@
+﻿TODO: Change the grade api call to: https://api.somtoday.nl/rest/v1/resultaten?leerling=[id]
+TODO: Depricate Somtoday_student_picture, nowbody wants to stare at there own head
+TODO: Add better UX such as errors on logging in
