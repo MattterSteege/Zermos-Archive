@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zermos_Web.Models;
+using Zermos_Web.Models.Requirements;
 using Zermos_Web.Models.SomtodayGradesModel;
 using Zermos_Web.Models.somtodayHomeworkModel;
 using Zermos_Web.Utilities;
@@ -38,7 +39,7 @@ namespace Zermos_Web.Controllers
 
         #region Cijfers
         [Authorize]
-        [Authorize(policy: "Somtoday")]
+        [SomtodayRequirement]
         public async Task<IActionResult> Cijfers(bool refresh_token = false)
         {
             ViewData["add_css"] = "somtoday";
@@ -46,8 +47,6 @@ namespace Zermos_Web.Controllers
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 var user = await _users.GetUserAsync(User.FindFirstValue("email"));
-
-                if (user.somtoday_access_token == null) return RedirectToAction("Inloggen", "Somtoday");
 
                 if (TokenUtils.CheckToken(user.somtoday_access_token) == false && refresh_token == false)
                 {
@@ -450,10 +449,10 @@ namespace Zermos_Web.Controllers
 
         #endregion
 
-        #region huiswerk
 
-        [Authorize(policy: "Somtoday")]
+        #region huiswerk
         [Authorize]
+        [SomtodayRequirement]
         public async Task<IActionResult> Huiswerk(bool refresh_token = false)
         {
             ViewData["add_css"] = "somtoday";
@@ -461,8 +460,6 @@ namespace Zermos_Web.Controllers
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 var user = await _users.GetUserAsync(User.FindFirstValue("email"));
-
-                if (string.IsNullOrEmpty(user.somtoday_access_token)) return RedirectToAction("Inloggen", "Somtoday");
 
                 if (TokenUtils.CheckToken(user.somtoday_access_token) == false && refresh_token == false)
                 {

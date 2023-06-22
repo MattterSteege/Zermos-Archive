@@ -7,16 +7,16 @@ using Microsoft.AspNetCore.Mvc.Filters;
 namespace Zermos_Web.Models.Requirements
 {
     [AttributeUsage(AttributeTargets.Method)]
-    public class SomtodayRequirementAttribute : ActionFilterAttribute
+    public class ZermeloRequirementAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var user = ((Users)context.HttpContext.RequestServices.GetService(typeof(Users)))?.GetUserAsync(context.HttpContext.User.FindFirstValue("email")).Result;
             
-            if (string.IsNullOrEmpty(user.somtoday_access_token) && string.IsNullOrEmpty(user.somtoday_refresh_token))
+            if (string.IsNullOrEmpty(user.zermelo_access_token)) 
             {
                 // User does not have the desired value, redirect to /a/login
-                context.Result = new RedirectResult("/somtoday/inloggen");
+                context.Result = new RedirectResult("/zermelo/inloggen");
                 return;
             }
 

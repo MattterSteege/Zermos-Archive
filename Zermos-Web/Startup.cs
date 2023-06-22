@@ -27,32 +27,21 @@ namespace Zermos_Web
             services.AddControllersWithViews();
             services.AddDbContext<ZermosContext>();
             services.AddScoped<Users>();
-            services.AddScoped<SomtodayRequirement>();
-            
-            services.AddScoped<IAuthorizationHandler, SomtodayAuthorizationHandler>();
+            services.AddScoped<SomtodayRequirementAttribute>();
+            //services.AddScoped<ZermeloRequirement>();
 
             var cookieExpiration = TimeSpan.FromDays(60);
 
             services.AddAuthentication("EmailScheme") // Sets the default scheme to cookies
                 .AddCookie("EmailScheme", options =>
                 {
-                    options.AccessDeniedPath = "/Account/Denied";
+                    // options.AccessDeniedPath = "/Account/Denied";
                     options.LoginPath = "/Account/Login";
                     options.LogoutPath = "/Account/Logout";
                     options.ExpireTimeSpan = cookieExpiration;
                     options.Cookie.MaxAge = cookieExpiration;
                     options.Cookie.IsEssential = true;
                 });
-            
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Somtoday", policy =>
-                {
-                    var serviceProvider = services.BuildServiceProvider();
-                    var users = serviceProvider.GetRequiredService<Users>();
-                    policy.Requirements.Add(new SomtodayRequirement(users));
-                });
-            });
 
             services.AddProgressiveWebApp();
         }

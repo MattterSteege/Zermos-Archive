@@ -11,11 +11,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zermos_Web.Models;
+using Zermos_Web.Models.Requirements;
 using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
-    [Authorize]
     public class ZermeloController : Controller
     {
         private readonly ILogger<ZermeloController> _logger;
@@ -28,6 +28,8 @@ namespace Zermos_Web.Controllers
             _users = users;
         }
 
+        [Authorize]
+        [ZermeloRequirement]
         public async Task<IActionResult> Rooster(string year, string week)
         {
             ViewData["add_css"] = "zermelo";
