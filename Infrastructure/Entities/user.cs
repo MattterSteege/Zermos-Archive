@@ -28,5 +28,10 @@ namespace Infrastructure.Entities
         public DateTime? VerifiedAt { get; set; }
         public bool IsVerified => VerifiedAt.HasValue;
         
+        //API related
+        // public string? ApiKey { get; set; }
+        // public DateTime? ApiKeyExpiresAt { get; set; }
+        // public bool ApiKeyIsExpired => ApiKeyExpiresAt.HasValue && ApiKeyExpiresAt <= DateTime.UtcNow;
+        
     }
 }

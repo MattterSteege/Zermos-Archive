@@ -1,0 +1,76 @@
+﻿/*@foreach (var messageGroup in Model)*/
+/*{*/
+/*<div class="message">*/
+/*    @foreach (var message in messageGroup)*/
+/*    {*/
+/*        if (message.Type == 1 )*/
+/*    {*/
+/*    <p class="content">@message.Content.String</p>*/
+/*    }*/
+/*        else if (message.Type == 2)*/
+/*    {*/
+/*    <p style="color: red; font-weight: 700" onclick="window.open('@message.Content.ContentClass.Url');" class="attachment">@message.Content.ContentClass.Name</p>*/
+/*    }*/
+/*        else if (message.Type == 30)*/
+/*    {*/
+/*    <h2 class="title">@message.Content.ContentClass.Title</h2>*/
+/*    }*/
+/*    }*/
+/*</div>*/
+/*}*/
+
+.message-container{
+    /*display: grid;*/
+    /*grid-template-columns: 1fr;*/
+    /*grid-gap: 8px;*/
+    /*border-radius: 14px;*/
+}
+
+.message-container .top-2 {
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 16px;
+    margin-bottom: 16px;
+}
+
+.message-container .later{
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 16px;
+}
+
+.message {
+    border-radius: 14px;
+    padding: 16px;
+    background: var(--overlay-color);
+    display: grid;
+    grid-template-rows: max-content;
+}
+
+.message .title {
+    grid-row: 1;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    height: fit-content;
+}
+
+.message .contents {
+    grid-row: 2;
+    display: flex;
+    grid-gap: 16px;
+    flex-direction: column;
+}
+
+.message .content {
+    grid-column: 1 / span 4;
+    margin: 0;
+}
+
+
+
+.message .attachments {
+    grid-row: 3;
+}

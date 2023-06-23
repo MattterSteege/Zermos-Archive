@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 
@@ -159,6 +160,29 @@ namespace Zermos_Web.Utilities
             }
 
             return queryParameters;
+        }
+        
+        /// <summary>
+        /// Converts links found in the provided text to a modified format.
+        /// </summary>
+        /// <param name="text">The input text.</param>
+        /// <returns>The modified text with links in the modified format.</returns>
+        public static string ConvertLinksInText(string text)
+        {
+            // Define the regex pattern to match URLs
+            string pattern = @"(https?://\S+)";
+
+            // Replace URLs with modified anchor tags
+            string convertedText = Regex.Replace(text, pattern, match =>
+            {
+                string originalLink = match.Value;
+                Uri uri = new Uri(originalLink);
+                string domain = uri.Host;
+                string modifiedLink = $"<a href='{originalLink}'>{domain}</a>";
+                return modifiedLink;
+            });
+
+            return convertedText;
         }
     }
 }

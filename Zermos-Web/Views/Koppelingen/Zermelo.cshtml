@@ -2,10 +2,9 @@
 
 @{
     ViewBag.Title = "title";
-    Layout = "_Layout";
 }
 
-<form asp-controller="Zermelo" asp-action="Inloggen" method="post">
+<form asp-controller="koppelingen" asp-action="zermelo" method="post">
     <!--Add username input with text 'gebruikersnaame' and password input with text 'wachtwoord'-->
     <input type="text" name="username" placeholder="gebruikersnaam">
     <input type="password" name="password" placeholder="wachtwoord">

@@ -7,14 +7,14 @@
 @{
     if (Model == null)
     {
-        <form method="post" asp-controller="AntoniusApp" asp-action="Koppelen">
+        <form method="post" asp-controller="Koppelingen" asp-action="Infowijs">
             <input type="text" name="username"/>
             <button type="submit">log in</button>
         </form>
     }
     else
     {
-        <form method="post" asp-controller="AntoniusApp" asp-action="Koppelen">
+        <form method="post" asp-controller="Koppelingen" asp-action="Infowijs">
             <input type="hidden" name="id" value="@Model.data.id"/>
             <input type="hidden" name="customer_product_id" value="@Model.data.customer_product_id"/>
             <input type="hidden" name="user_id" value="@Model.data.user_id"/>

@@ -15,8 +15,7 @@ namespace Zermos_Web.Models.Requirements
             
             if (string.IsNullOrEmpty(user.zermelo_access_token)) 
             {
-                // User does not have the desired value, redirect to /a/login
-                context.Result = new RedirectResult("/zermelo/inloggen");
+                context.Result = new RedirectResult("/koppelingen/zermelo");
                 return;
             }
 

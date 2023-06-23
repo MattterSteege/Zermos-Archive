@@ -18,6 +18,7 @@ using Zermos_Web.Models.Requirements;
 using Zermos_Web.Models.SomtodayGradesModel;
 using Zermos_Web.Models.somtodayHomeworkModel;
 using Zermos_Web.Utilities;
+using Data = ChartJSCore.Models.Data;
 using Item = Zermos_Web.Models.SomtodayGradesModel.Item;
 
 namespace Zermos_Web.Controllers
@@ -25,7 +26,6 @@ namespace Zermos_Web.Controllers
     public class SomtodayController : Controller
     {
         private readonly HttpClient _httpClient;
-        private readonly HttpClient _httpClientWithoutRedirect;
         private readonly ILogger<SomtodayController> _logger;
         private readonly Users _users;
 
@@ -34,7 +34,6 @@ namespace Zermos_Web.Controllers
             _logger = logger;
             _users = users;
             _httpClient = new HttpClient();
-            _httpClientWithoutRedirect = new HttpClient(new HttpClientHandler {AllowAutoRedirect = false});
         }
 
         #region Cijfers
@@ -448,8 +447,7 @@ namespace Zermos_Web.Controllers
         }
 
         #endregion
-
-
+        
         #region huiswerk
         [Authorize]
         [SomtodayRequirement]
@@ -520,116 +518,6 @@ namespace Zermos_Web.Controllers
                 .ToList();
 
             return homework;
-        }
-
-        #endregion
-
-        #region inloggen
-
-        [HttpGet]
-        public IActionResult Inloggen()
-        {
-            ViewData["add_css"] = "somtoday";
-
-            return View();
-        }
-
-
-        [HttpPost]
-        public async Task<IActionResult> Inloggen(string username, string password)
-        {
-            //code challenge: __JVhs4cj-iqe8ha5750d9QSWJMpV49SXHPqBgFulkk
-            //code verifier: 16BBJMtEJe8blIJY848ROvvO02F5V205l5A10x_DqFE
-
-            _httpClientWithoutRedirect.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
-
-            var baseurl = string.Format(
-                "https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling://oauth/callback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state={0}&scope=openid&tenant_uuid={1}&session=no_session&code_challenge={2}&code_challenge_method=S256",
-                RandomStateString(), "c23fbb99-be4b-4c11-bbf5-57e7fc4f4388",
-                "__JVhs4cj-iqe8ha5750d9QSWJMpV49SXHPqBgFulkk");
-
-            var response = await _httpClientWithoutRedirect.GetAsync(baseurl);
-            var authCode = response.Headers.Location.Query.Remove(0, 6);
-
-
-            _httpClientWithoutRedirect.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
-
-
-            baseurl = "https://inloggen.somtoday.nl/?-1.-panel-signInForm&auth=" + authCode;
-
-            var Content = new FormUrlEncodedContent(new Dictionary<string, string>
-            {
-                {"loginLink", "x"},
-                {"usernameFieldPanel:usernameFieldPanel_body:usernameField", username}
-            });
-
-            await _httpClientWithoutRedirect.PostAsync(baseurl, Content);
-
-            baseurl = "https://inloggen.somtoday.nl/login?1-1.-passwordForm&auth=" + authCode;
-
-            Content = new FormUrlEncodedContent(new Dictionary<string, string>
-            {
-                {"passwordFieldPanel:passwordFieldPanel_body:passwordField", password},
-                {"loginLink", "x"}
-            });
-
-            response = await _httpClientWithoutRedirect.PostAsync(baseurl, Content);
-
-            var finalAuthCode = HTMLUtils.ParseQuery(response.Headers.Location.Query)["code"];
-
-
-            baseurl =
-                "https://inloggen.somtoday.nl/oauth2/token?grant_type=authorization_code&session=no_session&scope=openid&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&code=" +
-                finalAuthCode + "&code_verifier=16BBJMtEJe8blIJY848ROvvO02F5V205l5A10x_DqFE";
-
-            response = await _httpClientWithoutRedirect.PostAsync(baseurl,
-                new FormUrlEncodedContent(new Dictionary<string, string> {{"", ""}}));
-
-            var somtodayAuthentication =
-                JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(response.Content.ReadAsStringAsync()
-                    .Result);
-
-            if (somtodayAuthentication.access_token == null) return View("Inloggen");
-
-            var user = await GetSomtodayStudent(somtodayAuthentication.access_token);
-            user.somtoday_access_token = somtodayAuthentication.access_token;
-            user.somtoday_refresh_token = somtodayAuthentication.refresh_token;
-
-            await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
-            return RedirectToAction("Index", "Hoofdmenu");
-        }
-
-        private async Task<user> GetSomtodayStudent(string auth_token)
-        {
-            //GET: https://api.somtoday.nl/rest/v1/leerlingen?additional=pasfoto
-            var baseurl = "https://api.somtoday.nl/rest/v1/leerlingen?additional=pasfoto";
-
-            _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + auth_token);
-            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-
-            var response = await _httpClient.GetAsync(baseurl);
-            var somtodayStudent =
-                JsonConvert.DeserializeObject<SomtodayStudentModel>(await response.Content.ReadAsStringAsync());
-            return new user
-            {
-                somtoday_student_id = somtodayStudent.items[0].links[0].id.ToString(),
-                somtoday_student_profile_picture = somtodayStudent.items[0].additionalObjects.pasfoto.datauri
-            };
-        }
-
-        private readonly Random random = new Random();
-
-        private string RandomStateString(int length = 8)
-        {
-            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            var result = "";
-            for (var i = 0; i < length; i++)
-                result += chars[random.Next(0, chars.Length)];
-
-
-            return result;
         }
 
         #endregion

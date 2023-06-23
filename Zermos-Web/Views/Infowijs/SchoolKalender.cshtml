@@ -1,0 +1,17 @@
+﻿@model System.Collections.Generic.List<Zermos_Web.Models.Datum>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="message-container">
+
+    @foreach (var datum in Model)
+    {
+        <div class="message">
+            <h2 class="title">@datum.title</h2>
+            <p class="content">@datum.content</p>
+        </div>
+    }
+</div>

@@ -1,0 +1,112 @@
+﻿@using Zermos_Web.Utilities
+@model List<IGrouping<Guid, Message>>
+
+@{
+    ViewBag.Title = "title";
+}
+
+<div class="message-container">
+
+    <div class="top-2">
+        <div class="message">
+            @{
+                var message = Model[0];
+                var title = message.FirstOrDefault(m => m.Type == 30);
+                var contents = message.Where(m => m.Type == 1);
+                var attachments = message.Where(m => m.Type == 2);
+            }
+
+            @if (title != null)
+            {
+                <h2 class="title">@title.Content.ContentClass.Title</h2>
+            }
+
+            <div class="contents">
+                @foreach (var content in contents)
+                {
+                    @* <pre class="content">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</pre> *@
+                    <p class="content">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</p>
+                }
+            </div>
+
+            <div class="attachments">
+                @foreach (var attachment in attachments)
+                {
+                    <div class="attachments">
+                        <p onclick="window.open('@attachment.Content.ContentClass.Url');" class="attachment">@attachment.Content.ContentClass.Name</p>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="message">
+            @{
+                message = Model[1];
+                title = message.FirstOrDefault(m => m.Type == 30);
+                contents = message.Where(m => m.Type == 1);
+                attachments = message.Where(m => m.Type == 2);
+            }
+
+            @if (title != null)
+            {
+                <h2 class="title">@title.Content.ContentClass.Title</h2>
+            }
+
+            <div class="contents">
+
+                @foreach (var content in contents)
+                {
+                    <p class="content">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</p>
+                }
+            </div>
+
+            <div class="attachments">
+                @foreach (var attachment in attachments)
+                {
+                    <div class="attachments">
+                        <p onclick="window.open('@attachment.Content.ContentClass.Url');" class="attachment">@attachment.Content.ContentClass.Name</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+
+    <div class="later">
+        @foreach (var messageGroup in Model.Skip(2))
+        {
+            <div class="message">
+
+                <div class="message">
+                    @{
+                        title = messageGroup.FirstOrDefault(m => m.Type == 30);
+                        contents = messageGroup.Where(m => m.Type == 1);
+                        attachments = messageGroup.Where(m => m.Type == 2);
+                    }
+
+                    @if (title != null)
+                    {
+                        <h2 class="title">@title.Content.ContentClass.Title</h2>
+                    }
+
+                    <div class="contents">
+
+                        @foreach (var content in contents)
+                        {
+                            <p class="content">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</p>
+                        }
+                    </div>
+
+                    <div class="attachments">
+                        @foreach (var attachment in attachments)
+                        {
+                            <div class="attachments">
+                                <p onclick="window.open('@attachment.Content.ContentClass.Url');" class="attachment">@attachment.Content.ContentClass.Name</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
