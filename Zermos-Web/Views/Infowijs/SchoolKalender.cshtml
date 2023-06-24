@@ -2,16 +2,79 @@
 
 @{
     ViewBag.Title = "title";
-    Layout = "_Layout";
+
+    // var groupedByMonth = Model.GroupBy(item => item.startsAt.ToDateTime().Year);
+    
+    //first group by year then by month
+    var groupedByMonth = Model.GroupBy(item => item.startsAt.ToDateTime().Year).SelectMany(group => group.GroupBy(item => item.startsAt.ToDateTime().Month));
 }
 
-<div class="message-container">
-
-    @foreach (var datum in Model)
+<div class="calendar-container">
+    @foreach (var dayGroup in groupedByMonth)
     {
-        <div class="message">
-            <h2 class="title">@datum.title</h2>
-            <p class="content">@datum.content</p>
+        <div class="calendar-month-parent" id="@(dayGroup.First()?.startsAt.ToDateTime().ToString("M-yy") ?? "Geen datum!?")">
+            
+            <h1>@(dayGroup.First()?.startsAt.ToDateTime().ToString("MMMM yyyy") ?? "Geen datum!?")</h1>
+            
+            @foreach (var homeworkItem in dayGroup)
+            {
+                <div class="calendar-item" style="@(homeworkItem.endsAt.ToDateTime() < DateTime.Now ? "opacity: 0.5;" : "opacity: 1;")">
+                    @homeworkItem.title <br/>
+                    
+                    @if (homeworkItem.startsAt.ToDateTime().Date == homeworkItem.endsAt.ToDateTime().Date && homeworkItem.isAllDay == false)
+                    {
+                        @(homeworkItem.startsAt.ToDateTime().ToString("dddd d MMMM HH:mm") + " - " + homeworkItem.endsAt.ToDateTime().ToString("HH:mm"))
+                    }
+                    else if (homeworkItem.startsAt.ToDateTime().Date != homeworkItem.endsAt.ToDateTime().Date && homeworkItem.isAllDay == false)
+                    {
+                        @(homeworkItem.startsAt.ToDateTime().ToString("dddd d MMMM") + " t/m " + homeworkItem.endsAt.ToDateTime().ToString("dddd d MMMM"))
+                    }
+                    else if (homeworkItem.isAllDay)
+                    {
+                        @homeworkItem.startsAt.ToDateTime().ToString("dddd d MMMM")
+                    }
+                    <br/>
+                    
+                    @* <div class="calendar-content @if (homeworkItem.startsAt.ToDateTime().Month < DateTime.Now.Month) { <text>calendar-content-passed</text> }">@Html.Raw(homeworkItem.title)</div> *@
+                    @* take in account for diffrent years *@
+                </div>
+            }
         </div>
     }
 </div>
+
+<script>
+    // Function to extract the target element ID from the URL
+    function getTargetElementId() {
+      const url = window.location.href;
+      const hashIndex = url.indexOf('#');
+      if (hashIndex !== -1) {
+        return url.slice(hashIndex);
+      }
+      return '';
+    }
+
+    // Function to smoothly scroll to the target element
+    function scrollToElement(element) {
+      const yOffset = -96; // Offset for fixed header, if any
+      const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
+      document.getElementById('main').scrollTo({ top: y, behavior: 'smooth' });
+    }
+    
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+
+    // Check if the URL contains a target element ID and scroll to it
+    window.addEventListener('DOMContentLoaded', () => {
+      const targetElementId = getTargetElementId().slice(1);
+      if (targetElementId) {
+        const targetElement = document.getElementById(targetElementId);
+        delay(500).then(() => {
+            
+            if (targetElement) {
+              scrollToElement(targetElement);
+            }
+            
+        });
+      }
+    });
+  </script>

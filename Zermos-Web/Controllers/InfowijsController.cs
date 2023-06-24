@@ -74,6 +74,8 @@ namespace Zermos_Web.Controllers
         [InfowijsRequirement]
         public async Task<IActionResult> SchoolKalender()
         {
+            ViewData["add_css"] = "infowijs";
+            
             //https://antonius.hoyapp.nl/hoy/v1/events
             _httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", await GetSessionToken());

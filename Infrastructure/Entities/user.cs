@@ -33,5 +33,10 @@ namespace Infrastructure.Entities
         // public DateTime? ApiKeyExpiresAt { get; set; }
         // public bool ApiKeyIsExpired => ApiKeyExpiresAt.HasValue && ApiKeyExpiresAt <= DateTime.UtcNow;
         
+        //koppelingen related
+        public bool zermeloIsLinked => zermelo_access_token != null;
+        public bool somtodayIsLinked => somtoday_access_token != null;
+        public bool infowijsIsLinked => infowijs_access_token != null;
+        
     }
 }

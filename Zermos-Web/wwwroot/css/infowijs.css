@@ -69,8 +69,31 @@
     margin: 0;
 }
 
-
-
 .message .attachments {
     grid-row: 3;
+}
+
+.calendar-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 16px;
+}
+
+.calendar-month-parent {
+    background: var(--overlay-color);
+    padding: 16px;
+    border-radius: 14px;
+}
+
+.calendar-month-parent h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.calendar-month-parent .calendar-item {
+    padding: 8px;
+    background: var(--background-color);
+    margin: 8px 8px 8px 0;
+    border-radius: 7px;
 }
