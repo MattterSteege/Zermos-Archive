@@ -45,29 +45,40 @@ namespace Zermos_Web.Controllers
         public IActionResult SchoolNieuws()
         {
             ViewData["add_css"] = "infowijs";
-            
-            //GET https://antonius.hoyapp.nl/hoy/v3/messages?include_archived=0&since=4000000
-            _httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", GetSessionToken().Result);
-            var response = _httpClient
-                .GetAsync("https://antonius.hoyapp.nl/hoy/v3/messages?include_archived=0&since=3500000").Result;
+            //the request was by ajax, so return the partial view
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                //GET https://antonius.hoyapp.nl/hoy/v3/messages?include_archived=0&since=4000000
+                _httpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", GetSessionToken().Result);
+                var response = _httpClient
+                    .GetAsync("https://antonius.hoyapp.nl/hoy/v3/messages?include_archived=0&since=3500000").Result;
 
-            /*
-                type catalog:
-                1: means message contents
-                2: means that that is an attached file (bijlage)     
-                3: means that it contains an foto
-                
-                12: probably means nothing, but is a divider between messages
-                
-                30: contains information about sender/reader and the title of the post 
-            */
+                /*
+                    type catalog:
+                    1: means message contents
+                    2: means that that is an attached file (bijlage)     
+                    3: means that it contains an foto
+                    
+                    12: probably means nothing, but is a divider between messages
+                    
+                    30: contains information about sender/reader and the title of the post 
+                */
 
-            //remove all messages that have type 12, then reverse the list so that the newest messages are on top, then group all the messages by groupid
-            var infowijsMessage = JsonConvert.DeserializeObject<InfowijsMessagesModel>(response.Content.ReadAsStringAsync().Result, Converter.Settings).Data.Messages
-                .Where(x => x.Type != 12).Reverse().GroupBy(x => x.GroupId).ToList();
+                //remove all messages that have type 12, then reverse the list so that the newest messages are on top, then group all the messages by groupid
+                var infowijsMessage = JsonConvert
+                    .DeserializeObject<InfowijsMessagesModel>(response.Content.ReadAsStringAsync().Result,
+                        Converter.Settings).Data.Messages
+                    .Where(x => x.Type != 12).Reverse().GroupBy(x => x.GroupId).ToList();
 
-            return View(infowijsMessage);
+                return View(infowijsMessage);
+            }
+
+            ViewData["laad_tekst"] = "De laatste nieuwtjes worden geladen";
+            //the request was by a legitimate user, so return the loading view
+            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
+                              ControllerContext.RouteData.Values["action"];
+            return View("_Loading");
         }
 
         [Authorize]
@@ -75,13 +86,25 @@ namespace Zermos_Web.Controllers
         public async Task<IActionResult> SchoolKalender()
         {
             ViewData["add_css"] = "infowijs";
-            
-            //https://antonius.hoyapp.nl/hoy/v1/events
-            _httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", await GetSessionToken());
-            
-            var response = await _httpClient.GetAsync("https://antonius.hoyapp.nl/hoy/v1/events");
-            return View(JsonConvert.DeserializeObject<InfowijsEventsModel>(await response.Content.ReadAsStringAsync(), Converter.Settings).data);
+            //the request was by ajax, so return the partial view
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                //https://antonius.hoyapp.nl/hoy/v1/events
+                _httpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", await GetSessionToken());
+
+                var response = await _httpClient.GetAsync("https://antonius.hoyapp.nl/hoy/v1/events");
+                return View(JsonConvert
+                    .DeserializeObject<InfowijsEventsModel>(await response.Content.ReadAsStringAsync(),
+                        Converter.Settings).data);
+            }
+
+            ViewData["laad_tekst"] = "De kalender wordt geladen";
+            //the request was by a legitimate user, so return the loading view
+            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
+                              ControllerContext.RouteData.Values["action"];
+
+            return View("_Loading");
         }
 
         [NonAction]

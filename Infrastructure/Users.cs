@@ -65,14 +65,11 @@ namespace Infrastructure
 
             if (user.name != null) userToUpdate.name = user.name;
             if (user.school_id != null) userToUpdate.school_id = user.school_id;
-            if (user.school_naam_code != null) userToUpdate.school_naam_code = user.school_naam_code;
             if (user.zermelo_access_token != null) userToUpdate.zermelo_access_token = user.zermelo_access_token;
             if (user.somtoday_access_token != null) userToUpdate.somtoday_access_token = user.somtoday_access_token;
             if (user.somtoday_refresh_token != null) userToUpdate.somtoday_refresh_token = user.somtoday_refresh_token;
             if (user.somtoday_student_id != null) userToUpdate.somtoday_student_id = user.somtoday_student_id;
-            // if (user.somtoday_student_profile_picture != null) userToUpdate.somtoday_student_profile_picture = user.somtoday_student_profile_picture;
             if (user.infowijs_access_token != null) userToUpdate.infowijs_access_token = user.infowijs_access_token;
-            if (user.infowijs_session_token != null) userToUpdate.infowijs_session_token = user.infowijs_session_token;
             if (user.VerificationToken != null) userToUpdate.VerificationToken = user.VerificationToken;
             if (user.CreatedAt != null) userToUpdate.CreatedAt = user.CreatedAt;
             if (user.VerifiedAt != null) userToUpdate.VerifiedAt = user.VerifiedAt;

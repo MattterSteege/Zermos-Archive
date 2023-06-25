@@ -297,13 +297,13 @@ main.main {
 .top-bar {
     position: absolute;
     width: calc(100% - 298px);
-    height: 48px;
-    border-radius: 14px;
+    height: 96px;
     overflow: hidden;
-    position: absolute;
-    top: 16px;
+    top: 0;
+    padding-top: 16px;
     right: 16px;
     z-index: 100;
+    background-image: linear-gradient(to top, rgba(255,0,0,0), var(--background-color) 25%);
 }
 
 .top-right-profile-picture {
@@ -312,7 +312,7 @@ main.main {
     border-radius: 14px;
     overflow: hidden;
     position: absolute;
-    top: 0;
+    top: 16px;
     right: 0;
     z-index: 100;
 }
@@ -347,7 +347,7 @@ main.main {
 .backbutton,
 .forewardbutton {
     position: absolute;
-    top: 0;
+    top: 16px;
     left: 0;
     width: 48px;
     height: 48px;

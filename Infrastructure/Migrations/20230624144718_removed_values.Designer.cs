@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ZermosContext))]
-    [Migration("20230609181019_ProfilePicture")]
-    partial class ProfilePicture
+    [Migration("20230624144718_removed_values")]
+    partial class removed_values
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -16,7 +16,7 @@ using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
-    [Route("account/[action]")]
+    [Route("[action]")]
     public class AccountAuthenticationController : Controller
     {
         private readonly IConfiguration _config;
@@ -28,13 +28,6 @@ namespace Zermos_Web.Controllers
             _logger = logger;
             _config = config;
             _users = users;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> LoginTest(int code = 0)
-        {
-            ViewData["add_css"] = "account";
-            return View("Login", new Tuple<string, int>("test@email.com", code));
         }
 
         [HttpGet]
@@ -70,7 +63,7 @@ namespace Zermos_Web.Controllers
                 mimeMessage.Body = new TextPart(TextFormat.Html)
                 {
                     Text =
-                        $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/Account/VerifyAccountCreation?token={newUser.VerificationToken}&email={newUser.email}\">hier</a> om je Zermos account te verifiëren. Deze link is 10 minuten geldig."
+                        $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountCreation?token={newUser.VerificationToken}&email={newUser.email}\">hier</a> om je Zermos account te verifiëren. Deze link is 10 minuten geldig."
                 };
 
                 // send email
@@ -96,7 +89,7 @@ namespace Zermos_Web.Controllers
             mimeMessage.Body = new TextPart(TextFormat.Html)
             {
                 Text =
-                    $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/Account/VerifyAccountLogin?token={user.VerificationToken}&email={user.email}\">hier</a> om in te loggen in je Zermos account. Deze link is 10 minuten geldig."
+                    $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountLogin?token={user.VerificationToken}&email={user.email}\">hier</a> om in te loggen in je Zermos account. Deze link is 10 minuten geldig."
             };
 
             // send email

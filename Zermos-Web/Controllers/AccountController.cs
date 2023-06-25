@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Zermos_Web.Controllers
 {
-    [Route("account/[action]")]
+    [Route("account")]
     public class AccountController : Controller
     {
         private readonly IConfiguration _config;
@@ -21,18 +21,10 @@ namespace Zermos_Web.Controllers
             _users = users;
         }
         
-        [HttpGet("@me")]
+        [HttpGet]
         public async Task<IActionResult> ShowAccount()
         {
-            var user = await _users.GetUserAsync(User.FindFirstValue("email"));
-            
-            var userString = "";
-            foreach (var property in user.GetType().GetProperties())
-            {
-                userString += $"{property.Name}: {property.GetValue(user)}\n";
-            }
-            
-            return Content(userString);
+            return View(await _users.GetUserAsync(User.FindFirstValue("email")));
         }
         //https://demos.creative-tim.com/soft-ui-dashboard-tailwind/pages/profile.html
     }

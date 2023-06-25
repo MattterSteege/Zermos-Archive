@@ -244,7 +244,6 @@ namespace Zermos_Web.Controllers
             return new user
             {
                 somtoday_student_id = somtodayStudent.items[0].links[0].id.ToString(),
-                somtoday_student_profile_picture = somtodayStudent.items[0].additionalObjects.pasfoto.datauri
             };
         }
 

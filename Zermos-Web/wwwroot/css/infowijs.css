@@ -77,6 +77,7 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 16px;
+    width: 80%;
 }
 
 .calendar-month-parent {
@@ -96,4 +97,35 @@
     background: var(--background-color);
     margin: 8px 8px 8px 0;
     border-radius: 7px;
+}
+
+.dates-container {
+    width: 20%;
+    position: fixed;
+    top: 96px;
+    right: -56px;
+    background: var(--overlay-color);
+    padding: 16px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+}
+
+.month {
+    padding: 4px 0 4px 4px;
+    border-top-left-radius: 8px; 
+    border-bottom-left-radius: 8px;
+}
+
+/*If screen width is 700px*/
+@media only screen and (max-width: 1000px) {
+
+    .dates-container {
+        display: none;
+    }
+
+    .calendar-container {
+        width: 100%;
+    }
+    
 }

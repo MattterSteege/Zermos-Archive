@@ -1,0 +1,11 @@
+﻿@model Infrastructure.Entities.user
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<a asp-controller="AccountAuthentication" asp-action="Logout">Uitloggen</a>
+<p>@(Model.is_infowijs_linked ? "infowijs is gekoppeld": "infowijs is niet gekoppeld")</p>
+<p>@(Model.is_zermelo_linked ? "zermelo is gekoppeld": "zermelo is niet gekoppeld")</p>
+<p>@(Model.is_somtoday_linked ? "somtoday is gekoppeld": "somtoday is niet gekoppeld")</p>
