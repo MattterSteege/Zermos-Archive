@@ -65,6 +65,7 @@
         </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="QRCoder" Version="1.4.3" />
         <PackageReference Include="WebEssentials.AspNetCore.PWA" Version="1.0.65" />
     </ItemGroup>
 
@@ -80,6 +81,10 @@
 
     <ItemGroup>
       <None Include="appsettings.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Pages\" />
     </ItemGroup>
 
 </Project>

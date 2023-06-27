@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "KOf3c5nw14ouiMtf5796Y5Z7EhK480SrCmlcfA0TwB/cCHODrMFA+nPrFG9ankaKyuqtvAcB5jmC3/YVVMtvSw==",
+  "dgSpecHash": "mOUtVKVHYTAYZ4IrnCg7NFODnRy0dvIIisLYPTE8gIy6LSLCcpGheSQqA+h8OMIIPABQC0Ma9CU83S3g7FUd9w==",
   "success": true,
   "projectFilePath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Zermos-Web\\Zermos-Web.csproj",
   "expectedPackageFiles": [
@@ -109,6 +109,7 @@
     "C:\\Users\\mattt\\.nuget\\packages\\nwebsec.aspnetcore.mvc\\2.0.0\\nwebsec.aspnetcore.mvc.2.0.0.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\nwebsec.aspnetcore.mvc.taghelpers\\2.0.0\\nwebsec.aspnetcore.mvc.taghelpers.2.0.0.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\portable.bouncycastle\\1.9.0\\portable.bouncycastle.1.9.0.nupkg.sha512",
+    "C:\\Users\\mattt\\.nuget\\packages\\qrcoder\\1.4.3\\qrcoder.1.4.3.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",

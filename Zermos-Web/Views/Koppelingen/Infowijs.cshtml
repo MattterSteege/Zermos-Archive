@@ -1,25 +1,34 @@
-﻿@model Zermos_Web.Models.AntoniusAppAuthenticatieModel
+﻿@model string
 
 @{
     ViewBag.Title = "title";
+    Layout = "_Layout";
 }
 
 @{
     if (Model == null)
     {
-        <form method="post" asp-controller="Koppelingen" asp-action="Infowijs">
-            <input type="text" name="username"/>
-            <button type="submit">log in</button>
-        </form>
+        <div class="login">
+            <div class="login-child">
+                <p class="child">Vul hier je schoolmail in.</p>
+                <p class="child">Nadat je je e-mailadres hebt ingevuld en op 'Inloggen' hebt geklikt, komt er een QR code tevoorschijn. Scan deze code met de QR code scanner in de antonius app (Antonius app > Meer > Hoy Scan), klik daarna op 'check of je ingelogd bent' en je bent ingelogd!</p>
+            </div>
+            <form method="post" asp-controller="Koppelingen" asp-action="Infowijs" class="form-control">
+                <input type="text" name="username" placeholder="vul je schoolemail in">
+                <input type="submit" value="Inloggen">
+            </form>
+        </div>
     }
     else
     {
-        <form method="post" asp-controller="Koppelingen" asp-action="Infowijs">
-            <input type="hidden" name="id" value="@Model.data.id"/>
-            <input type="hidden" name="customer_product_id" value="@Model.data.customer_product_id"/>
-            <input type="hidden" name="user_id" value="@Model.data.user_id"/>
-            <button type="submit">Check of je ingelogd bent</button>
-        </form>
+        <div class="login">
+            <div class="login-child">
+                <img src="https://chart.googleapis.com/chart?cht=qr&chl=@(ViewData["qr_text"])&chs=360x360&choe=UTF-8&chld=L|2" alt="qr code" class="img-thumbnail">
+            </div>
+            <form method="post" asp-controller="Koppelingen" asp-action="Infowijs" asp-route-koppelUuid="@ViewData["uuid"]" class="form-control">
+                <button type="submit">Check of je ingelogd bent</button>
+            </form>
+        </div>
     }
 }
 

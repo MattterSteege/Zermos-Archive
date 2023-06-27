@@ -66,6 +66,7 @@ namespace Infrastructure
             if (user.name != null) userToUpdate.name = user.name;
             if (user.school_id != null) userToUpdate.school_id = user.school_id;
             if (user.zermelo_access_token != null) userToUpdate.zermelo_access_token = user.zermelo_access_token;
+            if (user.zermelo_access_token_expires_at != null) userToUpdate.zermelo_access_token_expires_at = user.zermelo_access_token_expires_at;
             if (user.somtoday_access_token != null) userToUpdate.somtoday_access_token = user.somtoday_access_token;
             if (user.somtoday_refresh_token != null) userToUpdate.somtoday_refresh_token = user.somtoday_refresh_token;
             if (user.somtoday_student_id != null) userToUpdate.somtoday_student_id = user.somtoday_student_id;

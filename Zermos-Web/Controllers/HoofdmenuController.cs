@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Zermos_Web.Models.Requirements;
 
 namespace Zermos_Web.Controllers
 {
@@ -12,6 +13,7 @@ namespace Zermos_Web.Controllers
             _logger = logger;
         }
 
+        [NotImplementedYet]
         public IActionResult Index()
         {
             return View();

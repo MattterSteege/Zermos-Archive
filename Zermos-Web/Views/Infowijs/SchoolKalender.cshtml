@@ -31,7 +31,7 @@
                         }
                         else if (homeworkItem.isAllDay)
                         {
-                            @homeworkItem.startsAt.ToDateTime().ToString("dddd d MMMM")
+                            @homeworkItem.startsAt.ToDateTime().AddDays(1).ToString("dddd d MMMM")
                         }
                         <br/>
 

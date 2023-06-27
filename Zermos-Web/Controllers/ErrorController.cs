@@ -24,6 +24,11 @@ namespace Zermos_Web.Controllers
         {
             return View("404");
         }
+        
+        public IActionResult NotImplemented()
+        {
+            return View();
+        }
     }
 
     public class ErrorViewModel

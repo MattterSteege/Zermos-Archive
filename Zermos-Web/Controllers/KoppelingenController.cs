@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -10,6 +12,7 @@ using Infrastructure.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using QRCoder;
 using Zermos_Web.Models;
 using Zermos_Web.Utilities;
 
@@ -58,39 +61,87 @@ namespace Zermos_Web.Controllers
                 }
             };
         }
+        
+        [HttpGet]
+        public IActionResult Index()
+        {
+            ViewData["add_css"] = "koppelingen";
+            return View();
+        }
 
         #region infowijs
+        
+        // NEW INFOWIJS KOPPELING:
+        //     1. POST https://api.infowijs.nl/sessions/transfer/
+        //         returns:{ "data": "[uuid]" }
+        //     2. GET https://api.infowijs.nl/sessions/transfer/[uuid]
+        //         returns: { "data": "JWT" } of { "errors": [{ "status": 1300,"title": "There is no Session Transfer Request found" }] }
 
         [HttpGet]
         public IActionResult Infowijs()
         {
+            ViewData["add_css"] = "koppelingen";
+            
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Infowijs(string username, string id, string customer_product_id,
-            string user_id)
+        public async Task<IActionResult> Infowijs(string username, string koppelUuid)
         {
+            ViewData["add_css"] = "koppelingen";
+            
             if (username != null)
             {
-                string url = "https://api.infowijs.nl/sessions";
-                string json = JsonConvert.SerializeObject(new
-                    {customerProductId = "77584871-d26b-11ea-8b2e-060ffde8896c", username});
-                var data = new StringContent(json, Encoding.UTF8, "application/json");
-
-                var response = await _infowijsHttpClient.PostAsync(url, data);
-                var result = await response.Content.ReadAsStringAsync();
-
-                return View(JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModel>(result));
-            }
-
-            if (id != null && customer_product_id != null && user_id != null)
-            {
-                string url = $"https://api.infowijs.nl/sessions/{id}/{customer_product_id}/{user_id}";
-
+                string url = "https://api.infowijs.nl/sessions/transfer";
                 var response = await _infowijsHttpClient.PostAsync(url, null);
                 var result = await response.Content.ReadAsStringAsync();
+                
+                var uuid = JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModelAuthSuccess>(result).data;
 
+                ViewData["qr_text"] = "hoy_scan://v1/login/" + uuid;
+                ViewData["uuid"] = uuid;
+
+                return View(model: "");
+                
+                // string url = "https://api.infowijs.nl/sessions";
+                // string json = JsonConvert.SerializeObject(new
+                //     {customerProductId = "77584871-d26b-11ea-8b2e-060ffde8896c", username});
+                // var data = new StringContent(json, Encoding.UTF8, "application/json");
+                //
+                // var response = await _infowijsHttpClient.PostAsync(url, data);
+                // var result = await response.Content.ReadAsStringAsync();
+
+                //return View(JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModel>(result));
+            }
+
+            // if (id != null && customer_product_id != null && user_id != null)
+            // {
+            //     string url = $"https://api.infowijs.nl/sessions/{id}/{customer_product_id}/{user_id}";
+            //
+            //     var response = await _infowijsHttpClient.PostAsync(url, null);
+            //     var result = await response.Content.ReadAsStringAsync();
+            //
+            //     if (result.StartsWith("{\"data\":\""))
+            //     {
+            //         string token = result.Substring(9, result.Length - 11);
+            //
+            //         var user = new user {infowijs_access_token = token};
+            //         await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
+            //
+            //         return RedirectToAction("Index", "Hoofdmenu");
+            //     }
+            //
+            //     // return View(JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModel>(result));
+            //     return View();
+            // }
+
+            if (koppelUuid != null)
+            {
+                string url = $"https://api.infowijs.nl/sessions/transfer/{koppelUuid}";
+                
+                var response = await _infowijsHttpClient.GetAsync(url);
+                var result = await response.Content.ReadAsStringAsync();
+                
                 if (result.StartsWith("{\"data\":\""))
                 {
                     string token = result.Substring(9, result.Length - 11);
@@ -101,10 +152,13 @@ namespace Zermos_Web.Controllers
                     return RedirectToAction("Index", "Hoofdmenu");
                 }
 
-                return View(JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModel>(result));
+                ViewData["qr_text"] = "hoy_scan://v1/login/" + koppelUuid;
+                ViewData["uuid"] = koppelUuid;
+                
+                return View(model: "");
             }
 
-            return RedirectToAction(nameof(Infowijs));
+            return View();
         }
 
         #endregion
@@ -154,7 +208,7 @@ namespace Zermos_Web.Controllers
 
             var zermeloAuthentication = JsonConvert.DeserializeObject<ZermeloAuthenticatieModel>(responseString);
 
-            var user = new user {zermelo_access_token = zermeloAuthentication.access_token, school_id = username};
+            var user = new user {zermelo_access_token = zermeloAuthentication.access_token, school_id = username, zermelo_access_token_expires_at = DateTime.Now.AddMonths(2)};
             await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
 
             return RedirectToAction("Rooster", "Zermelo");

@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="koppelingen-container">
+    <div class="infowijs">
+        <h1>Infowijs</h1>
+        <p>Zermos <b>X</b> Infowijs, wat krijg je? Als je Infowijs aan je Zermos account koppelt dan krijg je toegan tot de volgende functies:</p>
+        <ul>
+            <li>
+                Schoolkalender
+            </li>
+            <li>
+                Schoolberichten
+            </li>
+        </ul>
+        <p>In de schoolkalender staan alle activiteiten die de school heeft ingepland. Denk hierbij aan toetsweken, uitjes en andere activiteiten. In de schoolberichten staan alle berichten die de school heeft geplaatst. Denk hierbij aan mededelingen, nieuwstjes en andere berichten.</p>
+        <a asp-controller="Koppelingen" asp-action="Infowijs">Koppel Infowijs</a>
+    </div>
+    <div class="somtoday">
+        <h1>Somtoday</h1>
+        <p>Zermos <b>X</b> Somtoday, wat krijg je? Als je Somtoday aan je Zermos account koppelt dan krijg je toegan tot de volgende functies:</p>
+        <ul>
+            <li>
+                Cijfers
+            </li>
+            <li>
+                Huiswerk
+            </li>
+        </ul>
+        <p>In de cijfers staan alle cijfers die je hebt gehaald. In het huiswerk staan alle huiswerkopdrachten die je hebt gekregen (en je nooit gaat maken)</p>
+        <a asp-controller="Koppelingen" asp-action="Somtoday">Koppel Somtoday</a>
+    </div>
+    <div class="zermelo">
+        <h1>Zermelo</h1>
+        <p>Zermos <b>X</b> Zermelo, wat krijg je? Als je Zermelo aan je Zermos account koppelt dan krijg je toegan tot de volgende functies:</p>
+        <ul>
+            <li>
+                Rooster
+            </li>
+        </ul>
+        <p>In het rooster staan alle lessen die je hebt op een dag.</p>
+        <a asp-controller="Koppelingen" asp-action="Zermelo">Koppel Zermelo</a>
+    </div>
+</div>
