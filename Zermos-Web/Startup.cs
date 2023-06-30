@@ -36,8 +36,8 @@ namespace Zermos_Web
                 .AddCookie("EmailScheme", options =>
                 {
                     // options.AccessDeniedPath = "/Account/Denied";
-                    options.LoginPath = "/Account/Login";
-                    options.LogoutPath = "/Account/Logout";
+                    options.LoginPath = "/Login";
+                    options.LogoutPath = "/Logout";
                     options.ExpireTimeSpan = cookieExpiration;
                     options.Cookie.MaxAge = cookieExpiration;
                     options.Cookie.IsEssential = true;

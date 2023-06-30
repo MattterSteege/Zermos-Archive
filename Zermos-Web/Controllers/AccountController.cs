@@ -1,9 +1,12 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Infrastructure;
+using Infrastructure.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Zermos_Web.Models.Requirements;
 
 namespace Zermos_Web.Controllers
 {
@@ -22,8 +25,10 @@ namespace Zermos_Web.Controllers
         }
         
         [HttpGet]
+        [AddLoadingScreen("account laden...")]
         public async Task<IActionResult> ShowAccount()
         {
+            ViewData["add_css"] = "account";
             return View(await _users.GetUserAsync(User.FindFirstValue("email")));
         }
         //https://demos.creative-tim.com/soft-ui-dashboard-tailwind/pages/profile.html

@@ -1,4 +1,6 @@
-﻿@using Zermos_Web.Utilities
+﻿@* @using Zermos_Web.Utilities *@
+@using Zermos_Web.Utilities
+@using System.Reflection
 @model Infrastructure.Entities.user
 
 @{
@@ -6,14 +8,205 @@
     Layout = "_Layout";
 }
 
-<a asp-controller="AccountAuthentication" asp-action="Logout">Uitloggen</a>
-<br/>
-<p>@(Model.is_infowijs_linked ? "infowijs is gekoppeld": "infowijs is niet gekoppeld") - geldig tot: @(TokenUtils.GetTokenExpiration(Model.infowijs_access_token).ToString("d/M/yyyy"))</p>
-<p>@(Model.is_zermelo_linked ? "zermelo is gekoppeld": "zermelo is niet gekoppeld") - geldig tot: @(Model.zermelo_access_token_expires_at?.ToString("d/M/yyyy"))</p>
-<p>@(Model.is_somtoday_linked ? "somtoday is gekoppeld": "somtoday is niet gekoppeld") - geldig tot: @(TokenUtils.GetTokenExpiration(Model.somtoday_refresh_token).ToString("d/M/yyyy"))</p>
-<br/>
-<a asp-controller="Koppelingen" asp-action="Index">koppelingen</a><br/>
-<a asp-controller="Koppelingen" asp-action="Infowijs">koppel infowijs</a><br/>
-<a asp-controller="Koppelingen" asp-action="Zermelo">koppel zermelo</a><br/>
-<a asp-controller="Koppelingen" asp-action="Somtoday">koppel somtoday</a>
-```
+<div class="information-group">
+    <div class="information-container">
+        <div class="information-item-parent" id="profiel">
+            <h1>Profiel</h1>
+            <p>@Model.email</p>
+        </div>
+
+        <div class="information-item-parent" id="info">
+            <h1>Opgeslagen informatie</h1>
+            <p>klik op een item om de informatie te kopieren</p>
+            <div class="opgeslagen-informatie-grid">
+                @{
+                    //Loop trough all the properties of the user object and display them like this: [name]: [value (capt at 25 characters)]
+                    foreach (PropertyInfo property in Model.GetType().GetProperties())
+                    {
+                        //<p>@property.Name: @property.GetValue(Model, null)?.ToString()</p>
+                        //cap at an maximum of 25 chars, but it can be less
+                        <p onclick="copyToClipboard('@property.GetValue(Model, null)?.ToString()')"><b>@property.Name</b>: @property.GetValue(Model, null)?.ToString()?.Substring(0, (property.GetValue(Model, null)?.ToString()?.Length ?? 0) > 21 ? 21 : (property.GetValue(Model, null)?.ToString()?.Length ?? 0))</p>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="information-item-parent" id="koppelingen">
+            <h1>Koppelingen</h1>
+            <div class="opgeslagen-informatie-grid">
+                <div class="infowijs">
+                    @if (Model.is_infowijs_linked)
+                    {
+                        <p><b>Infowijs</b>, geldig tot: @(TokenUtils.GetTokenExpiration(Model.infowijs_access_token).ToString("d/M/yyyy"))</p>
+                        <button id="infowijs-first" onclick="AreYouSure('infowijs')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
+
+                        <form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="infowijs">
+                            <button id="infowijs-second" class="koppel-knop zeker" style="display: none">Zeker?</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <p><b>Infowijs</b> is niet gekoppeld</p>
+                        <button onclick="window.location.href='/koppelingen/infowijs'" class="koppel-knop koppelen">Koppelen</button>
+                    }
+                </div>
+                <div class="zermelo">
+                    @if (Model.is_zermelo_linked)
+                    {
+                        <p><b>Zermelo</b>, geldig tot: @(Model.zermelo_access_token_expires_at?.ToString("d/M/yyyy"))</p>
+                        <button id="zermelo-first" onclick="AreYouSure('zermelo')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
+
+                        <form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="zermelo">
+                            <button id="zermelo-second" class="koppel-knop zeker" style="display: none">Zeker?</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <p><b>Zermelo</b> is niet gekoppeld</p>
+                        <button onclick="window.location.href='/koppelingen/zermelo'" class="koppel-knop koppelen">Koppelen</button>
+                    }
+                </div>
+
+                <div class="somtoday">
+                    @if (Model.is_somtoday_linked)
+                    {
+                        <p><b>Somtoday</b>, geldig tot: @(TokenUtils.GetTokenExpiration(Model.somtoday_refresh_token).ToString("d/M/yyyy"))</p>
+                        <button id="somtoday-first" onclick="AreYouSure('somtoday')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
+
+                        <form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="somtoday">
+                            <button id="somtoday-second" class="koppel-knop zeker" style="display: none">Zeker?</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <p><b>Somtoday</b> is niet gekoppeld</p>
+                        <button onclick="window.location.href='/koppelingen/somtoday'" class="koppel-knop koppelen">Koppelen</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="items-container">
+        <div class="item" onclick="doScrolling('profiel', 1000)" href="?profiel">
+            profiel
+        </div>
+        <div class="item" onclick="doScrolling('info', 1000)" href="?info">
+            Opgeslagen informatie
+        </div>
+        <div class="item" onclick="doScrolling('koppelingen', 1000)" href="?koppelingen">
+            koppelingen
+        </div>
+    </div>
+</div>
+
+<script>
+    function AreYouSure(app) {
+        document.getElementById(app + '-first').style.display = 'none';
+        document.getElementById(app + '-second').style.display = 'block';
+    }
+
+    function copyToClipboard(s) {
+        //use clipboard api if available
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(s);
+            return;
+        }
+        
+        //fallback to old method
+        var el = document.createElement('textarea');
+        el.value = s;
+        el.setAttribute('readonly', '');
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+    }
+
+    function getElementY(query) {
+        return document.getElementById('main').scrollTop + document.getElementById(query).getBoundingClientRect().top
+    }
+
+    function doScrolling(element, duration) {
+        var startingY = document.getElementById('main').scrollTop
+        var elementY = getElementY(element)
+        // If element is close to page's bottom then window will scroll only to some position above the element.
+        var targetY = document.body.scrollHeight - elementY < document.getElementById('main').innerHeight ? document.body.scrollHeight - document.getElementById('main').innerHeight : elementY
+        var diff = targetY - startingY
+
+        // Easing function: easeInOutCubic
+        // From: https://gist.github.com/gre/1650294
+        var easing = function(t) {
+            return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
+        }
+        var start
+
+        if (!diff) return
+        
+        diff -= 96;
+        
+        //add a percentage of diff to the duration
+        duration += Math.abs(diff / 10);
+
+        // Bootstrap our animation - it will get called right before next frame shall be rendered.
+        window.requestAnimationFrame(function step(timestamp) {
+            if (!start) start = timestamp
+            // Elapsed miliseconds since start of scrolling.
+            var time = timestamp - start
+            // Get percent of completion in range [0, 1].
+            var percent = Math.min(time / duration, 1)
+            // Apply the easing.
+            // It can cause bad-looking slow frames in browser performance tool, so be careful.
+            percent = easing(percent)
+
+            document.getElementById('main').scrollTo(0, startingY + diff * percent)
+
+            // Proceed with animation as long as we wanted it to.
+            if (time < duration) {
+                window.requestAnimationFrame(step)
+            }
+        })
+    }
+
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var mainElement = document.getElementById('main');
+        var indexItems = document.querySelectorAll('.items-container div');
+        var items = document.querySelectorAll('.information-item-parent');
+
+        //add the 'active' class to the item who's top is the closest to the top of the mainElement
+        function setActive() {
+          var closest = items[0];
+          var closestDistance = Math.abs(items[0].getBoundingClientRect().top - mainElement.getBoundingClientRect().top - 96);
+        
+          for (var i = 1; i < items.length; i++) {
+            var distance = Math.abs(items[i].getBoundingClientRect().top - mainElement.getBoundingClientRect().top - 96);
+            if (distance < closestDistance) {
+              closest = items[i];
+              closestDistance = distance;
+            }
+          }
+        
+          for (var i = 0; i < indexItems.length; i++) {
+            indexItems[i].classList.remove('active');
+          }
+        
+          for (var i = 0; i < indexItems.length; i++) {
+            if (indexItems[i].getAttribute('href') === '?' + closest.getAttribute('id')) {
+              indexItems[i].classList.add('active');
+              break;
+            }
+          }
+        }
+
+        //add the 'active' class to the item who's top is the closest to the top of the mainElement
+        setActive();
+
+        //add the 'active' class to the item who's top is the closest to the top of the mainElement when scrolling
+        mainElement.addEventListener('scroll', function() {
+            setActive();
+        });
+    });
+</script>

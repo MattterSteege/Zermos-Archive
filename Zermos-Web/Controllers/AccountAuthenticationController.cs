@@ -117,8 +117,8 @@ namespace Zermos_Web.Controllers
             if (user.VerificationToken != token) return await VerificationFailed(3); //token incorrect
 
             user.VerifiedAt = DateTime.Now;
-            user.VerificationToken = null;
-            user.CreatedAt = null;
+            user.VerificationToken = String.Empty;
+            user.CreatedAt = DateTime.MinValue;
             await _users.UpdateUserAsync(email.ToLower(), user);
 
             ViewData["add_css"] = "account";
@@ -136,8 +136,8 @@ namespace Zermos_Web.Controllers
 
             if (user.VerificationToken != token) return await VerificationFailed(3); //invalid token
 
-            user.VerificationToken = null;
-            user.CreatedAt = null;
+            user.VerificationToken = String.Empty;
+            user.CreatedAt = DateTime.MinValue;
             await _users.UpdateUserAsync(email.ToLower(), user);
             ViewData["add_css"] = "account";
             return await VerificationSuccess(email.ToLower());

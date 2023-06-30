@@ -83,8 +83,4 @@
       <None Include="appsettings.json" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Pages\" />
-    </ItemGroup>
-
 </Project>

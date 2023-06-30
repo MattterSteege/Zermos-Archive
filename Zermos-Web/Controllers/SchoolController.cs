@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zermos_Web.Models;
+using Zermos_Web.Models.Requirements;
 using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
@@ -21,13 +22,11 @@ namespace Zermos_Web.Controllers
             _logger = logger;
         }
 
+        [AddLoadingScreen("Nieuws word van de het informatieboord gehaald")]
         public async Task<IActionResult> InformatieBoord()
         {
             ViewData["add_css"] = "school";
-
-            //the request was by ajax, so return the partial view
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            {
+            
                 var model = new List<InformatieBoordModel>();
 
                 using var httpClient = new HttpClient();
@@ -67,13 +66,6 @@ namespace Zermos_Web.Controllers
 
                 return View(model);
             }
-
-            ViewData["laad_tekst"] = "Nieuws word van de het informatieboord gehaald";
-            //the request was by a legitimate user, so return the loading view
-            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
-                              ControllerContext.RouteData.Values["action"];
-            return View("_Loading");
-        }
 
         public async Task<IActionResult> Message(string content)
         {

@@ -78,16 +78,103 @@
     font-size: 1rem;
 }
 
-/*.child {*/
-/*    border-radius: 1rem;*/
-/*    background: var(--overlay-color);*/
-/*    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);*/
-/*    display: flex;*/
-/*    justify-content: start;*/
-/*    align-items: start;*/
-/*    cursor: pointer;*/
-/*    color: var(--text-color);*/
-/*    text-decoration: none;*/
-/*    height: 100%;*/
-/*    padding: 16px;*/
-/*}*/
+.information-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 16px;
+    width: 80%;
+}
+
+.information-item-parent {
+    background: var(--overlay-color);
+    padding: 16px;
+    border-radius: 14px;
+}
+
+.calendar-month-parent h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.calendar-month-parent .calendar-item {
+    padding: 8px;
+    background: var(--background-color);
+    margin: 8px 8px 8px 0;
+    border-radius: 7px;
+}
+
+.items-container {
+    width: 20%;
+    position: fixed;
+    top: 96px;
+    right: -56px;
+    background: var(--overlay-color);
+    padding: 16px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+}
+
+.item {
+    padding: 4px 0 4px 4px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.opgeslagen-informatie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(355px, 100% / 4)), 1fr));
+    grid-gap: 16px;
+    padding-top: 16px;
+}
+
+.opgeslagen-informatie-grid p {
+    padding: 8px;
+    background: var(--background-color);
+    border-radius: 7px;
+    height: 40px;
+}
+
+.opgeslagen-informatie-grid p:hover {
+    background: var(--inactive-color);
+}
+
+.koppel-knop {
+    color: white;
+    border-radius: 8px;
+    padding: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    border: transparent;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.koppelen {
+    background: #00b894;
+}
+
+.ontkoppelen {
+    background: #d63031;
+}
+
+.zeker {
+    background: #000000;
+}
+
+@media (max-width: 1000px) {
+    .koppelingen-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+    }
+
+    .items-container {
+        display: none;
+    }
+
+    .information-container {
+        width: 100%;
+    }
+}

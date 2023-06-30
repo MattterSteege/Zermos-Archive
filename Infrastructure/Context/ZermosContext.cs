@@ -1,13 +1,16 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Entities;
+using MySql.Data.MySqlClient;
 
 #nullable disable
 
 namespace Infrastructure.Context
 {
-    public partial class ZermosContext : DbContext
+    public class ZermosContext : DbContext
     {
+        public bool DatabaseAvailable { get; set; } = false;
+        
         public ZermosContext() { }
         public ZermosContext(DbContextOptions<ZermosContext> options) : base(options) { }
 
@@ -23,8 +26,31 @@ namespace Infrastructure.Context
                 string password = Environment.GetEnvironmentVariable("DB_PASSWORD");
                 string database = Environment.GetEnvironmentVariable("DB_NAME");
 
+                var connectionString = $"server={server};user={user};password={password};database={database};port={port};Connect Timeout=5;";
 
-                optionsBuilder.UseMySQL($"server={server};user={user};password={password};database={database};port={port};Connect Timeout=5;");
+                if (IsDatabaseConnectionValid(connectionString))
+                {
+                    optionsBuilder.UseMySQL(connectionString);
+                }
+            }
+        }
+
+        private bool IsDatabaseConnectionValid(string connectionString)
+        {
+            try
+            {
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    DatabaseAvailable = true;
+                    return true;
+                }
+            }
+            catch
+            {
+                DatabaseAvailable = false;
+                return false;
             }
         }
     }

@@ -37,80 +37,57 @@ namespace Zermos_Web.Controllers
         }
 
         #region Cijfers
+
         [Authorize]
         [SomtodayRequirement]
+        [AddLoadingScreen("Cijfers worden opgehaald")]
         public async Task<IActionResult> Cijfers(bool refresh_token = false)
         {
             ViewData["add_css"] = "somtoday";
             //the request was by ajax, so return the partial view
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+
+            var user = await _users.GetUserAsync(User.FindFirstValue("email"));
+
+            if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
+                await RefreshToken(user.somtoday_refresh_token);
+
+            var baseUrl =
+                $"https://api.somtoday.nl/rest/v1/resultaten/huidigVoorLeerling/{user.somtoday_student_id}?begintNaOfOp={DateTime.Now:yyyy}-01-01";
+
+            _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
+            _httpClient.DefaultRequestHeaders.Add("Range", "items=0-99");
+            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+
+            var response = await _httpClient.GetAsync(baseUrl);
+
+            var grades =
+                JsonConvert.DeserializeObject<SomtodayGradesModel>(await response.Content.ReadAsStringAsync());
+
+            if (response.IsSuccessStatusCode == false)
+                return NotFound(
+                    "Er is iets fout gegaan bij het ophalen van de cijfers, het is mogelijk dat je SOMtoday token verlopen is.");
+
+            if (int.TryParse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1],
+                    out var total))
             {
-                var user = await _users.GetUserAsync(User.FindFirstValue("email"));
+                var requests = total / 100 * 100;
 
-                if (TokenUtils.CheckToken(user.somtoday_access_token) == false && refresh_token == false)
+                for (var i = 100; i < requests; i += 100)
                 {
-                    ViewData["redirected_from_loadingpage"] = "true";
-                    ViewData["laad_tekst"] = "Cijfers worden geladen nadat je SOMtoday token is ververst";
-                    ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
-                                      ControllerContext.RouteData.Values["action"] + "?refresh_token=true";
-                    return View("_Loading");
+                    _httpClient.DefaultRequestHeaders.Clear();
+                    _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
+                    _httpClient.DefaultRequestHeaders.Add("Range", $"items={i}-{i + 99}");
+                    _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+
+                    response = await _httpClient.GetAsync(baseUrl);
+                    var _grades =
+                        JsonConvert.DeserializeObject<SomtodayGradesModel>(
+                            await response.Content.ReadAsStringAsync());
+                    grades.items.AddRange(_grades.items);
                 }
-
-                if (refresh_token)
-                {
-                    await RefreshToken(user.somtoday_refresh_token);
-                    ViewData["redirected_from_loadingpage"] = "true";
-                    ViewData["laad_tekst"] = "SOMtoday token is ververst, cijfers worden geladen";
-                    ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
-                                      ControllerContext.RouteData.Values["action"];
-                    return View("_Loading");
-                }
-
-
-                var baseUrl =
-                    $"https://api.somtoday.nl/rest/v1/resultaten/huidigVoorLeerling/{user.somtoday_student_id}?begintNaOfOp={DateTime.Now:yyyy}-01-01";
-
-                _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
-                _httpClient.DefaultRequestHeaders.Add("Range", "items=0-99");
-                _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-
-                var response = await _httpClient.GetAsync(baseUrl);
-
-                var grades =
-                    JsonConvert.DeserializeObject<SomtodayGradesModel>(await response.Content.ReadAsStringAsync());
-
-                if (response.IsSuccessStatusCode == false)
-                    return NotFound(
-                        "Er is iets fout gegaan bij het ophalen van de cijfers, het is mogelijk dat je SOMtoday token verlopen is.");
-
-                if (int.TryParse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1],
-                        out var total))
-                {
-                    var requests = total / 100 * 100;
-
-                    for (var i = 100; i < requests; i += 100)
-                    {
-                        _httpClient.DefaultRequestHeaders.Clear();
-                        _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
-                        _httpClient.DefaultRequestHeaders.Add("Range", $"items={i}-{i + 99}");
-                        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-
-                        response = await _httpClient.GetAsync(baseUrl);
-                        var _grades =
-                            JsonConvert.DeserializeObject<SomtodayGradesModel>(
-                                await response.Content.ReadAsStringAsync());
-                        grades.items.AddRange(_grades.items);
-                    }
-                }
-
-                return View(Sort(grades));
             }
 
-            ViewData["laad_tekst"] = "Cijfers worden geladen";
-            //the request was by a legitimate user, so return the loading view
-            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
-                              ControllerContext.RouteData.Values["action"];
-            return View("_Loading");
+            return View(Sort(grades));
         }
 
         public async Task RefreshToken(string token = null)
@@ -141,83 +118,59 @@ namespace Zermos_Web.Controllers
             };
             await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
         }
-        
+
+        [AddLoadingScreen("Cijfers worden geladen")]
         public IActionResult Cijfer(string content = null)
         {
             ViewData["add_css"] = "somtoday";
-            //the request was by ajax, so return the partial view
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            {
-                var a = Convert.FromBase64String(content ?? "");
-                var b = Encoding.UTF8.GetString(a);
-                var c = JsonConvert.DeserializeObject<sortedGrades>(b);
 
-                return View(c);
-            }
+            var a = Convert.FromBase64String(content ?? "");
+            var b = Encoding.UTF8.GetString(a);
+            var c = JsonConvert.DeserializeObject<sortedGrades>(b);
 
-            ViewData["laad_tekst"] = "Cijfer worden geladen";
-            //the request was by a legitimate user, so return the loading view
-            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
-                              ControllerContext.RouteData.Values["action"] + "?content=" + content;
-            return View("_Loading");
+            return View(c);
         }
-        
+
+        [AddLoadingScreen("Cijfers worden geladen")]
         public IActionResult CijferData(string content = null)
         {
             ViewData["add_css"] = "somtoday";
-            //the request was by ajax, so return the partial view
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            {
-                var a = Convert.FromBase64String(content ?? "");
-                var b = Encoding.UTF8.GetString(a);
-                var c = JsonConvert.DeserializeObject<Item>(b);
 
-                return View(c);
-            }
+            var a = Convert.FromBase64String(content ?? "");
+            var b = Encoding.UTF8.GetString(a);
+            var c = JsonConvert.DeserializeObject<Item>(b);
 
-            ViewData["laad_tekst"] = "Cijfer worden geladen";
-            //the request was by a legitimate user, so return the loading view
-            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
-                              ControllerContext.RouteData.Values["action"] + "?content=" + content;
-            return View("_Loading");
+            return View(c);
         }
-        
+
+        [AddLoadingScreen("Cijfers worden geladen")]
         public IActionResult CijferStatestieken(string content = null, bool asPFD = false)
         {
             if (asPFD) return View("_Loading");
 
             ViewData["add_css"] = "somtoday";
-            //the request was by ajax, so return the partial view
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            {
-                var a = Convert.FromBase64String(content ?? "");
-                var b = Encoding.UTF8.GetString(a);
-                var grades = JsonConvert.DeserializeObject<sortedGrades>(b);
 
-                ViewData["stats"] = new Dictionary<string, string>();
-                (ViewData["stats"] as Dictionary<string, string>)?.Add("vak",
-                    grades.vak.naam);
-                (ViewData["stats"] as Dictionary<string, string>)?.Add("hoogste",
-                    grades.grades.Max(x => x.geldendResultaat).ToString());
-                (ViewData["stats"] as Dictionary<string, string>)?.Add("laagste",
-                    grades.grades.Min(x => x.geldendResultaat).ToString());
+            var a = Convert.FromBase64String(content ?? "");
+            var b = Encoding.UTF8.GetString(a);
+            var grades = JsonConvert.DeserializeObject<sortedGrades>(b);
+
+            ViewData["stats"] = new Dictionary<string, string>();
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("vak",
+                grades.vak.naam);
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("hoogste",
+                grades.grades.Max(x => x.geldendResultaat).ToString());
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("laagste",
+                grades.grades.Min(x => x.geldendResultaat).ToString());
 
 
-                var charts = new List<Chart>();
-                charts.Add(GenerateGradeOverTimeAndGradeAverage(grades));
-                charts.Add(GetVoldoendeOndervoldoendeRatio(grades));
-                charts.Add(GetMostCommonGrade(grades));
-                //charts.Add(GetStandardDeviationChart(grades));
+            var charts = new List<Chart>();
+            charts.Add(GenerateGradeOverTimeAndGradeAverage(grades));
+            charts.Add(GetVoldoendeOndervoldoendeRatio(grades));
+            charts.Add(GetMostCommonGrade(grades));
+            //charts.Add(GetStandardDeviationChart(grades));
 
 
-                return View(charts);
-            }
-
-            ViewData["laad_tekst"] = "Statestieken berekenen";
-            //the request was by a legitimate user, so return the loading view
-            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
-                              ControllerContext.RouteData.Values["action"] + "?content=" + content;
-            return View("_Loading");
+            return View(charts);
         }
 
         private Chart CreateChart(string title, bool showHeight = true)
@@ -431,6 +384,8 @@ namespace Zermos_Web.Controllers
 
         public SomtodayGradesModel Sort(SomtodayGradesModel grades)
         {
+            if (grades == null) return new SomtodayGradesModel() {items = new List<Item>()};
+            
             grades.items = grades.items.OrderBy(x => x.datumInvoer).ToList();
 
             foreach (var item in grades.items.Where(x => x.resultaatLabelAfkorting == "V"))
@@ -447,73 +402,54 @@ namespace Zermos_Web.Controllers
         }
 
         #endregion
-        
+
         #region huiswerk
+
         [Authorize]
         [SomtodayRequirement]
-        public async Task<IActionResult> Huiswerk(bool refresh_token = false)
+        [AddLoadingScreen("Huiswerk wordt opgehaald")]
+        public async Task<IActionResult> Huiswerk(int days, bool refresh_token = false)
         {
             ViewData["add_css"] = "somtoday";
-            //the request was by ajax, so return the partial view
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            {
-                var user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
-                if (TokenUtils.CheckToken(user.somtoday_access_token) == false && refresh_token == false)
-                {
-                    ViewData["redirected_from_loadingpage"] = "true";
-                    ViewData["laad_tekst"] = "Huiswerk wordt opgevraagd nadat je SOMtoday token is ververst";
-                    ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
-                                      ControllerContext.RouteData.Values["action"] + "?refresh_token=true";
-                    return View("_Loading");
-                }
+            var user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
-                if (refresh_token)
-                {
-                    await RefreshToken(user.somtoday_refresh_token);
-                    ViewData["redirected_from_loadingpage"] = "true";
-                    ViewData["laad_tekst"] = "SOMtoday token is ververst, huiswerk wordt opgevraagd";
-                    ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
-                                      ControllerContext.RouteData.Values["action"];
-                    return View("_Loading");
-                }
+            days = days == 0 ? 14 : days;
+            days = days > 50 ? 50 : days;
 
-                var _startDate = DateTime.Now.AddDays(-14).ToString("yyyy-MM-dd");
-                var baseurl =
-                    $"https://api.somtoday.nl/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
+            if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
+                await RefreshToken(user.somtoday_refresh_token);
 
-                var rangemin = 0;
-                var rangemax = 99;
+            var _startDate = DateTime.Now.AddDays(-days).ToString("yyyy-MM-dd");
+            var baseurl =
+                $"https://api.somtoday.nl/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
+
+            var rangemin = 0;
+            var rangemax = 99;
 
 
-                _httpClient.DefaultRequestHeaders.Clear();
-                _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
-                _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-                _httpClient.DefaultRequestHeaders.Add("Range", $"items={rangemin}-{rangemax}");
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
+            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+            _httpClient.DefaultRequestHeaders.Add("Range", $"items={rangemin}-{rangemax}");
 
-                var response = await _httpClient.GetAsync(baseurl);
+            var response = await _httpClient.GetAsync(baseurl);
 
-                var somtodayHuiswerk =
-                    JsonConvert.DeserializeObject<somtodayHomeworkModel>(
-                        await response.Content.ReadAsStringAsync());
+            var somtodayHuiswerk =
+                JsonConvert.DeserializeObject<somtodayHomeworkModel>(
+                    await response.Content.ReadAsStringAsync());
 
-                return View(Sort(somtodayHuiswerk));
-            }
-
-            ViewData["laad_tekst"] = "Huiswerk wordt opgevraagd";
-            //the request was by a legitimate user, so return the loading view
-            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
-                              ControllerContext.RouteData.Values["action"];
-            return View("_Loading");
+            return View(Sort(somtodayHuiswerk));
         }
+
 
         public somtodayHomeworkModel Sort(somtodayHomeworkModel homework)
         {
-            var cutoffDate = DateTime.Now.AddDays(-14);
+            if (homework == null)
+                return new somtodayHomeworkModel {items = new List<Models.somtodayHomeworkModel.Item>()};
 
-            homework.items = homework.items
-                .Where(x => x.studiewijzerItem != null && x.datumTijd >= cutoffDate &&
-                            x.studiewijzerItem.huiswerkType != "LESSTOF")
+            homework.items = homework?.items?
+                .Where(x => x.studiewijzerItem != null && x.studiewijzerItem.huiswerkType != "LESSTOF")
                 .OrderBy(x => x.datumTijd)
                 .ToList();
 

@@ -1,5 +1,8 @@
 ﻿@* ReSharper disable Mvc.ControllerNotResolved *@
 @* ReSharper disable Mvc.ActionNotResolved *@
+@{
+    bool isDatabaseAvailable = true;
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -43,37 +46,43 @@
                     </div>
                 </a>
             </li>
+            @if (isDatabaseAvailable)
+            {
+                <h5 class="Heading">Zermelo</h5>
 
-            <h5 class="Heading">Zermelo</h5>
+                <li>
+                    <a asp-controller="Zermelo" asp-action="rooster">
+                        <div class="menu-item">
+                            <i class="fa-solid fa-calendar menu-icons fa-fw"></i>
+                            <p>Rooster</p>
+                        </div>
+                    </a>
+                </li>
+            }
 
-            <li>
-                <a asp-controller="Zermelo" asp-action="rooster">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-calendar menu-icons fa-fw"></i>
-                        <p>Rooster</p>
-                    </div>
-                </a>
-            </li>
+            @if (isDatabaseAvailable)
+            {
+                <h5 class="Heading">SOMtoday</h5>
 
-            <h5 class="Heading">SOMtoday</h5>
+                <li>
+                    <a asp-controller="Somtoday" asp-action="huiswerk">
+                        <div class="menu-item">
+                            <i class="fa-solid fa-pen-to-square menu-icons fa-fw"></i>
+                            <p>Huiswerk</p>
+                        </div>
+                    </a>
+                </li>
 
-            <li>
-                <a asp-controller="Somtoday" asp-action="huiswerk">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-pen-to-square menu-icons fa-fw"></i>
-                        <p>Huiswerk</p>
-                    </div>
-                </a>
-            </li>
+                <li>
+                    <a asp-controller="Somtoday" asp-action="cijfers">
+                        <div class="menu-item">
+                            <i class="fa-solid fa-line-chart menu-icons fa-fw"></i>
+                            <p>Cijfers</p>
+                        </div>
+                    </a>
+                </li>
+            }
 
-            <li>
-                <a asp-controller="Somtoday" asp-action="cijfers">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-line-chart menu-icons fa-fw"></i>
-                        <p>Cijfers</p>
-                    </div>
-                </a>
-            </li>
 
             <h5 class="Heading">School</h5>
 
@@ -86,34 +95,36 @@
                 </a>
             </li>
 
-            <h5 class="Heading">De Antonius app</h5>
+            @if (isDatabaseAvailable)
+            {
+                <h5 class="Heading">De Antonius app</h5>
 
-            <li>
-                <a asp-controller="Infowijs" asp-action="SchoolNieuws">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-newspaper menu-icons fa-fw"></i>
-                        <p>School nieuws</p>
-                    </div>
-                </a>
-            </li>
+                <li>
+                    <a asp-controller="Infowijs" asp-action="SchoolNieuws">
+                        <div class="menu-item">
+                            <i class="fa-solid fa-newspaper menu-icons fa-fw"></i>
+                            <p>School nieuws</p>
+                        </div>
+                    </a>
+                </li>
 
-            <li>
-                <a asp-controller="Infowijs" asp-action="SchoolKalender">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-calendar menu-icons fa-fw"></i>
-                        <p>School kalender</p>
-                    </div>
-                </a>
-            </li>
+                <li>
+                    <a asp-controller="Infowijs" asp-action="SchoolKalender">
+                        <div class="menu-item">
+                            <i class="fa-solid fa-calendar menu-icons fa-fw"></i>
+                            <p>School kalender</p>
+                        </div>
+                    </a>
+                </li>
 
-            <li style="display: none" class="hidden-account">
-                <a asp-controller="Account" asp-action="ShowAccount">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-user menu-icons fa-fw"></i>
-                    </div>
-                </a>
-            </li>
-
+                <li style="display: none" class="hidden-account">
+                    <a asp-controller="Account" asp-action="ShowAccount">
+                        <div class="menu-item">
+                            <i class="fa-solid fa-user menu-icons fa-fw"></i>
+                        </div>
+                    </a>
+                </li>
+            }
             <div class="spacer"></div>
         </ul>
     </div>

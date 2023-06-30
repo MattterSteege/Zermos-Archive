@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -26,6 +28,7 @@ namespace Zermos_Web.Controllers
         private readonly HttpClient _somtodayHttpClient;
         private readonly HttpClient _somtodayHttpClientWithoutRedirect;
         private readonly Users _users;
+        private readonly Random _random;
 
         public KoppelingenController(ILogger<KoppelingenController> logger, Users users)
         {
@@ -57,9 +60,10 @@ namespace Zermos_Web.Controllers
             {
                 DefaultRequestHeaders =
                 {
-                    {"origin", "https://inloggen.somtoday.nl"}
+                    {"origin", "https://inloggen.somtoday.nl"},
                 }
             };
+            _random = new Random();
         }
         
         [HttpGet]
@@ -68,6 +72,30 @@ namespace Zermos_Web.Controllers
             ViewData["add_css"] = "koppelingen";
             return View();
         }
+
+        #region ontkoppelen
+        [HttpPost("ontkoppel/{app}")]
+        public async Task<IActionResult> Ontkoppel(string app)
+        {
+            switch (app)
+            {
+                case "infowijs":
+                    await _users.UpdateUserAsync(User.FindFirstValue("email"), new user{infowijs_access_token = string.Empty});
+                    return Redirect("/account");
+                
+                case "somtoday":
+                    await _users.UpdateUserAsync(User.FindFirstValue("email"), new user{somtoday_access_token = string.Empty, somtoday_refresh_token = string.Empty, somtoday_student_id = string.Empty});
+                    return Redirect("/account");
+                
+                case "zermelo":
+                    await _users.UpdateUserAsync(User.FindFirstValue("email"), new user{zermelo_access_token = string.Empty, zermelo_access_token_expires_at = DateTime.MinValue});
+                    return Redirect("/account");
+
+                default:
+                    return Redirect("/account");
+            }
+        }
+        #endregion
 
         #region infowijs
         
@@ -86,7 +114,7 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Infowijs(string username, string koppelUuid)
+        public async Task<IActionResult> Infowijs(string username, string koppelUuid, bool retry = false)
         {
             ViewData["add_css"] = "koppelingen";
             
@@ -100,6 +128,7 @@ namespace Zermos_Web.Controllers
 
                 ViewData["qr_text"] = "hoy_scan://v1/login/" + uuid;
                 ViewData["uuid"] = uuid;
+                ViewData["retry"] = retry;
 
                 return View(model: "");
                 
@@ -154,6 +183,7 @@ namespace Zermos_Web.Controllers
 
                 ViewData["qr_text"] = "hoy_scan://v1/login/" + koppelUuid;
                 ViewData["uuid"] = koppelUuid;
+                ViewData["retry"] = retry;
                 
                 return View(model: "");
             }
@@ -229,18 +259,19 @@ namespace Zermos_Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Somtoday(string username, string password)
         {
-            //code challenge: __JVhs4cj-iqe8ha5750d9QSWJMpV49SXHPqBgFulkk
-            //code verifier: 16BBJMtEJe8blIJY848ROvvO02F5V205l5A10x_DqFE
+            var tokens = GenerateTokens();
+            //0 = code_verifier
+            //1 = code_challenge
 
-            var baseurl = string.Format(
-                "https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling://oauth/callback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state={0}&scope=openid&tenant_uuid={1}&session=no_session&code_challenge={2}&code_challenge_method=S256",
-                TokenUtils.RandomString(8), "c23fbb99-be4b-4c11-bbf5-57e7fc4f4388",
-                "__JVhs4cj-iqe8ha5750d9QSWJMpV49SXHPqBgFulkk");
+            //string baseurl = $"https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling://oauth/callback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state={TokenUtils.RandomString(8)}&scope=openid&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&session=no_session&code_challenge={tokens[1]}&code_challenge_method=S256";
+            string baseurl = $"https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling%3A%2F%2Foauth%2Fcallback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state=XLFOCQME&scope=openid&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&session=no_session&code_challenge=nuGm3_lqhVDq6eEd4Jo_0wXC5I40ts0XmQttqLARCDg&code_challenge_method=S256";
 
             var response = await _somtodayHttpClientWithoutRedirect.GetAsync(baseurl);
-            var authCode = response.Headers.Location.Query.Remove(0, 6);
             
-
+            if (response.StatusCode != HttpStatusCode.Redirect)
+                throw new Exception("Somtoday redirect is not 302");
+            
+            var authCode = response.Headers.Location?.Query.Remove(0, 6) ?? throw new Exception("Somtoday authcode is null");
 
             baseurl = "https://inloggen.somtoday.nl/?-1.-panel-signInForm&auth=" + authCode;
 
@@ -266,7 +297,7 @@ namespace Zermos_Web.Controllers
 
 
             baseurl = "https://inloggen.somtoday.nl/oauth2/token?grant_type=authorization_code&session=no_session&scope=openid&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&code=" +
-                      finalAuthCode + "&code_verifier=16BBJMtEJe8blIJY848ROvvO02F5V205l5A10x_DqFE";
+                      finalAuthCode + "&code_verifier=" + tokens[1];
 
             response = await _somtodayHttpClientWithoutRedirect.PostAsync(baseurl,
                 new FormUrlEncodedContent(new Dictionary<string, string> {{"", ""}}));
@@ -301,6 +332,34 @@ namespace Zermos_Web.Controllers
             };
         }
 
+        public string[] GenerateTokens()
+        {
+            string[] tokens = new string[2];
+            tokens[0] = GenerateNonce();
+            tokens[1] = GenerateCodeChallenge(tokens[0]);
+            return tokens;
+        }
+
+        private string GenerateNonce()
+        {
+            const string chars = "abcdefghijklmnopqrstuvwxyz123456789";
+            var nonce = new char[128];
+            for (int i = 0; i < nonce.Length; i++)
+                nonce[i] = chars[_random.Next(0, chars.Length)];
+
+            return new string(nonce);
+        }
+
+        private string GenerateCodeChallenge(string codeVerifier)
+        {
+            using var sha256 = SHA256.Create();
+            var hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(codeVerifier));
+            var b64Hash = Convert.ToBase64String(hash);
+            var code = Regex.Replace(b64Hash, "\\+", "-");
+            code = Regex.Replace(code, "\\/", "_");
+            code = Regex.Replace(code, "=+$", "");
+            return code;
+        }
         #endregion
     }
 }

@@ -3,7 +3,6 @@ TODO: Add better UX such as errors on logging in
 TODO: (later, when feasible) Add an API system that allows users to create an api key with which they can interact with SOMtoday, Zermelo and de Antonius app more easy then with the current system (when the request is past with an api key, then return the normal data)
 TODO: find a way to find what the since paramater means in messages from infowijs
 TODO: een linkje naar de school documenten maken; ""
-TODO: GEBRUIK HOY SCAN OM IN TE LOGGEN zie: auth.js
 TODO: bij return list<> in de api, als het null is doe dat return Enumerable.Empty<>()
 TODO: add a way to shorten an url for sharing (like bit.ly)
 

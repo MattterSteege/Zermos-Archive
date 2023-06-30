@@ -96,9 +96,33 @@ namespace Zermos_Web.Utilities
             return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(exp).ToLocalTime();
         }
 
-        public static string RandomString(int length = 6)
+        public enum RandomStringType
         {
-            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            LowerCase,
+            UpperCase,
+            Numbers,
+            SpecialCharacters
+        }
+
+        public static string RandomString(int length = 6, RandomStringType type = RandomStringType.UpperCase)
+        {
+            var chars = "";
+            switch (type)
+            {
+                case RandomStringType.LowerCase:
+                    chars += "abcdefghijklmnopqrstuvwxyz";
+                    break;
+                case RandomStringType.UpperCase:
+                    chars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                    break;
+                case RandomStringType.Numbers:
+                    chars += "0123456789";
+                    break;
+                case RandomStringType.SpecialCharacters:
+                    chars += "!\"§$%&/()=?`´*+~#'-_.:,;<>|\\";
+                    break;
+            }
+            
             var result = "";
             for (var i = 0; i < length; i++)
                 result += chars[Random.Next(0, chars.Length)];

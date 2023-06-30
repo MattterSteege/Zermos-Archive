@@ -77,7 +77,7 @@
 
 <div id="content">
     <div class="loader-text">
-        @(ViewData["laad_tekst"] ?? "De pagina wordt geladen")
+        @(ViewData["laad_tekst"] ?? Context.Items["laad_tekst"] ?? "De pagina wordt geladen")
     </div>
     <div class="loading-dots-container">
         <div class="loading-dots"></div>
@@ -91,10 +91,18 @@
     <script>
         $(function () {
           
-          if("@ViewData["url"]" === "") { return; }
+          //loader-text.innerhtmlo = ?laad_tekst
+          //string url - ?url
+          
+          const urlParams = new URLSearchParams(window.location.search);
+          
+          //$(".loader-text").innerText = urlParams.get('laad_tekst') ?? "De pagina wordt geladen";
+          
+         
+          if("@(ViewData["url"] ?? Context.Items["url"])" === "") { return; }
 
             $.ajax({
-                url: "@ViewData["url"]",
+                url: urlParams.get('url'),
                 success: function (data) { 
                   
                   //make the #content fade out in 250ms

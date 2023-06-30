@@ -42,53 +42,45 @@ namespace Zermos_Web.Controllers
 
         [Authorize]
         [InfowijsRequirement]
+        [AddLoadingScreen("De laatste nieuwtjes worden geladen")]
         public IActionResult SchoolNieuws()
         {
             ViewData["add_css"] = "infowijs";
-            //the request was by ajax, so return the partial view
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            {
-                //GET https://antonius.hoyapp.nl/hoy/v3/messages?include_archived=0&since=4000000
-                _httpClient.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", GetSessionToken().Result);
-                var response = _httpClient
-                    .GetAsync("https://antonius.hoyapp.nl/hoy/v3/messages?include_archived=0&since=3500000").Result;
 
-                /*
-                    type catalog:
-                    1: means message contents
-                    2: means that that is an attached file (bijlage)     
-                    3: means that it contains an foto
-                    
-                    12: probably means nothing, but is a divider between messages
-                    
-                    30: contains information about sender/reader and the title of the post 
-                */
+            //GET https://antonius.hoyapp.nl/hoy/v3/messages?include_archived=0&since=4000000
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", GetSessionToken().Result);
+            var response = _httpClient
+                .GetAsync("https://antonius.hoyapp.nl/hoy/v3/messages?include_archived=0&since=3500000").Result;
 
-                //remove all messages that have type 12, then reverse the list so that the newest messages are on top, then group all the messages by groupid
-                var infowijsMessage = JsonConvert
-                    .DeserializeObject<InfowijsMessagesModel>(response.Content.ReadAsStringAsync().Result,
-                        Converter.Settings).Data.Messages
-                    .Where(x => x.Type != 12).Reverse().GroupBy(x => x.GroupId).ToList();
+            /*
+                type catalog:
+                1: means message contents
+                2: means that that is an attached file (bijlage)     
+                3: means that it contains an foto
+                
+                12: probably means nothing, but is a divider between messages
+                
+                30: contains information about sender/reader and the title of the post 
+            */
 
-                return View(infowijsMessage);
-            }
+            //remove all messages that have type 12, then reverse the list so that the newest messages are on top, then group all the messages by groupid
+            var infowijsMessage = JsonConvert
+                .DeserializeObject<InfowijsMessagesModel>(response.Content.ReadAsStringAsync().Result,
+                    Converter.Settings).Data.Messages
+                .Where(x => x.Type != 12).Reverse().GroupBy(x => x.GroupId).ToList();
 
-            ViewData["laad_tekst"] = "De laatste nieuwtjes worden geladen";
-            //the request was by a legitimate user, so return the loading view
-            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
-                              ControllerContext.RouteData.Values["action"];
-            return View("_Loading");
+            return View(infowijsMessage);
         }
 
+
         [Authorize]
-        [InfowijsRequirement]
-        public async Task<IActionResult> SchoolKalender()
-        {
-            ViewData["add_css"] = "infowijs";
-            //the request was by ajax, so return the partial view
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            [InfowijsRequirement]
+            [AddLoadingScreen("De kalender wordt geladen")]
+            public async Task<IActionResult> SchoolKalender()
             {
+                ViewData["add_css"] = "infowijs";
+
                 //https://antonius.hoyapp.nl/hoy/v1/events
                 _httpClient.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", await GetSessionToken());
@@ -99,27 +91,20 @@ namespace Zermos_Web.Controllers
                         Converter.Settings).data);
             }
 
-            ViewData["laad_tekst"] = "De kalender wordt geladen";
-            //the request was by a legitimate user, so return the loading view
-            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
-                              ControllerContext.RouteData.Values["action"];
+            [NonAction]
+            private async Task<string> GetSessionToken()
+            {
+                string mainAccessToken =
+                    (await _users.GetUserAsync(User.FindFirstValue("email"))).infowijs_access_token;
 
-            return View("_Loading");
-        }
-
-        [NonAction]
-        private async Task<string> GetSessionToken()
-        {
-            string mainAccessToken = (await _users.GetUserAsync(User.FindFirstValue("email"))).infowijs_access_token;
-
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.infowijs.nl/sessions/access_token");
-            request.Headers.Add("Authorization", "Bearer " + mainAccessToken);
-            request.Headers.Add("Accept", "application/vnd.infowijs.v1+json");
-            request.Headers.Add("x-infowijs-client", $"nl.infowijs.hoy.android/nl.infowijs.client.antonius");
-            var response = await _httpClient.SendAsync(request);
-            var responseString = await response.Content.ReadAsStringAsync();
-            var accessToken = JsonConvert.DeserializeObject<InfowijsAccessTokenModel>(responseString);
-            return accessToken.data;
+                var request = new HttpRequestMessage(HttpMethod.Post, "https://api.infowijs.nl/sessions/access_token");
+                request.Headers.Add("Authorization", "Bearer " + mainAccessToken);
+                request.Headers.Add("Accept", "application/vnd.infowijs.v1+json");
+                request.Headers.Add("x-infowijs-client", $"nl.infowijs.hoy.android/nl.infowijs.client.antonius");
+                var response = await _httpClient.SendAsync(request);
+                var responseString = await response.Content.ReadAsStringAsync();
+                var accessToken = JsonConvert.DeserializeObject<InfowijsAccessTokenModel>(responseString);
+                return accessToken.data;
+            }
         }
     }
-}
