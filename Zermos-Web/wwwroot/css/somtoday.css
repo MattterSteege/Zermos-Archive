@@ -78,11 +78,11 @@
 }
 
 .sufficient {
-    color: #00ff00;
+    color: var(--confirm-color);
 }
 
 .insufficient {
-    color: #ff0000;
+    color: var(--deny-color);
 }
 
 .specific-grade {
@@ -208,6 +208,7 @@
     height: auto;
     width: 100%;
     grid-gap: 16px;
+    color: var(--text-color);
 }
 
 .homework-container .homework-day-parent {

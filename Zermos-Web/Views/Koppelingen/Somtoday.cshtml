@@ -11,3 +11,19 @@
     <input type="password" name="password" placeholder="wachtwoord">
     <input type="submit" value="Inloggen">
 </form>
+
+
+@if (Model is string)
+{
+    <script>
+        //on page load
+        document.addEventListener('DOMContentLoaded', function()
+        {
+            alert("@Model");
+            
+            document.querySelectorAll("tbody td:last-child").forEach(x => {
+                console.log(x);
+            });
+        });
+    </script>
+}

@@ -150,8 +150,12 @@ namespace Zermos_Web.Controllers
             var claims = new List<Claim>
             {
                 new Claim("email", email),
-                new Claim("role", "user")
+                new Claim("role", "user"),
             };
+            
+            var user = await _users.GetUserAsync(email);
+            
+            HttpContext.Response.Cookies.Append("theme", user.theme ?? "light");
 
             await HttpContext.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "user", "role")));
 

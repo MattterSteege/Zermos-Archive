@@ -43,7 +43,7 @@
 .form-control input:nth-child(2) {
     width: 25%;
     background: var(--accent-color);
-    color: white;
+    color: var(--text-color);
     border-radius: 0 1rem 1rem 0;
     font-weight: 600;
     cursor: pointer;
@@ -89,6 +89,7 @@
     background: var(--overlay-color);
     padding: 16px;
     border-radius: 14px;
+    color: var(--text-color);
 }
 
 .calendar-month-parent h1 {
@@ -120,6 +121,7 @@
     padding: 4px 0 4px 4px;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
+    color: var(--text-color);
 }
 
 .opgeslagen-informatie-grid {
@@ -141,7 +143,7 @@
 }
 
 .koppel-knop {
-    color: white;
+    color: var(--text-color);
     border-radius: 8px;
     padding: 8px;
     font-weight: 600;
@@ -153,15 +155,15 @@
 }
 
 .koppelen {
-    background: #00b894;
+    background: var(--confirm-color);
 }
 
 .ontkoppelen {
-    background: #d63031;
+    background: var(--deny-color);
 }
 
 .zeker {
-    background: #000000;
+    background: var(--sure-color);
 }
 
 @media (max-width: 1000px) {

@@ -1,11 +1,14 @@
-﻿@* ReSharper disable Mvc.ControllerNotResolved *@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@* ReSharper disable Mvc.ControllerNotResolved *@
 @* ReSharper disable Mvc.ActionNotResolved *@
 @{
     bool isDatabaseAvailable = true;
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<!--light, dark, red, blue, pink -->
+<!--get the theme from the session storage using js-->
+<html lang="nl" class="@(Context.Request.Cookies["theme"] ?? "light")">
 <head>
     <meta charset="UTF-8">
     <title>Zermos</title>

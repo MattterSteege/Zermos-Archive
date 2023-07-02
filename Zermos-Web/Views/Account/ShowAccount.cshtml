@@ -7,7 +7,7 @@
     ViewBag.Title = "title";
     Layout = "_Layout";
 }
-
+<iframe name="update" id="update" style="display: none;"></iframe>
 <div class="information-group">
     <div class="information-container">
         <div class="information-item-parent" id="profiel">
@@ -85,6 +85,26 @@
                 </div>
             </div>
         </div>
+
+        <div class="information-item-parent" id="theme">
+            <h1>Thema's</h1>
+            <form method="POST" asp-controller="Account" asp-action="UpdateTheme" asp-route-newTheme="light">
+                <button class="koppel-knop" style="background: var(--background-color) !important">licht</button>
+            </form>
+            <form method="POST" asp-controller="Account" asp-action="UpdateTheme" asp-route-newTheme="dark">
+                <button class="koppel-knop" style="background: var(--background-color) !important">Donker</button>
+            </form>
+            <form method="POST" asp-controller="Account" asp-action="UpdateTheme" asp-route-newTheme="red">
+                <button class="koppel-knop" style="background: var(--background-color) !important">Rood</button>
+            </form>
+            <form method="POST" asp-controller="Account" asp-action="UpdateTheme" asp-route-newTheme="blue">
+                <button class="koppel-knop" style="background: var(--background-color) !important">Blauw</button>
+            </form>
+            <form method="POST" asp-controller="Account" asp-action="UpdateTheme" asp-route-newTheme="pink">
+                <button class="koppel-knop" style="background: var(--background-color) !important">Roze</button>
+            </form>
+        </div>
+
     </div>
     <div class="items-container">
         <div class="item" onclick="doScrolling('profiel', 1000)" href="?profiel">
@@ -96,6 +116,9 @@
         <div class="item" onclick="doScrolling('koppelingen', 1000)" href="?koppelingen">
             koppelingen
         </div>
+        <div class="item" onclick="doScrolling('theme', 1000)" href="?theme">
+            Thema's
+        </div>
     </div>
 </div>
 
@@ -103,6 +126,11 @@
     function AreYouSure(app) {
         document.getElementById(app + '-first').style.display = 'none';
         document.getElementById(app + '-second').style.display = 'block';
+        
+        delay(3000).then(() => {
+            document.getElementById(app + '-first').style.display = 'block';
+            document.getElementById(app + '-second').style.display = 'none';
+        });
     }
 
     function copyToClipboard(s) {

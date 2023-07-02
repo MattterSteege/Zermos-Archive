@@ -1,9 +1,6 @@
 .main-container {
     width: 100%;
     height: 100%;
-
-    --rooster-item-background-color: #c6c6c6;
-    --rooster-item-cancellation-color: #EB3628;
 }
 
 .rooster {
@@ -101,6 +98,7 @@
     padding-left: 8px;
     font-weight: 600;
     background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 .hours-container ul li:first-child, .hours-container ul li:last-child {
@@ -139,16 +137,16 @@
     height: calc(100% - 16px);
     margin: 8px;
     border-radius: 4px;
-    background-color: var(--rooster-item-background-color);
+    background-color: var(--inactive-color);
     padding: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     font-weight: 600;
+    color: var(--text-color);
 }
 
 .canceled {
-    background-color: var(--rooster-item-cancellation-color);
-    color: #ffffff;
+    background-color: var(--deny-color);
 }

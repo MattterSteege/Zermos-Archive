@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -11,15 +9,16 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using QRCoder;
 using Zermos_Web.Models;
 using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
+    [Authorize]
     public class KoppelingenController : Controller
     {
         private readonly ILogger<KoppelingenController> _logger;
@@ -27,6 +26,7 @@ namespace Zermos_Web.Controllers
         private readonly HttpClient _zermeloHttpClient;
         private readonly HttpClient _somtodayHttpClient;
         private readonly HttpClient _somtodayHttpClientWithoutRedirect;
+        private readonly HttpClient _httpClientWithoutRedirect;
         private readonly Users _users;
         private readonly Random _random;
 
@@ -54,6 +54,7 @@ namespace Zermos_Web.Controllers
                 DefaultRequestHeaders =
                 {
                     {"origin", "https://inloggen.somtoday.nl"},
+                    {"accept", "application/json"}
                 }
             };
             _somtodayHttpClientWithoutRedirect = new HttpClient(new HttpClientHandler {AllowAutoRedirect = false})
@@ -63,9 +64,10 @@ namespace Zermos_Web.Controllers
                     {"origin", "https://inloggen.somtoday.nl"},
                 }
             };
+            _httpClientWithoutRedirect = new HttpClient(new HttpClientHandler {AllowAutoRedirect = false});
             _random = new Random();
         }
-        
+
         [HttpGet]
         public IActionResult Index()
         {
@@ -74,121 +76,99 @@ namespace Zermos_Web.Controllers
         }
 
         #region ontkoppelen
+
         [HttpPost("ontkoppel/{app}")]
         public async Task<IActionResult> Ontkoppel(string app)
         {
             switch (app)
             {
                 case "infowijs":
-                    await _users.UpdateUserAsync(User.FindFirstValue("email"), new user{infowijs_access_token = string.Empty});
+                    await _users.UpdateUserAsync(User.FindFirstValue("email"),
+                        new user {infowijs_access_token = string.Empty});
                     return Redirect("/account");
-                
+
                 case "somtoday":
-                    await _users.UpdateUserAsync(User.FindFirstValue("email"), new user{somtoday_access_token = string.Empty, somtoday_refresh_token = string.Empty, somtoday_student_id = string.Empty});
+                    await _users.UpdateUserAsync(User.FindFirstValue("email"),
+                        new user
+                        {
+                            somtoday_access_token = string.Empty, somtoday_refresh_token = string.Empty,
+                            somtoday_student_id = string.Empty
+                        });
                     return Redirect("/account");
-                
+
                 case "zermelo":
-                    await _users.UpdateUserAsync(User.FindFirstValue("email"), new user{zermelo_access_token = string.Empty, zermelo_access_token_expires_at = DateTime.MinValue});
+                    await _users.UpdateUserAsync(User.FindFirstValue("email"),
+                        new user
+                        {
+                            zermelo_access_token = string.Empty, zermelo_access_token_expires_at = DateTime.MinValue
+                        });
                     return Redirect("/account");
 
                 default:
                     return Redirect("/account");
             }
         }
+
         #endregion
 
         #region infowijs
-        
+
         // NEW INFOWIJS KOPPELING:
         //     1. POST https://api.infowijs.nl/sessions/transfer/
         //         returns:{ "data": "[uuid]" }
         //     2. GET https://api.infowijs.nl/sessions/transfer/[uuid]
         //         returns: { "data": "JWT" } of { "errors": [{ "status": 1300,"title": "There is no Session Transfer Request found" }] }
 
-        [HttpGet]
-        public IActionResult Infowijs()
-        {
-            ViewData["add_css"] = "koppelingen";
-            
-            return View();
-        }
+        // [HttpGet]
+        // public IActionResult Infowijs()
+        // {
+        //     ViewData["add_css"] = "koppelingen";
+        //
+        //     return View();
+        // }
 
+        [HttpGet]
         [HttpPost]
-        public async Task<IActionResult> Infowijs(string username, string koppelUuid, bool retry = false)
+        public async Task<IActionResult> Infowijs(string koppelUuid, bool retry = false)
         {
             ViewData["add_css"] = "koppelingen";
-            
-            if (username != null)
+
+            if (koppelUuid == null)
             {
-                string url = "https://api.infowijs.nl/sessions/transfer";
-                var response = await _infowijsHttpClient.PostAsync(url, null);
-                var result = await response.Content.ReadAsStringAsync();
-                
-                var uuid = JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModelAuthSuccess>(result).data;
+                string url1 = "https://api.infowijs.nl/sessions/transfer";
+                var response1 = await _infowijsHttpClient.PostAsync(url1, null);
+                var result1 = await response1.Content.ReadAsStringAsync();
+
+                var uuid = JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModelAuthSuccess>(result1).data;
 
                 ViewData["qr_text"] = "hoy_scan://v1/login/" + uuid;
                 ViewData["uuid"] = uuid;
                 ViewData["retry"] = retry;
 
                 return View(model: "");
-                
-                // string url = "https://api.infowijs.nl/sessions";
-                // string json = JsonConvert.SerializeObject(new
-                //     {customerProductId = "77584871-d26b-11ea-8b2e-060ffde8896c", username});
-                // var data = new StringContent(json, Encoding.UTF8, "application/json");
-                //
-                // var response = await _infowijsHttpClient.PostAsync(url, data);
-                // var result = await response.Content.ReadAsStringAsync();
-
-                //return View(JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModel>(result));
             }
 
-            // if (id != null && customer_product_id != null && user_id != null)
-            // {
-            //     string url = $"https://api.infowijs.nl/sessions/{id}/{customer_product_id}/{user_id}";
-            //
-            //     var response = await _infowijsHttpClient.PostAsync(url, null);
-            //     var result = await response.Content.ReadAsStringAsync();
-            //
-            //     if (result.StartsWith("{\"data\":\""))
-            //     {
-            //         string token = result.Substring(9, result.Length - 11);
-            //
-            //         var user = new user {infowijs_access_token = token};
-            //         await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
-            //
-            //         return RedirectToAction("Index", "Hoofdmenu");
-            //     }
-            //
-            //     // return View(JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModel>(result));
-            //     return View();
-            // }
+            string url2 = $"https://api.infowijs.nl/sessions/transfer/{koppelUuid}";
 
-            if (koppelUuid != null)
+            var response2 = await _infowijsHttpClient.GetAsync(url2);
+            var result2 = await response2.Content.ReadAsStringAsync();
+
+            if (result2.StartsWith("{\"data\":\""))
             {
-                string url = $"https://api.infowijs.nl/sessions/transfer/{koppelUuid}";
-                
-                var response = await _infowijsHttpClient.GetAsync(url);
-                var result = await response.Content.ReadAsStringAsync();
-                
-                if (result.StartsWith("{\"data\":\""))
-                {
-                    string token = result.Substring(9, result.Length - 11);
+                string token = result2.Substring(9, result2.Length - 11);
 
-                    var user = new user {infowijs_access_token = token};
-                    await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
+                var user = new user {infowijs_access_token = token};
+                await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
 
-                    return RedirectToAction("Index", "Hoofdmenu");
-                }
-
-                ViewData["qr_text"] = "hoy_scan://v1/login/" + koppelUuid;
-                ViewData["uuid"] = koppelUuid;
-                ViewData["retry"] = retry;
-                
-                return View(model: "");
+                return RedirectToAction("Index", "Hoofdmenu");
             }
 
-            return View();
+            ViewData["qr_text"] = "hoy_scan://v1/login/" + koppelUuid;
+            ViewData["uuid"] = koppelUuid;
+            ViewData["retry"] = retry;
+
+            return View(model: "");
+            
         }
 
         #endregion
@@ -238,7 +218,11 @@ namespace Zermos_Web.Controllers
 
             var zermeloAuthentication = JsonConvert.DeserializeObject<ZermeloAuthenticatieModel>(responseString);
 
-            var user = new user {zermelo_access_token = zermeloAuthentication.access_token, school_id = username, zermelo_access_token_expires_at = DateTime.Now.AddMonths(2)};
+            var user = new user
+            {
+                zermelo_access_token = zermeloAuthentication.access_token, school_id = username,
+                zermelo_access_token_expires_at = DateTime.Now.AddMonths(2)
+            };
             await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
 
             return RedirectToAction("Rooster", "Zermelo");
@@ -247,6 +231,7 @@ namespace Zermos_Web.Controllers
         #endregion
 
         #region Somtoday
+
         [HttpGet]
         public IActionResult Somtoday()
         {
@@ -259,19 +244,24 @@ namespace Zermos_Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Somtoday(string username, string password)
         {
-            var tokens = GenerateTokens();
-            //0 = code_verifier
-            //1 = code_challenge
-
-            //string baseurl = $"https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling://oauth/callback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state={TokenUtils.RandomString(8)}&scope=openid&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&session=no_session&code_challenge={tokens[1]}&code_challenge_method=S256";
-            string baseurl = $"https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling%3A%2F%2Foauth%2Fcallback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state=XLFOCQME&scope=openid&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&session=no_session&code_challenge=nuGm3_lqhVDq6eEd4Jo_0wXC5I40ts0XmQttqLARCDg&code_challenge_method=S256";
-
-            var response = await _somtodayHttpClientWithoutRedirect.GetAsync(baseurl);
+            string[] tokens = GenerateTokens();
+            //0 = code verifier
+            //1 = code challenge
             
-            if (response.StatusCode != HttpStatusCode.Redirect)
-                throw new Exception("Somtoday redirect is not 302");
-            
-            var authCode = response.Headers.Location?.Query.Remove(0, 6) ?? throw new Exception("Somtoday authcode is null");
+            //code challenge: __JVhs4cj-iqe8ha5750d9QSWJMpV49SXHPqBgFulkk
+            //code verifier: 16BBJMtEJe8blIJY848ROvvO02F5V205l5A10x_DqFE
+
+            var baseurl = string.Format(
+                "https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling://oauth/callback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state={0}&scope=openid&tenant_uuid={1}&session=no_session&code_challenge={2}&code_challenge_method=S256",
+                TokenUtils.RandomString(8), "c23fbb99-be4b-4c11-bbf5-57e7fc4f4388",
+                tokens[1]);
+
+            var response = await _httpClientWithoutRedirect.GetAsync(baseurl);
+            var authCode = response.Headers.Location.Query.Remove(0, 6);
+
+
+            //_somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
+
 
             baseurl = "https://inloggen.somtoday.nl/?-1.-panel-signInForm&auth=" + authCode;
 
@@ -296,8 +286,9 @@ namespace Zermos_Web.Controllers
             var finalAuthCode = HTMLUtils.ParseQuery(response.Headers.Location.Query)["code"];
 
 
-            baseurl = "https://inloggen.somtoday.nl/oauth2/token?grant_type=authorization_code&session=no_session&scope=openid&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&code=" +
-                      finalAuthCode + "&code_verifier=" + tokens[1];
+            baseurl =
+                "https://inloggen.somtoday.nl/oauth2/token?grant_type=authorization_code&session=no_session&scope=openid&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&code=" +
+                finalAuthCode + "&code_verifier=" + tokens[0];
 
             response = await _somtodayHttpClientWithoutRedirect.PostAsync(baseurl,
                 new FormUrlEncodedContent(new Dictionary<string, string> {{"", ""}}));
@@ -316,16 +307,19 @@ namespace Zermos_Web.Controllers
             return RedirectToAction("Index", "Hoofdmenu");
         }
 
+
         private async Task<user> GetSomtodayStudent(string auth_token)
         {
             //GET: https://api.somtoday.nl/rest/v1/leerlingen?additional=pasfoto
-            var baseurl = "https://api.somtoday.nl/rest/v1/leerlingen?additional=pasfoto";
-            
-            _somtodayHttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", auth_token);
+            var baseurl = "https://api.somtoday.nl/rest/v1/leerlingen";
+
+            _somtodayHttpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", auth_token);
 
             var response = await _somtodayHttpClient.GetAsync(baseurl);
+            string responseString = await response.Content.ReadAsStringAsync();
             var somtodayStudent =
-                JsonConvert.DeserializeObject<SomtodayStudentModel>(await response.Content.ReadAsStringAsync());
+                JsonConvert.DeserializeObject<SomtodayStudentModel>(responseString);
             return new user
             {
                 somtoday_student_id = somtodayStudent.items[0].links[0].id.ToString(),
@@ -360,6 +354,7 @@ namespace Zermos_Web.Controllers
             code = Regex.Replace(code, "=+$", "");
             return code;
         }
+
         #endregion
     }
 }

@@ -5,7 +5,7 @@ TODO: find a way to find what the since paramater means in messages from infowij
 TODO: een linkje naar de school documenten maken; ""
 TODO: bij return list<> in de api, als het null is doe dat return Enumerable.Empty<>()
 TODO: add a way to shorten an url for sharing (like bit.ly)
-
+TODO: make a color toggle <html class="dark-mode"> and <html class="...-mode"> etc.
 
 
 

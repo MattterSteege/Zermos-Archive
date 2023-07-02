@@ -39,7 +39,7 @@
     height: 40%;
     font-size: 14px;
     font-weight: 600;
-    color: var(--text-color-light);
+    color: var(--text-color);
 }
 
 .info {
@@ -72,11 +72,11 @@
 }
 
 .negative {
-    color: #82D616 !important;
+    color: var(--confirm-color) !important;
 }
 
 .positive {
-    color: #E90606 !important;
+    color: var(--deny-color) !important;
 }
 
 .grade-change {

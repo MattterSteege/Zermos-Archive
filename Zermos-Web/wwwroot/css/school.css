@@ -59,7 +59,7 @@
     font-weight: 700;
     font-size: 1.2rem;
     line-height: 1.5rem;
-    color: #fff;
+    color: var(--white-color);
     z-index: 1;
     top: 32px;
     left: 16px;
@@ -70,7 +70,7 @@
     width: calc(100% - 32px);
     font-weight: 200;
     line-height: 1.5rem;
-    color: #fff;
+    color: var(--white-color);;
     z-index: 1;
     top: 32px;
     left: 16px;
@@ -116,7 +116,7 @@
     font-weight: 700;
     font-size: 1.2rem;
     line-height: 1.5rem;
-    color: #fff;
+    color: var(--white-color);;
     z-index: 1;
     top: 32px;
     left: 16px;
@@ -127,7 +127,7 @@
     width: calc(100% - 32px);
     font-weight: 200;
     line-height: 1.5rem;
-    color: #fff;
+    color: var(--white-color);;
     z-index: 1;
     top: 32px;
     left: 16px;

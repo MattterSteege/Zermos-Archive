@@ -44,6 +44,12 @@ namespace Zermos_Web
                 });
 
             services.AddProgressiveWebApp();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromDays(60);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +69,8 @@ namespace Zermos_Web
                     await next();
                 }
             });
+            
+            app.UseSession();
             
             app.UseForwardedHeaders();
 

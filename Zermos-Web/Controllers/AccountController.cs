@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -25,11 +27,37 @@ namespace Zermos_Web.Controllers
         }
         
         [HttpGet]
+        [Authorize]
         [AddLoadingScreen("account laden...")]
         public async Task<IActionResult> ShowAccount()
         {
             ViewData["add_css"] = "account";
             return View(await _users.GetUserAsync(User.FindFirstValue("email")));
+        }
+        
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> UpdateTheme(string newTheme)
+        {
+            var userToUpdate = await _users.GetUserAsync(HttpContext.User.FindFirstValue("email"));
+            userToUpdate.theme = newTheme ?? "light";
+
+            HttpContext.Response.Cookies.Append("theme", newTheme ?? "light");
+            
+            if (HttpContext.User.Identity is ClaimsIdentity identity)
+            {
+                identity.RemoveClaim(identity.FindFirst("theme"));
+                identity.AddClaim(new Claim("theme", newTheme ?? "light"));
+            }
+
+            await _users.UpdateUserAsync(HttpContext.User.FindFirstValue("email"), userToUpdate);
+            
+            string theme = HttpContext.User.FindFirstValue("theme");
+            //cookies
+            theme = Request.Cookies["theme"];
+            
+            
+            return RedirectToAction("ShowAccount");
         }
         //https://demos.creative-tim.com/soft-ui-dashboard-tailwind/pages/profile.html
     }
