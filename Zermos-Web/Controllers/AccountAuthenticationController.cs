@@ -31,14 +31,15 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login(string ReturnUrl = "")
         {
             ViewData["add_css"] = "account";
+            ViewData["ReturnUrl"] = ReturnUrl;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string email = null)
+        public async Task<IActionResult> Login(string email = null, string ReturnUrl = "")
         {
             ViewData["add_css"] = "account";
             var user = await _users.GetUserAsync(email);
@@ -63,7 +64,7 @@ namespace Zermos_Web.Controllers
                 mimeMessage.Body = new TextPart(TextFormat.Html)
                 {
                     Text =
-                        $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountCreation?token={newUser.VerificationToken}&email={newUser.email}\">hier</a> om je Zermos account te verifiëren. Deze link is 10 minuten geldig."
+                        $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountCreation?token={newUser.VerificationToken}&email={newUser.email}{(ReturnUrl == "" ? "" : "&ReturnUrl" + ReturnUrl)}\">hier</a> om je Zermos account te verifiëren. Deze link is 10 minuten geldig."
                 };
 
                 // send email
@@ -89,7 +90,7 @@ namespace Zermos_Web.Controllers
             mimeMessage.Body = new TextPart(TextFormat.Html)
             {
                 Text =
-                    $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountLogin?token={user.VerificationToken}&email={user.email}\">hier</a> om in te loggen in je Zermos account. Deze link is 10 minuten geldig."
+                    $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountLogin?token={user.VerificationToken}&email={user.email}{(ReturnUrl == "" ? "" : "&ReturnUrl" + ReturnUrl)}\">hier</a> om in te loggen in je Zermos account. Deze link is 10 minuten geldig."
             };
 
             // send email
@@ -104,7 +105,7 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> VerifyAccountCreation(string token, string email)
+        public async Task<IActionResult> VerifyAccountCreation(string token, string email, string ReturnUrl = "")
         {
             var user = await _users.GetUserAsync(email.ToLower());
             if (user == null) return await VerificationFailed(1); //user not found
@@ -122,11 +123,11 @@ namespace Zermos_Web.Controllers
             await _users.UpdateUserAsync(email.ToLower(), user);
 
             ViewData["add_css"] = "account";
-            return await VerificationSuccess(email.ToLower());
+            return await VerificationSuccess(email.ToLower(), ReturnUrl);
         }
 
         [HttpGet]
-        public async Task<IActionResult> VerifyAccountLogin(string token, string email)
+        public async Task<IActionResult> VerifyAccountLogin(string token, string email, string ReturnUrl)
         {
             var user = await _users.GetUserAsync(email.ToLower());
             if (user == null) return await VerificationFailed(1); //user not found
@@ -140,11 +141,11 @@ namespace Zermos_Web.Controllers
             user.CreatedAt = DateTime.MinValue;
             await _users.UpdateUserAsync(email.ToLower(), user);
             ViewData["add_css"] = "account";
-            return await VerificationSuccess(email.ToLower());
+            return await VerificationSuccess(email.ToLower(), ReturnUrl);
         }
 
         [NonAction]
-        private async Task<IActionResult> VerificationSuccess(string email)
+        private async Task<IActionResult> VerificationSuccess(string email , string ReturnUrl)
         {
             ViewData["add_css"] = "account";
             var claims = new List<Claim>
@@ -159,7 +160,13 @@ namespace Zermos_Web.Controllers
 
             await HttpContext.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "user", "role")));
 
-            return View("Login", new Tuple<string, int>(email, 13));
+            if (string.IsNullOrEmpty(ReturnUrl))
+            {
+                return View("Login", new Tuple<string, int>(email, 13));
+            }
+            
+            return Redirect(ReturnUrl);
+            
         }
 
         [NonAction]

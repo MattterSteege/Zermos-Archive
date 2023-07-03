@@ -44,8 +44,7 @@ namespace Zermos_Web.Controllers
         public async Task<IActionResult> Cijfers(bool refresh_token = false)
         {
             ViewData["add_css"] = "somtoday";
-            //the request was by ajax, so return the partial view
-
+           
             var user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
@@ -209,7 +208,7 @@ namespace Zermos_Web.Controllers
                 }
             };
 
-            chart.Options.Plugins.Title = new Title {Text = new List<string> {title}, Display = false};
+            chart.Options.Plugins.Title = new ChartJSCore.Models.Title {Text = new List<string> {title}, Display = false};
 
             return chart;
         }

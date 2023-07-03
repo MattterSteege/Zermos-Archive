@@ -1,4 +1,5 @@
-﻿@model System.Collections.Generic.List<Zermos_Web.Models.Datum>
+﻿@using System.Globalization
+@model System.Collections.Generic.List<Zermos_Web.Models.Datum>
 
 @{
     ViewBag.Title = "title";
@@ -14,7 +15,7 @@
         {
             <div class="calendar-month-parent" id="@(dayGroup.First()?.startsAt.ToDateTime().ToString("M-yy") ?? "Geen datum!?")">
 
-                <h1>@(dayGroup.First()?.startsAt.ToDateTime().ToString("MMMM yyyy") ?? "Geen datum!?")</h1>
+                <h1>@(dayGroup.First()?.startsAt.ToDateTime().ToString("MMMM yyyy", new CultureInfo("nl-NL")) ?? "Geen datum!?")</h1>
 
                 @foreach (var homeworkItem in dayGroup)
                 {
@@ -23,15 +24,15 @@
 
                         @if (homeworkItem.startsAt.ToDateTime().Date == homeworkItem.endsAt.ToDateTime().Date && homeworkItem.isAllDay == false)
                         {
-                            @(homeworkItem.startsAt.ToDateTime().ToString("dddd d MMMM HH:mm") + " - " + homeworkItem.endsAt.ToDateTime().ToString("HH:mm"))
+                            @(homeworkItem.startsAt.ToDateTime().ToString("dddd d MMMM HH:mm", new CultureInfo("nl-NL")) + " - " + homeworkItem.endsAt.ToDateTime().ToString("HH:mm", new CultureInfo("nl-NL")))
                         }
                         else if (homeworkItem.startsAt.ToDateTime().Date != homeworkItem.endsAt.ToDateTime().Date && homeworkItem.isAllDay == false)
                         {
-                            @(homeworkItem.startsAt.ToDateTime().ToString("dddd d MMMM") + " t/m " + homeworkItem.endsAt.ToDateTime().ToString("dddd d MMMM"))
+                            @(homeworkItem.startsAt.ToDateTime().ToString("dddd d MMMM", new CultureInfo("nl-NL")) + " t/m " + homeworkItem.endsAt.ToDateTime().ToString("dddd d MMMM"))
                         }
                         else if (homeworkItem.isAllDay)
                         {
-                            @homeworkItem.startsAt.ToDateTime().AddDays(1).ToString("dddd d MMMM")
+                            @homeworkItem.startsAt.ToDateTime().AddDays(1).ToString("dddd d MMMM", new CultureInfo("nl-NL"))
                         }
                         <br/>
 
@@ -46,7 +47,7 @@
         @foreach (var dayGroup in groupedByMonth)
         {
             <div class="month" onclick="doScrolling('@(dayGroup.First()?.startsAt.ToDateTime().ToString("M-yy") ?? "Geen datum!?")', 1000)" href="?@(dayGroup.First()?.startsAt.ToDateTime().ToString("M-yy") ?? "Geen datum!?")">
-                @(dayGroup.First()?.startsAt.ToDateTime().ToString("MMMM") ?? "Geen datum!?")
+                @(dayGroup.First()?.startsAt.ToDateTime().ToString("MMMM", new CultureInfo("nl-NL")) ?? "Geen datum!?")
             </div>
         }
     </div>

@@ -25,7 +25,7 @@
             <p class="child">Zermos gebruikt alleen je schoolmail!</p>
             <p class="child">Nadat je je e-mailadres hebt ingevuld en op 'Inloggen' hebt geklikt, ontvang je een e-mail met een link om in te loggen. Als je nog geen account hebt, ontvang je een e-mail om een account aan te maken. Super simpel!</p>
         </div>
-        <form method="post" asp-action="Login" asp-controller="AccountAuthentication" class="form-control">
+        <form method="post" asp-action="Login" asp-controller="AccountAuthentication" asp-route-ReturnUrl="@ViewData["ReturnUrl"]" class="form-control">
             <input type="text" name="email" placeholder="vul je schoolemail in">
             <input type="submit" value="Inloggen">
         </form>

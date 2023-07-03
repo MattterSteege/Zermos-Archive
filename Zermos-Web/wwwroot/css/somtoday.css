@@ -256,6 +256,10 @@
         height: 75px;
     }
 
+    .vak:first-child {
+        height: auto;
+    }
+
     .stats-container .stats {
         height: 250px;
     }

@@ -3,19 +3,9 @@ TODO: Add better UX such as errors on logging in
 TODO: (later, when feasible) Add an API system that allows users to create an api key with which they can interact with SOMtoday, Zermelo and de Antonius app more easy then with the current system (when the request is past with an api key, then return the normal data)
 TODO: find a way to find what the since paramater means in messages from infowijs
 TODO: een linkje naar de school documenten maken; ""
-TODO: bij return list<> in de api, als het null is doe dat return Enumerable.Empty<>()
 TODO: add a way to shorten an url for sharing (like bit.ly)
-TODO: make a color toggle <html class="dark-mode"> and <html class="...-mode"> etc.
-
-
-
-
-
-
-
-
-
-
+TODO: Add user redirect to login link, so when the user clicked on grades, isn't logged in, then he is redirected to the login page, and after logging in, he is redirected to the grades page
+TODO: Make all dates, numbers etc. (everything with CultureInfo) into new CultureInfo("nl-NL")
 
 
 

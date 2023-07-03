@@ -50,8 +50,8 @@
     --background-color: #1a1a1a;
     --overlay-color: #2d2d2d;
     --text-color: #b9b9b9;
-    --accent-color: linear-gradient(335deg, rgb(255, 0, 0), rgb(255, 128, 128));
-    --active-color: linear-gradient(335deg, rgb(255, 0, 0), rgb(255, 128, 128));
+    --accent-color: linear-gradient(335deg, rgb(255, 0, 0), rgb(130 26 26));
+    --active-color: linear-gradient(335deg, rgb(255, 0, 0), rgb(130 26 26));
     --dark-gradient: linear-gradient(335deg, rgba(20, 23, 39, 0.8), rgba(58, 65, 111, 0.6));
     --inactive-color: #555555;
     --tint-color: #01befe;
@@ -549,6 +549,8 @@ main.main::-webkit-scrollbar-track {
     .top-bar {
         display: none;
     }
-    
-    
+
+    .menu-icons::before {
+        top: 2px;
+    }
 }

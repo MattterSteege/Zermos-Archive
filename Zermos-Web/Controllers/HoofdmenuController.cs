@@ -12,8 +12,7 @@ namespace Zermos_Web.Controllers
         {
             _logger = logger;
         }
-
-        [NotImplementedYet]
+        
         public IActionResult Index()
         {
             return View();

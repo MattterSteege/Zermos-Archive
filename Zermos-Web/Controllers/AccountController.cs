@@ -43,20 +43,9 @@ namespace Zermos_Web.Controllers
             userToUpdate.theme = newTheme ?? "light";
 
             HttpContext.Response.Cookies.Append("theme", newTheme ?? "light");
-            
-            if (HttpContext.User.Identity is ClaimsIdentity identity)
-            {
-                identity.RemoveClaim(identity.FindFirst("theme"));
-                identity.AddClaim(new Claim("theme", newTheme ?? "light"));
-            }
 
             await _users.UpdateUserAsync(HttpContext.User.FindFirstValue("email"), userToUpdate);
-            
-            string theme = HttpContext.User.FindFirstValue("theme");
-            //cookies
-            theme = Request.Cookies["theme"];
-            
-            
+
             return RedirectToAction("ShowAccount");
         }
         //https://demos.creative-tim.com/soft-ui-dashboard-tailwind/pages/profile.html

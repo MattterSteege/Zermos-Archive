@@ -57,7 +57,7 @@
             for (int i = 0; i < vak.grades.Count; i++)
             {
                 var gradeItem = vak.grades[i];
-                var geldendResultaat = Convert.ToDouble(gradeItem.geldendResultaat);
+                var geldendResultaat = NumberUtils.ParseFloat(gradeItem.geldendResultaat);
                 
                 if ((gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging) == 0 && sumOfWeights == 0)
                 {
@@ -65,7 +65,7 @@
                     continue;
                 }
 
-                sumOfWeightedGrades += (float)(geldendResultaat * (gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging));
+                sumOfWeightedGrades += (geldendResultaat * (gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging));
                 hasNonZeroWeight = true;
             }
 
@@ -74,18 +74,18 @@
                 sumOfWeights = vak.grades.Count;
             }
 
-            float Gemiddelde = MathF.Round((float) (sumOfWeightedGrades / sumOfWeights), 1, MidpointRounding.AwayFromZero);
+            float gemiddelde = MathF.Round(sumOfWeightedGrades / sumOfWeights, 1, MidpointRounding.AwayFromZero);
 
             <div class="vak">
                 <a asp-controller="Somtoday" asp-action="Cijfer" asp-route-content="@encoded">
                     <div class="top-30">
                         <h1>@vak.vak.naam</h1>
                         <p>@(vak.grades.Sum(gradeItem => gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging))x</p>
-                        <p class="@(Gemiddelde >= 5.5f ? "sufficient" : "insufficient ")">@(Gemiddelde.ToString("0.0", CultureInfo.InvariantCulture))</p>
+                        <p class="@(gemiddelde >= 5.5f ? "sufficient" : "insufficient ")">@(gemiddelde.ToString("0.0", CultureInfo.InvariantCulture))</p>
                     </div>
                     <div class="bottom-70">
                         <p style="flex-grow: 1; text-align: end;">Laatste cijfer:</p>
-                        <p style="margin-left: 16px; flex-grow: 1;" class="@(Gemiddelde >= 5.5f ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</p>
+                        <p style="margin-left: 16px; flex-grow: 1;" class="@(NumberUtils.ParseFloat(vak.grades[^1].geldendResultaat) >= 5.5f ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</p>
                     </div>
                 </a>
             </div>

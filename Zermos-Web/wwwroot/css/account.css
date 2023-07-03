@@ -106,15 +106,15 @@
 }
 
 .items-container {
-    width: 20%;
+    width: 16%;
     position: fixed;
     top: 96px;
-    right: -56px;
+    right: 9px;
     background: var(--overlay-color);
     padding: 16px;
-    border-radius: 14px;
     display: flex;
     flex-direction: column;
+    border-radius: 14px 0 0 14px;
 }
 
 .item {

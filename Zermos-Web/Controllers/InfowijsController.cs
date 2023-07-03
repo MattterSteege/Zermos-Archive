@@ -75,36 +75,54 @@ namespace Zermos_Web.Controllers
 
 
         [Authorize]
-            [InfowijsRequirement]
-            [AddLoadingScreen("De kalender wordt geladen")]
-            public async Task<IActionResult> SchoolKalender()
-            {
-                ViewData["add_css"] = "infowijs";
+        [InfowijsRequirement]
+        [AddLoadingScreen("De kalender wordt geladen")]
+        public async Task<IActionResult> SchoolKalender()
+        {
+            ViewData["add_css"] = "infowijs";
 
-                //https://antonius.hoyapp.nl/hoy/v1/events
-                _httpClient.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", await GetSessionToken());
+            //https://antonius.hoyapp.nl/hoy/v1/events
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", await GetSessionToken());
 
-                var response = await _httpClient.GetAsync("https://antonius.hoyapp.nl/hoy/v1/events");
-                return View(JsonConvert
-                    .DeserializeObject<InfowijsEventsModel>(await response.Content.ReadAsStringAsync(),
-                        Converter.Settings).data);
-            }
+            var response = await _httpClient.GetAsync("https://antonius.hoyapp.nl/hoy/v1/events");
+            return View(JsonConvert
+                .DeserializeObject<InfowijsEventsModel>(await response.Content.ReadAsStringAsync(),
+                    Converter.Settings).data);
+        }
 
-            [NonAction]
-            private async Task<string> GetSessionToken()
-            {
-                string mainAccessToken =
-                    (await _users.GetUserAsync(User.FindFirstValue("email"))).infowijs_access_token;
+        [NonAction]
+        private async Task<string> GetSessionToken()
+        {
+            string mainAccessToken =
+                (await _users.GetUserAsync(User.FindFirstValue("email"))).infowijs_access_token;
 
-                var request = new HttpRequestMessage(HttpMethod.Post, "https://api.infowijs.nl/sessions/access_token");
-                request.Headers.Add("Authorization", "Bearer " + mainAccessToken);
-                request.Headers.Add("Accept", "application/vnd.infowijs.v1+json");
-                request.Headers.Add("x-infowijs-client", $"nl.infowijs.hoy.android/nl.infowijs.client.antonius");
-                var response = await _httpClient.SendAsync(request);
-                var responseString = await response.Content.ReadAsStringAsync();
-                var accessToken = JsonConvert.DeserializeObject<InfowijsAccessTokenModel>(responseString);
-                return accessToken.data;
-            }
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.infowijs.nl/sessions/access_token");
+            request.Headers.Add("Authorization", "Bearer " + mainAccessToken);
+            request.Headers.Add("Accept", "application/vnd.infowijs.v1+json");
+            request.Headers.Add("x-infowijs-client", $"nl.infowijs.hoy.android/nl.infowijs.client.antonius");
+            var response = await _httpClient.SendAsync(request);
+            var responseString = await response.Content.ReadAsStringAsync();
+            var accessToken = JsonConvert.DeserializeObject<InfowijsAccessTokenModel>(responseString);
+            return accessToken.data;
+        }
+
+        public IActionResult SchoolWiki(string query)
+        {
+            //curl --location 'https://aboarc8x9f-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id=ABOARC8X9F&x-algolia-api-key=1c110b29cea05e83dce945e2c5594f2f' --header 'Content-Type: text/plain' --data '{"requests":[{"indexName":"schoolwiki.113-prod.185f99fe-1aea-4110-9d14-6c76533a352c","params":"query=PTA&hitsPerPage=100"}]}'
+            
+            string body =
+                "{\"requests\":[{\"indexName\":\"schoolwiki.113-prod.185f99fe-1aea-4110-9d14-6c76533a352c\",\"params\":\"query=" +
+                query +
+                "&hitsPerPage=100\"}]}";
+            var response = _httpClient
+                .PostAsync(
+                    "https://aboarc8x9f-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id=ABOARC8X9F&x-algolia-api-key=1c110b29cea05e83dce945e2c5594f2f",
+                    new StringContent(body, Encoding.UTF8, "application/json")).Result;
+            
+            var schoolWikiModel = JsonConvert.DeserializeObject<SchoolWikiModel>(response.Content.ReadAsStringAsync().Result);
+            
+            return Ok(schoolWikiModel);
         }
     }
+}

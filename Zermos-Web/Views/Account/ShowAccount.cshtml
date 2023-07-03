@@ -25,7 +25,7 @@
                     {
                         //<p>@property.Name: @property.GetValue(Model, null)?.ToString()</p>
                         //cap at an maximum of 25 chars, but it can be less
-                        <p onclick="copyToClipboard('@property.GetValue(Model, null)?.ToString()')"><b>@property.Name</b>: @property.GetValue(Model, null)?.ToString()?.Substring(0, (property.GetValue(Model, null)?.ToString()?.Length ?? 0) > 21 ? 21 : (property.GetValue(Model, null)?.ToString()?.Length ?? 0))</p>
+                        <p onclick="copyToClipboard('@property.GetValue(Model, null)?.ToString()?.Substring(0, (property.GetValue(Model, null)?.ToString()?.Length ?? 0) > 21 ? 21 : (property.GetValue(Model, null)?.ToString()?.Length ?? 0))')"><b>@property.Name</b>: @property.GetValue(Model, null)?.ToString()?.Substring(0, (property.GetValue(Model, null)?.ToString()?.Length ?? 0) > 21 ? 21 : (property.GetValue(Model, null)?.ToString()?.Length ?? 0))</p>
                     }
                 }
             </div>
