@@ -5,7 +5,7 @@
 .message-container .top-2 {
     grid-row: 1;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(355px, 100% / 3)), 1fr));
     grid-gap: 16px;
     margin-bottom: 16px;
 }
@@ -13,7 +13,7 @@
 .message-container .later{
     grid-row: 1;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(355px, 100% / 4)), 1fr));
     grid-gap: 16px;
 }
 

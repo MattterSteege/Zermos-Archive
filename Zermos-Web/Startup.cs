@@ -43,13 +43,7 @@ namespace Zermos_Web
                     options.Cookie.IsEssential = true;
                 });
 
-            services.AddProgressiveWebApp();
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromDays(60);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-            });
+            //services.AddProgressiveWebApp();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,15 +57,12 @@ namespace Zermos_Web
             app.Use(async (context, next) =>
             {
                 await next();
-                if (context.Response.StatusCode == 404)
+                if (context.Response.StatusCode == 404 && !context.Response.HasStarted)
                 {
-                    context.Request.Path = "/Error/404";
-                    await next();
+                    context.Response.Redirect("/Error/NotFound");
                 }
             });
-            
-            app.UseSession();
-            
+
             app.UseForwardedHeaders();
 
             app.UseStaticFiles();

@@ -75,6 +75,11 @@
 
     <ItemGroup>
       <None Include="appsettings.json" />
+      <None Include="Properties\Web.config">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

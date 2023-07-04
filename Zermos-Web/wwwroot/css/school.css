@@ -49,7 +49,6 @@
 }
 
 .child .image-overlay .overlay {
-    /*--dark-gradient is a linear-gradient with rgb(58,65,111) and rgb(58,65,111) can you turn it into a rgba with 0.5 opacity*/
     background: var(--dark-gradient)
 }
 
@@ -77,18 +76,6 @@
     padding-bottom: 48px;
     overflow: hidden;
 }
-
-/*Specefic message*/
-/*<div class="message-container">
-    <div class="message">
-        <h1 class="message-heading">@Model.Title</h1>
-        <p class="message-text">@Model.Content</p>
-        <div class="message-image-overlay">
-            <img src="@Model.Image">
-        </div>
-    </div>
-</div>
-*/
 
 .message-container {
     position: relative;

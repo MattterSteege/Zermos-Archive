@@ -1,4 +1,5 @@
-﻿@model Zermos_Web.Models.somtodayHomeworkModel.somtodayHomeworkModel
+﻿@using System.Globalization
+@model Zermos_Web.Models.somtodayHomeworkModel.somtodayHomeworkModel
 
 @{
     ViewBag.Title = "title";
@@ -12,7 +13,7 @@
     {
         <div class="homework-day-parent">
             
-            <h1>@(dayGroup.First()?.datumTijd.ToString("dddd dd MMMM") ?? "Geen datum!?")</h1>
+            <h1>@(dayGroup.First()?.datumTijd.ToString("dddd dd MMMM", new CultureInfo("nl-NL")) ?? "Geen datum!?")</h1>
             
             @foreach (var homeworkItem in dayGroup)
             {
