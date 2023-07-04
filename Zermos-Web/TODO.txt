@@ -6,7 +6,7 @@ TODO: een linkje naar de school documenten maken; ""
 TODO: add a way to shorten an url for sharing (like bit.ly)
 TODO: Add user redirect to login link, so when the user clicked on grades, isn't logged in, then he is redirected to the login page, and after logging in, he is redirected to the grades page
 TODO: Make all dates, numbers etc. (everything with CultureInfo) into new CultureInfo("nl-NL")
-
+TODO: add back the styling for school news
 
 
 

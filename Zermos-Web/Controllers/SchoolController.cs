@@ -67,7 +67,7 @@ namespace Zermos_Web.Controllers
                 return View(model);
             }
 
-        public async Task<IActionResult> Message(string content)
+        public IActionResult Message(string content)
         {
             ViewData["add_css"] = "school";
 

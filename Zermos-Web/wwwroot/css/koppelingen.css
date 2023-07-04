@@ -17,6 +17,7 @@
     justify-content: center;
     align-items: center;
     width: 60%;
+    max-height: min-content;
 }
 
 .form-control input {
@@ -168,5 +169,9 @@
         min-height: 30%;
         max-height: min-content;
         height: auto;
+    }
+    
+    .form-control {
+        width: 80%;
     }
 }

@@ -31,7 +31,14 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Login(string ReturnUrl = "")
+        public IActionResult test(int code = 13)
+        {
+            ViewData["add_css"] = "account";
+            return View("Login", new Tuple<string, int>("test123@gmail.com", code));
+        }
+        
+        [HttpGet]
+        public IActionResult Login(string ReturnUrl = "")
         {
             ViewData["add_css"] = "account";
             ViewData["ReturnUrl"] = ReturnUrl;
@@ -108,14 +115,14 @@ namespace Zermos_Web.Controllers
         public async Task<IActionResult> VerifyAccountCreation(string token, string email, string ReturnUrl = "")
         {
             var user = await _users.GetUserAsync(email.ToLower());
-            if (user == null) return await VerificationFailed(1); //user not found
+            if (user == null) return VerificationFailed(1); //user not found
 
-            if (user.IsVerified) return await VerificationFailed(4); //user already verified
+            if (user.IsVerified) return VerificationFailed(4); //user already verified
 
             if (user.CreatedAt != null && user.CreatedAt.Value.AddMinutes(10) < DateTime.Now)
-                return await VerificationFailed(2); //token expired
+                return VerificationFailed(2); //token expired
 
-            if (user.VerificationToken != token) return await VerificationFailed(3); //token incorrect
+            if (user.VerificationToken != token) return VerificationFailed(3); //token incorrect
 
             user.VerifiedAt = DateTime.Now;
             user.VerificationToken = String.Empty;
@@ -130,12 +137,12 @@ namespace Zermos_Web.Controllers
         public async Task<IActionResult> VerifyAccountLogin(string token, string email, string ReturnUrl)
         {
             var user = await _users.GetUserAsync(email.ToLower());
-            if (user == null) return await VerificationFailed(1); //user not found
+            if (user == null) return VerificationFailed(1); //user not found
 
             if (user.CreatedAt != null && user.CreatedAt.Value.AddMinutes(10) < DateTime.Now)
-                return await VerificationFailed(2); //token expired
+                return VerificationFailed(2); //token expired
 
-            if (user.VerificationToken != token) return await VerificationFailed(3); //invalid token
+            if (user.VerificationToken != token) return VerificationFailed(3); //invalid token
 
             user.VerificationToken = String.Empty;
             user.CreatedAt = DateTime.MinValue;
@@ -170,7 +177,7 @@ namespace Zermos_Web.Controllers
         }
 
         [NonAction]
-        private async Task<IActionResult> VerificationFailed(int code)
+        private IActionResult VerificationFailed(int code)
         {
             ViewData["add_css"] = "account";
             switch (code)

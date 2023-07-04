@@ -22,7 +22,7 @@ namespace Infrastructure.Entities
         public string theme { get; set; }
 
         //auth related
-        public string? VerificationToken { get; set; }
+        public string VerificationToken { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? VerifiedAt { get; set; }
         public bool IsVerified => VerifiedAt.HasValue;

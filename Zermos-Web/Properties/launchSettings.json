@@ -33,7 +33,7 @@
       "useSSL": true,
       "environmentVariables": {
         "DB_PASSWORD": "REDACTED_DATABASE_PASSWORD",
-        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Production",
         "DB_NAME": "REDACTED_DATABASE_NAME",
         "DB_PORT": "3306",
         "DB_HOST": "REDACTED_IP_ADRESS",

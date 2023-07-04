@@ -56,9 +56,9 @@ namespace Zermos_Web.Models
         [JsonProperty("isMe")] public bool IsMe { get; set; }
         [JsonProperty("avatar")] public Uri Avatar { get; set; }
         [JsonProperty("title")] public string Title { get; set; }
-        [JsonProperty("subtitle", NullValueHandling = NullValueHandling.Ignore)] public string? Subtitle { get; set; }
-        [JsonProperty("firstName", NullValueHandling = NullValueHandling.Ignore)] public string? FirstName { get; set; }
-        [JsonProperty("lastName", NullValueHandling = NullValueHandling.Ignore)] public string? LastName { get; set; }
+        [JsonProperty("subtitle", NullValueHandling = NullValueHandling.Ignore)] public string Subtitle { get; set; }
+        [JsonProperty("firstName", NullValueHandling = NullValueHandling.Ignore)] public string FirstName { get; set; }
+        [JsonProperty("lastName", NullValueHandling = NullValueHandling.Ignore)] public string LastName { get; set; }
         [JsonProperty("role")] public string Role { get; set; }
         [JsonProperty("conversationRole")] public string ConversationRole { get; set; }
         [JsonProperty("deleted_at")] public long DeletedAt { get; set; }

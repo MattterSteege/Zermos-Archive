@@ -1,27 +1,41 @@
 ﻿.checkout, .login {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(5, 1fr);
+    display: flex;
     grid-column-gap: 16px;
     grid-row-gap: 16px;
     width: 100%;
     height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .login-child {
-    grid-area: 2 / 2 / 4 / 3;
+    border-radius: 1rem;
+    background: var(--overlay-color);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    cursor: pointer;
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 16px;
+    flex-direction: column;
+    width: 60%;
+    height: 60%;
     font-size: 1rem;
     font-weight: 600;
 }
 
 .form-control {
-    grid-area: 4 / 2 / 5 / 3;
     height: 48px;
     background: var(--overlay-color);
     border-radius: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 60%;
+    max-height: min-content;
 }
 
 .form-control input {
@@ -41,27 +55,12 @@
 }
 
 .form-control input:nth-child(2) {
-    width: 25%;
+    width: 30%;
     background: var(--accent-color);
-    color: var(--text-color);
+    color: var(--white-color);
     border-radius: 0 1rem 1rem 0;
     font-weight: 600;
     cursor: pointer;
-}
-
-.login-child {
-    border-radius: 1rem;
-    background: var(--overlay-color);
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: start;
-    align-items: start;
-    cursor: pointer;
-    color: var(--text-color);
-    text-decoration: none;
-    height: 100%;
-    padding: 16px;
-    flex-direction: column;
 }
 
 .login-child .child:nth-child(1) {
@@ -178,5 +177,16 @@
 
     .information-container {
         width: 100%;
+    }
+
+    .login-child {
+        width: 80%;
+        min-height: 30%;
+        max-height: min-content;
+        height: auto;
+    }
+
+    .form-control {
+        width: 80%;
     }
 }

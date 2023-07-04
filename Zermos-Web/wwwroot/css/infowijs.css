@@ -49,6 +49,14 @@
     grid-row: 3;
 }
 
+.message .attachment {
+    margin-top: 8px;
+    background: var(--background-color);
+    padding: 8px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
 .calendar-container {
     display: grid;
     grid-template-columns: 1fr;

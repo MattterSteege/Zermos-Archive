@@ -62,7 +62,7 @@
             <div class="attachments">
                 @foreach (var attachment in attachments)
                 {
-                    <div class="attachments">
+                    <div class="attachment" target="_blank">
                         <p onclick="window.open('@attachment.Content.ContentClass.Url');" class="attachment">@attachment.Content.ContentClass.Name</p>
                     </div>
                 }

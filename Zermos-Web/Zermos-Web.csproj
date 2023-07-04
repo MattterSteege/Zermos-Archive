@@ -55,6 +55,7 @@
         <PackageReference Include="HtmlAgilityPack" Version="1.11.48" />
         <PackageReference Include="MailKit" Version="4.1.0" />
         <PackageReference Include="MessagePack" Version="2.6.100-alpha" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.0-preview.5.23302.2" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.17">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -65,8 +66,8 @@
         </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Pomelo.Extensions.Caching.MySql" Version="2.1.4" />
         <PackageReference Include="QRCoder" Version="1.4.3" />
-        <PackageReference Include="WebEssentials.AspNetCore.PWA" Version="1.0.65" />
     </ItemGroup>
 
     <ItemGroup>
@@ -86,6 +87,7 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+      <Content Remove="wwwroot\manifest.json" />
     </ItemGroup>
 
 </Project>

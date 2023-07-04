@@ -49,7 +49,6 @@
             //turn the model into a json string turn it into bytes and encode with base64
             var encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(vak)));
 
-            double average = 0;
             float sumOfWeightedGrades = 0.0f;
             int sumOfWeights = vak.grades.Sum(gradeItem => gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging);
             bool hasNonZeroWeight = false;

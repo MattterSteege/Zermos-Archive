@@ -64,7 +64,7 @@ namespace Zermos_Web.Controllers
 
             if (response.IsSuccessStatusCode == false)
                 return NotFound(
-                    "Er is iets fout gegaan bij het ophalen van de cijfers, het is mogelijk dat je SOMtoday token verlopen is.");
+                    "Er is iets fout gegaan bij het ophalen van de cijfers, het is mogelijk dat je SOMtoday token verlopen is, probeer de pagina opnieuw te openen, als het dan nog.");
 
             if (int.TryParse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1],
                     out var total))
@@ -407,19 +407,19 @@ namespace Zermos_Web.Controllers
         [Authorize]
         [SomtodayRequirement]
         [AddLoadingScreen("Huiswerk wordt opgehaald")]
-        public async Task<IActionResult> Huiswerk(int days, bool refresh_token = false)
+        public async Task<IActionResult> Huiswerk(int dagen, bool refresh_token = false)
         {
             ViewData["add_css"] = "somtoday";
 
             var user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
-            days = days == 0 ? 14 : days;
-            days = days > 50 ? 50 : days;
+            dagen = dagen == 0 ? 14 : dagen;
+            dagen = dagen > 50 ? 50 : dagen;
 
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
                 await RefreshToken(user.somtoday_refresh_token);
 
-            var _startDate = DateTime.Now.AddDays(-days).ToString("yyyy-MM-dd");
+            var _startDate = DateTime.Now.AddDays(-dagen).ToString("yyyy-MM-dd");
             var baseurl =
                 $"https://api.somtoday.nl/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
 

@@ -1,14 +1,13 @@
 using System;
 using Infrastructure;
 using Infrastructure.Context;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Zermos_Web.Models.Requirements;
+using StackExchange.Redis;
 
 namespace Zermos_Web
 {
@@ -27,8 +26,6 @@ namespace Zermos_Web
             services.AddControllersWithViews();
             services.AddDbContext<ZermosContext>();
             services.AddScoped<Users>();
-            services.AddScoped<SomtodayRequirementAttribute>();
-            //services.AddScoped<ZermeloRequirement>();
 
             var cookieExpiration = TimeSpan.FromDays(60);
 
@@ -42,8 +39,9 @@ namespace Zermos_Web
                     options.Cookie.MaxAge = cookieExpiration;
                     options.Cookie.IsEssential = true;
                 });
-
-            //services.AddProgressiveWebApp();
+            
+            //sets the data protection keys to be stored in the /dataprotection folder (in the docker volume dataprotection)
+            services.AddDataProtection().PersistKeysToFileSystem(new System.IO.DirectoryInfo("/dataprotection"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,7 +57,7 @@ namespace Zermos_Web
                 await next();
                 if (context.Response.StatusCode == 404 && !context.Response.HasStarted)
                 {
-                    context.Response.Redirect("/Error/NotFound");
+                    context.Response.Redirect("/Error/404");
                 }
             });
 
