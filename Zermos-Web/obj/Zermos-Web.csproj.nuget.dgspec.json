@@ -40,29 +40,41 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "HtmlAgilityPack": {
+              "target": "Package",
+              "version": "[1.11.49, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[5.0.17, )"
+              "version": "[7.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Abstractions": {
+              "target": "Package",
+              "version": "[7.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Analyzers": {
+              "target": "Package",
+              "version": "[7.0.8, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[5.0.17, )"
+              "version": "[7.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Relational": {
+              "target": "Package",
+              "version": "[7.0.8, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[5.0.17, )"
-            },
-            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
-              "target": "Package",
-              "version": "[1.18.1, )"
+              "version": "[7.0.8, )"
             },
             "MySql.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[5.0.17.2, )"
+              "version": "[7.0.2, )"
             }
           },
           "imports": [
@@ -133,10 +145,6 @@
               "target": "Package",
               "version": "[3.10.0, )"
             },
-            "HtmlAgilityPack": {
-              "target": "Package",
-              "version": "[1.11.48, )"
-            },
             "MailKit": {
               "target": "Package",
               "version": "[4.1.0, )"
@@ -145,37 +153,37 @@
               "target": "Package",
               "version": "[2.6.100-alpha, )"
             },
-            "Microsoft.AspNetCore.DataProtection.StackExchangeRedis": {
+            "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.0-preview.5.23302.2, )"
+              "version": "[7.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Abstractions": {
+              "target": "Package",
+              "version": "[7.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Analyzers": {
+              "target": "Package",
+              "version": "[7.0.8, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[5.0.17, )"
+              "version": "[7.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Relational": {
+              "target": "Package",
+              "version": "[7.0.8, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[5.0.17, )"
-            },
-            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
-              "target": "Package",
-              "version": "[1.18.1, )"
+              "version": "[7.0.8, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
-            },
-            "Pomelo.Extensions.Caching.MySql": {
-              "target": "Package",
-              "version": "[2.1.4, )"
-            },
-            "QRCoder": {
-              "target": "Package",
-              "version": "[1.4.3, )"
             }
           },
           "imports": [

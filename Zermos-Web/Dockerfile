@@ -1,6 +1,5 @@
-﻿#hit the [Zermos-Web/Dockerfile - orange pi] run button and all will be handled automatically
-
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+MAINTAINER Matt ter Steege <
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
@@ -30,3 +29,4 @@ COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Zermos-Web.dll"]
 VOLUME ["/dataprotection"]
 
+#hit the [Zermos-Web/Dockerfile - orange pi] run button and all will be handled automatically

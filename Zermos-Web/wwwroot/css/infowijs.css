@@ -1,4 +1,17 @@
-﻿.message-container{
+﻿.message-container a {
+    font-weight: 700;
+}
+
+.dark .message-container a, .red .message-container a {
+    color: cornflowerblue;
+}
+
+.light .message-container a, .blue .message-container a, .pink .message-container a {
+    color: #344767;
+}
+
+
+.message-container{
     color: var(--text-color);
 }
 

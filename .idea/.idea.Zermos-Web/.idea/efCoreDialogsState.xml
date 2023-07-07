@@ -8,7 +8,7 @@
         <entry key="Common:dbContextName" value="ZermosContext" />
         <entry key="Common:ef9282d1-32c2-4604-b103-ec93bd8e3dfa:dbContext" value="Infrastructure.Context.ZermosContext" />
         <entry key="Common:generateOnConfiguring" value="true" />
-        <entry key="Common:noBuild" value="true" />
+        <entry key="Common:noBuild" value="false" />
         <entry key="Common:outputFolder" value="Migrations" />
         <entry key="Common:provider" value="MySql.EntityFrameworkCore" />
         <entry key="Common:targetFramework" value="netcoreapp3.1" />

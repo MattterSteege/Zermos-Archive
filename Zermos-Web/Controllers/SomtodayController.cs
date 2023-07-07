@@ -47,13 +47,17 @@ namespace Zermos_Web.Controllers
            
             var user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
+            string access_token = user.somtoday_access_token;
+            
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
-                await RefreshToken(user.somtoday_refresh_token);
+            {
+                access_token = await RefreshToken(user.somtoday_refresh_token);
+            }
 
             var baseUrl =
-                $"https://api.somtoday.nl/rest/v1/resultaten/huidigVoorLeerling/{user.somtoday_student_id}?begintNaOfOp={DateTime.Now:yyyy}-01-01";
+                $"https://api.somtoday.nl/rest/v1/resultaten/huidigVoorLeerling/{user.somtoday_student_id}?begintNaOfOp={DateTime.Now:yyyy}-01-01&additional=samengesteldeToetskolomId";
 
-            _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
+            _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + access_token);
             _httpClient.DefaultRequestHeaders.Add("Range", "items=0-99");
             _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
@@ -69,16 +73,19 @@ namespace Zermos_Web.Controllers
             if (int.TryParse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1],
                     out var total))
             {
+                
+                
                 var requests = total / 100 * 100;
 
                 for (var i = 100; i < requests; i += 100)
                 {
                     _httpClient.DefaultRequestHeaders.Clear();
-                    _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
+                    _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + access_token);
                     _httpClient.DefaultRequestHeaders.Add("Range", $"items={i}-{i + 99}");
                     _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
                     response = await _httpClient.GetAsync(baseUrl);
+
                     var _grades =
                         JsonConvert.DeserializeObject<SomtodayGradesModel>(
                             await response.Content.ReadAsStringAsync());
@@ -89,9 +96,9 @@ namespace Zermos_Web.Controllers
             return View(Sort(grades));
         }
 
-        public async Task RefreshToken(string token = null)
+        public async Task<string> RefreshToken(string token = null)
         {
-            if (token == null) return;
+            if (token == null) return null;
 
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
@@ -116,6 +123,7 @@ namespace Zermos_Web.Controllers
                 somtoday_refresh_token = somtodayAuthentication.refresh_token
             };
             await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
+            return somtodayAuthentication.access_token;
         }
 
         [AddLoadingScreen("Cijfers worden geladen")]
@@ -154,13 +162,12 @@ namespace Zermos_Web.Controllers
             var grades = JsonConvert.DeserializeObject<sortedGrades>(b);
 
             ViewData["stats"] = new Dictionary<string, string>();
-            (ViewData["stats"] as Dictionary<string, string>)?.Add("vak",
-                grades.vak.naam);
-            (ViewData["stats"] as Dictionary<string, string>)?.Add("hoogste",
-                grades.grades.Max(x => x.geldendResultaat).ToString());
-            (ViewData["stats"] as Dictionary<string, string>)?.Add("laagste",
-                grades.grades.Min(x => x.geldendResultaat).ToString());
-
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("vak", grades.vak.naam);
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("hoogste", grades.grades.Max(x => x.geldendResultaat).ToString());
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("laagste", grades.grades.Min(x => x.geldendResultaat).ToString());
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("weging", grades.grades.Sum(x => x.weging).ToString());
+            // (ViewData["stats"] as Dictionary<string, string>)?.Add("som", the grades resultaat times it weight);
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("som", grades.grades.Sum(x => NumberUtils.ParseFloat(x.geldendResultaat) * x.weging).ToString("0.0000000000", System.Globalization.CultureInfo.InvariantCulture));
 
             var charts = new List<Chart>();
             charts.Add(GenerateGradeOverTimeAndGradeAverage(grades));
@@ -370,8 +377,7 @@ namespace Zermos_Web.Controllers
                 SpanGaps = false
             });
 
-            (ViewData["stats"] as Dictionary<string, string>)?.Add("gemiddelde",
-                chart.Data.Datasets[1].Data[^1]?.ToString("0.000"));
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("gemiddelde", chart.Data.Datasets[1].Data[^1]?.ToString("0.0000000000", System.Globalization.CultureInfo.InvariantCulture));
 
             return chart;
         }
@@ -389,11 +395,14 @@ namespace Zermos_Web.Controllers
 
             foreach (var item in grades.items.Where(x => x.resultaatLabelAfkorting == "V"))
                 item.geldendResultaat = "7";
+            
+            foreach (var item in grades.items.Where(x => x.resultaatLabelAfkorting == "G"))
+                item.geldendResultaat = "8";
 
 
             grades.items = grades.items
                 .Where(x => !(string.IsNullOrEmpty(x.omschrijving) && x.weging == 0))
-                .Where(x => x.type != "SamengesteldeToetsKolom")
+                .Where(x => x.type != "DeeltoetsKolom")
                 .Where(x => x.geldendResultaat != null)
                 .ToList();
 
@@ -403,21 +412,24 @@ namespace Zermos_Web.Controllers
         #endregion
 
         #region huiswerk
-
         [Authorize]
         [SomtodayRequirement]
         [AddLoadingScreen("Huiswerk wordt opgehaald")]
-        public async Task<IActionResult> Huiswerk(int dagen, bool refresh_token = false)
+        public async Task<IActionResult> Huiswerk(int dagen)
         {
             ViewData["add_css"] = "somtoday";
 
             var user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
+            string access_token = user.somtoday_access_token;
+            
+            if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
+            {
+                access_token = await RefreshToken(user.somtoday_refresh_token);
+            }
+
             dagen = dagen == 0 ? 14 : dagen;
             dagen = dagen > 50 ? 50 : dagen;
-
-            if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
-                await RefreshToken(user.somtoday_refresh_token);
 
             var _startDate = DateTime.Now.AddDays(-dagen).ToString("yyyy-MM-dd");
             var baseurl =
@@ -428,7 +440,7 @@ namespace Zermos_Web.Controllers
 
 
             _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
+            _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + access_token);
             _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
             _httpClient.DefaultRequestHeaders.Add("Range", $"items={rangemin}-{rangemax}");
 
@@ -438,9 +450,107 @@ namespace Zermos_Web.Controllers
                 JsonConvert.DeserializeObject<somtodayHomeworkModel>(
                     await response.Content.ReadAsStringAsync());
 
+            somtodayHuiswerk.items.AddRange(await GetRemappedCustomHuiswerk());
+            
             return View(Sort(somtodayHuiswerk));
         }
 
+        [NonAction]
+        private async Task<List<Models.somtodayHomeworkModel.Item>> GetRemappedCustomHuiswerk()
+        {
+            var customHomeworkItems = JsonConvert.DeserializeObject<List<customHuiswerkModel>>((await _users.GetUserAsync(User.FindFirstValue("email"))).custom_huiswerk ?? "[]") ?? new List<customHuiswerkModel>();
+            var remapedHomework = new List<Models.somtodayHomeworkModel.Item>(capacity:  customHomeworkItems.Count);
+
+            foreach (var customHomeworkItem in customHomeworkItems)
+            {
+                var item = new Models.somtodayHomeworkModel.Item
+                {
+                    datumTijd = customHomeworkItem.deadline,
+                    studiewijzerItem = new StudiewijzerItem
+                    {
+                        omschrijving = customHomeworkItem.omschrijving
+                    },
+                    lesgroep = new Lesgroep
+                    {
+                        vak = new Models.somtodayHomeworkModel.Vak
+                        {
+                            naam = customHomeworkItem.titel
+                        }
+                    },
+                    additionalObjects = new Models.somtodayHomeworkModel.AdditionalObjects
+                    {
+                        swigemaaktVinkjes = new SwigemaaktVinkjes
+                        {
+                            items = new List<Models.somtodayHomeworkModel.Item>
+                            {
+                                new Models.somtodayHomeworkModel.Item
+                                {
+                                    gemaakt = customHomeworkItem.gemaakt
+                                }
+                            }
+                        }
+                    },
+                    gemaakt = true,
+                    UUID = customHomeworkItem.id.ToString()
+                };
+
+                remapedHomework.Add(item);
+            }
+
+            return remapedHomework;
+        }
+
+
+        [Authorize]
+        [SomtodayRequirement]
+        [HttpGet("Somtoday/Huiswerk/Nieuw")]
+        public async Task<IActionResult> NieuwHuiswerk()
+        {
+            ViewData["add_css"] = "somtoday";
+            return View();
+        }
+        
+        [Authorize]
+        [SomtodayRequirement]
+        [HttpPost("Somtoday/Huiswerk/Nieuw")]
+        public async Task<IActionResult> NieuwHuiswerk(string title, string description, DateTime date)
+        {
+            var userEmail = User.FindFirstValue("email");
+            var user = await _users.GetUserAsync(userEmail);
+
+            var homework = JsonConvert.DeserializeObject<List<customHuiswerkModel>>(user.custom_huiswerk ?? "[]") ?? new List<customHuiswerkModel>();
+
+            homework.Add(new customHuiswerkModel(title, description, date, false, homework.Count + 1));
+
+            user = new user
+            {
+                custom_huiswerk = JsonConvert.SerializeObject(homework)
+            };
+
+            await _users.UpdateUserAsync(userEmail, user);
+            
+            return RedirectToAction("Huiswerk");
+        }
+        
+        [Authorize]
+        [SomtodayRequirement]
+        [HttpPut("Somtoday/Huiswerk/Nieuw")]
+        public async Task<IActionResult> NieuwHuiswerk(string title, string description, DateTime date, bool gemaakt, int id)
+        {
+            var userEmail = User.FindFirstValue("email");
+            var user = await _users.GetUserAsync(userEmail);
+            
+            var homework = JsonConvert.DeserializeObject<List<customHuiswerkModel>>(user.custom_huiswerk) ?? new List<customHuiswerkModel>();
+            
+            homework.RemoveAll(x => x.id == id);
+            homework.Add(new customHuiswerkModel(title, description, date, gemaakt, id));
+            
+            user.custom_huiswerk = JsonConvert.SerializeObject(homework);
+            
+            await _users.UpdateUserAsync(userEmail, user);
+            
+            return RedirectToAction("Huiswerk");
+        }
 
         public somtodayHomeworkModel Sort(somtodayHomeworkModel homework)
         {

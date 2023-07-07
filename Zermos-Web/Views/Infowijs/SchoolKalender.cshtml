@@ -3,11 +3,8 @@
 
 @{
     ViewBag.Title = "title";
-
-    // var groupedByMonth = Model.GroupBy(item => item.startsAt.ToDateTime().Year);
-
-    //first group by year then by month
     var groupedByMonth = Model.GroupBy(item => item.startsAt.ToDateTime().Year).SelectMany(group => group.GroupBy(item => item.startsAt.ToDateTime().Month));
+    var culture = new CultureInfo("nl-NL");
 }
 <div class="calander-group">
     <div class="calendar-container">
@@ -19,25 +16,26 @@
 
                 @foreach (var homeworkItem in dayGroup)
                 {
-                    <div class="calendar-item" style="@(homeworkItem.endsAt.ToDateTime() < DateTime.Now ? "opacity: 0.5;" : "opacity: 1;")">
+                    var startsAt = homeworkItem.startsAt.ToDateTime();
+                    var endsAt = homeworkItem.endsAt.ToDateTime();
+                    
+                    <div class="calendar-item" style="@(endsAt < DateTime.Now ? "opacity: 0.5;" : "opacity: 1;")">
                         @homeworkItem.title <br/>
 
-                        @if (homeworkItem.startsAt.ToDateTime().Date == homeworkItem.endsAt.ToDateTime().Date && homeworkItem.isAllDay == false)
+                        @if (startsAt.Date == endsAt.Date && homeworkItem.isAllDay == false)
                         {
-                            @(homeworkItem.startsAt.ToDateTime().ToString("dddd d MMMM HH:mm", new CultureInfo("nl-NL")) + " - " + homeworkItem.endsAt.ToDateTime().ToString("HH:mm", new CultureInfo("nl-NL")))
+                            @(startsAt.ToString("dddd d MMMM HH:mm", culture) + " - " + endsAt.ToString("HH:mm", culture))
                         }
-                        else if (homeworkItem.startsAt.ToDateTime().Date != homeworkItem.endsAt.ToDateTime().Date && homeworkItem.isAllDay == false)
+                        else if (startsAt.Date != endsAt.Date && homeworkItem.isAllDay == false)
                         {
-                            @(homeworkItem.startsAt.ToDateTime().ToString("dddd d MMMM", new CultureInfo("nl-NL")) + " t/m " + homeworkItem.endsAt.ToDateTime().ToString("dddd d MMMM"))
+                            @(startsAt.ToString("dddd d MMMM", culture) + " t/m " + endsAt.ToString("dddd d MMMM", culture))
                         }
                         else if (homeworkItem.isAllDay)
                         {
-                            @homeworkItem.startsAt.ToDateTime().AddDays(1).ToString("dddd d MMMM", new CultureInfo("nl-NL"))
+                            @startsAt.AddDays(1).ToString("dddd d MMMM", culture)
                         }
                         <br/>
-
-                        @* <div class="calendar-content @if (homeworkItem.startsAt.ToDateTime().Month < DateTime.Now.Month) { <text>calendar-content-passed</text> }">@Html.Raw(homeworkItem.title)</div> *@
-                        @* take in account for diffrent years *@
+                        
                     </div>
                 }
             </div>
@@ -46,8 +44,9 @@
     <div class="dates-container">
         @foreach (var dayGroup in groupedByMonth)
         {
-            <div class="month" onclick="doScrolling('@(dayGroup.First()?.startsAt.ToDateTime().ToString("M-yy") ?? "Geen datum!?")', 1000)" href="?@(dayGroup.First()?.startsAt.ToDateTime().ToString("M-yy") ?? "Geen datum!?")">
-                @(dayGroup.First()?.startsAt.ToDateTime().ToString("MMMM", new CultureInfo("nl-NL")) ?? "Geen datum!?")
+            var startsAt = dayGroup.First().startsAt.ToDateTime();
+            <div class="month" onclick="doScrolling('@startsAt.ToString("M-yy")', 1000)" href="?@startsAt.ToString("M-yy")">
+                @startsAt.ToString("MMMM", culture)
             </div>
         }
     </div>

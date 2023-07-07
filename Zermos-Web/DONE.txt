@@ -1,0 +1,8 @@
+﻿DONE: added grades calculations (wat moet ik halen, wat ga ik staan) to somtoday grades
+DONE: updated routes to be CapitalizedAtStart
+DONE: fixed login return url
+DONE: made schoolKalender faster
+DONE: updated icons of rooster and schoolkalender
+DONE: Fixed somtoday token refresh
+DONE: Added custom homework
+DONE: added a new version notifier

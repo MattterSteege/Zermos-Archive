@@ -41,7 +41,7 @@ namespace Zermos_Web.Controllers
         public IActionResult Login(string ReturnUrl = "")
         {
             ViewData["add_css"] = "account";
-            ViewData["ReturnUrl"] = ReturnUrl;
+            ViewData["returnUrl"] = ReturnUrl;
             return View();
         }
 
@@ -71,7 +71,7 @@ namespace Zermos_Web.Controllers
                 mimeMessage.Body = new TextPart(TextFormat.Html)
                 {
                     Text =
-                        $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountCreation?token={newUser.VerificationToken}&email={newUser.email}{(ReturnUrl == "" ? "" : "&ReturnUrl" + ReturnUrl)}\">hier</a> om je Zermos account te verifiëren. Deze link is 10 minuten geldig."
+                        $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountCreation?token={newUser.VerificationToken}&email={newUser.email}{(ReturnUrl == "" ? "" : "&returnUrl=" + ReturnUrl)}\">hier</a> om je Zermos account te verifiëren. Deze link is 10 minuten geldig."
                 };
 
                 // send email
@@ -97,7 +97,7 @@ namespace Zermos_Web.Controllers
             mimeMessage.Body = new TextPart(TextFormat.Html)
             {
                 Text =
-                    $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountLogin?token={user.VerificationToken}&email={user.email}{(ReturnUrl == "" ? "" : "&ReturnUrl" + ReturnUrl)}\">hier</a> om in te loggen in je Zermos account. Deze link is 10 minuten geldig."
+                    $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountLogin?token={user.VerificationToken}&email={user.email}{(ReturnUrl == "" ? "" : "&returnUrl=" + ReturnUrl)}\">hier</a> om in te loggen in je Zermos account. Deze link is 10 minuten geldig."
             };
 
             // send email
@@ -134,7 +134,7 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> VerifyAccountLogin(string token, string email, string ReturnUrl)
+        public async Task<IActionResult> VerifyAccountLogin(string token, string email, string returnUrl)
         {
             var user = await _users.GetUserAsync(email.ToLower());
             if (user == null) return VerificationFailed(1); //user not found
@@ -148,7 +148,7 @@ namespace Zermos_Web.Controllers
             user.CreatedAt = DateTime.MinValue;
             await _users.UpdateUserAsync(email.ToLower(), user);
             ViewData["add_css"] = "account";
-            return await VerificationSuccess(email.ToLower(), ReturnUrl);
+            return await VerificationSuccess(email.ToLower(), returnUrl);
         }
 
         [NonAction]

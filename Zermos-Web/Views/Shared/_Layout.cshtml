@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Reflection
 @* ReSharper disable Mvc.ControllerNotResolved *@
 @* ReSharper disable Mvc.ActionNotResolved *@
 @{
@@ -54,9 +55,9 @@
                 <h5 class="Heading">Zermelo</h5>
 
                 <li>
-                    <a asp-controller="Zermelo" asp-action="rooster">
+                    <a asp-controller="Zermelo" asp-action="Rooster">
                         <div class="menu-item">
-                            <i class="fa-solid fa-calendar menu-icons fa-fw"></i>
+                            <i class="fa-solid fa-calendar-day menu-icons fa-fw"></i>
                             <p>Rooster</p>
                         </div>
                     </a>
@@ -68,7 +69,7 @@
                 <h5 class="Heading">SOMtoday</h5>
 
                 <li>
-                    <a asp-controller="Somtoday" asp-action="huiswerk">
+                    <a asp-controller="Somtoday" asp-action="Huiswerk">
                         <div class="menu-item">
                             <i class="fa-solid fa-pen-to-square menu-icons fa-fw"></i>
                             <p>Huiswerk</p>
@@ -77,7 +78,7 @@
                 </li>
 
                 <li>
-                    <a asp-controller="Somtoday" asp-action="cijfers">
+                    <a asp-controller="Somtoday" asp-action="Cijfers">
                         <div class="menu-item">
                             <i class="fa-solid fa-line-chart menu-icons fa-fw"></i>
                             <p>Cijfers</p>
@@ -114,7 +115,7 @@
                 <li>
                     <a asp-controller="Infowijs" asp-action="SchoolKalender">
                         <div class="menu-item">
-                            <i class="fa-solid fa-calendar menu-icons fa-fw"></i>
+                            <i class="fa-solid fa-calendar-days menu-icons fa-fw"></i>
                             <p>School kalender</p>
                         </div>
                     </a>
@@ -155,11 +156,36 @@
     </div>
 </div>
 
+@if (Context.Request.Cookies["version"] == null && !(bool) Context.Items["loading"]! && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
+{
+    Context.Response.Cookies.Append("version", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+    <div class="version">
+        <p>Je gebruikt momenteel de <b>nieuwste</b> versie van Zermos</p>
+    </div>
+}
+else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariable("BuildNumber") && !(bool) Context.Items["loading"]! && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
+{
+    Context.Response.Cookies.Append("version", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+    <div class="version">
+        <p>Er is een nieuwe versie van Zermos (@Context.Request.Cookies["version"]), bekijk <a asp-controller="Account" asp-action="version">hier</a> wat er nieuw is</p>
+    </div>
+}
+
 <main class="main" id="main">
     @RenderBody()
 </main>
 
 <script src="~/js/global.js" asp-append-version="true"></script>
+<script>
+//remove the version after 5 seconds, fade
+    setTimeout(() => {
+        //fade .version out in 1s
+        $(".version").fadeOut(1000, () => {
+            //remove .version from the DOM
+            $(".version").remove();
+        });
+    }, 5000);
+</script>
 @await RenderSectionAsync("Scripts", false)
 </body>
 </html>

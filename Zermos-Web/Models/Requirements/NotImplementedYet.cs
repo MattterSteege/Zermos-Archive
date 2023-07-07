@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Zermos_Web.Models.Requirements
 {
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
     public class NotImplementedYet : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)

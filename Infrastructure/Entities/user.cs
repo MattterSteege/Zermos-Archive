@@ -20,6 +20,7 @@ namespace Infrastructure.Entities
         public string somtoday_student_id { get; set; }
         public string infowijs_access_token { get; set; }
         public string theme { get; set; }
+        public string custom_huiswerk { get; set; }
 
         //auth related
         public string VerificationToken { get; set; }

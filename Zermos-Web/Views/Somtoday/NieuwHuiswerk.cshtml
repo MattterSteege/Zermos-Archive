@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+@* [HttpPost("Somtoday/Huiswerk/Nieuw")] *@
+@* public async Task<IActionResult> NieuwHuiswerk(string title, string description, DateTime date) *@
+
+<form method="post" class="add-homework" asp-controller="Somtoday" asp-action="NieuwHuiswerk">
+    
+    <div class="date">
+        <label for="date">Wanneer moet het huiswerk af zijn?</label>
+        <input type="date" name="date" id="date" placeholder="dd-mm-yyyy" min="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")"/>
+    </div>
+
+    <div class="title">
+        <label for="title">Welke titel krijgt het huiswerk?</label>
+
+        <input type="text" name="title" id="title" placeholder="Titel"/>
+    </div>
+
+    <div class="description">
+        <label for="description">Wat is de beschrijving van het huiswerk?</label>
+        <textarea name="description" id="description" placeholder="Beschrijving"></textarea>
+    </div>
+
+    <button type="submit" class="submit">Huiswerk toevoegen</button>
+</form>

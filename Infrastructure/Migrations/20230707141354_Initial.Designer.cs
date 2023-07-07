@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ZermosContext))]
-    partial class ZermosContextModelSnapshot : ModelSnapshot
+    [Migration("20230707141354_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,9 +35,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTime?>("VerifiedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("custom_huiswerk")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("infowijs_access_token")
                         .HasColumnType("longtext");
