@@ -1,8 +1,5 @@
-﻿DONE: added grades calculations (wat moet ik halen, wat ga ik staan) to somtoday grades
-DONE: updated routes to be CapitalizedAtStart
-DONE: fixed login return url
-DONE: made schoolKalender faster
-DONE: updated icons of rooster and schoolkalender
-DONE: Fixed somtoday token refresh
-DONE: Added custom homework
-DONE: added a new version notifier
+﻿Visuele veranderingen zijn doorgevoerd
+informatie boord probeert je nu ook niet meer door te sturen naar het achterligende bericht
+Kalender word nu elke 12 uurs cyclus (0:00 - 11:59 / 12:00 - 23:59) opgeslagen en vervolgens word die versie gebruikt om de kalender te tonen, dit zorgt ervoor dat de laadtijd van de kalender een stuk korter is.
+Hetzelfde geld voor het informatieboord, deze word nu ook elke 12 uurs cyclus opgeslagen en vervolgens word die versie gebruikt om het informatieboord te tonen, dit zorgt ervoor dat de laadtijd van het informatieboord een stuk korter is.
+rooster ondersteund nu ook activiteiten 

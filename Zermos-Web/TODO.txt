@@ -5,9 +5,8 @@ TODO: find a way to find what the since paramater means in messages from infowij
 TODO: een linkje naar de school documenten maken; ""
 TODO: add a way to shorten an url for sharing (like bit.ly)
 TODO: add back the styling for school news
-TODO: add base64 validation
-
-
+TODO: find out what can be cached
+TODO: make rooster time based instead of "lesson-hour" based (first hour, second hour, etc.)
 
 
 

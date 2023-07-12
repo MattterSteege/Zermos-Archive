@@ -8,7 +8,7 @@
         <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
         <LangVersion>8</LangVersion>
         <ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
-        <Version>$([System.DateTime]::UtcNow.ToString("yy.M.d.H"))</Version>
+        <Version>1</Version>
     </PropertyGroup>
 
     <ItemGroup>
@@ -70,6 +70,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Wangkanai.Detection" Version="7.4.0" />
     </ItemGroup>
 
     <ItemGroup>

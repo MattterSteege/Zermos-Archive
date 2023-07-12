@@ -41,7 +41,8 @@ namespace Zermos_Web.Controllers
         [Authorize]
         [SomtodayRequirement]
         [AddLoadingScreen("Cijfers worden opgehaald")]
-        public async Task<IActionResult> Cijfers(bool refresh_token = false)
+        [ResponseCache(Duration = 300)]
+        public async Task<IActionResult> Cijfers(bool refresh = false)
         {
             ViewData["add_css"] = "somtoday";
            
@@ -129,6 +130,9 @@ namespace Zermos_Web.Controllers
         [AddLoadingScreen("Cijfers worden geladen")]
         public IActionResult Cijfer(string content = null)
         {
+            if (TokenUtils.IsValidBase64String(content) == false)
+                return NotFound("de cijfer data is niet in een geldige base64 format");
+            
             ViewData["add_css"] = "somtoday";
 
             var a = Convert.FromBase64String(content ?? "");
@@ -141,6 +145,9 @@ namespace Zermos_Web.Controllers
         [AddLoadingScreen("Cijfers worden geladen")]
         public IActionResult CijferData(string content = null)
         {
+            if (TokenUtils.IsValidBase64String(content) == false)
+                return NotFound("de cijfer data is niet in een geldige base64 format");
+            
             ViewData["add_css"] = "somtoday";
 
             var a = Convert.FromBase64String(content ?? "");
@@ -153,8 +160,12 @@ namespace Zermos_Web.Controllers
         [AddLoadingScreen("Cijfers worden geladen")]
         public IActionResult CijferStatestieken(string content = null, bool asPFD = false)
         {
-            if (asPFD) return View("_Loading");
+            if (asPFD) 
+                return NotFound("Deze functie is nog niet beschikbaar");
 
+            if (TokenUtils.IsValidBase64String(content) == false)
+                return NotFound("de cijfer data is niet in een geldige base64 format");
+            
             ViewData["add_css"] = "somtoday";
 
             var a = Convert.FromBase64String(content ?? "");
@@ -504,7 +515,7 @@ namespace Zermos_Web.Controllers
         [Authorize]
         [SomtodayRequirement]
         [HttpGet("Somtoday/Huiswerk/Nieuw")]
-        public async Task<IActionResult> NieuwHuiswerk()
+        public IActionResult NieuwHuiswerk()
         {
             ViewData["add_css"] = "somtoday";
             return View();

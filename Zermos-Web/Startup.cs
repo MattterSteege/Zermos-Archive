@@ -26,6 +26,8 @@ namespace Zermos_Web
             services.AddDbContext<ZermosContext>();
             services.AddScoped<Users>();
 
+            services.AddDetection();
+            
             var cookieExpiration = TimeSpan.FromDays(60);
 
             services.AddAuthentication("EmailScheme") // Sets the default scheme to cookies
@@ -63,6 +65,8 @@ namespace Zermos_Web
             app.UseForwardedHeaders();
 
             app.UseStaticFiles();
+
+            app.UseDetection();
 
             app.UseRouting();
 

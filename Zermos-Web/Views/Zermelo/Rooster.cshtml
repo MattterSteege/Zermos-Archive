@@ -60,43 +60,48 @@
                 {
                     <li class="lesdag">
                         @{
-                            var lesson = 1;
+                            string lesson = "1";
                             var appointments = Model.response.data[0].appointments;
                             var dayAppointments = appointments.Where(a => a.start.ToDateTime().DayOfWeek == day);
+                            IEnumerable<Appointment> appointmentList = dayAppointments.ToList();
                             var nextDayBeginsOnIndex = 0;
                         }
                         @for (var i = 0; i < 9; i++)
                         {
-                            if (nextDayBeginsOnIndex < dayAppointments.Count() && dayAppointments.ElementAt(nextDayBeginsOnIndex).appointmentType == "lesson" && dayAppointments.ElementAt(nextDayBeginsOnIndex).startTimeSlotName == lesson.ToString())
+                            if (nextDayBeginsOnIndex < appointmentList.Count())
                             {
-                                var appointment = dayAppointments.ElementAt(nextDayBeginsOnIndex);
+                                var appointment = appointmentList.ElementAt(nextDayBeginsOnIndex);
 
-                                if (appointment.cancelled)
+                                if ((appointment.appointmentType == "lesson" || appointment.appointmentType == "exam" || appointment.appointmentType == "activity")
+                                    && appointment.startTimeSlotName == lesson)
                                 {
-                                    <div class="lesson canceled">
-                                        @appointment.subjects[0] - @appointment.teachers[0] - @appointment.locations[0]
-                                    </div>
+                                    if (appointment.cancelled)
+                                    {
+                                        <div class="lesson canceled @appointment.appointmentType">
+                                            @(appointment.subjects?[0] ?? "geen vak") - @(appointment.teachers?[0] ?? "geen docenten") - @(appointment.locations?[0] ?? "geen locatie")
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="lesson @appointment.appointmentType">
+                                            @(appointment.subjects?[0] ?? "geen vak") - @(appointment.teachers?[0] ?? "geen docenten") - @(appointment.locations.Count > 0 ? appointment.locations[0] : "geen locatie")
+                                        </div>
+                                    }
+
+                                    nextDayBeginsOnIndex++;
                                 }
                                 else
                                 {
-                                    <div class="lesson">
-                                        @appointment.subjects[0] - @appointment.teachers[0] - @appointment.locations[0]
-                                    </div>
+                                    <div></div>
                                 }
 
-                                nextDayBeginsOnIndex++;
-                            }
-                            else
-                            {
-                                <div></div>
-                            }
+                                if (lesson == "2" || lesson == "4" || lesson == "7")
+                                {
+                                    <div style="background: var(--inactive-color)"></div>
+                                }
 
-                            if (lesson == 2 || lesson == 4 || lesson == 7)
-                            {
-                                <div style="background: var(--inactive-color)"></div>
+                                lesson = (i + 2).ToString();
                             }
-
-                            lesson++;
                         }
                     </li>
                 }

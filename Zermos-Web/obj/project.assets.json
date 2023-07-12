@@ -76,6 +76,19 @@
           }
         }
       },
+      "JetBrains.Annotations/2022.3.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/JetBrains.Annotations.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/JetBrains.Annotations.dll": {
+            "related": ".deps.json;.xml"
+          }
+        }
+      },
       "jQuery/3.5.1": {
         "type": "package"
       },
@@ -1064,6 +1077,58 @@
           }
         }
       },
+      "Wangkanai.Detection/7.4.0": {
+        "type": "package",
+        "dependencies": {
+          "Wangkanai.Hosting": "0.11.0",
+          "Wangkanai.System": "1.19.0"
+        },
+        "compile": {
+          "lib/net6.0/Wangkanai.Detection.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Wangkanai.Detection.dll": {
+            "related": ".pdb"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
+      "Wangkanai.Hosting/0.11.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Wangkanai.Hosting.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Wangkanai.Hosting.dll": {
+            "related": ".pdb"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
+      "Wangkanai.System/1.19.0": {
+        "type": "package",
+        "dependencies": {
+          "JetBrains.Annotations": "2022.3.1"
+        },
+        "compile": {
+          "lib/net6.0/Wangkanai.System.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Wangkanai.System.dll": {
+            "related": ".pdb"
+          }
+        }
+      },
       "Infrastructure/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
@@ -1257,6 +1322,28 @@
         "lib/netstandard2.0/Humanizer.dll",
         "lib/netstandard2.0/Humanizer.xml",
         "logo.png"
+      ]
+    },
+    "JetBrains.Annotations/2022.3.1": {
+      "sha512": "11nsS3+lFICGkztVs9PP2NRItxf9fF+qD6xEW/T0YGto52zj07wseUeBdMAU1ah9HNVTDZyRC1u4NWdtJScwhw==",
+      "type": "package",
+      "path": "jetbrains.annotations/2022.3.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "icon.png",
+        "jetbrains.annotations.2022.3.1.nupkg.sha512",
+        "jetbrains.annotations.nuspec",
+        "lib/net20/JetBrains.Annotations.dll",
+        "lib/net20/JetBrains.Annotations.xml",
+        "lib/netstandard1.0/JetBrains.Annotations.deps.json",
+        "lib/netstandard1.0/JetBrains.Annotations.dll",
+        "lib/netstandard1.0/JetBrains.Annotations.xml",
+        "lib/netstandard2.0/JetBrains.Annotations.deps.json",
+        "lib/netstandard2.0/JetBrains.Annotations.dll",
+        "lib/netstandard2.0/JetBrains.Annotations.xml",
+        "lib/portable40-net40+sl5+win8+wp8+wpa81/JetBrains.Annotations.dll",
+        "lib/portable40-net40+sl5+win8+wp8+wpa81/JetBrains.Annotations.xml"
       ]
     },
     "jQuery/3.5.1": {
@@ -3169,6 +3256,62 @@
         "version.txt"
       ]
     },
+    "Wangkanai.Detection/7.4.0": {
+      "sha512": "yZN+d/zVb9OzQlq5dBjC3QIoVXpJv4Ycu/kXY0yeqdZgxkz+RHBxOxrmNu/LVUvan1yCQNCIWaPWP7mn6kE+iQ==",
+      "type": "package",
+      "path": "wangkanai.detection/7.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NUGET.md",
+        "README.md",
+        "lib/net6.0/Wangkanai.Detection.dll",
+        "lib/net6.0/Wangkanai.Detection.pdb",
+        "lib/net7.0/Wangkanai.Detection.dll",
+        "lib/net7.0/Wangkanai.Detection.pdb",
+        "wangkanai-logo.png",
+        "wangkanai.detection.7.4.0.nupkg.sha512",
+        "wangkanai.detection.nuspec"
+      ]
+    },
+    "Wangkanai.Hosting/0.11.0": {
+      "sha512": "xC4BuDdbQZvcMaQRuh+ejuH3tOqtvb3LlVorHzs3DW/mYviTNzBasmVlMJuOh/hC+CGCi2PqjvskX162enzDSQ==",
+      "type": "package",
+      "path": "wangkanai.hosting/0.11.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net6.0/Wangkanai.Hosting.dll",
+        "lib/net6.0/Wangkanai.Hosting.pdb",
+        "lib/net7.0/Wangkanai.Hosting.dll",
+        "lib/net7.0/Wangkanai.Hosting.pdb",
+        "lib/netcoreapp3.1/Wangkanai.Hosting.dll",
+        "lib/netcoreapp3.1/Wangkanai.Hosting.pdb",
+        "wangkanai-logo.png",
+        "wangkanai.hosting.0.11.0.nupkg.sha512",
+        "wangkanai.hosting.nuspec"
+      ]
+    },
+    "Wangkanai.System/1.19.0": {
+      "sha512": "TU2EED9FPVfJinP1uF/f++e2cypRrIN6ca+XGSCnUDrlfpcJekX/TdG5qlLFGmXF8g334ndCytebQwi6QKtl9g==",
+      "type": "package",
+      "path": "wangkanai.system/1.19.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net6.0/Wangkanai.System.dll",
+        "lib/net6.0/Wangkanai.System.pdb",
+        "lib/net7.0/Wangkanai.System.dll",
+        "lib/net7.0/Wangkanai.System.pdb",
+        "lib/netstandard2.1/Wangkanai.System.dll",
+        "lib/netstandard2.1/Wangkanai.System.pdb",
+        "wangkanai-logo.png",
+        "wangkanai.system.1.19.0.nupkg.sha512",
+        "wangkanai.system.nuspec"
+      ]
+    },
     "Infrastructure/1.0.0": {
       "type": "project",
       "path": "../Infrastructure/Infrastructure.csproj",
@@ -3188,7 +3331,8 @@
       "Microsoft.EntityFrameworkCore.Design >= 7.0.8",
       "Microsoft.EntityFrameworkCore.Relational >= 7.0.8",
       "Microsoft.EntityFrameworkCore.Tools >= 7.0.8",
-      "Newtonsoft.Json >= 13.0.3"
+      "Newtonsoft.Json >= 13.0.3",
+      "Wangkanai.Detection >= 7.4.0"
     ]
   },
   "packageFolders": {
@@ -3281,6 +3425,10 @@
           "Newtonsoft.Json": {
             "target": "Package",
             "version": "[13.0.3, )"
+          },
+          "Wangkanai.Detection": {
+            "target": "Package",
+            "version": "[7.4.0, )"
           }
         },
         "imports": [

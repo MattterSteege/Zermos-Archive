@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 
 namespace Zermos_Web.Utilities
@@ -129,6 +130,31 @@ namespace Zermos_Web.Utilities
 
 
             return result;
+        }
+        
+        public static bool IsValidBase64String(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return false;
+
+            // Check if the input length is a multiple of 4
+            if (input.Length % 4 != 0)
+                return false;
+
+            // Check if the input contains only valid Base64 characters
+            if (!input.All(c => Char.IsLetterOrDigit(c) || c == '+' || c == '/' || c == '='))
+                return false;
+
+            try
+            {
+                // Attempt to decode the input to verify it's a valid Base64 string
+                Convert.FromBase64String(input);
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
         }
     }
 }

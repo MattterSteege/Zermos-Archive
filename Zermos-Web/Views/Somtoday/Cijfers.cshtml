@@ -2,16 +2,17 @@
 @using Item = Zermos_Web.Models.SomtodayGradesModel.Item
 @using System.Globalization
 @using System.Text
+@using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Newtonsoft.Json
+@using Wangkanai.Detection.Models
 @using Zermos_Web.Utilities
+@inject Wangkanai.Detection.Services.IDetectionService DetectionService
 @model Zermos_Web.Models.SomtodayGradesModel.SomtodayGradesModel
 
 @{
-    ViewBag.Title = "title";
+    Context.Response.Cookies.Append("last-seen-grades", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddDays(60)});
 
-    List<Item> LastThreeGrades = new List<Item>();
-    
     var sortedGrades = new List<sortedGrades>();
     foreach (var grade in Model.items)
     {
@@ -25,25 +26,13 @@
         }
         vak.grades.Add(grade);
     }
-
-    LastThreeGrades = Model.items.GetRange(Model.items.Count - 3, 3);
-    LastThreeGrades.Reverse();
+    
 
     sortedGrades.Sort((x, y) => string.Compare(x.vak.naam.ToLower(), y.vak.naam.ToLower(), StringComparison.Ordinal));
 }
-
-<div class="grades-container">
-    <div class="vak" style="padding: 16px;">
-        @foreach(var grade in LastThreeGrades)
-        {
-            <div class="top-30">
-                <p>@grade.vak.naam</p>
-                <p>@grade.geldendResultaat</p>
-            </div>
-        }
-    </div>
-    
-    @{
+@* <div class="grades" style="grid-template-columns: @(DetectionService.Device.Type == Device.Mobile ? "1fr" : "3fr 1fr");"> *@
+<div class="grades">
+    <div class="grades-container">
         @foreach (var vak in sortedGrades)
         {
             //turn the model into a json string turn it into bytes and encode with base64
@@ -57,7 +46,7 @@
             {
                 var gradeItem = vak.grades[i];
                 var geldendResultaat = NumberUtils.ParseFloat(gradeItem.geldendResultaat);
-                
+
                 if ((gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging) == 0 && sumOfWeights == 0)
                 {
                     sumOfWeightedGrades += NumberUtils.ParseFloat(gradeItem.geldendResultaat);
@@ -77,6 +66,11 @@
 
             <div class="vak">
                 <a asp-controller="Somtoday" asp-action="Cijfer" asp-route-content="@encoded">
+                    @if (Context.Request.Cookies["last-seen-grades"] == null || DateTime.Parse(Context.Request.Cookies["last-seen-grades"]) < vak.grades[^1].datumInvoer)
+                    {
+                        <!--Er is een mogelijkheid om tekst toe te voegen-->
+                        <div class="notification"></div>
+                    }
                     <div class="top-30">
                         <h1>@vak.vak.naam</h1>
                         <p>@(vak.grades.Sum(gradeItem => gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging))x</p>
@@ -89,5 +83,19 @@
                 </a>
             </div>
         }
-    }
+
+    </div>
+    @* @if (DetectionService.Device.Type != Device.Mobile) *@
+    @* { *@
+    @*     <div class="grades-history"> *@
+    @*         <div class="history-container"> *@
+    @*             @foreach (var grade in Model.items.GetRange(Model.items.Count - 20, 20)) *@
+    @*             { *@
+    @*                 <div class="history-grade"> *@
+    @*                     @grade.vak.naam - @grade.geldendResultaat - @(grade.weging == 0 ? grade.examenWeging : grade.weging) *@
+    @*                 </div> *@
+    @*             } *@
+    @*         </div> *@
+    @*     </div> *@
+    @* } *@
 </div>

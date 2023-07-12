@@ -4,6 +4,7 @@ using Zermos_Web.Models.Requirements;
 
 namespace Zermos_Web.Controllers
 {
+    [Route("[action]")]
     public class HoofdmenuController : Controller
     {
         private readonly ILogger<HoofdmenuController> _logger;
@@ -22,6 +23,11 @@ namespace Zermos_Web.Controllers
         {
             ViewData["laad_tekst"] = "Bezig met laden";
             return View("_Loading");
+        }
+        
+        public IActionResult Docs()
+        {
+            return View();
         }
     }
 }

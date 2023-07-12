@@ -30,37 +30,32 @@ namespace Zermos_Web.Controllers
 
         [Authorize]
         [ZermeloRequirement]
+        [AddLoadingScreen("Je rooster wordt geladen")]
         public async Task<IActionResult> Rooster(string year, string week)
         {
             ViewData["add_css"] = "zermelo";
-            //the request was by ajax, so return the partial view
 
             year ??= DateTime.Now.Year.ToString();
             week ??= DateTime.Now.GetWeekNumber().ToString();
 
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            {
-                var date = year + (week.ToCharArray().Length == 1 ? "0" + week : week);
 
-                var user = await _users.GetUserAsync(User.FindFirstValue("email"));
+            var date = year + (week.ToCharArray().Length == 1 ? "0" + week : week);
 
-                var baseURL = "https://ccg.zportal.nl/api/v3/liveschedule" +
-                              $"?access_token={user.zermelo_access_token}" +
-                              $"&student={user.school_id}" +
-                              $"&week={date}";
+            var user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
-                //GET request
-                using var httpClient = new HttpClient();
-                var response = await httpClient.GetStringAsync(baseURL);
+            var baseURL = "https://ccg.zportal.nl/api/v3/liveschedule" +
+                          $"?access_token={user.zermelo_access_token}" +
+                          $"&student={user.school_id}" +
+                          $"&week={date}";
 
-                return View(JsonConvert.DeserializeObject<ZermeloRoosterModel>(response));
-            }
+            //GET request
+            using var httpClient = new HttpClient();
+            var response = await httpClient.GetStringAsync(baseURL);
+            
+            //save to week_year_rooster.json
+            System.IO.File.WriteAllText($"{week}-{year}_rooster.json", response);
 
-            //the request was by a legitimate user, so return the loading view
-            ViewData["laad_tekst"] = "Je rooster wordt geladen";
-            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
-                              ControllerContext.RouteData.Values["action"] + "?week=" + week;
-            return View("_Loading");
+            return View(JsonConvert.DeserializeObject<ZermeloRoosterModel>(response));
         }
     }
 }

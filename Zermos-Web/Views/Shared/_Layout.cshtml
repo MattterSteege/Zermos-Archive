@@ -3,7 +3,7 @@
 @* ReSharper disable Mvc.ControllerNotResolved *@
 @* ReSharper disable Mvc.ActionNotResolved *@
 @{
-    bool isDatabaseAvailable = true;
+    string currentPage = $"/{ViewContext.RouteData.Values["controller"]}/{ViewContext.RouteData.Values["action"]?.ToString()?.Split("/")[0] ?? "index"}";
 }
 
 <!DOCTYPE html>
@@ -42,50 +42,46 @@
 
     <div class="bottom">
         <ul>
-            <li>
+            <li style="display: none;">
                 <a asp-controller="Hoofdmenu" asp-action="index">
                     <div class="menu-item">
-                        <i class="fa-solid fa-house menu-icons fa-fw active"></i>
+                        <i class="fa-solid fa-house menu-icons fa-fw @(currentPage == @Url.Action("index", "Hoofdmenu") ? "active" : "")"></i>
                         <p>Hoofdmenu</p>
                     </div>
                 </a>
             </li>
-            @if (isDatabaseAvailable)
-            {
-                <h5 class="Heading">Zermelo</h5>
 
-                <li>
-                    <a asp-controller="Zermelo" asp-action="Rooster">
-                        <div class="menu-item">
-                            <i class="fa-solid fa-calendar-day menu-icons fa-fw"></i>
-                            <p>Rooster</p>
-                        </div>
-                    </a>
-                </li>
-            }
+            <h5 class="Heading">Zermelo</h5>
 
-            @if (isDatabaseAvailable)
-            {
-                <h5 class="Heading">SOMtoday</h5>
+            <li>
+                <a asp-controller="Zermelo" asp-action="Rooster">
+                    <div class="menu-item">
+                        <i class="fa-solid fa-calendar-day menu-icons fa-fw @(currentPage == @Url.Action("Rooster", "Zermelo") ? "active" : "")"></i>
+                        <p>Rooster</p>
+                    </div>
+                </a>
+            </li>
 
-                <li>
-                    <a asp-controller="Somtoday" asp-action="Huiswerk">
-                        <div class="menu-item">
-                            <i class="fa-solid fa-pen-to-square menu-icons fa-fw"></i>
-                            <p>Huiswerk</p>
-                        </div>
-                    </a>
-                </li>
 
-                <li>
-                    <a asp-controller="Somtoday" asp-action="Cijfers">
-                        <div class="menu-item">
-                            <i class="fa-solid fa-line-chart menu-icons fa-fw"></i>
-                            <p>Cijfers</p>
-                        </div>
-                    </a>
-                </li>
-            }
+            <h5 class="Heading">SOMtoday</h5>
+
+            <li>
+                <a asp-controller="Somtoday" asp-action="Huiswerk">
+                    <div class="menu-item">
+                        <i class="fa-solid fa-pen-to-square menu-icons fa-fw @(currentPage == @Url.Action("Huiswerk", "Somtoday") ? "active" : "")"></i>
+                        <p>Huiswerk</p>
+                    </div>
+                </a>
+            </li>
+
+            <li>
+                <a asp-controller="Somtoday" asp-action="Cijfers">
+                    <div class="menu-item">
+                        <i class="fa-solid fa-line-chart menu-icons fa-fw @(currentPage == @Url.Action("Cijfers", "Somtoday") ? "active" : "")"></i>
+                        <p>Cijfers</p>
+                    </div>
+                </a>
+            </li>
 
 
             <h5 class="Heading">School</h5>
@@ -93,42 +89,41 @@
             <li>
                 <a asp-controller="School" asp-action="InformatieBoord">
                     <div class="menu-item">
-                        <i class="fa-solid fa-info-circle menu-icons fa-fw"></i>
+                        <i class="fa-solid fa-info-circle menu-icons fa-fw @(currentPage == @Url.Action("InformatieBoord", "School") ? "active" : "")"></i>
                         <p>Informatie bord</p>
                     </div>
                 </a>
             </li>
 
-            @if (isDatabaseAvailable)
-            {
-                <h5 class="Heading">De Antonius app</h5>
 
-                <li>
-                    <a asp-controller="Infowijs" asp-action="SchoolNieuws">
-                        <div class="menu-item">
-                            <i class="fa-solid fa-newspaper menu-icons fa-fw"></i>
-                            <p>School nieuws</p>
-                        </div>
-                    </a>
-                </li>
+            <h5 class="Heading">De Antonius app</h5>
 
-                <li>
-                    <a asp-controller="Infowijs" asp-action="SchoolKalender">
-                        <div class="menu-item">
-                            <i class="fa-solid fa-calendar-days menu-icons fa-fw"></i>
-                            <p>School kalender</p>
-                        </div>
-                    </a>
-                </li>
+            <li>
+                <a asp-controller="Infowijs" asp-action="SchoolNieuws">
+                    <div class="menu-item">
+                        <i class="fa-solid fa-newspaper menu-icons fa-fw @(currentPage == @Url.Action("SchoolNieuws", "Infowijs") ? "active" : "")"></i>
+                        <p>School nieuws</p>
+                    </div>
+                </a>
+            </li>
 
-                <li style="display: none" class="hidden-account">
-                    <a asp-controller="Account" asp-action="ShowAccount">
-                        <div class="menu-item">
-                            <i class="fa-solid fa-user menu-icons fa-fw"></i>
-                        </div>
-                    </a>
-                </li>
-            }
+            <li>
+                <a asp-controller="Infowijs" asp-action="SchoolKalender">
+                    <div class="menu-item">
+                        <i class="fa-solid fa-calendar-days menu-icons fa-fw @(currentPage == @Url.Action("SchoolKalender", "Infowijs") ? "active" : "")"></i>
+                        <p>School kalender</p>
+                    </div>
+                </a>
+            </li>
+
+            <li style="display: none" class="hidden-account">
+                <a asp-controller="Account" asp-action="ShowAccount">
+                    <div class="menu-item">
+                        <i class="fa-solid fa-user menu-icons fa-fw @(currentPage == @Url.Action("ShowAccount", "Account") ? "active" : "")"></i>
+                    </div>
+                </a>
+            </li>
+
             <div class="spacer"></div>
         </ul>
     </div>
@@ -143,7 +138,7 @@
 <div class="top-bar">
     <div class="top-right-profile-picture">
         <a asp-controller="Account" asp-action="ShowAccount">
-            <i class="fa-solid fa-user"></i>
+            <i class="fa-solid fa-user menu-icons fa-fw @(currentPage == @Url.Action("ShowAccount", "Account") ? "active" : "")"></i>
         </a>
     </div>
 
@@ -156,18 +151,18 @@
     </div>
 </div>
 
-@if (Context.Request.Cookies["version"] == null && !(bool) Context.Items["loading"]! && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
+@if (Context.Request.Cookies["version"] == null && !(bool) (Context.Items["loading"] ?? true) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
 {
-    Context.Response.Cookies.Append("version", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+    Context.Response.Cookies.Append("version", Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty);
     <div class="version">
         <p>Je gebruikt momenteel de <b>nieuwste</b> versie van Zermos</p>
     </div>
 }
-else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariable("BuildNumber") && !(bool) Context.Items["loading"]! && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
+else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") && !(bool) (Context.Items["loading"] ?? true) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
 {
-    Context.Response.Cookies.Append("version", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+    Context.Response.Cookies.Append("version", Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty);
     <div class="version">
-        <p>Er is een nieuwe versie van Zermos (@Context.Request.Cookies["version"]), bekijk <a asp-controller="Account" asp-action="version">hier</a> wat er nieuw is</p>
+        <p>Er is een nieuwe versie van Zermos (@Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty);), bekijk <a asp-controller="Account" asp-action="version">hier</a> wat er nieuw is</p>
     </div>
 }
 

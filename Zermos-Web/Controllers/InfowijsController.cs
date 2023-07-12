@@ -80,12 +80,29 @@ namespace Zermos_Web.Controllers
         public async Task<IActionResult> SchoolKalender()
         {
             ViewData["add_css"] = "infowijs";
+            
+            if (System.IO.File.Exists("infowijs_kalender.json"))
+            {
+                var lastModified = System.IO.File.GetLastWriteTime("infowijs_kalender.json");
+                // if last modified was in 0:00 - 11:59, and it is 13.00, then update the file.
+                // if last modified was in 12:00 - 23:59, and it is 00.00, then update the file.
+                if ((lastModified.Hour < 12 && DateTime.Now.Hour >= 13) || (lastModified.Hour >= 12 && DateTime.Now.Hour <= 24))
+                {
+                    return View(JsonConvert
+                        .DeserializeObject<InfowijsEventsModel>(await System.IO.File.ReadAllTextAsync("infowijs_kalender.json"),
+                            Converter.Settings).data);
+                }
+            }
 
             //https://antonius.hoyapp.nl/hoy/v1/events
             _httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", await GetSessionToken());
 
             var response = await _httpClient.GetAsync("https://antonius.hoyapp.nl/hoy/v1/events");
+            
+            //cache the output for 1 day in a json file
+            await System.IO.File.WriteAllTextAsync("infowijs_kalender.json", await response.Content.ReadAsStringAsync());
+            
             return View(JsonConvert
                 .DeserializeObject<InfowijsEventsModel>(await response.Content.ReadAsStringAsync(),
                     Converter.Settings).data);
