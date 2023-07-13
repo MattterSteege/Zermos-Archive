@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Zermos_Web.Models.Requirements;
 
 namespace Zermos_Web.Controllers
 {

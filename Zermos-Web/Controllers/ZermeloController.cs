@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Infrastructure;
-using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zermos_Web.Models;
 using Zermos_Web.Models.Requirements;
-using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
@@ -52,7 +48,7 @@ namespace Zermos_Web.Controllers
             using var httpClient = new HttpClient();
             var response = await httpClient.GetStringAsync(baseURL);
 
-            return View(!newUi ? "Rooster" : "New-Rooster",JsonConvert.DeserializeObject<ZermeloRoosterModel>(response));
+            return View(JsonConvert.DeserializeObject<ZermeloRoosterModel>(response));
         }
     }
 }

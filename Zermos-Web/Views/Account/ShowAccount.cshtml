@@ -17,7 +17,7 @@
 
         <div class="information-item-parent" id="info">
             <h1>Opgeslagen informatie</h1>
-            <p>klik op een item om de informatie te kopieren</p>
+            <p>De volgende dingen zijn opgeslagen om Zermos goed te kunnen gebruiken</p>
             <div class="opgeslagen-informatie-grid">
                 @{
                     //Loop trough all the properties of the user object and display them like this: [name]: [value (capt at 25 characters)]
@@ -25,7 +25,15 @@
                     {
                         //<p>@property.Name: @property.GetValue(Model, null)?.ToString()</p>
                         //cap at an maximum of 25 chars, but it can be less
-                        <p onclick="copyToClipboard('@property.GetValue(Model, null)?.ToString()?.Substring(0, (property.GetValue(Model, null)?.ToString()?.Length ?? 0) > 21 ? 21 : (property.GetValue(Model, null)?.ToString()?.Length ?? 0))')"><b>@property.Name</b>: @property.GetValue(Model, null)?.ToString()?.Substring(0, (property.GetValue(Model, null)?.ToString()?.Length ?? 0) > 21 ? 21 : (property.GetValue(Model, null)?.ToString()?.Length ?? 0))</p>
+                        @* <p onclick="copyToClipboard('@property.GetValue(Model, null)?.ToString()?.Substring(0, (property.GetValue(Model, null)?.ToString()?.Length ?? 0) > 21 ? 21 : (property.GetValue(Model, null)?.ToString()?.Length ?? 0))')"><b>@property.Name</b>: @property.GetValue(Model, null)?.ToString()?.Substring(0, (property.GetValue(Model, null)?.ToString()?.Length ?? 0) > 21 ? 21 : (property.GetValue(Model, null)?.ToString()?.Length ?? 0))</p> *@
+                        
+                        //if property is not { get; set; } then skip it
+                        if (property.GetMethod == null || property.SetMethod == null)
+                        {
+                            continue;
+                        }
+                        
+                        <p><b>@property.Name</b></p>
                     }
                 }
             </div>

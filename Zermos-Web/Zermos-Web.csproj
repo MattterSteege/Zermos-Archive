@@ -50,6 +50,13 @@
         <_ContentIncludedByDefault Remove="Views\Chart\SampleChart.cshtml" />
         <_ContentIncludedByDefault Remove="Views\Notities\Bewerk.cshtml" />
         <_ContentIncludedByDefault Remove="Views\Notities\Notities.cshtml" />
+        <_ContentIncludedByDefault Remove="test-JSON\Zermelo\22-2023_rooster.json" />
+        <_ContentIncludedByDefault Remove="test-JSON\Zermelo\23-2023_rooster.json" />
+        <_ContentIncludedByDefault Remove="test-JSON\Zermelo\24-2023_rooster.json" />
+        <_ContentIncludedByDefault Remove="test-JSON\Zermelo\25-2023_rooster.json" />
+        <_ContentIncludedByDefault Remove="test-JSON\Zermelo\26-2023_rooster.json" />
+        <_ContentIncludedByDefault Remove="test-JSON\Zermelo\27-2023_rooster.json" />
+        <_ContentIncludedByDefault Remove="test-JSON\Zermelo\28-2023_rooster.json" />
     </ItemGroup>
 
     <ItemGroup>
@@ -84,6 +91,7 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </None>
+      <None Remove="test-JSON\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -91,6 +99,15 @@
         <Link>.dockerignore</Link>
       </Content>
       <Content Remove="wwwroot\manifest.json" />
+      <Content Remove="test-JSON\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="test-JSON\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="test-JSON\**" />
     </ItemGroup>
 
 </Project>

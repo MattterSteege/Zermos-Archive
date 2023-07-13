@@ -1,4 +1,5 @@
-﻿@model ZermeloRoosterModel
+﻿@using System.Globalization
+@model ZermeloRoosterModel
 
 @{
     ViewData["title"] = "title";
@@ -56,6 +57,12 @@
         <ul>
             @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
             {
+                @if (Model.response.data[0].appointments.Count == 0)
+                {
+                    <li class="empty">Wow, de hele week vrij!</li>
+                    break;
+                }
+                
                 if (day != DayOfWeek.Saturday && day != DayOfWeek.Sunday)
                 {
                     <li class="lesdag">
@@ -65,43 +72,28 @@
                             var dayAppointments = appointments.Where(a => a.start.ToDateTime().DayOfWeek == day);
                             IEnumerable<Appointment> appointmentList = dayAppointments.ToList();
                             var nextDayBeginsOnIndex = 0;
+
+                            //100 means 100% of the height of the container
+                            //510 means 510 minutes between 08:20 and 16:50
+                            float minuteHeight = 100f / 510f;
+
+                            //get the date of the day that the appointments are for
+                            //8 * 60 + 20 = 500 minutes
+                            int dayStartUnix = appointmentList.ElementAt(0).start.ToDateTime().Date.AddMinutes(6 * 60 + 20).ToUnixTime();
+
                         }
-                        @for (var i = 0; i < 9; i++)
+
+                        @foreach (var appointment in appointmentList)
                         {
-                            if (nextDayBeginsOnIndex < appointmentList.Count())
-                            {
-                                var appointment = appointmentList.ElementAt(nextDayBeginsOnIndex);
+                            //percentage from top = (appointment start time - dayStartUnix) * minuteHeight *@
+                            //appointment height = (appointment end time - appointment start time) * minuteHeight
 
-                                if ((appointment.appointmentType == "lesson" || appointment.appointmentType == "exam" || appointment.appointmentType == "activity")
-                                    && appointment.startTimeSlotName == lesson)
-                                {
-                                    if (appointment.cancelled)
-                                    {
-                                        <div class="lesson canceled @appointment.appointmentType">
-                                            @(appointment.subjects?[0] ?? "geen vak") - @(appointment.teachers?[0] ?? "geen docenten") - @(appointment.locations?[0] ?? "geen locatie")
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="lesson @appointment.appointmentType">
-                                            @(appointment.subjects?[0] ?? "geen vak") - @(appointment.teachers?[0] ?? "geen docenten") - @(appointment.locations.Count > 0 ? appointment.locations[0] : "geen locatie")
-                                        </div>
-                                    }
+                            float appointmentHeight = ((appointment.end - appointment.start) / 60f) * minuteHeight;
+                            float appointmentTop = ((appointment.start - dayStartUnix) / 60f) * minuteHeight;
 
-                                    nextDayBeginsOnIndex++;
-                                }
-                                else
-                                {
-                                    <div></div>
-                                }
-
-                                if (lesson == "2" || lesson == "4" || lesson == "7")
-                                {
-                                    <div style="background: var(--inactive-color)"></div>
-                                }
-
-                                lesson = (i + 2).ToString();
-                            }
+                            <div class="lesson-time-based @(appointment.cancelled ? "canceled" : "") @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);">
+                                @(appointment.subjects.Count > 0 ? appointment.subjects[0] : "Geen les") - @(appointment.teachers.Count > 0 ? appointment.teachers[0] : "Geen docent") - @(appointment.locations.Count > 0 ? appointment.locations[0] : "Geen lokaal")
+                            </div>
                         }
                     </li>
                 }

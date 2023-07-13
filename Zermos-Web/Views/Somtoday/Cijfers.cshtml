@@ -12,7 +12,9 @@
 
 @{
     Context.Response.Cookies.Append("last-seen-grades", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddDays(60)});
-
+    
+    //grade history, make a string and then in the history do the html.raw or smth
+    
     var sortedGrades = new List<sortedGrades>();
     foreach (var grade in Model.items)
     {
@@ -85,17 +87,17 @@
         }
 
     </div>
-    @* @if (DetectionService.Device.Type != Device.Mobile) *@
-    @* { *@
-    @*     <div class="grades-history"> *@
-    @*         <div class="history-container"> *@
-    @*             @foreach (var grade in Model.items.GetRange(Model.items.Count - 20, 20)) *@
-    @*             { *@
-    @*                 <div class="history-grade"> *@
-    @*                     @grade.vak.naam - @grade.geldendResultaat - @(grade.weging == 0 ? grade.examenWeging : grade.weging) *@
-    @*                 </div> *@
-    @*             } *@
-    @*         </div> *@
-    @*     </div> *@
-    @* } *@
+    @if (DetectionService.Device.Type != Device.Mobile)
+    {
+        <div class="grades-history">
+            <div class="history-container">
+                @foreach (var grade in Model.items.GetRange(Model.items.Count - 20, 20))
+                {
+                    <div class="history-grade">
+                        @grade.vak.naam - @grade.geldendResultaat - @(grade.weging == 0 ? grade.examenWeging : grade.weging)
+                    </div>
+                }
+            </div>
+        </div>
+    }
 </div>

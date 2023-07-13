@@ -155,18 +155,33 @@
     margin: 4px;
 }
 
+li.empty {
+    grid-column: 1 / span 5;
+    align-content: center;
+    justify-content: center;
+    display: grid;
+    background: var(--overlay-color);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    margin: auto;
+    font-size: 20px;
+    padding: 20px;
+    border-radius: 7px;
+    font-weight: 700;
+}
+
 .exam {
-    background-color: #FFC107;
+    border-left: 4px solid #FFC107;
 }
 
 .activity {
-    background-color: #2CB543;
+    border-left: 4px solid #2CB543;
 }
 
 .lesson {
-
+    border-left: 4px solid #007BFF;
 }
 
 .canceled {
-    background-color: var(--deny-color);
+    border-left: 4px solid var(--deny-color);
+    opacity: 0.5;
 }
