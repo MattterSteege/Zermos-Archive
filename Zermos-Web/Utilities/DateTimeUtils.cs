@@ -133,6 +133,6 @@ public static class DateTimeUtils
         var dutchTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id);
         return (TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id).IsDaylightSavingTime(date)
             ? TimeZoneInfo.ConvertTimeFromUtc(date.ToUniversalTime(), dutchTimeZone)
-            : TimeZoneInfo.ConvertTime(date, dutchTimeZone)).AddHours(-1);
+            : date);
     }
 }

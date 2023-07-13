@@ -5,11 +5,11 @@ using Zermos_Web.Models.Requirements;
 namespace Zermos_Web.Controllers
 {
     [Route("[action]")]
-    public class HoofdmenuController : Controller
+    public class MainController : Controller
     {
-        private readonly ILogger<HoofdmenuController> _logger;
+        private readonly ILogger<MainController> _logger;
 
-        public HoofdmenuController(ILogger<HoofdmenuController> logger)
+        public MainController(ILogger<MainController> logger)
         {
             _logger = logger;
         }

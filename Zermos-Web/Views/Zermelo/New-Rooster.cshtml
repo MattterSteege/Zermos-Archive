@@ -1,0 +1,113 @@
+﻿@using System.Globalization
+@model ZermeloRoosterModel
+
+@{
+    ViewData["title"] = "title";
+}
+
+
+<div class="main-container">
+    <div class="times-container">
+        <ul>
+            <!--        20 horizontal lines-->
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <div class="days-container">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <div class="hours-container">
+        <ul>
+            <li></li>
+            <li>08:20</li> <!-- 1st hour -->
+            <li>09:10</li> <!-- 2nd hour -->
+            <li>10:00</li> <!-- break -->
+            <li>10:15</li> <!-- 3rd hour -->
+            <li>11:05</li> <!-- 4th hour -->
+            <li>11:55</li> <!-- break -->
+            <li>12:25</li> <!-- 5th hour -->
+            <li>13:15</li> <!-- 6th hour -->
+            <li>14:05</li> <!-- 7th hour -->
+            <li>14:55</li> <!-- break -->
+            <li>15:10</li> <!-- 8th hour -->
+            <li>16:00</li> <!-- 9th hour -->
+            <li></li> <!-- end schoolday -->
+        </ul>
+    </div>
+    <div class="lessons-container">
+        <ul>
+            @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+            {
+                if (day != DayOfWeek.Saturday && day != DayOfWeek.Sunday)
+                {
+                    <li class="lesdag">
+                        @{
+                            string lesson = "1";
+                            var appointments = Model.response.data[0].appointments;
+                            var dayAppointments = appointments.Where(a => a.start.ToDateTime().DayOfWeek == day);
+                            IEnumerable<Appointment> appointmentList = dayAppointments.ToList();
+                            var nextDayBeginsOnIndex = 0;
+
+                            //100 means 100% of the height of the container
+                            //510 means 510 minutes between 08:20 and 16:50
+                            float minuteHeight = 100f / 510f;
+
+                            //get the date of the day that the appointments are for
+                            //8 * 60 + 20 = 500 minutes
+                            int dayStartUnix = appointmentList.ElementAt(0).start.ToDateTime().Date.AddMinutes(6 * 60 + 20).ToUnixTime();
+
+                        }
+                        @for (var i = 0; i < 9; i++)
+                        {
+                            if (nextDayBeginsOnIndex < appointmentList.Count())
+                            {
+                                var appointment = appointmentList.ElementAt(nextDayBeginsOnIndex);
+
+                                //percentage from top = (appointment start time - dayStartUnix) * minuteHeight
+                                //appointment height = (appointment end time - appointment start time) * minuteHeight
+
+                                float appointmentHeight = ((appointment.end - appointment.start) / 60f) * minuteHeight;
+                                float appointmentTop = ((appointment.start - dayStartUnix) / 60f) * minuteHeight;
+                                
+                                // if (appointment.cancelled)
+                                // {
+                                    <div class="lesson-time-based @(appointment.cancelled ? "cancelled" : "") @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);">
+                                        @(appointment.subjects?[0] ?? "geen vak") @*- @(appointment.teachers?[0] ?? "geen docenten") - @(appointment.locations.Count > 0 ? appointment.locations[0] : "geen locatie"*@
+                                    </div>
+                                @* } *@
+                                @* else *@
+                                @* { *@
+                                @*     <div class="lesson-time-based  @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: @(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))%;"> *@
+                                @*         @(appointment.subjects?[0] ?? "geen vak") - @(appointment.teachers?[0] ?? "geen docenten") - @(appointment.locations.Count > 0 ? appointment.locations[0] : "geen locatie") *@
+                                @*     </div> *@
+                                @* } *@
+
+                                nextDayBeginsOnIndex++;
+                            }
+                        }
+                    </li>
+                }
+            }
+        </ul>
+
+    </div>
+</div>

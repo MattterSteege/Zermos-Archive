@@ -181,7 +181,7 @@ body {
     transition: background-size 0.3s;
 }
 
-.docs .docs-image:hover {
+.docs:hover .docs-image {
     background-size: 100%;
 }
 
@@ -203,7 +203,7 @@ body {
     font-size: 14px;
 }
 
-.sidebar .docs button {
+.sidebar .docs a {
     position: absolute;
     bottom: 16px;
     left: 16px;
@@ -216,6 +216,9 @@ body {
     font-weight: 700;
     font-size: 14px;
     cursor: pointer;
+    align-content: center;
+    justify-content: center;
+    display: grid;
 }
 
 .sidebar .docs button:hover {

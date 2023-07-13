@@ -31,7 +31,7 @@ namespace Zermos_Web.Controllers
         [Authorize]
         [ZermeloRequirement]
         [AddLoadingScreen("Je rooster wordt geladen")]
-        public async Task<IActionResult> Rooster(string year, string week)
+        public async Task<IActionResult> Rooster(string year, string week, bool newUi = false)
         {
             ViewData["add_css"] = "zermelo";
 
@@ -51,11 +51,8 @@ namespace Zermos_Web.Controllers
             //GET request
             using var httpClient = new HttpClient();
             var response = await httpClient.GetStringAsync(baseURL);
-            
-            //save to week_year_rooster.json
-            System.IO.File.WriteAllText($"{week}-{year}_rooster.json", response);
 
-            return View(JsonConvert.DeserializeObject<ZermeloRoosterModel>(response));
+            return View(!newUi ? "Rooster" : "New-Rooster",JsonConvert.DeserializeObject<ZermeloRoosterModel>(response));
         }
     }
 }

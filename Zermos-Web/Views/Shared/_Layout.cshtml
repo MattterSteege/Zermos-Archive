@@ -43,9 +43,9 @@
     <div class="bottom">
         <ul>
             <li style="display: none;">
-                <a asp-controller="Hoofdmenu" asp-action="index">
+                <a asp-controller="Main" asp-action="index">
                     <div class="menu-item">
-                        <i class="fa-solid fa-house menu-icons fa-fw @(currentPage == @Url.Action("index", "Hoofdmenu") ? "active" : "")"></i>
+                        <i class="fa-solid fa-house menu-icons fa-fw @(currentPage == @Url.Action("index", "Main") ? "active" : "")"></i>
                         <p>Hoofdmenu</p>
                     </div>
                 </a>
@@ -131,7 +131,7 @@
         <img class="docs-image background-tint"/>
         <h4>Hulp nodig?</h4>
         <p>Check hoe je Zermos kunt gebruiken</p>
-        <button>Bekijk de documentatie</button>
+        <a asp-controller="Main" asp-action="Docs">Bekijk de documentatie</a>
     </div>
 </div>
 

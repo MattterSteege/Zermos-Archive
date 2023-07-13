@@ -77,7 +77,7 @@ namespace Zermos_Web
             {
                 endpoints.MapControllerRoute(
                     "default",
-                    "{controller=Hoofdmenu}/{action=Index}/{id?}");
+                    "{controller=Main}/{action=Index}/{id?}");
             });
         }
     }

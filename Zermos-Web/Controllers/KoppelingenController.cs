@@ -160,7 +160,7 @@ namespace Zermos_Web.Controllers
                 var user = new user {infowijs_access_token = token};
                 await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
 
-                return RedirectToAction("Index", "Hoofdmenu");
+                return RedirectToAction("Index", "Main");
             }
 
             ViewData["qr_text"] = "hoy_scan://v1/login/" + koppelUuid;
@@ -304,7 +304,7 @@ namespace Zermos_Web.Controllers
             user.somtoday_refresh_token = somtodayAuthentication.refresh_token;
 
             await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
-            return RedirectToAction("Index", "Hoofdmenu");
+            return RedirectToAction("Index", "Main");
         }
 
 

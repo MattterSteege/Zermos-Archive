@@ -129,39 +129,30 @@
 }
 
 .lesdag {
-    display: grid;
     height: 100%;
     width: 100%;
     min-width: 100%;
     max-width: 100%;
-    grid-template-rows: 10fr 10fr 3fr 10fr 10fr 6fr 10fr 10fr 10fr 3fr 10fr 10fr;
+    position: relative;
 }
 
-.lesdag div {
-    width: 100%;
-    max-width: 100%;
-    min-width: 100%;
-    overflow: hidden;
-}
-
-.lesson {
-    padding: 8px;
+.lesson-time-based {
     max-width: calc(100% - 8px) !important;
     min-width: calc(100% - 8px) !important;
     width: calc(100% - 8px) !important;
-    height: calc(100% - 8px) !important;
+    padding: 8px;
     justify-self: center;
     align-self: center;
     background: var(--inactive-color);
     border-radius: 4px;
-    
-    
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     font-weight: 600;
     color: var(--text-color);
+    position: absolute;
+    margin: 4px;
 }
 
 .exam {
@@ -170,6 +161,10 @@
 
 .activity {
     background-color: #2CB543;
+}
+
+.lesson {
+
 }
 
 .canceled {
