@@ -97,6 +97,7 @@ namespace Zermos_Web.Utilities
             return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(exp).ToLocalTime();
         }
 
+        [Flags]
         public enum RandomStringType
         {
             LowerCase,

@@ -67,7 +67,7 @@
             float gemiddelde = MathF.Round(sumOfWeightedGrades / sumOfWeights, 1, MidpointRounding.AwayFromZero);
 
             <div class="vak">
-                <a asp-controller="Somtoday" asp-action="Cijfer" asp-route-content="@encoded">
+                <a asp-controller="Somtoday" asp-action="Cijfer" asp-route-vak="@vak.vak.afkorting.Capitalize()" asp-route-content="@encoded">
                     @if (Context.Request.Cookies["last-seen-grades"] == null || DateTime.Parse(Context.Request.Cookies["last-seen-grades"]) < vak.grades[^1].datumInvoer)
                     {
                         <!--Er is een mogelijkheid om tekst toe te voegen-->
@@ -87,17 +87,17 @@
         }
 
     </div>
-    @if (DetectionService.Device.Type != Device.Mobile)
-    {
-        <div class="grades-history">
-            <div class="history-container">
-                @foreach (var grade in Model.items.GetRange(Model.items.Count - 20, 20))
-                {
-                    <div class="history-grade">
-                        @grade.vak.naam - @grade.geldendResultaat - @(grade.weging == 0 ? grade.examenWeging : grade.weging)
-                    </div>
-                }
-            </div>
-        </div>
-    }
+    @* @if (DetectionService.Device.Type != Device.Mobile) *@
+    @* { *@
+    @*     <div class="grades-history"> *@
+    @*         <div class="history-container"> *@
+    @*             @foreach (var grade in Model.items.GetRange(Model.items.Count - 20, 20)) *@
+    @*             { *@
+    @*                 <div class="history-grade"> *@
+    @*                     @grade.vak.naam - @grade.geldendResultaat - @(grade.weging == 0 ? grade.examenWeging : grade.weging) *@
+    @*                 </div> *@
+    @*             } *@
+    @*         </div> *@
+    @*     </div> *@
+    @* } *@
 </div>

@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using System.Reflection
+@using Zermos_Web.Utilities
 @* ReSharper disable Mvc.ControllerNotResolved *@
 @* ReSharper disable Mvc.ActionNotResolved *@
 @{
@@ -17,11 +18,11 @@
     <script src="https://kit.fontawesome.com/052f5fa8f8.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="~/js/global.js"></script>
-    <link rel="stylesheet" href="~/css/style.css">
+    <script src="~/js/global.js?version=@(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? TokenUtils.RandomString(5, TokenUtils.RandomStringType.Numbers & TokenUtils.RandomStringType.LowerCase & TokenUtils.RandomStringType.UpperCase))"></script>
+    <link rel="stylesheet" href="~/css/style.css?version=@(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? TokenUtils.RandomString(5, TokenUtils.RandomStringType.Numbers & TokenUtils.RandomStringType.LowerCase & TokenUtils.RandomStringType.UpperCase))">
     @if (!string.IsNullOrEmpty(ViewData["add_css"]?.ToString()))
     {
-        <link rel="stylesheet" href="~/css/@(ViewData["add_css"]).css">
+        <link rel="stylesheet" href="~/css/@(ViewData["add_css"]).css?version=@(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? TokenUtils.RandomString(5, TokenUtils.RandomStringType.Numbers & TokenUtils.RandomStringType.LowerCase & TokenUtils.RandomStringType.UpperCase))">
     }
 </head>
 <body>

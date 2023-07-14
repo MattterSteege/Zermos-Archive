@@ -6,8 +6,7 @@ TODO: een linkje naar de school documenten maken; ""
 TODO: add a way to shorten an url for sharing (like bit.ly)
 TODO: add back the styling for school news
 TODO: find out what can be cached
-TODO: make rooster time based instead of "lesson-hour" based (first hour, second hour, etc.)
-
+TODO: cache grades for 15 minutes
 
 
 

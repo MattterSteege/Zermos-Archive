@@ -28,11 +28,11 @@
     <div class="days-container">
         <ul>
             <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
+            <li>Ma</li>
+            <li>Di</li>
+            <li>Wo</li>
+            <li>Do</li>
+            <li>Vr</li>
         </ul>
     </div>
     <div class="hours-container">
@@ -67,11 +67,7 @@
                 {
                     <li class="lesdag">
                         @{
-                            string lesson = "1";
-                            var appointments = Model.response.data[0].appointments;
-                            var dayAppointments = appointments.Where(a => a.start.ToDateTime().DayOfWeek == day);
-                            IEnumerable<Appointment> appointmentList = dayAppointments.ToList();
-                            var nextDayBeginsOnIndex = 0;
+                            IEnumerable<Appointment> appointmentList = Model.response.data[0].appointments.Where(a => a.start.ToDateTime().DayOfWeek == day).ToList();
 
                             //100 means 100% of the height of the container
                             //510 means 510 minutes between 08:20 and 16:50

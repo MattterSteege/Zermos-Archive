@@ -41,7 +41,7 @@ namespace Zermos_Web.Controllers
         [Authorize]
         [SomtodayRequirement]
         [AddLoadingScreen("Cijfers worden opgehaald")]
-        [ResponseCache(Duration = 300)]
+        [HttpGet("Somtoday/Cijfers")]
         public async Task<IActionResult> Cijfers(bool refresh = false)
         {
             ViewData["add_css"] = "somtoday";
@@ -128,6 +128,7 @@ namespace Zermos_Web.Controllers
         }
 
         [AddLoadingScreen("Cijfers worden geladen")]
+        [HttpGet("Somtoday/Cijfers/{vak}")]
         public IActionResult Cijfer(string content = null)
         {
             if (TokenUtils.IsValidBase64String(content) == false)
@@ -143,6 +144,7 @@ namespace Zermos_Web.Controllers
         }
 
         [AddLoadingScreen("Cijfers worden geladen")]
+        [HttpGet("Somtoday/Cijfers/{vak}/CijferData")]
         public IActionResult CijferData(string content = null)
         {
             if (TokenUtils.IsValidBase64String(content) == false)
@@ -158,6 +160,7 @@ namespace Zermos_Web.Controllers
         }
 
         [AddLoadingScreen("Cijfers worden geladen")]
+        [HttpGet("Somtoday/Cijfers/{vak}/Statestieken")]
         public IActionResult CijferStatestieken(string content = null, bool asPFD = false)
         {
             if (asPFD) 
@@ -426,7 +429,8 @@ namespace Zermos_Web.Controllers
         [Authorize]
         [SomtodayRequirement]
         [AddLoadingScreen("Huiswerk wordt opgehaald")]
-        public async Task<IActionResult> Huiswerk(int dagen)
+        [HttpGet("somtoday/huiswerk")]
+        public async Task<IActionResult> Huiswerk(int dagen = 14)
         {
             ViewData["add_css"] = "somtoday";
 
@@ -438,8 +442,7 @@ namespace Zermos_Web.Controllers
             {
                 access_token = await RefreshToken(user.somtoday_refresh_token);
             }
-
-            dagen = dagen == 0 ? 14 : dagen;
+            
             dagen = dagen > 50 ? 50 : dagen;
 
             var _startDate = DateTime.Now.AddDays(-dagen).ToString("yyyy-MM-dd");
