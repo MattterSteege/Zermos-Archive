@@ -11,7 +11,9 @@
 @model Zermos_Web.Models.SomtodayGradesModel.SomtodayGradesModel
 
 @{
-    Context.Response.Cookies.Append("last-seen-grades", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddDays(60)});
+    //Context.Response.Cookies.Append("last-seen-grades", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddDays(60)});
+    //ISO 8601
+    Context.Response.Cookies.Append("last-seen-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddDays(60)});
     
     //grade history, make a string and then in the history do the html.raw or smth
     
@@ -32,6 +34,7 @@
 
     sortedGrades.Sort((x, y) => string.Compare(x.vak.naam.ToLower(), y.vak.naam.ToLower(), StringComparison.Ordinal));
 }
+
 @* <div class="grades" style="grid-template-columns: @(DetectionService.Device.Type == Device.Mobile ? "1fr" : "3fr 1fr");"> *@
 <div class="grades">
     <div class="grades-container">
@@ -71,7 +74,7 @@
                     @if (Context.Request.Cookies["last-seen-grades"] == null || DateTime.Parse(Context.Request.Cookies["last-seen-grades"]) < vak.grades[^1].datumInvoer)
                     {
                         <!--Er is een mogelijkheid om tekst toe te voegen-->
-                        <div class="notification"></div>
+                        <div class="grade-notification"></div>
                     }
                     <div class="top-30">
                         <h1>@vak.vak.naam</h1>

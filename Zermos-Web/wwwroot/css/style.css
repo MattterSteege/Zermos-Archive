@@ -466,6 +466,69 @@ main.main::-webkit-scrollbar-track {
     padding: 16px;
     background: var(--confirm-color);
     border-radius: 14px;
+    z-index: 1000;
+}
+
+.notifications {
+    width: auto;
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    height: auto;
+}
+
+.notification {
+    width: auto;
+    height: 70px;
+    padding: 16px;
+    background: var(--inactive-color);
+    border-radius: 7px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    
+    transform-origin: bottom;
+    transform: scaleY(0);
+    opacity: 0;
+    transition: transform 0.5s, opacity 0.5s;
+}
+
+.notification.animate {
+    transform: scaleY(1);
+    opacity: 1;
+}
+
+@keyframes notification {
+    0% {
+        transform: rotate3d(1, 0, 0, -90deg) scaleY(0)
+    }
+    100% {
+        transform: rotate3d(1, 0, 0, 0deg) scaleY(1)
+    }
+}
+
+.notification h1 {
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.notification p {
+    font-size: 12px;
+    color: var(--text-color);
+}
+
+.error {
+    border-left: 7px solid var(--deny-color);
+}
+
+.warning {
+    border-left: 7px solid #FFC107;
+}
+
+.info {
+    border-left: 7px solid #007BFF;
 }
 
 /*If screen width is 700px*/
@@ -576,5 +639,15 @@ main.main::-webkit-scrollbar-track {
 
     ::-webkit-scrollbar {
         display: none;
+    }
+}
+
+@media only screen and (max-height: 772px){
+    .docs {
+        display: none;
+    }
+    
+    .sidebar .bottom {
+        bottom: 0;
     }
 }

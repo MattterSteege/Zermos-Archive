@@ -1,6 +1,8 @@
 ﻿Algemeen
     Visuele veranderingen zijn doorgevoerd
     Automatisch css en js refreshen is toegevoegd, dit houdt de UI een beetje op orde
+    Errors worden nu in een klein berichtje getoond
+    'Hulp nodig?' knop word verborgen als het scherm the klein is (qua hoogte)
     
 Account
     jouw informatie (inlog tokens, email, etc.) is niet meer zichtbaar en word niet doorgegeven aan jouw, dit zorgt ervoor dat jouw informatie veiliger is.

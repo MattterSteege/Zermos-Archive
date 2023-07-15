@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
@@ -22,6 +23,9 @@ namespace Zermos_Web.Controllers
         [HttpGet("/error/404")]
         public IActionResult FourZeroFour()
         {
+            HttpContext.AddNotification("da's pech, pagina weg", "De pagina die je zocht bestaat niet meer, of is verplaatst.", "error");
+            HttpContext.AddNotification("opgelet", "Deze pagina is niet meer beschikbaar, of is verplaatst.", "warning");
+            HttpContext.AddNotification("even voor jouw infomatie", "Deze pagina is niet meer beschikbaar, of is verplaatst.", "info");
             return View("404");
         }
         

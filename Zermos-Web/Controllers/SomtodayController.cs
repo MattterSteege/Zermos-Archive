@@ -429,7 +429,7 @@ namespace Zermos_Web.Controllers
         [Authorize]
         [SomtodayRequirement]
         [AddLoadingScreen("Huiswerk wordt opgehaald")]
-        [HttpGet("somtoday/huiswerk")]
+        [HttpGet("Somtoday/Huiswerk")]
         public async Task<IActionResult> Huiswerk(int dagen = 14)
         {
             ViewData["add_css"] = "somtoday";

@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using System.Reflection
+@using Microsoft.AspNetCore.Http
 @using Zermos_Web.Utilities
 @* ReSharper disable Mvc.ControllerNotResolved *@
 @* ReSharper disable Mvc.ActionNotResolved *@
@@ -18,11 +19,11 @@
     <script src="https://kit.fontawesome.com/052f5fa8f8.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="~/js/global.js?version=@(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? TokenUtils.RandomString(5, TokenUtils.RandomStringType.Numbers & TokenUtils.RandomStringType.LowerCase & TokenUtils.RandomStringType.UpperCase))"></script>
-    <link rel="stylesheet" href="~/css/style.css?version=@(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? TokenUtils.RandomString(5, TokenUtils.RandomStringType.Numbers & TokenUtils.RandomStringType.LowerCase & TokenUtils.RandomStringType.UpperCase))">
+    <script src="~/js/global.js" asp-append-version="true"></script>
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true">
     @if (!string.IsNullOrEmpty(ViewData["add_css"]?.ToString()))
     {
-        <link rel="stylesheet" href="~/css/@(ViewData["add_css"]).css?version=@(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? TokenUtils.RandomString(5, TokenUtils.RandomStringType.Numbers & TokenUtils.RandomStringType.LowerCase & TokenUtils.RandomStringType.UpperCase))">
+        <link rel="stylesheet" href="~/css/@(ViewData["add_css"]).css" asp-append-version="true">
     }
 </head>
 <body>
@@ -154,16 +155,16 @@
 
 @if (Context.Request.Cookies["version"] == null && !(bool) (Context.Items["loading"] ?? true) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
 {
-    Context.Response.Cookies.Append("version", Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty);
+    Context.Response.Cookies.Append("version", Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty, new CookieOptions { Expires = DateTime.Now.AddDays(60)});
     <div class="version">
         <p>Je gebruikt momenteel de <b>nieuwste</b> versie van Zermos</p>
     </div>
 }
 else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") && !(bool) (Context.Items["loading"] ?? true) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
 {
-    Context.Response.Cookies.Append("version", Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty);
+    Context.Response.Cookies.Append("version", Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty, new CookieOptions { Expires = DateTime.Now.AddDays(60)});
     <div class="version">
-        <p>Er is een nieuwe versie van Zermos (@Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty);), bekijk <a asp-controller="Account" asp-action="version">hier</a> wat er nieuw is</p>
+        <p>Er is een nieuwe versie van Zermos (@(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty)), bekijk <a asp-controller="Main" asp-action="Docs">hier</a> wat er nieuw is</p>
     </div>
 }
 
@@ -171,17 +172,23 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
     @RenderBody()
 </main>
 
+@{
+    //if body isn't _Loading.cshtml show notifs
+    if (ViewContext.View.Path != "/Views/Shared/_Loading.cshtml")
+    {
+        <div class="notifications">
+            @foreach (var notification in Context.GetNotifications())
+            {
+                <div class="notification @notification.Type">
+                    <h1>@notification.Type - @notification.Title</h1>
+                    <p>@notification.Body</p>
+                </div>
+            }
+        </div>
+    }
+}
+
 <script src="~/js/global.js" asp-append-version="true"></script>
-<script>
-//remove the version after 5 seconds, fade
-    setTimeout(() => {
-        //fade .version out in 1s
-        $(".version").fadeOut(1000, () => {
-            //remove .version from the DOM
-            $(".version").remove();
-        });
-    }, 5000);
-</script>
 @await RenderSectionAsync("Scripts", false)
 </body>
 </html>
