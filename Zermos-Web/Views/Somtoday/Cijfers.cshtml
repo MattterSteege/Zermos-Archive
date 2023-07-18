@@ -11,6 +11,12 @@
 @model Zermos_Web.Models.SomtodayGradesModel.SomtodayGradesModel
 
 @{
+    //if Model is null, quit rendering
+    if (Model == null)
+    {
+        return;
+    }
+    
     //Context.Response.Cookies.Append("last-seen-grades", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddDays(60)});
     //ISO 8601
     Context.Response.Cookies.Append("last-seen-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddDays(60)});

@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using Wangkanai.Extensions
 @model Zermos_Web.Models.somtodayHomeworkModel.somtodayHomeworkModel
 
 @{
@@ -12,15 +13,21 @@
     @foreach (var dayGroup in groupedHomework)
     {
         <div class="homework-day-parent">
-            
+
             <h1>@(dayGroup.First()?.datumTijd.ToString("dddd dd MMMM", new CultureInfo("nl-NL")) ?? "Geen datum!?")</h1>
-            
+
             @foreach (var homeworkItem in dayGroup)
             {
-                <div class="homeworkItem">
+                <div class="homeworkItem @homeworkItem.studiewijzerItem.huiswerkType?.ToLower() @(homeworkItem.studiewijzerItem.bijlagen?.Count > 0 ? "bijlagen" : "")">
                     <div class="homeworkItem-top">
-                        <p>@homeworkItem.lesgroep.vak.naam</p>
-                        <div class="homework-content">@Html.Raw(homeworkItem.studiewijzerItem.omschrijving ?? homeworkItem.studiewijzerItem.onderwerp)</div>
+                        <p style="width: fit-content;"><b>@homeworkItem.lesgroep.vak.naam</b> @(homeworkItem.studiewijzerItem.onderwerp.IsNullOrEmpty() ? "" : " - " + homeworkItem.studiewijzerItem.onderwerp)</p>
+                        
+                        @if (!homeworkItem.studiewijzerItem.omschrijving.IsNullOrEmpty())
+                        {
+                            <div class="homework-divider"></div>
+                            <div class="homework-content">@Html.Raw(homeworkItem.studiewijzerItem.omschrijving)</div>
+                        }
+
                     </div>
                 </div>
             }
@@ -33,8 +40,28 @@
     <h1 style="position: relative; top: 50%; width: 100%; transform: translate(0, -50%); text-align: center; color: var(--text-color);">Geen huiswerk, nice!</h1>
 }
 
-    <div class="bottom-right-add-button">
-        <a asp-controller="Somtoday" asp-action="NieuwHuiswerk">
-            <i class="fa-solid fa-plus center" style="background: var(--accent-color); color: var(--white-color);"></i>
-        </a>
-    </div>
+<div class="bottom-right-add-button">
+    <a asp-controller="Somtoday" asp-action="NieuwHuiswerk">
+        <i class="fa-solid fa-plus center" style="background: var(--accent-color); color: var(--white-color);"></i>
+    </a>
+</div>
+
+<script>
+  // Get all the div elements with class "homework-divider"
+  const dividers = document.querySelectorAll('.homework-divider');
+
+  // Loop through each divider element
+  dividers.forEach(divider => {
+    // Get the sibling p element
+    const siblingParagraph = divider.previousElementSibling;
+
+    // Check if the sibling exists and is a p element
+    if (siblingParagraph && siblingParagraph.tagName === 'P') {
+      // Get the width of the sibling paragraph
+      const width = siblingParagraph.offsetWidth;
+      
+      // Set the width of the divider to match the width of the paragraph
+      divider.style.width = `${width + 14}px`;
+    }
+  });
+</script>

@@ -3,6 +3,7 @@
     /* light mode */
     --background-color: #f8f9fa;
     --overlay-color: #ffffff;
+    --overlay-overlay-color: #f3f6f4;
     --text-color: #344767;
     --accent-color: linear-gradient(335deg, rgb(121, 40, 202), rgb(255, 0, 128));
     --active-color: linear-gradient(335deg, rgb(121, 40, 202), rgb(255, 0, 128));
@@ -470,7 +471,7 @@ main.main::-webkit-scrollbar-track {
 }
 
 .notifications {
-    width: auto;
+    width: 300px;
     position: fixed;
     bottom: 16px;
     right: 16px;
@@ -479,7 +480,7 @@ main.main::-webkit-scrollbar-track {
 
 .notification {
     width: auto;
-    height: 70px;
+    height: auto;
     padding: 16px;
     background: var(--inactive-color);
     border-radius: 7px;

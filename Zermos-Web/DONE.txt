@@ -1,24 +1,7 @@
 ﻿Algemeen
-    Visuele veranderingen zijn doorgevoerd
-    Automatisch css en js refreshen is toegevoegd, dit houdt de UI een beetje op orde
-    Errors worden nu in een klein berichtje getoond
-    'Hulp nodig?' knop word verborgen als het scherm the klein is (qua hoogte)
+    Nice email UI
+    Je krijgt nu een mail binnen als je Zermos wilt gebruiken, dus Zermos is up and running :)
+
+Somtoday - Huiswerk
+    De UI is nu beter, het bevat nu een duidelijker overzicht van alle huiswerk types (groen = zelf toegevoegd, oranje = toets, rood = grote toets, blauw = bijlage(n) aanwezig)
     
-Account
-    jouw informatie (inlog tokens, email, etc.) is niet meer zichtbaar en word niet doorgegeven aan jouw, dit zorgt ervoor dat jouw informatie veiliger is.
-
-Zermelo - Rooster
-    rooster ondersteund nu ook activiteiten en examens
-    rooster word nu gerenderd gebaseerd op de start en eind tijd, niet op lesuur (lesuur 1, 2, 3, etc)
-    rooster UI is aangepast, het type les word nu met een kleur aangegeven (les = blauw, activiteit = groen, examen = oranje, uitval = rood)
-    rooster is nu sneller (omdat het niet meer door 5*9 lessen hoeft te loopen, maar door de algemene +/- 30 lessen)
-    
-Infowijs - Kalender
-    Kalender word nu elke 12 uurs cyclus (0:00 - 11:59 / 12:00 - 23:59) opgeslagen en vervolgens word die versie gebruikt om de kalender te tonen, dit zorgt ervoor dat de laadtijd van de kalender een stuk korter is.
-
-School - Informatieboord
-    Informatieboord word nu elke 12 uurs cyclus opgeslagen en vervolgens word die versie gebruikt om het informatieboord te tonen, dit zorgt ervoor dat de laadtijd van het informatieboord een stuk korter is.
-    klikken op berichten voor extra details is verwijderd, de details worden nu direct getoond, dit zorgt ervoor dat de laadtijd van het informatieboord een stukje korter is.
-
-Somtoday - Cijfers
-    url's zijn nu logischer om mee te werken

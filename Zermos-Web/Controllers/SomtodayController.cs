@@ -56,7 +56,7 @@ namespace Zermos_Web.Controllers
             }
 
             var baseUrl =
-                $"https://api.somtoday.nl/rest/v1/resultaten/huidigVoorLeerling/{user.somtoday_student_id}?begintNaOfOp={DateTime.Now:yyyy}-01-01&additional=samengesteldeToetskolomId";
+                $"https://api.somtoday.nl/rest/v1/resultaten/huidigVoorLeerling/{user.somtoday_student_id}?additional=samengesteldeToetskolomId";
 
             _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + access_token);
             _httpClient.DefaultRequestHeaders.Add("Range", "items=0-99");
@@ -68,8 +68,10 @@ namespace Zermos_Web.Controllers
                 JsonConvert.DeserializeObject<SomtodayGradesModel>(await response.Content.ReadAsStringAsync());
 
             if (response.IsSuccessStatusCode == false)
-                return NotFound(
-                    "Er is iets fout gegaan bij het ophalen van de cijfers, het is mogelijk dat je SOMtoday token verlopen is, probeer de pagina opnieuw te openen, als het dan nog.");
+            {
+                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je cijfers konden niet worden opgehaald, mogelijk is je Somtoday token verlopen, kijk bij je account of je Somtoday opnieuw moet koppelen", "error");
+                return View(new SomtodayGradesModel {items = new List<Item>()});
+            }
 
             if (int.TryParse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1],
                     out var total))
@@ -482,7 +484,8 @@ namespace Zermos_Web.Controllers
                     datumTijd = customHomeworkItem.deadline,
                     studiewijzerItem = new StudiewijzerItem
                     {
-                        omschrijving = customHomeworkItem.omschrijving
+                        omschrijving = customHomeworkItem.omschrijving,
+                        huiswerkType = "EIGEN",
                     },
                     lesgroep = new Lesgroep
                     {
@@ -497,7 +500,7 @@ namespace Zermos_Web.Controllers
                         {
                             items = new List<Models.somtodayHomeworkModel.Item>
                             {
-                                new Models.somtodayHomeworkModel.Item
+                                new()
                                 {
                                     gemaakt = customHomeworkItem.gemaakt
                                 }

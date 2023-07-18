@@ -35,7 +35,7 @@ namespace Zermos_Web.Models
     {
         [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)] public Guid? Id { get; set; }
         [JsonProperty("title", NullValueHandling = NullValueHandling.Ignore)] public string Title { get; set; }
-        [JsonProperty("groupTitle", NullValueHandling = NullValueHandling.Ignore)] public string? GroupTitle { get; set; }
+        [JsonProperty("groupTitle", NullValueHandling = NullValueHandling.Ignore)] public string GroupTitle { get; set; }
         [JsonProperty("type", NullValueHandling = NullValueHandling.Ignore)] public long? Type { get; set; }
         [JsonProperty("users", NullValueHandling = NullValueHandling.Ignore)] public User[] Users { get; set; }
         [JsonProperty("createdAt", NullValueHandling = NullValueHandling.Ignore)] public long? CreatedAt { get; set; }

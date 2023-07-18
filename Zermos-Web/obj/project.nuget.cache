@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "3hIdAF5tmTOhkdsPNbpRxZF5Dg2u61K4bhAdjg9XbBmDkCNFu6+PZNXIvQ6vLX9DU8i7yXWx8CBQmA93wc3U7w==",
+  "dgSpecHash": "0Qn1Bh5YIVFj9XuZsEJAxQSyDHHcFjDKcck28CxH+aZs6dMVnrZv7s1AZ2406EZYijOuiwzFj3WSHD7JzzAGZg==",
   "success": true,
   "projectFilePath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Zermos-Web\\Zermos-Web.csproj",
   "expectedPackageFiles": [
@@ -73,7 +73,11 @@
     "C:\\Users\\mattt\\.nuget\\packages\\system.windows.extensions\\4.7.0\\system.windows.extensions.4.7.0.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\wangkanai.detection\\7.4.0\\wangkanai.detection.7.4.0.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\wangkanai.hosting\\0.11.0\\wangkanai.hosting.0.11.0.nupkg.sha512",
-    "C:\\Users\\mattt\\.nuget\\packages\\wangkanai.system\\1.19.0\\wangkanai.system.1.19.0.nupkg.sha512"
+    "C:\\Users\\mattt\\.nuget\\packages\\wangkanai.system\\1.19.0\\wangkanai.system.1.19.0.nupkg.sha512",
+    "C:\\Users\\mattt\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.15\\microsoft.netcore.app.ref.6.0.15.nupkg.sha512",
+    "C:\\Users\\mattt\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.15\\microsoft.windowsdesktop.app.ref.6.0.15.nupkg.sha512",
+    "C:\\Users\\mattt\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.15\\microsoft.aspnetcore.app.ref.6.0.15.nupkg.sha512",
+    "C:\\Users\\mattt\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.15\\microsoft.netcore.app.host.win-x64.6.0.15.nupkg.sha512"
   ],
   "logs": []
 }

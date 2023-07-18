@@ -8,6 +8,8 @@ TODO: add back the styling for school news
 TODO: find out what can be cached
 TODO: cache grades for 15 minutes
 
+TODO: UI for: [Zermelo], [Somtoday], School, Infowijs
+TODO: add check for user if email is correct (5 second timer before 'okay and send' button is enabled)
 
 
 

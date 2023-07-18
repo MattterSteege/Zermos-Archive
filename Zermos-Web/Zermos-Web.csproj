@@ -6,7 +6,7 @@
         <UserSecretsId>4d40238e-f7f7-4df9-b365-c0b3e33ab656</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
-        <LangVersion>8</LangVersion>
+        <LangVersion>11</LangVersion>
         <ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
         <Version>1</Version>
     </PropertyGroup>

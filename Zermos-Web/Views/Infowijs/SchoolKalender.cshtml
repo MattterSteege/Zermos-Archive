@@ -28,7 +28,7 @@
                         }
                         else if (startsAt.Date != endsAt.Date && homeworkItem.isAllDay == false)
                         {
-                            @(startsAt.ToString("dddd d MMMM", culture) + " t/m " + endsAt.ToString("dddd d MMMM", culture))
+                            @(startsAt.AddDays(1).ToString("dddd d MMMM", culture) + " t/m " + endsAt.ToString("dddd d MMMM", culture))
                         }
                         else if (homeworkItem.isAllDay)
                         {

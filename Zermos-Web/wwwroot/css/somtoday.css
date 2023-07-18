@@ -284,11 +284,20 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 10px;
-    border-radius: 1rem;
-    background: var(--background-color);
+    border-radius: 7px;
+    background: var(--inactive-color);
     height: 100%;
     width: 100%;
     padding: 16px;
+}
+
+.homework-divider {
+    width: 100%;
+    transition: width 0.5s;
+    background: var(--text-color);
+    height: 2px;
+    margin-top: 3px;
+    margin-bottom: 7px;
 }
 
 .homework-content {
@@ -304,6 +313,22 @@
     font-size: 1.2rem;
     font-weight: 700;
     margin-bottom: 8px;
+}
+
+.toets {
+    border-left: 7px solid #FFA500;  
+}
+
+.grote_toets {
+    border-left: 7px solid #d63031;
+}
+
+.eigen {
+    border-left: 7px solid #2CB543;
+}
+
+.bijlagen {
+    border-right: 7px solid #007BFF;
 }
 
 .bottom-right-add-button {

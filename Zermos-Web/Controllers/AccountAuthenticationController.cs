@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
@@ -63,6 +64,11 @@ namespace Zermos_Web.Controllers
                 };
 
                 await _users.AddUserAsync(newUser);
+                
+                StringBuilder sb = new StringBuilder();
+                sb.Append("<!DOCTYPE html><html lang=\"en\"><head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" charset=\"UTF-8\"/> <title>Zermos</title> <link href=\"https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700\" rel=\"stylesheet\"/> <script src=\"https://kit.fontawesome.com/052f5fa8f8.js\" crossorigin=\"anonymous\"></script> <style>body{background: #f8f9fa;}.middle{ width: 100%; background-color: #ffffff; display: flex; flex-direction: column;}.zermos{font-family: 'Open Sans', sans-serif; font-weight: bold; font-size: 3rem; color: #344767; width: calc(100% - 2rem); text-align: center; margin: 0; padding: 1rem;}.content{font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 1rem; color: #344767; width: calc(100% - 2rem); text-align: center; margin: 0; padding: 1rem;}.valid-time{font-family: 'Open Sans', sans-serif; font-weight: 400; font-size: 1rem; color: #344767; width: 100%; text-align: center; margin: 0;}.verify-button{font-family: 'Open Sans', sans-serif; font-weight: 600; font-size: 1.5rem; color: #ffffff; width: 50%; height: auto; background-color: #344767; border-radius: 14px; padding: 1rem; margin: 1rem 25%; border: none; cursor: pointer;}.verify-button:hover{background-color: #2c3e50;}.verify-button:active{background-color: #344767;}.valid-time{font-family: 'Open Sans', sans-serif; font-weight: 200; font-size: 0.8rem; color: #344767; width: 100%; text-align: center; margin: 0; padding-bottom: 1rem;}</style></head><body><div class=\"middle\"> <h1 class=\"zermos\">Zermos</h1> <p class=\"content\">Je hebt zojuist een account aangemaakt bij <strong>Zermos</strong>. Daarom is er een e-mail verzonden om te verifiëren dat je daadwerkelijk een account wilt aanmaken.</p><p class=\"content\">Bevestig je e-mailadres door op de onderstaande knop te klikken. Deze stap voegt extra beveiliging toe aan je account door te verifiëren dat jij de eigenaar bent van dit e-mailadres.</p><a onclick=\"window.location.href='");
+                sb.Append($"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountCreation?token={newUser.VerificationToken}&email={newUser.email}{(ReturnUrl == "" ? "" : "&returnUrl=" + ReturnUrl)}");
+                sb.Append(";\" class=\"verify-button\">Log nu in!</a> <p class=\"valid-time\">P.S. deze link is 10 minuten geldig.</p></div></body></html>");
 
                 mimeMessage = new MimeMessage();
                 mimeMessage.From.Add(MailboxAddress.Parse(_config.GetSection("Email:EmailUsername").Value));
@@ -70,8 +76,7 @@ namespace Zermos_Web.Controllers
                 mimeMessage.Subject = "Test Email Subject";
                 mimeMessage.Body = new TextPart(TextFormat.Html)
                 {
-                    Text =
-                        $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountCreation?token={newUser.VerificationToken}&email={newUser.email}{(ReturnUrl == "" ? "" : "&returnUrl=" + ReturnUrl)}\">hier</a> om je Zermos account te verifiëren. Deze link is 10 minuten geldig."
+                    Text = sb.ToString()
                 };
 
                 // send email
@@ -89,6 +94,11 @@ namespace Zermos_Web.Controllers
             user.VerificationToken = TokenUtils.RandomString(32);
             user.CreatedAt = DateTime.Now;
             await _users.UpdateUserAsync(email, user);
+            
+            StringBuilder sb2 = new StringBuilder();
+            sb2.Append("<!DOCTYPE html><html lang=\"en\"><head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" charset=\"UTF-8\"/> <title>Zermos</title> <link href=\"https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700\" rel=\"stylesheet\"/> <script src=\"https://kit.fontawesome.com/052f5fa8f8.js\" crossorigin=\"anonymous\"></script> <style>body{background: #f8f9fa;}.middle{ width: 100%; background-color: #ffffff; display: flex; flex-direction: column;}.zermos{font-family: 'Open Sans', sans-serif; font-weight: bold; font-size: 3rem; color: #344767; width: calc(100% - 2rem); text-align: center; margin: 0; padding: 1rem;}.content{font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 1rem; color: #344767; width: calc(100% - 2rem); text-align: center; margin: 0; padding: 1rem;}.valid-time{font-family: 'Open Sans', sans-serif; font-weight: 400; font-size: 1rem; color: #344767; width: 100%; text-align: center; margin: 0;}.verify-button{font-family: 'Open Sans', sans-serif; font-weight: 600; font-size: 1.5rem; color: #ffffff; width: 50%; height: auto; background-color: #344767; border-radius: 14px; padding: 1rem; margin: 1rem 25%; border: none; cursor: pointer; text-decoration: none; text-align: center;}.verify-button:hover{background-color: #2c3e50;}.verify-button:active{background-color: #344767;}.valid-time{font-family: 'Open Sans', sans-serif; font-weight: 200; font-size: 0.8rem; color: #344767; width: 100%; text-align: center; margin: 0; padding-bottom: 1rem;}</style></head><body><div class=\"middle\"> <h1 class=\"zermos\">Zermos</h1> <p class=\"content\">Je hebt zojuist een inlog e-mail aangevraagd om in te loggen bij <strong>Zermos</strong>. Daarom is er een e-mail verzonden om te verifiëren dat je daadwerkelijk een wilt inloggen.</p><a href='");
+            sb2.Append($"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountLogin?token={user.VerificationToken}&email={user.email}{(ReturnUrl == "" ? "" : "&returnUrl=" + ReturnUrl)}");
+            sb2.Append("' class=\"verify-button\">Log nu in!</a> <p class=\"valid-time\">P.S. deze link is 10 minuten geldig.</p></div></body></html>");
 
             mimeMessage = new MimeMessage();
             mimeMessage.From.Add(MailboxAddress.Parse(_config.GetSection("Email:EmailUsername").Value));
@@ -96,8 +106,7 @@ namespace Zermos_Web.Controllers
             mimeMessage.Subject = "Test Email Subject";
             mimeMessage.Body = new TextPart(TextFormat.Html)
             {
-                Text =
-                    $"klik <a href=\"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountLogin?token={user.VerificationToken}&email={user.email}{(ReturnUrl == "" ? "" : "&returnUrl=" + ReturnUrl)}\">hier</a> om in te loggen in je Zermos account. Deze link is 10 minuten geldig."
+                Text = sb2.ToString()
             };
 
             // send email
