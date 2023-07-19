@@ -227,6 +227,15 @@ namespace Zermos_Web.Controllers
 
             return RedirectToAction("Rooster", "Zermelo");
         }
+        
+        // [HttpGet]
+        // [Route("/Koppelingen/Zermelo/Qr")]
+        // public IActionResult ZermeloWithQrCode()
+        // {
+        //     ViewData["add_css"] = "zermelo";
+        //
+        //     return View();
+        // }
 
         #endregion
 

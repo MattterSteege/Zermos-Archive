@@ -161,7 +161,7 @@ namespace Zermos_Web.Utilities
 
             return queryParameters;
         }
-        
+
         /// <summary>
         /// Converts links found in the provided text to a modified format.
         /// </summary>
@@ -183,6 +183,66 @@ namespace Zermos_Web.Utilities
             });
 
             return convertedText;
+        }
+
+        /// <summary>
+        /// This method balances HTML tags in the provided input string, so it adds any missing closing tags <hello>world -> <hello>world</hello>
+        /// </summary>
+        /// <param name="input">The input string to balance.</param>
+        /// <returns>The balanced string.</returns>
+        public static string BalanceHtmlTags(string input)
+        {
+            // Regular expression to match any HTML tag
+            Regex tagRegex = new Regex(@"<([a-zA-Z]+)(?:\s*[^>]*)>?");
+
+            // Find all the matches of HTML tags in the input
+            MatchCollection tagMatches = tagRegex.Matches(input);
+
+            // Create a stack to keep track of opening tags
+            Stack<string> tagStack = new Stack<string>();
+
+            foreach (Match match in tagMatches)
+            {
+                string tag = match.Value;
+                string tagName = match.Groups[1].Value;
+
+                if (!tag.StartsWith("</"))
+                {
+                    // If it's an opening tag, push it onto the stack
+                    tagStack.Push(tag);
+                }
+                else
+                {
+                    // If it's a closing tag, check if there is a corresponding opening tag
+                    if (tagStack.Count > 0 && tagStack.Peek().StartsWith($"<{tagName}"))
+                    {
+                        // Pop the corresponding opening tag from the stack
+                        tagStack.Pop();
+                    }
+                    else
+                    {
+                        // If no corresponding opening tag is found, add the opening tag before the closing tag
+                        input = input.Insert(match.Index, $"<{tagName}>");
+                    }
+                }
+            }
+
+            // Add any missing closing tags at the end of the input
+            while (tagStack.Count > 0)
+            {
+                string remainingTag = tagStack.Pop();
+                
+                //does the remaining tag have a closing tag?
+                if (!remainingTag.EndsWith(">"))
+                {
+                    input += ">";
+                }
+
+                string tagName = remainingTag.TrimStart('<').TrimEnd('>');
+                input += $"</{tagName}>";
+            }
+
+            return input;
         }
     }
 }

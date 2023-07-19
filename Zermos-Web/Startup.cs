@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+//using WebEssentials.AspNetCore.Pwa;
 using Zermos_Web.Utilities;
 
 namespace Zermos_Web
@@ -29,7 +30,8 @@ namespace Zermos_Web
             services.AddScoped<Users>();
 
             services.AddDetection();
-            
+            //services.AddProgressiveWebApp();
+
             var cookieExpiration = TimeSpan.FromDays(60);
 
             services.AddAuthentication("EmailScheme") // Sets the default scheme to cookies

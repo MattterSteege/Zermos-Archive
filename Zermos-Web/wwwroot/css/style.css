@@ -641,6 +641,10 @@ main.main::-webkit-scrollbar-track {
     ::-webkit-scrollbar {
         display: none;
     }
+    
+    #main.main {
+        z-index: 100;
+    }
 }
 
 @media only screen and (max-height: 772px){

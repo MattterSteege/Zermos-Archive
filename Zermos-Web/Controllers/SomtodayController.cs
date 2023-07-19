@@ -69,7 +69,7 @@ namespace Zermos_Web.Controllers
 
             if (response.IsSuccessStatusCode == false)
             {
-                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je cijfers konden niet worden opgehaald, mogelijk is je Somtoday token verlopen, kijk bij je account of je Somtoday opnieuw moet koppelen", "error");
+                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je cijfers konden niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", "error");
                 return View(new SomtodayGradesModel {items = new List<Item>()});
             }
 
@@ -461,6 +461,12 @@ namespace Zermos_Web.Controllers
             _httpClient.DefaultRequestHeaders.Add("Range", $"items={rangemin}-{rangemax}");
 
             var response = await _httpClient.GetAsync(baseurl);
+            
+            if (response.IsSuccessStatusCode == false)
+            {
+                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je Huiswerk op Somtoday kon niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", "error");
+                return View(Sort(new somtodayHomeworkModel() {items = await GetRemappedCustomHuiswerk()}));
+            }
 
             var somtodayHuiswerk =
                 JsonConvert.DeserializeObject<somtodayHomeworkModel>(

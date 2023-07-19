@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "wSxyTMkqaS4Uat20cCDpdgoYNCDdvF8uTh32o0ai4KeyE1Zcjd7qrLJca3aUIY8ehzFblwLDygRxOT+rdg7tqg==",
+  "dgSpecHash": "DZ8kYKMzPjYZOv7rBBVgd4zZAjKVrqw0M1mGR3qljJFzByBka4h/6nz63t+Andwr2O7XglDgwJYkcD5w8CeJ3Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Infrastructure\\Infrastructure.csproj",
   "expectedPackageFiles": [
@@ -54,10 +54,7 @@
     "C:\\Users\\mattt\\.nuget\\packages\\system.text.json\\7.0.1\\system.text.json.7.0.1.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
-    "C:\\Users\\mattt\\.nuget\\packages\\system.windows.extensions\\4.7.0\\system.windows.extensions.4.7.0.nupkg.sha512",
-    "C:\\Users\\mattt\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.15\\microsoft.netcore.app.ref.6.0.15.nupkg.sha512",
-    "C:\\Users\\mattt\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.15\\microsoft.windowsdesktop.app.ref.6.0.15.nupkg.sha512",
-    "C:\\Users\\mattt\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.15\\microsoft.aspnetcore.app.ref.6.0.15.nupkg.sha512"
+    "C:\\Users\\mattt\\.nuget\\packages\\system.windows.extensions\\4.7.0\\system.windows.extensions.4.7.0.nupkg.sha512"
   ],
   "logs": []
 }

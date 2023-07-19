@@ -1,5 +1,5 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-MAINTAINER Matt ter Steege <
+MAINTAINER Matt ter Steege <matttersteege@gmail.com>
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443

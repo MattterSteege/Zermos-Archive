@@ -4,4 +4,7 @@
 
 Somtoday - Huiswerk
     De UI is nu beter, het bevat nu een duidelijker overzicht van alle huiswerk types (groen = zelf toegevoegd, oranje = toets, rood = grote toets, blauw = bijlage(n) aanwezig)
+    De 'huiswerk toevoegen' knop is nu zichtbaar op de navigatiebalk
     
+Infowijs - School nieuws
+    Er is nu een 'lees meer' knop aanwezig, zodat alles wat overzichtelijker is terwijl je nog steeds alles kan lezen
