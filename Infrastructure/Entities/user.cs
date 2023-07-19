@@ -21,6 +21,10 @@ namespace Infrastructure.Entities
         public string infowijs_access_token { get; set; }
         public string theme { get; set; }
         public string custom_huiswerk { get; set; }
+        
+        //cache related
+        public string cached_somtoday_grades { get; set; }
+        public string cached_somtoday_homework { get; set; }
 
         //auth related
         public string VerificationToken { get; set; }

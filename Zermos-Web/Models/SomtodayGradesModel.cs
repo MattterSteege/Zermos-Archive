@@ -5,7 +5,7 @@ namespace Zermos_Web.Models.SomtodayGradesModel
 {
     public class SomtodayGradesModel
     {
-        public int laatsteWijziging { get; set; }
+        //public int laatsteWijziging { get; set; }
         public List<Item> items { get; set; }
     }
 
@@ -22,7 +22,7 @@ namespace Zermos_Web.Models.SomtodayGradesModel
 
         //public bool teltNietmee { get; set; }
         //public bool toetsNietGemaakt { get; set; }
-        public int leerjaar { get; set; }
+        //public int leerjaar { get; set; }
 
         //public long periode { get; set; }
         public int weging { get; set; }

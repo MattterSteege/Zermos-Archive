@@ -1,5 +1,4 @@
 ﻿@using System.Globalization
-@using Wangkanai.Extensions
 @model Zermos_Web.Models.somtodayHomeworkModel.somtodayHomeworkModel
 
 @{
@@ -20,12 +19,28 @@
             {
                 <div class="homeworkItem @homeworkItem.studiewijzerItem.huiswerkType?.ToLower() @(homeworkItem.studiewijzerItem.bijlagen?.Count > 0 ? "bijlagen" : "")">
                     <div class="homeworkItem-top">
-                        <p style="width: fit-content;"><b>@homeworkItem.lesgroep.vak.naam</b> @(homeworkItem.studiewijzerItem.onderwerp.IsNullOrEmpty() ? "" : " - " + homeworkItem.studiewijzerItem.onderwerp)</p>
-                        
-                        @if (!homeworkItem.studiewijzerItem.omschrijving.IsNullOrEmpty())
+                        <p style="width: fit-content;">
+                            <b>@homeworkItem.lesgroep.vak.naam</b> @(string.IsNullOrEmpty(homeworkItem.studiewijzerItem.onderwerp) ? "" : " - " + homeworkItem.studiewijzerItem.onderwerp)
+                        </p>
+
+                        @if (!string.IsNullOrEmpty(homeworkItem.studiewijzerItem.omschrijving))
                         {
                             <div class="homework-divider"></div>
                             <div class="homework-content">@Html.Raw(homeworkItem.studiewijzerItem.omschrijving)</div>
+                        }
+
+                        @if (homeworkItem.studiewijzerItem.bijlagen != null && !homeworkItem.studiewijzerItem.bijlagen.Count.Equals(0))
+                        {
+                            <div class="homework-divider"></div>
+                            <div class="homework-bijlagen">
+                                @foreach (var bijlage in homeworkItem.studiewijzerItem.bijlagen)
+                                {
+                                    <a href="@bijlage.assemblyResults[0].fileUrl" target="_blank" class="homework-bijlage">
+                                        <span class="fa-solid fa-paperclip" style=" vertical-align: middle;"></span>
+                                        <p>@bijlage.omschrijving</p>
+                                    </a>
+                                }
+                            </div>
                         }
 
                     </div>
@@ -60,8 +75,9 @@
       // Get the width of the sibling paragraph
       const width = siblingParagraph.offsetWidth;
       
-      // Set the width of the divider to match the width of the paragraph
-      divider.style.width = `${width + 14}px`;
+      // Set the width of the divider to match the width of the paragraph or the width of the parent element, whichever is smaller
+        console.log(width, divider.parentElement.offsetWidth);
+        divider.style.width = `${Math.min(width, divider.parentElement.offsetWidth)}px`;
     }
   });
 </script>

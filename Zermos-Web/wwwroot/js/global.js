@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const notification = notifications[i];
             await delay(500);
             $(notification).addClass("animate");
-            
+
             //when clicked: $(notification).removeClass("animate");
             notification.addEventListener('click', function () {
                 $(notification).removeClass("animate");
@@ -54,3 +54,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
     animateNotifications();
 });
+
+function addNotification(title, body, type) {
+    const notification = document.createElement("div");
+    notification.classList.add("notification");
+    notification.classList.add(type);
+
+    const titleElement = document.createElement("h1");
+    titleElement.innerText = title;
+    notification.appendChild(titleElement);
+
+    const bodyElement = document.createElement("p");
+    bodyElement.innerText = body;
+    notification.appendChild(bodyElement);
+
+    //add to .notifications
+    document.querySelector(".notifications").appendChild(notification);
+
+    new Promise(res => setTimeout(res, 500)).then(() => {
+        $(notification).addClass("animate");
+
+        notification.addEventListener('click', function () {
+                $(notification).removeClass("animate");
+        }, false);
+
+        new Promise(res => setTimeout(res, 5000)).then(() => {
+            $(notification).removeClass("animate");
+        });
+    });
+
+    return notification;
+}

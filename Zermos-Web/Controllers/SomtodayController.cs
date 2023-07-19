@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -10,6 +11,7 @@ using ChartJSCore.Models;
 using Infrastructure;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -42,10 +44,19 @@ namespace Zermos_Web.Controllers
         [SomtodayRequirement]
         [AddLoadingScreen("Cijfers worden opgehaald")]
         [HttpGet("Somtoday/Cijfers")]
-        public async Task<IActionResult> Cijfers(bool refresh = false)
+        public async Task<IActionResult> Cijfers()
         {
             ViewData["add_css"] = "somtoday";
-           
+
+            if (Request.Cookies.ContainsKey("cached-somtoday-grades-at"))
+            {
+                DateTime cached_at = DateTime.Parse(Request.Cookies["cached-somtoday-grades-at"] ?? string.Empty);
+                if (cached_at.AddMinutes(5) > DateTime.Now)
+                {
+                    return View(JsonConvert.DeserializeObject<SomtodayGradesModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_somtoday_grades ?? string.Empty));
+                }
+            }
+            
             var user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
             string access_token = user.somtoday_access_token;
@@ -96,7 +107,16 @@ namespace Zermos_Web.Controllers
                 }
             }
 
-            return View(Sort(grades));
+            grades = Sort(grades);
+            
+            await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+            {
+                cached_somtoday_grades = JsonConvert.SerializeObject(grades)
+            });
+            
+            Response.Cookies.Append("cached-somtoday-grades-at", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(5)});
+
+            return View(grades);
         }
 
         public async Task<string> RefreshToken(string token = null)

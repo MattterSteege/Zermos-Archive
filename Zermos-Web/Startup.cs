@@ -4,12 +4,9 @@ using Infrastructure.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-//using WebEssentials.AspNetCore.Pwa;
-using Zermos_Web.Utilities;
 
 namespace Zermos_Web
 {
@@ -28,9 +25,6 @@ namespace Zermos_Web
             services.AddControllersWithViews();
             services.AddDbContext<ZermosContext>();
             services.AddScoped<Users>();
-
-            services.AddDetection();
-            //services.AddProgressiveWebApp();
 
             var cookieExpiration = TimeSpan.FromDays(60);
 
@@ -69,8 +63,6 @@ namespace Zermos_Web
             app.UseForwardedHeaders();
 
             app.UseStaticFiles();
-
-            app.UseDetection();
 
             app.UseRouting();
 
