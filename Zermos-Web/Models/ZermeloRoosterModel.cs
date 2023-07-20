@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Zermos_Web.Models
+namespace Zermos_Web.Models.zermelo
 {
     public class ZermeloRoosterModel
     {

@@ -5,13 +5,18 @@
 Somtoday - Huiswerk
     De UI is nu beter, het bevat nu een duidelijker overzicht van alle huiswerk types (groen = zelf toegevoegd, oranje = toets, rood = grote toets, blauw = bijlage(n) aanwezig)
     De 'huiswerk toevoegen' knop is nu zichtbaar op de navigatiebalk
+    Huiswerk wordt nu voor 1 uur opgeslagen in de database, zodat het laden sneller gaat en Somtoay niet overbelast wordt
     
 Somtoday - Cijfers
     Cijfers worden nu voor 15 minuten opgeslagen in de database, zodat het laden sneller gaat en Somtoay niet overbelast wordt
-    
-Somtoday - Huiswerk
-    Huiswerk wordt nu voor 1 uur opgeslagen in de database, zodat het laden sneller gaat en Somtoay niet overbelast wordt
-    
+
 Infowijs - School nieuws
     Er is nu een 'lees meer' knop aanwezig, zodat alles wat overzichtelijker is terwijl je nog steeds alles kan lezen
     Mogelijke bijlagen worden nu onder aan het bericht weergegeven, i.p.v. halverwege
+    
+Koppelingen - Zermelo
+    Er is nu een optie om qr-code login te gebruiken, dan hoef ik je wachtwoord niet te weten ;) Je vind je qr-code in Zermelo op https://ccg.zportal.nl/main/ > koppelingen > koppel externe applicatie
+    Er is nu een optie om de koppelcode van zermelo te gebruiken, ook nu hoef ik dus je wachtwoord niet te weten. Je vind je koppelcode in Zermelo op https://ccg.zportal.nl/main/ > koppelingen > koppel externe applicatie
+    
+Koppelingen - Infowijs
+    Er is nu een laad iccoontje aanwezig, zodat je weet dat er iets gebeurd

@@ -1,0 +1,11 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<form method="post" asp-controller="Koppelingen" asp-action="ZermeloWithCode">
+    <input type="text" name="code" />
+    <input type="submit" value="Submit" />
+</form>

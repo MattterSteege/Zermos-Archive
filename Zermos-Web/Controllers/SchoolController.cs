@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using Infrastructure;
+using Infrastructure.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -16,26 +19,29 @@ namespace Zermos_Web.Controllers
     public class SchoolController : Controller
     {
         private readonly ILogger<SchoolController> _logger;
+        private readonly Users _users;
 
-        public SchoolController(ILogger<SchoolController> logger)
+        public SchoolController(ILogger<SchoolController> logger, Users users)
         {
             _logger = logger;
+            _users = users;
         }
 
         [AddLoadingScreen("Nieuws word van de het informatieboord gehaald")]
         public async Task<IActionResult> InformatieBoord()
         {
             ViewData["add_css"] = "school";
-            
-            if (System.IO.File.Exists("school_informatieboord.json"))
+
+            if (Request.Cookies.ContainsKey("cached-school-informationscreen"))
             {
-                var lastModified = System.IO.File.GetLastWriteTime("school_informatieboord.json");
-                // if last modified was in 0:00 - 11:59, and it is 13.00, then update the file.
-                // if last modified was in 12:00 - 23:59, and it is 00.00, then update the file.
-                if (lastModified.Hour >= 0 && lastModified.Hour < 12 && DateTime.Now.Hour >= 0 && DateTime.Now.Hour < 12 || lastModified.Hour >= 12 && lastModified.Hour < 24 && DateTime.Now.Hour >= 12 && DateTime.Now.Hour < 24)
+                var lastModified = DateTime.Parse(Request.Cookies["cached-school-informationscreen"] ?? string.Empty);
+                
+                if (lastModified.Hour >= 0 && lastModified.Hour < 12 && DateTime.Now.Hour >= 0 &&
+                    DateTime.Now.Hour < 12 || lastModified.Hour >= 12 && lastModified.Hour < 24 &&
+                    DateTime.Now.Hour >= 12 && DateTime.Now.Hour < 24)
                 {
-                    return View(JsonConvert.DeserializeObject<List<InformatieBoordModel>>(await System.IO.File.ReadAllTextAsync("school_informatieboord.json"),
-                            Converter.Settings));
+
+                    return View(JsonConvert.DeserializeObject<List<InformatieBoordModel>>((await _users.GetUserAsync(User.FindFirstValue("email"))).cached_school_informationscreen));
                 }
             }
 
@@ -50,6 +56,7 @@ namespace Zermos_Web.Controllers
             var elements = doc.DocumentNode.SelectNodes("//div[contains(@class, 'swiper-slide')]");
 
             if (elements != null)
+            {
                 foreach (var element in elements)
                 {
                     var title = element.SelectSingleNode(".//h1[contains(@class, 'text-black')]")?.InnerText ?? "";
@@ -75,27 +82,17 @@ namespace Zermos_Web.Controllers
 
                     model.Add(new InformatieBoordModel(title, subTitle, image, contentText));
                 }
+            }
+            
+            await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+            {
+                cached_school_informationscreen = JsonConvert.SerializeObject(model)
+            });
 
-            await System.IO.File.WriteAllTextAsync("school_informatieboord.json", JsonConvert.SerializeObject(model));
+            
+            Response.Cookies.Append("cached-school-informationscreen", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddDays(60)});
 
             return View(model);
-        }
-
-        public IActionResult Message(string content)
-        {
-            ViewData["add_css"] = "school";
-
-            //the request was by ajax, so return the partial view
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-                //turn the model into a json string turn it into bytes and encode with base64 but in reverse
-                return View(
-                    JsonConvert.DeserializeObject<InformatieBoordModel>(
-                        Encoding.UTF8.GetString(Convert.FromBase64String(content))));
-
-            //the request was by a legitimate user, so return the loading view
-            ViewData["url"] = "/" + ControllerContext.RouteData.Values["controller"] + "/" +
-                              ControllerContext.RouteData.Values["action"] + "?content=" + content;
-            return View("_Loading");
         }
     }
 }

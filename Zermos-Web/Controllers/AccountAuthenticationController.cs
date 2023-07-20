@@ -209,6 +209,12 @@ namespace Zermos_Web.Controllers
         {
             ViewData["add_css"] = "account";
             await HttpContext.SignOutAsync();
+            
+            foreach (var cookie in Request.Cookies.Keys)
+            {
+                Response.Cookies.Delete(cookie);
+            }
+            
             return View("Login", new Tuple<string, int>(null, 3));
         }
     }

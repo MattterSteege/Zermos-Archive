@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zermos_Web.Models;
+using Zermos_Web.Models.zermelo;
+using Zermos_Web.Models.zermeloUserModel;
 using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
@@ -218,24 +220,74 @@ namespace Zermos_Web.Controllers
 
             var zermeloAuthentication = JsonConvert.DeserializeObject<ZermeloAuthenticatieModel>(responseString);
 
+            var zermeloUser = await GetZermeloUser(zermeloAuthentication.access_token);
+
             var user = new user
             {
-                zermelo_access_token = zermeloAuthentication.access_token, school_id = username,
+                zermelo_access_token = zermeloAuthentication.access_token,
+                school_id = zermeloUser.response.data[0].code,
+                name = zermeloUser.response.data[0].firstName + " " + zermeloUser.response.data[0].prefix + " " + zermeloUser.response.data[0].lastName,
                 zermelo_access_token_expires_at = DateTime.Now.AddMonths(2)
             };
+            
             await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
 
             return RedirectToAction("Rooster", "Zermelo");
         }
         
-        // [HttpGet]
-        // [Route("/Koppelingen/Zermelo/Qr")]
-        // public IActionResult ZermeloWithQrCode()
-        // {
-        //     ViewData["add_css"] = "zermelo";
-        //
-        //     return View();
-        // }
+        [HttpGet]
+        [Route("/Koppelingen/Zermelo/Qr")]
+        public IActionResult ZermeloWithQr()
+        {
+            ViewData["add_css"] = "zermelo";
+            return View();
+        }
+        
+        [HttpGet]
+        [Route("/Koppelingen/Zermelo/Code")]
+        public IActionResult ZermeloWithCode()
+        {
+            ViewData["add_css"] = "zermelo";
+            return View();
+        }
+
+        [HttpPost]
+        [Route("/Koppelingen/Zermelo/Code")]
+        public async Task<IActionResult> ZermeloWithCode(string code)
+        {
+            code = code.Replace(" ", "").Substring(0, 12);
+            
+            //POST /oauth/token?grant_type=authorization_code&code=
+            string url = $"https://ccg.zportal.nl/api/v3/oauth/token?grant_type=authorization_code&code={code}";
+            var response = await _zermeloHttpClient.PostAsync(url, null);
+            string responseString = await response.Content.ReadAsStringAsync();
+            
+            if (!response.IsSuccessStatusCode) return RedirectToAction(nameof(Zermelo));
+            
+            var zermeloAuthentication = JsonConvert.DeserializeObject<ZermeloAuthenticatieModel>(responseString);
+            
+            var zermeloUser = await GetZermeloUser(zermeloAuthentication.access_token);
+
+            var user = new user
+            {
+                zermelo_access_token = zermeloAuthentication.access_token,
+                school_id = zermeloUser.response.data[0].code,
+                name = zermeloUser.response.data[0].firstName + " " + zermeloUser.response.data[0].prefix + " " + zermeloUser.response.data[0].lastName,
+                zermelo_access_token_expires_at = DateTime.Now.AddMonths(2)
+            };
+            await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
+            
+            return RedirectToAction("Rooster", "Zermelo");
+        }
+
+        private async Task<ZermeloUserModel> GetZermeloUser(string access_token)
+        {
+            string url = "https://ccg.zportal.nl/api/v3/users/~me?access_token=" + access_token;
+            var response = await _zermeloHttpClient.GetAsync(url);
+            var responseString = await response.Content.ReadAsStringAsync();
+            
+            return JsonConvert.DeserializeObject<ZermeloUserModel>(responseString);
+        }
 
         #endregion
 

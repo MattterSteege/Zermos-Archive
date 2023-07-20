@@ -25,6 +25,9 @@ namespace Infrastructure.Entities
         //cache related
         public string cached_somtoday_grades { get; set; }
         public string cached_somtoday_homework { get; set; }
+        public string cached_infowijs_calendar { get; set; }
+        public string cached_infowijs_news { get; set; }
+        public string cached_school_informationscreen { get; set; }
 
         //auth related
         public string VerificationToken { get; set; }
