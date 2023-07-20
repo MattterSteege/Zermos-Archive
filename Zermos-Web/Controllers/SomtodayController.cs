@@ -47,16 +47,12 @@ namespace Zermos_Web.Controllers
         public async Task<IActionResult> Cijfers()
         {
             ViewData["add_css"] = "somtoday";
-
-            if (Request.Cookies.ContainsKey("cached-somtoday-grades-at"))
-            {
-                DateTime cached_at = DateTime.Parse(Request.Cookies["cached-somtoday-grades-at"] ?? string.Empty);
-                if (cached_at.AddMinutes(5) > DateTime.Now)
-                {
-                    return View(JsonConvert.DeserializeObject<SomtodayGradesModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_somtoday_grades ?? string.Empty));
-                }
-            }
             
+            if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
+            {
+                return View(JsonConvert.DeserializeObject<SomtodayGradesModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_somtoday_grades ?? string.Empty));
+            }
+
             var user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
             string access_token = user.somtoday_access_token;
@@ -114,7 +110,7 @@ namespace Zermos_Web.Controllers
                 cached_somtoday_grades = JsonConvert.SerializeObject(grades)
             });
             
-            Response.Cookies.Append("cached-somtoday-grades-at", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(5)});
+            Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
 
             return View(grades);
         }
@@ -455,6 +451,13 @@ namespace Zermos_Web.Controllers
         public async Task<IActionResult> Huiswerk(int dagen = 14)
         {
             ViewData["add_css"] = "somtoday";
+            
+            if (Request.Cookies.ContainsKey("cached-somtoday-homework") && dagen == 14)
+            {
+                string cache = (await _users.GetUserAsync(User.FindFirstValue("email"))).cached_somtoday_homework;
+                var homework = JsonConvert.DeserializeObject<somtodayHomeworkModel>(cache);
+                return View(homework);
+            }
 
             var user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
@@ -493,8 +496,17 @@ namespace Zermos_Web.Controllers
                     await response.Content.ReadAsStringAsync());
 
             somtodayHuiswerk.items.AddRange(await GetRemappedCustomHuiswerk());
+
+            somtodayHuiswerk = Sort(somtodayHuiswerk);
             
-            return View(Sort(somtodayHuiswerk));
+            await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+            {
+                cached_somtoday_homework = JsonConvert.SerializeObject(somtodayHuiswerk)
+            });
+            
+            Response.Cookies.Append("cached-somtoday-homework", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddHours(1)});
+            
+            return View(somtodayHuiswerk);
         }
 
         [NonAction]

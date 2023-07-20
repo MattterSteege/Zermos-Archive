@@ -8,7 +8,7 @@
 <div class="stats-container">
     <div class="stats">
         <p class="stats-vak">Vak: @((ViewData["stats"] as Dictionary<string, string>)?["vak"])</p>
-        <p class="gemiddelde">Gemiddelde: @((ViewData["stats"] as Dictionary<string, string>)?["gemiddelde"].Substring(0, 5))</p>
+        <p class="gemiddelde">Gemiddelde: @((ViewData["stats"] as Dictionary<string, string>)?["gemiddelde"].Substring(0, Math.Min( (ViewData["stats"] as Dictionary<string, string>)?["gemiddelde"].Length ?? 0, 5)))</p>
         <p class="hoogste-cijfer">Hoogste cijfer: @((ViewData["stats"] as Dictionary<string, string>)?["hoogste"])</p>
         <p class="laagste-cijfer">Laagste cijfer: @((ViewData["stats"] as Dictionary<string, string>)?["laagste"])</p>
     </div>

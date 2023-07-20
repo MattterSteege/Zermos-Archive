@@ -61,6 +61,8 @@
 .message .attachments {
     grid-row: 3;
     margin-top: 16px;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .message div.attachment {

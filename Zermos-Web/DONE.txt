@@ -9,5 +9,9 @@ Somtoday - Huiswerk
 Somtoday - Cijfers
     Cijfers worden nu voor 15 minuten opgeslagen in de database, zodat het laden sneller gaat en Somtoay niet overbelast wordt
     
+Somtoday - Huiswerk
+    Huiswerk wordt nu voor 1 uur opgeslagen in de database, zodat het laden sneller gaat en Somtoay niet overbelast wordt
+    
 Infowijs - School nieuws
     Er is nu een 'lees meer' knop aanwezig, zodat alles wat overzichtelijker is terwijl je nog steeds alles kan lezen
+    Mogelijke bijlagen worden nu onder aan het bericht weergegeven, i.p.v. halverwege

@@ -6,6 +6,14 @@
     int wordCount = 150;
 }
 
+<style>
+  pre {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+</style>
+
 <div class="message-container">
 
     <div class="top-2">
@@ -25,8 +33,7 @@
             <div class="contents">
                 @foreach (var content in contents)
                 {
-                    
-                    @* <pre class="content">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</pre> *@
+@* <pre class="content">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</pre> *@
                     @if (content.Content.String.Split(new char[] {' ', '\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).Length < wordCount)
                     {
                         <p class="content">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</p>
@@ -35,7 +42,7 @@
                     {
                         <p id=@("base-" + "0") class="content">@Html.Raw(HTMLUtils.BalanceHtmlTags(HTMLUtils.ConvertLinksInText(content.Content.String).FirstWords(wordCount)))</p>
                         <span id=@("dots-" + "0")>...</span>
-                        <span id=@("more-" + "0") style="display: none;">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</span>
+                        <pre id=@("more-" + "0") style="display: none;">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</pre>
                         <button onclick=@("readMore(" + "0" + ")") id=@("myBtn-" + "0") class="read-more-btn">Lees meer</button>
                     }
                 }
@@ -75,7 +82,7 @@
                     {
                         <p id=@("base-" + "1") class="content">@Html.Raw(HTMLUtils.BalanceHtmlTags(HTMLUtils.ConvertLinksInText(content.Content.String).FirstWords(wordCount)))</p>
                         <span id=@("dots-" + "1")>...</span>
-                        <span id=@("more-" + "1") style="display: none;">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</span>
+                        <pre id=@("more-" + "1") style="display: none;">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</pre>
                         <button onclick=@("readMore(" + "1" + ")") id=@("myBtn-" + "1") class="read-more-btn">Lees meer</button>
                     }
                 }
@@ -97,48 +104,44 @@
         @foreach (var messageGroup in Model.Skip(2))
         {
             <div class="message">
+                @{
+                    title = messageGroup.FirstOrDefault(m => m.Type == 30);
+                    contents = messageGroup.Where(m => m.Type == 1);
+                    attachments = messageGroup.Where(m => m.Type == 2);
+                }
 
-                <div class="message">
-                    @{
-                        title = messageGroup.FirstOrDefault(m => m.Type == 30);
-                        contents = messageGroup.Where(m => m.Type == 1);
-                        attachments = messageGroup.Where(m => m.Type == 2);
-                    }
+                @if (title != null)
+                {
+                    <h2 class="title">@title.Content.ContentClass.Title</h2>
+                }
 
-                    @if (title != null)
+                <div class="contents">
+
+                    @foreach (var content in contents)
                     {
-                        <h2 class="title">@title.Content.ContentClass.Title</h2>
+                        @if (content.Content.String.Split(new char[] {' ', '\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).Length < wordCount)
+                        {
+                            <p class="content">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</p>
+                        }
+                        else
+                        {
+                            int indexOfMessage = Model.IndexOf(messageGroup);
+                            <p id=@("base-" + indexOfMessage) class="content">@Html.Raw(HTMLUtils.BalanceHtmlTags(HTMLUtils.ConvertLinksInText(content.Content.String).FirstWords(wordCount)))</p>
+                            <span id=@("dots-" + indexOfMessage)>...</span>
+                            <pre id=@("more-" + indexOfMessage) style="display: none;">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</pre>
+                            <button onclick=@("readMore(" + indexOfMessage + ")") id=@("myBtn-" + indexOfMessage) class="read-more-btn">Lees meer</button>
+                        }
                     }
-
-                    <div class="contents">
-
-                        @foreach (var content in contents)
-                        {
-                            @if (content.Content.String.Split(new char[] {' ', '\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).Length < wordCount)
-                            {
-                                <p class="content">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</p>
-                            }
-                            else
-                            {
-                                int indexOfMessage = Model.IndexOf(messageGroup);
-                                <p id=@("base-" + indexOfMessage) class="content">@Html.Raw(HTMLUtils.BalanceHtmlTags(HTMLUtils.ConvertLinksInText(content.Content.String).FirstWords(wordCount)))</p>
-                                <span id=@("dots-" + indexOfMessage)>...</span>
-                                <span id=@("more-" + indexOfMessage) style="display: none;">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</span>
-                                <button onclick=@("readMore(" + indexOfMessage + ")") id=@("myBtn-" + indexOfMessage) class="read-more-btn">Lees meer</button>
-                            }
-                        }
-                    </div>
-
-                    <div class="attachments">
-                        @foreach (var attachment in attachments)
-                        {
-                            <div class="attachments">
-                                <p onclick="window.open('@attachment.Content.ContentClass.Url');" class="attachment">@(attachment.Content.ContentClass.Name + System.IO.Path.GetExtension(attachment.Content.ContentClass.Url.AbsolutePath))</p>
-                            </div>
-                        }
-                    </div>
                 </div>
 
+                <div class="attachments">
+                    @foreach (var attachment in attachments)
+                    {
+                        <div class="attachments">
+                            <p onclick="window.open('@attachment.Content.ContentClass.Url');" class="attachment">@(attachment.Content.ContentClass.Name + System.IO.Path.GetExtension(attachment.Content.ContentClass.Url.AbsolutePath))</p>
+                        </div>
+                    }
+                </div>
             </div>
         }
     </div>
