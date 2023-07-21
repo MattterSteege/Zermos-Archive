@@ -8,14 +8,20 @@ namespace Zermos_Web.Utilities
 {
     public static class NotificationCenter
     {
+        public enum NotificationType
+        {
+            INFO,
+            WARNING,
+            ERROR
+        }
 
-        public static void AddNotification(this HttpContext context, string title, string body, string type)
+        public static void AddNotification(this HttpContext context, string title, string body, NotificationType type)
         {
             var notification = new Notification
             {
                 Title = title,
                 Body = body,
-                Type = type
+                Type = type.ToString().ToLower()
             };
 
             List<Notification> notifications = context.GetNotifications();

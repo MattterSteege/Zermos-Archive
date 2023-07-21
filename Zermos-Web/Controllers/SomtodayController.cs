@@ -76,7 +76,7 @@ namespace Zermos_Web.Controllers
 
             if (response.IsSuccessStatusCode == false)
             {
-                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je cijfers konden niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", "error");
+                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je cijfers konden niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", NotificationCenter.NotificationType.ERROR);
                 return View(new SomtodayGradesModel {items = new List<Item>()});
             }
 
@@ -448,11 +448,11 @@ namespace Zermos_Web.Controllers
         [SomtodayRequirement]
         [AddLoadingScreen("Huiswerk wordt opgehaald")]
         [HttpGet("Somtoday/Huiswerk")]
-        public async Task<IActionResult> Huiswerk(int dagen = 14)
+        public async Task<IActionResult> Huiswerk(int dagen = 21, bool recache = false)
         {
             ViewData["add_css"] = "somtoday";
             
-            if (Request.Cookies.ContainsKey("cached-somtoday-homework") && dagen == 14)
+            if (Request.Cookies.ContainsKey("cached-somtoday-homework") && recache == false)
             {
                 string cache = (await _users.GetUserAsync(User.FindFirstValue("email"))).cached_somtoday_homework;
                 var homework = JsonConvert.DeserializeObject<somtodayHomeworkModel>(cache);
@@ -467,8 +467,6 @@ namespace Zermos_Web.Controllers
             {
                 access_token = await RefreshToken(user.somtoday_refresh_token);
             }
-            
-            dagen = dagen > 50 ? 50 : dagen;
 
             var _startDate = DateTime.Now.AddDays(-dagen).ToString("yyyy-MM-dd");
             var baseurl =
@@ -487,7 +485,7 @@ namespace Zermos_Web.Controllers
             
             if (response.IsSuccessStatusCode == false)
             {
-                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je Huiswerk op Somtoday kon niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", "error");
+                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je Huiswerk op Somtoday kon niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", NotificationCenter.NotificationType.ERROR);
                 return View(Sort(new somtodayHomeworkModel() {items = await GetRemappedCustomHuiswerk()}));
             }
 

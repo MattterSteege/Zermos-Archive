@@ -23,9 +23,9 @@ namespace Zermos_Web.Controllers
         [HttpGet("/error/404")]
         public IActionResult FourZeroFour()
         {
-            HttpContext.AddNotification("da's pech, pagina weg", "De pagina die je zocht bestaat niet meer, of is verplaatst.", "error");
-            HttpContext.AddNotification("opgelet", "Deze pagina is niet meer beschikbaar, of is verplaatst.", "warning");
-            HttpContext.AddNotification("even voor jouw infomatie", "Deze pagina is niet meer beschikbaar, of is verplaatst.", "info");
+            HttpContext.AddNotification("da's pech, pagina weg", "De pagina die je zocht bestaat niet meer, of is verplaatst.", NotificationCenter.NotificationType.ERROR);
+            HttpContext.AddNotification("opgelet", "Deze pagina is niet meer beschikbaar, of is verplaatst.", NotificationCenter.NotificationType.WARNING);
+            HttpContext.AddNotification("even voor jouw infomatie", "Deze pagina is niet meer beschikbaar, of is verplaatst.", NotificationCenter.NotificationType.INFO);
             return View("404");
         }
         

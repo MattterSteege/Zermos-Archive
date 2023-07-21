@@ -15,7 +15,7 @@
                 <img src="/images/Loading-Icon-by-Kanggraphic-27-580x386-removebg-preview.png" >
             </div>
         </div>
-        <form method="post" asp-controller="Koppelingen" asp-action="Infowijs" asp-route-koppelUuid="@ViewData["uuid"]" class="form-control" asp-route-retry="true">
+        <form method="post" asp-controller="Koppelingen" asp-action="InfowijsQr" asp-route-uuid="@ViewData["uuid"]" class="form-control" asp-route-retry="true">
             <button type="submit" id="check" class="check">Check @((bool)ViewData["retry"]! ? "opnieuw" : "") of je ingelogd bent</button>
         </form>
     </div>

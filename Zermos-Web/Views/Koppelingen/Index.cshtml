@@ -18,7 +18,7 @@
         <p>In de schoolkalender staan alle activiteiten die de school heeft ingepland. Denk hierbij aan toetsweken, uitjes en andere activiteiten. In de schoolberichten staan alle berichten die de school heeft geplaatst. Denk hierbij aan mededelingen, nieuwtjes en andere berichten.</p>
         <div class="spacer" style="padding: 0; margin-top: 8px"></div>
         <div class="methods">
-            <a asp-controller="Koppelingen" asp-action="Infowijs">Koppel Infowijs</a>
+            <a asp-controller="Koppelingen" asp-action="InfowijsQr">Koppel Infowijs</a>
         </div>
     </div>
     <div class="somtoday">
@@ -49,7 +49,7 @@
         <p>In het rooster staan alle lessen die je hebt op een dag.</p>
         <div class="spacer" style="padding: 0; margin-top: 8px"></div>
         <div class="methods">
-            <a asp-controller="Koppelingen" asp-action="Zermelo">Koppel Zermelo met je wachtwoord</a>
+            @* <a asp-controller="Koppelingen" asp-action="Zermelo">Koppel Zermelo met je wachtwoord</a> @*For when the UI is done, but with koppelcode and QR it is quite unnecesairy*@  
             <a asp-controller="Koppelingen" asp-action="ZermeloWithCode">Koppel Zermelo een koppelcode</a>
             <a asp-controller="Koppelingen" asp-action="ZermeloWithQr">Koppel Zermelo een qr-code</a>
         </div>

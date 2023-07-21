@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -130,47 +131,61 @@ namespace Zermos_Web.Controllers
         // }
 
         [HttpGet]
-        [HttpPost]
-        public async Task<IActionResult> Infowijs(string koppelUuid, bool retry = false)
+        [Route("Koppelingen/Infowijs/Qr")]
+        public async Task<IActionResult> InfowijsQr(string uuid, bool retry = false)
         {
-            ViewData["add_css"] = "koppelingen";
-
-            if (koppelUuid == null)
+            if (uuid != null)
             {
-                string url1 = "https://api.infowijs.nl/sessions/transfer";
-                var response1 = await _infowijsHttpClient.PostAsync(url1, null);
-                var result1 = await response1.Content.ReadAsStringAsync();
-
-                var uuid = JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModelAuthSuccess>(result1).data;
-
                 ViewData["qr_text"] = "hoy_scan://v1/login/" + uuid;
                 ViewData["uuid"] = uuid;
                 ViewData["retry"] = retry;
-
                 return View(model: "");
             }
+            
+            ViewData["add_css"] = "koppelingen";
+            
+            string url1 = "https://api.infowijs.nl/sessions/transfer";
+            var response1 = await _infowijsHttpClient.PostAsync(url1, null);
+            var result1 = await response1.Content.ReadAsStringAsync();
 
-            string url2 = $"https://api.infowijs.nl/sessions/transfer/{koppelUuid}";
+            uuid = JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModelAuthSuccess>(result1).data;
 
-            var response2 = await _infowijsHttpClient.GetAsync(url2);
-            var result2 = await response2.Content.ReadAsStringAsync();
-
-            if (result2.StartsWith("{\"data\":\""))
-            {
-                string token = result2.Substring(9, result2.Length - 11);
-
-                var user = new user {infowijs_access_token = token};
-                await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
-
-                return RedirectToAction("Index", "Main");
-            }
-
-            ViewData["qr_text"] = "hoy_scan://v1/login/" + koppelUuid;
-            ViewData["uuid"] = koppelUuid;
+            ViewData["qr_text"] = "hoy_scan://v1/login/" + uuid;
+            ViewData["uuid"] = uuid;
             ViewData["retry"] = retry;
 
             return View(model: "");
+        }
+
+        [HttpPost]
+        [Route("Koppelingen/Infowijs/Qr")]
+        public async Task<IActionResult> InfowijsQr(string uuid)
+        {
+            if (uuid == null)
+            {
+                return Redirect("/koppelingen/infowijs/qr");
+            }
             
+            ViewData["add_css"] = "koppelingen";
+            
+            string url2 = "https://api.infowijs.nl/sessions/transfer/" + uuid;
+            var response2 = await _infowijsHttpClient.GetAsync(url2);
+            var result2 = await response2.Content.ReadAsStringAsync();
+
+            if (response2.StatusCode != HttpStatusCode.OK)
+            {
+                ViewData["qr_text"] = "hoy_scan://v1/login/" + uuid;
+                ViewData["uuid"] = uuid;
+                ViewData["retry"] = true;
+                return View(model: "");
+            }
+            
+            var jwt = JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModelAuthSuccess>(result2).data;
+
+            var email = User.FindFirstValue("email");
+            await _users.UpdateUserAsync(email, new user {infowijs_access_token = jwt});
+
+            return RedirectToAction("ShowAccount", "Account");
         }
 
         #endregion
@@ -226,15 +241,16 @@ namespace Zermos_Web.Controllers
             {
                 zermelo_access_token = zermeloAuthentication.access_token,
                 school_id = zermeloUser.response.data[0].code,
-                name = zermeloUser.response.data[0].firstName + " " + zermeloUser.response.data[0].prefix + " " + zermeloUser.response.data[0].lastName,
+                name = zermeloUser.response.data[0].firstName + " " + zermeloUser.response.data[0].prefix + " " +
+                       zermeloUser.response.data[0].lastName,
                 zermelo_access_token_expires_at = DateTime.Now.AddMonths(2)
             };
-            
+
             await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
 
-            return RedirectToAction("Rooster", "Zermelo");
+            return RedirectToAction("ShowAccount", "Account");
         }
-        
+
         [HttpGet]
         [Route("/Koppelingen/Zermelo/Qr")]
         public IActionResult ZermeloWithQr()
@@ -242,7 +258,7 @@ namespace Zermos_Web.Controllers
             ViewData["add_css"] = "koppelingen";
             return View();
         }
-        
+
         [HttpGet]
         [Route("/Koppelingen/Zermelo/Code")]
         public IActionResult ZermeloWithCode()
@@ -256,32 +272,38 @@ namespace Zermos_Web.Controllers
         public async Task<IActionResult> ZermeloWithCode(string code, string from = "code")
         {
             //POST /oauth/token?grant_type=authorization_code&code=
-            string url = $"https://ccg.zportal.nl/api/v3/oauth/token?grant_type=authorization_code&code={code.Replace(" ", "")}";
+            string url =
+                $"https://ccg.zportal.nl/api/v3/oauth/token?grant_type=authorization_code&code={code.Replace(" ", "")}";
             var response = await _zermeloHttpClient.PostAsync(url, null);
             string responseString = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
             {
+                HttpContext.AddNotification("Niet geldig",
+                    "Deze code is mogelijk niet geldig, refresh zermelo en probeer het opnieuw",
+                    NotificationCenter.NotificationType.ERROR);
+
                 if (from == "code")
                     return RedirectToAction("ZermeloWithCode", "Koppelingen");
-                
+
                 return RedirectToAction("ZermeloWithQr", "Koppelingen");
             }
-            
+
             var zermeloAuthentication = JsonConvert.DeserializeObject<ZermeloAuthenticatieModel>(responseString);
-            
+
             var zermeloUser = await GetZermeloUser(zermeloAuthentication.access_token);
 
             var user = new user
             {
                 zermelo_access_token = zermeloAuthentication.access_token,
                 school_id = zermeloUser.response.data[0].code,
-                name = zermeloUser.response.data[0].firstName + " " + zermeloUser.response.data[0].prefix + " " + zermeloUser.response.data[0].lastName,
+                name = zermeloUser.response.data[0].firstName + " " + zermeloUser.response.data[0].prefix + " " +
+                       zermeloUser.response.data[0].lastName,
                 zermelo_access_token_expires_at = DateTime.Now.AddMonths(2)
             };
             await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
-            
-            return RedirectToAction("Rooster", "Zermelo");
+
+            return RedirectToAction("ShowAccount", "Account");
         }
 
         private async Task<ZermeloUserModel> GetZermeloUser(string access_token)
@@ -289,7 +311,7 @@ namespace Zermos_Web.Controllers
             string url = "https://ccg.zportal.nl/api/v3/users/~me?access_token=" + access_token;
             var response = await _zermeloHttpClient.GetAsync(url);
             var responseString = await response.Content.ReadAsStringAsync();
-            
+
             return JsonConvert.DeserializeObject<ZermeloUserModel>(responseString);
         }
 
@@ -312,7 +334,7 @@ namespace Zermos_Web.Controllers
             string[] tokens = GenerateTokens();
             //0 = code verifier
             //1 = code challenge
-            
+
             //code challenge: __JVhs4cj-iqe8ha5750d9QSWJMpV49SXHPqBgFulkk
             //code verifier: 16BBJMtEJe8blIJY848ROvvO02F5V205l5A10x_DqFE
 
@@ -369,7 +391,7 @@ namespace Zermos_Web.Controllers
             user.somtoday_refresh_token = somtodayAuthentication.refresh_token;
 
             await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
-            return RedirectToAction("Index", "Main");
+            return RedirectToAction("ShowAccount", "Account");
         }
 
 
