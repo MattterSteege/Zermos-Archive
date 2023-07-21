@@ -16,7 +16,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 60%;
+    width: 80%;
     max-height: min-content;
 }
 
@@ -34,6 +34,7 @@
 .form-control input:first-child {
     width: 75%;
     border-radius: 1rem 0 0 1rem;
+    text-align: center;
 }
 
 .form-control input:nth-child(2) {
@@ -52,30 +53,29 @@
     display: flex;
     justify-content: start;
     align-items: start;
-    cursor: pointer;
     color: var(--text-color);
     text-decoration: none;
     padding: 16px;
     flex-direction: column;
-    width: 60%;
-    height: 60%;
+    width: 80%;
+    height: auto;
     grid-area: 2 / 2 / 4 / 3;
     font-size: 1rem;
     font-weight: 600;
     cursor: default;
 }
 
-.login-child .child:nth-child(1) {
+.login-child h1{
     font-weight: 600;
     font-size: 1.5rem;
     text-align: center;
     width: 100%;
 }
 
-.login-child .child:nth-child(2) {
+.login-child p {
 
     margin-top: 16px;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 1rem;
 }
 
@@ -130,7 +130,7 @@
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(355px, 100% / 4)), 1fr));
     grid-gap: 16px;
     background: var(--background-color);
 }
@@ -169,38 +169,31 @@
     margin-bottom: 8px;
 }
 
-.koppelingen-container div a {
+.koppelingen-container div .methods {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    /*margin top should be either auto or 16px, which is higher*/
+    margin-top: max(16px, auto);
+    padding: unset;
+}
+
+.koppelingen-container div .methods a {
     font-size: 1rem;
     text-decoration: none;
-    width: calc(100% - 16px);
+    width: 100%;
     height: 40px;
-    display: block;
     text-align: center;
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
     background: var(--accent-color);
-    border-radius: 14px;
-    justify-items: center;
+    border-radius: 7px;
+    justify-content: center;
     color: var(--white-color);
     font-weight: 700;
     padding: 10px;
-}
-
-@media (max-width: 1000px) {
-    .koppelingen-container {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
-    }
-    
-    .login-child {
-        width: 80%;
-        min-height: 30%;
-        max-height: min-content;
-        height: auto;
-    }
-    
-    .form-control {
-        width: 80%;
-    }
+    display: flex;
+    flex-direction: column;
 }

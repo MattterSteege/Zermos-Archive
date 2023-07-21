@@ -5,7 +5,59 @@
     Layout = "_Layout";
 }
 
-<form method="post" asp-controller="Koppelingen" asp-action="ZermeloWithCode">
-    <input type="text" name="code" />
-    <input type="submit" value="Submit" />
-</form>
+<div class="login">
+    <div class="login-child">
+        <h1 class="child">Koppel Zermelo aan je account!</h1>
+        <p class="child">Om Zermelo aan je account te koppelen moet je een code invoeren. Deze code kun je vinden in Zermelo, <a target="_blank" href="https://ccg.zportal.nl/main">hier</a> om precies te zijn. Als je op de website van Zermelo bent, klik dan op 'koppelingen' (het deel icoontje links in de navigatiebalk) en daarna op 'koppel externe applicatie', kopieer de code en plak die hieronder.</p>
+    </div>
+    <form method="post" asp-controller="Koppelingen" asp-action="ZermeloWithCode" asp-route-from="code" class="form-control">
+        <input type="text" name="code" placeholder="xxx xxx xxx xxx">
+        <input type="submit" value="Inloggen">
+    </form>
+</div>
+
+<script>
+    var inputfield = $('input[name="code"]');
+    var submitbutton = $('input[type="submit"]');
+    
+    
+    //when a user is typing the code add a space after every 3 characters
+    //when there are a total of 12 non-space characters, enable the submit button
+    inputfield.on('input', function () {
+        var value = inputfield.val();
+        var length = value.length;
+        var spaceCount = (value.match(/ /g) || []).length;
+        if (length === 3 || length === 7 || length === 11) {
+            if (spaceCount < 3) {
+                inputfield.val(value + " ");
+            }
+        }
+        if (length === 15) {
+            submitbutton.click();
+        }
+    });
+    
+    //when the user presses enter, submit the form
+    inputfield.keypress(function (e) {
+        if (e.which === 13) {
+            submitbutton.click();
+        }
+    });
+    
+    //when a user pastes a code, remove all spaces, place a space after every 3 characters and submit the form
+    inputfield.on('paste', function () {
+        
+        //replace all spaces with nothing
+        var value = inputfield.val().replace(/ /g, "");
+        var length = value.length;
+        //add a space after every 3 characters
+        value = value.replace(/(.{3})/g, "$1 ");
+        inputfield.val(value); 
+        
+        delay(1000);
+        
+        if (length === 15) {
+            submitbutton.click();
+        }
+    });
+</script>

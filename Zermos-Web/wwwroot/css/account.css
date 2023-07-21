@@ -141,8 +141,24 @@
     background: var(--inactive-color);
 }
 
+.all-koppelingen {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    background: var(--accent-color);
+    border-radius: 7px;
+}
+
+.all-koppelingen a {
+    display: block;
+    text-align: center;
+    color: var(--white-color);
+}
+
 .koppel-knop {
-    color: var(--text-color);
+    color: var(--white-color);
     border-radius: 8px;
     padding: 8px;
     font-weight: 600;
@@ -150,7 +166,6 @@
     margin-top: 8px;
     border: transparent;
     width: 100%;
-    margin-bottom: 8px;
 }
 
 .koppelen {

@@ -180,7 +180,7 @@ namespace Zermos_Web.Controllers
         [HttpGet]
         public IActionResult Zermelo()
         {
-            ViewData["add_css"] = "zermelo";
+            ViewData["add_css"] = "koppelingen";
 
             return View();
         }
@@ -239,7 +239,7 @@ namespace Zermos_Web.Controllers
         [Route("/Koppelingen/Zermelo/Qr")]
         public IActionResult ZermeloWithQr()
         {
-            ViewData["add_css"] = "zermelo";
+            ViewData["add_css"] = "koppelingen";
             return View();
         }
         
@@ -247,22 +247,26 @@ namespace Zermos_Web.Controllers
         [Route("/Koppelingen/Zermelo/Code")]
         public IActionResult ZermeloWithCode()
         {
-            ViewData["add_css"] = "zermelo";
+            ViewData["add_css"] = "koppelingen";
             return View();
         }
 
         [HttpPost]
         [Route("/Koppelingen/Zermelo/Code")]
-        public async Task<IActionResult> ZermeloWithCode(string code)
+        public async Task<IActionResult> ZermeloWithCode(string code, string from = "code")
         {
-            code = code.Replace(" ", "").Substring(0, 12);
-            
             //POST /oauth/token?grant_type=authorization_code&code=
-            string url = $"https://ccg.zportal.nl/api/v3/oauth/token?grant_type=authorization_code&code={code}";
+            string url = $"https://ccg.zportal.nl/api/v3/oauth/token?grant_type=authorization_code&code={code.Replace(" ", "")}";
             var response = await _zermeloHttpClient.PostAsync(url, null);
             string responseString = await response.Content.ReadAsStringAsync();
-            
-            if (!response.IsSuccessStatusCode) return RedirectToAction(nameof(Zermelo));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                if (from == "code")
+                    return RedirectToAction("ZermeloWithCode", "Koppelingen");
+                
+                return RedirectToAction("ZermeloWithQr", "Koppelingen");
+            }
             
             var zermeloAuthentication = JsonConvert.DeserializeObject<ZermeloAuthenticatieModel>(responseString);
             

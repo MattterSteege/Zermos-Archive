@@ -6,57 +6,150 @@
 }
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<style>
-    main {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    #reader {
-        width: 600px;
-    }
-    #result {
-        text-align: center;
-        font-size: 1.5rem;
-    }
-</style>
-<main>
-    <div id="reader"></div>
-    <div id="result"></div>
-</main>
+
+
+<div class="login">
+    <div class="login-child">
+        <h1 class="child">Koppel Zermelo aan je account!</h1>
+        <p class="child">Om Zermelo aan je account te koppelen moet je een qr-code scannen. Deze code kun je vinden in Zermelo, <a target="_blank" href="https://ccg.zportal.nl/main">hier</a> om precies te zijn. Als je op de website van Zermelo bent, klik dan op 'koppelingen' (het deel icoontje links in de navigatiebalk) en daarna op 'koppel externe applicatie', scan de code en tada, ingelogd. Pas wel op, je hebt hier een computer voor de qr-code nodig en een mobiel om te scannen!</p>
+        <div style="width: 100%; height: auto; border-radius: 7px; margin-top: 16px; overflow: hidden;" id="reader"></div>
+        <div id="result" style="display: none; margin-top: 16px; width: 100%; text-align: center"></div>
+    </div>
+</div>
+
+
 <script>
-const scanner = new Html5QrcodeScanner('reader', {
-    qrbox: {
-        width: 250,
-        height: 250,
-    },
-    fps: 20,
-    facingMode: { exact: "environment"}
-});
-scanner.render(success, error);
-
-function success(result) {
-    //POST to /Koppelingen/Zermelo/Qr?code=['code' from json]
+    const html5QrCode = new Html5Qrcode("reader");
     
-    code = JSON.parse(result).code;    
-    document.getElementById('reader').remove();
-    scanner.clear();
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/Koppelingen/Zermelo/Code?code=" + code, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
+    // if you scanned, it will be send to the internal api
+    const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+        code = JSON.parse(decodedText).code;
+        document.getElementById('result').innerText = 'Inlog code: ' + code.substring(0, 3) + ' ' + code.substring(3, 6) + ' ' + code.substring(6, 9) + ' ' + code.substring(9, 12);        
+        document.getElementById('result').style.display = 'block';
+        html5QrCode.stop();
+        //document.getElementById('reader').remove();
+        //html5QrCode.clear();
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/Koppelingen/Zermelo/Code?code=" + code + "&from=qr", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
     
-    xhr.onreadystatechange = function() {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            //follow redirect
-            
-           window.location.href = this.responseURL;
+        xhr.onreadystatechange = function() {
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                //follow redirect
+                window.location.href = this.responseURL;
+            }
         }
+    
+        xhr.send();
     }
     
-    xhr.send();        
-}
-
-function error(err) {
-    console.error(err);
-}
+    const config = { fps: 200, qrbox: 100 };
+    
+    // prefer the back camera else the front one 
+    html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback);
 </script>
+
+@* <style> *@
+@*     .qr-box { *@
+@*         display: flex; *@
+@*         justify-content: center; *@
+@*         align-items: center; *@
+@*         height: 100%; *@
+@*         width: 100%; *@
+@*     } *@
+@*     #reader { *@
+@*         width: 600px; *@
+@*     } *@
+@* </style> *@
+@* *@
+@* <div class="qr-box"> *@
+@*     <div id="reader"></div> *@
+@* </div> *@
+@* *@
+@* *@
+@* <script> *@
+@* // const scanner = new Html5QrcodeScanner('reader', { *@
+@* //     qrbox: { *@
+@* //         width: 250, *@
+@* //         height: 250, *@
+@* //     }, *@
+@* //     fps: 10, *@
+@* //     videoConstraints: { facingMode: { exact: "environment" } }, *@
+@* // }); *@
+@* // scanner.render(success, error); *@
+@* // *@
+@* // document.getElementById('reader__header_message').parentElement.style.display = 'none'; *@
+@* // document.getElementById('html5-qrcode-anchor-scan-type-change').parentElement.style.display = 'none'; *@
+@* // document.getElementById('html5-qrcode-button-camera-permission').innerText = 'Vraag cameratoestemmingen aan'; *@
+@* *@
+@* //ask for camera permission *@
+@* document.getElementById('html5-qrcode-button-camera-permission').addEventListener('click', function() { *@
+@*     navigator.mediaDevices.getUserMedia({ *@
+@*         video: { *@
+@*             facingMode: { *@
+@*                 exact: "environment" *@
+@*             } *@
+@*         } *@
+@*     }).then(function(stream) { *@
+@*         document.getElementById('reader').style.display = 'block'; *@
+@*         document.getElementById('reader__header_message').parentElement.style.display = 'none'; *@
+@*         document.getElementById('html5-qrcode-anchor-scan-type-change').parentElement.style.display = 'none'; *@
+@*         document.getElementById('html5-qrcode-button-camera-permission').innerText = 'Vraag cameratoestemmingen aan'; *@
+@*     }); *@
+@* }); *@
+@* *@
+@* const html5QrCode = new Html5Qrcode("reader"); *@
+@* const config = { *@
+@*     fps: 10, *@
+@*     qrbox: { *@
+@*         width: 250, *@
+@*         height: 250 *@
+@*     } *@
+@* }; *@
+@* *@
+@* // If you want to prefer front camera *@
+@* html5QrCode.start({ *@
+@*     facingMode: "environment" *@
+@* }, config, success, error); *@
+@* *@
+@* function success(result) { *@
+@*     code = JSON.parse(result).code; *@
+@*     document.getElementById('reader').remove(); *@
+@*     scanner.clear(); *@
+@*     var xhr = new XMLHttpRequest(); *@
+@*     xhr.open("POST", "/Koppelingen/Zermelo/Code?code=" + code, true); *@
+@*     xhr.setRequestHeader('Content-Type', 'application/json'); *@
+@* *@
+@*     xhr.onreadystatechange = function() { *@
+@*         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) { *@
+@*             //follow redirect *@
+@* *@
+@*             window.location.href = this.responseURL; *@
+@*         } *@
+@*     } *@
+@* *@
+@*     xhr.send(); *@
+@* } *@
+@* *@
+@* function error(err) { *@
+@*     console.error(err); *@
+@* } *@
+@* </script> *@
+@* *@
+@* $1$ //the width of the camera  #1# *@
+@* $1$ <div style="width:200px; " id="reader"></div> #1# *@
+@* $1$ <div id="result">resultaat</div> #1# *@
+@* $1$ #1# *@
+@* $1$ <script> #1# *@
+@* $1$     const html5QrCode = new Html5Qrcode( #1# *@
+@* $1$       "reader", { formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE ] }); #1# *@
+@* $1$     const qrCodeSuccessCallback = (decodedText, decodedResult) => { #1# *@
+@* $1$             document.getElementById('result').value = decodedText; #1# *@
+@* $1$     }; #1# *@
+@* $1$     const config = { fps: 10, qrbox: { width: 250, height: 250 } }; #1# *@
+@* $1$      #1# *@
+@* $1$     html5QrCode.render(qrCodeSuccessCallback); #1# *@
+@* $1$      #1# *@
+@* $1$     // If you want to prefer front camera #1# *@
+@* $1$     html5QrCode.start({ facingMode: "user" }, config, qrCodeSuccessCallback); #1# *@
+@* $1$ </script> #1# *@

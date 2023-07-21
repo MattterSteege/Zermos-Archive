@@ -17,6 +17,7 @@ Infowijs - School nieuws
 Koppelingen - Zermelo
     Er is nu een optie om qr-code login te gebruiken, dan hoef ik je wachtwoord niet te weten ;) Je vind je qr-code in Zermelo op https://ccg.zportal.nl/main/ > koppelingen > koppel externe applicatie
     Er is nu een optie om de koppelcode van zermelo te gebruiken, ook nu hoef ik dus je wachtwoord niet te weten. Je vind je koppelcode in Zermelo op https://ccg.zportal.nl/main/ > koppelingen > koppel externe applicatie
+    De UI voor het koppelen van Zermelo is nu een stukkie mooier
     
 Koppelingen - Infowijs
     Er is nu een laad iccoontje aanwezig, zodat je weet dat er iets gebeurd

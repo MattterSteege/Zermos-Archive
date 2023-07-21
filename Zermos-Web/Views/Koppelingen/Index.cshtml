@@ -15,8 +15,11 @@
                 Schoolberichten
             </li>
         </ul>
-        <p>In de schoolkalender staan alle activiteiten die de school heeft ingepland. Denk hierbij aan toetsweken, uitjes en andere activiteiten. In de schoolberichten staan alle berichten die de school heeft geplaatst. Denk hierbij aan mededelingen, nieuwstjes en andere berichten.</p>
-        <a asp-controller="Koppelingen" asp-action="Infowijs">Koppel Infowijs</a>
+        <p>In de schoolkalender staan alle activiteiten die de school heeft ingepland. Denk hierbij aan toetsweken, uitjes en andere activiteiten. In de schoolberichten staan alle berichten die de school heeft geplaatst. Denk hierbij aan mededelingen, nieuwtjes en andere berichten.</p>
+        <div class="spacer" style="padding: 0; margin-top: 8px"></div>
+        <div class="methods">
+            <a asp-controller="Koppelingen" asp-action="Infowijs">Koppel Infowijs</a>
+        </div>
     </div>
     <div class="somtoday">
         <h1>Somtoday</h1>
@@ -30,7 +33,10 @@
             </li>
         </ul>
         <p>In de cijfers staan alle cijfers die je hebt gehaald. In het huiswerk staan alle huiswerkopdrachten die je hebt gekregen (en je nooit gaat maken)</p>
-        <a asp-controller="Koppelingen" asp-action="Somtoday">Koppel Somtoday</a>
+        <div class="spacer" style="padding: 0; margin-top: 8px"></div>
+        <div class="methods">
+            <a asp-controller="Koppelingen" asp-action="Somtoday">Koppel Somtoday</a>
+        </div>
     </div>
     <div class="zermelo">
         <h1>Zermelo</h1>
@@ -41,6 +47,11 @@
             </li>
         </ul>
         <p>In het rooster staan alle lessen die je hebt op een dag.</p>
-        <a asp-controller="Koppelingen" asp-action="Zermelo">Koppel Zermelo</a>
+        <div class="spacer" style="padding: 0; margin-top: 8px"></div>
+        <div class="methods">
+            <a asp-controller="Koppelingen" asp-action="Zermelo">Koppel Zermelo met je wachtwoord</a>
+            <a asp-controller="Koppelingen" asp-action="ZermeloWithCode">Koppel Zermelo een koppelcode</a>
+            <a asp-controller="Koppelingen" asp-action="ZermeloWithQr">Koppel Zermelo een qr-code</a>
+        </div>
     </div>
 </div>

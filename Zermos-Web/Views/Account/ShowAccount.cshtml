@@ -40,7 +40,7 @@
         </div>
 
         <div class="information-item-parent" id="koppelingen">
-            <h1>Koppelingen</h1>
+            <h1 onclick="window.location.href='@Url.Action("Index", "Koppelingen")'" style="text-decoration: underline; cursor: pointer;">Koppelingen</h1>
             <div class="opgeslagen-informatie-grid">
                 <div class="infowijs">
                     @if (Model.is_infowijs_linked)
@@ -91,25 +91,26 @@
                         <button onclick="window.location.href='/koppelingen/somtoday'" class="koppel-knop koppelen">Koppelen</button>
                     }
                 </div>
+                
             </div>
         </div>
 
         <div class="information-item-parent" id="theme">
             <h1>Thema's</h1>
             <form method="POST" asp-controller="Account" asp-action="UpdateTheme" asp-route-newTheme="light">
-                <button class="koppel-knop" style="background: var(--background-color) !important">licht</button>
+                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">licht</button>
             </form>
             <form method="POST" asp-controller="Account" asp-action="UpdateTheme" asp-route-newTheme="dark">
-                <button class="koppel-knop" style="background: var(--background-color) !important">Donker</button>
+                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Donker</button>
             </form>
             <form method="POST" asp-controller="Account" asp-action="UpdateTheme" asp-route-newTheme="red">
-                <button class="koppel-knop" style="background: var(--background-color) !important">Rood</button>
+                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Rood</button>
             </form>
             <form method="POST" asp-controller="Account" asp-action="UpdateTheme" asp-route-newTheme="blue">
-                <button class="koppel-knop" style="background: var(--background-color) !important">Blauw</button>
+                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Blauw</button>
             </form>
             <form method="POST" asp-controller="Account" asp-action="UpdateTheme" asp-route-newTheme="pink">
-                <button class="koppel-knop" style="background: var(--background-color) !important">Roze</button>
+                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Roze</button>
             </form>
         </div>
 
@@ -135,7 +136,7 @@
         document.getElementById(app + '-first').style.display = 'none';
         document.getElementById(app + '-second').style.display = 'block';
         
-        delay(3000).then(() => {
+         new Promise(res => setTimeout(res, 3000)).then(() => {
             document.getElementById(app + '-first').style.display = 'block';
             document.getElementById(app + '-second').style.display = 'none';
         });
