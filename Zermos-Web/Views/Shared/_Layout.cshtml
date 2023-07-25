@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using System.Reflection
 @using Microsoft.AspNetCore.Http
 @using Zermos_Web.Utilities
@@ -18,6 +18,7 @@
     <script src="https://kit.fontawesome.com/052f5fa8f8.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f8f9fa">
     <script src="~/js/global.js" asp-append-version="true"></script>
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true">
     @if (!string.IsNullOrEmpty(ViewData["add_css"]?.ToString()))
@@ -152,16 +153,16 @@
     </div>
 </div>
 
-@if (Context.Request.Cookies["version"] == null && !(bool) (Context.Items["loading"] ?? true) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
+@if (Context.Request.Cookies["version"] == null && !(bool)(Context.Items["loading"] ?? true) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
 {
-    Context.Response.Cookies.Append("version", Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty, new CookieOptions { Expires = DateTime.Now.AddDays(60)});
+    Context.Response.Cookies.Append("version", Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty, new CookieOptions { Expires = DateTime.Now.AddDays(60) });
     <div class="version">
         <p>Je gebruikt momenteel de <b>nieuwste</b> versie van Zermos</p>
     </div>
 }
-else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") && !(bool) (Context.Items["loading"] ?? true) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
+else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") && !(bool)(Context.Items["loading"] ?? true) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
 {
-    Context.Response.Cookies.Append("version", Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty, new CookieOptions { Expires = DateTime.Now.AddDays(60)});
+    Context.Response.Cookies.Append("version", Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty, new CookieOptions { Expires = DateTime.Now.AddDays(60) });
     <div class="version">
         <p>Er is een nieuwe versie van Zermos (@(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty)), bekijk <a asp-controller="Main" asp-action="Docs">hier</a> wat er nieuw is</p>
     </div>
@@ -186,6 +187,11 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
         </div>
     }
 }
+
+<script>
+    const themecolor = getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim();
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', themecolor);
+</script>
 
 @await RenderSectionAsync("Scripts", false)
 </body>
