@@ -1,3 +1,9 @@
+---
+layout: default
+title: Zermelo
+nav_exclude: true
+---
+
 # Zermelo
 
 Zermelo, hoewel het maar één klein paginatje heeft, kun je eigenlijk niet zonder. Als je Zermelo met Zermos koppelt, krijg je toegang tot je rooster. Het rooster is, zoals ik het noem, 'time-based'. Dit betekent dat je het rooster tijdgetrouw is en je dus makkelijk kunt zien hoeveel tijd je tussen de lessen hebt, hoelang je tussenuren zijn en hoelang je pauze hebt. Super handig toch!

@@ -1,3 +1,9 @@
+---
+layout: default
+title: Infowijs
+nav_exclude: true
+---
+
 # Infowijs (De Antonius app)
 
 ## Waarvoor heb je Infowijs nodig?

@@ -1,3 +1,9 @@
+---
+layout: default
+title: School
+nav_exclude: true
+---
+
 ## Antonius
 
 Hierbij hoef je geen gegevens in te vullen, er word dus automatisch een link gelegd met school.

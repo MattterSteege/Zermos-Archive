@@ -1,3 +1,9 @@
+---
+layout: default
+title: what's new
+nav_exclude: true
+---
+
 # Release Notes - Versie 0.1.2 - 18-07-2023 🎉
 
 - Algemeen

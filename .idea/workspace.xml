@@ -4,21 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c3582447-ff79-4dd3-9c47-b4613b8d0576" name="Changes" comment="added a test feature, redirect">
-      <change afterPath="$PROJECT_DIR$/Infowijs.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/School.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Somtoday.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Zermelo.md" afterDir="false" />
+    <list default="true" id="c3582447-ff79-4dd3-9c47-b4613b8d0576" name="Changes" comment="updated docs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infowijs.md" beforeDir="false" afterPath="$PROJECT_DIR$/Infowijs.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/School.md" beforeDir="false" afterPath="$PROJECT_DIR$/School.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Somtoday.md" beforeDir="false" afterPath="$PROJECT_DIR$/Somtoday.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WhatsNew.md" beforeDir="false" afterPath="$PROJECT_DIR$/WhatsNew.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Sneakpeek - ZERMOS WEB - 2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Sneakpeek - ZERMOS WEB - 3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Sneakpeek - ZERMOS WEB - 4.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Sneakpeek - ZERMOS WEB - 5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/Sneakpeek - ZERMOS WEB.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/index.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/koppelingen.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/whatsnew.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Zermelo.md" beforeDir="false" afterPath="$PROJECT_DIR$/Zermelo.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +45,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "Docs",
+    "last_opened_file_path": "C:/Users/mattt/Documents/Github/Zermos",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -71,6 +64,7 @@
       <updated>1675856852870</updated>
       <workItem from="1675856857858" duration="1656000" />
       <workItem from="1678904574241" duration="23000" />
+      <workItem from="1690391206713" duration="64000" />
     </task>
     <task id="LOCAL-00001" summary="added a test feature, redirect">
       <created>1675857654150</created>
@@ -79,7 +73,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675857654150</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="updated docs">
+      <created>1690389932531</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1690389932531</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -98,6 +99,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added a test feature, redirect" />
-    <option name="LAST_COMMIT_MESSAGE" value="added a test feature, redirect" />
+    <MESSAGE value="updated docs" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated docs" />
   </component>
 </project>

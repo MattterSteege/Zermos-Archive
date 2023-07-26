@@ -1,3 +1,9 @@
+---
+layout: default
+title: Somtoday
+nav_exclude: true
+---
+
 # Somtoday
 
 ## Waarvoor heb je Somtoday nodig?
