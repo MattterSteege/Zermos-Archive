@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="c3582447-ff79-4dd3-9c47-b4613b8d0576" name="Changes" comment="added a test feature, redirect">
+      <change afterPath="$PROJECT_DIR$/Infowijs.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/School.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Somtoday.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Zermelo.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WhatsNew.md" beforeDir="false" afterPath="$PROJECT_DIR$/WhatsNew.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Sneakpeek - ZERMOS WEB - 2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Sneakpeek - ZERMOS WEB - 3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Sneakpeek - ZERMOS WEB - 4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Sneakpeek - ZERMOS WEB - 5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Sneakpeek - ZERMOS WEB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/index.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/koppelingen.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/whatsnew.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,15 +46,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "Docs",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

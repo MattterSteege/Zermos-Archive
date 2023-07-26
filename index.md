@@ -7,11 +7,12 @@ nav_exclude: false
 
 In deze documentatie vind je alles wat je moet weten over de Zermos app.
 
-- wat heb ik aan dew koppeling met
-  - [Zermelo](koppelingen#zermelo)
-  - [SOMtoday](koppelingen#somtoday)
-  - [De Antonius app](koppelingen#de-antonius-app)
-  - [De school zelf](koppelingen#antonius)
+### koppelingen
+  - [Zermelo](Zermelo)
+  - [SOMtoday](Somtoday)
+  - [De Antonius app](Infowijs)
+  - [De school zelf](School)
 
+### release notes
 - Wow, er is iets nieuw. Wat is dat?
-  - [Nieuwe functies](nieuwe%20functies)
+  - [Nieuwe functies](WhatsNew)
