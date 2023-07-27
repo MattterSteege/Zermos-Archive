@@ -1,7 +1,7 @@
 ---
 layout: default
 title: what's new
-nav_exclude: true
+nav_exclude: false
 ---
 
 # Release Notes - Versie 0.1.2 - 18-07-2023 🎉

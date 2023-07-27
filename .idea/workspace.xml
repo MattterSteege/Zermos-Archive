@@ -6,11 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="c3582447-ff79-4dd3-9c47-b4613b8d0576" name="Changes" comment="updated docs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infowijs.md" beforeDir="false" afterPath="$PROJECT_DIR$/Infowijs.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/School.md" beforeDir="false" afterPath="$PROJECT_DIR$/School.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Somtoday.md" beforeDir="false" afterPath="$PROJECT_DIR$/Somtoday.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WhatsNew.md" beforeDir="false" afterPath="$PROJECT_DIR$/WhatsNew.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Zermelo.md" beforeDir="false" afterPath="$PROJECT_DIR$/Zermelo.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,22 +35,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "Docs",
-    "last_opened_file_path": "C:/Users/mattt/Documents/Github/Zermos",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Docs&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/mattt/Documents/Github/Zermos&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -64,7 +61,8 @@
       <updated>1675856852870</updated>
       <workItem from="1675856857858" duration="1656000" />
       <workItem from="1678904574241" duration="23000" />
-      <workItem from="1690391206713" duration="64000" />
+      <workItem from="1690391206713" duration="450000" />
+      <workItem from="1690473705431" duration="3195000" />
     </task>
     <task id="LOCAL-00001" summary="added a test feature, redirect">
       <created>1675857654150</created>
@@ -80,7 +78,14 @@
       <option name="project" value="LOCAL" />
       <updated>1690389932531</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="updated docs">
+      <created>1690391311600</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1690391311600</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
