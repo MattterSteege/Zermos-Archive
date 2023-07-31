@@ -26,7 +26,7 @@ namespace Zermos_Web.Controllers
         
         public IActionResult Docs()
         {
-            return View();
+            return Redirect("https://zermos-docs.kronk.tech");
         }
     }
 }
