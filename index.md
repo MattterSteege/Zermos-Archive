@@ -13,6 +13,12 @@ In deze documentatie vind je alles wat je moet weten over de Zermos app.
   - [De Antonius app](Infowijs)
   - [De school zelf](School)
 
+### Account
+  - [Inloggen](Account)
+  - [Uitloggen](Account)
+
+### Problemen
+
 ### release notes
 - Wow, er is iets nieuw. Wat is dat?
   - [Nieuwe functies](WhatsNew)

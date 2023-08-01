@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Somtoday
-nav_exclude: true
+nav_exclude: false
 ---
 
 # Somtoday

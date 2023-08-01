@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Infowijs
-nav_exclude: true
+nav_exclude: false
 ---
 
 # Infowijs (De Antonius app)

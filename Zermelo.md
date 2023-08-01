@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Zermelo
-nav_exclude: true
+nav_exclude: false
 ---
 
 # Zermelo
