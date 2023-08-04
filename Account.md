@@ -5,7 +5,7 @@ nav_exclude: false
 ---
 
 # Account
-Als je ingelogd ben op Zermos, dan blijf je dat voor 2 maanden, daarna wordt je automatisch uitgelogd. Je account is ook op meerder apparaten te gebruiken, dus je kan op je telefoon en op je laptop ingelogd zijn en alle koppelingen worden automatisch gesynchroniseerd.
+Als je ingelogd bent op Zermos, dan blijf je dat voor 2 maanden, daarna word je automatisch uitgelogd. Je account is ook op meerder apparaten te gebruiken, dus je kan op je telefoon en op je laptop ingelogd zijn en alle koppelingen worden automatisch gesynchroniseerd.
 
 ## Inloggen
 Een account aanmaken voor Zermos is super makkelijker, ga naar [inloggen](https://zermos.kronk.tech/login) en vul je email in. Klik vervolgens op inloggen. Je krijgt nu een email met een link. Als je op deze link klikt, ben je ingelogd!

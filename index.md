@@ -17,7 +17,8 @@ In deze documentatie vind je alles wat je moet weten over de Zermos app.
   - [Inloggen](Account)
   - [Uitloggen](Account)
 
-### Problemen
+### Vragen
+  - [Veelgestelde vragen](FAQ)
 
 ### release notes
 - Wow, er is iets nieuw. Wat is dat?

@@ -5,12 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c3582447-ff79-4dd3-9c47-b4613b8d0576" name="Changes" comment="updated docs">
-      <change afterPath="$PROJECT_DIR$/Account.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FAQ.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infowijs.md" beforeDir="false" afterPath="$PROJECT_DIR$/Infowijs.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Account.md" beforeDir="false" afterPath="$PROJECT_DIR$/Account.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/School.md" beforeDir="false" afterPath="$PROJECT_DIR$/School.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Somtoday.md" beforeDir="false" afterPath="$PROJECT_DIR$/Somtoday.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Zermelo.md" beforeDir="false" afterPath="$PROJECT_DIR$/Zermelo.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_layouts/forward.html" beforeDir="false" afterPath="$PROJECT_DIR$/_layouts/forward.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/index.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -67,6 +68,7 @@
       <workItem from="1678904574241" duration="23000" />
       <workItem from="1690391206713" duration="450000" />
       <workItem from="1690473705431" duration="3195000" />
+      <workItem from="1691168347101" duration="2126000" />
     </task>
     <task id="LOCAL-00001" summary="added a test feature, redirect">
       <created>1675857654150</created>
