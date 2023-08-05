@@ -23,10 +23,5 @@ namespace Zermos_Web.Controllers
             ViewData["laad_tekst"] = "Bezig met laden";
             return View("_Loading");
         }
-        
-        public IActionResult Docs()
-        {
-            return Redirect("https://zermos-docs.kronk.tech");
-        }
     }
 }

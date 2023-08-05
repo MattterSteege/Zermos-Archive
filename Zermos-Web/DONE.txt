@@ -1,9 +1,7 @@
 ﻿Algemeen
-    Nice email UI
-    Je krijgt nu een mail binnen als je Zermos wilt gebruiken, dus Zermos is up and running :)
+    De oude 'Docs' pagina (https://zermos.kronk.tech/Docs) is verangen door een nieuwe pagina (https://zermos-docs.kronk.tech) met een betere UI en meer informatie
 
 Somtoday - Huiswerk
-    De UI is nu beter, het bevat nu een duidelijker overzicht van alle huiswerk types (groen = zelf toegevoegd, oranje = toets, rood = grote toets, blauw = bijlage(n) aanwezig)
     De 'huiswerk toevoegen' knop is nu zichtbaar op de navigatiebalk
     Huiswerk wordt nu voor 1 uur opgeslagen in de database, zodat het laden sneller gaat en Somtoay niet overbelast wordt
     
@@ -18,6 +16,10 @@ Koppelingen - Zermelo
     Er is nu een optie om qr-code login te gebruiken, dan hoef ik je wachtwoord niet te weten ;) Je vind je qr-code in Zermelo op https://ccg.zportal.nl/main/ > koppelingen > koppel externe applicatie
     Er is nu een optie om de koppelcode van zermelo te gebruiken, ook nu hoef ik dus je wachtwoord niet te weten. Je vind je koppelcode in Zermelo op https://ccg.zportal.nl/main/ > koppelingen > koppel externe applicatie
     De UI voor het koppelen van Zermelo is nu een stukkie mooier
+    Wachtwoord koppelen is volledig verwijderd, op de oude pagina staan nu de qr-code en koppelcode opties
     
 Koppelingen - Infowijs
     Er is nu een laad iccoontje aanwezig, zodat je weet dat er iets gebeurd
+    
+Under the hood
+    Het mail systeem is verbeterd, het is nu een stukkie sneller en werkt op meer devices
