@@ -1,5 +1,7 @@
 ﻿Algemeen
     De oude 'Docs' pagina (https://zermos.kronk.tech/Docs) is verangen door een nieuwe pagina (https://zermos-docs.kronk.tech) met een betere UI en meer informatie
+    Meerdere kleine UI verbeteringen
+    De icoontjes hebben een nieuw likje verf gekregen
 
 Somtoday - Huiswerk
     De 'huiswerk toevoegen' knop is nu zichtbaar op de navigatiebalk
@@ -11,6 +13,7 @@ Somtoday - Cijfers
 Infowijs - School nieuws
     Er is nu een 'lees meer' knop aanwezig, zodat alles wat overzichtelijker is terwijl je nog steeds alles kan lezen
     Mogelijke bijlagen worden nu onder aan het bericht weergegeven, i.p.v. halverwege
+    Er is nu een notificatie bubble rechts bovenaan het nieuws bericht, net zoals bij de cijfers
     
 Koppelingen - Zermelo
     Er is nu een optie om qr-code login te gebruiken, dan hoef ik je wachtwoord niet te weten ;) Je vind je qr-code in Zermelo op https://ccg.zportal.nl/main/ > koppelingen > koppel externe applicatie

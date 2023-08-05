@@ -1,18 +1,15 @@
 ﻿@using Zermos_Web.Utilities
+@using Microsoft.AspNetCore.Http
 @model List<IGrouping<Guid, Message>>
 
 @{
     ViewBag.Title = "title";
     int wordCount = 150;
-}
+    Context.Response.Cookies.Append("last-seen-infowijs-news", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddDays(60)});
 
-<style>
-  pre {
-    overflow-x: auto;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }
-</style>
+    DateTime lastUpdated = Context.Request.Cookies["last-seen-infowijs-news"] == null ? DateTime.MinValue : DateTime.Parse(Context.Request.Cookies["last-seen-infowijs-news"]);
+
+}
 
 <div class="message-container">
 
@@ -24,10 +21,18 @@
                 var contents = message.Where(m => m.Type == 1);
                 var attachments = message.Where(m => m.Type == 2);
             }
+            
 
             @if (title != null)
             {
                 <h2 class="title">@title.Content.ContentClass.Title</h2>
+                                                                   
+                @if (lastUpdated < title.CreatedAt.ToDateTime())
+                {
+                    <div class="news-notification">
+                        <div class="notif-dot"></div>
+                    </div>
+                }
             }
 
             <div class="contents">
@@ -68,6 +73,13 @@
             @if (title != null)
             {
                 <h2 class="title">@title.Content.ContentClass.Title</h2>
+                                                                   
+                @if (lastUpdated < title.CreatedAt.ToDateTime())
+                {
+                    <div class="news-notification">
+                        <div class="notif-dot"></div>
+                    </div>
+                }
             }
 
             <div class="contents">
@@ -113,6 +125,13 @@
                 @if (title != null)
                 {
                     <h2 class="title">@title.Content.ContentClass.Title</h2>
+                                                                       
+                    @if (lastUpdated < title.CreatedAt.ToDateTime())
+                    {
+                        <div class="news-notification">
+                            <div class="notif-dot"></div>
+                        </div>
+                    }
                 }
 
                 <div class="contents">
