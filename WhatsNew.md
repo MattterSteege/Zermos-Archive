@@ -4,12 +4,13 @@ title: what's new
 nav_exclude: false
 ---
 
-# Release Notes - Versie 0.1.3 - 05-08-2023
+# Release Notes - Versie 0.1.3 - 06-08-2023
 
 - Algemeen
     - De oude 'Docs' pagina (https://zermos.kronk.tech/Docs) is verangen door een nieuwe pagina (https://zermos-docs.kronk.tech) met een betere UI en meer informatie
     - Meerdere kleine UI verbeteringen
     - De icoontjes hebben een nieuw likje verf gekregen
+    - Het mail login systeem werkt weer, dus inloggen is weer helemaal chill ;)
 
 - Somtoday - Huiswerk
     - De 'huiswerk toevoegen' knop is nu zichtbaar op de navigatiebalk
