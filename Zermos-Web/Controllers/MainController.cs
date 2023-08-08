@@ -1,27 +1,35 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
+using Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Zermos_Web.Controllers
 {
-    [Route("[action]")]
+    //[Route("[action]")]
     public class MainController : Controller
     {
         private readonly ILogger<MainController> _logger;
+        private readonly Users _users;
 
-        public MainController(ILogger<MainController> logger)
+        public MainController(ILogger<MainController> logger, Users users)
         {
             _logger = logger;
+            _users = users;
         }
         
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            ViewData["add_css"] = "hoofdmenu";
+            return View(await _users.GetUserAsync(User.FindFirstValue("email")));
         }
 
+        #if DEBUG
         public IActionResult Laadscherm()
         {
             ViewData["laad_tekst"] = "Bezig met laden";
             return View("_Loading");
         }
+        #endif
     }
 }

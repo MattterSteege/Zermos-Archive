@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
-using MailKit.Net.Smtp;
-using MailKit.Security;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MimeKit;
-using MimeKit.Text;
+using Newtonsoft.Json;
 using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
@@ -20,39 +17,41 @@ namespace Zermos_Web.Controllers
     [Route("[action]")]
     public class AccountAuthenticationController : Controller
     {
-        private readonly IConfiguration _config;
         private readonly ILogger<AccountAuthenticationController> _logger;
         private readonly Users _users;
 
         public AccountAuthenticationController(ILogger<AccountAuthenticationController> logger, IConfiguration config, Users users)
         {
             _logger = logger;
-            _config = config;
             _users = users;
         }
-
+        
+        #if DEBUG
         [HttpGet]
         public IActionResult test(int code = 13)
         {
             ViewData["add_css"] = "account";
             return View("Login", new Tuple<string, int>("test123@gmail.com", code));
         }
+        #endif
+        
         
         [HttpGet]
-        public IActionResult Login(string ReturnUrl = "")
+        public IActionResult Login(string returnUrl = "")
         {
             ViewData["add_css"] = "account";
-            ViewData["returnUrl"] = ReturnUrl;
+            ViewData["returnUrl"] = returnUrl;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string email = null, string ReturnUrl = "")
+        public async Task<IActionResult> Login(string email = null, string returnUrl = "")
         {
             ViewData["add_css"] = "account";
             var user = await _users.GetUserAsync(email);
-            MimeMessage mimeMessage;
-            SmtpClient smtp;
+            
+            Response.Cookies.Append("try_login", "true");
+            
             if (user == null || user.IsVerified == false)
             {
                 var newUser = new user
@@ -65,15 +64,7 @@ namespace Zermos_Web.Controllers
 
                 await _users.AddUserAsync(newUser);
                 
-                // StringBuilder sb = new StringBuilder();
-                // sb.Append("<!DOCTYPE html><html lang=\"en\"><head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" charset=\"UTF-8\"/> <title>Zermos</title> <link href=\"https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700\" rel=\"stylesheet\"/> <script src=\"https://kit.fontawesome.com/052f5fa8f8.js\" crossorigin=\"anonymous\"></script> <style>body{background: #f8f9fa;}.middle{width: 100%; background-color: #ffffff; display: flex; flex-direction: column;}.zermos{font-family: 'Open Sans', sans-serif; font-weight: bold; font-size: 3rem; color: #344767; width: calc(100% - 2rem); text-align: center; margin: 0; padding: 1rem;}.content{font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 1rem; color: #344767; width: calc(100% - 2rem); text-align: center; margin: 0; padding: 1rem;}.valid-time{font-family: 'Open Sans', sans-serif; font-weight: 200; font-size: 0.8rem; color: #344767; width: 100%; text-align: center; margin: 0; padding-bottom: 1rem;}.verify-button{font-family: 'Open Sans', sans-serif; font-weight: 600; font-size: 1.5rem; color: #ffffff; width: 50%; height: auto; background-color: #344767; border-radius: 14px; padding: 1rem; margin: 1rem 25%; border: none; cursor: pointer; text-align: center;}</style></head><body><div class=\"middle\"><h1 class=\"zermos\">Zermos</h1> <p class=\"content\">Je hebt zojuist een account aangemaakt bij <strong>Zermos</strong>. Daarom is er een e-mail verzonden om te verifiëren dat je daadwerkelijk een account wilt aanmaken.</p><p class=\"content\">Bevestig je e-mailadres door op de onderstaande knop te klikken. Deze stap voegt extra beveiliging toe aan je account door te verifiëren dat jij de eigenaar bent van dit e-mailadres.</p><a class=\"verify-button\" onclick=\"window.location.href='");
-                // sb.Append($"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountCreation?token={newUser.VerificationToken}&email={newUser.email}{(ReturnUrl == "" ? "" : "&returnUrl=" + ReturnUrl)}");
-                // sb.Append("'\">Log nu in!</a> <p class=\"valid-time\">P.S. deze link is 10 minuten geldig.</p></div></body></html>");
-                //
-                //
-                // string html = sb.ToString();
-                
-                bool success = await MailgunService.SendEmail(email, "Zermos - Bevestig je e-mailadres", "bevestig je e-mailadres", "{\"login-url\": \"" + Request.Scheme + "://" + Request.Host + Request.PathBase + "/VerifyAccountCreation?token=" + newUser.VerificationToken + "&email=" + newUser.email + (ReturnUrl == "" ? "" : "&returnUrl=" + ReturnUrl) + "\"}}");
+                await MailgunService.SendEmail(email, "Zermos - Bevestig je e-mailadres", $"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountCreation?token={newUser.VerificationToken}&email={newUser.email}{(returnUrl == "" ? "" : "&returnUrl=" + returnUrl)}", true);
 
                 return View(new Tuple<string, int>(email, 12));
             }
@@ -83,36 +74,22 @@ namespace Zermos_Web.Controllers
             user.CreatedAt = DateTime.Now;
             await _users.UpdateUserAsync(email, user);
             
-            // StringBuilder sb2 = new StringBuilder();
-            // sb2.Append("<!DOCTYPE html><html lang=\"en\"><head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" charset=\"UTF-8\"/> <title>Zermos</title> <link href=\"https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700\" rel=\"stylesheet\"/> <script src=\"https://kit.fontawesome.com/052f5fa8f8.js\" crossorigin=\"anonymous\"></script> <style>body{background: #f8f9fa;}.middle{ width: 100%; background-color: #ffffff; display: flex; flex-direction: column;}.zermos{font-family: 'Open Sans', sans-serif; font-weight: bold; font-size: 3rem; color: #344767; width: calc(100% - 2rem); text-align: center; margin: 0; padding: 1rem;}.content{font-family: 'Open Sans', sans-serif; font-weight: 300; font-size: 1rem; color: #344767; width: calc(100% - 2rem); text-align: center; margin: 0; padding: 1rem;}.valid-time{font-family: 'Open Sans', sans-serif; font-weight: 400; font-size: 1rem; color: #344767; width: 100%; text-align: center; margin: 0;}.verify-button{font-family: 'Open Sans', sans-serif; font-weight: 600; font-size: 1.5rem; color: #ffffff; width: 50%; height: auto; background-color: #344767; border-radius: 14px; padding: 1rem; margin: 1rem 25%; border: none; cursor: pointer; text-decoration: none; text-align: center;}.verify-button:hover{background-color: #2c3e50;}.verify-button:active{background-color: #344767;}.valid-time{font-family: 'Open Sans', sans-serif; font-weight: 200; font-size: 0.8rem; color: #344767; width: 100%; text-align: center; margin: 0; padding-bottom: 1rem;}</style></head><body><div class=\"middle\"> <h1 class=\"zermos\">Zermos</h1> <p class=\"content\">Je hebt zojuist een inlog e-mail aangevraagd om in te loggen bij <strong>Zermos</strong>. Daarom is er een e-mail verzonden om te verifiëren dat je daadwerkelijk een wilt inloggen.</p><a href='");
-            // sb2.Append($"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountLogin?token={user.VerificationToken}&email={user.email}{(ReturnUrl == "" ? "" : "&returnUrl=" + ReturnUrl)}");
-            // sb2.Append("\" class=\"verify-button\">Log nu in!</a> <p class=\"valid-time\">P.S. deze link is 10 minuten geldig.</p></div></body></html>");
-            //
-            // mimeMessage = new MimeMessage();
-            // mimeMessage.From.Add(MailboxAddress.Parse(_config.GetSection("Email:EmailUsername").Value));
-            // mimeMessage.To.Add(MailboxAddress.Parse(email));
-            // mimeMessage.Subject = "Test Email Subject";
-            // mimeMessage.Body = new TextPart(TextFormat.Html)
-            // {
-            //     Text = sb2.ToString()
-            // };
-            //
-            // // send email
-            // smtp = new SmtpClient();
-            // await smtp.ConnectAsync(_config.GetSection("Email:EmailHost").Value, 587, SecureSocketOptions.StartTls);
-            // await smtp.AuthenticateAsync(_config.GetSection("Email:EmailUsername").Value,
-            //     _config.GetSection("Email:EmailPassword").Value);
-            // await smtp.SendAsync(mimeMessage);
-            // await smtp.DisconnectAsync(true);
-            
-            bool success2 = await MailgunService.SendEmail(email, "Zermos - Bevestig je e-mailadres", "log nu in", "{\"login-url\": \"" + Request.Scheme + "://" + Request.Host + Request.PathBase + "/VerifyAccountLogin?token=" + user.VerificationToken + "&email=" + user.email + (ReturnUrl == "" ? "" : "&returnUrl=" + ReturnUrl) + "\"}}");
-            
+            await MailgunService.SendEmail(email, "Zermos - Bevestig je e-mailadres", $"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountLogin?token={user.VerificationToken}&email={user.email}{(returnUrl == "" ? "" : "&returnUrl=" + returnUrl)}", true);
+
             return View(new Tuple<string, int>(email, 11));
         }
 
         [HttpGet]
         public async Task<IActionResult> VerifyAccountCreation(string token, string email, string ReturnUrl = "")
         {
+            if (Request.Cookies.Count == 0)
+            {
+                return VerificationFailed(5);
+            }
+            
+            //remove cookie "try_login"
+            Response.Cookies.Delete("try_login");
+            
             var user = await _users.GetUserAsync(email.ToLower());
             if (user == null) return VerificationFailed(1); //user not found
 
@@ -135,6 +112,16 @@ namespace Zermos_Web.Controllers
         [HttpGet]
         public async Task<IActionResult> VerifyAccountLogin(string token, string email, string returnUrl)
         {
+            if (Request.Cookies.Count == 0)
+            {
+                return VerificationFailed(5);
+            }
+            
+            //remove cookie "try_login"
+            Response.Cookies.Delete("try_login");
+            
+            _logger.LogInformation("User {email} is trying to to log in", email);
+
             var user = await _users.GetUserAsync(email.ToLower());
             if (user == null) return VerificationFailed(1); //user not found
 
@@ -156,8 +143,8 @@ namespace Zermos_Web.Controllers
             ViewData["add_css"] = "account";
             var claims = new List<Claim>
             {
-                new Claim("email", email),
-                new Claim("role", "user"),
+                new("email", email),
+                new("role", "user"),
             };
             
             var user = await _users.GetUserAsync(email);
@@ -166,6 +153,8 @@ namespace Zermos_Web.Controllers
 
             await HttpContext.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "user", "role")));
 
+            _logger.LogInformation("User {email} logged in", email);
+            
             if (string.IsNullOrEmpty(ReturnUrl))
             {
                 return View("Login", new Tuple<string, int>(email, 13));
@@ -179,17 +168,23 @@ namespace Zermos_Web.Controllers
         private IActionResult VerificationFailed(int code)
         {
             ViewData["add_css"] = "account";
+
             switch (code)
             {
                 case 1:
+                    _logger.LogWarning("Verification failed with code {code} (User not found in database)", 21);
                     return View("Login", new Tuple<string, int>(null, 21));
                 case 2:
+                    _logger.LogWarning("Verification failed with code {code} (Token expired)", 22);
                     return View("Login", new Tuple<string, int>(null, 22));
                 case 3:
+                    _logger.LogWarning("Verification failed with code {code} (Token incorrect)", 23);
                     return View("Login", new Tuple<string, int>(null, 23));
                 case 4:
+                    _logger.LogWarning("Verification failed with code {code} (User already verified)", 24);
                     return View("Login", new Tuple<string, int>(null, 24));
                 default:
+                    _logger.LogWarning("Verification failed with code {code} (Unknown error)", 4);
                     return View("Login", new Tuple<string, int>(null, 4));
             }
         }

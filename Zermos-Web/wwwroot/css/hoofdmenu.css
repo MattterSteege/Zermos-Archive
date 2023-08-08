@@ -35,14 +35,14 @@
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
-.info .heading {
+.information .heading {
     height: 40%;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-color);
 }
 
-.info {
+.information {
     height: 100%;
     width: 66.66%;
     display: flex;

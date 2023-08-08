@@ -28,6 +28,7 @@ namespace Infrastructure.Entities
         public string cached_infowijs_calendar { get; set; }
         public string cached_infowijs_news { get; set; }
         public string cached_school_informationscreen { get; set; }
+        //public string cached_zermelo_schedule { get; set; }
 
         //auth related
         public string VerificationToken { get; set; }

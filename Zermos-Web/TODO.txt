@@ -3,9 +3,10 @@ TODO: (later, when feasible) Add an API system that allows users to create an ap
 TODO: find a way to find what the since paramater means in messages from infowijs
 TODO: een linkje naar de school documenten maken; ""
 TODO: add a way to shorten an url for sharing (like bit.ly)
-TODO: Last read for school news
+TODO: Main page dashboard, only use chached data from the database (so no api calls)
 TODO: Infowijs email authentication
 TODO: Make functioning PWA (with auth, since you can't open a PWA with a normal link, you need to add web+zermos://auth?token= to the manifest and try to redirect to the app)
+TODO: Be able to change the schedule week
 
 TODO: UI for: [Zermelo], [Somtoday], School, [Infowijs], koppelingen ([Infowijs], [Zermelo], Somtoday)
 
