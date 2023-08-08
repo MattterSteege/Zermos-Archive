@@ -18,17 +18,22 @@ namespace Zermos_Web.Controllers
             _users = users;
         }
         
+        #if DEBUG
         public async Task<IActionResult> Index()
         {
             ViewData["add_css"] = "hoofdmenu";
             return View(await _users.GetUserAsync(User.FindFirstValue("email")));
         }
 
-        #if DEBUG
         public IActionResult Laadscherm()
         {
             ViewData["laad_tekst"] = "Bezig met laden";
             return View("_Loading");
+        }
+        #elif RELEASE
+        public async Task<IActionResult> Index()
+        {
+            return RedirectToAction("Rooster", "Zermelo");
         }
         #endif
     }

@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zermos_Web.Models;
-using Zermos_Web.Models.zermelo;
 using Zermos_Web.Models.zermeloUserModel;
 using Zermos_Web.Utilities;
 
@@ -115,21 +114,6 @@ namespace Zermos_Web.Controllers
         #endregion
 
         #region infowijs
-
-        // NEW INFOWIJS KOPPELING:
-        //     1. POST https://api.infowijs.nl/sessions/transfer/
-        //         returns:{ "data": "[uuid]" }
-        //     2. GET https://api.infowijs.nl/sessions/transfer/[uuid]
-        //         returns: { "data": "JWT" } of { "errors": [{ "status": 1300,"title": "There is no Session Transfer Request found" }] }
-
-        // [HttpGet]
-        // public IActionResult Infowijs()
-        // {
-        //     ViewData["add_css"] = "koppelingen";
-        //
-        //     return View();
-        // }
-
         [HttpGet]
         [Route("Koppelingen/Infowijs/Qr")]
         public async Task<IActionResult> InfowijsQr(string uuid, bool retry = false)
@@ -442,6 +426,57 @@ namespace Zermos_Web.Controllers
             return code;
         }
 
+        #endregion
+        
+        #region Teams
+        public IActionResult Teams()
+        {
+#if DEBUG
+            string redirectUrl = "https://localhost:5001/Koppelingen/Teams/Callback";
+#elif RELEASE
+            string redirectUrl = "https://zermos.kronk.tech/Koppelingen/Teams/Callback";
+#endif
+            redirectUrl = "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=REDACTED_MS_CLIENT_ID&response_type=code&redirect_uri=" + redirectUrl + "&response_mode=query&scope=User.Read&state=" + TokenUtils.RandomString();
+
+            return Redirect(redirectUrl);
+        }
+        
+        [Route("/Koppelingen/Teams/Callback")]
+        public async Task<IActionResult> TeamsCallback(string code, string state, string session_state)
+        {
+#if DEBUG
+            string redirectUrl = "https://localhost:5001/Koppelingen/Teams/Callback";
+#elif RELEASE
+            string redirectUrl = "https://zermos.kronk.tech/Koppelingen/Teams/Callback";
+#endif
+            
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://login.microsoftonline.com/organizations/oauth2/v2.0/token");
+            var collection = new List<KeyValuePair<string, string>>();
+            collection.Add(new("client_id", "REDACTED_MS_CLIENT_ID"));
+            collection.Add(new("scope", "User.Read"));
+            //collection.Add(new("scope", "User.Read EduAssignments.Read"));
+            collection.Add(new("code", code));
+            collection.Add(new("redirect_uri", redirectUrl));
+            collection.Add(new("grant_type", "authorization_code"));
+            collection.Add(new("client_secret", "lcV8Q~GbQjBv45fivMgN3ARP~UHPNSuV259gQcU7"));
+            var content = new FormUrlEncodedContent(collection);
+            request.Content = content;
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            string responseString = await response.Content.ReadAsStringAsync();
+            
+            TeamsAuthenticationModel auth = JsonConvert.DeserializeObject<TeamsAuthenticationModel>(responseString);
+
+            request = new HttpRequestMessage(HttpMethod.Get, "https://graph.microsoft.com/v1.0/me");
+            request.Headers.Add("Accept", "application/json");
+            request.Headers.Add("Authorization", "Bearer " + auth.access_token);
+            
+            response = await client.SendAsync(request);
+            
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
         #endregion
     }
 }

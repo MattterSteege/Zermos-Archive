@@ -58,6 +58,8 @@ namespace Zermos_Web.Utilities
 
             return snapshots;
         }
+        
+        
 
         public static IList<double?> CalculateStandardDeviationSnapshots(float[] grades, int[] weights)
         {

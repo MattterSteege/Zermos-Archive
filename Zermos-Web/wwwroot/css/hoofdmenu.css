@@ -71,15 +71,7 @@
     border-radius: 8px;
 }
 
-.negative {
-    color: var(--confirm-color) !important;
-}
-
-.positive {
-    color: var(--deny-color) !important;
-}
-
-.grade-change {
+.grade-weight {
     height: 100%;
     font-weight: 700;
     font-size: 14px;

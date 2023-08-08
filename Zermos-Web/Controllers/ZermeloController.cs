@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Infrastructure;
+using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -51,11 +52,21 @@ namespace Zermos_Web.Controllers
             var response = await httpClient.GetAsync(baseURL);
             
             if (response.IsSuccessStatusCode == false)
-            {
+            {   
+                if (week == DateTime.Now.GetWeekNumber().ToString() && year == DateTime.Now.Year.ToString())
+                {
+                    await _users.UpdateUserAsync(User.FindFirstValue("email"), new user {cached_zermelo_schedule = "{\"response\":{\"data\":[{\"Items\":[{\"appointments\":[]}]}]}}"});
+                }
+                
                 HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je rooster kon niet worden geladen, waarschijnlijk is je Zermelo token verlopen", NotificationCenter.NotificationType.ERROR);
                 return View(new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>()}}}});
             }
 
+            if (week == DateTime.Now.GetWeekNumber().ToString() && year == DateTime.Now.Year.ToString())
+            {
+                await _users.UpdateUserAsync(User.FindFirstValue("email"), new user {cached_zermelo_schedule = await response.Content.ReadAsStringAsync()});
+            }
+            
             return View(JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync()));
         }
     }

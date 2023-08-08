@@ -7,7 +7,7 @@ TODO: Main page dashboard, only use chached data from the database (so no api ca
 TODO: Infowijs email authentication
 TODO: Make functioning PWA (with auth, since you can't open a PWA with a normal link, you need to add web+zermos://auth?token= to the manifest and try to redirect to the app)
 TODO: Be able to change the schedule week
-
+TODO: Somtoday grades get the grade change a new grade made using: NumberUtils.CalculateWeightedAverageSnapshots()[^1] / NumberUtils.CalculateWeightedAverageSnapshots()[^2] * 100
 TODO: UI for: [Zermelo], [Somtoday], School, [Infowijs], koppelingen ([Infowijs], [Zermelo], Somtoday)
 
 

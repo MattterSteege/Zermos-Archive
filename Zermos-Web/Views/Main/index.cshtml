@@ -1,78 +1,87 @@
-﻿@* @using Zermos_Web.Models.zermelo *@
-@* @using Newtonsoft.Json *@
-@* @model Infrastructure.Entities.user *@
-@* *@
-@* *@
-@* @{ *@
-@*     ViewBag.Title = "title"; *@
-@*     Layout = "_Layout"; *@
-@* *@
-@*     Appointment zermelo_NextLesson = null; *@
-@*      *@
-@*     if (Model != null) *@
-@*     { *@
-@*         if (!string.IsNullOrEmpty(Model.cached_zermelo_schedule)) *@
-@*         { *@
-@*             zermelo_NextLesson = JsonConvert.DeserializeObject<ZermeloRoosterModel>(Model.cached_zermelo_schedule).response.data[0].appointments.Where(x => x.start.ToDateTime() > DateTime.Now).MinBy(x => x.start); *@
-@*         } *@
-@*     } *@
-@* } *@
-@* *@
-@* *@
-@* <div class="main-container"> *@
-@* *@
-@*     <div class="row-1"> *@
-@*      *@
-@*         <div class="child next-lesson"> *@
-@*             <div class="information"> *@
-@*                 <h1 class="heading">Volgende les</h1> *@
-@*                 <div class="lesson-info"> *@
-@*                     <p class="lesson-subject">@zermelo_NextLesson.subjects[0]</p> *@
-@*                     <p class="lesson-teacher">@zermelo_NextLesson.teachers[0]</p> *@
-@*                     <p class="lesson-location">@zermelo_NextLesson.locations[0]</p> *@
-@*                 </div> *@
-@*             </div> *@
-@*             <div class="icon"> *@
-@*                 <i class="fa-solid fa-calendar fa-fw card-icon active"></i> *@
-@*             </div> *@
-@*         </div> *@
-@*      *@
-@*         <div class="child last-grade"> *@
-@*             <div class="information"> *@
-@*                 <h1 class="heading">Laatste cijfer</h1> *@
-@*                 <div class="grade-info"> *@
-@*                     <p class="grade-subject">Wiskunde:</p> *@
-@*                     <p class="grade-number">8.5</p> *@
-@*                     <p class="grade-change negative">-3%</p> *@
-@*                 </div> *@
-@*             </div> *@
-@*             <div class="icon"> *@
-@*                 <i class="fa-solid fa-line-chart fa-fw card-icon active"></i> *@
-@*             </div> *@
-@*         </div> *@
-@*      *@
-@*         <div class="child homework"> *@
-@*             <div class="information"> *@
-@*                 <h1 class="heading">Laatste cijfer</h1> *@
-@*                 <div class="grade-info"> *@
-@*                     <p class="grade-subject">Wiskunde:</p> *@
-@*                     <p class="grade-number">8.5</p> *@
-@*                     <p class="grade-change negative">-3%</p> *@
-@*                 </div> *@
-@*             </div> *@
-@*             <div class="icon"> *@
-@*                 <i class="fa-solid fa-line-chart fa-fw card-icon active"></i> *@
-@*             </div> *@
-@*         </div> *@
-@*      *@
-@*     </div> *@
-@*      *@
-@*     <div class="row-2"> *@
-@*         <div class="child"> *@
-@*      *@
-@*         </div> *@
-@*         <div class="child"> *@
-@*      *@
-@*         </div> *@
-@*     </div> *@
-@* </div> *@
+﻿@using Zermos_Web.Models.zermelo
+@using Newtonsoft.Json
+@using Zermos_Web.Models.SomtodayGradesModel
+@model Infrastructure.Entities.user
+
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+
+    Appointment zermelo_NextLesson = null;
+    Zermos_Web.Models.SomtodayGradesModel.Item somtoday_LastGrade = null;
+
+    if (Model != null)
+    {
+        if (!string.IsNullOrEmpty(Model.cached_zermelo_schedule))
+        {
+            var a = JsonConvert.DeserializeObject<ZermeloRoosterModel>(Model.cached_zermelo_schedule);
+            zermelo_NextLesson = a.response.data[0].appointments?.Where(x => x.start.ToDateTime() > DateTime.Now).MinBy(x => x.start);
+        }
+
+        if (!string.IsNullOrEmpty(Model.cached_somtoday_grades))
+        {
+            var a = JsonConvert.DeserializeObject<SomtodayGradesModel>(Model.cached_somtoday_grades);
+            somtoday_LastGrade = a.items[0];
+        }
+    }
+}
+
+
+<div class="main-container">
+
+    <div class="row-1">
+
+        <div class="child next-lesson">
+            <div class="information">
+                <h1 class="heading">Volgende les</h1>
+                <div class="lesson-info">
+                    <p class="lesson-subject">@zermelo_NextLesson?.subjects[0]</p>
+                    <p class="lesson-teacher">@zermelo_NextLesson?.teachers[0]</p>
+                    <p class="lesson-location">@zermelo_NextLesson?.locations[0]</p>
+                </div>
+            </div>
+            <div class="icon">
+                <i class="fa-solid fa-calendar fa-fw card-icon active"></i>
+            </div>
+        </div>
+
+        <div class="child last-grade">
+            <div class="information">
+                <h1 class="heading">Laatste cijfer</h1>
+                <div class="grade-info">
+                    <p class="grade-subject">@somtoday_LastGrade?.vak.naam:</p>
+                    <p class="grade-number">@somtoday_LastGrade?.geldendResultaat</p>
+                    <p class="grade-number">@(somtoday_LastGrade?.weging == 0 ? somtoday_LastGrade.examenWeging : 0)x</p>
+                </div>
+            </div>
+            <div class="icon">
+                <i class="fa-solid fa-line-chart fa-fw card-icon active"></i>
+            </div>
+        </div>
+
+        <div class="child homework">
+            <div class="information">
+                <h1 class="heading">Laatste cijfer</h1>
+                <div class="grade-info">
+                    <p class="grade-subject">Wiskunde:</p>
+                    <p class="grade-number">8.5</p>
+                    <p class="grade-change negative">-3%</p>
+                </div>
+            </div>
+            <div class="icon">
+                <i class="fa-solid fa-line-chart fa-fw card-icon active"></i>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row-2">
+        <div class="child">
+
+        </div>
+        <div class="child">
+
+        </div>
+    </div>
+</div>
