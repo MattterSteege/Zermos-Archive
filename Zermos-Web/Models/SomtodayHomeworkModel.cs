@@ -24,7 +24,7 @@ namespace Zermos_Web.Models.somtodayHomeworkModel
         public Vak vak { get; set; }
     }
 
-    public class somtodayHomeworkModel
+    public class SomtodayHomeworkModel
     {
         public List<Item> items { get; set; }
     }
@@ -58,7 +58,7 @@ namespace Zermos_Web.Models.somtodayHomeworkModel
         public string fileUrl { get; set; }
     }
     
-//     public class somtodayHomeworkModel
+//     public class SomtodayHomeworkModel
 //     {
 //         public List<Item> items { get; set; }
 //     }

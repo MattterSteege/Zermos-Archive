@@ -25,7 +25,7 @@
 
             @if (title != null)
             {
-                <h2 class="title">@title.Content.ContentClass.Title</h2>
+                <h2 class="title">@title.Content.ContentClass?.Title</h2>
                                                                    
                 @if (lastUpdated < title.CreatedAt.ToDateTime())
                 {
@@ -53,8 +53,11 @@
                 }
             </div>
 
-            <div class="attachments">
-                @foreach (var attachment in attachments)
+            @{
+                IEnumerable<Message> messages1 = attachments as Message[] ?? attachments.ToArray();
+            }
+            <div class="attachments" style="padding: @(messages1.Any() ? "16px" : "0");">
+                @foreach (var attachment in messages1)
                 {
                     <div class="attachments">
                         <p onclick="window.open('@attachment.Content.ContentClass.Url');" class="attachment">@(attachment.Content.ContentClass.Name + System.IO.Path.GetExtension(attachment.Content.ContentClass.Url.AbsolutePath))</p>
@@ -72,7 +75,7 @@
 
             @if (title != null)
             {
-                <h2 class="title">@title.Content.ContentClass.Title</h2>
+                <h2 class="title">@title.Content.ContentClass?.Title</h2>
                                                                    
                 @if (lastUpdated < title.CreatedAt.ToDateTime())
                 {
@@ -100,8 +103,12 @@
                 }
             </div>
 
-            <div class="attachments">
-                @foreach (var attachment in attachments)
+
+            @{
+                IEnumerable<Message> messages2 = attachments as Message[] ?? attachments.ToArray();
+            }
+            <div class="attachments" style="padding: @(messages2.Any() ? "16px" : "0");">
+                @foreach (var attachment in messages2)
                 {
                     <div class="attachment" target="_blank">
                         <p onclick="window.open('@attachment.Content.ContentClass.Url');" class="attachment">@(attachment.Content.ContentClass.Name + System.IO.Path.GetExtension(attachment.Content.ContentClass.Url.AbsolutePath))</p>
@@ -124,7 +131,7 @@
 
                 @if (title != null)
                 {
-                    <h2 class="title">@title.Content.ContentClass.Title</h2>
+                    <h2 class="title">@title.Content.ContentClass?.Title</h2>
                                                                        
                     @if (lastUpdated < title.CreatedAt.ToDateTime())
                     {
@@ -153,8 +160,11 @@
                     }
                 </div>
 
-                <div class="attachments">
-                    @foreach (var attachment in attachments)
+            @{
+                IEnumerable<Message> messages3 = attachments as Message[] ?? attachments.ToArray();
+            }
+            <div class="attachments" style="padding: @(messages3.Any() ? "16px" : "0");">
+                    @foreach (var attachment in messages3)
                     {
                         <div class="attachments">
                             <p onclick="window.open('@attachment.Content.ContentClass.Url');" class="attachment">@(attachment.Content.ContentClass.Name + System.IO.Path.GetExtension(attachment.Content.ContentClass.Url.AbsolutePath))</p>

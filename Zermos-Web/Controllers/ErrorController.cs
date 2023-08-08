@@ -5,6 +5,7 @@ using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
+    [Route("[action]")]
     public class ErrorController : Controller
     {
         private readonly ILogger<ErrorController> _logger;
@@ -20,12 +21,13 @@ namespace Zermos_Web.Controllers
             return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
         
-        [HttpGet("/error/404")]
+        [HttpGet("/404")]
         public IActionResult FourZeroFour()
         {
             return View("404");
         }
         
+        [HttpGet("/NotImplemented")]
         public IActionResult NotImplemented()
         {
             return View();

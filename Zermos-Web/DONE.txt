@@ -1,1 +1,5 @@
-﻿
+﻿0.1.4 - The small update...
+
+Infowijs
+    Caching is nu ook doorgevoerd in de 'infowijs' pagina's, dat bezorgt jouw weer een snellere laadtijd!
+    Verschillende UI verbeteringen

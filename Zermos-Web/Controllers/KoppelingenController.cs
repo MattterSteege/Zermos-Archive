@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zermos_Web.Models;
+using Zermos_Web.Models.Requirements;
 using Zermos_Web.Models.zermeloUserModel;
 using Zermos_Web.Utilities;
 
@@ -429,6 +430,7 @@ namespace Zermos_Web.Controllers
         #endregion
         
         #region Teams
+        [NotImplementedYet]
         public IActionResult Teams()
         {
 #if DEBUG
@@ -436,11 +438,12 @@ namespace Zermos_Web.Controllers
 #elif RELEASE
             string redirectUrl = "https://zermos.kronk.tech/Koppelingen/Teams/Callback";
 #endif
-            redirectUrl = "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=REDACTED_MS_CLIENT_ID&response_type=code&redirect_uri=" + redirectUrl + "&response_mode=query&scope=User.Read&state=" + TokenUtils.RandomString();
+            redirectUrl = "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=REDACTED_MS_CLIENT_ID&response_type=code&redirect_uri=" + redirectUrl + "&response_mode=query&scope=User.Read offline_access&state=" + TokenUtils.RandomString();
 
             return Redirect(redirectUrl);
         }
         
+        [NotImplementedYet]
         [Route("/Koppelingen/Teams/Callback")]
         public async Task<IActionResult> TeamsCallback(string code, string state, string session_state)
         {
@@ -475,7 +478,9 @@ namespace Zermos_Web.Controllers
             
             response = await client.SendAsync(request);
             
-            return Ok(await response.Content.ReadAsStringAsync());
+            TeamsUserModel user = JsonConvert.DeserializeObject<TeamsUserModel>(await response.Content.ReadAsStringAsync());
+            
+            return Ok(user);
         }
         #endregion
     }

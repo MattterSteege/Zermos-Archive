@@ -7,4 +7,5 @@ public class TeamsAuthenticationModel
     public int expires_in { get; set; }
     public int ext_expires_in { get; set; }
     public string access_token { get; set; }
+    public string refresh_token { get; set; }
 }

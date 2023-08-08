@@ -1,8 +1,12 @@
 ﻿using System.Security.Claims;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Zermos_Web.Models.Requirements;
 
 namespace Zermos_Web.Controllers
 {
@@ -19,6 +23,7 @@ namespace Zermos_Web.Controllers
         }
         
         #if DEBUG
+        [AddLoadingScreen("hoofdmenu laden...")]
         public async Task<IActionResult> Index()
         {
             ViewData["add_css"] = "hoofdmenu";
@@ -36,5 +41,20 @@ namespace Zermos_Web.Controllers
             return RedirectToAction("Rooster", "Zermelo");
         }
         #endif
+        
+        [Route(".well-known/microsoft-identity-association.json")]
+        public IActionResult MicrosoftIdentityAssociation()
+        {
+            return Json(new
+            {
+                associatedApplications = new[]
+                {
+                    new
+                    {
+                        applicationId = "REDACTED_MS_CLIENT_ID"
+                    }
+                }
+            }, new JsonSerializerOptions {WriteIndented = true });
+        }
     }
 }

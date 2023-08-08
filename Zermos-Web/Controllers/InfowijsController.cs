@@ -6,7 +6,9 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Infrastructure;
+using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -41,9 +43,15 @@ namespace Zermos_Web.Controllers
         [Authorize]
         [InfowijsRequirement]
         [AddLoadingScreen("De laatste nieuwtjes worden geladen")]
-        public IActionResult SchoolNieuws()
+        public async Task<IActionResult> SchoolNieuws()
         {
             ViewData["add_css"] = "infowijs";
+            
+            if (Request.Cookies.ContainsKey("cached-infowijs-news"))
+            {
+                return View(JsonConvert.DeserializeObject<InfowijsMessagesModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_infowijs_news ?? string.Empty, Converter.Settings).Data.Messages
+                    .Where(x => x.Type != 12).Reverse().GroupBy(x => x.GroupId).ToList());
+            }
 
             //GET https://antonius.hoyapp.nl/hoy/v3/messages?include_archived=0&since=4000000
             _httpClient.DefaultRequestHeaders.Authorization =
@@ -64,10 +72,17 @@ namespace Zermos_Web.Controllers
 
             //remove all messages that have type 12, then reverse the list so that the newest messages are on top, then group all the messages by groupid
             var infowijsMessage = JsonConvert
-                .DeserializeObject<InfowijsMessagesModel>(response.Content.ReadAsStringAsync().Result,
+                .DeserializeObject<InfowijsMessagesModel>(await response.Content.ReadAsStringAsync(),
                     Converter.Settings).Data.Messages
                 .Where(x => x.Type != 12).Reverse().GroupBy(x => x.GroupId).ToList();
 
+            await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+            {
+                cached_infowijs_news = await response.Content.ReadAsStringAsync()
+            });
+            
+            Response.Cookies.Append("cached-infowijs-news", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
+            
             return View(infowijsMessage);
         }
 
@@ -79,17 +94,9 @@ namespace Zermos_Web.Controllers
         {
             ViewData["add_css"] = "infowijs";
             
-            if (System.IO.File.Exists("infowijs_kalender.json"))
+            if (Request.Cookies.ContainsKey("cached-infowijs-calendar"))
             {
-                var lastModified = System.IO.File.GetLastWriteTime("infowijs_kalender.json");
-                // if last modified was in 0:00 - 11:59, and it is 13.00, then update the file.
-                // if last modified was in 12:00 - 23:59, and it is 00.00, then update the file.
-                if ((lastModified.Hour < 12 && DateTime.Now.Hour >= 13) || (lastModified.Hour >= 12 && DateTime.Now.Hour <= 24))
-                {
-                    return View(JsonConvert
-                        .DeserializeObject<InfowijsEventsModel>(await System.IO.File.ReadAllTextAsync("infowijs_kalender.json"),
-                            Converter.Settings).data);
-                }
+                return View(JsonConvert.DeserializeObject<InfowijsEventsModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_infowijs_calendar ?? string.Empty, Converter.Settings).data);
             }
 
             //https://antonius.hoyapp.nl/hoy/v1/events
@@ -98,9 +105,13 @@ namespace Zermos_Web.Controllers
 
             var response = await _httpClient.GetAsync("https://antonius.hoyapp.nl/hoy/v1/events");
             
-            //cache the output for 1 day in a json file
-            await System.IO.File.WriteAllTextAsync("infowijs_kalender.json", await response.Content.ReadAsStringAsync());
+            await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+            {
+                cached_infowijs_calendar = await response.Content.ReadAsStringAsync()
+            });
             
+            Response.Cookies.Append("cached-infowijs-calendar", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddDays(1)});
+
             return View(JsonConvert
                 .DeserializeObject<InfowijsEventsModel>(await response.Content.ReadAsStringAsync(),
                     Converter.Settings).data);

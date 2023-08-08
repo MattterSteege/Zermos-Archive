@@ -2,7 +2,7 @@
 
 namespace Zermos_Web.Models
 {
-    public class customHuiswerkModel
+    public class CustomHuiswerkModel
     {
         public string titel;
         public string omschrijving;
@@ -10,7 +10,7 @@ namespace Zermos_Web.Models
         public bool gemaakt;
         public int id;
         
-        public customHuiswerkModel(string titel, string omschrijving, DateTime deadline, bool gemaakt, int id = -1)
+        public CustomHuiswerkModel(string titel, string omschrijving, DateTime deadline, bool gemaakt, int id = -1)
         {
             this.titel = titel;
             this.omschrijving = omschrijving;

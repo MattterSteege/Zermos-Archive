@@ -455,7 +455,7 @@ namespace Zermos_Web.Controllers
             if (Request.Cookies.ContainsKey("cached-somtoday-homework") && recache == false)
             {
                 string cache = (await _users.GetUserAsync(User.FindFirstValue("email"))).cached_somtoday_homework;
-                var homework = JsonConvert.DeserializeObject<somtodayHomeworkModel>(cache);
+                var homework = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(cache);
                 return View(homework);
             }
 
@@ -486,11 +486,11 @@ namespace Zermos_Web.Controllers
             if (response.IsSuccessStatusCode == false)
             {
                 HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je Huiswerk op Somtoday kon niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", NotificationCenter.NotificationType.ERROR);
-                return View(Sort(new somtodayHomeworkModel() {items = await GetRemappedCustomHuiswerk()}));
+                return View(Sort(new SomtodayHomeworkModel() {items = await GetRemappedCustomHuiswerk()}));
             }
 
             var somtodayHuiswerk =
-                JsonConvert.DeserializeObject<somtodayHomeworkModel>(
+                JsonConvert.DeserializeObject<SomtodayHomeworkModel>(
                     await response.Content.ReadAsStringAsync());
 
             somtodayHuiswerk.items.AddRange(await GetRemappedCustomHuiswerk());
@@ -510,7 +510,7 @@ namespace Zermos_Web.Controllers
         [NonAction]
         private async Task<List<Models.somtodayHomeworkModel.Item>> GetRemappedCustomHuiswerk()
         {
-            var customHomeworkItems = JsonConvert.DeserializeObject<List<customHuiswerkModel>>((await _users.GetUserAsync(User.FindFirstValue("email"))).custom_huiswerk ?? "[]") ?? new List<customHuiswerkModel>();
+            var customHomeworkItems = JsonConvert.DeserializeObject<List<CustomHuiswerkModel>>((await _users.GetUserAsync(User.FindFirstValue("email"))).custom_huiswerk ?? "[]") ?? new List<CustomHuiswerkModel>();
             var remapedHomework = new List<Models.somtodayHomeworkModel.Item>(capacity:  customHomeworkItems.Count);
 
             foreach (var customHomeworkItem in customHomeworkItems)
@@ -571,9 +571,9 @@ namespace Zermos_Web.Controllers
             var userEmail = User.FindFirstValue("email");
             var user = await _users.GetUserAsync(userEmail);
 
-            var homework = JsonConvert.DeserializeObject<List<customHuiswerkModel>>(user.custom_huiswerk ?? "[]") ?? new List<customHuiswerkModel>();
+            var homework = JsonConvert.DeserializeObject<List<CustomHuiswerkModel>>(user.custom_huiswerk ?? "[]") ?? new List<CustomHuiswerkModel>();
 
-            homework.Add(new customHuiswerkModel(title, description, date, false, homework.Count + 1));
+            homework.Add(new CustomHuiswerkModel(title, description, date, false, homework.Count + 1));
 
             user = new user
             {
@@ -593,10 +593,10 @@ namespace Zermos_Web.Controllers
             var userEmail = User.FindFirstValue("email");
             var user = await _users.GetUserAsync(userEmail);
             
-            var homework = JsonConvert.DeserializeObject<List<customHuiswerkModel>>(user.custom_huiswerk) ?? new List<customHuiswerkModel>();
+            var homework = JsonConvert.DeserializeObject<List<CustomHuiswerkModel>>(user.custom_huiswerk) ?? new List<CustomHuiswerkModel>();
             
             homework.RemoveAll(x => x.id == id);
-            homework.Add(new customHuiswerkModel(title, description, date, gemaakt, id));
+            homework.Add(new CustomHuiswerkModel(title, description, date, gemaakt, id));
             
             user.custom_huiswerk = JsonConvert.SerializeObject(homework);
             
@@ -605,10 +605,10 @@ namespace Zermos_Web.Controllers
             return RedirectToAction("Huiswerk");
         }
 
-        public somtodayHomeworkModel Sort(somtodayHomeworkModel homework)
+        public SomtodayHomeworkModel Sort(SomtodayHomeworkModel homework)
         {
             if (homework == null)
-                return new somtodayHomeworkModel {items = new List<Models.somtodayHomeworkModel.Item>()};
+                return new SomtodayHomeworkModel {items = new List<Models.somtodayHomeworkModel.Item>()};
 
             homework.items = homework?.items?
                 .Where(x => x.studiewijzerItem != null && x.studiewijzerItem.huiswerkType != "LESSTOF")

@@ -127,6 +127,7 @@ pre {
     color: var(--text-color);
     padding: 4px;
     font-size: 1rem;
+    font-weight: 700;
 
     display: block;
     background-color: var(--background-color);
