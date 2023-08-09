@@ -17,7 +17,8 @@
     <script src="https://kit.fontawesome.com/052f5fa8f8.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f8f9fa">
+    @* <meta name="theme-color" content="#f8f9fa"> *@
+    <meta name="theme-color" content="@((Context.Request.Cookies["theme"] == "light" || Context.Request.Cookies["theme"] == "blue") ? "#f8f9fa" : (Context.Request.Cookies["theme"] == "dark" || Context.Request.Cookies["theme"] == "red") ? "#1a1a1a" : (Context.Request.Cookies["theme"] == "pink") ? "#ffebf2" : "#f8f9fa")">
     <script src="~/js/global.js" asp-append-version="true"></script>
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true">
     @if (!string.IsNullOrEmpty(ViewData["add_css"]?.ToString()))
@@ -186,11 +187,6 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
         </div>
     }
 }
-
-<script>
-    const themecolor = getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim();
-    document.querySelector('meta[name="theme-color"]').setAttribute('content', themecolor);
-</script>
 
 @await RenderSectionAsync("Scripts", false)
 </body>

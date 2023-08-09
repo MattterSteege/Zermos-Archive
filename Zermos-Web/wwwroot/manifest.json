@@ -2,6 +2,12 @@
   "name": "Zermos web",
   "short_name": "Zermos",
   "description": "Dé webapp voor school! Check je rooster, huiswerk, cijfers en nog veel meer met gemak!",
+  "protocol_handlers": [
+    {
+      "protocol": "web+zermos",
+      "url": "Deeplink?link=%s"
+    }
+  ],
   "icons": [
     {
       "src": "/images/icon192x192-curved.png",

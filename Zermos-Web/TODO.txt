@@ -9,6 +9,7 @@ TODO: Make functioning PWA (with auth, since you can't open a PWA with a normal 
 TODO: Be able to change the schedule week
 TODO: Somtoday grades get the grade change a new grade made using: NumberUtils.CalculateWeightedAverageSnapshots()[^1] / NumberUtils.CalculateWeightedAverageSnapshots()[^2] * 100
 TODO: UI for: [Zermelo], [Somtoday], School, [Infowijs], koppelingen ([Infowijs], [Zermelo], Somtoday)
+TODO: Place all <script> tags in the view folder in a @section scripts{} tag
 
 
 

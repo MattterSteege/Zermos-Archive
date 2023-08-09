@@ -41,6 +41,28 @@ namespace Zermos_Web.Controllers
             return RedirectToAction("Rooster", "Zermelo");
         }
         #endif
+
+        
+        //to send the correct deeplink format do this: location.href = 'web+zermos://' + url;
+        [Route("/Deeplink")]
+        public IActionResult Deeplink(string data = null)
+        {
+            if (data == null)
+            {
+                data = System.Net.WebUtility.UrlDecode(Request.QueryString.Value);
+            }
+            if (data != null)
+            {
+                data = data.Replace("web+zermos://", "");
+                if (data[data.Length - 1] == '/')
+                {
+                    data = data.Substring(0, data.Length - 1);
+                }
+                
+                return Redirect(data);
+            }
+            return Redirect("/");
+        }
         
         [Route(".well-known/microsoft-identity-association.json")]
         public IActionResult MicrosoftIdentityAssociation()

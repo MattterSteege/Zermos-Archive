@@ -29,6 +29,7 @@
         <form method="post" asp-action="Login" asp-controller="AccountAuthentication" asp-route-ReturnUrl="@ViewData["returnUrl"]" class="form-control">
             <input type="text" name="email" placeholder="vul je schoolemail in">
             <input type="submit" value="Inloggen">
+            <input type="hidden" name="isPWA" value="false">
         </form>
     </div>
 }
@@ -107,4 +108,16 @@ else
             <p class="child" style="color: #EB3628">Er is een onbekende fout opgetreden?</p>
         </div>
     </div>
+}
+
+@section Scripts
+{
+    <script>
+        const isInStandaloneMode = () =>
+              (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone) || document.referrer.includes('android-app://');
+        console.log(isInStandaloneMode());
+        if (isInStandaloneMode()) {
+            document.querySelector('input[name="isPWA"]').value = 'true'
+        }
+    </script>
 }

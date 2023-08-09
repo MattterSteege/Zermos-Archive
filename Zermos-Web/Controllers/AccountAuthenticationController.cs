@@ -45,7 +45,7 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string email = null, string returnUrl = "")
+        public async Task<IActionResult> Login(string email = null, string returnUrl = "", bool isPWA = false)
         {
             ViewData["add_css"] = "account";
             var user = await _users.GetUserAsync(email);
@@ -64,7 +64,7 @@ namespace Zermos_Web.Controllers
 
                 await _users.AddUserAsync(newUser);
                 
-                await MailgunService.SendEmail(email, "Zermos - Bevestig je e-mailadres", $"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountCreation?token={newUser.VerificationToken}&email={newUser.email}{(returnUrl == "" ? "" : "&returnUrl=" + returnUrl)}", true);
+                await MailgunService.SendEmail(email, "Zermos - Bevestig je e-mailadres", $"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountCreation?token={newUser.VerificationToken}&email={newUser.email}{(returnUrl == "" ? "" : "&returnUrl=" + returnUrl)}&isPWA={(isPWA ? "true" : "false")}", true);
 
                 return View(new Tuple<string, int>(email, 12));
             }
@@ -74,17 +74,23 @@ namespace Zermos_Web.Controllers
             user.CreatedAt = DateTime.Now;
             await _users.UpdateUserAsync(email, user);
             
-            await MailgunService.SendEmail(email, "Zermos - Bevestig je e-mailadres", $"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountLogin?token={user.VerificationToken}&email={user.email}{(returnUrl == "" ? "" : "&returnUrl=" + returnUrl)}", true);
+            await MailgunService.SendEmail(email, "Zermos - Bevestig je e-mailadres", $"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountLogin?token={user.VerificationToken}&email={user.email}{(returnUrl == "" ? "" : "&returnUrl=" + returnUrl)}&isPWA={(isPWA ? "true" : "false")}", true);
 
             return View(new Tuple<string, int>(email, 11));
         }
 
         [HttpGet]
-        public async Task<IActionResult> VerifyAccountCreation(string token, string email, string ReturnUrl = "")
+        public async Task<IActionResult> VerifyAccountCreation(string token, string email, string returnUrl = "", bool isPWA = false)
         {
             if (Request.Cookies.Count == 0)
             {
                 return VerificationFailed(5);
+            }
+            
+            if (isPWA)
+            {
+                return Redirect(
+                    $"web+zermos:///VerifyAccountCreation?token={token}&email={email}{(returnUrl == "" ? "" : "&returnUrl=" + returnUrl)}");
             }
             
             //remove cookie "try_login"
@@ -106,15 +112,21 @@ namespace Zermos_Web.Controllers
             await _users.UpdateUserAsync(email.ToLower(), user);
 
             ViewData["add_css"] = "account";
-            return await VerificationSuccess(email.ToLower(), ReturnUrl);
+            return await VerificationSuccess(email.ToLower(), returnUrl);
         }
 
         [HttpGet]
-        public async Task<IActionResult> VerifyAccountLogin(string token, string email, string returnUrl)
+        public async Task<IActionResult> VerifyAccountLogin(string token, string email, string returnUrl, bool isPWA)
         {
             if (Request.Cookies.Count == 0)
             {
                 return VerificationFailed(5);
+            }
+
+            if (isPWA)
+            {
+                return Redirect(
+                    $"web+zermos:///VerifyAccountLogin?token={token}&email={email}{(returnUrl == "" ? "" : "&returnUrl=" + returnUrl)}");
             }
             
             //remove cookie "try_login"
