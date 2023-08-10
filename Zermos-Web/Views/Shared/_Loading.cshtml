@@ -95,49 +95,49 @@
 
 @section Scripts
 {
-<script>
-    $(function () {
-            
-      const urlParams = new URLSearchParams(window.location.search);
-     
-      if("@(ViewData["url"] ?? Context.Items["url"])" === "") { return; }
-
-        $.ajax({
-            url: urlParams.get('url'),
-            success: function (data) { 
-              
-              //make the #content fade out in 250ms
-              $("#content").fadeOut(250, function () { 
-              
-                //wait 250ms and then replace the content with the new content            
-                var newDoc = document.open("text/html", "replace");
-                //set faded out
-                //set the new content
-                newDoc.write(data);
-                
-                //append the opactiy style to the new content
-                var style = document.createElement('style');
-                style.type = 'text/css';
-                
-                //set the opacity to 0
-                style.innerHTML = "#main { opacity: 0; animation: fade-in .25s ease-in-out forwards; }  @@keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }";
-                newDoc.head.appendChild(style);
-                                  
-                newDoc.close();
-                
-                $("#main").fadeIn(250);
-              });
-
-            },
-            //when an error happens, alert the user with the text of the error
-            error: function (xhr, status, error) { 
-              alert(xhr.responseText);
-              window.location.href = "/";
-              
-             },
-            cache: false,
-            type: 'GET'
+  <script>
+        $(function() {
+        
+            const urlParams = new URLSearchParams(window.location.search);
+        
+            if ("@(ViewData["url "] ?? Context.Items["url "])" === "") { return; }
+        
+            $.ajax({
+                url: urlParams.get('url'),
+                success: function(data) {
+        
+                    //make the #content fade out in 250ms
+                    $("#content").fadeOut(250, function() {
+        
+                        //wait 250ms and then replace the content with the new content            
+                        var newDoc = document.open("text/html", "replace");
+                        //set faded out
+                        //set the new content
+                        newDoc.write(data);
+        
+                        //append the opactiy style to the new content
+                        var style = document.createElement('style');
+                        style.type = 'text/css';
+        
+                        //set the opacity to 0
+                        style.innerHTML = "#main { opacity: 0; animation: fade-in .25s ease-in-out forwards; }  @@keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }";
+                        newDoc.head.appendChild(style);
+        
+                        newDoc.close();
+        
+                        $("#main").fadeIn(250);
+                    });
+        
+                },
+                //when an error happens, alert the user with the text of the error
+                error: function(xhr, status, error) {
+                    alert(xhr.responseText);
+                    window.location.href = "/";
+        
+                },
+                cache: false,
+                type: 'GET'
+            });
         });
-    });
-</script>
+    </script>
 }

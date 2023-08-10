@@ -15,49 +15,51 @@
         <input type="submit" value="Inloggen">
     </form>
 </div>
-
-<script>
-    var inputfield = $('input[name="code"]');
-    var submitbutton = $('input[type="submit"]');
-    
-    
-    //when a user is typing the code add a space after every 3 characters
-    //when there are a total of 12 non-space characters, enable the submit button
-    inputfield.on('input', function () {
-        var value = inputfield.val();
-        var length = value.length;
-        var spaceCount = (value.match(/ /g) || []).length;
-        if (length === 3 || length === 7 || length === 11) {
-            if (spaceCount < 3) {
-                inputfield.val(value + " ");
+@section Scripts
+{
+    <script>
+        var inputfield = $('input[name="code"]');
+        var submitbutton = $('input[type="submit"]');
+        
+        
+        //when a user is typing the code add a space after every 3 characters
+        //when there are a total of 12 non-space characters, enable the submit button
+        inputfield.on('input', function () {
+            var value = inputfield.val();
+            var length = value.length;
+            var spaceCount = (value.match(/ /g) || []).length;
+            if (length === 3 || length === 7 || length === 11) {
+                if (spaceCount < 3) {
+                    inputfield.val(value + " ");
+                }
             }
-        }
-        if (length === 15) {
-            submitbutton.click();
-        }
-    });
-    
-    //when the user presses enter, submit the form
-    inputfield.keypress(function (e) {
-        if (e.which === 13) {
-            submitbutton.click();
-        }
-    });
-    
-    //when a user pastes a code, remove all spaces, place a space after every 3 characters and submit the form
-    inputfield.on('paste', function () {
+            if (length === 15) {
+                submitbutton.click();
+            }
+        });
         
-        //replace all spaces with nothing
-        var value = inputfield.val().replace(/ /g, "");
-        var length = value.length;
-        //add a space after every 3 characters
-        value = value.replace(/(.{3})/g, "$1 ");
-        inputfield.val(value); 
+        //when the user presses enter, submit the form
+        inputfield.keypress(function (e) {
+            if (e.which === 13) {
+                submitbutton.click();
+            }
+        });
         
-        delay(1000);
-        
-        if (length === 15) {
-            submitbutton.click();
-        }
-    });
-</script>
+        //when a user pastes a code, remove all spaces, place a space after every 3 characters and submit the form
+        inputfield.on('paste', function () {
+            
+            //replace all spaces with nothing
+            var value = inputfield.val().replace(/ /g, "");
+            var length = value.length;
+            //add a space after every 3 characters
+            value = value.replace(/(.{3})/g, "$1 ");
+            inputfield.val(value); 
+            
+            delay(1000);
+            
+            if (length === 15) {
+                submitbutton.click();
+            }
+        });
+    </script>
+}

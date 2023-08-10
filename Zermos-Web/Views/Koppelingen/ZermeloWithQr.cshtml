@@ -5,7 +5,6 @@
     Layout = "_Layout";
 }
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
 <div class="login">
@@ -18,57 +17,60 @@
     </div>
 </div>
 
-
-<script>
-Html5Qrcode.getCameras().then(devices => {
-    if (devices && devices.length) {
-
-        const html5QrCode = new Html5Qrcode("reader");
-
-        // if you scanned, it will be send to the internal api
-        const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-            code = JSON.parse(decodedText).code;
-            document.getElementById('result').innerText = 'Inlog code: ' + code.substring(0, 3) + ' ' + code.substring(3, 6) + ' ' + code.substring(6, 9) + ' ' + code.substring(9, 12);
-            document.getElementById('result').style.display = 'block';
-            html5QrCode.stop();
-            //document.getElementById('reader').remove();
-            //html5QrCode.clear();
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "/Koppelingen/Zermelo/Code?code=" + code + "&from=qr", true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-
-            xhr.onreadystatechange = function() {
-                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                    //follow redirect
-                    window.location.href = this.responseURL;
+@section Scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+    Html5Qrcode.getCameras().then(devices => {
+        if (devices && devices.length) {
+    
+            const html5QrCode = new Html5Qrcode("reader");
+    
+            // if you scanned, it will be send to the internal api
+            const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+                code = JSON.parse(decodedText).code;
+                document.getElementById('result').innerText = 'Inlog code: ' + code.substring(0, 3) + ' ' + code.substring(3, 6) + ' ' + code.substring(6, 9) + ' ' + code.substring(9, 12);
+                document.getElementById('result').style.display = 'block';
+                html5QrCode.stop();
+                //document.getElementById('reader').remove();
+                //html5QrCode.clear();
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/Koppelingen/Zermelo/Code?code=" + code + "&from=qr", true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+    
+                xhr.onreadystatechange = function() {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        //follow redirect
+                        window.location.href = this.responseURL;
+                    }
                 }
+    
+                xhr.send();
             }
-
-            xhr.send();
+    
+            const config = {
+                fps: 200,
+                qrbox: 100
+            };
+    
+            // prefer the back camera else the front one 
+            html5QrCode.start({
+                facingMode: "environment"
+            }, config, qrCodeSuccessCallback);
+            
+        } else {
+            // no camera found
+            document.getElementsByClassName('child')[0].style.display = 'none';
+            document.getElementsByClassName('child')[1].style.display = 'none';
+            document.getElementById('reader').style.display = 'none';
+            document.getElementsByClassName('child')[2].style.display = 'block';
         }
-
-        const config = {
-            fps: 200,
-            qrbox: 100
-        };
-
-        // prefer the back camera else the front one 
-        html5QrCode.start({
-            facingMode: "environment"
-        }, config, qrCodeSuccessCallback);
-        
-    } else {
-        // no camera found
-        document.getElementsByClassName('child')[0].style.display = 'none';
-        document.getElementsByClassName('child')[1].style.display = 'none';
-        document.getElementById('reader').style.display = 'none';
-        document.getElementsByClassName('child')[2].style.display = 'block';
-    }
-}).catch(err => {
-    // no camera found
-    document.getElementsByClassName('child')[0].style.display = 'none';
-    document.getElementsByClassName('child')[1].style.display = 'none';
-    document.getElementById('reader').style.display = 'none';
-    document.getElementsByClassName('child')[2].style.display = 'block';
-});
-</script>
+        }).catch(err => {
+            // no camera found
+            document.getElementsByClassName('child')[0].style.display = 'none';
+            document.getElementsByClassName('child')[1].style.display = 'none';
+            document.getElementById('reader').style.display = 'none';
+            document.getElementsByClassName('child')[2].style.display = 'block';
+        });
+    </script>
+}
