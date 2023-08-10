@@ -488,9 +488,9 @@ main.main::-webkit-scrollbar-track {
     border-radius: 7px;
     margin-bottom: 16px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
     flex-direction: column;
+    pointer-events: all;
     
     transform-origin: bottom;
     transform: scaleY(0);

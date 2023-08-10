@@ -176,6 +176,7 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
     //if body isn't _Loading.cshtml show notifs
     if (ViewContext.View.Path != "/Views/Shared/_Loading.cshtml")
     {
+        <!-- Hoi :), als je benieuwd ben naar hoe dit werkt, de berekening staat in /global.js-->
         <div class="notifications">
             @foreach (var notification in Context.GetNotifications())
             {

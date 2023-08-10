@@ -70,6 +70,9 @@
                         @{
                             IEnumerable<Appointment> appointmentList = Model.response.data[0].appointments.Where(a => a.start.ToDateTime().DayOfWeek == day).ToList();
 
+                            if (appointmentList.Count() == 0)
+                                continue;
+                            
                             //100 means 100% of the height of the container
                             //510 means 510 minutes between 08:20 and 16:50
                             float minuteHeight = 100f / 510f;
@@ -99,3 +102,32 @@
 
     </div>
 </div>
+
+@section Scripts
+{
+<script>
+    function goToWeek(week) {
+        $.ajax({
+            url: '/Zermelo/Rooster?week=' + week + '&asPartial=true',
+            success: async function (data) {   
+               
+                var mainContainer = document.getElementsByClassName('main-container')[0];
+                mainContainer.style.opacity = '0';
+                await new Promise(res => setTimeout(res, 250));
+                //set mainContainer.innerHTML to the data, but remove <div class="main-container"> and </div>
+                mainContainer.innerHTML = data.substring(35, data.length - 6);
+                mainContainer.style.opacity = '1';               
+                
+            },
+            //when an error happens, alert the user with the text of the error
+            error: function (xhr, status, error) { 
+              alert(xhr.responseText);
+              window.location.href = "/";
+              
+             },
+            cache: false,
+            type: 'GET'
+        });
+    }
+</script>
+}

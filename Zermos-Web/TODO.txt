@@ -6,7 +6,7 @@ TODO: add a way to shorten an url for sharing (like bit.ly)
 TODO: Main page dashboard, only use chached data from the database (so no api calls)
 TODO: Infowijs email authentication
 TODO: Make functioning PWA (with auth, since you can't open a PWA with a normal link, you need to add web+zermos://auth?token= to the manifest and try to redirect to the app)
-TODO: Be able to change the schedule week
+TODO: Be able to change the schedule week (aleen de knoppen die goToWeek(curr - 1) and goToWeek(curr + 1) doen)
 TODO: Somtoday grades get the grade change a new grade made using: NumberUtils.CalculateWeightedAverageSnapshots()[^1] / NumberUtils.CalculateWeightedAverageSnapshots()[^2] * 100
 TODO: UI for: [Zermelo], [Somtoday], School, [Infowijs], koppelingen ([Infowijs], [Zermelo], Somtoday)
 TODO: Place all <script> tags in the view folder in a @section scripts{} tag

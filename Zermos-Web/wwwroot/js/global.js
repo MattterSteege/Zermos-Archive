@@ -29,11 +29,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function animateNotifications() {
         const notifications = $(".notification");
+        
+        let charsCount = 0;
 
         notifications.removeClass("animate");
 
         for (let i = notifications.length - 1; i >= 0; i--) {
             const notification = notifications[i];
+            charsCount += notification.getElementsByTagName("p")[0].innerText.length;
             await delay(500);
             $(notification).addClass("animate");
 
@@ -42,8 +45,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 $(notification).removeClass("animate");
             });
         }
-
-        await delay(5000);
+        
+        //a person reads around 265 characters per minute, as calculated here: https://ux.stackexchange.com/questions/22520/how-long-does-it-take-to-read-x-number-of-characters
+        //so we wait 2 seconds and add 60 seconds for each 265 words, with a character average if 4.7 per word, which means +/- 1245,5 characters per minute
+        //so: 2 seconds + 60 seconds for each 1245,5 characters
+        const delayTime = 2000 + (charsCount / 1245.5) * 60000;
+        //console.log(delayTime);
+        await delay(delayTime);
 
         for (let i = 0; i < notifications.length; i++) {
             const notification = notifications[i];

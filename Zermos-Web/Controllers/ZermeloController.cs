@@ -30,7 +30,7 @@ namespace Zermos_Web.Controllers
         [Authorize]
         [ZermeloRequirement]
         [AddLoadingScreen("Je rooster wordt geladen")]
-        public async Task<IActionResult> Rooster(string year, string week)
+        public async Task<IActionResult> Rooster(string year, string week, bool asPartial = false)
         {
             ViewData["add_css"] = "zermelo";
 
@@ -59,15 +59,20 @@ namespace Zermos_Web.Controllers
                 }
                 
                 HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je rooster kon niet worden geladen, waarschijnlijk is je Zermelo token verlopen", NotificationCenter.NotificationType.ERROR);
-                return View(new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>()}}}});
+                if (asPartial)
+                    return PartialView(new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>()}}}});
+                else
+                    return View(new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>()}}}});
             }
 
             if (week == DateTime.Now.GetWeekNumber().ToString() && year == DateTime.Now.Year.ToString())
             {
                 await _users.UpdateUserAsync(User.FindFirstValue("email"), new user {cached_zermelo_schedule = await response.Content.ReadAsStringAsync()});
             }
-            
-            return View(JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync()));
+            if (asPartial)
+                return PartialView(JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync()));
+            else
+                return View(JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync()));
         }
     }
 }
