@@ -6,8 +6,11 @@
     ViewData["title"] = "title";
 }
 
-
 <div class="main-container">
+    
+    <div class="MondayOfAppointmentsWeek" style="display: none">@Model.response.data[0].MondayOfAppointmentsWeek.ToUnixTime()</div>
+    <div class="Week" style="display: none">@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()</div>
+    
     <div class="times-container">
         <ul>
             <!--        20 horizontal lines-->
@@ -63,7 +66,7 @@
                     <li class="empty">Wow, de hele week vrij!</li>
                     break;
                 }
-                
+
                 if (day != DayOfWeek.Saturday && day != DayOfWeek.Sunday)
                 {
                     <li class="lesdag">
@@ -72,14 +75,14 @@
 
                             if (appointmentList.Count() == 0)
                                 continue;
-                            
+
                             //100 means 100% of the height of the container
                             //510 means 510 minutes between 08:20 and 16:50
                             float minuteHeight = 100f / 510f;
 
                             //get the date of the day that the appointments are for
                             //8 * 60 + 20 = 500 minutes
-                            int dayStartUnix = appointmentList.ElementAt(0).start.ToDateTime().Date.AddMinutes(6 * 60 + 20).ToUnixTime();
+                            int dayStartUnix = appointmentList.ElementAt(0).start.ToDateTime().Date.ToDayTimeSavingDate().AddMinutes(6 * 60 + 20).ToUnixTime();
 
                         }
 
@@ -103,9 +106,39 @@
     </div>
 </div>
 
+
+
+
+
+
+
+
+@{
+    
+    
+    //voor het rooster, maak de datepicker in 2 stukken: [Week 32,] & [7 - 13 augustus 2023], dan kan je namelijk met css de 2e laten verdwijnen als het niet meer past
+    //voeg aan het zermelo model ding een "week start datetime" toe
+    
+    
+    
+    
+    
+}
+
+
+
+
+
+
+
+
+
+
 @section Scripts
 {
     <script>
+        loadDatepicker();
+    
         function goToWeek(week) {
             $.ajax({
                 url: '/Zermelo/Rooster?week=' + week + '&asPartial=true',
@@ -116,8 +149,8 @@
                     await new Promise(res => setTimeout(res, 250));
                     //set mainContainer.innerHTML to the data, but remove <div class="main-container"> and </div>
                     mainContainer.innerHTML = data.substring(35, data.length - 6);
-                    mainContainer.style.opacity = '1';               
-                    
+                    mainContainer.style.opacity = '1'; 
+                    loadDatepicker();                    
                 },
                 //when an error happens, alert the user with the text of the error
                 error: function (xhr, status, error) { 
@@ -129,5 +162,108 @@
                 type: 'GET'
             });
         }
+        
+        //onload
+        function loadDatepicker () {
+            
+            
+            //if the datepicker is already loaded, don't load it again
+            if (document.getElementsByClassName('datepicker').length > 0)
+                document.getElementsByClassName('datepicker')[0].remove();
+            
+            let week = document.getElementsByClassName('Week')[0].innerHTML;
+            let MondayOfAppointmentsWeek = new Date(document.getElementsByClassName('MondayOfAppointmentsWeek')[0].innerHTML * 1000);
+                                   
+            //create a div
+            var datepickerParent = document.createElement('div');
+            datepickerParent.className = 'datepicker';
+            
+            //create a div
+            var backbutton = document.createElement('div');
+            backbutton.className = 'backbutton';
+            backbutton.style.position = 'unset';
+            backbutton.onclick = function() {               
+                PreviousWeek();
+            };
+            //create an i
+            var backbuttonI = document.createElement('i');
+            backbuttonI.className = 'fa-solid fa-angle-left';
+            //append the i to the div
+            backbutton.appendChild(backbuttonI);
+            //append the div to 'datepickerParent'
+            datepickerParent.appendChild(backbutton);
+            
+            //create a p
+            var weektext = document.createElement('p');
+            weektext.innerHTML = 'Week ' + week;
+            //append the p to 'datepickerParent'
+            datepickerParent.appendChild(weektext);
+            
+            //create a p
+            var date = document.createElement('p');
+            date.className = 'date';
+            date.innerHTML = ', ' + MondayOfAppointmentsWeek.getDate() + ' - ' + (MondayOfAppointmentsWeek.getDate() + 6) + ' ' + MondayOfAppointmentsWeek.toLocaleString('nl-NL', { month: 'long' }) + ' ' + MondayOfAppointmentsWeek.getFullYear();
+            //append the p to 'datepickerParent'
+            datepickerParent.appendChild(date);
+            
+            //create a div
+            var forwardbutton = document.createElement('div');
+            forwardbutton.className = 'forewardbutton';
+            forwardbutton.style.position = 'unset';
+            forwardbutton.onclick = function() {
+                NextWeek();
+            };
+            //create an i
+            var forwardbuttonI = document.createElement('i');
+            forwardbuttonI.className = 'fa-solid fa-angle-right';
+            //append the i to the div
+            forwardbutton.appendChild(forwardbuttonI);
+            //append the div to 'datepickerParent'
+            datepickerParent.appendChild(forwardbutton);
+            
+            //append the div to 'top-bar'
+            document.getElementsByClassName('top-bar')[0].appendChild(datepickerParent);
+        }
+        
+        function NextWeek() {
+            var week = document.getElementsByClassName('Week')[0].innerHTML;
+            goToWeek(Number(week) + 1);
+        }
+        
+        function PreviousWeek() {
+            var week = document.getElementsByClassName('Week')[0].innerHTML;
+            goToWeek(week - 1);
+        }
+   
+        let touchstartX = 0
+        let touchendX = 0
+        let threshold = 100 //px
+            
+        function checkDirection() {
+          if (touchendX < touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
+              NextWeek();
+          } 
+          else if (touchendX > touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
+              PreviousWeek();
+          }
+          else {
+              console.log('didn\'t exceed threshold')
+          }
+        }
+        
+        document.addEventListener('touchstart', e => {
+          touchstartX = e.changedTouches[0].screenX
+        })
+        
+        document.addEventListener('touchmove', e => {
+          touchendX = e.changedTouches[0].screenX
+          console.log(Math.abs(touchstartX - touchendX))
+        })
+        
+        document.addEventListener('touchend', e => {
+          touchendX = e.changedTouches[0].screenX
+            console.log(Math.abs(touchstartX - touchendX))
+          checkDirection()
+        })
     </script>
 }

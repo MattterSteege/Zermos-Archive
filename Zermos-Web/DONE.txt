@@ -11,3 +11,7 @@ Infowijs
     Caching is nu ook doorgevoerd in de 'infowijs' pagina's, dat bezorgt jouw weer een snellere laadtijd!
     Verschillende UI verbeteringen
     
+Zermelo
+    'Since the dawn of time, humanity has struggled with time. So they created timezones, 24 of them. Some are +1.00, some are -9.00, but they all have one thing in common: they are a pain in the...', nou, mijn mening over de manier waarop ik het rooster uit Zermelo moet verwerken is dus ook duidelijk.
+    er is nu op pc een balk waarin je een week terug en vooruit kan gaan, dus je kan met een beetje klikken je rooster van 5 maanden terug bekijken.
+    Woosh, woosh, woosh, swipe op mobiel met gemak door je rooster heen.

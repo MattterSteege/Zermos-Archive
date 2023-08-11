@@ -37,7 +37,6 @@ namespace Zermos_Web.Controllers
             year ??= DateTime.Now.Year.ToString();
             week ??= DateTime.Now.GetWeekNumber().ToString();
 
-
             var date = year + (week.ToCharArray().Length == 1 ? "0" + week : week);
 
             var user = await _users.GetUserAsync(User.FindFirstValue("email"));
@@ -60,19 +59,21 @@ namespace Zermos_Web.Controllers
                 
                 HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je rooster kon niet worden geladen, waarschijnlijk is je Zermelo token verlopen", NotificationCenter.NotificationType.ERROR);
                 if (asPartial)
-                    return PartialView(new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>()}}}});
-                else
-                    return View(new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>()}}}});
+                    return PartialView(new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>(), MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year)}}}});
+                return View(new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>(), MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year)}}}});
             }
 
             if (week == DateTime.Now.GetWeekNumber().ToString() && year == DateTime.Now.Year.ToString())
             {
                 await _users.UpdateUserAsync(User.FindFirstValue("email"), new user {cached_zermelo_schedule = await response.Content.ReadAsStringAsync()});
             }
+            
+            var zermeloRoosterModel = JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync());
+            zermeloRoosterModel.response.data[0].MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year);
+            
             if (asPartial)
-                return PartialView(JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync()));
-            else
-                return View(JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync()));
+                return PartialView(zermeloRoosterModel);
+            return View(zermeloRoosterModel);
         }
     }
 }

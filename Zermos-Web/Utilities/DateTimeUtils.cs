@@ -130,9 +130,12 @@ public static class DateTimeUtils
 
     public static DateTime ToDayTimeSavingDate(this DateTime date)
     {
-        var dutchTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id);
-        return (TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id).IsDaylightSavingTime(date)
-            ? TimeZoneInfo.ConvertTimeFromUtc(date.ToUniversalTime(), dutchTimeZone)
-            : date);
+        bool summertime = TimeZoneInfo.Local.IsDaylightSavingTime(date);
+        if (summertime)
+        {
+            return date;
+        }
+        
+        return date.AddHours(1);
     }
 }

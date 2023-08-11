@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Zermos_Web.Models.zermelo
 {
@@ -45,7 +46,7 @@ namespace Zermos_Web.Models.zermelo
 
     public class Items
     {
-        public int laatsteWijziging { get; set; }
+        public DateTime MondayOfAppointmentsWeek { get; set; }
         public List<Appointment> appointments { get; set; }
     }
 
