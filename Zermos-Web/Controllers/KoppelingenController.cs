@@ -307,7 +307,7 @@ namespace Zermos_Web.Controllers
         [HttpGet]
         public IActionResult Somtoday()
         {
-            ViewData["add_css"] = "somtoday";
+            ViewData["add_css"] = "koppelingen";
 
             return View();
         }

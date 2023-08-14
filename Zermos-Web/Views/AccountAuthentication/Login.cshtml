@@ -27,7 +27,7 @@
             <p class="child">Nadat je je e-mailadres hebt ingevuld en op 'Inloggen' hebt geklikt, ontvang je een e-mail met een link om in te loggen. Als je nog geen account hebt, ontvang je een e-mail om een account aan te maken. Super simpel!</p>
         </div>
         <form method="post" asp-action="Login" asp-controller="AccountAuthentication" asp-route-ReturnUrl="@ViewData["returnUrl"]" class="form-control">
-            <input type="text" name="email" placeholder="vul je schoolemail in">
+            <input type="email" name="email" pattern=".+@@ccg-leerling\.nl" size="30" required placeholder="vul je schoolemail in"/>
             <input type="submit" value="Inloggen">
             <input type="hidden" name="isPWA" value="false">
         </form>

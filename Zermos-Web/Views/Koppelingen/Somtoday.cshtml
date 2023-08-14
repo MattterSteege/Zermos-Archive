@@ -5,9 +5,14 @@
     Layout = "_Layout";
 }
 
-<form asp-controller="koppelingen" asp-action="somtoday" method="post">
-    <!--Add username input with text 'gebruikersnaame' and password input with text 'wachtwoord'-->
-    <input type="text" name="username" placeholder="gebruikersnaam">
-    <input type="password" name="password" placeholder="wachtwoord">
-    <input type="submit" value="Inloggen">
-</form>
+<div class="login">
+    <div class="login-child">
+        <h1 class="child">Koppel Somtoday aan je account!</h1>
+        <p class="child">Helaas is er geen betere manier om Somtoday te koppelen anders dan je gebruikersnaam en wachtwoord in te voeren. Wees gerust, je wachtwoord wordt niet opgeslagen. Als je meer vragen hebt, dan staat dat <a href="https://zermos-docs.kronk.tech/Somtoday#waarom-kan-ik-alleen-inloggen-met-mijn-wachtwoord">hier</a> uitgelegd</p>
+    </div>
+    <form asp-controller="koppelingen" asp-action="somtoday" method="post" class="form-control">
+        <input type="text" name="username" placeholder="gebruikersnaam" style="width: 37.5%;">
+        <input type="password" name="password" placeholder="wachtwoord" style="width: 37.5%; text-align: center; background: unset; border-radius: unset; font-weight: 500; cursor: unset;">
+        <input type="submit" value="Inloggen">
+    </form>
+</div>

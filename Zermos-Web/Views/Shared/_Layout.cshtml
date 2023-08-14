@@ -6,7 +6,7 @@
 @{
     string currentPage = $"/{ViewContext.RouteData.Values["controller"]}/{ViewContext.RouteData.Values["action"]?.ToString()?.Split("/")[0] ?? "index"}";
 }
-
+<!-- Hoi :), als je probeert uit te vogelen hoe ik dit heb gedaan, klik dan maar weer op het kruisje rechtsbovenin, want ik ga het niet zeggen...-->
 <!DOCTYPE html>
 <!--themes can be: light, dark, red, blue or pink -->
 <html lang="nl" class="@(Context.Request.Cookies["theme"] ?? "light")">
@@ -44,7 +44,7 @@
 
     <div class="bottom">
         <ul>
-            <li style="display: none;">
+            <li>
                 <a asp-controller="Main" asp-action="index">
                     <div class="menu-item">
                         <i class="fa-solid fa-house menu-icons fa-fw @(currentPage == @Url.Action("index", "Main") ? "active" : "")"></i>
@@ -176,7 +176,6 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
     //if body isn't _Loading.cshtml show notifs
     if (ViewContext.View.Path != "/Views/Shared/_Loading.cshtml")
     {
-        <!-- Hoi :), als je benieuwd ben naar hoe dit werkt, de berekening staat in /global.js-->
         <div class="notifications">
             @foreach (var notification in Context.GetNotifications())
             {

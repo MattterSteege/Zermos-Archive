@@ -6,6 +6,8 @@ Algemeen
     We hebben een P, we hebben een W, we hebben een A, we hebben nu een PWA! Zermos web is nu ook te downloaden als een website, dit is nog experimenteel en kan dus nog bugs bevatten (en is voor nu alleen beschikbaar op PC), maar wel ongelovelijk handig. Zermos is tijdens het gebruik van de PWA (niet de website versie) in staat om pagina's op te slaan op je telefoon en die aan je te laten zien voor als je geen internet hebt. Zo kan je dus ook offline je rooster, cijfers en huiswerk bekijken, het is alleen niet het nieuwste van het nieuwste.
     URL-balk kleur is nu veer responsive naar je geselecteerde thema.
     Experimentele functie zijn verwijderd uit de publieke versie van de website
+    alleen [leerlingnummer]@ccg-leerling.nl is nu nog toegestaan als email adres voor het inloggen op Zermos.
+    'zachtjes tikt de regen op mijn zolderraam, ik heb geen zin om naar school te gaan', nou, dat is toevallig. Zermos heeft laat nu de regen rondom school zien, handig zeg!
 
 Infowijs
     Caching is nu ook doorgevoerd in de 'infowijs' pagina's, dat bezorgt jouw weer een snellere laadtijd!
@@ -15,3 +17,10 @@ Zermelo
     'Since the dawn of time, humanity has struggled with time. So they created timezones, 24 of them. Some are +1.00, some are -9.00, but they all have one thing in common: they are a pain in the...', nou, mijn mening over de manier waarop ik het rooster uit Zermelo moet verwerken is dus ook duidelijk.
     er is nu op pc een balk waarin je een week terug en vooruit kan gaan, dus je kan met een beetje klikken je rooster van 5 maanden terug bekijken.
     Woosh, woosh, woosh, swipe op mobiel met gemak door je rooster heen.
+    
+Koppelingen
+    De login UI op de Somtoday pagina is nu wél aanwezig
+    Het laad-icoontje op de Infowijs QR pagina staat nu niet achter de tekst
+    
+Somtoday - cijfers
+    Er is een nieuwe statistiek toegevoegd: 'cijfer verandering'. je krijgt nu te zien hoe je nieuwe cijfer je gemiddelde beïnvloedt (Bijv. CKV: +0.95% of Duits: -382.52%).

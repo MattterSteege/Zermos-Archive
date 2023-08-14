@@ -9,7 +9,6 @@
 /*ROW 1*/
 .main-container .row-1 {
     width: 100%;
-    height: 80px;
     margin-bottom: 16px;
 
     /*responsive grid either 4x1 2x2 or 1x4*/
@@ -150,15 +149,17 @@
 }
 
 
+
+
+
 /*ROW 2*/
 .main-container .row-2 {
     width: 100%;
-    height: 250px;
     margin-bottom: 16px;
 
     /*responsive grid either 4x1 2x2 or 1x4*/
     display: grid;
-    grid-template-columns: repeat(10, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(355px, 100% / 3)), 1fr));
     grid-auto-flow: row;
     grid-gap: 16px;
 
@@ -167,20 +168,76 @@
 }
 
 .main-container .row-2 .child:nth-child(1) {
-    height: 100%;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background: var(--overlay-color);
+    border-radius: 1rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.main-container .row-2 .child:nth-child(1) .header {
+    width: 100%;
+    height: 80px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    background: var(--overlay-color);
     border-radius: 1rem;
-    min-width: 280px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    grid-column: 1 / span 6;
+}
+
+.main-container .row-2 .child:nth-child(1) .weather-graph {
+    width: calc(100% - 24px);
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 12px;
+    border: 1px solid var(--text-color);
+    border-radius: 7px;
+}
+
+.line {
+    width: 1px;
+    height: 100%;
+    background: var(--text-color);;
+}
+
+.line + .current {
+    position: absolute;
+    width: 3px;
+    height: 144px;
+    background: var(--confirm-color);
+    left: 12px;
+    transition: all 0.5s ease;
+}
+
+.weather-graph-underlay {
+    width: calc(100% - 24px) !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-evenly !important;
+    align-items: flex-end !important;
+    border: 1px solid var(--text-color) !important;
+    border-radius: 7px !important;
+    flex-wrap: nowrap !important;
+    position: absolute !important;
+    height: 146px !important;
+    margin: 92px 12px 12px !important;
+}
+
+.amount {
+    width: 4%;
+    background: var(--text-color);
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
 }
 
 .main-container .row-2 .child:nth-child(2) {
-    height: 100%;
+    height: 250px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -189,5 +246,4 @@
     border-radius: 1rem;
     min-width: 280px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    grid-column: 7 / span 11;
 }

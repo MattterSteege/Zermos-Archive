@@ -3,5 +3,11 @@ TODO: (later, when feasible) Add an API system that allows users to create an ap
 TODO: find a way to find what the since paramater means in messages from infowijs
 TODO: Main page dashboard, only use chached data from the database (so no api calls)
 TODO: Infowijs email authentication
-TODO: Somtoday grades get the grade change a new grade made using: NumberUtils.CalculateWeightedAverageSnapshots()[^1] / NumberUtils.CalculateWeightedAverageSnapshots()[^2] * 100
-TODO: UI for: [Zermelo], [Somtoday], School, [Infowijs], koppelingen ([Infowijs], [Zermelo], Somtoday)
+TODO: main menu page weather - add text for mm/u rain and a slider for time
+
+
+TODO: School recap page
+    - Totaal hoeveelheid lessen: 'Je hebt dit schooljaar 1230 lessen gevolgd met een totaal van 61.500 minuten / 1.025 uur'
+    - Totaal hoeveelheid lessen gemist
+    - Totaal hoeveelheid huiswerk gemaakt
+    - Totaal hoeveelheid cijfers/toetsen gemaakt

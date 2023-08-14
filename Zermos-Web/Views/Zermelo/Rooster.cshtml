@@ -161,6 +161,18 @@
                 cache: false,
                 type: 'GET'
             });
+            
+            modifyUrl('Rooster', '/Zermelo/Rooster?week=' + week);
+        }
+        
+        function modifyUrl(title, url) {
+         if (typeof (history.pushState) != "undefined") {
+          var obj = {
+           Title: title,
+           Url: url
+          };
+          history.pushState(obj, obj.Title, obj.Url);
+         }
         }
         
         //onload
@@ -246,23 +258,14 @@
           else if (touchendX > touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
               PreviousWeek();
           }
-          else {
-              console.log('didn\'t exceed threshold')
-          }
         }
         
         document.addEventListener('touchstart', e => {
           touchstartX = e.changedTouches[0].screenX
         })
         
-        document.addEventListener('touchmove', e => {
-          touchendX = e.changedTouches[0].screenX
-          console.log(Math.abs(touchstartX - touchendX))
-        })
-        
         document.addEventListener('touchend', e => {
           touchendX = e.changedTouches[0].screenX
-            console.log(Math.abs(touchstartX - touchendX))
           checkDirection()
         })
     </script>

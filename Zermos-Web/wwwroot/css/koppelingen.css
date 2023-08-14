@@ -46,6 +46,15 @@
     cursor: pointer;
 }
 
+.form-control input:nth-child(3) {
+    width: 25%;
+    background: var(--accent-color);
+    color: white;
+    border-radius: 0 1rem 1rem 0;
+    font-weight: 600;
+    cursor: pointer;
+}
+
 .login-child {
     border-radius: 1rem;
     background: var(--overlay-color);
@@ -103,10 +112,9 @@
     width: 100px;
     height: 100px;
     z-index: 1;
-    position: absolute;
     top: calc(50% + 116px);
     left: 50%;
-    transform: translate(-50%, calc(-50% - 58px));
+    margin: 64px auto;
 }
 
 .loading-icon img {

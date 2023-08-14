@@ -10,7 +10,7 @@
         <div class="login-child">
             <p class="child">Vul hier je schoolmail in.</p>
             <p class="child">Scan deze code met de QR code scanner in de antonius app (Antonius app > Meer > Hoy Scan), klik daarna op 'check of je ingelogd bent' en je bent ingelogd!</p>
-            <img src="https://chart.googleapis.com/chart?cht=qr&chl=@(ViewData["qr_text"])&chs=360x360&choe=UTF-8&chld=L|0" alt="qr code" class="img-thumbnail">
+            <img onload="imageLoaded()" src="https://chart.googleapis.com/chart?cht=qr&chl=@(ViewData["qr_text"])&chs=360x360&choe=UTF-8&chld=L|0" alt="qr code" class="img-thumbnail">
             <div class="loading-icon">
                 <img src="/images/Loading-Icon-by-Kanggraphic-27-580x386-removebg-preview.png" >
             </div>
@@ -21,16 +21,12 @@
     </div>
 }
 
-@* <script> *@
-@* function doSetTimeout(i) { *@
-@*   setTimeout(function() {  *@
-@*       document.getElementById("check").click();  *@
-@*   }, 1000*i); *@
-@* } *@
-@* *@
-@* for (let i = 1; i <= 20; ++i) *@
-@*     doSetTimeout(i); *@
-@* </script> *@
+<script>
+    function imageLoaded() {
+        var loadingIcon = document.getElementsByClassName("loading-icon")[0];
+        loadingIcon.style.display = "none";  
+    }
+</script>
 
 @* Make a button that when clicked, send a POST request to /AntoniusApp/koppelen?a=a&b=b&c=c *@
 @* <form method="post" asp-controller="AntoniusApp" asp-action="Koppelen"> *@

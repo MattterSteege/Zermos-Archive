@@ -211,7 +211,7 @@ body {
     width: calc(100% - 32px);
     height: 40px;
     border-radius: 7px;
-    background: var(--white-color);
+    background: var(--overlay-color);
     border: none;
     color: var(--text-color);
     font-weight: 700;

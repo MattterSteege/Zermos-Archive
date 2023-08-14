@@ -52,6 +52,8 @@
             float sumOfWeightedGrades = 0.0f;
             int sumOfWeights = vak.grades.Sum(gradeItem => gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging);
             bool hasNonZeroWeight = false;
+            var gradesArray = new float[vak.grades.Count];
+            var gradesWeight = new int[vak.grades.Count];
 
             for (int i = 0; i < vak.grades.Count; i++)
             {
@@ -66,6 +68,9 @@
 
                 sumOfWeightedGrades += (geldendResultaat * (gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging));
                 hasNonZeroWeight = true;
+                
+                gradesArray[i] = NumberUtils.ParseFloat(vak.grades[i].geldendResultaat);
+                gradesWeight[i] = vak.grades[i].weging == 0 ? vak.grades[i].examenWeging : vak.grades[i].weging;
             }
 
             if (!hasNonZeroWeight)
@@ -74,6 +79,20 @@
             }
 
             float gemiddelde = MathF.Round(sumOfWeightedGrades / sumOfWeights, 1, MidpointRounding.AwayFromZero);
+
+            
+            var WeightedAverageSnapshots = NumberUtils.CalculateWeightedAverageSnapshots(gradesArray, gradesWeight);
+            double gradeChange = 0;
+            try
+            {
+                //var lastGrade = WeightedAverageSnapshots[^2];
+                //var currentGrade = WeightedAverageSnapshots[^1];
+                gradeChange = Math.Round((double)((WeightedAverageSnapshots[^1] - WeightedAverageSnapshots[^2]) / WeightedAverageSnapshots[^2] * 100), 2);
+            }
+            catch (Exception)
+            {
+                gradeChange = 100;
+            }
 
             <div class="vak">
                 <a asp-controller="Somtoday" asp-action="Cijfer" asp-route-vak="@vak.vak.afkorting.Capitalize()" asp-route-content="@encoded">
@@ -90,6 +109,7 @@
                     <div class="bottom-70">
                         <p style="flex-grow: 1; text-align: end;">Laatste cijfer:</p>
                         <p style="margin-left: 16px; flex-grow: 1;" class="@(NumberUtils.ParseFloat(vak.grades[^1].geldendResultaat) >= 5.5f ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</p>
+                        <p style="margin-left: 16px; flex-grow: 1;" class="@(gradeChange > 0 ? "sufficient" : "insufficient ")">@(gradeChange > 0 ? "+" : "")@(gradeChange)%</p>
                     </div>
                 </a>
             </div>
