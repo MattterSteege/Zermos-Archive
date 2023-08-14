@@ -116,6 +116,65 @@ namespace Zermos_Web.Controllers
 
         #region infowijs
         [HttpGet]
+        [Route("Koppelingen/Infowijs/Email")]
+        public IActionResult InfowijsWithEmail(string email, bool retry = false)
+        {
+            ViewData["add_css"] = "koppelingen";
+
+            ViewData["retry"] = false;
+            return View(model: "");
+        }
+        
+        [HttpPost]
+        [Route("Koppelingen/Infowijs/Email")]
+        public async Task<IActionResult> InfowijsWithEmail(string email, string customer_product_id, string user_id, string id)
+        {
+            ViewData["add_css"] = "koppelingen";
+            if (email != null && (customer_product_id == null || user_id ==  null || id == null))
+            {
+                string url1 = "https://api.infowijs.nl/sessions";
+                var response1 = _infowijsHttpClient.PostAsync(url1, new StringContent(JsonConvert.SerializeObject(new
+                {
+                    username = email,
+                    communityName = "antonius"
+                }), Encoding.UTF8, "application/json")).Result;
+            
+                var result1 = response1.Content.ReadAsStringAsync().Result;
+                var antoniusAppAuthenticatieModelData = JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModel>(result1);
+            
+                ViewData["email"] = email;
+                ViewData["customer_product_id"] = antoniusAppAuthenticatieModelData.data.customer_product_id;
+                ViewData["user_id"] = antoniusAppAuthenticatieModelData.data.user_id;
+                ViewData["id"] = antoniusAppAuthenticatieModelData.data.id;
+                ViewData["retry"] = false;
+                return View(model: "");
+            }
+
+            var response2 = await _infowijsHttpClient.PostAsync("https://api.infowijs.nl/sessions/" + id + "/77584871-d26b-11ea-8b2e-060ffde8896c/" + user_id, null);
+            var result2 = await response2.Content.ReadAsStringAsync();
+            
+            try
+            {
+
+                var jwt = JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModelAuthSuccess>(result2).data;
+
+                await _users.UpdateUserAsync(User.FindFirstValue("email"),
+                    new user {infowijs_access_token = jwt});
+
+                return Redirect("/account");
+            }
+            catch
+            {
+                ViewData["email"] = email;
+                ViewData["customer_product_id"] = customer_product_id;
+                ViewData["user_id"] = user_id;
+                ViewData["id"] = id;
+                ViewData["retry"] = true;
+                return View(model: "");
+            }
+        }
+        
+        [HttpGet]
         [Route("Koppelingen/Infowijs/Qr")]
         public async Task<IActionResult> InfowijsQr(string uuid, bool retry = false)
         {
@@ -172,7 +231,6 @@ namespace Zermos_Web.Controllers
 
             return RedirectToAction("ShowAccount", "Account");
         }
-
         #endregion
 
         #region Zermelo

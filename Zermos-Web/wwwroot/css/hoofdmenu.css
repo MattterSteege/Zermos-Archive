@@ -188,7 +188,7 @@
     border-radius: 1rem;
 }
 
-.main-container .row-2 .child:nth-child(1) .weather-graph {
+.weather-graph {
     width: calc(100% - 24px);
     height: 100%;
     display: flex;
@@ -216,17 +216,17 @@
 }
 
 .weather-graph-underlay {
-    width: calc(100% - 24px) !important;
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: space-evenly !important;
-    align-items: flex-end !important;
-    border: 1px solid var(--text-color) !important;
-    border-radius: 7px !important;
-    flex-wrap: nowrap !important;
-    position: absolute !important;
-    height: 146px !important;
-    margin: 92px 12px 12px !important;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: flex-end;
+    border: unset;
+    border-radius: 7px;
+    flex-wrap: nowrap;
+    position: absolute;
+    height: 146px;
+    margin: 92px 12px 12px;
+    overflow: hidden;
 }
 
 .amount {

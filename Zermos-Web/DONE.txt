@@ -21,6 +21,7 @@ Zermelo
 Koppelingen
     De login UI op de Somtoday pagina is nu wél aanwezig
     Het laad-icoontje op de Infowijs QR pagina staat nu niet achter de tekst
+    Je kan nu ook je email gebruiken om infowijs te koppelen!
     
 Somtoday - cijfers
     Er is een nieuwe statistiek toegevoegd: 'cijfer verandering'. je krijgt nu te zien hoe je nieuwe cijfer je gemiddelde beïnvloedt (Bijv. CKV: +0.95% of Duits: -382.52%).

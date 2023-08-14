@@ -1,0 +1,34 @@
+﻿@model string
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+@{
+    if ((ViewData["customer_product_id"] != null && ViewData["user_id"] != null && ViewData["id"] != null)) //user token has been fetched, now wait for user
+    {
+        <div class="login">
+            <div class="login-child">
+                <p class="child">Check of je een mail hebt ontvangen</p>
+                <p class="child">Er is een mail gestuurd naar <b>@ViewData["email"]</b>, deze mail is namens 'Antonius (noreply@mailer.hoyapp.nl)' gestuurd. Klik op de knop in de mail, je krijgt een groen vinkje te zien met de tekst '<b>Gelukt!</b>'. Als je dit ziet, open Zermos dan weer en klik op de knop 'check of je ingelogd bent' hieronder</p>
+            </div>
+            <form method="post" asp-controller="Koppelingen" asp-action="InfowijsWithEmail" asp-route-customer_product_id="@ViewData["customer_product_id"]" asp-route-user_id="@ViewData["user_id"]" asp-route-id="@ViewData["id"]" class="form-control">
+                <button type="submit" id="check" class="check">Check @((bool)ViewData["retry"]! ? "opnieuw" : "") of je ingelogd bent</button>
+            </form>
+        </div>
+    }
+    else
+    {
+        <div class="login">
+            <div class="login-child">
+                <p class="child">Vul hier je schoolmail in.</p>
+                <p class="child">Om Infowijs te koppelen aan je account, moet je eerst je schoolmail invullen. Je krijgt dan een mail met een knop, als je op die knop klikt wordt je doorgestuurd naar infowijs, je krijgt een groen vinkje te zien met de tekst '<b>Gelukt!</b>'. Als je dit ziet, open Zermos dan weer en klik op de knop 'check of je ingelogd bent' die dadelijk hieronder verschijnt.</p>
+            </div>
+            <form method="post" asp-controller="Koppelingen" asp-action="InfowijsWithEmail" class="form-control">
+                <input type="email" id="email" name="email" class="email" placeholder="schoolmail" />
+                <button type="submit" id="check" class="check" style="border-radius: 0 14px 14px 0;">Stuur mij de email</button>
+            </form>
+        </div>
+    }
+}

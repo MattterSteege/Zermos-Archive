@@ -1,14 +1,10 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Microsoft.AspNetCore.Http
 @using Zermos_Web.Utilities
-@* ReSharper disable Mvc.ControllerNotResolved *@
-@* ReSharper disable Mvc.ActionNotResolved *@
 @{
     string currentPage = $"/{ViewContext.RouteData.Values["controller"]}/{ViewContext.RouteData.Values["action"]?.ToString()?.Split("/")[0] ?? "index"}";
 }
-<!-- Hoi :), als je probeert uit te vogelen hoe ik dit heb gedaan, klik dan maar weer op het kruisje rechtsbovenin, want ik ga het niet zeggen...-->
 <!DOCTYPE html>
-<!--themes can be: light, dark, red, blue or pink -->
 <html lang="nl" class="@(Context.Request.Cookies["theme"] ?? "light")">
 <head>
     <meta charset="UTF-8">
@@ -164,7 +160,7 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
 {
     Context.Response.Cookies.Append("version", Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty, new CookieOptions { Expires = DateTime.Now.AddDays(60) });
     <div class="version">
-        <p>Er is een nieuwe versie van Zermos (@(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty)), bekijk <a asp-controller="Main" asp-action="Docs">hier</a> wat er nieuw is</p>
+        <p>Er is een nieuwe versie van Zermos (@(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty)), bekijk <a href="http://zermos-docs.kronk.tech">hier</a> wat er nieuw is</p>
     </div>
 }
 
