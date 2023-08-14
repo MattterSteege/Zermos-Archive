@@ -14,7 +14,7 @@ nav_exclude: false
   - We hebben een P, we hebben een W, we hebben een A, we hebben nu een PWA! Zermos web is nu ook te downloaden als een website, dit is nog experimenteel en kan dus nog bugs bevatten (en is voor nu alleen beschikbaar op PC), maar wel ongelovelijk handig. Zermos is tijdens het gebruik van de PWA (niet de website versie) in staat om pagina's op te slaan op je telefoon en die aan je te laten zien voor als je geen internet hebt. Zo kan je dus ook offline je rooster, cijfers en huiswerk bekijken, het is alleen niet het nieuwste van het nieuwste.
   - URL-balk kleur is nu weer 'responsive' naar je geselecteerde thema.
   - Experimentele functie zijn verwijderd uit de publieke versie van de website
-  - alleen [leerlingnummer]@ccg-leerling.nl is nu nog toegestaan als email adres voor het inloggen op Zermos.
+  - Alleen [leerlingnummer]@ccg-leerling.nl is nu nog toegestaan als email adres voor het inloggen op Zermos.
   - 'zachtjes tikt de regen op mijn zolderraam, ik heb geen zin om naar school te gaan', nou, dat is toevallig. Zermos heeft laat nu de regen rondom school zien, handig zeg!
 
 - Infowijs
