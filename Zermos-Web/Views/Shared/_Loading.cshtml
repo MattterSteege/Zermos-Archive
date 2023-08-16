@@ -114,8 +114,7 @@ $(function() {
                 //set faded out
                 //set the new content
                 newDoc.write(data);
-
-                console.log(data);
+                
                 //append the opactiy style to the new content
                 var style = document.createElement('style');
                 style.type = 'text/css';
@@ -126,8 +125,7 @@ $(function() {
 
                 newDoc.close();
                 
-                
-                modifyUrl("Zermos", "@(ViewData["url"] ?? Context.Items["url"])");
+
 
                 $("#main").fadeIn(250);
             });
