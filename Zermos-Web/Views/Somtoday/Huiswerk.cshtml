@@ -77,7 +77,6 @@
           const width = siblingParagraph.offsetWidth;
           
           // Set the width of the divider to match the width of the paragraph or the width of the parent element, whichever is smaller
-            console.log(width, divider.parentElement.offsetWidth);
             divider.style.width = `${Math.min(width, divider.parentElement.offsetWidth)}px`;
         }
       });

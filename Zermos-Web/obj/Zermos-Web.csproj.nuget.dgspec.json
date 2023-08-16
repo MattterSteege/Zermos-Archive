@@ -184,10 +184,6 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
-            },
-            "WebEssentials.AspNetCore.PWA": {
-              "target": "Package",
-              "version": "[1.0.65, )"
             }
           },
           "imports": [

@@ -1,4 +1,4 @@
-﻿console.log('global.js loaded');
+﻿    console.log('[ GLOBAL.JS ] loaded');
 document.addEventListener('DOMContentLoaded', function () {
     const elements = document.querySelectorAll('.svgText');
     // console.log(elements);

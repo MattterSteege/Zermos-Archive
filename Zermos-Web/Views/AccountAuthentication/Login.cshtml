@@ -115,7 +115,6 @@ else
     <script>
         const isInStandaloneMode = () =>
               (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone) || document.referrer.includes('android-app://');
-        console.log(isInStandaloneMode());
         if (isInStandaloneMode()) {
             document.querySelector('input[name="isPWA"]').value = 'true'
         }

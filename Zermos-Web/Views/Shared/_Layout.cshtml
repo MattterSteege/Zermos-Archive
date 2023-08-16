@@ -3,6 +3,7 @@
 @using Zermos_Web.Utilities
 @{
     string currentPage = $"/{ViewContext.RouteData.Values["controller"]}/{ViewContext.RouteData.Values["action"]?.ToString()?.Split("/")[0] ?? "index"}";
+    string version = Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? "dev";
 }
 <!DOCTYPE html>
 <html lang="nl" class="@(Context.Request.Cookies["theme"] ?? "light")">
@@ -13,13 +14,19 @@
     <script src="https://kit.fontawesome.com/052f5fa8f8.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="/manifest.webmanifest" />
     @* <meta name="theme-color" content="#f8f9fa"> *@
     <meta name="theme-color" content="@((Context.Request.Cookies["theme"] == "light" || Context.Request.Cookies["theme"] == "blue") ? "#f8f9fa" : (Context.Request.Cookies["theme"] == "dark" || Context.Request.Cookies["theme"] == "red") ? "#1a1a1a" : (Context.Request.Cookies["theme"] == "pink") ? "#ffebf2" : "#f8f9fa")">
-    <script src="~/js/global.js" asp-append-version="true"></script>
-    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/style.css?v=@version">
+    
+    @if (ViewContext.View.Path != "/Views/Shared/_Loading.cshtml")
+    {
+        <script src="~/js/global.js?v=@version"></script>
+        
+    }
     @if (!string.IsNullOrEmpty(ViewData["add_css"]?.ToString()))
     {
-        <link rel="stylesheet" href="~/css/@(ViewData["add_css"]).css" asp-append-version="true">
+        <link rel="stylesheet" href="~/css/@(ViewData["add_css"]).css?v=@version">
     }
 </head>
 <body>
@@ -40,14 +47,14 @@
 
     <div class="bottom">
         <ul>
-            <li>
-                <a asp-controller="Main" asp-action="index">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-house menu-icons fa-fw @(currentPage == @Url.Action("index", "Main") ? "active" : "")"></i>
-                        <p>Hoofdmenu</p>
-                    </div>
-                </a>
-            </li>
+            @* <li> *@
+            @*     <a asp-controller="Main" asp-action="index"> *@
+            @*         <div class="menu-item"> *@
+            @*             <i class="fa-solid fa-house menu-icons fa-fw @(currentPage == @Url.Action("index", "Main") ? "active" : "")"></i> *@
+            @*             <p>Hoofdmenu</p> *@
+            @*         </div> *@
+            @*     </a> *@
+            @* </li> *@
 
             <h5 class="Heading">Zermelo</h5>
 
@@ -181,6 +188,15 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
                 </div>
             }
         </div>
+        
+        <script>
+            if('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/serviceworker.js')
+                    .then(function() {
+                        console.log("[ SERVICE WORKER ] Registered");
+                    });
+            }
+        </script>
     }
 }
 

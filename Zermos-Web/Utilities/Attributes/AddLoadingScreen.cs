@@ -32,8 +32,9 @@ namespace Zermos_Web.Models.Requirements
             // Set ViewData values
             context.HttpContext.Items["loading"] = true;
             context.HttpContext.Items["laad_tekst"] = LaadTekst;
-            context.HttpContext.Items["url"] = "/" + context.RouteData.Values["controller"] + "/" + context.RouteData.Values["action"] + "?" + parameters;
-
+            context.HttpContext.Items["url"] = "/" + context.RouteData.Values["controller"] + "/" + context.RouteData.Values["action"] + (parameters.Length > 0 ? "?" + parameters : "");
+            
+            
             // Return the _loading.cshtml view
             context.Result = new ViewResult
             {

@@ -489,27 +489,20 @@ namespace Zermos_Web.Controllers
         
         #region Teams
 #if DEBUG
-        [NotImplementedYet]
         public IActionResult Teams()
         {
             string redirectUrl = "https://localhost:5001/Koppelingen/Teams/Callback";
-// #elif RELEASE
-//             string redirectUrl = "https://zermos.kronk.tech/Koppelingen/Teams/Callback";
-// #endif
+            
             redirectUrl = "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=REDACTED_MS_CLIENT_ID&response_type=code&redirect_uri=" + redirectUrl + "&response_mode=query&scope=User.Read offline_access&state=" + TokenUtils.RandomString();
 
             return Redirect(redirectUrl);
         }
         
-        [NotImplementedYet]
         [Route("/Koppelingen/Teams/Callback")]
         public async Task<IActionResult> TeamsCallback(string code, string state, string session_state)
         {
-// #if DEBUG
             string redirectUrl = "https://localhost:5001/Koppelingen/Teams/Callback";
-// #elif RELEASE
-//             string redirectUrl = "https://zermos.kronk.tech/Koppelingen/Teams/Callback";
-            
+
             var client = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Post, "https://login.microsoftonline.com/organizations/oauth2/v2.0/token");
             var collection = new List<KeyValuePair<string, string>>();

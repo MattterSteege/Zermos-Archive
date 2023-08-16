@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zermos_Web.Models.Requirements;
+using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
@@ -23,26 +24,21 @@ namespace Zermos_Web.Controllers
         }
         
         #if DEBUG
-        [AddLoadingScreen("hoofdmenu laden...")]
-        public async Task<IActionResult> Index()
-        {
-            ViewData["add_css"] = "hoofdmenu";
-            return View(await _users.GetUserAsync(User.FindFirstValue("email")));
-        }
-
         public IActionResult Laadscherm()
         {
             ViewData["laad_tekst"] = "Bezig met laden";
             return View("_Loading");
         }
-        #elif RELEASE
+        #endif
+        
+        [AddLoadingScreen("hoofdmenu laden...")]
         public async Task<IActionResult> Index()
         {
-            return RedirectToAction("Rooster", "Zermelo");
+            ViewData["add_css"] = "hoofdmenu";
+            HttpContext.AddNotification("Pas op", "Deze pagina is no niet af, er kunnen nog bugs in zitten", NotificationCenter.NotificationType.WARNING);
+            return View(await _users.GetUserAsync(User.FindFirstValue("email")));
         }
-        #endif
 
-        
         //to send the correct deeplink format do this: location.href = 'web+zermos://' + url;
         [Route("/Deeplink")]
         public IActionResult Deeplink(string data = null)
@@ -62,6 +58,18 @@ namespace Zermos_Web.Controllers
                 return Redirect(data);
             }
             return Redirect("/");
+        }
+        
+        [Route("/serviceworker.js")]
+        public IActionResult ServiceWorker()
+        {
+            return File("~/serviceworker.js", "text/javascript");
+        }
+        
+        [Route("/Offline")]
+        public IActionResult Offline()
+        {
+            return Ok("Je bent offline en deze pagina is niet gecached");
         }
         
         [Route(".well-known/microsoft-identity-association.json")]
