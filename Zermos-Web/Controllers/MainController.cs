@@ -31,12 +31,13 @@ namespace Zermos_Web.Controllers
         }
         #endif
         
-        [AddLoadingScreen("hoofdmenu laden...")]
+        [AddLoadingScreen("hoofdmenu laden")]
         public async Task<IActionResult> Index()
         {
+            await Task.Delay(1000);
             ViewData["add_css"] = "hoofdmenu";
             HttpContext.AddNotification("Pas op", "Deze pagina is no niet af, er kunnen nog bugs in zitten", NotificationCenter.NotificationType.WARNING);
-            return View(await _users.GetUserAsync(User.FindFirstValue("email")));
+            return PartialView(await _users.GetUserAsync(User.FindFirstValue("email")));
         }
 
         //to send the correct deeplink format do this: location.href = 'web+zermos://' + url;

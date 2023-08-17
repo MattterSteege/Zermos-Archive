@@ -34,10 +34,6 @@ namespace Zermos_Web.Models.Requirements
             context.HttpContext.Items["laad_tekst"] = LaadTekst;
             context.HttpContext.Items["url"] = "/" + context.RouteData.Values["controller"] + "/" + context.RouteData.Values["action"] + (parameters.Length > 0 ? "?" + parameters : "");
             
-            //make service worker know that this is not the final page and that it should not cache it
-            context.HttpContext.Response.Headers.Add("Service-Worker-Allowed", "/");
-            context.HttpContext.Response.Headers.Add("Cache-Control", "no-store");
-            
             // Return the _loading.cshtml view
             context.Result = new ViewResult
             {

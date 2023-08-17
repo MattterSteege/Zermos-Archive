@@ -3,6 +3,7 @@
     #content {
         width: 100%;
         height: 100%;
+        transition: 0.3s;
     }
 
     .loader-text {
@@ -59,11 +60,6 @@
       transform: translate(-50%, -50%);
     }   
     
-    #main {
-      opacity: 0;
-      animation: fade-in 0.25s ease-in-out forwards;
-    }
-    
     @@keyframes fade-in {
       0% {
         opacity: 0;
@@ -95,51 +91,103 @@
 
 @section Scripts
 {
-<script>
+  <script id="loading-script">
 $(function() {
 
     const urlParams = new URLSearchParams(window.location.search);
 
     if ("@(ViewData["url"] ?? Context.Items["url"])" === "") { return; }
 
+    // Define a function to append a script to either the head or body
+    function appendScript(element, codeOrSrc, isSrc) {
+        var script = document.createElement("script");
+        if (isSrc) {
+            script.src = codeOrSrc;
+        } else {
+            script.innerHTML = codeOrSrc;
+        }
+        script.id = "added-by-fetch";
+        element.appendChild(script);
+    }
+    
+    // Define a function to append a stylesheet link to the head
+    function appendStylesheet(href) {
+        var link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        link.id = "added-by-fetch";
+        document.head.appendChild(link);
+    }
+    
+    // Get the URL parameter
+    var url = urlParams.get('url');
+    
+    // Make an AJAX request
     $.ajax({
-        url: urlParams.get('url'),
+        url: url,
         success: function(data) {
-
-            //make the #content fade out in 250ms
-            $("#content").fadeOut(250, function() {
-
-                //wait 250ms and then replace the content with the new content            
-                var newDoc = document.open("text/html", "replace");
-                //set faded out
-                //set the new content
-                newDoc.write(data);
-                
-                //append the opactiy style to the new content
-                var style = document.createElement('style');
-                style.type = 'text/css';
-
-                //set the opacity to 0
-                style.innerHTML = "#main { opacity: 0; animation: fade-in .25s ease-in-out forwards; }  @@keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }";
-                newDoc.head.appendChild(style);
-
-                newDoc.close();
-                
-
-
-                $("#main").fadeIn(250);
-            });
-
+            var el = document.createElement('html');
+            el.innerHTML = data;
+    
+            var mainElement = document.getElementById("main");
+            var contentElement = document.getElementById("content");
+    
+            // Fade out main and content
+            mainElement.style.opacity = "0";
+            contentElement.style.opacity = "0";
+    
+            setTimeout(function() {
+                var cleanedData = stripScripts("link", stripScripts("script", data));
+    
+                // Update main content
+                mainElement.innerHTML = cleanedData;
+    
+                var scripts = el.getElementsByTagName("script");
+                var head = document.head;
+                var body = document.body;
+    
+                for (var i = 0; i < scripts.length; i++) {
+                    if (scripts[i].src) {
+                        appendScript(head, scripts[i].src, true);
+                    } else {
+                        appendScript(body, scripts[i].innerHTML, false);
+                    }
+                }
+    
+                var links = el.getElementsByTagName("link");
+                for (var i = 0; i < links.length; i++) {
+                    if (links[i].rel === "stylesheet") {
+                        appendStylesheet(links[i].href);
+                    }
+                }
+    
+                // Remove loading script
+                document.getElementById("loading-script").remove();
+    
+                // Set opacity back to 1
+                mainElement.style.opacity = "1";
+                contentElement.style.opacity = "1";
+            }, 250);
         },
-        //when an error happens, alert the user with the text of the error
         error: function(xhr, status, error) {
-            alert(xhr.responseText);
+            alert("An error occurred: " + error);
             window.location.href = "/";
-
         },
         cache: false,
         type: 'GET'
     });
+
+    
+    function stripScripts(tag, data) {
+        var div = document.createElement('div');
+        div.innerHTML = data;
+        var scripts = div.getElementsByTagName(tag);
+        var i = scripts.length;
+        while (i--) {
+          scripts[i].parentNode.removeChild(scripts[i]);
+        }
+        return div.innerHTML;
+      }
 
     function modifyUrl(title, url) {
         if (typeof(history.pushState) != "undefined") {
@@ -150,6 +198,6 @@ $(function() {
             history.pushState(obj, obj.Title, obj.Url);
         }
     }
-});
+  });
 </script>
 }

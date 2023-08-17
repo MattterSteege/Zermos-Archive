@@ -361,7 +361,7 @@ body {
 
 main.main {
     left: 266px;
-    transition: 0.3s;
+    transition: 0.25s;
     width: calc(100% - 266px);
     height: 100%;
     position: fixed;

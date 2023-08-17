@@ -6,7 +6,6 @@
 
 @{
     ViewBag.Title = "title";
-    Layout = "_Layout";
 
     Appointment zermelo_NextLesson = null;
     Zermos_Web.Models.SomtodayGradesModel.Item somtoday_LastGrade = null;
@@ -27,6 +26,7 @@
     }
 }
 
+<link rel="stylesheet" href="/css/hoofdmenu.css">
 
 <div class="main-container">
 
@@ -151,9 +151,7 @@
     </div>
 </div>
 
-@section Scripts
-{
-    <script>   
+<script>   
     fetch('https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat=52.011194&lon=4.726696&region=nl&unit=mm/u')
     .then(response => response.json())
     .then(data => { 
@@ -196,7 +194,5 @@
     //onresize
     window.addEventListener("resize", () => {
         document.getElementsByClassName("weather-graph-underlay")[0].style.width = document.getElementsByClassName("weather-graph")[0].offsetWidth + "px";
-    });
-    
-    </script>
-}
+    }); 
+</script>

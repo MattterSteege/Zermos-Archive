@@ -2,7 +2,7 @@
 TODO: (later, when feasible) Add an API system that allows users to create an api key with which they can interact with SOMtoday, Zermelo and de Antonius app more easy then with the current system (when the request is past with an api key, then return the normal data)
 TODO: find a way to find what the since paramater means in messages from infowijs
 TODO: main menu page weather - add text for mm/u rain and a slider for time
-TODO: Add a small buble that shows when the user has swiped enough to go to the next week
+TODO: Add a small bubble that shows when the user has swiped enough to go to the next week
 TODO: CSS cleanup, it is really needed
 TODO: offline page
 
@@ -11,3 +11,11 @@ TODO: School recap page
     - Totaal hoeveelheid lessen gemist
     - Totaal hoeveelheid huiswerk gemaakt
     - Totaal hoeveelheid cijfers/toetsen gemaakt
+    
+    
+    
+TODO: make all pages loading proof, that means:
+    - turn viewData["add_css"] should be added to the view itself in the form <link rel="stylesheet" href="css/...">
+    - remove the @script part and add the script tags to the view itself
+    
+TODO: add page transitions, so that only the #main part changes and thus all the icons don't have to be reloaded every time
