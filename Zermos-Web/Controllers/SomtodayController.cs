@@ -50,7 +50,7 @@ namespace Zermos_Web.Controllers
             
             if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
             {
-                return View(JsonConvert.DeserializeObject<SomtodayGradesModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_somtoday_grades ?? string.Empty));
+                return PartialView(JsonConvert.DeserializeObject<SomtodayGradesModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_somtoday_grades ?? string.Empty));
             }
 
             var user = await _users.GetUserAsync(User.FindFirstValue("email"));
@@ -77,7 +77,7 @@ namespace Zermos_Web.Controllers
             if (response.IsSuccessStatusCode == false)
             {
                 HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je cijfers konden niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", NotificationCenter.NotificationType.ERROR);
-                return View(new SomtodayGradesModel {items = new List<Item>()});
+                return PartialView(new SomtodayGradesModel {items = new List<Item>()});
             }
 
             if (int.TryParse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1],
@@ -112,7 +112,7 @@ namespace Zermos_Web.Controllers
             
             Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
 
-            return View(grades);
+            return PartialView(grades);
         }
 
         public async Task<string> RefreshToken(string token = null)
@@ -158,7 +158,7 @@ namespace Zermos_Web.Controllers
             var b = Encoding.UTF8.GetString(a);
             var c = JsonConvert.DeserializeObject<sortedGrades>(b);
 
-            return View(c);
+            return PartialView(c);
         }
 
         [AddLoadingScreen("Cijfers worden geladen")]
@@ -174,7 +174,7 @@ namespace Zermos_Web.Controllers
             var b = Encoding.UTF8.GetString(a);
             var c = JsonConvert.DeserializeObject<Item>(b);
 
-            return View(c);
+            return PartialView(c);
         }
 
         [AddLoadingScreen("Cijfers worden geladen")]
@@ -208,7 +208,7 @@ namespace Zermos_Web.Controllers
             //charts.Add(GetStandardDeviationChart(grades));
 
 
-            return View(charts);
+            return PartialView(charts);
         }
 
         private Chart CreateChart(string title, bool showHeight = true)
@@ -456,7 +456,7 @@ namespace Zermos_Web.Controllers
             {
                 string cache = (await _users.GetUserAsync(User.FindFirstValue("email"))).cached_somtoday_homework;
                 var homework = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(cache);
-                return View(homework);
+                return PartialView(homework);
             }
 
             var user = await _users.GetUserAsync(User.FindFirstValue("email"));
@@ -486,7 +486,7 @@ namespace Zermos_Web.Controllers
             if (response.IsSuccessStatusCode == false)
             {
                 HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je Huiswerk op Somtoday kon niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", NotificationCenter.NotificationType.ERROR);
-                return View(Sort(new SomtodayHomeworkModel() {items = await GetRemappedCustomHuiswerk()}));
+                return PartialView(Sort(new SomtodayHomeworkModel() {items = await GetRemappedCustomHuiswerk()}));
             }
 
             var somtodayHuiswerk =
@@ -504,7 +504,7 @@ namespace Zermos_Web.Controllers
             
             Response.Cookies.Append("cached-somtoday-homework", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddHours(1)});
             
-            return View(somtodayHuiswerk);
+            return PartialView(somtodayHuiswerk);
         }
 
         [NonAction]
@@ -556,11 +556,12 @@ namespace Zermos_Web.Controllers
 
         [Authorize]
         [SomtodayRequirement]
+        [AddLoadingScreen("Pagina laden")]
         [HttpGet("Somtoday/Huiswerk/Nieuw")]
         public IActionResult NieuwHuiswerk()
         {
             ViewData["add_css"] = "somtoday";
-            return View();
+            return PartialView();
         }
         
         [Authorize]

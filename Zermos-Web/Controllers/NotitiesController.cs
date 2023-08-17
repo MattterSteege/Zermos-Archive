@@ -36,13 +36,13 @@
 //             
 //             var notes = JsonConvert.DeserializeObject<List<Notitie>>(user.notities ?? "[]");
 //
-//             return View(notes);
+//             return PartialView(notes);
 //         }
 //         
 //         [HttpGet]
 //         public IActionResult Nieuw()
 //         {
-//             return View("Bewerk");
+//             return PartialView("Bewerk");
 //         }
 //         
 //         [HttpPost]
@@ -95,7 +95,7 @@
 //             if (!notes.Any(n => n.id == id))
 //                 return BadRequest("Notitie bestaat niet");
 //             
-//             return View(notes.First(n => n.id == id));
+//             return PartialView(notes.First(n => n.id == id));
 //         }
 //     }
 // }

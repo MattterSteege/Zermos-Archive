@@ -49,7 +49,7 @@ namespace Zermos_Web.Controllers
             
             if (Request.Cookies.ContainsKey("cached-infowijs-news"))
             {
-                return View(JsonConvert.DeserializeObject<InfowijsMessagesModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_infowijs_news ?? string.Empty, Converter.Settings).Data.Messages
+                return PartialView(JsonConvert.DeserializeObject<InfowijsMessagesModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_infowijs_news ?? string.Empty, Converter.Settings).Data.Messages
                     .Where(x => x.Type != 12).Reverse().GroupBy(x => x.GroupId).ToList());
             }
 
@@ -83,7 +83,7 @@ namespace Zermos_Web.Controllers
             
             Response.Cookies.Append("cached-infowijs-news", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
             
-            return View(infowijsMessage);
+            return PartialView(infowijsMessage);
         }
 
 
@@ -96,7 +96,7 @@ namespace Zermos_Web.Controllers
             
             if (Request.Cookies.ContainsKey("cached-infowijs-calendar"))
             {
-                return View(JsonConvert.DeserializeObject<InfowijsEventsModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_infowijs_calendar ?? string.Empty, Converter.Settings).data);
+                return PartialView(JsonConvert.DeserializeObject<InfowijsEventsModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_infowijs_calendar ?? string.Empty, Converter.Settings).data);
             }
 
             //https://antonius.hoyapp.nl/hoy/v1/events
@@ -112,7 +112,7 @@ namespace Zermos_Web.Controllers
             
             Response.Cookies.Append("cached-infowijs-calendar", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddDays(1)});
 
-            return View(JsonConvert
+            return PartialView(JsonConvert
                 .DeserializeObject<InfowijsEventsModel>(await response.Content.ReadAsStringAsync(),
                     Converter.Settings).data);
         }

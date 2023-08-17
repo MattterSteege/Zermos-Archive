@@ -41,7 +41,7 @@ namespace Zermos_Web.Controllers
                     DateTime.Now.Hour >= 12 && DateTime.Now.Hour < 24)
                 {
 
-                    return View(JsonConvert.DeserializeObject<List<InformatieBoordModel>>((await _users.GetUserAsync(User.FindFirstValue("email"))).cached_school_informationscreen));
+                    return PartialView(JsonConvert.DeserializeObject<List<InformatieBoordModel>>((await _users.GetUserAsync(User.FindFirstValue("email"))).cached_school_informationscreen));
                 }
             }
 
@@ -92,7 +92,7 @@ namespace Zermos_Web.Controllers
             
             Response.Cookies.Append("cached-school-informationscreen", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddDays(60)});
 
-            return View(model);
+            return PartialView(model);
         }
     }
 }

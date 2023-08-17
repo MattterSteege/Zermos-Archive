@@ -29,7 +29,7 @@ public class StreamingController : Controller
         // Write an initial message to the client. This will be shown as a message from the server
         var writer = new StreamWriter(Response.Body, Encoding.UTF8, bufferSize: 10240, leaveOpen: true);
     
-        await writer.WriteLineAsync("<!--" + await ViewRenderer.RenderViewToStringAsync("_loading", null, ControllerContext)); // return the loading.cs view
+        await writer.WriteLineAsync("<!--" + await ViewRenderer.RenderViewToStringAsync("_loading", null, ControllerContext)); // return the loading.cs PartialView
         await writer.WriteLineAsync(); // Separation between events
         await writer.FlushAsync();
     

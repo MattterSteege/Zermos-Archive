@@ -41,6 +41,8 @@
     DateTime lastUpdated = Context.Request.Cookies["last-seen-somtoday-grades"] == null ? DateTime.MinValue : DateTime.Parse(Context.Request.Cookies["last-seen-somtoday-grades"]);
 }
 
+<link rel="stylesheet" href="~/css/somtoday.css" />
+
 @* <div class="grades" style="grid-template-columns: @(DetectionService.Device.Type == Device.Mobile ? "1fr" : "3fr 1fr");"> *@
 <div class="grades">
     <div class="grades-container">

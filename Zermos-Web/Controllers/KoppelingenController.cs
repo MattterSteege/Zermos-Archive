@@ -75,7 +75,7 @@ namespace Zermos_Web.Controllers
         public IActionResult Index()
         {
             ViewData["add_css"] = "koppelingen";
-            return View();
+            return PartialView();
         }
 
         #region ontkoppelen
@@ -122,7 +122,7 @@ namespace Zermos_Web.Controllers
             ViewData["add_css"] = "koppelingen";
 
             ViewData["retry"] = false;
-            return View(model: "");
+            return PartialView(model: "");
         }
         
         [HttpPost]
@@ -147,7 +147,7 @@ namespace Zermos_Web.Controllers
                 ViewData["user_id"] = antoniusAppAuthenticatieModelData.data.user_id;
                 ViewData["id"] = antoniusAppAuthenticatieModelData.data.id;
                 ViewData["retry"] = false;
-                return View(model: "");
+                return PartialView(model: "");
             }
 
             var response2 = await _infowijsHttpClient.PostAsync("https://api.infowijs.nl/sessions/" + id + "/77584871-d26b-11ea-8b2e-060ffde8896c/" + user_id, null);
@@ -170,7 +170,7 @@ namespace Zermos_Web.Controllers
                 ViewData["user_id"] = user_id;
                 ViewData["id"] = id;
                 ViewData["retry"] = true;
-                return View(model: "");
+                return PartialView(model: "");
             }
         }
         
@@ -183,7 +183,7 @@ namespace Zermos_Web.Controllers
                 ViewData["qr_text"] = "hoy_scan://v1/login/" + uuid;
                 ViewData["uuid"] = uuid;
                 ViewData["retry"] = retry;
-                return View(model: "");
+                return PartialView(model: "");
             }
             
             ViewData["add_css"] = "koppelingen";
@@ -198,7 +198,7 @@ namespace Zermos_Web.Controllers
             ViewData["uuid"] = uuid;
             ViewData["retry"] = retry;
 
-            return View(model: "");
+            return PartialView(model: "");
         }
 
         [HttpPost]
@@ -221,7 +221,7 @@ namespace Zermos_Web.Controllers
                 ViewData["qr_text"] = "hoy_scan://v1/login/" + uuid;
                 ViewData["uuid"] = uuid;
                 ViewData["retry"] = true;
-                return View(model: "");
+                return PartialView(model: "");
             }
             
             var jwt = JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModelAuthSuccess>(result2).data;
@@ -240,7 +240,7 @@ namespace Zermos_Web.Controllers
         {
             ViewData["add_css"] = "koppelingen";
 
-            return View();
+            return PartialView();
         }
 
 
@@ -299,7 +299,7 @@ namespace Zermos_Web.Controllers
         public IActionResult ZermeloWithQr()
         {
             ViewData["add_css"] = "koppelingen";
-            return View();
+            return PartialView();
         }
 
         [HttpGet]
@@ -307,7 +307,7 @@ namespace Zermos_Web.Controllers
         public IActionResult ZermeloWithCode()
         {
             ViewData["add_css"] = "koppelingen";
-            return View();
+            return PartialView();
         }
 
         [HttpPost]
@@ -367,7 +367,7 @@ namespace Zermos_Web.Controllers
         {
             ViewData["add_css"] = "koppelingen";
 
-            return View();
+            return PartialView();
         }
 
 
@@ -427,7 +427,7 @@ namespace Zermos_Web.Controllers
                 JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(response.Content.ReadAsStringAsync()
                     .Result);
 
-            if (somtodayAuthentication.access_token == null) return View();
+            if (somtodayAuthentication.access_token == null) return PartialView();
 
             var user = await GetSomtodayStudent(somtodayAuthentication.access_token);
             user.somtoday_access_token = somtodayAuthentication.access_token;

@@ -3,7 +3,6 @@
 
 @{
     ViewBag.Title = "title";
-    Layout = "_Layout";
 
     //whem the model is 0, show the login page
 
@@ -18,6 +17,8 @@
     
     //when model is 3, say that the user is logged out
 }
+
+<link rel="stylesheet" href="/css/account.css">
 
 @if (Model == null || Model.Item2 == 0)
 {
@@ -110,13 +111,12 @@ else
     </div>
 }
 
-@section Scripts
-{
-    <script>
-        const isInStandaloneMode = () =>
-              (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone) || document.referrer.includes('android-app://');
-        if (isInStandaloneMode()) {
-            document.querySelector('input[name="isPWA"]').value = 'true'
-        }
-    </script>
-}
+
+<script>
+    const isInStandaloneMode = () =>
+          (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone) || document.referrer.includes('android-app://');
+    if (isInStandaloneMode()) {
+        document.querySelector('input[name="isPWA"]').value = 'true'
+    }
+</script>
+

@@ -17,5 +17,6 @@ TODO: School recap page
 TODO: make all pages loading proof, that means:
     - turn viewData["add_css"] should be added to the view itself in the form <link rel="stylesheet" href="css/...">
     - remove the @script part and add the script tags to the view itself
+    - remove the Layout = "_Layout";
     
 TODO: add page transitions, so that only the #main part changes and thus all the icons don't have to be reloaded every time

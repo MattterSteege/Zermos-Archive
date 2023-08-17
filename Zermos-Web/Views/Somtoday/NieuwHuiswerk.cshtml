@@ -1,10 +1,11 @@
 ﻿@{
     ViewBag.Title = "title";
-    Layout = "_Layout";
 }
 
 @* [HttpPost("Somtoday/Huiswerk/Nieuw")] *@
 @* public async Task<IActionResult> NieuwHuiswerk(string title, string description, DateTime date) *@
+
+<link rel="stylesheet" href="~/css/somtoday.css" />
 
 <form method="post" class="add-homework" asp-controller="Somtoday" asp-action="NieuwHuiswerk">
     

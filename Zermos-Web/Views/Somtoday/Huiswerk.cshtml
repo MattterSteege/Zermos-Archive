@@ -8,6 +8,8 @@
     var groupedHomework = Model.items.GroupBy(item => item.datumTijd.Day);
 }
 
+<link rel="stylesheet" href="~/css/somtoday.css" />
+
 <div class="homework-container">
     @foreach (var dayGroup in groupedHomework)
     {
@@ -61,24 +63,23 @@
     </a>
 </div>
 
-@section Scripts {
-    <script>
-      // Get all the div elements with class "homework-divider"
-      const dividers = document.querySelectorAll('.homework-divider');
-    
-      // Loop through each divider element
-      dividers.forEach(divider => {
-        // Get the sibling p element
-        const siblingParagraph = divider.previousElementSibling;
-    
-        // Check if the sibling exists and is a p element
-        if (siblingParagraph && siblingParagraph.tagName === 'P') {
-          // Get the width of the sibling paragraph
-          const width = siblingParagraph.offsetWidth;
-          
-          // Set the width of the divider to match the width of the paragraph or the width of the parent element, whichever is smaller
-            divider.style.width = `${Math.min(width, divider.parentElement.offsetWidth)}px`;
-        }
-      });
-    </script>
-}
+
+<script>
+  // Get all the div elements with class "homework-divider"
+  const dividers = document.querySelectorAll('.homework-divider');
+
+  // Loop through each divider element
+  dividers.forEach(divider => {
+    // Get the sibling p element
+    const siblingParagraph = divider.previousElementSibling;
+
+    // Check if the sibling exists and is a p element
+    if (siblingParagraph && siblingParagraph.tagName === 'P') {
+      // Get the width of the sibling paragraph
+      const width = siblingParagraph.offsetWidth;
+      
+      // Set the width of the divider to match the width of the paragraph or the width of the parent element, whichever is smaller
+        divider.style.width = `${Math.min(width, divider.parentElement.offsetWidth)}px`;
+    }
+  });
+</script>

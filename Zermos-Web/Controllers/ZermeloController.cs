@@ -60,7 +60,7 @@ namespace Zermos_Web.Controllers
                 HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je rooster kon niet worden geladen, waarschijnlijk is je Zermelo token verlopen", NotificationCenter.NotificationType.ERROR);
                 if (asPartial)
                     return PartialView(new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>(), MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year)}}}});
-                return View(new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>(), MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year)}}}});
+                return PartialView(new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>(), MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year)}}}});
             }
 
             if (week == DateTime.Now.GetWeekNumber().ToString() && year == DateTime.Now.Year.ToString())
@@ -73,7 +73,7 @@ namespace Zermos_Web.Controllers
             
             if (asPartial)
                 return PartialView(zermeloRoosterModel);
-            return View(zermeloRoosterModel);
+            return PartialView(zermeloRoosterModel);
         }
     }
 }

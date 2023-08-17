@@ -28,8 +28,7 @@ namespace Zermos_Web.Controllers
         [AddLoadingScreen("account laden...")]
         public async Task<IActionResult> ShowAccount()
         {
-            ViewData["add_css"] = "account";
-            return View(await _users.GetUserAsync(User.FindFirstValue("email")));
+            return PartialView(await _users.GetUserAsync(User.FindFirstValue("email")));
         }
         
         [HttpPost]

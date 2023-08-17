@@ -2,8 +2,9 @@
 
 @{
     ViewBag.Title = "title";
-    Layout = "_Layout";
 }
+
+<link rel="stylesheet" href="~/css/koppelingen.css" />
 
 @{
     if ((ViewData["customer_product_id"] != null && ViewData["user_id"] != null && ViewData["id"] != null)) //user token has been fetched, now wait for user

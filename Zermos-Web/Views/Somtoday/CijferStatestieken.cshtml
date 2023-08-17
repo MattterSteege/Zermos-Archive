@@ -5,6 +5,8 @@
     var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 }
 
+<link rel="stylesheet" href="~/css/somtoday.css" />
+
 <div class="stats-container">
     <div class="stats">
         <p class="stats-vak">Vak: @((ViewData["stats"] as Dictionary<string, string>)?["vak"])</p>
@@ -37,91 +39,89 @@
 </div>
 
 
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        @for (var i = 0; i < Model.Count; i++)
-        {
-            @Html.Raw(Model[i].CreateChartCode(letters[i].ToString()))
-        }
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    @for (var i = 0; i < Model.Count; i++)
+    {
+        @Html.Raw(Model[i].CreateChartCode(letters[i].ToString()))
+    }
+    
+    //WAT MOET IK HALEN
+    var grade_wmih = document.getElementById("grade_wmih");
+    var weight_wmih = document.getElementById("weight_wmih");
+    var result_wmih = document.getElementById("result_wmih");
+    
+    //when grade value changes
+    grade_wmih.addEventListener("change", function () { wmih(); });
+    
+    //when weight value changes
+    weight_wmih.addEventListener("change", function () { wmih(); });
+    
+    //calculation function
+    function wmih() {
+        const totaleWeging = @((ViewData["stats"] as Dictionary<string, string>)?["weging"]) + parseInt(weight_wmih.value);
+        const alBehaaldePunten = @((ViewData["stats"] as Dictionary<string, string>)?["som"]);
+        const nogTeBehalen = parseFloat(grade_wmih.value) * totaleWeging - alBehaaldePunten;
+        const nogTeBehalenPunten = nogTeBehalen / parseInt(weight_wmih.value);
         
-        //WAT MOET IK HALEN
-        var grade_wmih = document.getElementById("grade_wmih");
-        var weight_wmih = document.getElementById("weight_wmih");
-        var result_wmih = document.getElementById("result_wmih");
-        
-        //when grade value changes
-        grade_wmih.addEventListener("change", function () { wmih(); });
-        
-        //when weight value changes
-        weight_wmih.addEventListener("change", function () { wmih(); });
-        
-        //calculation function
-        function wmih() {
-            const totaleWeging = @((ViewData["stats"] as Dictionary<string, string>)?["weging"]) + parseInt(weight_wmih.value);
-            const alBehaaldePunten = @((ViewData["stats"] as Dictionary<string, string>)?["som"]);
-            const nogTeBehalen = parseFloat(grade_wmih.value) * totaleWeging - alBehaaldePunten;
-            const nogTeBehalenPunten = nogTeBehalen / parseInt(weight_wmih.value);
-            
-            if (isNaN(nogTeBehalenPunten)){       
-                return;
-            }
-            
-            
-            result_wmih.innerHTML = "Je moet een " + (nogTeBehalen / parseInt(weight_wmih.value)).toFixed(2) + " halen om een " + grade_wmih.value + " te staan.";
-            
-            result_wmih.style.display = "block";
+        if (isNaN(nogTeBehalenPunten)){       
+            return;
         }
         
         
+        result_wmih.innerHTML = "Je moet een " + (nogTeBehalen / parseInt(weight_wmih.value)).toFixed(2) + " halen om een " + grade_wmih.value + " te staan.";
         
+        result_wmih.style.display = "block";
+    }
+    
+    
+    
+    
+    
+    //WAT GA IK STAAN
+    var grade_wgis = document.getElementById("grade_wgis");
+    var weight_wgis = document.getElementById("weight_wgis");
+    var result_wgis = document.getElementById("result_wgis");
+    
+    //when grade value changes
+    grade_wgis.addEventListener("change", function () { wgis(); });
+    
+    //when weight value changes
+    weight_wgis.addEventListener("change", function () { wgis(); });
+    
+    //calculation function
+    function wgis() {
+        const totaleWeging = @((ViewData["stats"] as Dictionary<string, string>)?["weging"]) + parseInt(weight_wgis.value);
+        const alBehaaldePunten = @((ViewData["stats"] as Dictionary<string, string>)?["som"]) + parseFloat(grade_wgis.value) * parseInt(weight_wgis.value);
+        const nogTeBehalenPunten = alBehaaldePunten / totaleWeging;
         
-        
-        //WAT GA IK STAAN
-        var grade_wgis = document.getElementById("grade_wgis");
-        var weight_wgis = document.getElementById("weight_wgis");
-        var result_wgis = document.getElementById("result_wgis");
-        
-        //when grade value changes
-        grade_wgis.addEventListener("change", function () { wgis(); });
-        
-        //when weight value changes
-        weight_wgis.addEventListener("change", function () { wgis(); });
-        
-        //calculation function
-        function wgis() {
-            const totaleWeging = @((ViewData["stats"] as Dictionary<string, string>)?["weging"]) + parseInt(weight_wgis.value);
-            const alBehaaldePunten = @((ViewData["stats"] as Dictionary<string, string>)?["som"]) + parseFloat(grade_wgis.value) * parseInt(weight_wgis.value);
-            const nogTeBehalenPunten = alBehaaldePunten / totaleWeging;
-            
-            if (isNaN(nogTeBehalenPunten)){       
-                return;
-            }
-            
-            result_wgis.innerHTML = "Je komt een " + (alBehaaldePunten / totaleWeging).toFixed(2) + " te staan.";
-            
-            result_wgis.style.display = "block";
+        if (isNaN(nogTeBehalenPunten)){       
+            return;
         }
         
+        result_wgis.innerHTML = "Je komt een " + (alBehaaldePunten / totaleWeging).toFixed(2) + " te staan.";
         
+        result_wgis.style.display = "block";
+    }
+    
+    
+    
+    
+    
+    //Prevent the input of invalid characters
+    const inputElements = document.querySelectorAll('input[type="text"]');
+    
+    inputElements.forEach(function(inputElement) {
+      inputElement.addEventListener('keypress', function(event) {
+        const allowedCharacters = /[0-9.,]/; // Define the allowed characters using a regular expression
         
+        const inputCharacter = String.fromCharCode(event.charCode);
         
-        
-        //Prevent the input of invalid characters
-        const inputElements = document.querySelectorAll('input[type="text"]');
-        
-        inputElements.forEach(function(inputElement) {
-          inputElement.addEventListener('keypress', function(event) {
-            const allowedCharacters = /[0-9.,]/; // Define the allowed characters using a regular expression
-            
-            const inputCharacter = String.fromCharCode(event.charCode);
-            
-            if (!allowedCharacters.test(inputCharacter)) {
-              event.preventDefault(); // Prevent the input of invalid characters
-            }
-          });
-        });
+        if (!allowedCharacters.test(inputCharacter)) {
+          event.preventDefault(); // Prevent the input of invalid characters
+        }
+      });
+    });
 
-        
-    </script>
-}
+    
+</script>

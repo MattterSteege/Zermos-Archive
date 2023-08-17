@@ -18,19 +18,19 @@ namespace Zermos_Web.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
+            return PartialView(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
         
         [HttpGet("/404")]
         public IActionResult FourZeroFour()
         {
-            return View("404");
+            return PartialView("404");
         }
         
         [HttpGet("/NotImplemented")]
         public IActionResult NotImplemented()
         {
-            return View();
+            return PartialView();
         }
     }
 
