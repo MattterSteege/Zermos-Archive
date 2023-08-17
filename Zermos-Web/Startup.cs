@@ -52,14 +52,14 @@ namespace Zermos_Web
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
             else
-                app.UseExceptionHandler("/Error/Error");
+                app.UseExceptionHandler("/Error");
 
             app.Use(async (context, next) =>
             {
                 await next();
                 if (context.Response.StatusCode == 404 && !context.Response.HasStarted)
                 {
-                    context.Response.Redirect("/Error/404");
+                    context.Response.Redirect("/404");
                 }
             });
 

@@ -546,13 +546,10 @@ main.main::-webkit-scrollbar-track {
     background: var(--background-color);
     z-index: 1;
     pointer-events: none;
-}
-
-.loader-text {
-    left: 50%;
-    top: 45%;
-    position: absolute;
-    transform: translate(-45%, -50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .loading-dots {
@@ -596,10 +593,7 @@ main.main::-webkit-scrollbar-track {
 }
 
 .loading-dots-container {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    margin-top: 16px;
 }
 
 @keyframes fade-in {

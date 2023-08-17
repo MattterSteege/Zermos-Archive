@@ -72,9 +72,9 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpGet]
+        [ZermosPage]
         public IActionResult Index()
         {
-            ViewData["add_css"] = "koppelingen";
             return PartialView();
         }
 
@@ -117,10 +117,9 @@ namespace Zermos_Web.Controllers
         #region infowijs
         [HttpGet]
         [Route("Koppelingen/Infowijs/Email")]
+        [ZermosPage]
         public IActionResult InfowijsWithEmail(string email, bool retry = false)
         {
-            ViewData["add_css"] = "koppelingen";
-
             ViewData["retry"] = false;
             return PartialView(model: "");
         }
@@ -129,7 +128,6 @@ namespace Zermos_Web.Controllers
         [Route("Koppelingen/Infowijs/Email")]
         public async Task<IActionResult> InfowijsWithEmail(string email, string customer_product_id, string user_id, string id)
         {
-            ViewData["add_css"] = "koppelingen";
             if (email != null && (customer_product_id == null || user_id ==  null || id == null))
             {
                 string url1 = "https://api.infowijs.nl/sessions";
@@ -176,6 +174,7 @@ namespace Zermos_Web.Controllers
         
         [HttpGet]
         [Route("Koppelingen/Infowijs/Qr")]
+        [ZermosPage]
         public async Task<IActionResult> InfowijsQr(string uuid, bool retry = false)
         {
             if (uuid != null)
@@ -185,8 +184,6 @@ namespace Zermos_Web.Controllers
                 ViewData["retry"] = retry;
                 return PartialView(model: "");
             }
-            
-            ViewData["add_css"] = "koppelingen";
             
             string url1 = "https://api.infowijs.nl/sessions/transfer";
             var response1 = await _infowijsHttpClient.PostAsync(url1, null);
@@ -209,8 +206,6 @@ namespace Zermos_Web.Controllers
             {
                 return Redirect("/koppelingen/infowijs/qr");
             }
-            
-            ViewData["add_css"] = "koppelingen";
             
             string url2 = "https://api.infowijs.nl/sessions/transfer/" + uuid;
             var response2 = await _infowijsHttpClient.GetAsync(url2);
@@ -236,10 +231,9 @@ namespace Zermos_Web.Controllers
         #region Zermelo
 
         [HttpGet]
+        [ZermosPage]
         public IActionResult Zermelo()
         {
-            ViewData["add_css"] = "koppelingen";
-
             return PartialView();
         }
 
@@ -298,7 +292,6 @@ namespace Zermos_Web.Controllers
         [Route("/Koppelingen/Zermelo/Qr")]
         public IActionResult ZermeloWithQr()
         {
-            ViewData["add_css"] = "koppelingen";
             return PartialView();
         }
 
@@ -306,7 +299,6 @@ namespace Zermos_Web.Controllers
         [Route("/Koppelingen/Zermelo/Code")]
         public IActionResult ZermeloWithCode()
         {
-            ViewData["add_css"] = "koppelingen";
             return PartialView();
         }
 
@@ -363,10 +355,9 @@ namespace Zermos_Web.Controllers
         #region Somtoday
 
         [HttpGet]
+        [ZermosPage]
         public IActionResult Somtoday()
         {
-            ViewData["add_css"] = "koppelingen";
-
             return PartialView();
         }
 
@@ -489,6 +480,7 @@ namespace Zermos_Web.Controllers
         
         #region Teams
 #if DEBUG
+        [ZermosPage]
         public IActionResult Teams()
         {
             string redirectUrl = "https://localhost:5001/Koppelingen/Teams/Callback";
@@ -499,6 +491,7 @@ namespace Zermos_Web.Controllers
         }
         
         [Route("/Koppelingen/Teams/Callback")]
+        [ZermosPage]
         public async Task<IActionResult> TeamsCallback(string code, string state, string session_state)
         {
             string redirectUrl = "https://localhost:5001/Koppelingen/Teams/Callback";

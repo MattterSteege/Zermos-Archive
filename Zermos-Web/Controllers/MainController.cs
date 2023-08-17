@@ -23,15 +23,7 @@ namespace Zermos_Web.Controllers
             _users = users;
         }
         
-        #if DEBUG
-        public IActionResult Laadscherm()
-        {
-            ViewData["laad_tekst"] = "Bezig met laden";
-            return PartialView("_Loading");
-        }
-        #endif
-        
-        public IActionResult Index(string url = "/Main/Hoofdmenu")
+        public IActionResult Index(string url = "/Hoofdmenu")
         {
             if (url != null)
             {
@@ -42,6 +34,7 @@ namespace Zermos_Web.Controllers
         
         //[AddLoadingScreen("hoofdmenu laden")]
         [ZermosPage]
+        [Route("/Hoofdmenu")]
         public async Task<IActionResult> Hoofdmenu()
         {
             ViewData["add_css"] = "hoofdmenu";

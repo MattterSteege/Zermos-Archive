@@ -174,7 +174,7 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
 
 <div id="content">
     <div class="loader-text">
-        @(ViewData["laad_tekst"] ?? Context.Items["laad_tekst"] ?? "De pagina wordt geladen")
+        De pagina wordt geladen
     </div>
     <div class="loading-dots-container">
         <div class="loading-dots"></div>
@@ -228,7 +228,12 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
         
         var mainElement = document.getElementById("main");
         var contentElement = document.getElementById("content");
+        var text = loadingTexts[Math.floor(Math.random() * loadingTexts.length)];
+        console.log(text);
+        document.getElementsByClassName("loader-text")[0].innerHTML = text;
 
+        //set loading-text to one of the followin
+        
         contentElement.style.opacity = "1";
         // Make an AJAX request
         $.ajax({
@@ -274,8 +279,7 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
                 }, 250);
             },
             error: function(xhr, status, error) {
-                alert("An error occurred: " + error);
-                window.location.href = "/";
+                console.log(error);
             },
             cache: false,
             type: 'GET'
@@ -304,6 +308,82 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
             history.pushState(obj, obj.Title, obj.Url);
         }
     }
+    
+    const loadingTexts = [
+        "Tijd en Ruimte omwisselen",
+        "heftig rond draaien",
+        "Een lepel buigen",
+        "Denk niet aan paarse nijlpaarden",
+        "Leuke dag?",
+        "Lachen laadt Zermos sneller!",
+        "En geniet van de liftmuziek",
+        "Even geduld a.u.b. terwijl de kleine elven je pagina tekenen",
+        "Wil je daar frietjes bij?",
+        "De zwaartekrachtconstante in uw omgeving controleren",
+        "Ga je gang - houd je adem in!",
+        "Je staat tenminste niet in de wacht",
+        "De server wordt aangedreven door een citroen",
+        "We stellen je geduld op de proef",
+        "Alsof je een andere keuze had",
+        "Wachten totdat de satelliet in positie komt",
+        "Zijn we er al?",
+        "Tel maar tot 10",
+        "Waarom zo serieus?",
+        "Terugtellen vanaf oneindig",
+        "Geen paniek",
+        "Dus... Kom je hier vaak?",
+        "Waarschuwing: steek jezelf niet in de hens",
+        "We maken een koekje voor je",
+        "Het rad van fortuin draaien",
+        "Kans op succes berekenen",
+        "Hoe noem je 8 Hobbits? Een Hobbyte",
+        "Is dit Windows?",  
+        "Wacht alstublieft tot de luiaard begint te bewegen", 
+        "Ik zweer dat het bijna klaar is",
+        "Laten we een minuutje mindfulness nemen",
+        "Luisteren naar het geluid van één hand die klapt",
+        "Zorgen dat alle puntjes hieronder staan",
+        "De hamster laten draaien",
+        "AI overtuigen om niet kwaad te worden",
+        "Hoe ben je hier gekomen?",
+        "Wacht, ruik je iets brandends?",
+        "42",
+        "Ik denk dat ik ben, daarom ben ik. Denk Ik",
+        "het gebeurt",
+        "Een paar zeeschildpadden vastbinden",
+        "Wat is de vliegsnelheid van een onbeladen zwaluw?",
+        "Ik wist niet dat verf zo snel droogde.",
+        "De hond uitlaten",
+        "Delen door nul",
+        "Als dit over 5 minuten niet klaar is, wacht dan gewoon langer.",
+        "We hebben een grotere boot nodig.",
+        "Webontwikkelaars doen het met <style>",
+        "Encryptie op militair niveau kraken",
+        "Op zoek naar gevoel voor humor, wacht even",
+        "BRB",
+        "TODO: grappig laadbericht invoegen",
+        "Laten we hopen dat het het wachten waard is",
+        "Draai gerust rond in je stoel",
+        "Wat de wat?",
+        "Meer RAM downloaden",
+        "Alt-F4 versnelt dingen",
+        "Pixels duwen",
+        "Lekker weertje hè",
+        "Een muur bouwen",
+        "Alles in dit universum is een aardappel of geen aardappel",
+        "Geduld, het is moeilijk!",
+        "Nieuwe manieren ontdekken om je te laten wachten",
+        "TODO: Liftmuziek invoegen",
+        "Het zware werk doen",
+        "We werken heel hard ... Echt",
+        "je bent nummer 2147483647 in de wachtrij",
+        "Eenhoorns voeren",
+        "Vind je mijn laadanimatie leuk? Ik heb hem zelf gemaakt",
+        "Een mississippi, twee mississippi...",
+        "Geen paniek... AHHHHH!",
+        "Zorgen dat kabouters nog steeds kort zijn.",
+        "IJs bakken...",
+    ];
 </script>
 @await RenderSectionAsync("Scripts", false)
 @* <script> *@
