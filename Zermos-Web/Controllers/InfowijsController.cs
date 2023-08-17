@@ -42,7 +42,7 @@ namespace Zermos_Web.Controllers
 
         [Authorize]
         [InfowijsRequirement]
-        [AddLoadingScreen("De laatste nieuwtjes worden geladen")]
+        [ZermosPage]
         public async Task<IActionResult> SchoolNieuws()
         {
             ViewData["add_css"] = "infowijs";
@@ -89,7 +89,7 @@ namespace Zermos_Web.Controllers
 
         [Authorize]
         [InfowijsRequirement]
-        [AddLoadingScreen("De kalender wordt geladen")]
+        [ZermosPage]
         public async Task<IActionResult> SchoolKalender()
         {
             ViewData["add_css"] = "infowijs";

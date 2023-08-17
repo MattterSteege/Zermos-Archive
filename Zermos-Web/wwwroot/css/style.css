@@ -534,13 +534,104 @@ main.main::-webkit-scrollbar-track {
     border-left: 7px solid #007BFF;
 }
 
+#content {
+    opacity: 1;
+    left: 266px;
+    transition: 0.25s;
+    width: calc(100% - 266px);
+    height: 100%;
+    position: fixed;
+    overflow-y: auto;
+    padding: 96px 8px 16px 16px;
+    background: var(--background-color);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.loader-text {
+    left: 50%;
+    top: 45%;
+    position: absolute;
+    transform: translate(-45%, -50%);
+}
+
+.loading-dots {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--active-color);
+    animation: loading-dots 1.5s infinite ease-in-out;
+    transform: scale(0);
+}
+
+.loading-dots:nth-child(2) {
+    animation-delay: .2s;
+}
+
+.loading-dots:nth-child(3) {
+    animation-delay: .4s;
+}
+
+@keyframes loading-dots {
+     0% {
+         transform: scale(0);
+     }
+     50% {
+         transform: scale(1);
+     }
+     100% {
+         transform: scale(0);
+     }
+ }
+
+.loader-text {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.loader-text .loading-dots {
+    margin: 0 2px;
+}
+
+.loading-dots-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes fade-in {
+     0% {
+         opacity: 0;
+     }
+     100% {
+         opacity: 1;
+     }
+ }
+
 /*If screen width is 700px*/
 @media only screen and (max-width: 700px) {
-
+    
     html {
         font-size: 10px;
     }
 
+    main.main {
+        z-index: 100;
+        left: 0 !important;
+        width: calc(100% - 64px) !important;
+        padding: 16px 16px 16px !important;
+    }
+    
+    #content {
+        z-index: 101;
+        left: 0 !important;
+        width: calc(100% - 64px) !important;
+        padding: 16px 16px 16px !important;
+    }
+    
     .sidebar {
         width: 64px;
         height: 100%;
@@ -626,12 +717,6 @@ main.main::-webkit-scrollbar-track {
         display: none;
     }
 
-    .main {
-        left: 0 !important;
-        width: calc(100% - 64px) !important;
-        padding: 16px 16px 16px !important;
-    }
-
     .top-bar {
         display: none;
     }
@@ -643,9 +728,9 @@ main.main::-webkit-scrollbar-track {
     ::-webkit-scrollbar {
         display: none;
     }
-    
-    #main.main {
-        z-index: 100;
+
+    .loader-text {
+        display: none;
     }
 }
 

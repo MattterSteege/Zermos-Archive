@@ -27,7 +27,7 @@ namespace Zermos_Web.Controllers
             _users = users;
         }
 
-        [AddLoadingScreen("Nieuws word van de het informatieboord gehaald")]
+        [ZermosPage]
         public async Task<IActionResult> InformatieBoord()
         {
             ViewData["add_css"] = "school";

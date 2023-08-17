@@ -25,7 +25,7 @@ namespace Zermos_Web.Controllers
         
         [HttpGet]
         [Authorize]
-        [AddLoadingScreen("account laden...")]
+        [ZermosPage]
         public async Task<IActionResult> ShowAccount()
         {
             return PartialView(await _users.GetUserAsync(User.FindFirstValue("email")));

@@ -31,10 +31,19 @@ namespace Zermos_Web.Controllers
         }
         #endif
         
-        [AddLoadingScreen("hoofdmenu laden")]
-        public async Task<IActionResult> Index()
+        public IActionResult Index(string url = "/Main/Hoofdmenu")
         {
-            await Task.Delay(1000);
+            if (url != null)
+            {
+                ViewData["url"] = url;
+            }
+            return View();
+        }
+        
+        //[AddLoadingScreen("hoofdmenu laden")]
+        [ZermosPage]
+        public async Task<IActionResult> Hoofdmenu()
+        {
             ViewData["add_css"] = "hoofdmenu";
             HttpContext.AddNotification("Pas op", "Deze pagina is no niet af, er kunnen nog bugs in zitten", NotificationCenter.NotificationType.WARNING);
             return PartialView(await _users.GetUserAsync(User.FindFirstValue("email")));

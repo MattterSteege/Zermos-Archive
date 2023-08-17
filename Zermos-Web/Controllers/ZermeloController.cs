@@ -29,7 +29,7 @@ namespace Zermos_Web.Controllers
 
         [Authorize]
         [ZermeloRequirement]
-        [AddLoadingScreen("Je rooster wordt geladen")]
+        [ZermosPage]
         public async Task<IActionResult> Rooster(string year, string week, bool asPartial = false)
         {
             ViewData["add_css"] = "zermelo";

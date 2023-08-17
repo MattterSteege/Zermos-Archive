@@ -28,7 +28,7 @@
 //             _users = users;
 //         }
 //         
-//         [AddLoadingScreen("notities laden...")]
+//         [ZermosPage]
 //         public async Task<IActionResult> Notities()
 //         {
 //             ViewData["add_css"] = "notities";

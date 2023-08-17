@@ -42,7 +42,7 @@ namespace Zermos_Web.Controllers
 
         [Authorize]
         [SomtodayRequirement]
-        [AddLoadingScreen("Cijfers worden opgehaald")]
+        [ZermosPage]
         [HttpGet("Somtoday/Cijfers")]
         public async Task<IActionResult> Cijfers()
         {
@@ -145,7 +145,7 @@ namespace Zermos_Web.Controllers
             return somtodayAuthentication.access_token;
         }
 
-        [AddLoadingScreen("Cijfers worden geladen")]
+        [ZermosPage]
         [HttpGet("Somtoday/Cijfers/{vak}")]
         public IActionResult Cijfer(string content = null)
         {
@@ -161,7 +161,7 @@ namespace Zermos_Web.Controllers
             return PartialView(c);
         }
 
-        [AddLoadingScreen("Cijfers worden geladen")]
+        [ZermosPage]
         [HttpGet("Somtoday/Cijfers/{vak}/CijferData")]
         public IActionResult CijferData(string content = null)
         {
@@ -177,7 +177,7 @@ namespace Zermos_Web.Controllers
             return PartialView(c);
         }
 
-        [AddLoadingScreen("Cijfers worden geladen")]
+        [ZermosPage]
         [HttpGet("Somtoday/Cijfers/{vak}/Statestieken")]
         public IActionResult CijferStatestieken(string content = null, bool asPFD = false)
         {
@@ -446,7 +446,7 @@ namespace Zermos_Web.Controllers
         #region huiswerk
         [Authorize]
         [SomtodayRequirement]
-        [AddLoadingScreen("Huiswerk wordt opgehaald")]
+        [ZermosPage]
         [HttpGet("Somtoday/Huiswerk")]
         public async Task<IActionResult> Huiswerk(int dagen = 21, bool recache = false)
         {
@@ -556,7 +556,7 @@ namespace Zermos_Web.Controllers
 
         [Authorize]
         [SomtodayRequirement]
-        [AddLoadingScreen("Pagina laden")]
+        [ZermosPage]
         [HttpGet("Somtoday/Huiswerk/Nieuw")]
         public IActionResult NieuwHuiswerk()
         {
