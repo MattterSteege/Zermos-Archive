@@ -228,9 +228,7 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
         
         var mainElement = document.getElementById("main");
         var contentElement = document.getElementById("content");
-        var text = loadingTexts[Math.floor(Math.random() * loadingTexts.length)];
-        console.log(text);
-        document.getElementsByClassName("loader-text")[0].innerHTML = text;
+        document.getElementsByClassName("loader-text")[0].innerHTML = loadingTexts[Math.floor(Math.random() * loadingTexts.length)];
 
         //set loading-text to one of the followin
         
@@ -308,6 +306,14 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
             history.pushState(obj, obj.Title, obj.Url);
         }
     }
+    
+    //
+    window.addEventListener('popstate', function (e) {
+        var state = e.state;
+        if (state !== null) {
+            ReplacePage(state.Url);
+        }
+    });
     
     const loadingTexts = [
         "Tijd en Ruimte omwisselen",

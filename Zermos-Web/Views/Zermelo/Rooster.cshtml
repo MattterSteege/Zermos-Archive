@@ -106,6 +106,14 @@
         </ul>
 
     </div>
+    <div class="swipebubbles">
+        <div class="bubble left">
+            <i class="fa-solid fa-angle-left"></i>
+        </div>
+        <div class="bubble right">
+            <i class="fa-solid fa-angle-right"></i>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -222,7 +230,7 @@
     
     var touchstartX;
     var touchendX;
-    var threshold = 100 //px
+    var threshold = 150 //px
         
     function checkDirection() {
       if (touchendX < touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
@@ -237,8 +245,31 @@
       touchstartX = e.changedTouches[0].screenX
     })
     
+    //while swiping, change the x position of the swipebubbles to the x position of the swipe
+    document.addEventListener('touchmove', e => {
+      var swipebubbles = document.getElementsByClassName('swipebubbles')[0];
+      let swipeChange = e.changedTouches[0].screenX - touchstartX;
+      swipebubbles.style.left = 'calc(50% + ' + swipeChange + 'px)';
+      
+      if (swipeChange > threshold || swipeChange < -threshold) {
+          swipebubbles.getElementsByClassName('left')[0].style.background = 'var(--confirm-color)';
+          swipebubbles.getElementsByClassName('left')[0].style.opacity = '1';
+          swipebubbles.getElementsByClassName('right')[0].style.background = 'var(--confirm-color)';
+            swipebubbles.getElementsByClassName('right')[0].style.opacity = '1';
+      }
+      else {
+          swipebubbles.getElementsByClassName('left')[0].style.background = 'var(--text-color)';
+          swipebubbles.getElementsByClassName('left')[0].style.opacity = '0.5';
+          swipebubbles.getElementsByClassName('right')[0].style.background = 'var(--text-color)';
+            swipebubbles.getElementsByClassName('right')[0].style.opacity = '0.5';
+      }
+    })
+    
     document.addEventListener('touchend', e => {
-      touchendX = e.changedTouches[0].screenX
-      checkDirection()
+        touchendX = e.changedTouches[0].screenX
+        checkDirection()
+      
+        var swipebubbles = document.getElementsByClassName('swipebubbles')[0];
+        swipebubbles.style.left = 'calc(50% + ' + 0 + 'px)';
     })
 </script>

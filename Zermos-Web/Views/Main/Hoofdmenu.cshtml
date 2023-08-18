@@ -151,43 +151,47 @@
     </div>
 </div>
 
-<script>   
-    fetch('https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat=52.011194&lon=4.726696&region=nl&unit=mm/u')
-    .then(response => response.json())
-    .then(data => { 
-        //temp text
-        document.querySelector(".weather-temp").innerText = (data["temp"] + "°C");
-        
-        
-        
-        //current time line
-        let startUnix = data["start"];
-        let endUnix = Number(data["start"]) + 7200;
-        let currentUnix = Math.floor(Date.now() / 1000);
-        let currentLine = document.querySelector(".current");
-        let widthOfWorkingFieldInPixels = document.querySelector(".weather-graph").clientWidth;
-        let widthOfASecondInPixels = widthOfWorkingFieldInPixels / 7200;
-        let currentLinePosition = (currentUnix - startUnix) * widthOfASecondInPixels;         
-        currentLine.style.left = (currentLinePosition + 12) + "px";
-        
-        //interval of 5 to recalculate the position of the current line
-        setInterval(() => {
-            currentLinePosition = (Math.floor(Date.now() / 1000) - startUnix) * widthOfASecondInPixels;
+<script>  
+    RefreshWeer();
+
+    function RefreshWeer() {
+        fetch('https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat=52.011194&lon=4.726696&region=nl&unit=mm/u')
+        .then(response => response.json())
+        .then(data => { 
+            //temp text
+            document.querySelector(".weather-temp").innerText = (data["temp"] + "°C");
+            
+            
+            
+            //current time line
+            let startUnix = data["start"];
+            let endUnix = Number(data["start"]) + 7200;
+            let currentUnix = Math.floor(Date.now() / 1000);
+            let currentLine = document.querySelector(".current");
+            let widthOfWorkingFieldInPixels = document.querySelector(".weather-graph").clientWidth;
+            let widthOfASecondInPixels = widthOfWorkingFieldInPixels / 7200;
+            let currentLinePosition = (currentUnix - startUnix) * widthOfASecondInPixels;         
             currentLine.style.left = (currentLinePosition + 12) + "px";
-        }, 5000);
-        
-        
-        
-        //array of 25 - 10 5-minute intervals
-        let precipitation = data["precip"];
-        //let precipitation = [0,0.2,0.2,0.3,0.5,0.1,0,0,0,0,0,0,4,5,3,1.2,0,1,0.5,0,0,0,0.2,0.1,0]; //test data
-        let heighestPrecipitation = Math.max(...precipitation);
-        let heightOfGraph = document.querySelector(".weather-graph").clientHeight;
-        let heightOfAmmountInPixels = (heightOfGraph / heighestPrecipitation) * 0.8;      
-        for (let i = 0; i < precipitation.length; i++) {
-            document.getElementsByClassName("amount")[i].style.height = (precipitation[i] * heightOfAmmountInPixels) + "px";
-        }
-    });
+            
+            //interval of 5 to recalculate the position of the current line
+            setInterval(() => {
+                currentLinePosition = (Math.floor(Date.now() / 1000) - startUnix) * widthOfASecondInPixels;
+                currentLine.style.left = (currentLinePosition + 12) + "px";
+            }, 5000);
+            
+            
+            
+            //array of 25 - 10 5-minute intervals
+            let precipitation = data["precip"];
+            //let precipitation = [0,0.2,0.2,0.3,0.5,0.1,0,0,0,0,0,0,4,5,3,1.2,0,1,0.5,0,0,0,0.2,0.1,0]; //test data
+            let heighestPrecipitation = Math.max(...precipitation);
+            let heightOfGraph = document.querySelector(".weather-graph").clientHeight;
+            let heightOfAmmountInPixels = (heightOfGraph / heighestPrecipitation) * 0.8;      
+            for (let i = 0; i < precipitation.length; i++) {
+                document.getElementsByClassName("amount")[i].style.height = (precipitation[i] * heightOfAmmountInPixels) + "px";
+            }
+        });
+    }
     
     document.getElementsByClassName("weather-graph-underlay")[0].style.width = document.getElementsByClassName("weather-graph")[0].offsetWidth + "px";
     

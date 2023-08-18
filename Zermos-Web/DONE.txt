@@ -7,6 +7,7 @@ Algemeen
     - Het laadscherm is ook veel soepeler :)
     - Het probleem met de 404 pagina is verholpen (de 404 pagina stond niet op de goede plek, de opgevraagde pagina bestond dus niet en werd je doorgestuurd naar de 404 pagina, enz. enz.).
     - Leuke laadscherm berichten toegevoegd, want school wifi is traaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa....
+    - Er is een Update(); method toegevoegd, maar dit is niet echt belangrijk om te weten.
     
-    
-    
+Zermelo - Rooster
+    - Er is nu een klein bolletje dat aangeeft of je ver genoeg hebt geswiped om naar de volgende/vorige week te gaan.
