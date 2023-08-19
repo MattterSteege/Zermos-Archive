@@ -87,35 +87,10 @@
                     </div>
                 </div>
                 <div class="icon">
-                    <i class="fa-solid fa-line-chart fa-fw card-icon active"></i>
+                    <i class="fa-solid fa-cloud fa-fw card-icon active"></i>
                 </div>
             </div>
             <div class="weather-graph-underlay">
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
-                <div class="amount"></div>
             </div>
             <div class="weather-graph">
                 <div class="line"></div>
@@ -151,7 +126,7 @@
     </div>
 </div>
 
-<script>  
+<script defer>  
     RefreshWeer();
 
     function RefreshWeer() {
@@ -181,22 +156,72 @@
             
             
             
-            //array of 25 - 10 5-minute intervals
+            //array of 25 - 10 5-minute intervals4
             let precipitation = data["precip"];
             //let precipitation = [0,0.2,0.2,0.3,0.5,0.1,0,0,0,0,0,0,4,5,3,1.2,0,1,0.5,0,0,0,0.2,0.1,0]; //test data
-            let heighestPrecipitation = Math.max(...precipitation);
-            let heightOfGraph = document.querySelector(".weather-graph").clientHeight;
-            let heightOfAmmountInPixels = (heightOfGraph / heighestPrecipitation) * 0.8;      
-            for (let i = 0; i < precipitation.length; i++) {
-                document.getElementsByClassName("amount")[i].style.height = (precipitation[i] * heightOfAmmountInPixels) + "px";
-            }
+           
+            const svgContainer = document.getElementsByClassName('weather-graph-underlay')[0];
+            const svg = createSmoothBezierCurve(precipitation);
+            console.log(svg);
+            svgContainer.appendChild(svg);
         });
     }
-    
-    document.getElementsByClassName("weather-graph-underlay")[0].style.width = document.getElementsByClassName("weather-graph")[0].offsetWidth + "px";
-    
-    //onresize
-    window.addEventListener("resize", () => {
-        document.getElementsByClassName("weather-graph-underlay")[0].style.width = document.getElementsByClassName("weather-graph")[0].offsetWidth + "px";
-    }); 
+       
+    function createSmoothBezierCurve(numbers) {       
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("preserveAspectRatio", "none");
+        svg.setAttribute("class", "graph-chart");
+        svg.setAttribute("viewBox", "0 0 250 300");
+        
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", createBezierPath(numbers));
+        path.setAttribute("vector-effect", "non-scaling-stroke");
+        path.setAttribute("fill", "#00B3FF");
+        path.setAttribute("stroke", "#8ABAFF");
+        path.setAttribute("stroke-width", "0");
+        path.setAttribute("stroke-linecap", "butt");
+        
+        svg.appendChild(path);
+        
+        return svg;
+        
+        function createBezierPath(numbers) {
+            // Just like before, create the starting point
+            let path = "M" + (0) + " " + (300 - numbers[0] * 10);
+        
+            // Calculate the control points for the Bezier curves
+            for (let i = 1; i < numbers.length - 1; i++) {
+                const x0 = (i - 1) * 10;
+                const y0 = 300 - numbers[i - 1] * 10;
+        
+                const x1 = i * 10;
+                const y1 = 300 - numbers[i] * 10;
+        
+                const x2 = (i + 1) * 10;
+                const y2 = 300 - numbers[i + 1] * 10;
+        
+                const x3 = (i + 2) * 10;
+                const y3 = 300 - numbers[i + 2] * 10;
+                
+                if (isNaN(x0) || isNaN(y0) || isNaN(x1) || isNaN(y1) || isNaN(x2) || isNaN(y2) || isNaN(x3) || isNaN(y3)) {
+                    continue;
+                }
+        
+                const cp1x = Math.round(x1 + (x2 - x0) / 6);
+                const cp1y = Math.round(y1 + (y2 - y0) / 6);
+        
+                const cp2x = Math.round(x2 - (x3 - x1) / 6);
+                const cp2y = Math.round(y2 - (y3 - y1) / 6);
+        
+                path += "C" + cp1x + " " + cp1y + ", " + cp2x + " " + cp2y + ", " + x2 + " " + y2;
+            }
+        
+            // Add the final line segment to complete the path
+            path += "L" + (numbers.length * 10) + " " + (300 - numbers[numbers.length - 1] * 10);
+        
+            return path;
+        }
+
+    }
+   
 </script>

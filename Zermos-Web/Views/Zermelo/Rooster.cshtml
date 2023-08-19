@@ -10,7 +10,7 @@
 
 <div class="main-container">
     
-    <div class="MondayOfAppointmentsWeek" style="display: none">@Model.response.data[0].MondayOfAppointmentsWeek.ToUnixTime()</div>
+    <div id="@Model.response.data[0].MondayOfAppointmentsWeek.ToUnixTime()" class="MondayOfAppointmentsWeek" style="display: none">@Model.response.data[0].MondayOfAppointmentsWeek.ToUnixTime()</div>
     <div class="Week" style="display: none">@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()</div>
     
     <div class="times-container">
@@ -97,7 +97,8 @@
                             float appointmentTop = ((appointment.start - dayStartUnix) / 60f) * minuteHeight;
 
                             <div class="lesson-time-based @(appointment.cancelled ? "canceled" : "") @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);">
-                                @(appointment.subjects.Count > 0 ? appointment.subjects[0] : "Geen les") - @(appointment.teachers.Count > 0 ? appointment.teachers[0] : "Geen docent") - @(appointment.locations.Count > 0 ? appointment.locations[0] : "Geen lokaal")
+                                @(appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.subjects[0] + "</p>") : "")
+                                @(appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.locations[0] + "</p>") : "")
                             </div>
                         }
                     </li>
@@ -118,32 +119,6 @@
 
 <script>
     loadDatepicker();
-
-    // function goToWeek(week) {
-    //     $.ajax({
-    //         url: '/Zermelo/Rooster?week=' + week + '&asPartial=true',
-    //         success: async function (data) {   
-    //           
-    //             var mainContainer = document.getElementsByClassName('main-container')[0];
-    //             mainContainer.style.opacity = '0';
-    //             await new Promise(res => setTimeout(res, 250));
-    //             //set mainContainer.innerHTML to the data, but remove <div class="main-container"> and </div>
-    //             mainContainer.innerHTML = data.substring(35, data.length - 6);
-    //             mainContainer.style.opacity = '1'; 
-    //             loadDatepicker();                    
-    //         },
-    //         //when an error happens, alert the user with the text of the error
-    //         error: function (xhr, status, error) { 
-    //           alert(xhr.responseText);
-    //           window.location.href = "/";
-    //          
-    //          },
-    //         cache: false,
-    //         type: 'GET'
-    //     });
-    //    
-    //     modifyUrl('Rooster', '/Zermelo/Rooster?week=' + week);
-    // }
     
     function modifyUrl(title, url) {
      if (typeof (history.pushState) != "undefined") {
@@ -154,6 +129,7 @@
       history.pushState(obj, obj.Title, obj.Url);
      }
     }
+    
     
     //onload
     function loadDatepicker () {
@@ -233,43 +209,59 @@
     var threshold = 150 //px
         
     function checkDirection() {
-      if (touchendX < touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
-          NextWeek();
-      } 
-      else if (touchendX > touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
-          PreviousWeek();
-      }
+        if (touchendX < touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
+            NextWeek();
+        } 
+        else if (touchendX > touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
+            PreviousWeek();
+        }
     }
-
-    document.addEventListener('touchstart', e => {
+    
+    main.addEventListener('touchstart', e => {
       touchstartX = e.changedTouches[0].screenX
-    })
+    });
     
-    //while swiping, change the x position of the swipebubbles to the x position of the swipe
-    document.addEventListener('touchmove', e => {
-      var swipebubbles = document.getElementsByClassName('swipebubbles')[0];
-      let swipeChange = e.changedTouches[0].screenX - touchstartX;
-      swipebubbles.style.left = 'calc(50% + ' + swipeChange + 'px)';
-      
-      if (swipeChange > threshold || swipeChange < -threshold) {
-          swipebubbles.getElementsByClassName('left')[0].style.background = 'var(--confirm-color)';
-          swipebubbles.getElementsByClassName('left')[0].style.opacity = '1';
-          swipebubbles.getElementsByClassName('right')[0].style.background = 'var(--confirm-color)';
-            swipebubbles.getElementsByClassName('right')[0].style.opacity = '1';
-      }
-      else {
-          swipebubbles.getElementsByClassName('left')[0].style.background = 'var(--text-color)';
-          swipebubbles.getElementsByClassName('left')[0].style.opacity = '0.5';
-          swipebubbles.getElementsByClassName('right')[0].style.background = 'var(--text-color)';
-            swipebubbles.getElementsByClassName('right')[0].style.opacity = '0.5';
-      }
-    })
+    main.addEventListener('touchmove', e => {
+      //if swiping left, use .left
+        //if swiping right, use .right
+        
+        var swipeChange = Math.abs(e.changedTouches[0].screenX - touchstartX);
+        
+        if (e.changedTouches[0].screenX < touchstartX) {
+
+            var right = document.getElementsByClassName('right')[0];
+            right.style.right = 'calc(-20% + ' + swipeChange + 'px)';
+            
+            if (swipeChange > threshold) {
+                right.style.background = 'var(--confirm-color)';
+                right.style.opacity = '1';
+            }
+            else {
+                right.style.background = 'var(--text-color)';
+                right.style.opacity = '0.5';
+            }
+        }
+        else {
+            var left = document.getElementsByClassName('left')[0];
+            left.style.left = 'calc(-20%  + ' + swipeChange + 'px)';
+            
+            if (swipeChange > threshold) {
+                left.style.background = 'var(--confirm-color)';
+                left.style.opacity = '1';
+                
+            }
+            else {
+                left.style.background = 'var(--text-color)';
+                left.style.opacity = '0.5';
+            }
+        }
+    });
     
-    document.addEventListener('touchend', e => {
+    main.addEventListener('touchend', e => {
         touchendX = e.changedTouches[0].screenX
-        checkDirection()
-      
-        var swipebubbles = document.getElementsByClassName('swipebubbles')[0];
-        swipebubbles.style.left = 'calc(50% + ' + 0 + 'px)';
-    })
+        document.getElementsByClassName('right')[0].style.right = 'calc(-20% + 0px)';
+        document.getElementsByClassName('left')[0].style.left = 'calc(-20% + 0px)';
+        checkDirection()       
+    });
+   
 </script>

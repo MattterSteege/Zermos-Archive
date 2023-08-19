@@ -11,3 +11,8 @@ Algemeen
     
 Zermelo - Rooster
     - Er is nu een klein bolletje dat aangeeft of je ver genoeg hebt geswiped om naar de volgende/vorige week te gaan.
+    - Een veelvoorkomende error is opgelost, dat is altijd fijn ;)
+    - De week verandere via 'swipen' werkt nu weer zoals het hoort.
+    
+Hoofdmenu
+    - de weer 'card' geeft nu een soepele lijn in plaats van een balk van onder.

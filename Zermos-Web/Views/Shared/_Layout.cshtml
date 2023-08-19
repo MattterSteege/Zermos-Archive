@@ -1,6 +1,4 @@
-@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Microsoft.AspNetCore.Http
-@using Microsoft.AspNetCore.Mvc.Routing
 @using Zermos_Web.Utilities
 @{
     string currentPage = $"/{ViewContext.RouteData.Values["controller"]}/{ViewContext.RouteData.Values["action"]?.ToString()?.Split("/")[0] ?? "index"}";
@@ -15,15 +13,15 @@
     <script src="https://kit.fontawesome.com/052f5fa8f8.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="manifest" href="/manifest.webmanifest"/>
     @* <meta name="theme-color" content="#f8f9fa"> *@
     <meta name="theme-color" content="@((Context.Request.Cookies["theme"] == "light" || Context.Request.Cookies["theme"] == "blue") ? "#f8f9fa" : (Context.Request.Cookies["theme"] == "dark" || Context.Request.Cookies["theme"] == "red") ? "#1a1a1a" : (Context.Request.Cookies["theme"] == "pink") ? "#ffebf2" : "#f8f9fa")">
     <link rel="stylesheet" href="~/css/style.css?v=@version">
-    
+
     @if (ViewContext.View.Path != "/Views/Shared/_Loading.cshtml")
     {
         <script src="~/js/global.js?v=@version"></script>
-        
+
     }
     @if (!string.IsNullOrEmpty(ViewData["add_css"]?.ToString()))
     {
@@ -157,18 +155,18 @@
     </div>
 </div>
 
-@if (Context.Request.Cookies["version"] == null && !(bool)(Context.Items["loading"] ?? true) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
+@if (Context.Request.Cookies["version"] == null && !(bool) (Context.Items["loading"] ?? true) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
 {
-    Context.Response.Cookies.Append("version", Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty, new CookieOptions { Expires = DateTime.Now.AddDays(60) });
+    Context.Response.Cookies.Append("version", Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty, new CookieOptions {Expires = DateTime.Now.AddDays(60)});
     <div class="version">
         <p>Je gebruikt momenteel de <b>nieuwste</b> versie van Zermos</p>
     </div>
 }
-else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") && !(bool)(Context.Items["loading"] ?? true) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
+else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") && !(bool) (Context.Items["loading"] ?? true) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
 {
-    Context.Response.Cookies.Append("version", Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty, new CookieOptions { Expires = DateTime.Now.AddDays(60) });
+    Context.Response.Cookies.Append("version", Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty, new CookieOptions {Expires = DateTime.Now.AddDays(60)});
     <div class="version">
-        <p>Er is een nieuwe versie van Zermos (@(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty)), bekijk <a href="http://zermos-docs.kronk.tech">hier</a> wat er nieuw is</p>
+        <p>Er is een nieuwe versie van Zermos (@(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty)), bekijk <a href="https://zermos-docs.kronk.tech">hier</a> wat er nieuw is</p>
     </div>
 }
 
@@ -199,15 +197,15 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
                 </div>
             }
         </div>
-        
+
     }
 }
-<script id="loading-script">
+<script id="vital-script">
     function ReplacePage(url) {
         
         // Define a function to append a script to either the head or body
         function appendScript(element, codeOrSrc, isSrc) {
-            var script = document.createElement("script");
+            const script = document.createElement("script");
             if (isSrc) {
                 script.src = codeOrSrc;
             } else {
@@ -219,15 +217,14 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
 
         // Define a function to append a stylesheet link to the head
         function appendStylesheet(href) {
-            var link = document.createElement("link");
+            const link = document.createElement("link");
             link.rel = "stylesheet";
             link.href = href;
             link.id = "added-by-fetch";
             document.head.appendChild(link);
         }
         
-        var mainElement = document.getElementById("main");
-        var contentElement = document.getElementById("content");
+        const contentElement = document.getElementById("content");
         document.getElementsByClassName("loader-text")[0].innerHTML = loadingTexts[Math.floor(Math.random() * loadingTexts.length)];
 
         //set loading-text to one of the followin
@@ -238,27 +235,29 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
             url: url,
             success: function(data) {
                 modifyUrl("Zermos", url);
-                var el = document.createElement('html');
+                const el = document.createElement('html');
                 el.innerHTML = data;
 
 
                 setTimeout(function() {
-                    //remove all items with id added-by-fetch
-                    var elements = document.querySelectorAll("#added-by-fetch");
-                    for (var i = 0; i < elements.length; i++) {
+                    let i  ;
+//remove all items with id added-by-fetch
+                    const elements = document.querySelectorAll("#added-by-fetch");
+                    for (i= 0; i < elements.length; i++) {
                         elements[i].remove();
                     }
                     
                     var cleanedData = stripScripts("link", stripScripts("script", data));
 
                     // Update main content
-                    mainElement.innerHTML = cleanedData;
+                    main.outerHTML = main.outerHTML;
+                    main.innerHTML = cleanedData;
 
-                    var scripts = el.getElementsByTagName("script");
-                    var head = document.head;
-                    var body = document.body;
+                    const scripts = el.getElementsByTagName("script");
+                    const head = document.head;
+                    const body = document.body;
 
-                    for (var i = 0; i < scripts.length; i++) {
+                    for (i= 0; i < scripts.length; i++) {
                         if (scripts[i].src) {
                             appendScript(head, scripts[i].src, true);
                         } else {
@@ -266,8 +265,8 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
                         }
                     }
 
-                    var links = el.getElementsByTagName("link");
-                    for (var i = 0; i < links.length; i++) {
+                    const links = el.getElementsByTagName("link");
+                    for (i= 0; i < links.length; i++) {
                         if (links[i].rel === "stylesheet") {
                             appendStylesheet(links[i].href);
                         }
@@ -285,10 +284,10 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
 
 
         function stripScripts(tag, data) {
-            var div = document.createElement('div');
+            const div = document.createElement('div');
             div.innerHTML = data;
-            var scripts = div.getElementsByTagName(tag);
-            var i = scripts.length;
+            const scripts = div.getElementsByTagName(tag);
+            let i = scripts.length;
             while (i--) {
                 scripts[i].parentNode.removeChild(scripts[i]);
             }
@@ -299,7 +298,7 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
     
     function modifyUrl(title, url) {
         if (typeof(history.pushState) != "undefined") {
-            var obj = {
+            const obj = {
                 Title: title,
                 Url: url
             };
@@ -309,7 +308,7 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
     
     //
     window.addEventListener('popstate', function (e) {
-        var state = e.state;
+        const state = e.state;
         if (state !== null) {
             ReplacePage(state.Url);
         }
