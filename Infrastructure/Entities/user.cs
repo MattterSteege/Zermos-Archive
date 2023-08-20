@@ -4,8 +4,6 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-#nullable disable
-
 namespace Infrastructure.Entities
 {
     public class user

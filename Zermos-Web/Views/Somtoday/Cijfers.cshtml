@@ -3,7 +3,6 @@
 @using System.Globalization
 @using System.Text
 @using Microsoft.AspNetCore.Http
-@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Newtonsoft.Json
 @using Zermos_Web.Utilities
 @model Zermos_Web.Models.SomtodayGradesModel.SomtodayGradesModel
@@ -38,7 +37,7 @@
 
     sortedGrades.Sort((x, y) => string.Compare(x.vak.naam.ToLower(), y.vak.naam.ToLower(), StringComparison.Ordinal));
     
-    DateTime lastUpdated = Context.Request.Cookies["last-seen-somtoday-grades"] == null ? DateTime.MinValue : DateTime.Parse(Context.Request.Cookies["last-seen-somtoday-grades"]);
+    var lastUpdated = Context.Request.Cookies["last-seen-somtoday-grades"] == null ? DateTime.MinValue : DateTime.Parse(Context.Request.Cookies["last-seen-somtoday-grades"]);
 }
 
 <link rel="stylesheet" href="~/css/somtoday.css" />
@@ -51,13 +50,13 @@
             //turn the model into a json string turn it into bytes and encode with base64
             var encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(vak)));
 
-            float sumOfWeightedGrades = 0.0f;
-            int sumOfWeights = vak.grades.Sum(gradeItem => gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging);
-            bool hasNonZeroWeight = false;
+            var sumOfWeightedGrades = 0.0f;
+            var sumOfWeights = vak.grades.Sum(gradeItem => gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging);
+            var hasNonZeroWeight = false;
             var gradesArray = new float[vak.grades.Count];
             var gradesWeight = new int[vak.grades.Count];
 
-            for (int i = 0; i < vak.grades.Count; i++)
+            for (var i = 0; i < vak.grades.Count; i++)
             {
                 var gradeItem = vak.grades[i];
                 var geldendResultaat = NumberUtils.ParseFloat(gradeItem.geldendResultaat);
@@ -68,7 +67,7 @@
                     continue;
                 }
 
-                sumOfWeightedGrades += (geldendResultaat * (gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging));
+                sumOfWeightedGrades += geldendResultaat * (gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging);
                 hasNonZeroWeight = true;
                 
                 gradesArray[i] = NumberUtils.ParseFloat(vak.grades[i].geldendResultaat);
@@ -80,7 +79,7 @@
                 sumOfWeights = vak.grades.Count;
             }
 
-            float gemiddelde = MathF.Round(sumOfWeightedGrades / sumOfWeights, 1, MidpointRounding.AwayFromZero);
+            var gemiddelde = MathF.Round(sumOfWeightedGrades / sumOfWeights, 1, MidpointRounding.AwayFromZero);
 
             
             var WeightedAverageSnapshots = NumberUtils.CalculateWeightedAverageSnapshots(gradesArray, gradesWeight);

@@ -139,7 +139,7 @@ pre {
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 16px;
-    width: 80%;
+    /* width: 80%; */
     color: var(--text-color);
 }
 
@@ -163,22 +163,26 @@ pre {
 }
 
 .dates-container {
-    width: 16%;
-    position: fixed;
-    top: 96px;
+    position: sticky;
+    top: 0;
     background: var(--overlay-color);
     padding: 16px;
     display: flex;
     flex-direction: column;
     color: var(--text-color);
-    right: 9px;
-    border-radius: 14px 0 0 14px;
+    border-radius: 14px;
+    height: min-content;
 }
 
 .month {
     padding: 4px 0 4px 4px;
-    border-top-left-radius: 8px; 
-    border-bottom-left-radius: 8px;
+    border-radius: 8px;
+}
+
+.calander-group {
+    display: grid;
+    grid-template-columns: 8fr 150px;
+    grid-gap: 16px;
 }
 
 /*If screen width is 700px*/
@@ -191,5 +195,10 @@ pre {
     .calendar-container {
         width: 100%;
     }
-    
+
+    .calander-group {
+        display: grid;
+        grid-template-columns: 1fr 0;
+        grid-gap: 0;
+    }    
 }

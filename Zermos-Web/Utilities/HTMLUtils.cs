@@ -8,7 +8,7 @@ namespace Zermos_Web.Utilities
     public static class HTMLUtils
     {
         /// <summary>
-        ///     Replaces all HTML entities (h1, p, etc.) in a string with their corresponding characters.
+        ///     Removes all HTML tags from a string.
         /// </summary>
         /// <param name="input">The string to replace the HTML entities in.</param>
         /// <returns>The string with the HTML entities replaced.</returns>
@@ -170,15 +170,15 @@ namespace Zermos_Web.Utilities
         public static string ConvertLinksInText(string text)
         {
             // Define the regex pattern to match URLs
-            string pattern = @"(https?://\S+)";
+            var pattern = @"(https?://\S+)";
 
             // Replace URLs with modified anchor tags
-            string convertedText = Regex.Replace(text, pattern, match =>
+            var convertedText = Regex.Replace(text, pattern, match =>
             {
-                string originalLink = match.Value;
-                Uri uri = new Uri(originalLink);
-                string domain = uri.Host;
-                string modifiedLink = $"<a href='{originalLink}'>{domain}</a>";
+                var originalLink = match.Value;
+                var uri = new Uri(originalLink);
+                var domain = uri.Host;
+                var modifiedLink = $"<a href='{originalLink}'>{domain}</a>";
                 return modifiedLink;
             });
 
@@ -193,18 +193,18 @@ namespace Zermos_Web.Utilities
         public static string BalanceHtmlTags(string input)
         {
             // Regular expression to match any HTML tag
-            Regex tagRegex = new Regex(@"<([a-zA-Z]+)(?:\s*[^>]*)>?");
+            var tagRegex = new Regex(@"<([a-zA-Z]+)(?:\s*[^>]*)>?");
 
             // Find all the matches of HTML tags in the input
-            MatchCollection tagMatches = tagRegex.Matches(input);
+            var tagMatches = tagRegex.Matches(input);
 
             // Create a stack to keep track of opening tags
-            Stack<string> tagStack = new Stack<string>();
+            var tagStack = new Stack<string>();
 
             foreach (Match match in tagMatches)
             {
-                string tag = match.Value;
-                string tagName = match.Groups[1].Value;
+                var tag = match.Value;
+                var tagName = match.Groups[1].Value;
 
                 if (!tag.StartsWith("</"))
                 {
@@ -230,7 +230,7 @@ namespace Zermos_Web.Utilities
             // Add any missing closing tags at the end of the input
             while (tagStack.Count > 0)
             {
-                string remainingTag = tagStack.Pop();
+                var remainingTag = tagStack.Pop();
                 
                 //does the remaining tag have a closing tag?
                 if (!remainingTag.EndsWith(">"))
@@ -238,7 +238,7 @@ namespace Zermos_Web.Utilities
                     input += ">";
                 }
 
-                string tagName = remainingTag.TrimStart('<').TrimEnd('>');
+                var tagName = remainingTag.TrimStart('<').TrimEnd('>');
                 input += $"</{tagName}>";
             }
 

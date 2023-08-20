@@ -22,6 +22,10 @@ namespace Infrastructure
         /// <returns>A list of all users.</returns>
         public async Task<List<user>> GetUsersAsync()
         {
+            #if RELEASE
+            return null;
+            #endif
+            
             try
             {
                 return await _context.users.AsNoTracking().ToListAsync();
@@ -94,14 +98,18 @@ namespace Infrastructure
                 
                 var userValue = property.GetValue(user);
 
-                if (userValue != null)
+                if (userValue == null)
+                    continue;
+                
+                switch (userValue)
                 {
-                    if (userValue is string && string.IsNullOrEmpty((string)userValue))
+                    case string value when string.IsNullOrEmpty(value):
+                    case DateTime time when time == DateTime.MinValue:
                         property.SetValue(userToUpdate, null);
-                    else if (userValue is DateTime && (DateTime)userValue == DateTime.MinValue)
-                        property.SetValue(userToUpdate, null);
-                    else
+                        break;
+                    default:
                         property.SetValue(userToUpdate, userValue);
+                        break;
                 }
             }
 

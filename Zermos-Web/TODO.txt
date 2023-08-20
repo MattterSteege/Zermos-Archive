@@ -3,9 +3,7 @@ TODO: (later, when feasible) Add an API system that allows users to create an ap
 TODO: find a way to find what the since paramater means in messages from infowijs
 TODO: main menu page weather - add text for mm/u rain and a slider for time
 TODO: CSS cleanup, it is really needed
-TODO: offline page
-TODO: find a way to not show the error on rooster page swiping
-TODO: Rooster page > height not working as intended
+TODO: custom homework deleting
 TODO: School recap page
     - Totaal hoeveelheid lessen: 'Je hebt dit schooljaar 1230 lessen gevolgd met een totaal van 61.500 minuten / 1.025 uur'
     - Totaal hoeveelheid lessen gemist

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
@@ -47,7 +43,7 @@ namespace Zermos_Web.Utilities
                 message += "' class=\"verify-button\">Log nu in!</a> <p class=\"valid-time\">P.S. deze link is 10 minuten geldig.</p></div></body></html>";
             }
             
-            MimeMessage mimeMessage = new MimeMessage();
+            var mimeMessage = new MimeMessage();
             mimeMessage.From.Add(MailboxAddress.Parse("Zermos <no-reply@mail.kronk.tech>"));
             mimeMessage.To.Add(MailboxAddress.Parse(to));
             mimeMessage.Subject = subject;

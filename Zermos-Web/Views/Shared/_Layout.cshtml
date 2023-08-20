@@ -1,8 +1,8 @@
 @using Microsoft.AspNetCore.Http
 @using Zermos_Web.Utilities
 @{
-    string currentPage = $"/{ViewContext.RouteData.Values["controller"]}/{ViewContext.RouteData.Values["action"]?.ToString()?.Split("/")[0] ?? "index"}";
-    string version = Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? "dev";
+    var currentPage = $"/{ViewContext.RouteData.Values["controller"]}/{ViewContext.RouteData.Values["action"]?.ToString()?.Split("/")[0] ?? "index"}";
+    var version = Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? "dev";
 }
 <!DOCTYPE html>
 <html lang="nl" class="@(Context.Request.Cookies["theme"] ?? "light")">
@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="manifest" href="/manifest.webmanifest"/>
     @* <meta name="theme-color" content="#f8f9fa"> *@
-    <meta name="theme-color" content="@((Context.Request.Cookies["theme"] == "light" || Context.Request.Cookies["theme"] == "blue") ? "#f8f9fa" : (Context.Request.Cookies["theme"] == "dark" || Context.Request.Cookies["theme"] == "red") ? "#1a1a1a" : (Context.Request.Cookies["theme"] == "pink") ? "#ffebf2" : "#f8f9fa")">
+    <meta name="theme-color" content="@(Context.Request.Cookies["theme"] == "light" || Context.Request.Cookies["theme"] == "blue" ? "#f8f9fa" : Context.Request.Cookies["theme"] == "dark" || Context.Request.Cookies["theme"] == "red" ? "#1a1a1a" : Context.Request.Cookies["theme"] == "pink" ? "#ffebf2" : "#f8f9fa")">
     <link rel="stylesheet" href="~/css/style.css?v=@version">
 
     @if (ViewContext.View.Path != "/Views/Shared/_Loading.cshtml")
@@ -46,14 +46,14 @@
 
     <div class="bottom">
         <ul>
-            @* <li> *@
-            @*     <a asp-controller="Main" asp-action="index"> *@
-            @*         <div class="menu-item"> *@
-            @*             <i class="fa-solid fa-house menu-icons fa-fw @(currentPage == @Url.Action("index", "Main") ? "active" : "")"></i> *@
-            @*             <p>Hoofdmenu</p> *@
-            @*         </div> *@
-            @*     </a> *@
-            @* </li> *@
+            <li>
+                <a onclick="ReplacePage('@Url.Action("Index", "Main")')">
+                    <div class="menu-item">
+                        <i class="fa-solid fa-house menu-icons fa-fw @(currentPage == @Url.Action("index", "Main") ? "active" : "")"></i>
+                        <p>Hoofdmenu</p>
+                    </div>
+                </a>
+            </li>
 
             <h5 class="Heading">Zermelo</h5>
 
@@ -271,6 +271,8 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
                             appendStylesheet(links[i].href);
                         }
                     }
+                    
+                    main.dispatchEvent(new Event("main:load"));
 
                     contentElement.style.opacity = "0";
                 }, 250);

@@ -130,7 +130,7 @@ namespace Zermos_Web.Controllers
         {
             if (email != null && (customer_product_id == null || user_id ==  null || id == null))
             {
-                string url1 = "https://api.infowijs.nl/sessions";
+                var url1 = "https://api.infowijs.nl/sessions";
                 var response1 = _infowijsHttpClient.PostAsync(url1, new StringContent(JsonConvert.SerializeObject(new
                 {
                     username = email,
@@ -185,7 +185,7 @@ namespace Zermos_Web.Controllers
                 return PartialView(model: "");
             }
             
-            string url1 = "https://api.infowijs.nl/sessions/transfer";
+            var url1 = "https://api.infowijs.nl/sessions/transfer";
             var response1 = await _infowijsHttpClient.PostAsync(url1, null);
             var result1 = await response1.Content.ReadAsStringAsync();
 
@@ -207,7 +207,7 @@ namespace Zermos_Web.Controllers
                 return Redirect("/koppelingen/infowijs/qr");
             }
             
-            string url2 = "https://api.infowijs.nl/sessions/transfer/" + uuid;
+            var url2 = "https://api.infowijs.nl/sessions/transfer/" + uuid;
             var response2 = await _infowijsHttpClient.GetAsync(url2);
             var result2 = await response2.Content.ReadAsStringAsync();
 
@@ -253,7 +253,7 @@ namespace Zermos_Web.Controllers
 
             var response = await _zermeloHttpClient.PostAsync("https://ccg.zportal.nl/api/v3/oauth",
                 new FormUrlEncodedContent(form));
-            string responseString = await response.Content.ReadAsStringAsync();
+            var responseString = await response.Content.ReadAsStringAsync();
 
             var accessToken = Regex.Matches(responseString, "[a-zA-Z0-9]{20}")[0].Value;
 
@@ -307,10 +307,10 @@ namespace Zermos_Web.Controllers
         public async Task<IActionResult> ZermeloWithCode(string code, string from = "code")
         {
             //POST /oauth/token?grant_type=authorization_code&code=
-            string url =
+            var url =
                 $"https://ccg.zportal.nl/api/v3/oauth/token?grant_type=authorization_code&code={code.Replace(" ", "")}";
             var response = await _zermeloHttpClient.PostAsync(url, null);
-            string responseString = await response.Content.ReadAsStringAsync();
+            var responseString = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
             {
@@ -343,7 +343,7 @@ namespace Zermos_Web.Controllers
 
         private async Task<ZermeloUserModel> GetZermeloUser(string access_token)
         {
-            string url = "https://ccg.zportal.nl/api/v3/users/~me?access_token=" + access_token;
+            var url = "https://ccg.zportal.nl/api/v3/users/~me?access_token=" + access_token;
             var response = await _zermeloHttpClient.GetAsync(url);
             var responseString = await response.Content.ReadAsStringAsync();
 
@@ -365,7 +365,7 @@ namespace Zermos_Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Somtoday(string username, string password)
         {
-            string[] tokens = GenerateTokens();
+            var tokens = GenerateTokens();
             //0 = code verifier
             //1 = code challenge
 
@@ -438,7 +438,7 @@ namespace Zermos_Web.Controllers
                 new AuthenticationHeaderValue("Bearer", auth_token);
 
             var response = await _somtodayHttpClient.GetAsync(baseurl);
-            string responseString = await response.Content.ReadAsStringAsync();
+            var responseString = await response.Content.ReadAsStringAsync();
             var somtodayStudent =
                 JsonConvert.DeserializeObject<SomtodayStudentModel>(responseString);
             return new user
@@ -449,7 +449,7 @@ namespace Zermos_Web.Controllers
 
         public string[] GenerateTokens()
         {
-            string[] tokens = new string[2];
+            var tokens = new string[2];
             tokens[0] = GenerateNonce();
             tokens[1] = GenerateCodeChallenge(tokens[0]);
             return tokens;
@@ -459,7 +459,7 @@ namespace Zermos_Web.Controllers
         {
             const string chars = "abcdefghijklmnopqrstuvwxyz123456789";
             var nonce = new char[128];
-            for (int i = 0; i < nonce.Length; i++)
+            for (var i = 0; i < nonce.Length; i++)
                 nonce[i] = chars[_random.Next(0, chars.Length)];
 
             return new string(nonce);
@@ -483,7 +483,7 @@ namespace Zermos_Web.Controllers
         [ZermosPage]
         public IActionResult Teams()
         {
-            string redirectUrl = "https://localhost:5001/Koppelingen/Teams/Callback";
+            var redirectUrl = "https://localhost:5001/Koppelingen/Teams/Callback";
             
             redirectUrl = "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=REDACTED_MS_CLIENT_ID&response_type=code&redirect_uri=" + redirectUrl + "&response_mode=query&scope=User.Read offline_access&state=" + TokenUtils.RandomString();
 
@@ -494,7 +494,7 @@ namespace Zermos_Web.Controllers
         [ZermosPage]
         public async Task<IActionResult> TeamsCallback(string code, string state, string session_state)
         {
-            string redirectUrl = "https://localhost:5001/Koppelingen/Teams/Callback";
+            var redirectUrl = "https://localhost:5001/Koppelingen/Teams/Callback";
 
             var client = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Post, "https://login.microsoftonline.com/organizations/oauth2/v2.0/token");
@@ -511,9 +511,9 @@ namespace Zermos_Web.Controllers
             var response = await client.SendAsync(request);
             response.EnsureSuccessStatusCode();
 
-            string responseString = await response.Content.ReadAsStringAsync();
+            var responseString = await response.Content.ReadAsStringAsync();
             
-            TeamsAuthenticationModel auth = JsonConvert.DeserializeObject<TeamsAuthenticationModel>(responseString);
+            var auth = JsonConvert.DeserializeObject<TeamsAuthenticationModel>(responseString);
 
             request = new HttpRequestMessage(HttpMethod.Get, "https://graph.microsoft.com/v1.0/me");
             request.Headers.Add("Accept", "application/json");
@@ -521,7 +521,7 @@ namespace Zermos_Web.Controllers
             
             response = await client.SendAsync(request);
             
-            TeamsUserModel user = JsonConvert.DeserializeObject<TeamsUserModel>(await response.Content.ReadAsStringAsync());
+            var user = JsonConvert.DeserializeObject<TeamsUserModel>(await response.Content.ReadAsStringAsync());
             
             return Ok(user);
         }

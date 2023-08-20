@@ -3,7 +3,6 @@ using System.Security.Claims;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Zermos_Web.Controllers;
 
 namespace Zermos_Web.Models.Requirements
 {

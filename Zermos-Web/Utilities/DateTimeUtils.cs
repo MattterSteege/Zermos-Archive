@@ -130,7 +130,7 @@ public static class DateTimeUtils
 
     public static DateTime ToDayTimeSavingDate(this DateTime date)
     {
-        bool summertime = TimeZoneInfo.Local.IsDaylightSavingTime(date);
+        var summertime = TimeZoneInfo.Local.IsDaylightSavingTime(date);
         if (summertime)
         {
             return date;

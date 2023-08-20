@@ -16,3 +16,6 @@ Zermelo - Rooster
     
 Hoofdmenu
     - de weer 'card' geeft nu een soepele lijn in plaats van een balk van onder.
+    
+Infowijs/Account
+    - de rechter zijbalk met 'belangrijke links' is nu weer werkend, en laat de kleuren weer zien.

@@ -1,11 +1,9 @@
 ﻿using System.Security.Claims;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Zermos_Web.Models.Requirements;
 using Zermos_Web.Utilities;
 

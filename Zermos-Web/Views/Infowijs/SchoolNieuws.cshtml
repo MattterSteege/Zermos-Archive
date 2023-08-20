@@ -4,10 +4,10 @@
 
 @{
     ViewBag.Title = "title";
-    int wordCount = 150;
+    var wordCount = 150;
     Context.Response.Cookies.Append("last-seen-infowijs-news", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddDays(60)});
 
-    DateTime lastUpdated = Context.Request.Cookies["last-seen-infowijs-news"] == null ? DateTime.MinValue : DateTime.Parse(Context.Request.Cookies["last-seen-infowijs-news"]);
+    var lastUpdated = Context.Request.Cookies["last-seen-infowijs-news"] == null ? DateTime.MinValue : DateTime.Parse(Context.Request.Cookies["last-seen-infowijs-news"]);
 
 }
 
@@ -153,7 +153,7 @@
                         }
                         else
                         {
-                            int indexOfMessage = Model.IndexOf(messageGroup);
+                            var indexOfMessage = Model.IndexOf(messageGroup);
                             <p id=@("base-" + indexOfMessage) class="content">@Html.Raw(HTMLUtils.BalanceHtmlTags(HTMLUtils.ConvertLinksInText(content.Content.String).FirstWords(wordCount)))</p>
                             <span id=@("dots-" + indexOfMessage)>...</span>
                             <pre id=@("more-" + indexOfMessage) style="display: none;">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</pre>

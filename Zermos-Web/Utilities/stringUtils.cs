@@ -27,7 +27,7 @@ namespace Zermos_Web.Utilities
             if (string.IsNullOrEmpty(str))
                 return str;
             var words = str.Split(' ');
-            string returna = string.Join(" ", words.Take(wordCount));
+            var returna = string.Join(" ", words.Take(wordCount));
             return returna;
         }
     }

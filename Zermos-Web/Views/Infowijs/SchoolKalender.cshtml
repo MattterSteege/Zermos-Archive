@@ -64,14 +64,14 @@
     }
 
     function getElementY(query) {
-        return document.getElementById('main').scrollTop + document.getElementById(query).getBoundingClientRect().top
+        return main.scrollTop + document.getElementById(query).getBoundingClientRect().top
     }
 
     function doScrolling(element, duration) {
-        var startingY = document.getElementById('main').scrollTop
+        var startingY = main.scrollTop
         var elementY = getElementY(element)
         // If element is close to page's bottom then window will scroll only to some position above the element.
-        var targetY = document.body.scrollHeight - elementY < document.getElementById('main').innerHeight ? document.body.scrollHeight - document.getElementById('main').innerHeight : elementY
+        var targetY = document.body.scrollHeight - elementY < main.innerHeight ? document.body.scrollHeight - main.innerHeight : elementY
         var diff = targetY - startingY
 
         // Easing function: easeInOutCubic
@@ -99,7 +99,7 @@
             // It can cause bad-looking slow frames in browser performance tool, so be careful.
             percent = easing(percent)
 
-            document.getElementById('main').scrollTo(0, startingY + diff * percent)
+            main.scrollTo(0, startingY + diff * percent)
 
             // Proceed with animation as long as we wanted it to.
             if (time < duration) {
@@ -109,7 +109,7 @@
     }
 
     // Check if the URL contains a target element ID and scroll to it
-    window.addEventListener('DOMContentLoaded', () => {
+    main.addEventListener('main:load', () => {
         const targetElementId = getTargetElementId();
         if (targetElementId) {
             const targetElement = document.getElementById(targetElementId);
@@ -117,21 +117,17 @@
                 doScrolling(targetElementId, 1000)
             }
         }
-    });
 
-
-    document.addEventListener('DOMContentLoaded', function() {
-        var mainElement = document.getElementById('main');
         var indexItems = document.querySelectorAll('.dates-container div');
         var items = document.querySelectorAll('.calendar-month-parent');
 
         //add the 'active' class to the item who's top is the closest to the top of the mainElement
         function setActive() {
           var closest = items[0];
-          var closestDistance = Math.abs(items[0].getBoundingClientRect().top - mainElement.getBoundingClientRect().top - 96);
+          var closestDistance = Math.abs(items[0].getBoundingClientRect().top - main.getBoundingClientRect().top - 96);
         
           for (var i = 1; i < items.length; i++) {
-            var distance = Math.abs(items[i].getBoundingClientRect().top - mainElement.getBoundingClientRect().top - 96);
+            var distance = Math.abs(items[i].getBoundingClientRect().top - main.getBoundingClientRect().top - 96);
             if (distance < closestDistance) {
               closest = items[i];
               closestDistance = distance;
@@ -154,7 +150,7 @@
         setActive();
 
         //add the 'active' class to the item who's top is the closest to the top of the mainElement when scrolling
-        mainElement.addEventListener('scroll', function() {
+        main.addEventListener('scroll', function() {
             setActive();
         });
     });

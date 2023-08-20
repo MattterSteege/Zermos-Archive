@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -55,7 +54,7 @@ namespace Zermos_Web.Controllers
 
             var user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
-            string access_token = user.somtoday_access_token;
+            var access_token = user.somtoday_access_token;
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
@@ -454,14 +453,14 @@ namespace Zermos_Web.Controllers
             
             if (Request.Cookies.ContainsKey("cached-somtoday-homework") && recache == false)
             {
-                string cache = (await _users.GetUserAsync(User.FindFirstValue("email"))).cached_somtoday_homework;
+                var cache = (await _users.GetUserAsync(User.FindFirstValue("email"))).cached_somtoday_homework;
                 var homework = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(cache);
                 return PartialView(homework);
             }
 
             var user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
-            string access_token = user.somtoday_access_token;
+            var access_token = user.somtoday_access_token;
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {

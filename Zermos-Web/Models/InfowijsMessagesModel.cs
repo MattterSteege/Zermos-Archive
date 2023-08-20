@@ -11,14 +11,14 @@ namespace Zermos_Web.Models
         [JsonProperty("data")] public Data Data { get; set; } = null!;
     }
 
-    public partial class Data
+    public class Data
     {
         [JsonProperty("messages")] public List<Message> Messages { get; set; } = null!;
         [JsonProperty("since")] public long Since { get; set; }
         [JsonProperty("hasMore")] public bool HasMore { get; set; }
     }
 
-    public partial class Message
+    public class Message
     {
         [JsonProperty("id")] public Guid Id { get; set; }
         [JsonProperty("type")] public long Type { get; set; }
@@ -31,7 +31,7 @@ namespace Zermos_Web.Models
         [JsonProperty("isMe")] public bool IsMe { get; set; }
     }
 
-    public partial class ContentClass
+    public class ContentClass
     {
         [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)] public Guid? Id { get; set; }
         [JsonProperty("title", NullValueHandling = NullValueHandling.Ignore)] public string Title { get; set; }
@@ -50,7 +50,7 @@ namespace Zermos_Web.Models
         [JsonProperty("url", NullValueHandling = NullValueHandling.Ignore)] public Uri Url { get; set; }
     }
 
-    public partial class User
+    public class User
     {
         [JsonProperty("id")] public long Id { get; set; }
         [JsonProperty("isMe")] public bool IsMe { get; set; }
@@ -64,7 +64,7 @@ namespace Zermos_Web.Models
         [JsonProperty("deleted_at")] public long DeletedAt { get; set; }
     }
 
-    public partial struct ContentUnion
+    public struct ContentUnion
     {
         public ContentClass ContentClass;
         public string String;

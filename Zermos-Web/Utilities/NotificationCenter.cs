@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
 
 namespace Zermos_Web.Utilities
 {
@@ -24,7 +21,7 @@ namespace Zermos_Web.Utilities
                 Type = type.ToString().ToLower()
             };
 
-            List<Notification> notifications = context.GetNotifications();
+            var notifications = context.GetNotifications();
             notifications.Add(notification);
 
             context.Items["Notifications"] = notifications;

@@ -62,15 +62,15 @@
 
         <div class="child last-grade">
             <div class="information">
-                <h1 class="heading">Laatste cijfer</h1>
+                <h1 class="heading">Wat komt hier?</h1>
                 <div class="grade-info">
-                    <p class="grade-subject">@somtoday_LastGrade?.vak.naam:</p>
-                    <p class="grade-number">@somtoday_LastGrade?.geldendResultaat</p>
-                    <p class="grade-number">@(somtoday_LastGrade?.weging == 0 ? somtoday_LastGrade.examenWeging : 0)x</p>
+                    <p class="grade-subject">Ik heb geen idee... Mischien iets met huiswerk , of met nieuwsberichten</p>
+                    <p class="grade-number"></p>
+                    <p class="grade-number"></p>
                 </div>
             </div>
             <div class="icon">
-                <i class="fa-solid fa-line-chart fa-fw card-icon active"></i>
+                <i class="fa-solid fa-question fa-fw card-icon active"></i>
             </div>
         </div>
 
@@ -162,7 +162,6 @@
            
             const svgContainer = document.getElementsByClassName('weather-graph-underlay')[0];
             const svg = createSmoothBezierCurve(precipitation);
-            console.log(svg);
             svgContainer.appendChild(svg);
         });
     }

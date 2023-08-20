@@ -121,7 +121,7 @@ namespace Zermos_Web.Controllers
         [NonAction]
         private async Task<string> GetSessionToken()
         {
-            string mainAccessToken =
+            var mainAccessToken =
                 (await _users.GetUserAsync(User.FindFirstValue("email"))).infowijs_access_token;
 
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.infowijs.nl/sessions/access_token");
@@ -138,7 +138,7 @@ namespace Zermos_Web.Controllers
         {
             //curl --location 'https://aboarc8x9f-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id=ABOARC8X9F&x-algolia-api-key=1c110b29cea05e83dce945e2c5594f2f' --header 'Content-Type: text/plain' --data '{"requests":[{"indexName":"schoolwiki.113-prod.185f99fe-1aea-4110-9d14-6c76533a352c","params":"query=PTA&hitsPerPage=100"}]}'
             
-            string body =
+            var body =
                 "{\"requests\":[{\"indexName\":\"schoolwiki.113-prod.185f99fe-1aea-4110-9d14-6c76533a352c\",\"params\":\"query=" +
                 query +
                 "&hitsPerPage=100\"}]}";
