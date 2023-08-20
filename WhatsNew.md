@@ -8,7 +8,7 @@ nav_exclude: false
 
 0.2 - The small update...
 
-* notitie, vanaf nu zijn er 2 versies van Zermos web: 'Zermos web' een de 'PWA', ze verschillen niet veel van elkaar, dus wat voor het een geldt, geldt ook voor het ander. Als je vragen hebt over beide, kijk dan bij de docs.
+* Notitie, vanaf nu zijn er 2 versies van Zermos web: 'Zermos web' een de 'PWA', ze verschillen niet veel van elkaar, dus wat voor het een geldt, geldt ook voor het ander. Als je vragen hebt over beide, kijk dan bij de docs.
 
 - Algemeen
   - We hebben een P, we hebben een W, we hebben een A, we hebben nu een PWA! Zermos web is nu ook te downloaden als een website, dit is nog experimenteel en kan dus nog bugs bevatten (en is voor nu alleen beschikbaar op PC), maar wel ongelovelijk handig. Zermos is tijdens het gebruik van de PWA (niet de website versie) in staat om pagina's op te slaan op je telefoon en die aan je te laten zien voor als je geen internet hebt. Zo kan je dus ook offline je rooster, cijfers en huiswerk bekijken, het is alleen niet het nieuwste van het nieuwste.
