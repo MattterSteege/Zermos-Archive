@@ -4,6 +4,30 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - Versie 0.2.1 - 20-08-2023
+
+0.2.1 UX update
+
+In deze update heb ik me vooral gericht op de manier waarop je omgaat met de website. Hierdoor heb ik verschillende dingen aangepast, zoals:
+
+- Algemeen
+    - De term 'routing' (die ik hieronder zal verduidelijken) verwijst naar het proces van het navigeren tussen verschillende pagina's op een website. Een website bestaat uit verschillende URL's, zoals bijvoorbeeld https://zermos.kronk.tech/Zermelo/Rooster en https://zermos.kronk.tech/Somtoday/Cijfers. In het begin verliep dit proces soepel, maar er was een terugkerend probleem: telkens wanneer je naar een andere pagina ging, werden alle extra scripts, afbeeldingen, iconen, en andere elementen opnieuw gedownload, hoewel dit eigenlijk niet noodzakelijk was.<br><br>Om dit aan te pakken, heb ik een oplossing geïmplementeerd. Wanneer je bijvoorbeeld de URL 'https://zermos.kronk.tech/Zermelo/Rooster' bezoekt, word je nu doorgestuurd naar 'https://zermos.kronk.tech?url=/Zermelo/Rooster'. Bij deze aangepaste URL wordt eerst de basisset van de website gedownload, inclusief de zijbalk, iconen en andere componenten. Hierdoor ontstaat een leeg gebied in het midden van de pagina. Vervolgens wordt de specifieke opgevraagde pagina (die wordt aangegeven in de '?url=/Zermelo/Rooster' parameter) gedownload en in dit lege gebied geplaatst. Dit hele proces gebeurt achter de schermen en wordt netjes gepresenteerd met een laadscherm, waardoor het lijkt alsof er geen verandering heeft plaatsgevonden.<br><br>Deze aanpak heeft ook een extra voordeel: de website hoeft veel minder gegevens te downloaden, omdat je op je telefoon feitelijk op dezelfde pagina blijft en de ervaring dus 'normaal' aanvoelt. In het verleden werd bij elke paginawissel ongeveer 811 KB (ongeveer 81 e-mails) aan gegevens gedownload. Dit gebeurde telkens bij elke laadscherm en elke andere pagina. Nu wordt er slechts 1 keer ongeveer 811 KB gedownload bij het opstarten, gevolgd door slechts 2 KB per pagina. Dit is een aanzienlijke verbetering. Bovendien worden de grootste bestanden gecachet (opgeslagen in het geheugen van je mobiel/PC), waardoor deze niet opnieuw gedownload hoeven te worden. Dit resulteert in slechts ongeveer 20 KB aan gegevens die worden gedownload wanneer je Zermos opstart.
+    - Het laadscherm is ook veel soepeler :)
+    - Het probleem met de 404 pagina is verholpen (de 404 pagina stond niet op de goede plek, de opgevraagde pagina bestond dus niet en werd je doorgestuurd naar de 404 pagina, enz. enz.).
+    - Leuke laadscherm berichten toegevoegd, want school wifi is traaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa....
+    - Er is een Update(); method toegevoegd, maar dit is niet echt belangrijk om te weten.
+    
+- Zermelo - Rooster
+    - Er is nu een klein bolletje dat aangeeft of je ver genoeg hebt geswiped om naar de volgende/vorige week te gaan.
+    - Een veelvoorkomende error is opgelost, dat is altijd fijn ;)
+    - De week verandere via 'swipen' werkt nu weer zoals het hoort.
+    
+- Hoofdmenu
+    - de weer 'card' geeft nu een soepele lijn in plaats van een balk van onder.
+    
+- Infowijs/Account
+    - de rechter zijbalk met 'belangrijke links' is nu weer werkend, en laat de kleuren weer zien.
+
 # Release Notes - Versie 0.2.0 - 14-08-2023
 
 0.2 - The small update...
