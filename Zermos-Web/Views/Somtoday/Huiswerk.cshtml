@@ -58,7 +58,7 @@
 }
 
 <div class="bottom-right-add-button">
-    <a asp-controller="Somtoday" asp-action="NieuwHuiswerk">
+    <a onclick="ReplacePage('@Url.Action("NieuwHuiswerk", "Somtoday")')">
         <i class="fa-solid fa-plus center"></i>
     </a>
 </div>

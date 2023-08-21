@@ -13,7 +13,7 @@
 <div class="grades-container">
 
     <div class="vak">
-        <a asp-controller="Somtoday" asp-action="CijferStatestieken" asp-route-vak="@Model.vak.afkorting.Capitalize()" asp-route-content="@Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(Model)))" style="display: flex; align-content: center; justify-content: center; flex-wrap: wrap;">
+        <a onclick="ReplacePage('@Url.Action("CijferStatestieken", "Somtoday", new {vak = Model.vak.afkorting.Capitalize(), content = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(Model)))})')" style="display: flex; align-content: center; justify-content: center; flex-wrap: wrap;">
             <div class="top-30 fade-out" style="justify-content: center; align-items: center;">
                 <h1>Cijfer statestieken</h1>
             </div>
@@ -31,7 +31,7 @@
             var encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(vak)));
 
             <div class="vak">
-                <a asp-controller="Somtoday" asp-action="CijferData" asp-route-vak="@vak.vak.afkorting.Capitalize()" asp-route-content="@encoded">
+                <a onclick="ReplacePage('@Url.Action("CijferData", "Somtoday", new {vak = vak.vak.afkorting.Capitalize(), content = encoded})')">
                     <div class="top-30">
                         <h1>@vak.vak.naam</h1>
                         <p>@(vak.weging == 0 ? vak.examenWeging : vak.weging)x</p>

@@ -47,7 +47,7 @@
     <div class="bottom">
         <ul>
             <li>
-                <a onclick="ReplacePage('@Url.Action("Index", "Main")')">
+                <a onclick="ReplacePage('/Hoofdmenu')">
                     <div class="menu-item">
                         <i class="fa-solid fa-house menu-icons fa-fw @(currentPage == @Url.Action("index", "Main") ? "active" : "")"></i>
                         <p>Hoofdmenu</p>
@@ -201,6 +201,9 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
     }
 }
 <script id="vital-script">
+    var main = document.getElementById("main");
+    var content = document.getElementById("content");
+
     function ReplacePage(url) {
         
         // Define a function to append a script to either the head or body
@@ -224,20 +227,15 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
             document.head.appendChild(link);
         }
         
-        const contentElement = document.getElementById("content");
         document.getElementsByClassName("loader-text")[0].innerHTML = loadingTexts[Math.floor(Math.random() * loadingTexts.length)];
 
         //set loading-text to one of the followin
         
-        contentElement.style.opacity = "1";
+        content.style.opacity = "1";
         // Make an AJAX request
         $.ajax({
             url: url,
             success: function(data) {
-                modifyUrl("Zermos", url);
-                const el = document.createElement('html');
-                el.innerHTML = data;
-
 
                 setTimeout(function() {
                     let i  ;
@@ -247,45 +245,51 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
                         elements[i].remove();
                     }
                     
-                    var cleanedData = stripScripts("link", stripScripts("script", data));
-
                     // Update main content
-                    main.outerHTML = main.outerHTML;
-                    main.innerHTML = cleanedData;
+                    main.outerHTML = '<main class="main" id="main"></main>';
+                    main = document.getElementById("main");
+                    main.innerHTML = stripTag("link", stripTag("script", data));
 
-                    const scripts = el.getElementsByTagName("script");
-                    const head = document.head;
-                    const body = document.body;
+                    let html = document.createElement("html");
+                    html.innerHTML = data;
+                    
+                    const scripts = html.getElementsByTagName("script");
 
                     for (i= 0; i < scripts.length; i++) {
                         if (scripts[i].src) {
-                            appendScript(head, scripts[i].src, true);
+                            appendScript(document.head, scripts[i].src, true);
                         } else {
-                            appendScript(body, scripts[i].innerHTML, false);
+                            appendScript(document.body, scripts[i].innerHTML, false);
                         }
                     }
 
-                    const links = el.getElementsByTagName("link");
+                    const links = html.getElementsByTagName("link");
                     for (i= 0; i < links.length; i++) {
                         if (links[i].rel === "stylesheet") {
                             appendStylesheet(links[i].href);
                         }
                     }
                     
+                    html.remove();
+                    
                     main.dispatchEvent(new Event("main:load"));
 
-                    contentElement.style.opacity = "0";
+                    modifyUrl("Zermos", url);
+                    content.style.opacity = "0";
                 }, 250);
             },
             error: function(xhr, status, error) {
-                console.log(error);
+                //if it is a 401, repolace /login
+                if (xhr.status === 401) {
+                    ReplacePage("/Login");
+                }
             },
             cache: false,
             type: 'GET'
         });
 
 
-        function stripScripts(tag, data) {
+        function stripTag(tag, data) {
             const div = document.createElement('div');
             div.innerHTML = data;
             const scripts = div.getElementsByTagName(tag);
@@ -295,7 +299,6 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
             }
             return div.innerHTML;
         }
-
     }
     
     function modifyUrl(title, url) {
@@ -316,7 +319,7 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
         }
     });
     
-    const loadingTexts = [
+    var loadingTexts = [
         "Tijd en Ruimte omwisselen",
         "heftig rond draaien",
         "Een lepel buigen",

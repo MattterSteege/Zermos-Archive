@@ -84,7 +84,7 @@
 
                             //get the date of the day that the appointments are for
                             //8 * 60 + 20 = 500 minutes
-                            var dayStartUnix = appointmentList.ElementAt(0).start.ToDateTime().Date.ToDayTimeSavingDate().AddMinutes(6 * 60 + 20).ToUnixTime();
+                            var dayStartUnix = appointmentList.ElementAt(0).start.ToDateTime().Date.AddMinutes(6 * 60 + 20).ToUnixTime();
 
                         }
 

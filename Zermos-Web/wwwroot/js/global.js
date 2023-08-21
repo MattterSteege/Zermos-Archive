@@ -94,6 +94,7 @@ function addNotification(title, body, type) {
     return notification;
 }
 
+//UPDATING ZERMOS OR FIXING STYLE ISSUES
 async function Update() {
     /*                                    */
     /*                                    */
@@ -102,5 +103,17 @@ async function Update() {
     /*                                    */
 
     console.log('[ GLOBAL.JS ] Update uitvoeren');
+    reloadCss();
     window.location.href = "/";
+}
+
+function reloadCss()
+{
+    const links = document.getElementsByTagName("link");
+    for (const cl in links)
+    {
+        const link = links[cl];
+        if (link.rel === "stylesheet")
+            link.href += "";
+    }
 }

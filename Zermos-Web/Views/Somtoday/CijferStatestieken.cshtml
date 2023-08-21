@@ -41,6 +41,10 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+
+    document.getElementById("main").addEventListener("main:load", load);
+
+    @Html.Raw("function load() {")
     @for (var i = 0; i < Model.Count; i++)
     {
         @Html.Raw(Model[i].CreateChartCode(letters[i].ToString()))
@@ -122,6 +126,6 @@
         }
       });
     });
-
     
+    @Html.Raw("}");
 </script>

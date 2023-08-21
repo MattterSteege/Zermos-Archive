@@ -10,6 +10,7 @@ public static class DateTimeUtils
 
     public static DateTime ToDateTime(this int unixTimeStamp)
     {
+        //unixTimeStamp is dutch time, so we need to convert it to normal dutch time with DST
         return new DateTime(1970, 1, 1, 1, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimeStamp);
     }
 
@@ -128,14 +129,13 @@ public static class DateTimeUtils
         return $"{diff.Days / 365} jaar";
     }
 
-    public static DateTime ToDayTimeSavingDate(this DateTime date)
+    public static DateTime ConvertToNormalDutchTime(this DateTime inputDate)
     {
-        var summertime = TimeZoneInfo.Local.IsDaylightSavingTime(date);
-        if (summertime)
-        {
-            return date;
-        }
-        
-        return date.AddHours(1);
+        //convert dutch time to normal dutch time with DST
+        bool isDst = TimeZoneInfo.Local.IsDaylightSavingTime(inputDate);
+        if (isDst)
+            inputDate = inputDate.AddHours(1);
+        return inputDate;
     }
+    
 }

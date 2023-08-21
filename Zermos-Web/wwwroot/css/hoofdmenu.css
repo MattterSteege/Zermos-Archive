@@ -85,12 +85,13 @@
 .lesson-subject, .lesson-teacher, .lesson-location {
     height: 100%;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 14px;
     color: var(--text-color);
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 8px;
+    text-transform: uppercase;
 }
 
 /*news card*/
@@ -105,7 +106,7 @@
 .news-title {
     height: 100%;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 14px;
     color: var(--text-color);
     display: flex;
     justify-content: start;

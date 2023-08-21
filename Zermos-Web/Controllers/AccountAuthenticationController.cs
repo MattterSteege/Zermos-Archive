@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Zermos_Web.Models.Requirements;
 using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
@@ -34,13 +35,20 @@ namespace Zermos_Web.Controllers
         
         
         [HttpGet]
-        public IActionResult Login(string returnUrl = "")
+        [ZermosPage]
+        public IActionResult Login(string returnUrl = "", string email = null, int code = 0)
         {
+            if (email != null && code != 0)
+            {
+                return PartialView(new Tuple<string, int>(email, code));
+            }
+            
             ViewData["returnUrl"] = returnUrl;
             return PartialView();
         }
 
         [HttpPost]
+        [ZermosPage]
         public async Task<IActionResult> Login(string email = null, string returnUrl = "", bool isPWA = false)
         {
             var user = await _users.GetUserAsync(email);
@@ -61,7 +69,7 @@ namespace Zermos_Web.Controllers
                 
                 await MailgunService.SendEmail(email, "Zermos - Bevestig je e-mailadres", $"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountCreation?token={newUser.VerificationToken}&email={newUser.email}{(returnUrl == "" ? "" : "&returnUrl=" + returnUrl)}&isPWA={(isPWA ? "true" : "false")}", true);
 
-                return PartialView(new Tuple<string, int>(email, 12));
+                return RedirectToAction("Login", new {email = email, code = 12});
             }
 
             //update user's verification token
@@ -71,10 +79,11 @@ namespace Zermos_Web.Controllers
             
             await MailgunService.SendEmail(email, "Zermos - Bevestig je e-mailadres", $"{Request.Scheme}://{Request.Host}{Request.PathBase}/VerifyAccountLogin?token={user.VerificationToken}&email={user.email}{(returnUrl == "" ? "" : "&returnUrl=" + returnUrl)}&isPWA={(isPWA ? "true" : "false")}", true);
 
-            return PartialView(new Tuple<string, int>(email, 11));
+            return RedirectToAction("Login", new {email = email, code = 11});
         }
 
         [HttpGet]
+        [ZermosPage]
         public async Task<IActionResult> VerifyAccountCreation(string token, string email, string returnUrl = "", bool isPWA = false)
         {
             if (Request.Cookies.Count == 0)
@@ -110,6 +119,7 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpGet]
+        [ZermosPage]
         public async Task<IActionResult> VerifyAccountLogin(string token, string email, string returnUrl, bool isPWA)
         {
             if (Request.Cookies.Count == 0)
@@ -161,7 +171,7 @@ namespace Zermos_Web.Controllers
             
             if (string.IsNullOrEmpty(ReturnUrl))
             {
-                return PartialView("Login", new Tuple<string, int>(email, 13));
+                return RedirectToAction("Login", new {email = email, code = 13});
             }
             
             return Redirect(ReturnUrl);
@@ -175,23 +185,23 @@ namespace Zermos_Web.Controllers
             {
                 case 1:
                     _logger.LogWarning("Verification failed with code {code} (User not found in database)", 21);
-                    return PartialView("Login", new Tuple<string, int>(null, 21));
+                    return RedirectToAction("Login", new {code = 21});
                 case 2:
                     _logger.LogWarning("Verification failed with code {code} (Token expired)", 22);
-                    return PartialView("Login", new Tuple<string, int>(null, 22));
+                    return RedirectToAction("Login", new {code = 22});
                 case 3:
                     _logger.LogWarning("Verification failed with code {code} (Token incorrect)", 23);
-                    return PartialView("Login", new Tuple<string, int>(null, 23));
+                    return RedirectToAction("Login", new {code = 23});
                 case 4:
                     _logger.LogWarning("Verification failed with code {code} (User already verified)", 24);
-                    return PartialView("Login", new Tuple<string, int>(null, 24));
+                    return RedirectToAction("Login", new {code = 24});
                 default:
                     _logger.LogWarning("Verification failed with code {code} (Unknown error)", 4);
-                    return PartialView("Login", new Tuple<string, int>(null, 4));
+                    return RedirectToAction("Login", new {code = 4});
             }
         }
 
-
+        [ZermosPage]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
@@ -201,7 +211,7 @@ namespace Zermos_Web.Controllers
                 Response.Cookies.Delete(cookie);
             }
             
-            return PartialView("Login", new Tuple<string, int>(null, 3));
+            return RedirectToAction("Login", new {code = 3});
         }
     }
 }
