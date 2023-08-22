@@ -56,7 +56,7 @@ namespace Zermos_Web
             app.Use(async (context, next) =>
             {
                 await next();
-                if (context.Response.StatusCode == 404 && !context.Response.HasStarted)
+                if (context.Response is {StatusCode: 404, HasStarted: false})
                 {
                     context.Response.Redirect("/404");
                 }

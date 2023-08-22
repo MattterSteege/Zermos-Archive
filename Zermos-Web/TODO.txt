@@ -9,5 +9,3 @@ TODO: School recap page
     - Totaal hoeveelheid lessen gemist
     - Totaal hoeveelheid huiswerk gemaakt
     - Totaal hoeveelheid cijfers/toetsen gemaakt
-TODO: pictures in school nieuws
-TODO: grade statistics not showing when page load's

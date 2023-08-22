@@ -1,0 +1,10 @@
+﻿@model Zermos_Web.Models.SomtodayAfwezigheidModel.SomtodayAfwezigheidModel
+
+@{
+    ViewBag.Title = "title";
+}
+
+@foreach (var item in Model.items)
+{
+    <p>@item.absentieReden.omschrijving</p>
+}

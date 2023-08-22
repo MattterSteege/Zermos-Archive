@@ -36,9 +36,9 @@
             <div class="information">
                 <h1 class="heading">Volgende les:</h1>
                 <div class="lesson-info">
-                    <p class="lesson-subject">@zermelo_NextLesson?.subjects[0]</p>
-                    <p class="lesson-teacher">@zermelo_NextLesson?.teachers[0]</p>
-                    <p class="lesson-location" style="text-transform: unset;">@zermelo_NextLesson?.locations[0]</p>
+                    <p class="lesson-subject">@(zermelo_NextLesson?.subjects.Count > 0 ? zermelo_NextLesson?.subjects[0] : "")</p>
+                    <p class="lesson-teacher">@(zermelo_NextLesson?.teachers.Count > 0 ? zermelo_NextLesson?.teachers[0] : "")</p>
+                    <p class="lesson-location" style="text-transform: unset;">@(zermelo_NextLesson?.locations.Count > 0 ? zermelo_NextLesson?.locations[0] : "")</p>
                 </div>
             </div>
             <div class="icon">

@@ -19,7 +19,6 @@ pre {
 .news-notification {
     width: 100%;
     height: 0;
-    grid-row: 1;
     display: flex;
     flex-direction: row-reverse;
 }
@@ -47,7 +46,6 @@ pre {
 }
 
 .message-container .top-2 {
-    grid-row: 1;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(355px, 100% / 3)), 1fr));
     grid-gap: 16px;
@@ -55,7 +53,6 @@ pre {
 }
 
 .message-container .later{
-    grid-row: 1;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(355px, 100% / 4)), 1fr));
     grid-gap: 16px;
@@ -65,12 +62,11 @@ pre {
     border-radius: 14px;
     padding: 16px;
     background: var(--overlay-color);
-    display: grid;
-    grid-template-rows: max-content;
+    display: flex;
+    flex-direction: column;
 }
 
 .message .title {
-    grid-row: 2;
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0;
@@ -78,7 +74,6 @@ pre {
 }
 
 .message .contents {
-    grid-row: 3;
     display: flex;
     grid-gap: 16px;
     flex-direction: column;
@@ -90,10 +85,10 @@ pre {
 }
 
 .message .attachments {
-    grid-row: 4;
     margin-top: 16px;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
+    margin-bottom: auto;
 }
 
 .message div.attachment {
@@ -120,6 +115,18 @@ pre {
     text-align: center;
 }
 
+img.photo-attachment {
+    width: 100%;
+    border-radius: 7px;
+    cursor: pointer;
+    color: var(--text-color);
+    padding: 4px;
+    display: block;
+    background-color: var(--background-color);
+    border: none;
+    outline: none;
+    text-align: center;
+}
 
 .message .read-more-btn {
     border-radius: 7px;

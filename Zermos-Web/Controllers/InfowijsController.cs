@@ -134,6 +134,7 @@ namespace Zermos_Web.Controllers
             return accessToken.data;
         }
         
+        [ZermosPage]
         public IActionResult SchoolWiki(string query)
         {
             //curl --location 'https://aboarc8x9f-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id=ABOARC8X9F&x-algolia-api-key=1c110b29cea05e83dce945e2c5594f2f' --header 'Content-Type: text/plain' --data '{"requests":[{"indexName":"schoolwiki.113-prod.185f99fe-1aea-4110-9d14-6c76533a352c","params":"query=PTA&hitsPerPage=100"}]}'

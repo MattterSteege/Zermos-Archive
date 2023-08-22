@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ChartJSCore.Helpers;
 using ChartJSCore.Models;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zermos_Web.Models;
 using Zermos_Web.Models.Requirements;
+using Zermos_Web.Models.SomtodayAfwezigheidModel;
 using Zermos_Web.Models.SomtodayGradesModel;
 using Zermos_Web.Models.somtodayHomeworkModel;
 using Zermos_Web.Utilities;
@@ -196,9 +198,9 @@ namespace Zermos_Web.Controllers
             (ViewData["stats"] as Dictionary<string, string>)?.Add("vak", grades.vak.naam);
             (ViewData["stats"] as Dictionary<string, string>)?.Add("hoogste", grades.grades.Max(x => x.geldendResultaat).ToString());
             (ViewData["stats"] as Dictionary<string, string>)?.Add("laagste", grades.grades.Min(x => x.geldendResultaat).ToString());
-            (ViewData["stats"] as Dictionary<string, string>)?.Add("weging", grades.grades.Sum(x => x.weging).ToString());
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("weging", grades.grades.Sum(x => x.weging == 0 ? x.examenWeging : x.weging).ToString()); 
             // (ViewData["stats"] as Dictionary<string, string>)?.Add("som", the grades resultaat times it weight);
-            (ViewData["stats"] as Dictionary<string, string>)?.Add("som", grades.grades.Sum(x => NumberUtils.ParseFloat(x.geldendResultaat) * x.weging).ToString("0.0000000000", System.Globalization.CultureInfo.InvariantCulture));
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("som", grades.grades.Sum(x => NumberUtils.ParseFloat(x.geldendResultaat) * x.weging == 0 ? x.examenWeging : x.weging).ToString("0.0000000000", System.Globalization.CultureInfo.InvariantCulture));
 
             var charts = new List<Chart>();
             charts.Add(GenerateGradeOverTimeAndGradeAverage(grades));
@@ -382,7 +384,7 @@ namespace Zermos_Web.Controllers
                 chart.Data.Datasets[0].Data.Add(NumberUtils.ParseFloat(grade.geldendResultaat));
                 data.Labels.Add(grade.datumInvoer.ToString("dd-MM"));
                 gradesArray[grades.grades.IndexOf(grade)] = NumberUtils.ParseFloat(grade.geldendResultaat);
-                gradesWeight[grades.grades.IndexOf(grade)] = grade.weging;
+                gradesWeight[grades.grades.IndexOf(grade)] = grade.weging == 0 ? grade.examenWeging : grade.weging;
             }
 
             chart.Data.Datasets.Add(new LineDataset
@@ -446,7 +448,7 @@ namespace Zermos_Web.Controllers
         [Authorize]
         [SomtodayRequirement]
         [ZermosPage]
-        [HttpGet("Somtoday/Huiswerk")]
+        [HttpGet("/Somtoday/Huiswerk")]
         public async Task<IActionResult> Huiswerk(int dagen = 21, bool recache = false)
         {
             ViewData["add_css"] = "somtoday";
@@ -618,6 +620,63 @@ namespace Zermos_Web.Controllers
             return homework;
         }
 
+        #endregion
+        
+        #region Afwezigheid
+        [Authorize]
+        [SomtodayRequirement]
+        [ZermosPage]
+        [HttpGet("/Account/Afwezigheid")]
+        public async Task<IActionResult> Afwezigheid()
+        {
+            if (Request.Cookies.ContainsKey("cached-somtoday-absence"))
+            {
+                return PartialView(JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_somtoday_absence ?? string.Empty));
+            }
+            
+            SchooljaarUtils.Schooljaar currentSchoolyear = SchooljaarUtils.GetSchooljaar(DateTime.Now.AddYears(-1));
+            
+            //https://api.somtoday.nl/rest/v1/waarnemingen?waarnemingSoort=Afwezig
+            
+            var user = await _users.GetUserAsync(User.FindFirstValue("email"));
+            
+            var access_token = user.somtoday_access_token;
+            
+            if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
+            {
+                access_token = await RefreshToken(user.somtoday_refresh_token);
+            }
+            
+            var baseurl = $"https://api.somtoday.nl/rest/v1/waarnemingen?waarnemingSoort=Afwezig&beginDatumTijd={currentSchoolyear.vanafDatumDate:yyyy-MM-dd}&eindDatumTijd={currentSchoolyear.totDatumDate:yyyy-MM-dd}";
+            
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + access_token);
+            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+            
+            var response = await _httpClient.GetAsync(baseurl);
+            
+            if (response.IsSuccessStatusCode == false)
+            {
+                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je Afwezigheid op Somtoday kon niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", NotificationCenter.NotificationType.ERROR);
+                return PartialView(new SomtodayAfwezigheidModel {items = new List<Models.SomtodayAfwezigheidModel.Item>()});
+            }
+            
+            var somtodayAfwezigheid =
+                JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(
+                    await response.Content.ReadAsStringAsync());
+            
+            if (currentSchoolyear.vanafDatumDate < DateTime.Now && DateTime.Now < currentSchoolyear.totDatumDate)
+            {
+                await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+                {
+                    cached_somtoday_absence = JsonConvert.SerializeObject(somtodayAfwezigheid)
+                });
+                
+                Response.Cookies.Append("cached-somtoday-absence", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddHours(12)});
+            }
+            
+            return PartialView(somtodayAfwezigheid);
+        }
         #endregion
     }
 }

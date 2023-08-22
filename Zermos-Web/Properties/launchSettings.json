@@ -21,6 +21,7 @@
     },
     "Zermos_Web": {
       "commandName": "Project",
+      "useSSL": true,
       "environmentVariables": {
         "DB_PASSWORD": "REDACTED_DATABASE_PASSWORD",
         "ASPNETCORE_ENVIRONMENT": "Development",

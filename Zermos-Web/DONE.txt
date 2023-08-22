@@ -2,3 +2,8 @@
 
 - Somtoday - cijfers
     - De overgang naar specifieke cijfer data is nu ook met de nieuwe laadmanier, die was ik vorige update vergeten over te zetten
+    - De grafieken laden weer goed in
+    - De grafieken laten nu ook goed de cijfers van 'examens' (CKV, Maat, etc.) zien en daardoor krijg je nu ook gemiddeldes van die cijfers i.p.v. NaN (Not a Number)
+    
+- Infowijs - Schoolnieuws
+    - Mogelijk bijgevoegde foto's worden nu ook weergegeven

@@ -42,13 +42,12 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 
-    document.getElementById("main").addEventListener("main:load", load);
+    document.getElementById("main").addEventListener("main:load", function () {
+        //wait 100ms and then load the charts
+        setTimeout(load, 100);
+    });
 
-    @Html.Raw("function load() {")
-    @for (var i = 0; i < Model.Count; i++)
-    {
-        @Html.Raw(Model[i].CreateChartCode(letters[i].ToString()))
-    }
+    @Html.Raw($"function load() {{{string.Join("", Model.Select((m, i) => m.CreateChartCode(letters[i].ToString())))}}}");
     
     //WAT MOET IK HALEN
     var grade_wmih = document.getElementById("grade_wmih");
@@ -113,7 +112,7 @@
     
     
     //Prevent the input of invalid characters
-    const inputElements = document.querySelectorAll('input[type="text"]');
+    var inputElements = document.querySelectorAll('input[type="text"]');
     
     inputElements.forEach(function(inputElement) {
       inputElement.addEventListener('keypress', function(event) {
@@ -126,6 +125,4 @@
         }
       });
     });
-    
-    @Html.Raw("}");
 </script>

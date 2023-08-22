@@ -57,29 +57,31 @@
     <h1 style="position: relative; top: 50%; width: 100%; transform: translate(0, -50%); text-align: center; color: var(--text-color);">Geen huiswerk, nice!</h1>
 }
 
-<div class="bottom-right-add-button">
-    <a onclick="ReplacePage('@Url.Action("NieuwHuiswerk", "Somtoday")')">
-        <i class="fa-solid fa-plus center"></i>
-    </a>
-</div>
-
 
 <script>
-  // Get all the div elements with class "homework-divider"
-  var dividers = document.querySelectorAll('.homework-divider');
-
-  // Loop through each divider element
-  dividers.forEach(divider => {
-    // Get the sibling p element
-    const siblingParagraph = divider.previousElementSibling;
-
-    // Check if the sibling exists and is a p element
-    if (siblingParagraph && siblingParagraph.tagName === 'P') {
-      // Get the width of the sibling paragraph
-      const width = siblingParagraph.offsetWidth;
-      
-      // Set the width of the divider to match the width of the paragraph or the width of the parent element, whichever is smaller
-        divider.style.width = `${Math.min(width, divider.parentElement.offsetWidth)}px`;
-    }
-  });
+      // Get all the div elements with class "homework-divider"
+    var dividers = document.querySelectorAll('.homework-divider');
+    
+    // Loop through each divider element
+    dividers.forEach(divider => {
+        // Get the sibling p element
+        const siblingParagraph = divider.previousElementSibling;
+    
+        // Check if the sibling exists and is a p element
+        if (siblingParagraph && siblingParagraph.tagName === 'P') {
+            // Get the width of the sibling paragraph
+            const width = siblingParagraph.offsetWidth;
+    
+            // Set the width of the divider to match the width of the paragraph or the width of the parent element, whichever is smaller
+            divider.style.width = `${Math.min(width, divider.parentElement.offsetWidth)}px`;
+        }
+    });
+    
+    //append to .sidebar :  
+    bottomRightAddButton = document.createElement("div");
+    bottomRightAddButton.className = "bottom-right-add-button";
+    bottomRightAddButton.id = "added-by-fetch";
+    bottomRightAddButton.innerHTML = '<a onclick="ReplacePage(\'/Somtoday/Huiswerk/Nieuw\')"><i class="fa-solid fa-plus center"></i></a>';
+    
+    document.querySelector(".bottom ul").appendChild(bottomRightAddButton);
 </script>
