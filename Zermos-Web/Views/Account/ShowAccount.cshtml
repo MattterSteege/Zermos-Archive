@@ -1,5 +1,8 @@
 ﻿@* @using Zermos_Web.Utilities *@
 @using Zermos_Web.Utilities
+@using System.Security.Claims
+@using Newtonsoft.Json
+@using Zermos_Web.Models.SomtodayAfwezigheidModel
 @model Infrastructure.Entities.user
 
 @{
@@ -13,6 +16,16 @@
         <div class="information-item-parent" id="profiel">
             <h1>Profiel</h1>
             <p>@Model.email</p>
+        </div>
+        
+        <div onclick="ReplacePage('@Url.Action("Afwezigheid", "Somtoday")')" class="information-item-parent" id="absentie" style="cursor: pointer;">
+            <h1>Afwezigheid</h1>
+            @{
+                int afwezigheidCount = JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(Model.cached_somtoday_absence ?? "[]").items.Count;
+                
+            }
+            
+            <p>Je bent dit jaar <b>@afwezigheidCount</b> keer afwezig geweest@(afwezigheidCount == 0 ? ", ga zo door!" : ".")</p>
         </div>
 
         <div class="information-item-parent" id="info">
@@ -28,7 +41,7 @@
                         @* <p onclick="copyToClipboard('@property.GetValue(Model, null)?.ToString()?.Substring(0, (property.GetValue(Model, null)?.ToString()?.Length ?? 0) > 21 ? 21 : (property.GetValue(Model, null)?.ToString()?.Length ?? 0))')"><b>@property.Name</b>: @property.GetValue(Model, null)?.ToString()?.Substring(0, (property.GetValue(Model, null)?.ToString()?.Length ?? 0) > 21 ? 21 : (property.GetValue(Model, null)?.ToString()?.Length ?? 0))</p> *@
                         
                         //if property is not { get; set; } then skip it
-                        if (property.GetMethod == null || property.SetMethod == null)
+                        if (property.GetMethod == null || property.SetMethod == null || property.GetValue(Model, null) == null)
                         {
                             continue;
                         }
@@ -40,7 +53,7 @@
         </div>
 
         <div class="information-item-parent" id="koppelingen">
-            <h1 onclick="window.location.href='@Url.Action("Index", "Koppelingen")'" style="text-decoration: underline; cursor: pointer;">Koppelingen</h1>
+            <h1 onclick="ReplacePage('@Url.Action("Index", "Koppelingen")')" style="text-decoration: underline; cursor: pointer;">Koppelingen</h1>
             <div class="opgeslagen-informatie-grid">
                 <div class="infowijs">
                     @if (Model.is_infowijs_linked)
@@ -55,7 +68,7 @@
                     else
                     {
                         <p><b>Infowijs</b> is niet gekoppeld</p>
-                        <button onclick="window.location.href='/Koppelingen/Infowijs/Qr'" class="koppel-knop koppelen">Koppelen</button>
+                        <button onclick="replacePage('@Url.Action("Index", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
                     }
                 </div>
                 <div class="zermelo">
@@ -71,7 +84,7 @@
                     else
                     {
                         <p><b>Zermelo</b> is niet gekoppeld</p>
-                        <button onclick="window.location.href='/Koppelingen/Zermelo'" class="koppel-knop koppelen">Koppelen</button>
+                        <button onclick="replacePage('@Url.Action("Zermelo", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
                     }
                 </div>
 
@@ -88,7 +101,7 @@
                     else
                     {
                         <p><b>Somtoday</b> is niet gekoppeld</p>
-                        <button onclick="window.location.href='/Koppelingen/Somtoday'" class="koppel-knop koppelen">Koppelen</button>
+                        <button onclick="replacePage('@Url.Action("Somtoday", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
                     }
                 </div>
                 
@@ -118,6 +131,9 @@
     <div class="items-container">
         <div class="item" onclick="doScrolling('profiel', 1000)" href="?profiel">
             profiel
+        </div>
+        <div class="item" onclick="doScrolling('profiel', 1000)" href="?absentie">
+            absentie
         </div>
         <div class="item" onclick="doScrolling('info', 1000)" href="?info">
             Opgeslagen informatie

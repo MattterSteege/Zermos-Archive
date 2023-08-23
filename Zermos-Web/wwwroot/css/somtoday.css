@@ -485,19 +485,25 @@
     font-weight: 700;
 }
 
-/*@media only screen and (max-width: 1776px) {*/
-/*    .grades-history {*/
-/*        display: none;*/
-/*    }*/
+.absentie-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    height: auto;
+    width: 100%;
+    grid-gap: 16px;
+    color: var(--text-color);
+}
 
-/*    .grades-container {*/
-/*        grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(355px, 100% / 5)), 1fr));*/
-/*    }*/
+.absentie {
+    border-radius: 14px;
+    padding: 16px;
+    background: var(--overlay-color);
+}
 
-/*    .grades {*/
-/*        grid-template-columns: 1fr !important;;*/
-/*    }*/
-/*}*/
+.absentie h1 {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
 
 @media only screen and (max-width: 700px) {
 

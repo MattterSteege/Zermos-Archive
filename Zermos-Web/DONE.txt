@@ -7,3 +7,6 @@
     
 - Infowijs - Schoolnieuws
     - Mogelijk bijgevoegde foto's worden nu ook weergegeven
+    
+- Somtoday (/ account)
+    - Stond de brug weer open? Natuurlijk. Je mislukte smoesjes staan nu ook op Zermos, ga naar je account en klik op 'afwezigheid' om ze te bekijken.

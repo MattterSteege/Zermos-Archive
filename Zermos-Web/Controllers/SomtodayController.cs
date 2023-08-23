@@ -627,6 +627,7 @@ namespace Zermos_Web.Controllers
         [SomtodayRequirement]
         [ZermosPage]
         [HttpGet("/Account/Afwezigheid")]
+        [HttpGet("/Somtoday/Afwezigheid")]
         public async Task<IActionResult> Afwezigheid()
         {
             if (Request.Cookies.ContainsKey("cached-somtoday-absence"))
@@ -634,7 +635,7 @@ namespace Zermos_Web.Controllers
                 return PartialView(JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_somtoday_absence ?? string.Empty));
             }
             
-            SchooljaarUtils.Schooljaar currentSchoolyear = SchooljaarUtils.GetSchooljaar(DateTime.Now.AddYears(-1));
+            SchooljaarUtils.Schooljaar currentSchoolyear = SchooljaarUtils.GetSchooljaar(DateTime.Now);
             
             //https://api.somtoday.nl/rest/v1/waarnemingen?waarnemingSoort=Afwezig
             
@@ -647,7 +648,7 @@ namespace Zermos_Web.Controllers
                 access_token = await RefreshToken(user.somtoday_refresh_token);
             }
             
-            var baseurl = $"https://api.somtoday.nl/rest/v1/waarnemingen?waarnemingSoort=Afwezig&beginDatumTijd={currentSchoolyear.vanafDatumDate:yyyy-MM-dd}&eindDatumTijd={currentSchoolyear.totDatumDate:yyyy-MM-dd}";
+            var baseurl = $"https://api.somtoday.nl/rest/v1/absentiemeldingen?begindatumtijd={currentSchoolyear.vanafDatumDate:yyyy-MM-dd}&einddatumtijd={currentSchoolyear.totDatumDate:yyyy-MM-dd}";
             
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + access_token);
@@ -673,6 +674,7 @@ namespace Zermos_Web.Controllers
                 });
                 
                 Response.Cookies.Append("cached-somtoday-absence", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddHours(12)});
+
             }
             
             return PartialView(somtodayAfwezigheid);

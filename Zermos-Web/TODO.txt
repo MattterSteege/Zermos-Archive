@@ -1,5 +1,4 @@
 ﻿TODO: Change the grade api call to: https://api.somtoday.nl/rest/v1/resultaten?leerling=[id]
-TODO: (later, when feasible) Add an API system that allows users to create an api key with which they can interact with SOMtoday, Zermelo and de Antonius app more easy then with the current system (when the request is past with an api key, then return the normal data)
 TODO: find a way to find what the since paramater means in messages from infowijs
 TODO: main menu page weather - add text for mm/u rain and a slider for time
 TODO: CSS cleanup, it is really needed
@@ -9,3 +8,5 @@ TODO: School recap page
     - Totaal hoeveelheid lessen gemist
     - Totaal hoeveelheid huiswerk gemaakt
     - Totaal hoeveelheid cijfers/toetsen gemaakt
+TODO: zelf lessen inplannen in je rooster
+TODO: absences page
