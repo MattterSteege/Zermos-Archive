@@ -1,12 +1,4 @@
-﻿TODO: Change the grade api call to: https://api.somtoday.nl/rest/v1/resultaten?leerling=[id]
-TODO: find a way to find what the since paramater means in messages from infowijs
-TODO: main menu page weather - add text for mm/u rain and a slider for time
+﻿TODO: main menu page weather - add text for mm/u rain and a slider for time
 TODO: CSS cleanup, it is really needed
-TODO: custom homework deleting
-TODO: School recap page
-    - Totaal hoeveelheid lessen: 'Je hebt dit schooljaar 1230 lessen gevolgd met een totaal van 61.500 minuten / 1.025 uur'
-    - Totaal hoeveelheid lessen gemist
-    - Totaal hoeveelheid huiswerk gemaakt
-    - Totaal hoeveelheid cijfers/toetsen gemaakt
 TODO: zelf lessen inplannen in je rooster
-TODO: absences page
+TODO: stress test MS login, and depricate the old login

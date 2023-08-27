@@ -1,4 +1,4 @@
-﻿@model Tuple<string, int>
+﻿@model Zermos_Web.Controllers.TeamsAuthenticateController.loginModel
 
 @{
     ViewBag.Title = "title";
@@ -19,48 +19,44 @@
 
 <link rel="stylesheet" href="/css/account.css">
 
-@if (Model == null || Model.Item2 == 0)
+@if (Model == null || Model.code == 0)
 {
     <div class="login">
         <div class="login-child">
-            <p class="child">Zermos gebruikt alleen je schoolmail!</p>
-            <p class="child">Nadat je je e-mailadres hebt ingevuld en op 'Inloggen' hebt geklikt, ontvang je een e-mail met een link om in te loggen. Als je nog geen account hebt, ontvang je een e-mail om een account aan te maken. Super simpel!</p>
+            <p class="child">Zermos gebruikt Microsoft om in te loggen!</p>
+            <p class="child">Om in te loggen bij Zermos moet je je microsoft account gebruiken. Je wordt, nadat je op de knop hieronder klikt, doorgestuurd naar de microsoft login pagina. Je volgd de aangegeven stappen en daarna wordt je weer terug gestuurd en ben je ingelogd.</p>
         </div>
-        <form method="post" asp-action="Login" asp-controller="AccountAuthentication" asp-route-ReturnUrl="@ViewData["returnUrl"]" class="form-control">
-            <input type="email" name="email" pattern=".+@@ccg-leerling\.nl" size="30" required placeholder="vul je schoolemail in"/>
-            <input type="submit" value="Inloggen">
-            <input type="hidden" name="isPWA" value="false">
-        </form>
+        <a href=@Model.email class="form-control">Open Microsoft</a>
     </div>
 }
-else if (Model.Item2 == 11)
+else if (Model.code == 11)
 {
     <div class="login">
         <div class="login-child">
             <p class="child">Welkom terug!</p>
-            <p class="child">Er is een e-mail gestuurd naar <b>@(Model.Item1 ?? "[email]")</b> met een link om in te loggen. Controleer je inbox, en klik op de link om direct toegang te krijgen. Als je de e-mail niet binnen enkele minuten ziet, controleer dan je spam map.</p>
+            <p class="child">Er is een e-mail gestuurd naar <b>@(Model.email ?? "[email]")</b> met een link om in te loggen. Controleer je inbox, en klik op de link om direct toegang te krijgen. Als je de e-mail niet binnen enkele minuten ziet, controleer dan je spam map.</p>
         </div>
     </div>
 }
-else if (Model.Item2 == 12)
+else if (Model.code == 12)
 {
     <div class="login">
         <div class="login-child">
             <p class="child">Welkom bij Zermos!</p>
-            <p class="child">Geweldig! We hebben zojuist een e-mail verzonden naar <b>@(Model.Item1 ?? "[email]")</b> met de link om een account aan te maken. Ga snel naar je inbox om de e-mail te vinden. Als je de e-mail niet binnen enkele minuten ziet, controleer dan je spam map.</p>
+            <p class="child">Geweldig! We hebben zojuist een e-mail verzonden naar <b>@(Model.email ?? "[email]")</b> met de link om een account aan te maken. Ga snel naar je inbox om de e-mail te vinden. Als je de e-mail niet binnen enkele minuten ziet, controleer dan je spam map.</p>
         </div>
     </div>
 }
-else if (Model.Item2 == 13)
+else if (Model.code == 13)
 {
     <div class="login">
         <div class="login-child">
             <p class="child">Succes!</p>
-            <p class="child">Je bent succesvol ingelogd op je account. Welkom terug, <b>@(Model.Item1 ?? "[email]")</b>! Je hebt nu volledige toegang tot alle functies en mogelijkheden, mits je ze gekoppeld heb.</p>
+            <p class="child">Je bent succesvol ingelogd op je account. Welkom terug, <b>@(Model.email ?? "[email]")</b>! Je hebt nu volledige toegang tot alle functies en mogelijkheden, mits je ze gekoppeld heb.</p>
         </div>
     </div>
 }
-else if (Model.Item2 == 21)
+else if (Model.code == 21)
 {
     <div class="login">
         <div class="login-child">
@@ -68,7 +64,7 @@ else if (Model.Item2 == 21)
         </div>
     </div>
 }
-else if (Model.Item2 == 22)
+else if (Model.code == 22)
 {
     <div class="login">
         <div class="login-child">
@@ -76,7 +72,7 @@ else if (Model.Item2 == 22)
         </div>
     </div>
 }
-else if (Model.Item2 == 23)
+else if (Model.code == 23)
 {
     <div class="login">
         <div class="login-child">
@@ -84,7 +80,7 @@ else if (Model.Item2 == 23)
         </div>
     </div>
 }
-else if (Model.Item2 == 24)
+else if (Model.code == 24)
 {
     <div class="login">
         <div class="login-child">
@@ -92,7 +88,7 @@ else if (Model.Item2 == 24)
         </div>
     </div>
 }
-else if (Model.Item2 == 3)
+else if (Model.code == 3)
 {
     <div class="login">
         <div class="login-child">
@@ -109,13 +105,3 @@ else
         </div>
     </div>
 }
-
-
-<script>
-    const isInStandaloneMode = () =>
-          (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone) || document.referrer.includes('android-app://');
-    if (isInStandaloneMode()) {
-        document.querySelector('input[name="isPWA"]').value = 'true'
-    }
-</script>
-

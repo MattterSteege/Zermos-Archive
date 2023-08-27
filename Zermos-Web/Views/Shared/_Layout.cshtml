@@ -91,10 +91,10 @@
             <h5 class="Heading">School</h5>
 
             <li>
-                <a onclick="ReplacePage('@Url.Action("InformatieBoord", "School")')">
+                <a onclick="ReplacePage('@Url.Action("informatiebord", "School")')">
                     <div class="menu-item">
-                        <i class="fa-solid fa-info-circle menu-icons fa-fw @(currentPage == @Url.Action("InformatieBoord", "School") ? "active" : "")"></i>
-                        <p>Informatie bord</p>
+                        <i class="fa-solid fa-info-circle menu-icons fa-fw @(currentPage == @Url.Action("Informatiebord", "School") ? "active" : "")"></i>
+                        <p>Informatiebord</p>
                     </div>
                 </a>
             </li>
@@ -193,7 +193,7 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
             {
                 <div class="notification @notification.Type">
                     <h1>@notification.Type - @notification.Title</h1>
-                    <p>@notification.Body</p>
+                    <p>@Html.Raw(notification.Body)</p>
                 </div>
             }
         </div>
@@ -236,8 +236,13 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
         // Make an AJAX request
         $.ajax({
             url: url,
-            success: function(data) {
-
+            success: function(data, textStatus, xhr){
+                
+                if (xhr.status === 299) {
+                    window.location.href = data;
+                    return;
+                }
+                
                 setTimeout(function() {
                     let i  ;
 //remove all items with id added-by-fetch
@@ -280,6 +285,10 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
                 }, 250);
             },
             error: function(xhr, status, error) {
+                //prevent error logging
+
+                //console.log(xhr, status, error);
+                
                 //if it is a 401, repolace /login
                 if (xhr.status === 401) {
                     ReplacePage("/Login");
@@ -368,7 +377,7 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
         "Delen door nul",
         "Als dit over 5 minuten niet klaar is, wacht dan gewoon langer.",
         "We hebben een grotere boot nodig.",
-        "Webontwikkelaars doen het met <style>",
+        "Webontwikkelaars doen het met &lt;style&gt;",
         "Encryptie op militair niveau kraken",
         "Op zoek naar gevoel voor humor, wacht even",
         "BRB",
@@ -395,6 +404,29 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
         "Zorgen dat kabouters nog steeds kort zijn.",
         "IJs bakken...",
     ];
+    
+    // let history = [];
+    // let historyIndex = 0;
+    //
+    // function goBack() {
+    //     if (historyIndex > 0) {
+    //         historyIndex--;
+    //         ReplacePage(history[historyIndex]);
+    //     }
+    // }
+    //
+    // function goForward() {
+    //     if (historyIndex < history.length - 1) {
+    //         historyIndex++;
+    //         ReplacePage(history[historyIndex]);
+    //     }
+    // }
+    //
+    // function addPageToHistory(url) {
+    //     history.push(url);
+    //     historyIndex = history.length - 1;
+    // }
+    
 </script>
 @await RenderSectionAsync("Scripts", false)
 @* <script> *@

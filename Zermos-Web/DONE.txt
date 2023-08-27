@@ -10,3 +10,12 @@
     
 - Somtoday (/ account)
     - Stond de brug weer open? Natuurlijk. Je mislukte smoesjes staan nu ook op Zermos, ga naar je account en klik op 'afwezigheid' om ze te bekijken.
+    
+- Somtoday - cijfers
+    -De cijfers worden nu op een andere manier opgevraagd op Zermos, hierdoor laden de cijfers iets langzamer in, maar dit is veiliger voor jouw data. Ook is het makkelijker om een cijfer te vinden aangezien het heel handig is gesorteerd op vak en cijfer id. (/Somtoday/Cijfers > alle vakken | /Somtoday/Cijfers/Ckv > alle cijfers van CKV | /Somtoday/Cijfers/Ckv/Statestieken > alle cijfers van CKV met statistieken | /Somtoday/Cijfers/Ckv/12345678901234 > het cijfer van CKV met id 12345678901234)
+    
+- Somtoday - custom huiswerk
+    - Je custom huiswerk is nu ook verwijderbaar, klik op het prullenbakje om het huiswerk te verwijderen
+    
+- School - informatiebord
+    - het informatiebord is nu ook te zien zonder dat je ingelogd bent

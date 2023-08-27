@@ -96,7 +96,7 @@
             }
 
             <div class="vak">
-                <a onclick="ReplacePage('@Url.Action("Cijfer", "Somtoday", new {vak = vak.vak.afkorting.Capitalize(), content = encoded})')">
+                <a onclick="ReplacePage('@Url.Action("Cijfer", "Somtoday", new {vak = vak.vak.afkorting.Capitalize()})')">
                     @if (lastUpdated < vak.grades[^1].datumInvoer)
                     {
                         <!--Er is een mogelijkheid om tekst toe te voegen-->

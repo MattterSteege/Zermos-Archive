@@ -2,13 +2,9 @@
     ViewBag.Title = "title";
 }
 
-@* [HttpPost("Somtoday/Huiswerk/Nieuw")] *@
-@* public async Task<IActionResult> NieuwHuiswerk(string title, string description, DateTime date) *@
-
 <link rel="stylesheet" href="~/css/somtoday.css" />
 
-<form method="post" class="add-homework" asp-controller="Somtoday" asp-action="NieuwHuiswerk">
-    
+<form class="add-homework" id="add-homework">
     <div class="date">
         <label for="date">Wanneer moet het huiswerk af zijn?</label>
         <input type="date" name="date" id="date" placeholder="dd-mm-yyyy" min="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")"/>
@@ -27,3 +23,23 @@
 
     <button type="submit" class="submit">Huiswerk toevoegen</button>
 </form>
+
+<script>
+$('#add-homework').submit(function(e) {
+    e.preventDefault();
+    
+    fetch('/Somtoday/Huiswerk/Nieuw', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `title=${document.getElementById("title").value}&description=${document.getElementById("description").value}&date=${document.getElementById("date").value}`
+    }).then(response => {
+        if (response.status === 200) {
+            ReplacePage('/Somtoday/Huiswerk');
+        }
+    }).catch(error => {
+        console.error(error);
+    });
+});
+</script>

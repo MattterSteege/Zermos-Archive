@@ -116,6 +116,13 @@ namespace Zermos_Web.Controllers
 
         #region infowijs
         [HttpGet]
+        [ZermosPage]
+        public IActionResult Infowijs()
+        {
+            return PartialView();
+        }
+        
+        [HttpGet]
         [Route("Koppelingen/Infowijs/Email")]
         [ZermosPage]
         public IActionResult InfowijsWithEmail(string email, bool retry = false)

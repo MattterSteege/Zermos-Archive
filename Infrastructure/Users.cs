@@ -84,6 +84,9 @@ namespace Infrastructure
         /// <param name="user">The user object with the new values.</param>
         public async Task UpdateUserAsync(string email, user user)
         {
+            if (string.IsNullOrEmpty(email))
+                return;
+            
             var userToUpdate = await _context.users.FirstOrDefaultAsync(x => x.email == email.ToLower());
 
             if (userToUpdate == null)

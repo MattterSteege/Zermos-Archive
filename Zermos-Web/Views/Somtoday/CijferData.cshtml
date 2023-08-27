@@ -9,11 +9,11 @@
 <div class="specific-grade">
     <div class="child">
         <div class="top-30">
-            <h1 class="child">@Model.vak.naam</h1>
+            <h1 class="child">@Model.vak.naam (<b>@Model.vak.afkorting</b>)</h1>
             <p class="child">Omschrijving: @Model.omschrijving</p>
-            <p class="child">Weging: @Model.weging</p>
+            <p class="child">Weging: @(Model.weging == 0 ? Model.examenWeging : Model.weging)x</p>
             <p class="child">Geldend resultaat: @Model.geldendResultaat</p>
-            <p class="child">Invoerdatum: @Model.datumInvoer</p>
+            <p class="child">Invoerdatum: @(Model.datumInvoer.ToString("dd MMMM yyyy hh:mm:ss"))</p>
         </div>
     </div>
 </div>

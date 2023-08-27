@@ -13,6 +13,7 @@ using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
+    #if RELEASE
     [Route("[action]")]
     public class AccountAuthenticationController : Controller
     {
@@ -214,4 +215,5 @@ namespace Zermos_Web.Controllers
             return RedirectToAction("Login", new {code = 3});
         }
     }
+    #endif
 }

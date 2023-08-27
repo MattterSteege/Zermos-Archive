@@ -28,20 +28,23 @@ namespace Zermos_Web.Controllers
         }
 
         [ZermosPage]
-        public async Task<IActionResult> InformatieBoord()
+        public async Task<IActionResult> Informatiebord()
         {
             ViewData["add_css"] = "school";
 
-            if (Request.Cookies.ContainsKey("cached-school-informationscreen"))
+            if (User.Identity is {IsAuthenticated: true})
             {
-                var lastModified = DateTime.Parse(Request.Cookies["cached-school-informationscreen"] ?? string.Empty);
-                
-                if (lastModified.Hour >= 0 && lastModified.Hour < 12 && DateTime.Now.Hour >= 0 &&
-                    DateTime.Now.Hour < 12 || lastModified.Hour >= 12 && lastModified.Hour < 24 &&
-                    DateTime.Now.Hour >= 12 && DateTime.Now.Hour < 24)
+                if (Request.Cookies.ContainsKey("cached-school-informationscreen"))
                 {
+                    var lastModified = DateTime.Parse(Request.Cookies["cached-school-informationscreen"] ?? string.Empty);
+                    
+                    if (lastModified.Hour >= 0 && lastModified.Hour < 12 && DateTime.Now.Hour >= 0 &&
+                        DateTime.Now.Hour < 12 || lastModified.Hour >= 12 && lastModified.Hour < 24 &&
+                        DateTime.Now.Hour >= 12 && DateTime.Now.Hour < 24)
+                    {
 
-                    return PartialView(JsonConvert.DeserializeObject<List<InformatieBoordModel>>((await _users.GetUserAsync(User.FindFirstValue("email"))).cached_school_informationscreen));
+                        return PartialView(JsonConvert.DeserializeObject<List<InformatieBoordModel>>((await _users.GetUserAsync(User.FindFirstValue("email"))).cached_school_informationscreen));
+                    }
                 }
             }
 
@@ -83,14 +86,17 @@ namespace Zermos_Web.Controllers
                     model.Add(new InformatieBoordModel(title, subTitle, image, contentText));
                 }
             }
-            
-            await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
-            {
-                cached_school_informationscreen = JsonConvert.SerializeObject(model)
-            });
 
-            
-            Response.Cookies.Append("cached-school-informationscreen", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddDays(60)});
+            if (User.Identity is {IsAuthenticated: true})
+            {
+                await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+                {
+                    cached_school_informationscreen = JsonConvert.SerializeObject(model)
+                });
+                
+                Response.Cookies.Append("cached-school-informationscreen", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"),
+                    new CookieOptions {Expires = DateTime.Now.AddDays(60)});
+            }
 
             return PartialView(model);
         }

@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Zermos_Web.Models.Requirements;
@@ -31,7 +32,7 @@ namespace Zermos_Web.Controllers
             return View();
         }
         
-        //[AddLoadingScreen("hoofdmenu laden")]
+        [Authorize]
         [ZermosPage]
         [Route("/Hoofdmenu")]
         public async Task<IActionResult> Hoofdmenu()
@@ -66,12 +67,6 @@ namespace Zermos_Web.Controllers
         public IActionResult ServiceWorker()
         {
             return File("~/serviceworker.js", "text/javascript");
-        }
-        
-        [Route("/Offline")]
-        public IActionResult Offline()
-        {
-            return Ok("Je bent offline en deze pagina is niet gecached");
         }
         
         [Route(".well-known/microsoft-identity-association.json")]

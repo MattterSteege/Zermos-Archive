@@ -13,7 +13,7 @@
 <div class="grades-container">
 
     <div class="vak">
-        <a onclick="ReplacePage('@Url.Action("CijferStatestieken", "Somtoday", new {vak = Model.vak.afkorting.Capitalize(), content = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(Model)))})')" style="display: flex; align-content: center; justify-content: center; flex-wrap: wrap;">
+        <a onclick="ReplacePage('@Url.Action("CijferStatestieken", "Somtoday", new {vak = Model.vak.afkorting.Capitalize()})')" style="display: flex; align-content: center; justify-content: center; flex-wrap: wrap;">
             <div class="top-30 fade-out" style="justify-content: center; align-items: center;">
                 <h1>Cijfer statestieken</h1>
             </div>
@@ -26,12 +26,11 @@
     @{
         @foreach (var vak in Model.grades)
         {
-            float geldendResultaat = 0;
+            float geldendResultaat;
             NumberUtils.TryParseFloat(vak.geldendResultaat, out geldendResultaat);
-            var encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(vak)));
 
             <div class="vak">
-                <a onclick="ReplacePage('@Url.Action("CijferData", "Somtoday", new {vak = vak.vak.afkorting.Capitalize(), content = encoded})')">
+                <a onclick="ReplacePage('@Url.Action("CijferData", "Somtoday", new {vak = vak.vak.afkorting.Capitalize(), id = vak.links[0].id})')">
                     <div class="top-30">
                         <h1>@vak.vak.naam</h1>
                         <p>@(vak.weging == 0 ? vak.examenWeging : vak.weging)x</p>

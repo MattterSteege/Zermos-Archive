@@ -281,14 +281,21 @@
 }
 
 .homework-container .homework-day-parent .homeworkItem {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: 10px;
+    display: flex;
+    grid-gap: 16px;
     border-radius: 7px;
     background: var(--inactive-color);
     height: 100%;
     width: 100%;
     padding: 16px;
+}
+
+.homeworkItem .homeworkItem-top{
+    margin-right: auto;
+}
+
+.delete-icon {
+    font-size: 1.1rem;
 }
 
 .homework-divider {
@@ -308,6 +315,7 @@
     display: flex;
     gap: 8px;
     flex-direction: column;
+    margin-top: 8px;
 }
 
 .homework-bijlage {

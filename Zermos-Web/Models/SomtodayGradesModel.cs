@@ -11,7 +11,7 @@ namespace Zermos_Web.Models.SomtodayGradesModel
 
     public class Item
     {
-        //public List<Link> links { get; set; }
+        public List<Link> links { get; set; }
         //public List<Permission> permissions { get; set; }
         //public AdditionalObjects additionalObjects { get; set; }
         //public string herkansingstype { get; set; }
@@ -55,13 +55,13 @@ namespace Zermos_Web.Models.SomtodayGradesModel
     //     public string achternaam { get; set; }
     // }
 
-    // public class Link
-    // {
-    //     public object id { get; set; }
-    //     public string rel { get; set; }
-    //     public string type { get; set; }
-    //     public string href { get; set; }
-    // }
+    public class Link
+    {
+        public string id { get; set; }
+        //     public string rel { get; set; }
+        //     public string type { get; set; }
+        //     public string href { get; set; }
+    }
 
     public class Vak
     {

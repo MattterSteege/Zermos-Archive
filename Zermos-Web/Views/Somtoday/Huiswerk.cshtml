@@ -27,13 +27,13 @@
 
                         @if (!string.IsNullOrEmpty(homeworkItem.studiewijzerItem.omschrijving))
                         {
-                            <div class="homework-divider"></div>
+                            @* <div class="homework-divider"></div> *@
                             <div class="homework-content">@Html.Raw(homeworkItem.studiewijzerItem.omschrijving)</div>
                         }
 
                         @if (homeworkItem.studiewijzerItem.bijlagen != null && !homeworkItem.studiewijzerItem.bijlagen.Count.Equals(0))
                         {
-                            <div class="homework-divider"></div>
+                            @* <div class="homework-divider"></div> *@
                             <div class="homework-bijlagen">
                                 @foreach (var bijlage in homeworkItem.studiewijzerItem.bijlagen)
                                 {
@@ -46,6 +46,16 @@
                         }
 
                     </div>
+                    
+                    @if (homeworkItem.studiewijzerItem.huiswerkType?.ToLower() == "eigen")
+                    {
+                        <div class="delete-icon" id="custom-homework-@homeworkItem.UUID" onclick="WantToDeleteHomework('@homeworkItem.UUID')">
+                            <i class="fa-solid fa-trash"></i>
+                        </div>
+                        <div class="delete-icon" id="custom-homework-sure-@homeworkItem.UUID" onclick="WantToDeleteHomeworkSure('@homeworkItem.UUID')" style="display: none; color: var(--deny-color);">
+                            <i class="fa-solid fa-trash"></i>
+                        </div>
+                    }
                 </div>
             }
         </div>
@@ -59,23 +69,57 @@
 
 
 <script>
-      // Get all the div elements with class "homework-divider"
-    var dividers = document.querySelectorAll('.homework-divider');
+    function WantToDeleteHomeworkSure(s) {
     
-    // Loop through each divider element
-    dividers.forEach(divider => {
-        // Get the sibling p element
-        const siblingParagraph = divider.previousElementSibling;
+        fetch('/somtoday/huiswerk/nieuw?id=' + s, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                
+                if (document.getElementById("custom-homework-" + s).parentElement.parentElement.childElementCount === 2) {
+                    document.getElementById("custom-homework-" + s).parentElement.parentElement.remove();
+                }
+                else
+                {
+                    document.getElementById("custom-homework-" + s).parentElement.remove();
+                }
+            }
+        });
+    }
     
-        // Check if the sibling exists and is a p element
-        if (siblingParagraph && siblingParagraph.tagName === 'P') {
-            // Get the width of the sibling paragraph
-            const width = siblingParagraph.offsetWidth;
-    
-            // Set the width of the divider to match the width of the paragraph or the width of the parent element, whichever is smaller
-            divider.style.width = `${Math.min(width, divider.parentElement.offsetWidth)}px`;
+    function WantToDeleteHomework(s) {
+        document.getElementById("custom-homework-" + s).style.display = "none";
+        document.getElementById("custom-homework-sure-" + s).style.display = "block";
+        try
+        {
+            new Promise(res => setTimeout(res, 3000)).then(() => {
+                document.getElementById("custom-homework-" + s).style.display = "block";
+                document.getElementById("custom-homework-sure-" + s).style.display = "none";
+            });  
         }
-    });
+        catch{}
+    }
+
+    //   // Get all the div elements with class "homework-divider"
+    // var dividers = document.querySelectorAll('.homework-divider');
+    //
+    // // Loop through each divider element
+    // dividers.forEach(divider => {
+    //     // Get the sibling p element
+    //     const siblingParagraph = divider.previousElementSibling;
+    //
+    //     // Check if the sibling exists and is a p element
+    //     if (siblingParagraph && siblingParagraph.tagName === 'P') {
+    //         // Get the width of the sibling paragraph
+    //         const width = siblingParagraph.offsetWidth;
+    //
+    //         // Set the width of the divider to match the width of the paragraph or the width of the parent element, whichever is smaller
+    //         divider.style.width = `${Math.min(width, divider.parentElement.offsetWidth)}px`;
+    //     }
+    // });
     
     //append to .sidebar :  
     bottomRightAddButton = document.createElement("div");

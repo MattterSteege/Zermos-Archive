@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -63,48 +65,7 @@ namespace Zermos_Web.Controllers
                 access_token = await RefreshToken(user.somtoday_refresh_token);
             }
 
-            var baseUrl =
-                $"https://api.somtoday.nl/rest/v1/resultaten/huidigVoorLeerling/{user.somtoday_student_id}?additional=samengesteldeToetskolomId";
-
-            _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + access_token);
-            _httpClient.DefaultRequestHeaders.Add("Range", "items=0-99");
-            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-
-            var response = await _httpClient.GetAsync(baseUrl);
-
-            var grades =
-                JsonConvert.DeserializeObject<SomtodayGradesModel>(await response.Content.ReadAsStringAsync());
-
-            if (response.IsSuccessStatusCode == false)
-            {
-                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je cijfers konden niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", NotificationCenter.NotificationType.ERROR);
-                return PartialView(new SomtodayGradesModel {items = new List<Item>()});
-            }
-
-            if (int.TryParse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1],
-                    out var total))
-            {
-                
-                
-                var requests = total / 100 * 100;
-
-                for (var i = 100; i < requests; i += 100)
-                {
-                    _httpClient.DefaultRequestHeaders.Clear();
-                    _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + access_token);
-                    _httpClient.DefaultRequestHeaders.Add("Range", $"items={i}-{i + 99}");
-                    _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-
-                    response = await _httpClient.GetAsync(baseUrl);
-
-                    var _grades =
-                        JsonConvert.DeserializeObject<SomtodayGradesModel>(
-                            await response.Content.ReadAsStringAsync());
-                    grades.items.AddRange(_grades.items);
-                }
-            }
-
-            grades = Sort(grades);
+            var grades = await fetchGrades(access_token, user.somtoday_student_id);
             
             await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
             {
@@ -134,6 +95,13 @@ namespace Zermos_Web.Controllers
 
             var response = _httpClient
                 .PostAsync("https://inloggen.somtoday.nl/oauth2/token", new FormUrlEncodedContent(form)).Result;
+            
+            if (response.IsSuccessStatusCode == false)
+            {
+                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je Somtoday refresh token lijkt verlopen te zijn, als dit probleem zich voor blijft doen, koppel Somtoday dan opnieuw", NotificationCenter.NotificationType.ERROR);
+                return null;
+            }
+            
             var somtodayAuthentication =
                 JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(response.Content.ReadAsStringAsync().Result);
 
@@ -148,51 +116,132 @@ namespace Zermos_Web.Controllers
 
         [ZermosPage]
         [HttpGet("Somtoday/Cijfers/{vak}")]
-        public IActionResult Cijfer(string content = null)
+        public async Task<IActionResult> Cijfer(string vak)
         {
-            if (TokenUtils.IsValidBase64String(content) == false)
-                return NotFound("de cijfer data is niet in een geldige base64 format");
+            SomtodayGradesModel grades;
             
-            ViewData["add_css"] = "somtoday";
+            if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
+            {
+                grades = JsonConvert.DeserializeObject<SomtodayGradesModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_somtoday_grades ?? string.Empty);
+            }
+            else
+            {
+                var user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
-            var a = Convert.FromBase64String(content ?? "");
-            var b = Encoding.UTF8.GetString(a);
-            var c = JsonConvert.DeserializeObject<sortedGrades>(b);
+                var access_token = user.somtoday_access_token;
+            
+                if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
+                {
+                    access_token = await RefreshToken(user.somtoday_refresh_token);
+                }
 
-            return PartialView(c);
+                grades = await fetchGrades(access_token, user.somtoday_student_id);
+            
+                await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+                {
+                    cached_somtoday_grades = JsonConvert.SerializeObject(grades)
+                });
+            
+                Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
+            }
+            
+            var sortedGrades = new List<sortedGrades>();
+            foreach (var grade in grades.items)
+            {
+                var vakWithGrades = sortedGrades.Find(x => x.vak.naam == grade.vak.naam);
+                if (vakWithGrades == null)
+                {
+                    vakWithGrades = new sortedGrades();
+                    vakWithGrades.vak = grade.vak;
+                    vakWithGrades.grades = new List<Item>();
+                    sortedGrades.Add(vakWithGrades);
+                }
+                vakWithGrades.grades.Add(grade);
+            }
+
+            return PartialView(sortedGrades.Find(x => string.Equals(x.vak.afkorting, vak, StringComparison.CurrentCultureIgnoreCase)));
         }
 
         [ZermosPage]
-        [HttpGet("Somtoday/Cijfers/{vak}/CijferData")]
-        public IActionResult CijferData(string content = null)
+        [HttpGet("Somtoday/Cijfers/{vak}/{id}")]
+        public async Task<IActionResult> CijferData(string id)
         {
-            if (TokenUtils.IsValidBase64String(content) == false)
-                return NotFound("de cijfer data is niet in een geldige base64 format");
+            SomtodayGradesModel grades;
             
-            ViewData["add_css"] = "somtoday";
+            if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
+            {
+                grades = JsonConvert.DeserializeObject<SomtodayGradesModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_somtoday_grades ?? string.Empty);
+            }
+            else
+            {
+                var user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
-            var a = Convert.FromBase64String(content ?? "");
-            var b = Encoding.UTF8.GetString(a);
-            var c = JsonConvert.DeserializeObject<Item>(b);
+                var access_token = user.somtoday_access_token;
+            
+                if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
+                {
+                    access_token = await RefreshToken(user.somtoday_refresh_token);
+                }
 
-            return PartialView(c);
+                grades = await fetchGrades(access_token, user.somtoday_student_id);
+            
+                await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+                {
+                    cached_somtoday_grades = JsonConvert.SerializeObject(grades)
+                });
+            
+                Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
+            }
+
+            return PartialView(grades.items.Find(x => x.links[0].id == id));
         }
 
         [ZermosPage]
         [HttpGet("Somtoday/Cijfers/{vak}/Statestieken")]
-        public IActionResult CijferStatestieken(string content = null, bool asPFD = false)
+        public async Task<IActionResult> CijferStatestieken(string vak, bool asPFD = false)
         {
-            if (asPFD) 
-                return NotFound("Deze functie is nog niet beschikbaar");
-
-            if (TokenUtils.IsValidBase64String(content) == false)
-                return NotFound("de cijfer data is niet in een geldige base64 format");
+            SomtodayGradesModel somtodayGradesModel;
             
-            ViewData["add_css"] = "somtoday";
+            if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
+            {
+                somtodayGradesModel = JsonConvert.DeserializeObject<SomtodayGradesModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_somtoday_grades ?? string.Empty);
+            }
+            else
+            {
+                var user = await _users.GetUserAsync(User.FindFirstValue("email"));
 
-            var a = Convert.FromBase64String(content ?? "");
-            var b = Encoding.UTF8.GetString(a);
-            var grades = JsonConvert.DeserializeObject<sortedGrades>(b);
+                var access_token = user.somtoday_access_token;
+            
+                if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
+                {
+                    access_token = await RefreshToken(user.somtoday_refresh_token);
+                }
+
+                somtodayGradesModel = await fetchGrades(access_token, user.somtoday_student_id);
+            
+                await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+                {
+                    cached_somtoday_grades = JsonConvert.SerializeObject(somtodayGradesModel)
+                });
+            
+                Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
+            }
+            
+            var sortedGrades = new List<sortedGrades>();
+            foreach (var grade in somtodayGradesModel.items)
+            {
+                var vakWithGrades = sortedGrades.Find(x => x.vak.naam == grade.vak.naam);
+                if (vakWithGrades == null)
+                {
+                    vakWithGrades = new sortedGrades();
+                    vakWithGrades.vak = grade.vak;
+                    vakWithGrades.grades = new List<Item>();
+                    sortedGrades.Add(vakWithGrades);
+                }
+                vakWithGrades.grades.Add(grade);
+            }
+
+            var grades = sortedGrades.Find(x => string.Equals(x.vak.afkorting, vak, StringComparison.CurrentCultureIgnoreCase));
 
             ViewData["stats"] = new Dictionary<string, string>();
             (ViewData["stats"] as Dictionary<string, string>)?.Add("vak", grades.vak.naam);
@@ -442,6 +491,51 @@ namespace Zermos_Web.Controllers
             return grades;
         }
 
+        public async Task<SomtodayGradesModel> fetchGrades(string access_token, string somtoday_student_id)
+        {
+                        var baseUrl =
+                $"https://api.somtoday.nl/rest/v1/resultaten/huidigVoorLeerling/{somtoday_student_id}?additional=samengesteldeToetskolomId";
+
+            _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + access_token);
+            _httpClient.DefaultRequestHeaders.Add("Range", "items=0-99");
+            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+
+            var response = await _httpClient.GetAsync(baseUrl);
+
+            var grades =
+                JsonConvert.DeserializeObject<SomtodayGradesModel>(await response.Content.ReadAsStringAsync());
+
+            if (response.IsSuccessStatusCode == false)
+            {
+                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je cijfers konden niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", NotificationCenter.NotificationType.ERROR);
+                return new SomtodayGradesModel {items = new List<Item>()};
+            }
+
+            if (int.TryParse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1],
+                    out var total))
+            {
+                
+                
+                var requests = total / 100 * 100;
+
+                for (var i = 100; i < requests; i += 100)
+                {
+                    _httpClient.DefaultRequestHeaders.Clear();
+                    _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + access_token);
+                    _httpClient.DefaultRequestHeaders.Add("Range", $"items={i}-{i + 99}");
+                    _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+
+                    response = await _httpClient.GetAsync(baseUrl);
+
+                    var _grades =
+                        JsonConvert.DeserializeObject<SomtodayGradesModel>(
+                            await response.Content.ReadAsStringAsync());
+                    grades.items.AddRange(_grades.items);
+                }
+            }
+
+            return Sort(grades);
+        }
         #endregion
 
         #region huiswerk
@@ -457,7 +551,8 @@ namespace Zermos_Web.Controllers
             {
                 var cache = (await _users.GetUserAsync(User.FindFirstValue("email"))).cached_somtoday_homework;
                 var homework = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(cache);
-                return PartialView(homework);
+                homework.items.AddRange(await GetRemappedCustomHuiswerk());
+                return PartialView(Sort(homework));
             }
 
             var user = await _users.GetUserAsync(User.FindFirstValue("email"));
@@ -494,14 +589,14 @@ namespace Zermos_Web.Controllers
                 JsonConvert.DeserializeObject<SomtodayHomeworkModel>(
                     await response.Content.ReadAsStringAsync());
 
-            somtodayHuiswerk.items.AddRange(await GetRemappedCustomHuiswerk());
-
-            somtodayHuiswerk = Sort(somtodayHuiswerk);
-            
             await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
             {
                 cached_somtoday_homework = JsonConvert.SerializeObject(somtodayHuiswerk)
             });
+            
+            somtodayHuiswerk.items.AddRange(await GetRemappedCustomHuiswerk());
+
+            somtodayHuiswerk = Sort(somtodayHuiswerk);
             
             Response.Cookies.Append("cached-somtoday-homework", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddHours(1)});
             
@@ -568,8 +663,20 @@ namespace Zermos_Web.Controllers
         [Authorize]
         [SomtodayRequirement]
         [HttpPost("Somtoday/Huiswerk/Nieuw")]
-        public async Task<IActionResult> NieuwHuiswerk(string title, string description, DateTime date)
+        public async Task<IActionResult> NieuwHuiswerkPOST()
         {
+            //from form
+            var title = Request.Form["title"];
+            var description = Request.Form["description"];
+            var date = DateTime.ParseExact(Request.Form["date"], "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            
+            
+            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description) || date == null)
+            {
+                HttpContext.AddNotification("Bijna", "Je hebt of geen titel, of geen datum ingevult, beide velden zijn nodig om huiswerk aan te maken", NotificationCenter.NotificationType.INFO);
+                return Forbid();
+            }
+            
             var userEmail = User.FindFirstValue("email");
             var user = await _users.GetUserAsync(userEmail);
 
@@ -584,13 +691,13 @@ namespace Zermos_Web.Controllers
 
             await _users.UpdateUserAsync(userEmail, user);
             
-            return RedirectToAction("Huiswerk");
+            return Ok();
         }
         
         [Authorize]
         [SomtodayRequirement]
-        [HttpPut("Somtoday/Huiswerk/Nieuw")]
-        public async Task<IActionResult> NieuwHuiswerk(string title, string description, DateTime date, bool gemaakt, int id)
+        [HttpDelete("Somtoday/Huiswerk/Nieuw")]
+        public async Task<IActionResult> NieuwHuiswerk(int id)
         {
             var userEmail = User.FindFirstValue("email");
             var user = await _users.GetUserAsync(userEmail);
@@ -598,13 +705,12 @@ namespace Zermos_Web.Controllers
             var homework = JsonConvert.DeserializeObject<List<CustomHuiswerkModel>>(user.custom_huiswerk) ?? new List<CustomHuiswerkModel>();
             
             homework.RemoveAll(x => x.id == id);
-            homework.Add(new CustomHuiswerkModel(title, description, date, gemaakt, id));
             
             user.custom_huiswerk = JsonConvert.SerializeObject(homework);
             
             await _users.UpdateUserAsync(userEmail, user);
             
-            return RedirectToAction("Huiswerk");
+            return Ok();
         }
 
         public SomtodayHomeworkModel Sort(SomtodayHomeworkModel homework)

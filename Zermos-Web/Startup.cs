@@ -30,8 +30,8 @@ namespace Zermos_Web
 
             var cookieExpiration = TimeSpan.FromDays(60);
 
-            services.AddAuthentication("EmailScheme") // Sets the default scheme to cookies
-                .AddCookie("EmailScheme", options =>
+            services.AddAuthentication("MicrosoftScheme") // Sets the default scheme to cookies
+                .AddCookie("MicrosoftScheme", options =>
                 {
                     // options.AccessDeniedPath = "/Account/Denied";
                     options.LoginPath = "/Login";
