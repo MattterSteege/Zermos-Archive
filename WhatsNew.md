@@ -4,6 +4,36 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - Versie 0.2.2 - 29-08-2023
+
+0.2.2 meer dingen
+
+- Somtoday - cijfers
+    - De overgang naar specifieke cijfer data is nu ook met de nieuwe laadmanier, die was ik vorige update vergeten over te zetten
+    - De grafieken laden weer goed in
+    - De grafieken laten nu ook goed de cijfers van 'examens' (CKV, Maat, etc.) zien en daardoor krijg je nu ook gemiddeldes van die cijfers i.p.v. NaN (Not a Number)
+    
+- Infowijs - Schoolnieuws
+    - Mogelijk bijgevoegde foto's worden nu ook weergegeven
+    
+- Somtoday (/ account)
+    - Stond de brug weer open? Natuurlijk. Je mislukte smoesjes staan nu ook op Zermos, ga naar je account en klik op 'afwezigheid' om ze te bekijken.
+    
+- Somtoday - cijfers
+    - De cijfers worden nu op een andere manier opgevraagd op Zermos, hierdoor laden de cijfers iets langzamer in, maar dit is veiliger voor jouw data. Ook is het makkelijker om een cijfer te vinden aangezien het heel handig is gesorteerd op vak en cijfer id. (/Somtoday/Cijfers > alle vakken | /Somtoday/Cijfers/Ckv > alle cijfers van CKV | /Somtoday/Cijfers/Ckv/Statestieken > alle cijfers van CKV met statistieken | /Somtoday/Cijfers/Ckv/12345678901234 > het cijfer van CKV met (Somtoday) id 12345678901234)
+
+- Somtoday - Huiswerk
+    - Een visueel probleem is opgelost, de huiswerk items zijn nu weer even breed als de rest van de pagina
+    
+- Somtoday - custom huiswerk
+    - Je custom huiswerk is nu ook verwijderbaar, klik 2 keer op het prullenbakje om het huiswerk te verwijderen
+    
+- School - informatiebord
+    - het informatiebord is nu ook te zien zonder dat je ingelogd bent
+    
+- Koppelingen
+    - Alle koppeling methodes zijn nu ook overgeschakeld naar de nieuwe UI
+
 # Release Notes - Versie 0.2.1 - 20-08-2023
 
 0.2.1 UX update
