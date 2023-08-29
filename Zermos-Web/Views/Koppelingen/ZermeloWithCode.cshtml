@@ -11,15 +11,15 @@
         <h1 class="child">Koppel Zermelo aan je account!</h1>
         <p class="child">Om Zermelo aan je account te koppelen moet je een code invoeren. Deze code kun je vinden in Zermelo, <a target="_blank" href="https://ccg.zportal.nl/main">hier</a> om precies te zijn. Als je op de website van Zermelo bent, klik dan op 'koppelingen' (het deel icoontje links in de navigatiebalk) en daarna op 'koppel externe applicatie', kopieer de code en plak die hieronder.</p>
     </div>
-    <form method="post" asp-controller="Koppelingen" asp-action="ZermeloWithCode" asp-route-from="code" class="form-control">
+    <form method="post" asp-controller="Koppelingen" asp-action="ZermeloWithCode" class="form-control">
         <input type="text" name="code" placeholder="xxx xxx xxx xxx">
-        <input type="submit" value="Inloggen">
+        <button type="submit" class="check" style="width: 25%;">Inloggen</button>
     </form>
 </div>
 
 <script>
     var inputfield = $('input[name="code"]');
-    var submitbutton = $('input[type="submit"]');
+    var submitbutton = $('button[type="submit"]');
     
     
     //when a user is typing the code add a space after every 3 characters
@@ -46,7 +46,7 @@
     });
     
     //when a user pastes a code, remove all spaces, place a space after every 3 characters and submit the form
-    inputfield.on('paste', function () {
+    inputfield.on('paste', async function () {
         
         //replace all spaces with nothing
         var value = inputfield.val().replace(/ /g, "");
@@ -55,10 +55,45 @@
         value = value.replace(/(.{3})/g, "$1 ");
         inputfield.val(value); 
         
-        delay(1000);
+        await new Promise(res => setTimeout(res, 1000));
         
         if (length === 15) {
             submitbutton.click();
         }
+    });
+
+    //when user submits the form, use the function below to check if the user is logged in
+    document.getElementsByTagName("form")[0].addEventListener("submit", function (e) {
+        e.preventDefault();
+        
+        var form = document.getElementsByTagName("form")[0];
+        
+        var url = form.action;
+        var inputs = form.getElementsByTagName("input");
+        for (var i = 0; i < inputs.length; i++) {
+            var input = inputs[i];
+            if (input.type === "hidden") continue;
+            url += (i === 0 ? "?" : "&") + input.name + "=" + input.value;
+        }
+        
+        var button = document.getElementsByTagName("button")[0];
+        button.innerHTML = "Bezig met laden...";
+        button.disabled = true;
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", url);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    if (xhr.responseText === "success") {
+                        ReplacePage('@Url.Action("ShowAccount", "Account")');
+                    }
+                    else {
+                        button.innerHTML = "Log opnieuw in";
+                        button.disabled = false;
+                    }
+                }
+            }
+        };
+        xhr.send();
     });
 </script>

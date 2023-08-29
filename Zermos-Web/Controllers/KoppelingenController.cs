@@ -147,12 +147,12 @@ namespace Zermos_Web.Controllers
                 var result1 = response1.Content.ReadAsStringAsync().Result;
                 var antoniusAppAuthenticatieModelData = JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModel>(result1);
             
-                ViewData["email"] = email;
-                ViewData["customer_product_id"] = antoniusAppAuthenticatieModelData.data.customer_product_id;
-                ViewData["user_id"] = antoniusAppAuthenticatieModelData.data.user_id;
-                ViewData["id"] = antoniusAppAuthenticatieModelData.data.id;
-                ViewData["retry"] = false;
-                return PartialView(model: "");
+                // ViewData["email"] = email;
+                // ViewData["customer_product_id"] = antoniusAppAuthenticatieModelData.data.customer_product_id;
+                // ViewData["user_id"] = antoniusAppAuthenticatieModelData.data.user_id;
+                // ViewData["id"] = antoniusAppAuthenticatieModelData.data.id;
+                // ViewData["retry"] = false;
+                return Ok("?" + email + "?customer_product_id=" + antoniusAppAuthenticatieModelData.data.customer_product_id + "&user_id=" + antoniusAppAuthenticatieModelData.data.user_id + "&id=" + antoniusAppAuthenticatieModelData.data.id);
             }
 
             var response2 = await _infowijsHttpClient.PostAsync("https://api.infowijs.nl/sessions/" + id + "/77584871-d26b-11ea-8b2e-060ffde8896c/" + user_id, null);
@@ -166,16 +166,11 @@ namespace Zermos_Web.Controllers
                 await _users.UpdateUserAsync(User.FindFirstValue("email"),
                     new user {infowijs_access_token = jwt});
 
-                return Redirect("/account");
+                return Ok("success");
             }
             catch
             {
-                ViewData["email"] = email;
-                ViewData["customer_product_id"] = customer_product_id;
-                ViewData["user_id"] = user_id;
-                ViewData["id"] = id;
-                ViewData["retry"] = true;
-                return PartialView(model: "");
+                return Ok("failed");
             }
         }
         
@@ -211,27 +206,27 @@ namespace Zermos_Web.Controllers
         {
             if (uuid == null)
             {
-                return Redirect("/koppelingen/infowijs/qr");
+                return Ok("failed");
             }
             
-            var url2 = "https://api.infowijs.nl/sessions/transfer/" + uuid;
-            var response2 = await _infowijsHttpClient.GetAsync(url2);
-            var result2 = await response2.Content.ReadAsStringAsync();
+            var url = "https://api.infowijs.nl/sessions/transfer/" + uuid;
+            var response = await _infowijsHttpClient.GetAsync(url);
+            var result = await response.Content.ReadAsStringAsync();
 
-            if (response2.StatusCode != HttpStatusCode.OK)
+            if (response.StatusCode != HttpStatusCode.OK)
             {
                 ViewData["qr_text"] = "hoy_scan://v1/login/" + uuid;
                 ViewData["uuid"] = uuid;
                 ViewData["retry"] = true;
-                return PartialView(model: "");
+                return Ok("failed");
             }
             
-            var jwt = JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModelAuthSuccess>(result2).data;
+            var jwt = JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModelAuthSuccess>(result).data;
 
             var email = User.FindFirstValue("email");
             await _users.UpdateUserAsync(email, new user {infowijs_access_token = jwt});
 
-            return RedirectToAction("ShowAccount", "Account");
+            return Ok("success");
         }
         #endregion
 
@@ -296,6 +291,7 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpGet]
+        [ZermosPage]
         [Route("/Koppelingen/Zermelo/Qr")]
         public IActionResult ZermeloWithQr()
         {
@@ -303,6 +299,7 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpGet]
+        [ZermosPage]
         [Route("/Koppelingen/Zermelo/Code")]
         public IActionResult ZermeloWithCode()
         {
@@ -311,7 +308,7 @@ namespace Zermos_Web.Controllers
 
         [HttpPost]
         [Route("/Koppelingen/Zermelo/Code")]
-        public async Task<IActionResult> ZermeloWithCode(string code, string from = "code")
+        public async Task<IActionResult> ZermeloWithCode(string code)
         {
             //POST /oauth/token?grant_type=authorization_code&code=
             var url =
@@ -325,10 +322,7 @@ namespace Zermos_Web.Controllers
                     "Deze code is mogelijk niet geldig, refresh zermelo en probeer het opnieuw",
                     NotificationCenter.NotificationType.ERROR);
 
-                if (from == "code")
-                    return RedirectToAction("ZermeloWithCode", "Koppelingen");
-
-                return RedirectToAction("ZermeloWithQr", "Koppelingen");
+                return Ok("failed");
             }
 
             var zermeloAuthentication = JsonConvert.DeserializeObject<ZermeloAuthenticatieModel>(responseString);
@@ -345,7 +339,7 @@ namespace Zermos_Web.Controllers
             };
             await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
 
-            return RedirectToAction("ShowAccount", "Account");
+            return Ok("success");
         }
 
         private async Task<ZermeloUserModel> GetZermeloUser(string access_token)
@@ -425,14 +419,14 @@ namespace Zermos_Web.Controllers
                 JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(response.Content.ReadAsStringAsync()
                     .Result);
 
-            if (somtodayAuthentication.access_token == null) return PartialView();
+            if (somtodayAuthentication.access_token == null) return Ok("failed");
 
             var user = await GetSomtodayStudent(somtodayAuthentication.access_token);
             user.somtoday_access_token = somtodayAuthentication.access_token;
             user.somtoday_refresh_token = somtodayAuthentication.refresh_token;
 
             await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
-            return RedirectToAction("ShowAccount", "Account");
+            return Ok("success");
         }
 
 

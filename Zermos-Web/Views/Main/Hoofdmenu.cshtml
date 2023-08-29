@@ -15,7 +15,7 @@
         if (!string.IsNullOrEmpty(Model.cached_zermelo_schedule))
         {
             var a = JsonConvert.DeserializeObject<ZermeloRoosterModel>(Model.cached_zermelo_schedule);
-            zermelo_NextLesson = a.response.data[0].appointments?.Where(x => x.start.ToDateTime().ConvertToNormalDutchTime() > DateTime.Now).MinBy(x => x.start);
+            zermelo_NextLesson = a.response.data[0].appointments?.Where(x => x.start.ToDateTime().ConvertToNormalDutchTime() > DateTime.Now && x.cancelled == false).MinBy(x => x.start);
         } 
 
         if (!string.IsNullOrEmpty(Model.cached_somtoday_grades))

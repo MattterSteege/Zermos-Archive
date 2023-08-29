@@ -6,30 +6,87 @@
 
 <link rel="stylesheet" href="~/css/koppelingen.css" />
 
-@{
-    if (ViewData["customer_product_id"] != null && ViewData["user_id"] != null && ViewData["id"] != null) //user token has been fetched, now wait for user
-    {
-        <div class="login">
-            <div class="login-child">
-                <p class="child">Check of je een mail hebt ontvangen</p>
-                <p class="child">Er is een mail gestuurd naar <b>@ViewData["email"]</b>, deze mail is namens 'Antonius (noreply@mailer.hoyapp.nl)' gestuurd. Klik op de knop in de mail, je krijgt een groen vinkje te zien met de tekst '<b>Gelukt!</b>'. Als je dit ziet, open Zermos dan weer en klik op de knop 'check of je ingelogd bent' hieronder</p>
-            </div>
-            <form method="post" asp-controller="Koppelingen" asp-action="InfowijsWithEmail" asp-route-customer_product_id="@ViewData["customer_product_id"]" asp-route-user_id="@ViewData["user_id"]" asp-route-id="@ViewData["id"]" class="form-control">
-                <button type="submit" id="check" class="check">Check @((bool)ViewData["retry"]! ? "opnieuw" : "") of je ingelogd bent</button>
-            </form>
-        </div>
+<div class="login">
+    <div class="login-child">
+        <p class="child">Vul hier je schoolmail in.</p>
+        <p class="child">Om Infowijs te koppelen aan je account, moet je eerst je schoolmail invullen. Je krijgt dan een mail met een knop, als je op die knop klikt wordt je doorgestuurd naar infowijs, je krijgt een groen vinkje te zien met de tekst '<b>Gelukt!</b>'. Als je dit ziet, open Zermos dan weer en klik op de knop 'check of je ingelogd bent' die dadelijk hieronder verschijnt.</p>
+    </div>
+    <form method="post" asp-controller="Koppelingen" asp-action="InfowijsWithEmail" class="form-control">
+        <input type="email" id="email" name="email" class="email" placeholder="schoolmail" />
+        <button type="submit" id="check" class="check" style="border-radius: 0 14px 14px 0;">Stuur mij de email</button>
+    </form>
+</div>
+
+<div class="login" style="display: none">
+    <div class="login-child">
+        <p class="child">Check of je een mail hebt ontvangen</p>
+        <p class="child">Er is een mail gestuurd naar <b id="email-text">[Email]</b>, deze mail is namens 'Antonius (noreply@mailer.hoyapp.nl)' gestuurd. Klik op de knop in de mail, je krijgt een groen vinkje te zien met de tekst '<b>Gelukt!</b>'. Als je dit ziet, open Zermos dan weer en klik op de knop 'check of je ingelogd bent' hieronder</p>
+    </div>
+    <form method="post" asp-controller="Koppelingen" asp-action="InfowijsWithEmail" class="form-control">
+        <button type="submit" id="check" class="check">Check of je ingelogd bent</button>
+    </form>
+</div>
+
+<script>
+//when user submits the form, use the function below to check if the user is logged in
+document.getElementsByTagName("form")[0].addEventListener("submit", send);
+document.getElementsByTagName("form")[1].addEventListener("submit", send);
+var form = document.getElementsByTagName("form")[0];
+var button = document.getElementsByClassName("check")[0];
+
+function send(e) {
+    e.preventDefault();
+    button.innerHTML = "Bezig met laden...";
+    button.disabled = true;
+    
+    //for each input field, add it a parameter to the url
+    //?first=value&second=value&third=value
+    var url = form.action;
+    var inputs = form.getElementsByTagName("input");
+    for (var i = 0; i < inputs.length; i++) {
+        var input = inputs[i];
+        if (input.type === "hidden") continue;
+        url += (i === 0 ? "?" : "&") + input.name + "=" + input.value;
     }
-    else
-    {
-        <div class="login">
-            <div class="login-child">
-                <p class="child">Vul hier je schoolmail in.</p>
-                <p class="child">Om Infowijs te koppelen aan je account, moet je eerst je schoolmail invullen. Je krijgt dan een mail met een knop, als je op die knop klikt wordt je doorgestuurd naar infowijs, je krijgt een groen vinkje te zien met de tekst '<b>Gelukt!</b>'. Als je dit ziet, open Zermos dan weer en klik op de knop 'check of je ingelogd bent' die dadelijk hieronder verschijnt.</p>
-            </div>
-            <form method="post" asp-controller="Koppelingen" asp-action="InfowijsWithEmail" class="form-control">
-                <input type="email" id="email" name="email" class="email" placeholder="schoolmail" />
-                <button type="submit" id="check" class="check" style="border-radius: 0 14px 14px 0;">Stuur mij de email</button>
-            </form>
-        </div>
-    }
+        
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url)
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {            
+            if (xhr.status === 200) {
+                if (xhr.responseText === "success") {
+                    ReplacePage('@Url.Action("ShowAccount", "Account")');
+                }
+                else if (xhr.responseText.startsWith("?"))
+                {
+                    var query = xhr.responseText;
+                    //email = ?[email]?customer_product_id=[customer_product_id]&user_id=[user_id]&id=[id]
+                    query = query.substring(1);
+                    var email = query.split("?")[0];
+                    query = query.substring(email.length);
+                    
+                    document.getElementById("email-text").innerHTML = email;
+                    
+                    //set action url to the current url with the query string
+                    form = document.getElementsByTagName("form")[1];
+                    button = document.getElementsByClassName("check")[1];
+                    
+                    form.action = form.action + query;
+                    
+                    //hide the first form
+                    document.getElementsByClassName("login")[0].style.display = "none";
+                    document.getElementsByClassName("login")[1].style.display = "flex";
+                    
+                }
+                else
+                {
+                    button.innerHTML = "Check opnieuw of je ingelogd bent";
+                    button.disabled = false;
+                }
+            }
+        }
+    };
+    xhr.send();
 }
+
+</script>

@@ -27,12 +27,29 @@
         var loadingIcon = document.getElementsByClassName("loading-icon")[0];
         loadingIcon.style.display = "none";  
     }
-</script>
 
-@* Make a button that when clicked, send a POST request to /AntoniusApp/koppelen?a=a&b=b&c=c *@
-@* <form method="post" asp-controller="AntoniusApp" asp-action="Koppelen"> *@
-@*     <input type="hidden" name="a" value="@Model.data.id"/> *@
-@*     <input type="hidden" name="b" value="@Model.data.customer_product_id"/> *@
-@*     <input type="hidden" name="c" value="@Model.data.user_id"/> *@
-@*     <button type="submit">Check of je ingelogd bent</button> *@
-@* </form> *@
+    //when user submits the form, use the function below to check if the user is logged in
+    document.getElementsByTagName("form")[0].addEventListener("submit", function (e) {
+        e.preventDefault();
+        var form = document.getElementsByTagName("form")[0];
+        var button = document.getElementById("check");
+        button.innerHTML = "Bezig met laden...";
+        button.disabled = true;
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", form.action);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    if (xhr.responseText === "success") {
+                        ReplacePage('@Url.Action("ShowAccount", "Account")');
+                    }
+                    else {
+                        button.innerHTML = "Check opnieuw of je ingelogd bent";
+                        button.disabled = false;
+                    }
+                }
+            }
+        };
+        xhr.send();
+    });
+</script>

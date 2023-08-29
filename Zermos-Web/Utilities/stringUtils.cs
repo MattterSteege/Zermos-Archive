@@ -30,5 +30,16 @@ namespace Zermos_Web.Utilities
             var returna = string.Join(" ", words.Take(wordCount));
             return returna;
         }
+
+        /// <summary>
+        /// Returns true if the string is null or empty.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static bool IsNullOrEmpty(this string str)
+        {
+            bool a = string.IsNullOrEmpty(str);
+            return a;
+        }
     }
 }

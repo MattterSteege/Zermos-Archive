@@ -21,8 +21,7 @@
         <div onclick="ReplacePage('@Url.Action("Afwezigheid", "Somtoday")')" class="information-item-parent" id="absentie" style="cursor: pointer;">
             <h1>Afwezigheid</h1>
             @{
-                int afwezigheidCount = JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(Model.cached_somtoday_absence ?? "[]").items.Count;
-                
+                int afwezigheidCount = JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(Model.cached_somtoday_absence.IsNullOrEmpty() ? "{\"items\":[]}" : Model.cached_somtoday_absence).items.Count;
             }
             
             <p>Je bent dit jaar <b>@afwezigheidCount</b> keer afwezig geweest@(afwezigheidCount == 0 ? ", ga zo door!" : ".")</p>
@@ -68,7 +67,7 @@
                     else
                     {
                         <p><b>Infowijs</b> is niet gekoppeld</p>
-                        <button onclick="replacePage('@Url.Action("Index", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
+                        <button onclick="ReplacePage('@Url.Action("Infowijs", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
                     }
                 </div>
                 <div class="zermelo">
@@ -84,7 +83,7 @@
                     else
                     {
                         <p><b>Zermelo</b> is niet gekoppeld</p>
-                        <button onclick="replacePage('@Url.Action("Zermelo", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
+                        <button onclick="ReplacePage('@Url.Action("Zermelo", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
                     }
                 </div>
 
@@ -101,7 +100,7 @@
                     else
                     {
                         <p><b>Somtoday</b> is niet gekoppeld</p>
-                        <button onclick="replacePage('@Url.Action("Somtoday", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
+                        <button onclick="ReplacePage('@Url.Action("Somtoday", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
                     }
                 </div>
                 

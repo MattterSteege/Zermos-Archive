@@ -20,6 +20,21 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
+
+//wait for script to load
+var waitForLoad = function () {
+    if (typeof Html5Qrcode !== "undefined") {
+        init();
+    } else {
+        console.log('waiting');
+        setTimeout(waitForLoad, 1000);
+    }
+};
+
+waitForLoad();
+
+function init() {
+
 Html5Qrcode.getCameras().then(devices => {
     if (devices && devices.length) {
 
@@ -31,21 +46,37 @@ Html5Qrcode.getCameras().then(devices => {
             document.getElementById('result').innerText = 'Inlog code: ' + code.substring(0, 3) + ' ' + code.substring(3, 6) + ' ' + code.substring(6, 9) + ' ' + code.substring(9, 12);
             document.getElementById('result').style.display = 'block';
             html5QrCode.stop();
-            //document.getElementById('reader').remove();
-            //html5QrCode.clear();
+            
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", "/Koppelingen/Zermelo/Code?code=" + code + "&from=qr", true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-
-            xhr.onreadystatechange = function() {
-                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                    //follow redirect
-                    window.location.href = this.responseURL;
+            xhr.open("POST", '/Koppelingen/Zermelo/Code?code=' + code, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        if (xhr.responseText === "success") {
+                            ReplacePage('@Url.Action("ShowAccount", "Account")');
+                        }
+                        else {
+                            document.getElementById('result').innerText = 'Deze QR-code is verlopen of al gebruikt, probeer het opnieuw met een nieuwe code.';
+                            
+                            // wait 2 seconds and then reload the page
+                            setTimeout(function () {
+                                document.getElementById('result').style.display = 'none';
+                                const config = {
+                                    fps: 200,
+                                    qrbox: 100
+                                };
+                        
+                                // prefer the back camera else the front one 
+                                html5QrCode.start({
+                                    facingMode: "environment"
+                                }, config, qrCodeSuccessCallback);
+                            }, 3000);
+                        }
+                    }
                 }
-            }
-
+            };
             xhr.send();
-        }
+        };
 
         const config = {
             fps: 200,
@@ -71,4 +102,5 @@ Html5Qrcode.getCameras().then(devices => {
         document.getElementById('reader').style.display = 'none';
         document.getElementsByClassName('child')[2].style.display = 'block';
     });
+}
 </script>

@@ -15,18 +15,18 @@ using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers;
 
-public class TeamsAuthenticateController : Controller
+public class AuthenticationController : Controller
 {
     private readonly Users _users;
-    private readonly ILogger<TeamsAuthenticateController> _logger;
+    private readonly ILogger<AuthenticationController> _logger;
 
-    public TeamsAuthenticateController(Users users, ILogger<TeamsAuthenticateController> logger)
+    public AuthenticationController(Users users, ILogger<AuthenticationController> logger)
     {
         _users = users;
         _logger = logger;
     }
 
-    const string redirectUrl = "https://localhost:5001/Login/Callback";
+    const string redirectUrl = "https://zermos.kronk.tech/Login/Callback";
     const string clientId = "REDACTED_MS_CLIENT_ID";
     const string clientSecret = "lcV8Q~GbQjBv45fivMgN3ARP~UHPNSuV259gQcU7";
 

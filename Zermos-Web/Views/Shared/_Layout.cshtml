@@ -208,12 +208,15 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
         document.body.removeAttribute("onload");
         
         // Define a function to append a script to either the head or body
-        function appendScript(element, codeOrSrc, isSrc) {
+        function appendScript(element, scriptToWorkWith, isSrc) {
             const script = document.createElement("script");
             if (isSrc) {
-                script.src = codeOrSrc;
+                script.src = scriptToWorkWith.src;
+                script.integrity = scriptToWorkWith.integrity;
+                script.crossOrigin = scriptToWorkWith.crossOrigin;
+                script.referrerPolicy = scriptToWorkWith.referrerPolicy;
             } else {
-                script.innerHTML = codeOrSrc;
+                script.innerHTML = scriptToWorkWith.innerHTML;
             }
             script.id = "added-by-fetch";
             element.appendChild(script);
@@ -263,9 +266,9 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
 
                     for (i= 0; i < scripts.length; i++) {
                         if (scripts[i].src) {
-                            appendScript(document.head, scripts[i].src, true);
+                            appendScript(document.head, scripts[i], true);
                         } else {
-                            appendScript(document.body, scripts[i].innerHTML, false);
+                            appendScript(document.body, scripts[i], false);
                         }
                     }
 
