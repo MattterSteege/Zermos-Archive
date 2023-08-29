@@ -12,8 +12,8 @@ public static class SchooljaarUtils
         public string naam { get; set; }
         public string vanafDatum { get; set; }
         public string totDatum { get; set; }
-        public DateTime vanafDatumDate => DateTime.Parse(vanafDatum);
-        public DateTime totDatumDate => DateTime.Parse(totDatum);
+        public DateTime vanafDatumDate { get; set; }
+        public DateTime totDatumDate { get; set; }
     }
     
     private static List<Schooljaar> schooljaren { get; set; }
@@ -26,19 +26,27 @@ public static class SchooljaarUtils
     
     public static Schooljaar GetSchooljaar(DateTime date)
     {
-        if (schooljaren == null)
-            Initialize();
-        
-        
-        foreach (var schooljaar in schooljaren)
+        //current date, check in which schoolyear it is.
+        //a schoolyear goes from 1 of august till 31 of july
+        //check in which schoolyear the dateTime is.
+        DateTime start = new DateTime(date.Year, 8, 1);
+        DateTime end = new DateTime(date.Year + 1, 7, 31);
+        //but what if the current date is 1 of january 2021?, the schoolyear end's in 2021, so we need to check if the date is before the start of the schoolyear.
+        if (date < start)
         {
-            if (date >= schooljaar.vanafDatumDate && date <= schooljaar.totDatumDate)
-            {
-                return schooljaar;
-            }
+            //the date is before the start of the schoolyear, so we need to check the previous schoolyear.
+            start = new DateTime(date.Year - 1, 8, 1);
+            end = new DateTime(date.Year, 7, 31);
         }
 
-        return null;
+        return new Schooljaar
+        {
+            naam = $"{start.Year}/{end.Year}",
+            vanafDatum = start.ToString("yyyy-MM-dd"),
+            totDatum = end.ToString("yyyy-MM-dd"),
+            vanafDatumDate = start,
+            totDatumDate = end
+        };
     }
     
     public static Schooljaar getCurrentSchooljaar()

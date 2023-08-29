@@ -106,6 +106,10 @@
 
     <ItemGroup>
       <EmbeddedResource Remove="test-JSON\**" />
+    <ItemGroup>
+      <Folder Include="wwwroot\data\" />
+    </ItemGroup>
+
     </ItemGroup>
 
 

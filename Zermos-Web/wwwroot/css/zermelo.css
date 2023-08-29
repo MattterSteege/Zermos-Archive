@@ -24,7 +24,7 @@
     top: 16px;
     left: 410px;
     border-radius: 14px;
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     cursor: pointer;

@@ -740,8 +740,8 @@ namespace Zermos_Web.Controllers
             {
                 return PartialView(JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_somtoday_absence ?? string.Empty));
             }
-            
-            SchooljaarUtils.Schooljaar currentSchoolyear = SchooljaarUtils.GetSchooljaar(DateTime.Now);
+
+            SchooljaarUtils.Schooljaar currentSchoolyear = SchooljaarUtils.getCurrentSchooljaar();
             
             //https://api.somtoday.nl/rest/v1/waarnemingen?waarnemingSoort=Afwezig
             

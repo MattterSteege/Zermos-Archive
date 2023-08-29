@@ -362,7 +362,7 @@
     width: 50px;
     border-radius: 50%;
     background: var(--background-color);
-    display: grid;
+    display: grid !important;
     place-items: center;
     margin: 16px;
     cursor: pointer;

@@ -4,5 +4,3 @@ TODO: zelf lessen inplannen in je rooster
 TODO: When checking if user has cookie for cached data, check if the data is not null or empty
 TODO: login UI cleanup en evening out
 TODO: maak een timer van 'de volgende les' zodat mensen weten waneer ze moeten vertrekken enzo
-TODO: fix schooljaar manier
-TODO: convert afwezigheid dates to dutch naming
