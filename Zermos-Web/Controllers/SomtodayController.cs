@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ChartJSCore.Helpers;
 using ChartJSCore.Models;
@@ -671,7 +668,7 @@ namespace Zermos_Web.Controllers
             var date = DateTime.ParseExact(Request.Form["date"], "yyyy-MM-dd", CultureInfo.InvariantCulture);
             
             
-            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description) || date == null)
+            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description))
             {
                 HttpContext.AddNotification("Bijna", "Je hebt of geen titel, of geen datum ingevult, beide velden zijn nodig om huiswerk aan te maken", NotificationCenter.NotificationType.INFO);
                 return Forbid();

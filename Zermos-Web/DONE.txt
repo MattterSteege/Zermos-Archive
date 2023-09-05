@@ -5,4 +5,7 @@
     
 - Somtoday - Afwezigheid
     - Je afwezigheid's data wordt nu getoond in het nederlands, dus niet meer august, maar augustus
+    
+- Zermelo 
+    - Als je op een vak klikt, dan krijg je nu een popup met de vak, docent(en), lokaal(en), begintijd, eindtijd, groep(en) en de statusen van de les
 

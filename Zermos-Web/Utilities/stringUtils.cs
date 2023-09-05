@@ -41,5 +41,17 @@ namespace Zermos_Web.Utilities
             bool a = string.IsNullOrEmpty(str);
             return a;
         }
+        
+        /// <summary>
+        /// Returns a base64 string of the object.
+        /// </summary>
+        /// <param name="obj">The object to convert to base64.</param>
+        /// <returns>The base64 string of the object.</returns>
+        public static string ObjectToBase64String(this object obj)
+        {
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            string base64 = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(json));
+            return base64;
+        }
     }
 }

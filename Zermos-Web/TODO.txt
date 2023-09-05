@@ -3,4 +3,5 @@ TODO: CSS cleanup, it is really needed
 TODO: zelf lessen inplannen in je rooster
 TODO: When checking if user has cookie for cached data, check if the data is not null or empty
 TODO: login UI cleanup en evening out
-TODO: maak een timer van 'de volgende les' zodat mensen weten waneer ze moeten vertrekken enzo
+TODO: make homework searchable on test, subject, date, etc. make it possible to do this via the url and via buttons
+TODO: Make a api endpoint for the dag en week huiswerk which will be called by the website when it is loaded in the browser

@@ -1,11 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using Zermos_Web.Models.zermelo;
 
 public static class DateTimeUtils
 {
     public static int ToUnixTime(this DateTime dateTime)
     {
         return (int) ((DateTimeOffset) dateTime).ToUnixTimeSeconds();
+    }
+    
+    public static int ToUnixTime(this TimeSpan timeSpan)
+    {
+        return (int) timeSpan.TotalSeconds;
     }
 
     public static DateTime ToDateTime(this int unixTimeStamp)
@@ -17,6 +25,11 @@ public static class DateTimeUtils
     public static DateTime ToDateTime(this long unixTimeStamp)
     {
         return new DateTime(1970, 1, 1, 1, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimeStamp);
+    }
+    
+    public static DateTime ToDateTime(this TimeSpan timeSpan)
+    {
+        return new DateTime(1970, 1, 1, 1, 0, 0, DateTimeKind.Utc).Add(timeSpan);
     }
 
     public static DateTime IsDateCloser(this DateTime Current, DateTime New)
@@ -138,4 +151,9 @@ public static class DateTimeUtils
         return inputDate;
     }
     
+    //TSource type should be DateTime
+    public static Appointment GetClosestNextDate<T>(this IEnumerable<T> source) where T :  Appointment
+    {
+        return (source as T[] ?? source.ToArray()).Where(x => x.start.ToDateTime().ConvertToNormalDutchTime() > DateTime.Now).MinBy(x => x.start);
+    }
 }

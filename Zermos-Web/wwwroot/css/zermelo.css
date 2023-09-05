@@ -277,18 +277,84 @@ li.empty {
     right: -20%;
 }
 
+.lesson-detail {
+    width: 100%;
+    height: 100%;
+    grid-row: 1;
+    grid-column: 1;
+    padding: 10% 20%;
+    backdrop-filter: blur(10px);
+    z-index: 1;
+    opacity: 0;
+    transition: 0.5s;
+    pointer-events: none;
+}
+
+.lesson-detail .inside {
+    width: 100%;
+    height: 100%;
+    background: var(--overlay-color);
+    border-radius: 7px;
+    display: flex;
+    color: var(--text-color);
+    flex-direction: column;
+    padding: 14px;
+    font-size: 1.2rem;
+}
+
+.lesson-detail .inside .vak {
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+}
+
+.lesson-detail .inside .generic {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 7px;
+    text-transform: uppercase;
+    text-align: center;
+    justify-content: center;
+}
+
+.lesson-detail .inside .generic p {
+    width: 100%;
+}
+
+.lesson-detail .inside .tijd {
+    text-align: center;
+}
+
+.lesson-detail .inside .statuses {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: auto;
+}
+
+.show-homework {
+    margin-top: 14px;
+    height: 48px;
+    background: var(--accent-color);
+    color: var(--white-color);
+    align-items: center;
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    font-weight: 600;
+}
+
 @media screen and (max-width: 600px) {
-
-    .hours-container {
-        display: none;
-    }
-
+    
     .days-container ul {
-        grid-template-columns: 0 repeat(5, 1fr);
+        grid-template-columns: 40px repeat(5, 1fr);
     }
 
     .lessons-container {
-        padding-left: 0;
+        padding-left: 40px;
     }
 }
 
@@ -306,6 +372,23 @@ li.empty {
         justify-content: center;
     }
 
+    .hours-container ul {
+        width: 38px;
+    }
+
+    .hours-container ul li {
+        width: 38px;
+        padding-left: unset;
+        text-align: center;
+    }
+
+    .lessons-container {
+        padding-left: 40px;
+    }
+
+    .days-container ul {
+        grid-template-columns: 40px repeat(5, 1fr);
+    }
 }
 
 @media screen and (max-width: 820px) {

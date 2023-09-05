@@ -30,7 +30,7 @@ namespace Zermos_Web.Controllers
         [Authorize]
         [ZermeloRequirement]
         [ZermosPage]
-        public async Task<IActionResult> Rooster(string year, string week, bool asPartial = false)
+        public async Task<IActionResult> Rooster(string year, string week)
         {
             ViewData["add_css"] = "zermelo";
 
@@ -58,8 +58,6 @@ namespace Zermos_Web.Controllers
                 }
                 
                 HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je rooster kon niet worden geladen, waarschijnlijk is je Zermelo token verlopen", NotificationCenter.NotificationType.ERROR);
-                if (asPartial)
-                    return PartialView(new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>(), MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year)}}}});
                 return PartialView(new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>(), MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year)}}}});
             }
 
@@ -70,9 +68,7 @@ namespace Zermos_Web.Controllers
             
             var zermeloRoosterModel = JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync());
             zermeloRoosterModel.response.data[0].MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year);
-            
-            if (asPartial)
-                return PartialView(zermeloRoosterModel);
+
             return PartialView(zermeloRoosterModel);
         }
     }

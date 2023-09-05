@@ -131,6 +131,9 @@ body {
     background: var(--background-color);
     --webkit-font-smoothing: antialiased;
     --moz-osx-font-smoothing: grayscale;
+
+
+    font-size: 14px;
 }
 
 /* End setting default values */
@@ -180,6 +183,7 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     transition: background-size 0.3s;
+    padding: 80px;
 }
 
 .docs:hover .docs-image {
@@ -347,7 +351,7 @@ body {
 
 .active {
     background: var(--accent-color);
-    color: var(--white-color);;
+    color: var(--white-color) !important;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -606,9 +610,9 @@ main.main::-webkit-scrollbar-track {
  }
 
 /*If screen width is 700px*/
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 1200px) {
     
-    html {
+    body {
         font-size: 10px;
     }
 

@@ -1,5 +1,6 @@
 ﻿@using System.Globalization
 @using Zermos_Web.Models.zermelo
+@using Zermos_Web.Utilities
 @model Zermos_Web.Models.zermelo.ZermeloRoosterModel
 
 @{
@@ -96,7 +97,7 @@
                             var appointmentHeight = (appointment.end - appointment.start) / 60f * minuteHeight;
                             var appointmentTop = (appointment.start - dayStartUnix) / 60f * minuteHeight;
 
-                            <div class="lesson-time-based @(appointment.cancelled ? "canceled" : "") @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);">
+                            <div class="lesson-time-based @(appointment.cancelled ? "canceled" : "") @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.ObjectToBase64String())')">
                                 @(appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.subjects[0] + "</p>") : "")
                                 @(appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.locations[0] + "</p>") : "")
                             </div>
@@ -115,22 +116,28 @@
             <i class="fa-solid fa-angle-right"></i>
         </div>
     </div>
+    <div class="lesson-detail" style="display: none">
+        <div class="inside">
+            <p class="vak">[vak]</p>
+            <div class="generic">
+                <p class="docent">[docent]</p>
+                <p class="lokaal">[lokaal]</p>
+                <p class="groep">[groep]</p>
+            </div>
+            <p class="tijd">[tijd]</p>
+            <div class="statuses">
+                
+            </div>
+            <div class="show-homework">
+                Bekijk huiswerk
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
     loadDatepicker();
-    
-    function modifyUrl(title, url) {
-     if (typeof (history.pushState) != "undefined") {
-      var obj = {
-       Title: title,
-       Url: url
-      };
-      history.pushState(obj, obj.Title, obj.Url);
-     }
-    }
-    
-    
+
     //onload
     function loadDatepicker () {
         
@@ -264,5 +271,69 @@
         document.getElementsByClassName('left')[0].style.left = 'calc(-20% + 0px)';
         checkDirection()       
     });
-   
+    
+    main.addEventListener('main:load', e => {
+        var lessonDetail = document.getElementsByClassName('lesson-detail')[0];
+        lessonDetail.style = '';
+    });
+    
+    function OpenLessonDetail(base64){
+        var lessonDetail = document.getElementsByClassName('lesson-detail')[0];
+        var subject = lessonDetail.getElementsByClassName('vak')[0];
+        var teacher = lessonDetail.getElementsByClassName('docent')[0];
+        var location = lessonDetail.getElementsByClassName('lokaal')[0];
+        var time = lessonDetail.getElementsByClassName('tijd')[0];
+        var group = lessonDetail.getElementsByClassName('groep')[0];
+        var statuses = lessonDetail.getElementsByClassName('statuses')[0];
+        var showHomework = lessonDetail.getElementsByClassName('show-homework')[0];
+
+        var json = JSON.parse(atob(base64));
+        
+        subject.innerHTML = json.subjects[0] ?? '?';
+        
+        teacher.innerHTML = json.teachers[0] ?? '?';
+        location.innerHTML = json.locations[0] ?? '?';
+        group.innerHTML = json.groups[0] ?? '?';
+        //start and end time should be in the format of 08:20 - 09:10
+        var start = new Date(json.start * 1000);
+        var end = new Date(json.end * 1000);
+        json.start = start.getHours() + ':' + (start.getMinutes() < 10 ? '0' + start.getMinutes() : start.getMinutes());
+        json.end = end.getHours() + ':' + (end.getMinutes() < 10 ? '0' + end.getMinutes() : end.getMinutes());
+        
+        time.innerHTML = json.start + ' - ' + json.end;
+        
+        statuses.innerHTML = '';
+        
+        //loop trough the statuses and add the 'nl' value to the statuses div
+        for (var i = 0; i < json.status.length; i++) {
+            var status = json.status[i];
+            var statusDiv = document.createElement('p');
+            statusDiv.className = 'status';
+            statusDiv.innerHTML = "• " + status.nl;
+            statuses.appendChild(statusDiv);
+        }
+        
+        
+        lessonDetail.style.opacity = '1';
+        lessonDetail.style.pointerEvents = 'all';
+        lessonDetail.style.visibility = 'visible';
+        
+        //add to lessondetail and to .inside a click event that logs which element is clicked
+        lessonDetail.onclick = function(e) {
+            if (e.target === lessonDetail) {
+                console.log('lessonDetail');
+                lessonDetail.style.opacity = '0';
+                lessonDetail.style.pointerEvents = 'none';
+                lessonDetail.style.visibility = 'hidden';
+            }
+        };
+        
+        if (json.subjects.length === 0)
+            showHomework.style.display = 'none';
+        
+        showHomework.onclick = function(e) {
+            console.log('showHomework');
+            ReplacePage('/Somtoday/Huiswerk?subject=' + json.subjects[0]);
+        };
+    }
 </script>

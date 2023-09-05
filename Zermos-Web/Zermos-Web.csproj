@@ -90,25 +90,15 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </None>
-      <None Remove="test-JSON\**" />
     </ItemGroup>
 
     <ItemGroup>
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
-      <Content Remove="test-JSON\**" />
-    </ItemGroup>
 
-    <ItemGroup>
-      <Compile Remove="test-JSON\**" />
-    </ItemGroup>
 
-    <ItemGroup>
-      <EmbeddedResource Remove="test-JSON\**" />
-    <ItemGroup>
-      <Folder Include="wwwroot\data\" />
-    </ItemGroup>
+
 
     </ItemGroup>
 
