@@ -287,20 +287,23 @@
         var statuses = lessonDetail.getElementsByClassName('statuses')[0];
         var showHomework = lessonDetail.getElementsByClassName('show-homework')[0];
 
-        var json = JSON.parse(atob(base64));
+        const json = JSON.parse(atob(base64));
         
         subject.innerHTML = json.subjects[0] ?? '?';
         
         teacher.innerHTML = json.teachers[0] ?? '?';
         location.innerHTML = json.locations[0] ?? '?';
         group.innerHTML = json.groups[0] ?? '?';
+        
+        showHomework.onclick = function(e) {
+            ReplacePage('/Somtoday/Huiswerk?les=' + json.start);
+        };
+                
         //start and end time should be in the format of 08:20 - 09:10
         var start = new Date(json.start * 1000);
         var end = new Date(json.end * 1000);
-        json.start = start.getHours() + ':' + (start.getMinutes() < 10 ? '0' + start.getMinutes() : start.getMinutes());
-        json.end = end.getHours() + ':' + (end.getMinutes() < 10 ? '0' + end.getMinutes() : end.getMinutes());
         
-        time.innerHTML = json.start + ' - ' + json.end;
+        time.innerHTML = start.getHours() + ':' + (start.getMinutes() < 10 ? '0' + start.getMinutes() : start.getMinutes()) + ' - ' + end.getHours() + ':' + (end.getMinutes() < 10 ? '0' + end.getMinutes() : end.getMinutes());
         
         statuses.innerHTML = '';
         
@@ -330,10 +333,5 @@
         
         if (json.subjects.length === 0)
             showHomework.style.display = 'none';
-        
-        showHomework.onclick = function(e) {
-            console.log('showHomework');
-            ReplacePage('/Somtoday/Huiswerk?subject=' + json.subjects[0]);
-        };
     }
 </script>

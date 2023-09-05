@@ -301,9 +301,10 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
                     
                     html.remove();
                     
+                    modifyUrl("Zermos", url);
+                    
                     main.dispatchEvent(new Event("main:load"));    
                     
-                    modifyUrl("Zermos", url);
                     content.style.opacity = "0";
                 }, 250);
             },

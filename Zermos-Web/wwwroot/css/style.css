@@ -482,6 +482,7 @@ main.main::-webkit-scrollbar-track {
     right: 16px;
     height: auto;
     pointer-events: none;
+    z-index: 1000;
 }
 
 .notification {

@@ -540,11 +540,11 @@ namespace Zermos_Web.Controllers
         [SomtodayRequirement]
         [ZermosPage]
         [HttpGet("/Somtoday/Huiswerk")]
-        public async Task<IActionResult> Huiswerk(int dagen = 21, bool recache = false)
+        public async Task<IActionResult> Huiswerk(int dagen = 21)
         {
             ViewData["add_css"] = "somtoday";
             
-            if (Request.Cookies.ContainsKey("cached-somtoday-homework") && recache == false)
+            if (Request.Cookies.ContainsKey("cached-somtoday-homework"))
             {
                 var cache = (await _users.GetUserAsync(User.FindFirstValue("email"))).cached_somtoday_homework;
                 var homework = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(cache);

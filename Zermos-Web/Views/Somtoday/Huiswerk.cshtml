@@ -5,7 +5,9 @@
     ViewBag.Title = "title";
 
 
-    var groupedHomework = Model.items.GroupBy(item => item.datumTijd.Day);
+    var groupedHomework = Model.items.GroupBy(item => item.datumTijd.Date);
+    bool nextHomeworkFound = false;
+    int dayId = 0;
 }
 
 <link rel="stylesheet" href="~/css/somtoday.css" />
@@ -13,13 +15,21 @@
 <div class="homework-container">
     @foreach (var dayGroup in groupedHomework)
     {
-        <div class="homework-day-parent">
+        //if date is after today and nextHomeworkFound is false
+        string id = "";
+        if (dayGroup.First().datumTijd.Date > DateTime.Now.Date.AddDays(DateTime.Now.Hour < 17 ? -1 : 0) && !nextHomeworkFound)
+        {
+            id = "next-homework";
+            nextHomeworkFound = true;
+        }
+        
+        <div class="homework-day-parent" id="@(id == "" ? dayId : id)">
 
             <h1>@(dayGroup.First()?.datumTijd.ToString("dddd dd MMMM", new CultureInfo("nl-NL")) ?? "Geen datum!?")</h1>
 
             @foreach (var homeworkItem in dayGroup)
             {
-                <div class="homeworkItem @homeworkItem.studiewijzerItem.huiswerkType?.ToLower() @(homeworkItem.studiewijzerItem.bijlagen?.Count > 0 ? "bijlagen" : "")">
+                <div class="homeworkItem @homeworkItem.studiewijzerItem.huiswerkType?.ToLower() @(homeworkItem.studiewijzerItem.bijlagen?.Count > 0 ? "bijlagen" : "")" id="@homeworkItem.datumTijd.ToUnixTime()">
                     <div class="homeworkItem-top">
                         <p style="width: fit-content;">
                             <b>@homeworkItem.lesgroep.vak.naam</b> @(string.IsNullOrEmpty(homeworkItem.studiewijzerItem.onderwerp) ? "" : " - " + homeworkItem.studiewijzerItem.onderwerp)
@@ -59,6 +69,8 @@
                 </div>
             }
         </div>
+        
+        dayId++;
     }
 </div>
 
@@ -129,4 +141,74 @@
     bottomRightAddButton.innerHTML = '<a onclick="ReplacePage(\'/Somtoday/Huiswerk/Nieuw\')"><i class="fa-solid fa-plus center"></i></a>';
     
     document.querySelector(".bottom ul").appendChild(bottomRightAddButton);
+    
+    main.addEventListener("main:load", function () {  
+        //if the url has the parameter "les" then scroll to that homework item's parent
+        const searchParams = new URLSearchParams(window.location.search);
+        const les = searchParams.get('les');
+        if (les !== null) {
+            //get the id of the homework item's parent
+            const homeworkItem = document.getElementById(les);
+            if (homeworkItem !== null) {
+                //scroll to the homework item's parent
+                doScrolling(homeworkItem.parentElement.id, 500);
+            }
+            else
+            {
+                //scroll to the next homework item
+                doScrolling("next-homework", 500);
+                addNotification("Huiswerk niet gevonden", "Er is geen huiswerk gevonden bij deze les, balen zeg ;)", "info");
+            }
+        }
+        else
+        {
+            //scroll to the next homework item
+            doScrolling("next-homework", 500);
+        }
+    });
+        
+    function getElementY(query) {
+        return main.scrollTop + document.getElementById(query).getBoundingClientRect().top
+    }
+
+    function doScrolling(element, duration) {
+        var startingY = main.scrollTop
+        var elementY = getElementY(element)
+        // If element is close to page's bottom then window will scroll only to some position above the element.
+        var targetY = document.body.scrollHeight - elementY < main.innerHeight ? document.body.scrollHeight - main.innerHeight : elementY
+        var diff = targetY - startingY
+
+        // Easing function: easeInOutCubic
+        // From: https://gist.github.com/gre/1650294
+        var easing = function(t) {
+            return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
+        }
+        var start
+
+        if (!diff) return
+        
+        diff -= 96;
+        
+        //add a percentage of diff to the duration
+        duration += Math.abs(diff / 10);
+
+        // Bootstrap our animation - it will get called right before next frame shall be rendered.
+        window.requestAnimationFrame(function step(timestamp) {
+            if (!start) start = timestamp
+            // Elapsed miliseconds since start of scrolling.
+            var time = timestamp - start
+            // Get percent of completion in range [0, 1].
+            var percent = Math.min(time / duration, 1)
+            // Apply the easing.
+            // It can cause bad-looking slow frames in browser performance tool, so be careful.
+            percent = easing(percent)
+
+            main.scrollTo(0, startingY + diff * percent)
+
+            // Proceed with animation as long as we wanted it to.
+            if (time < duration) {
+                window.requestAnimationFrame(step)
+            }
+        })
+    }
 </script>

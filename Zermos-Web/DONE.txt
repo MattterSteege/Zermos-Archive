@@ -6,6 +6,10 @@
 - Somtoday - Afwezigheid
     - Je afwezigheid's data wordt nu getoond in het nederlands, dus niet meer august, maar augustus
     
+- Somtoday - Huiswerk
+    - Je wordt nu automatisch doorgestuurd naar de juiste dag, dan hoef je niet zoveel te scrollen
+
 - Zermelo 
     - Als je op een vak klikt, dan krijg je nu een popup met de vak, docent(en), lokaal(en), begintijd, eindtijd, groep(en) en de statusen van de les
+    - Als je op de knop 'bekijk huiswerk' klikt, dan krijg je het huiswerk  dat op die les gepland staat te zien, anders krijg je een melding dat er geen huiswerk is
 
