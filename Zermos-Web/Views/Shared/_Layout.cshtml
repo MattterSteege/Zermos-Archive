@@ -46,14 +46,14 @@
 
     <div class="bottom">
         <ul>
-            <li>
-                <a onclick="ReplacePage('/Hoofdmenu')">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-house menu-icons fa-fw @(currentPage == @Url.Action("index", "Main") ? "active" : "")"></i>
-                        <p>Hoofdmenu</p>
-                    </div>
-                </a>
-            </li>
+            @* <li> *@
+            @*     <a onclick="ReplacePage('/Hoofdmenu')"> *@
+            @*         <div class="menu-item"> *@
+            @*             <i class="fa-solid fa-house menu-icons fa-fw @(currentPage == @Url.Action("index", "Main") ? "active" : "")"></i> *@
+            @*             <p>Hoofdmenu</p> *@
+            @*         </div> *@
+            @*     </a> *@
+            @* </li> *@
 
             <h5 class="Heading">Zermelo</h5>
 
@@ -316,6 +316,10 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
                 //if it is a 401, repolace /login
                 if (xhr.status === 401) {
                     ReplacePage("/Login");
+                }
+                else
+                {
+                    document.getElementsByClassName("loader-text")[0].innerHTML = "De pagina kon niet opgevraagd worden, waarschijnlijk is Zermos even offline";
                 }
             },
             cache: false,

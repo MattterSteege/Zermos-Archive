@@ -2,14 +2,19 @@
 
 - algemeen
     - er wordt nu gewacht tot de css ingeladen is voordat de pagina wordt getoond, dit voorkomt dat de pagina eerst de ruwe tekst toont en daarna pas de opmaak
+    - De knop naar het hoofdmenu is tijdelijk verwijderd, ik ben totaal niet blij met hoe de pagina er uit ziet en werkt, dus daar ga ik nog aan werken. Voor nu blijft hij nog wel beschikbaar via https://zermos.kronk.tech/Hoofdmenu, maar niet via de knop
     
 - Somtoday - Afwezigheid
     - Je afwezigheid's data wordt nu getoond in het nederlands, dus niet meer august, maar augustus
     
 - Somtoday - Huiswerk
     - Je wordt nu automatisch doorgestuurd naar de juiste dag, dan hoef je niet zoveel te scrollen
+    - Als je via het rooster naar je huiswerk wordt gestuurd (door huiswerk op een les), dan gaat het huiswerk dat er bij hoort gloeien
 
 - Zermelo 
     - Als je op een vak klikt, dan krijg je nu een popup met de vak, docent(en), lokaal(en), begintijd, eindtijd, groep(en) en de statusen van de les
     - Als je op de knop 'bekijk huiswerk' klikt, dan krijg je het huiswerk  dat op die les gepland staat te zien, anders krijg je een melding dat er geen huiswerk is
+    
+- Backend
+    - De oude authenticatie manier is nu volledig verwijderd, je kan nu alleen nog maar inloggen met je Microsoft account
 

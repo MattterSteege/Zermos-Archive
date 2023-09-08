@@ -32,13 +32,7 @@ namespace Infrastructure.Entities
         public string cached_infowijs_news { get; set; }
         public string cached_school_informationscreen { get; set; }
         public string cached_zermelo_schedule { get; set; }
-
-        //auth related
-        public string VerificationToken { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public DateTime? VerifiedAt { get; set; }
-        public bool IsVerified => VerifiedAt.HasValue;
-
+        
         //API related
         // public string? ApiKey { get; set; }
         // public DateTime? ApiKeyExpiresAt { get; set; }

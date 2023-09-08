@@ -354,6 +354,83 @@
     border-right: 7px solid #007BFF;
 }
 
+.blink {
+    animation: blinker 1s linear;
+    animation-iteration-count: 1
+}
+
+@keyframes blinker {
+    0% {
+        opacity: 100%;
+        box-shadow: 0 0 0 var(--confirm-color);
+    }
+    40% {
+        box-shadow: 0 0 25px var(--confirm-color);
+    }
+    60% {
+        box-shadow: 0 0 25px var(--confirm-color);
+    }
+    100% {
+        opacity: 100%;
+        box-shadow: 0 0 0 var(--confirm-color);
+    }
+}
+
+.homework-search {
+    width: 210px;
+    height: 48px;
+    background: var(--overlay-color);
+    position: fixed;
+    top: 16px;
+    left: 410px;
+    border-radius: 14px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--text-color);
+    transition: all 0.25s;
+}
+
+.homework-search i {
+    margin-left: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease 0s;
+}
+
+.homework-search i::before {
+    font-size: 21px;
+}
+
+.homework-search p {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.homework-search .search-text {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.OpenSearchButton {
+    padding-right: 16px;
+    height: 100%;
+    width: 36px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.homework-search-button-popup {
+    width: 210px;
+    z-index: -1;
+    height: 48px;
+    transition: all 0.25s;
+}
+
 .bottom-right-add-button {
     position: fixed;
     bottom: 0;

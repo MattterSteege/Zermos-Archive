@@ -1,0 +1,20 @@
+{
+  "B8": {
+    "uuid": "085ecdf6-47ed-55de-80a7-41fc430b3757",
+    "temperature": "30",
+    "temperatureScore": 4,
+    "humidity": "53",
+    "humidityScore": 1,
+    "airQuality": "411",
+    "airQualityScore": 1
+  },
+  "D3": {
+    "uuid": "3510a390-f361-5299-a438-062e30e77e9a",
+    "temperature": "28",
+    "temperatureScore": 4,
+    "humidity": "58",
+    "humidityScore": 1,
+    "airQuality": "443",
+    "airQualityScore": 1
+  }
+}

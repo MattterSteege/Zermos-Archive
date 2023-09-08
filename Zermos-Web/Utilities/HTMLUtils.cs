@@ -124,7 +124,19 @@ namespace Zermos_Web.Utilities
                 {"&uuml;", 'ü'},
                 {"&yacute;", 'ý'},
                 {"&thorn;", 'þ'},
-                {"&yuml;", 'ÿ'}
+                {"&yuml;", 'ÿ'},
+                {"&lsquo;", '‘'},
+                {"&rsquo;", '’'},
+                {"&sbquo;", '‚'},
+                {"&ldquo;", '“'},
+                {"&rdquo;", '”'},
+                {"&bdquo;", '„'},
+                {"&dagger;", '†'},
+                {"&Dagger;", '‡'},
+                {"&permil;", '‰'},
+                {"&lsaquo;", '‹'},
+                {"&rsaquo;", '›'},
+                {"&euro;", '€'}
             };
 
             var regex = new Regex("(&[A-Za-z]+;)");
