@@ -429,6 +429,36 @@
     z-index: -1;
     height: 48px;
     transition: all 0.25s;
+    padding-top: 48px;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+}
+
+.option {
+    height: 100%;
+    width: 100%;
+    padding-left: 14px;
+    padding-right: 7px;
+    gap: 7px;
+    display: flex;
+    flex-direction: column;
+}
+
+.option .option-toggle {
+    text-align: center;
+    padding: 7px;
+    border-radius: 7px;
+}
+
+.selected {
+    background: var(--confirm-color) !important;
+    color: var(--white-color) !important;
+}
+
+.option .option-toggle, .unselected {
+    background: var(--background-color);
+    color: var(--text-color);
 }
 
 .bottom-right-add-button {
