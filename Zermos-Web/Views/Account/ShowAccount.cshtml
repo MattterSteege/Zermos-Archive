@@ -55,7 +55,7 @@
             <h1 onclick="ReplacePage('@Url.Action("Index", "Koppelingen")')" style="text-decoration: underline; cursor: pointer;">Koppelingen</h1>
             <div class="opgeslagen-informatie-grid">
                 <div class="infowijs">
-                    @if (Model.is_infowijs_linked)
+                    @if (TokenUtils.CheckToken(Model.infowijs_access_token))
                     {
                         <p><b>Infowijs</b>, geldig tot: @(TokenUtils.GetTokenExpiration(Model.infowijs_access_token).ToString("d/M/yyyy"))</p>
                         <button id="infowijs-first" onclick="AreYouSure('infowijs')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
@@ -71,7 +71,7 @@
                     }
                 </div>
                 <div class="zermelo">
-                    @if (Model.is_zermelo_linked)
+                    @if (Model.zermelo_access_token_expires_at > DateTime.Now)
                     {
                         <p><b>Zermelo</b>, geldig tot: @(Model.zermelo_access_token_expires_at?.ToString("d/M/yyyy"))</p>
                         <button id="zermelo-first" onclick="AreYouSure('zermelo')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
@@ -88,7 +88,7 @@
                 </div>
 
                 <div class="somtoday">
-                    @if (Model.is_somtoday_linked)
+                    @if (TokenUtils.CheckToken(Model.somtoday_refresh_token))
                     {
                         <p><b>Somtoday</b>, geldig tot: @(TokenUtils.GetTokenExpiration(Model.somtoday_refresh_token).ToString("d/M/yyyy"))</p>
                         <button id="somtoday-first" onclick="AreYouSure('somtoday')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
@@ -109,6 +109,7 @@
 
         <div class="information-item-parent" id="theme">
             <h1>Thema's</h1>
+            <p>Welke thema wil je gebruiken?</p>
             <form method="POST" asp-controller="Account" asp-action="UpdateTheme" asp-route-newTheme="light">
                 <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">licht</button>
             </form>
@@ -123,6 +124,32 @@
             </form>
             <form method="POST" asp-controller="Account" asp-action="UpdateTheme" asp-route-newTheme="pink">
                 <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Roze</button>
+            </form>
+        </div>
+        
+        <div class="information-item-parent" id="opening_page">
+            <h1>Laad pagina</h1>
+            <p>Welke pagina wil je zien als je Zermos opent?</p>
+            <form method="POST" asp-controller="Account" asp-action="UpdateDefaultPage" asp-route-newDefaultPage="/Zermelo/Rooster">
+                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Je rooster</button>
+            </form>
+            <form method="POST" asp-controller="Account" asp-action="UpdateDefaultPage" asp-route-newDefaultPage="/Somtoday/Cijfers">
+                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Je cijfers</button>
+            </form>
+            <form method="POST" asp-controller="Account" asp-action="UpdateDefaultPage" asp-route-newDefaultPage="/Somtoday/Huiswerk">
+                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Je huiswerk</button>
+            </form>
+            <form method="POST" asp-controller="Account" asp-action="UpdateDefaultPage" asp-route-newDefaultPage="/Somtoday/Afwezigheid">
+                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Je afwezigheid</button>
+            </form>
+            <form method="POST" asp-controller="Account" asp-action="UpdateDefaultPage" asp-route-newDefaultPage="/Infowijs/SchoolNieuws">
+                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Het schoolnieuws</button>
+            </form>
+            <form method="POST" asp-controller="Account" asp-action="UpdateDefaultPage" asp-route-newDefaultPage="/Infowijs/SchoolKalender">
+                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">De schoolkalender</button>
+            </form>
+            <form method="POST" asp-controller="Account" asp-action="UpdateDefaultPage" asp-route-newDefaultPage="/School/informatiebord">
+                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Het informatiebord</button>
             </form>
         </div>
 
@@ -142,6 +169,9 @@
         </div>
         <div class="item" onclick="doScrolling('theme', 1000)" href="?theme">
             Thema's
+        </div>
+        <div class="item" onclick="doScrolling('opening_page', 1000)" href="?opening_page">
+            Laad pagina
         </div>
     </div>
 </div>

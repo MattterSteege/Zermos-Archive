@@ -29,10 +29,10 @@
 
             @foreach (var homeworkItem in dayGroup)
             {
-                <div class="homeworkItem @homeworkItem.studiewijzerItem.huiswerkType?.ToLower() @(homeworkItem.studiewijzerItem.bijlagen?.Count > 0 ? "bijlagen" : "")" time="@homeworkItem.datumTijd.ToUnixTime()" vak="@homeworkItem.lesgroep.vak.naam" bijlagen="@homeworkItem.studiewijzerItem.bijlagen?.Count" huiswerkType="@homeworkItem.studiewijzerItem.huiswerkType?.ToLower()">
+                <div class="homeworkItem @homeworkItem.studiewijzerItem.huiswerkType?.ToLower() @(homeworkItem.studiewijzerItem.bijlagen?.Count > 0 ? "bijlagen" : "") @(homeworkItem.huiswerkType)" time="@homeworkItem.datumTijd.ToUnixTime()" vak="@(homeworkItem.lesgroep?.vak.naam ?? "Onbekend")" bijlagen="@homeworkItem.studiewijzerItem.bijlagen?.Count" huiswerkType="@homeworkItem.studiewijzerItem.huiswerkType?.ToLower()">
                     <div class="homeworkItem-top">
                         <p style="width: fit-content;">
-                            <b>@homeworkItem.lesgroep.vak.naam</b> @(string.IsNullOrEmpty(homeworkItem.studiewijzerItem.onderwerp) ? "" : " - " + homeworkItem.studiewijzerItem.onderwerp)
+                            <b>@(homeworkItem.lesgroep?.vak.naam ?? "onbekend")</b> @(string.IsNullOrEmpty(homeworkItem.studiewijzerItem.onderwerp) ? "" : " - " + homeworkItem.studiewijzerItem.onderwerp)
                         </p>
 
                         @if (!string.IsNullOrEmpty(homeworkItem.studiewijzerItem.omschrijving))
@@ -82,7 +82,7 @@
 
 <script>
     //make an array of all the homework items, title, content, bijlagen, date, 
-    var allSubjects = ["@(Html.Raw(string.Join("\",\"", Model.items.Select(x => x.lesgroep.vak.naam).Distinct())))"];
+    var allSubjects = ["@(Html.Raw(string.Join("\",\"", Model.items.Select(x => (x.lesgroep?.vak.naam) ?? "Onbekend").Distinct())))"];
     var allContent = ["@(Html.Raw(string.Join("\",\"", Model.items.Select(x => x.studiewijzerItem.huiswerkType.ToLower()).Distinct())))"];
     
         loadHomeworkSearch();
@@ -120,7 +120,12 @@
             function openSearchPopUp() {
                 var searchPopup = document.getElementsByClassName('homework-search-button-popup')[0];
                 searchPopup.style.display = 'block';
-                searchPopup.style.height = '400px';
+                
+                var height = (document.getElementById("subject_options").children.length * 33) + ((document.getElementById("subject_options").children.length - 1) * 7) + 48 + 61;
+                var secondHeight = (document.getElementById("type_options").children.length * 33) + ((document.getElementById("type_options").children.length - 1) * 7) + 48 + 61;
+                
+                searchPopup.style.height = (height > secondHeight ? height : secondHeight) + 'px';
+                
                 searchPopup.style.width = '420px';
                 searchPopup.style.boxShadow = '0 0 15px rgba(0, 0, 0, 0.1)';
                 

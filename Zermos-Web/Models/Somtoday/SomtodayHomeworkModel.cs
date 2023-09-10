@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Zermos_Web.Models.somtodayHomeworkModel
 {
@@ -9,13 +10,25 @@ namespace Zermos_Web.Models.somtodayHomeworkModel
     }
 
     public class Item
-    {
+    { 
+        public List<Link> links { get; set; }
+        [JsonIgnore]
+        public string huiswerkType => links[0].type.Contains("Dag") ? "dag" : links[0].type.Contains("Week") ? "week" : "normaal";
         public AdditionalObjects additionalObjects { get; set; }
         public StudiewijzerItem studiewijzerItem { get; set; }
         public Lesgroep lesgroep { get; set; }
-        public DateTime datumTijd { get; set; }
+
+        [JsonProperty("datumTijd")]
+        public DateTime DatumTijd { get; set; }
+
+        [JsonIgnore]
+        public DateTime datumTijd => DatumTijd == new DateTime()
+            ? DateTimeUtils.GetMondayOfWeekAndYear(weeknummerVanaf.ToString(), DateTime.Now.Year.ToString())
+            : DatumTijd;
+        
         public bool gemaakt { get; set; }
         public string UUID { get; set; }
+        public int weeknummerVanaf { get; set; }
     }
 
     public class Lesgroep
@@ -55,6 +68,11 @@ namespace Zermos_Web.Models.somtodayHomeworkModel
     public class AssemblyResult
     {
         public string fileUrl { get; set; }
+    }
+
+    public class Link
+    {
+        public string type { get; set; }
     }
     
 //     public class SomtodayHomeworkModel

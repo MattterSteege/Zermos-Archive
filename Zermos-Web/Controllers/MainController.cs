@@ -23,11 +23,15 @@ namespace Zermos_Web.Controllers
             _users = users;
         }
         
-        public IActionResult Index(string url = "/Hoofdmenu")
+        public async Task<IActionResult> Index(string url = null)
         {
             if (url != null)
             {
                 ViewData["url"] = url;
+            }
+            else
+            {
+                ViewData["url"] = Request.Cookies["default_page"] ?? "/Zermelo/Rooster";
             }
             return View();
         }

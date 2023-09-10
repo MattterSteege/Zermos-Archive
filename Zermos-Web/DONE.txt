@@ -3,6 +3,7 @@
 - algemeen
     - er wordt nu gewacht tot de css ingeladen is voordat de pagina wordt getoond, dit voorkomt dat de pagina eerst de ruwe tekst toont en daarna pas de opmaak
     - De knop naar het hoofdmenu is tijdelijk verwijderd, ik ben totaal niet blij met hoe de pagina er uit ziet en werkt, dus daar ga ik nog aan werken. Voor nu blijft hij nog wel beschikbaar via https://zermos.kronk.tech/Hoofdmenu, maar niet via de knop
+    - Je kan nu aangeven welke pagina je wilt zien als je Zermos bezoekt (https://zermos.kronk.tech/), als je Zermos bezoekt op bijv. https://zermos.kronk.tech/rooster, dan wordt je automatisch nogsteeds doorgestuurd naar het rooster. Stel het snel in op de account pagina
     
 - Somtoday - Afwezigheid
     - Je afwezigheid's data wordt nu getoond in het nederlands, dus niet meer august, maar augustus
@@ -10,6 +11,8 @@
 - Somtoday - Huiswerk
     - Je wordt nu automatisch doorgestuurd naar de juiste dag, dan hoef je niet zoveel te scrollen
     - Als je via het rooster naar je huiswerk wordt gestuurd (door huiswerk op een les), dan gaat het huiswerk dat er bij hoort gloeien
+    - Je kan nu je huiswerk sorteren op vak, en type (huiswerk, toets en grote toest). Als je bijvoorbeeld alle je wiskunde huiswerk verbergd, dan komt er een klein meldinkje te zien zodat je weet dat er meer huiswerk is, maar dat het verborgen is.
+    - 'dag' en 'week' huiswerk wordt nu ook getoont, dit herken je aan de licht-groene rechter rand.
 
 - Zermelo 
     - Als je op een vak klikt, dan krijg je nu een popup met de vak, docent(en), lokaal(en), begintijd, eindtijd, groep(en) en de statusen van de les

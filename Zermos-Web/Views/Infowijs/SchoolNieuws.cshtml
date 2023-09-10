@@ -43,12 +43,12 @@
                     {
                         @if (content.Content.String.Split(new char[] {' ', '\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).Length < wordCount)
                         {
-                            <p class="content">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</p>
+                            <pre class="content">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</pre>
                         }
                         else
                         {
                             var indexOfMessage = Model.IndexOf(messageGroup);
-                            <p id=@("base-" + indexOfMessage) class="content">@Html.Raw(HTMLUtils.BalanceHtmlTags(HTMLUtils.ConvertLinksInText(content.Content.String).FirstWords(wordCount)))</p>
+                            <pre id=@("base-" + indexOfMessage) class="content">@Html.Raw(HTMLUtils.BalanceHtmlTags(HTMLUtils.ConvertLinksInText(content.Content.String).FirstWords(wordCount)))</pre>
                             <span id=@("dots-" + indexOfMessage)>...</span>
                             <pre id=@("more-" + indexOfMessage) style="display: none;">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</pre>
                             <button onclick=@("readMore(" + indexOfMessage + ")") id=@("myBtn-" + indexOfMessage) class="read-more-btn">Lees meer</button>

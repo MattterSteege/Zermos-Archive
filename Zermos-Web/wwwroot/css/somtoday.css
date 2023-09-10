@@ -354,6 +354,10 @@
     border-right: 7px solid #007BFF;
 }
 
+.week, .dag {
+    border-right: 7px solid #00d89e;
+}
+
 .blink {
     animation: blinker 1s linear;
     animation-iteration-count: 1

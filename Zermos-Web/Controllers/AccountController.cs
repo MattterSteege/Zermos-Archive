@@ -9,7 +9,7 @@ using Zermos_Web.Models.Requirements;
 
 namespace Zermos_Web.Controllers
 {
-    [Route("account")]
+    [Route("account/[action]")]
     public class AccountController : Controller
     {
         private readonly IConfiguration _config;
@@ -26,6 +26,7 @@ namespace Zermos_Web.Controllers
         [HttpGet]
         [Authorize]
         [ZermosPage]
+        [Route("/Account")]
         public async Task<IActionResult> ShowAccount()
         {
             return PartialView(await _users.GetUserAsync(User.FindFirstValue("email")));
@@ -45,5 +46,19 @@ namespace Zermos_Web.Controllers
             return RedirectToAction("ShowAccount");
         }
         //https://demos.creative-tim.com/soft-ui-dashboard-tailwind/pages/profile.html
+        
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> UpdateDefaultPage(string newDefaultPage)
+        {
+            var userToUpdate = await _users.GetUserAsync(HttpContext.User.FindFirstValue("email"));
+            userToUpdate.default_page = newDefaultPage ?? "/Zermelo/Rooster";
+
+            HttpContext.Response.Cookies.Append("default_page", newDefaultPage ?? "/Zermelo/Rooster");
+
+            await _users.UpdateUserAsync(HttpContext.User.FindFirstValue("email"), userToUpdate);
+
+            return RedirectToAction("ShowAccount");
+        }
     }
 }

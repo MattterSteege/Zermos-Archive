@@ -8,6 +8,9 @@ public static class DateTimeUtils
 {
     public static int ToUnixTime(this DateTime dateTime)
     {
+        if (dateTime == new DateTime())
+            return 0;
+        
         return (int) ((DateTimeOffset) dateTime).ToUnixTimeSeconds();
     }
     

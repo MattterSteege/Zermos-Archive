@@ -585,6 +585,8 @@ namespace Zermos_Web.Controllers
             var somtodayHuiswerk =
                 JsonConvert.DeserializeObject<SomtodayHomeworkModel>(
                     await response.Content.ReadAsStringAsync());
+            
+            somtodayHuiswerk.items.AddRange(await GetWeekAndDayHomework(access_token, dagen));
 
             await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
             {
@@ -600,6 +602,47 @@ namespace Zermos_Web.Controllers
             return PartialView(somtodayHuiswerk);
         }
 
+        private async Task<List<Models.somtodayHomeworkModel.Item>> GetWeekAndDayHomework(string access_token, int dagen)
+        {
+            
+            var _startDate = DateTime.Now.AddDays(-dagen).ToString("yyyy-MM-dd");
+            var baseurl = $"https://api.somtoday.nl/rest/v1/studiewijzeritemdagtoekenningen?schooljaar=&begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
+
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + access_token);
+            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+            _httpClient.DefaultRequestHeaders.Add("Range", $"items=0-99");
+            
+            var response = await _httpClient.GetAsync(baseurl);
+            
+            if (response.IsSuccessStatusCode == false)
+            {
+                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je \"dag huiswerk\" op somtoday kon niet opgevraagd worden", NotificationCenter.NotificationType.WARNING);
+                return new List<Models.somtodayHomeworkModel.Item>();
+            }
+            
+            var somtodayHuiswerk = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(await response.Content.ReadAsStringAsync());
+
+            baseurl = $"https://api.somtoday.nl/rest/v1/studiewijzeritemweektoekenningen?schooljaar=&begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
+            
+            response = await _httpClient.GetAsync(baseurl);
+            
+            if (response.IsSuccessStatusCode == false)
+            {
+                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je \"week huiswerk\" op somtoday kon niet opgevraagd worden, je \"dag huiswerk\" is wel opgevraagd", NotificationCenter.NotificationType.WARNING);
+                return somtodayHuiswerk.items;
+            }
+
+            somtodayHuiswerk.items.AddRange(JsonConvert.DeserializeObject<SomtodayHomeworkModel>(await response.Content.ReadAsStringAsync()).items);
+            
+
+            Console.WriteLine("\n\n\n\n");
+            Console.WriteLine(await response.Content.ReadAsStringAsync());
+            Console.WriteLine("\n\n\n\n");
+            
+            return somtodayHuiswerk.items;
+        }
+
         [NonAction]
         private async Task<List<Models.somtodayHomeworkModel.Item>> GetRemappedCustomHuiswerk()
         {
@@ -610,7 +653,7 @@ namespace Zermos_Web.Controllers
             {
                 var item = new Models.somtodayHomeworkModel.Item
                 {
-                    datumTijd = customHomeworkItem.deadline,
+                    DatumTijd = customHomeworkItem.deadline,
                     studiewijzerItem = new StudiewijzerItem
                     {
                         omschrijving = customHomeworkItem.omschrijving,
@@ -645,7 +688,6 @@ namespace Zermos_Web.Controllers
 
             return remapedHomework;
         }
-
 
         [Authorize]
         [SomtodayRequirement]
