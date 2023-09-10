@@ -4,6 +4,34 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - Versie 0.2.2 - 10-09-2023
+
+0.2.3 - uhmmmm
+
+- algemeen
+    - er wordt nu gewacht tot de css ingeladen is voordat de pagina wordt getoond, dit voorkomt dat de pagina eerst de ruwe tekst toont en daarna pas de opmaak
+    - De knop naar het hoofdmenu is tijdelijk verwijderd, ik ben totaal niet blij met hoe de pagina er uit ziet en werkt, dus daar ga ik nog aan werken. Voor nu blijft hij nog wel beschikbaar via https://zermos.kronk.tech/Hoofdmenu, maar niet via de knop
+    - Je kan nu aangeven welke pagina je wilt zien als je Zermos bezoekt (https://zermos.kronk.tech/), als je Zermos bezoekt op bijv. https://zermos.kronk.tech/rooster, dan wordt je automatisch nogsteeds doorgestuurd naar het rooster. Stel het snel in op de account pagina
+    
+- Somtoday - Afwezigheid
+    - Je afwezigheid's data wordt nu getoond in het nederlands, dus niet meer august, maar augustus
+    
+- Somtoday - Huiswerk
+    - Je wordt nu automatisch doorgestuurd naar de juiste dag, dan hoef je niet zoveel te scrollen
+    - Als je via het rooster naar je huiswerk wordt gestuurd (door huiswerk op een les), dan gaat het huiswerk dat er bij hoort gloeien
+    - Je kan nu je huiswerk sorteren op vak, en type (huiswerk, toets en grote toest). Als je bijvoorbeeld alle je wiskunde huiswerk verbergd, dan komt er een klein meldinkje te zien zodat je weet dat er meer huiswerk is, maar dat het verborgen is.
+    - 'dag' en 'week' huiswerk wordt nu ook getoont, dit herken je aan de licht-groene rechter rand.
+
+- Zermelo 
+    - Als je op een vak klikt, dan krijg je nu een popup met de vak, docent(en), lokaal(en), begintijd, eindtijd, groep(en) en de statusen van de les
+    - Als je op de knop 'bekijk huiswerk' klikt, dan krijg je het huiswerk  dat op die les gepland staat te zien, anders krijg je een melding dat er geen huiswerk is
+
+- School - Schoolklimaat (!?)
+    - Ik ben bezig met een nieuwe functie: 'Schoolklimaat'. Dit is een pagina waarop je de temperaturen etc. van alle lokalen in een keer kan zien. Je kan een bekijken wat ik al heb op https://zermos.kronk.tech/schoolklimaat (P.S. het is niet veel)
+    
+- Backend
+    - De oude authenticatie manier is nu volledig verwijderd, je kan nu alleen nog maar inloggen met je Microsoft account
+
 # Release Notes - Versie 0.2.2 - 29-08-2023
 
 0.2.2 meer dingen
@@ -20,7 +48,11 @@ nav_exclude: false
     - Stond de brug weer open? Natuurlijk. Je mislukte smoesjes staan nu ook op Zermos, ga naar je account en klik op 'afwezigheid' om ze te bekijken.
     
 - Somtoday - cijfers
-    - De cijfers worden nu op een andere manier opgevraagd op Zermos, hierdoor laden de cijfers iets langzamer in, maar dit is veiliger voor jouw data. Ook is het makkelijker om een cijfer te vinden aangezien het heel handig is gesorteerd op vak en cijfer id. (/Somtoday/Cijfers > alle vakken | /Somtoday/Cijfers/Ckv > alle cijfers van CKV | /Somtoday/Cijfers/Ckv/Statestieken > alle cijfers van CKV met statistieken | /Somtoday/Cijfers/Ckv/12345678901234 > het cijfer van CKV met (Somtoday) id 12345678901234)
+    - De cijfers worden nu op een andere manier opgevraagd op Zermos, hierdoor laden de cijfers iets langzamer in, maar dit is veiliger voor jouw data. Ook is het makkelijker om een cijfer te vinden aangezien het heel handig is gesorteerd op vak en cijfer id.
+<br>`/Somtoday/Cijfers` > alle vakken
+<br>`/Somtoday/Cijfers/Ckv` > alle cijfers van CKV
+<br>`/Somtoday/Cijfers/Ckv/Statestieken` > alle cijfers van CKV met statistieken
+<br>`/Somtoday/Cijfers/Ckv/12345678901234` > het cijfer van CKV met (Somtoday) id 12345678901234
 
 - Somtoday - Huiswerk
     - Een visueel probleem is opgelost, de huiswerk items zijn nu weer even breed als de rest van de pagina
