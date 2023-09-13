@@ -12,10 +12,10 @@
 
 <div class="grades-container">
 
-    <div class="vak">
+    <div class="vak" style="height: auto">
         <a onclick="ReplacePage('@Url.Action("CijferStatestieken", "Somtoday", new {vak = Model.vak.afkorting.Capitalize()})')" style="display: flex; align-content: center; justify-content: center; flex-wrap: wrap;">
             <div class="top-30 fade-out" style="justify-content: center; align-items: center;">
-                <h1>Cijfer statestieken</h1>
+                <p>Cijfer statestieken</p>
             </div>
             <div class="background">
                 <img class="image"/>
@@ -32,7 +32,7 @@
             <div class="vak">
                 <a onclick="ReplacePage('@Url.Action("CijferData", "Somtoday", new {vak = vak.vak.afkorting.Capitalize(), id = vak.links[0].id})')">
                     <div class="top-30">
-                        <h1>@vak.vak.naam</h1>
+                        <p>@vak.vak.naam</p>
                         <p>@(vak.weging == 0 ? vak.examenWeging : vak.weging)x</p>
                         <p class="@(geldendResultaat >= 5.5f ? "sufficient" : "insufficient ")">@(vak.resultaatLabelAfkorting == "V" ? "V" : geldendResultaat.ToString("0.0", CultureInfo.InvariantCulture))</p>
                     </div>

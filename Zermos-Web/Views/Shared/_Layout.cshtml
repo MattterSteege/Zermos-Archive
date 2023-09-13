@@ -155,21 +155,6 @@
     </div>
 </div>
 
-@if (Context.Request.Cookies["version"] == null && !(bool) (Context.Items["loading"] ?? true) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
-{
-    Context.Response.Cookies.Append("version", Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty, new CookieOptions {Expires = DateTime.Now.AddDays(60)});
-    <div class="version">
-        <p>Je gebruikt momenteel de <b>nieuwste</b> versie van Zermos</p>
-    </div>
-}
-else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") && !(bool) (Context.Items["loading"] ?? true) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development")
-{
-    Context.Response.Cookies.Append("version", Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty, new CookieOptions {Expires = DateTime.Now.AddDays(60)});
-    <div class="version">
-        <p>Er is een nieuwe versie van Zermos (@(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? string.Empty)), bekijk <a href="https://zermos-docs.kronk.tech">hier</a> wat er nieuw is</p>
-    </div>
-}
-
 <div id="content">
     <div class="loader-text">
         De pagina wordt geladen
@@ -201,6 +186,8 @@ else if (Context.Request.Cookies["version"] != Environment.GetEnvironmentVariabl
     }
 }
 <script id="vital-script">
+    console.log('Je gebruikt Zermos versie @Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION")');
+
     var main = document.getElementById("main");
     var content = document.getElementById("content");
 

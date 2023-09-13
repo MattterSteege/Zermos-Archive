@@ -310,6 +310,10 @@
         //loop trough the statuses and add the 'nl' value to the statuses div
         for (var i = 0; i < json.status.length; i++) {
             var status = json.status[i];
+            
+            if (status['code'] === 2002)
+                continue;
+            
             var statusDiv = document.createElement('p');
             statusDiv.className = 'status';
             statusDiv.innerHTML = "• " + status.nl;

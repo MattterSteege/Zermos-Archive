@@ -5,7 +5,7 @@
     grid-auto-flow: row;
     grid-gap: 16px;
     color: var(--text-color);
-    font-size: 0.8rem;
+    font-size: var(--font-size);
     height: max-content;
     width: 100%;
 }
@@ -15,8 +15,8 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 10px;
-    padding: 16px;
-    border-radius: 1rem;
+    padding: var(--padding);
+    border-radius: var(--border-radius);
     background: var(--overlay-color);
     height: auto;
     width: 100%;
@@ -34,7 +34,7 @@
     position: absolute;
     object-fit: cover;
     background-size: cover;
-    border-radius: 8px;
+    border-radius: var(--border-radius-small);
     top: 16px;
     left: 16px;
     transition: 0.3s;
@@ -45,7 +45,7 @@
     height: 100%;
     top: 0;
     left: 0;
-    border-radius: 16px;
+    border-radius: var(--border-radius);
 }
 
 .child .image-overlay .overlay {
@@ -56,12 +56,12 @@
     position: relative;
     width: calc(100% - 32px);
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: var(--font-size-heading);
     line-height: 1.5rem;
     color: var(--white-color);
     z-index: 1;
-    top: 32px;
-    left: 16px;
+    top: var(--padding);
+    left: var(--padding);
 }
 
 .child .text {
@@ -69,11 +69,12 @@
     width: calc(100% - 32px);
     font-weight: 200;
     line-height: 1.5rem;
-    color: var(--white-color);;
+    color: var(--white-color);
+    font-size: var(--font-size);
     z-index: 1;
-    top: 32px;
-    left: 16px;
-    padding-bottom: 48px;
+    top: var(--padding);
+    left: var(--padding);
+    padding-bottom: calc(var(--padding) * 2);
     overflow: hidden;
 }
 
@@ -82,7 +83,7 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 10px;
-    border-radius: 1rem;
+    border-radius: var(--border-radius);
     background: var(--overlay-color);
     height: 100%;
     min-width: calc(360px);
@@ -93,7 +94,7 @@
     position: relative;
     width: 100%;
     height: auto;
-    padding-bottom: 48px;
+    padding-bottom: calc(var(--padding) * 2);
     overflow: hidden;
 }
 
@@ -101,12 +102,12 @@
     position: relative;
     width: calc(100% - 32px);
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: var(--font-size-heading);
     line-height: 1.5rem;
     color: var(--white-color);;
     z-index: 1;
-    top: 32px;
-    left: 16px;
+    top: var(--padding);
+    left: var(--padding);
 }
 
 .message-container .message .message-text {
@@ -114,10 +115,10 @@
     width: calc(100% - 32px);
     font-weight: 200;
     line-height: 1.5rem;
-    color: var(--white-color);;
+    color: var(--white-color);
     z-index: 1;
-    top: 32px;
-    left: 16px;
+    top: var(--padding);
+    left: var(--padding);
 }
 
 .message-container .message .message-image-overlay {
@@ -126,15 +127,15 @@
     position: absolute;
     object-fit: cover;
     background-size: cover;
-    border-radius: 8px;
-    top: 16px;
-    left: 16px;
+    border-radius: var(--border-radius-small);
+    top: var(--padding);
+    left: var(--padding);
     transition: 0.3s;
 }
 
 .message-container .message .message-image-overlay img {
     height: 100%;
-    border-radius: 8px;
+    border-radius: var(--border-radius-small);
     /*    Change width to keep w/h ratio*/
     width: auto;
 

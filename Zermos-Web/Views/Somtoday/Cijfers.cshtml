@@ -103,7 +103,7 @@
                         <div class="grade-notification"></div>
                     }
                     <div class="top-30">
-                        <h1>@vak.vak.naam</h1>
+                        <p>@vak.vak.naam</p>
                         <p>@(vak.grades.Sum(gradeItem => gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging))x</p>
                         <p class="@(gemiddelde >= 5.5f ? "sufficient" : "insufficient ")">@(gemiddelde.ToString("0.0", CultureInfo.InvariantCulture))</p>
                     </div>
@@ -117,17 +117,4 @@
         }
 
     </div>
-    @* @if (DetectionService.Device.Type != Device.Mobile) *@
-    @* { *@
-    @*     <div class="grades-history"> *@
-    @*         <div class="history-container"> *@
-    @*             @foreach (var grade in Model.items.GetRange(Model.items.Count - 20, 20)) *@
-    @*             { *@
-    @*                 <div class="history-grade"> *@
-    @*                     @grade.vak.naam - @grade.geldendResultaat - @(grade.weging == 0 ? grade.examenWeging : grade.weging) *@
-    @*                 </div> *@
-    @*             } *@
-    @*         </div> *@
-    @*     </div> *@
-    @* } *@
 </div>

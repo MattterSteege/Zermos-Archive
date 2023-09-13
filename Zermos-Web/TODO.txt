@@ -5,3 +5,5 @@ TODO: When checking if user has cookie for cached data, check if the data is not
 TODO: login UI cleanup en evening out
 TODO: make time use login, so the user get's logged out after the session is closed
 TODO: make the class climate system work with all the locations
+TODO: make one font size with variables css (Style.css, Zermelo.css, School.css) Somtoday.cs s, Account.css, Hoofdmenu.css, Infowijs.css, Koppelingen.css
+TODO: Schedule page opn Safari is doing 'safari' things

@@ -208,4 +208,8 @@
     .form-control {
         width: 80%;
     }
+    
+    .items-container {
+        display: none;
+    }
 }

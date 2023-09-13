@@ -59,11 +59,21 @@ public class SchoolklimaatController : Controller
 
     public async Task<Dictionary<string, SchoolklimaatModel>> GetSchoolklimaat()
     {
-        Dictionary<string, SchoolklimaatModel> schoolklimaatModels = new Dictionary<string, SchoolklimaatModel>();
+        var lokalen = (await (await _httpClient.GetAsync("https://zermos-docs.kronk.tech/schoolklimaat.txt")).Content.ReadAsStringAsync()).Split("\n");
         
         Dictionary<string, string> LocationWithUUID = new Dictionary<string, string>();
-        LocationWithUUID.Add("B8", "085ecdf6-47ed-55de-80a7-41fc430b3757");
-        LocationWithUUID.Add("D3", "3510a390-f361-5299-a438-062e30e77e9a");
+
+        foreach (string lokaalMetId in lokalen)
+        {
+            if (!lokaalMetId.Contains(':'))
+                continue;
+            
+            var lokaal = lokaalMetId.Split(": ")[0];
+            var id = lokaalMetId.Split(": ")[1];
+            LocationWithUUID.Add(lokaal, id);
+        }
+        
+        Dictionary<string, SchoolklimaatModel> schoolklimaatModels = new Dictionary<string, SchoolklimaatModel>();
 
         foreach (KeyValuePair<string,string> keyValuePair in LocationWithUUID)
         {
@@ -72,6 +82,10 @@ public class SchoolklimaatController : Controller
             
             var regex = new Regex(@"<[A-Za-z]+\sstyle=""[^""]*""[^""]*""[A-Za-z]+\('([0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12})',([A-Za-z0-9]+),([A-Za-z0-9]+),'([A-Za-z0-9]+)',([A-Za-z0-9]+),'([A-Za-z0-9]+)',([A-Za-z0-9]+),'([A-Za-z0-9]+)'\)"">");
             var match = regex.Match(content);
+            
+            if (!match.Success)
+                continue;
+            
             schoolklimaatModels.Add(keyValuePair.Key, new SchoolklimaatModel
             {
                 uuid = match.Groups[1].Value,

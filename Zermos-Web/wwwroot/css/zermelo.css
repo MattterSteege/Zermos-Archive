@@ -10,7 +10,7 @@
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    border-radius: 7px;
+    border-radius: var(--border-radius-small);
     overflow: hidden;
     border: 1px solid var(--inactive-color);
     transition: opacity .25s;
@@ -23,7 +23,7 @@
     position: fixed;
     top: 16px;
     left: 410px;
-    border-radius: 14px;
+    border-radius: var(--border-radius);
     display: flex !important;
     align-items: center;
     justify-content: center;
@@ -42,7 +42,7 @@
 }
 
 .datepicker p {
-    font-size: 16px;
+    font-size: var(--font-size-heading);
     font-weight: 700;
     color: var(--text-color);
 }
@@ -78,7 +78,7 @@
 .times-container ul li {
     width: 100%;
     border-bottom: 1px solid var(--inactive-color);
-    padding: 8px 0;
+    padding: var(--padding-small) 0;
 }
 
 .times-container ul li:last-child {
@@ -106,11 +106,12 @@
 .days-container ul li {
     height: 100%;
     border-right: 1px solid var(--inactive-color);
-    padding: 8px 0;
+    padding: var(--padding-small) 0;
     float: left;
     font-weight: 600;
     color: var(--text-color);
     text-align: center;
+    font-size: var(--font-size);
 }
 
 .days-container ul li:last-child {
@@ -137,10 +138,11 @@
 .hours-container ul li {
     width: 58px;
     height: 20px;
-    padding-left: 8px;
+    padding-left: var(--padding-small);
     font-weight: 600;
     background-color: var(--background-color);
     color: var(--text-color);
+    font-size: var(--font-size);
 }
 
 .hours-container ul li:first-child, .hours-container ul li:last-child {
@@ -176,15 +178,19 @@
     position: relative;
 }
 
+.lesdag p {
+    font-size: var(--font-size);
+}
+
 .lesson-time-based {
     max-width: calc(100% - 8px) !important;
     min-width: calc(100% - 8px) !important;
     width: calc(100% - 8px) !important;
-    padding: 8px;
+    padding: var(--padding-small);
     justify-self: center;
     align-self: center;
     background: var(--inactive-color);
-    border-radius: 4px;
+    border-radius: var(--border-radius-small);
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
@@ -204,21 +210,6 @@
 }
 .lesson-time-based p:first-child {
     font-weight: 600;
-}
-
-li.empty {
-    grid-column: 1 / span 5;
-    align-content: center;
-    justify-content: center;
-    display: grid;
-    background: var(--overlay-color);
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    margin: auto;
-    font-size: 20px;
-    padding: 20px;
-    border-radius: 7px;
-    font-weight: 700;
-    color: var(--text-color);
 }
 
 .exam {
@@ -284,27 +275,29 @@ li.empty {
     grid-column: 1;
     padding: 10% 20%;
     backdrop-filter: blur(10px);
+    transform: translate3d(0, 0, 0);
     z-index: 1;
     opacity: 0;
     transition: 0.5s;
     pointer-events: none;
+    display: grid;
+    align-content: center;
 }
 
 .lesson-detail .inside {
-    width: 100%;
-    height: 100%;
     background: var(--overlay-color);
-    border-radius: 7px;
+    border-radius: var(--border-radius-small);
     display: flex;
     color: var(--text-color);
     flex-direction: column;
-    padding: 14px;
-    font-size: 1.2rem;
+    padding: var(--padding);
+    max-height: 400px;
+    font-size: var(--font-size);
 }
 
 .lesson-detail .inside .vak {
     font-weight: 700;
-    font-size: 1.5rem;
+    font-size: var(--font-size-heading);
     text-align: center;
     text-transform: uppercase;
     margin-bottom: 7px;
@@ -317,6 +310,7 @@ li.empty {
     text-transform: uppercase;
     text-align: center;
     justify-content: center;
+    font-size: var(--font-size);
 }
 
 .lesson-detail .inside .generic p {
@@ -337,11 +331,11 @@ li.empty {
 
 .show-homework {
     margin-top: 14px;
-    height: 48px;
+    height: var(--button-height);
     background: var(--accent-color);
     color: var(--white-color);
     align-items: center;
-    border-radius: 7px;
+    border-radius: var(--border-radius-small);
     display: flex;
     justify-content: center;
     font-weight: 600;

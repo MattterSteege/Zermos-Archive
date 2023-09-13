@@ -23,7 +23,7 @@ namespace Zermos_Web.Controllers
             _users = users;
         }
         
-        public async Task<IActionResult> Index(string url = null)
+        public IActionResult Index(string url = null)
         {
             if (url != null)
             {

@@ -1,20 +1,56 @@
 {
+  "A5": {
+    "uuid": "7dd77d93-c4fa-4805-90fd-cdc41325ad3a",
+    "temperature": "26",
+    "temperatureScore": 3,
+    "humidity": "57",
+    "humidityScore": 1,
+    "airQuality": "419",
+    "airQualityScore": 1
+  },
+  "SKLOK": {
+    "uuid": "8f656635-8fe6-5f73-834d-fa39d4200d85",
+    "temperature": "24",
+    "temperatureScore": 1,
+    "humidity": "71",
+    "humidityScore": 2,
+    "airQuality": "439",
+    "airQualityScore": 1
+  },
+  "SKPR": {
+    "uuid": "b8e8b852-700b-5cee-8c50-410f4c4227b7",
+    "temperature": "24",
+    "temperatureScore": 1,
+    "humidity": "72",
+    "humidityScore": 2,
+    "airQuality": "419",
+    "airQualityScore": 1
+  },
+  "B6": {
+    "uuid": "cd855b14-d489-4a37-be2f-cb3f20908eb9",
+    "temperature": "26",
+    "temperatureScore": 3,
+    "humidity": "62",
+    "humidityScore": 1,
+    "airQuality": "463",
+    "airQualityScore": 1
+  },
   "B8": {
     "uuid": "085ecdf6-47ed-55de-80a7-41fc430b3757",
-    "temperature": "30",
+    "temperature": "27",
     "temperatureScore": 4,
-    "humidity": "53",
+    "humidity": "59",
     "humidityScore": 1,
-    "airQuality": "411",
+    "airQuality": "527",
     "airQualityScore": 1
   },
   "D3": {
     "uuid": "3510a390-f361-5299-a438-062e30e77e9a",
-    "temperature": "28",
-    "temperatureScore": 4,
-    "humidity": "58",
+    "temperature": "26",
+    "temperatureScore": 3,
+    "humidity": "64",
     "humidityScore": 1,
-    "airQuality": "443",
+    "airQuality": "528",
     "airQualityScore": 1
   }
 }
