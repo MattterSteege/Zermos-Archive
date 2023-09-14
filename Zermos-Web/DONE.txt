@@ -2,3 +2,6 @@
 
 - Account
     - De item selector op je laptop is nu weg als je op mobiel bent (je scherm minder dan 1000px breed is)
+    
+- Somtoday - Huiswerk
+    - Deze pagina laadt nu wel weer in (foutje met custom huiswerk)

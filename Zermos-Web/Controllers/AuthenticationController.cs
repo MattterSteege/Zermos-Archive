@@ -25,8 +25,11 @@ public class AuthenticationController : Controller
         _users = users;
         _logger = logger;
     }
-
+#if RELEASE
     const string redirectUrl = "https://zermos.kronk.tech/Login/Callback";
+#else
+    const string redirectUrl = "https://192.168.178.34:5001/Login/Callback";
+#endif
     const string clientId = "REDACTED_MS_CLIENT_ID";
     const string clientSecret = "lcV8Q~GbQjBv45fivMgN3ARP~UHPNSuV259gQcU7";
 

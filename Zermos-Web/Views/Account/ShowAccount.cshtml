@@ -19,7 +19,7 @@
         </div>
         
         <div onclick="ReplacePage('@Url.Action("Afwezigheid", "Somtoday")')" class="information-item-parent" id="afwezigheid" style="cursor: pointer;">
-            <h1>Afwezigheid</h1>
+            <h1 style="text-decoration: underline; cursor: pointer;" >Afwezigheid</h1>
             @{
                 int afwezigheidCount = JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(Model.cached_somtoday_absence.IsNullOrEmpty() ? "{\"items\":[]}" : Model.cached_somtoday_absence).items.Count;
             }

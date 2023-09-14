@@ -4,26 +4,21 @@
     ViewBag.Title = "title";
 }
 
-<link rel="stylesheet" href="~/css/school.css" />
+<link rel="stylesheet" href="~/css/school.css"/>
 
 <div class="news-items-holder" id="news-items-holder">
 
     @foreach (var informatieBoordItem in Model)
     {
-        //go to the InformatieBoord controller and the InformatieBoord action with the model as paramaters (title=, content=, image=)
         <div class="child">
-            @{
-                //turn the model into a json string turn it into bytes and encode with base64
-                //var encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(informatieBoordItem)));
-            }
-            <a> @*asp-controller="School" asp-action="Message" asp-route-content="@encoded"*@
+            <div class="text-holder">
                 <h1 class="heading">@informatieBoordItem.Title</h1>
                 <p class="text">@informatieBoordItem.Content</p>
-                <div class="image-overlay">
-                    <img src="@informatieBoordItem.Image">
-                    <div class="overlay"></div>
-                </div>
-            </a>
+            </div>
+            <div class="image-overlay">
+                <img src="@informatieBoordItem.Image">
+                <div class="overlay"></div>
+            </div>
         </div>
     }
 

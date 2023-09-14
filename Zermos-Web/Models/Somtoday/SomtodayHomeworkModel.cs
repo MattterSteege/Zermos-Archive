@@ -13,7 +13,7 @@ namespace Zermos_Web.Models.somtodayHomeworkModel
     { 
         public List<Link> links { get; set; }
         [JsonIgnore]
-        public string huiswerkType => links[0].type.Contains("Dag") ? "dag" : links[0].type.Contains("Week") ? "week" : "normaal";
+        public string huiswerkType => links != null ? links[0].type.Contains("Dag") ? "dag" : links[0].type.Contains("Week") ? "week" : "normaal" : "normaal";
         public AdditionalObjects additionalObjects { get; set; }
         public StudiewijzerItem studiewijzerItem { get; set; }
         public Lesgroep lesgroep { get; set; }
