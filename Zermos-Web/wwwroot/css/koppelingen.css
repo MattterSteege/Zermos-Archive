@@ -1,7 +1,7 @@
 ﻿.checkout, .login {
     display: flex;
-    grid-column-gap: 16px;
-    grid-row-gap: 16px;
+    grid-column-gap: var(--padding);
+    grid-row-gap: var(--padding);
     width: 100%;
     height: 100%;
     flex-direction: column;
@@ -12,7 +12,7 @@
 .form-control {
     height: 48px;
     background: var(--overlay-color);
-    border-radius: 1rem;
+    border-radius: var(--border-radius);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -25,15 +25,15 @@
     border: none;
     background: transparent;
     outline: none;
-    padding: 0 16px;
-    font-size: 1rem;
+    padding: 0 var(--padding);
+    font-size: var(--font-size);
     font-weight: 500;
     color: var(--text-color);
 }
 
 .form-control input:first-child {
     width: 75%;
-    border-radius: 1rem 0 0 1rem;
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
     text-align: center;
 }
 
@@ -41,7 +41,7 @@
     width: 25%;
     background: var(--accent-color);
     color: white;
-    border-radius: 0 1rem 1rem 0;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
     font-weight: 600;
     cursor: pointer;
 }
@@ -50,25 +50,25 @@
     width: 25%;
     background: var(--accent-color);
     color: white;
-    border-radius: 0 1rem 1rem 0;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
     font-weight: 600;
     cursor: pointer;
 }
 
 .login-child {
-    border-radius: 1rem;
+    border-radius: var(--border-radius);
     background: var(--overlay-color);
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow);
     display: flex;
     justify-content: start;
     align-items: start;
     color: var(--text-color);
     text-decoration: none;
-    padding: 16px;
+    padding: var(--padding);
     flex-direction: column;
     width: 80%;
     height: auto;
-    font-size: 1rem;
+    font-size: var(--font-size);
     font-weight: 600;
     cursor: default;
     max-height: 80%;
@@ -76,16 +76,16 @@
 
 .login-child h1{
     font-weight: 600;
-    font-size: 1.5rem;
+    font-size: var(--font-size-heading);
     text-align: center;
     width: 100%;
 }
 
 .login-child p {
 
-    margin-top: 16px;
+    margin-top: var(--padding);
     font-weight: 600;
-    font-size: 1rem;
+    font-size: var(--font-size);
 }
 
 .check {
@@ -93,14 +93,14 @@
     height: 100%;
     background: var(--accent-color);
     border: none;
-    border-radius: 14px;
+    border-radius: var(--border-radius);
     color: white;
     font-weight: 700;
 }
 
 .img-thumbnail {
     align-self: center;
-    margin: auto 16px;
+    margin: auto var(--padding);
     object-fit: scale-down;
     overflow: hidden;
     width: 100%;
@@ -139,42 +139,41 @@
     height: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(355px, 100% / 4)), 1fr));
-    grid-gap: 16px;
+    grid-gap: var(--padding);
     background: var(--background-color);
 }
 
 .koppelingen-container div {
     background: var(--overlay-color);
-    border-radius: 14px;
-    padding: 16px;
+    border-radius: var(--border-radius);
+    padding: var(--padding);
     display: flex;
     flex-direction: column;
     position: relative;
 }
 
 .koppelingen-container div h1 {
-    font-size: 2rem;
+    font-size: var(--font-size-heading);
     font-weight: 600;
     color: var(--text-color);
 }
 
 .koppelingen-container div p {
-    font-size: 1rem;
+    font-size: var(--font-size);
     font-weight: 500;
     color: var(--text-color);
 }
 
 .koppelingen-container div ul {
     padding: 0;
-    margin: 16px;
-    margin-left: 20px;
+    margin: var(--padding) var(--padding) var(--padding) 20px;
 }
 
 .koppelingen-container div ul li {
-    font-size: 1rem;
+    font-size: var(--font-size);
     font-weight: 700;
     color: var(--text-color);
-    margin-bottom: 8px;
+    margin-bottom: var(--padding-small);
 }
 
 .koppelingen-container div .methods {
@@ -182,26 +181,25 @@
     flex-direction: column;
     width: 100%;
     height: auto;
-    gap: 8px;
+    gap: var(--padding-small);
     justify-content: center;
     align-items: center;
-    /*margin top should be either auto or 16px, which is higher*/
-    margin-top: max(16px, auto);
+    margin-top: max(var(--padding), auto);
     padding: unset;
 }
 
 .koppelingen-container div .methods a {
-    font-size: 1rem;
+    font-size: var(--font-size);
     text-decoration: none;
     width: 100%;
-    height: 40px;
+    height: var(--button-height);
     text-align: center;
     background: var(--accent-color);
-    border-radius: 7px;
+    border-radius: var(--border-radius-small);
     justify-content: center;
     color: var(--white-color);
     font-weight: 700;
-    padding: 10px;
+    padding: var(--padding-small);
     display: flex;
     flex-direction: column;
 }

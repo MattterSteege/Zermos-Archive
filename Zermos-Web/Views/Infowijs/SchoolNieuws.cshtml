@@ -49,7 +49,7 @@
                         {
                             var indexOfMessage = Model.IndexOf(messageGroup);
                             <pre id=@("base-" + indexOfMessage) class="content">@Html.Raw(HTMLUtils.BalanceHtmlTags(HTMLUtils.ConvertLinksInText(content.Content.String).FirstWords(wordCount)))</pre>
-                            <span id=@("dots-" + indexOfMessage)>...</span>
+                            <span id=@("dots-" + indexOfMessage) style="font-size: var(--font-size);">...</span>
                             <pre id=@("more-" + indexOfMessage) style="display: none;">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</pre>
                             <button onclick=@("readMore(" + indexOfMessage + ")") id=@("myBtn-" + indexOfMessage) class="read-more-btn">Lees meer</button>
                         }

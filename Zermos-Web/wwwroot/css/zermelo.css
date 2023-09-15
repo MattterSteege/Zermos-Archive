@@ -11,6 +11,7 @@
     overflow: hidden;
     border: 1px solid var(--inactive-color);
     transition: opacity 0.25s;
+    position: relative;
 }
 
 .datepicker {
@@ -55,11 +56,11 @@
 }
 
 .times-container {
-    /*be the same dimensions as main-container*/
     width: 100%;
     height: 100%;
-    grid-row: 1;
-    grid-column: 1;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 .times-container ul {
@@ -86,8 +87,9 @@
 .days-container {
     width: 100%;
     height: 100%;
-    grid-row: 1;
-    grid-column: 1;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 .days-container ul {
@@ -118,8 +120,9 @@
 .hours-container {
     width: 100%;
     height: 100%;
-    grid-row: 1;
-    grid-column: 1;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 .hours-container ul {
@@ -150,8 +153,9 @@
 .lessons-container {
     width: 100%;
     height: 100%;
-    grid-row: 1;
-    grid-column: 1;
+    position: absolute;
+    left: 0;
+    top: 0;
     padding-left: 60px;
     padding-top: 40px;
     --height-of-5-minutes: calc(100% / 102);
@@ -182,10 +186,8 @@
 .lesson-time-based {
     max-width: calc(100% - 8px) !important;
     min-width: calc(100% - 8px) !important;
-    width: calc(100% - 8px) !important;
+    width: 100%;
     padding: var(--padding-small);
-    justify-self: center;
-    align-self: center;
     background: var(--inactive-color);
     border-radius: var(--border-radius-small);
     display: flex;
@@ -271,14 +273,16 @@
     grid-row: 1;
     grid-column: 1;
     padding: 10% 20%;
-    backdrop-filter: blur(10px);
-    transform: translate3d(0, 0, 0);
+    backdrop-filter: blur(5px);
+    transform: translate3d(-0, 0, 0);
     z-index: 1;
     opacity: 0;
     transition: 0.5s;
     pointer-events: none;
     display: grid;
     align-content: center;
+    position: absolute;
+    background: rgba(232, 232, 232, 0.5);
 }
 
 .lesson-detail .inside {

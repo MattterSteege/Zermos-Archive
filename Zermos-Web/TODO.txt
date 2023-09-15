@@ -4,5 +4,5 @@ TODO: zelf lessen inplannen in je rooster
 TODO: When checking if user has cookie for cached data, check if the data is not null or empty
 TODO: make time use login, so the user get's logged out after the session is closed
 TODO: make the class climate system work with all the locations
-TODO: make one font size with variables css (Style.css, Account.css School.css, Somtoday.css), Zermelo.css, Hoofdmenu.css, Infowijs.css, Koppelingen.css
+TODO: make one font size with variables css (Style.css, Account.css School.css, Somtoday.css, Zermelo.css, Infowijs.css), Hoofdmenu.css, Koppelingen.css
 TODO: Schedule page opn Safari is doing 'safari' things, and make the schedule page height 100% of the allowed space (so it doesn't scroll)
