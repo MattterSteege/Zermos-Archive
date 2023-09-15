@@ -4,7 +4,23 @@ title: what's new
 nav_exclude: false
 ---
 
-# Release Notes - Versie 0.2.2 - 10-09-2023
+# Release Notes - Versie 0.2.4 - 15-09-2023
+
+0.2.4 - UI fixes voor de vorige updates, geen nieuwe functionaliteiten
+
+- Account
+    - De item selector op je laptop is nu weg als je op mobiel bent (je scherm minder dan 1000px breed is)
+    
+- Somtoday - Huiswerk
+    - Deze pagina laadt nu wel weer in (foutje met custom huiswerk)
+
+- Algemeen
+    - De css (opmaak) van de website is nu beter georganiseerd, geoptimaliseerd en opgeschoond. Ook werkt de website nu beter op mobiel. (Dit is 90% van deze hele update en je ziet er heel weinig van :( )
+    
+- Zermelo - Rooster
+    - Door de css aanpassingen is de rooster pagina nu ook beter op mobiel, blur werkt nu ook op safari en de hoogte het rooster (plus de les elementen) is nu dynamisch en stop niet meer na een hoogte van 600px.
+
+# Release Notes - Versie 0.2.3 - 10-09-2023
 
 0.2.3 - uhmmmm
 
