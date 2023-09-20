@@ -1,7 +1,7 @@
-﻿0.2.4 - UI fixes voor de vorige updates, geen nieuwe functionaliteiten
+﻿0.2.5 - Een beetje dit, een beetje dat
+
+- algemeen
+    - De 'volgende' en 'vorige' knoppen bovenaan de (pc) pagina werken nu met de custom 'history api'
 
 - Account
-    - De item selector op je laptop is nu weg als je op mobiel bent (je scherm minder dan 1000px breed is)
-    
-- Somtoday - Huiswerk
-    - Deze pagina laadt nu wel weer in (foutje met custom huiswerk)
+    - Er is nu een uitlog knop... Dat duurde even...

@@ -310,6 +310,8 @@
     background: var(--overlay-overlay-color);
     padding: 4px 8px;
     border-radius: var(--border-radius-small);
+    color: blue;
+    cursor: pointer;
 }
 
 .homework-content ul {

@@ -28,7 +28,7 @@
         <link rel="stylesheet" href="~/css/@(ViewData["add_css"]).css?v=@version">
     }
 </head>
-<body onload="ReplacePage('@ViewData["url"]')">
+<body onload="init()">
 <div class="sidebar">
     <div class="top">
         <!--        6 SVG's with the letters Z,E,R,M,O & S width should be 1/6 of 100%-->
@@ -146,11 +146,11 @@
         </a>
     </div>
 
-    <div class="backbutton" onclick="window.history.back()">
+    <div class="backbutton" onclick="customHistory.historyBack()">
         <i class="fa-solid fa-angle-left"></i>
     </div>
 
-    <div class="forewardbutton" onclick="window.history.forward()">
+    <div class="forewardbutton" onclick="customHistory.historyForward()">
         <i class="fa-solid fa-angle-right"></i>
     </div>
 </div>
@@ -187,11 +187,17 @@
 }
 <script id="vital-script">
     console.log('Je gebruikt Zermos versie @Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION")');
+    
+    
+    function init() {
+        window.history.pushState({}, document.title, "/");
+        ReplacePage('@ViewData["url"]');
+    }
 
     var main = document.getElementById("main");
     var content = document.getElementById("content");
 
-    function ReplacePage(url) {
+    function ReplacePage(url, fromHistory = false) {
         document.body.removeAttribute("onload");
         
         // Define a function to append a script to either the head or body
@@ -213,7 +219,7 @@
         function appendStylesheet(href) {
             const link = document.createElement("link");
             link.rel = "stylesheet";
-            link.href = href;
+            link.href = href + '?v=@version';
             link.id = "added-by-fetch";
             document.head.appendChild(link);
             return link;
@@ -288,7 +294,8 @@
                     
                     html.remove();
                     
-                    modifyUrl("Zermos", url);
+                    if (!fromHistory)
+                        customHistory.navigateTo(url);
                     
                     main.dispatchEvent(new Event("main:load"));    
                     
@@ -326,23 +333,64 @@
         }
     }
     
-    function modifyUrl(title, url) {
-        if (typeof(history.pushState) != "undefined") {
-            const obj = {
-                Title: title,
-                Url: url
-            };
-            history.pushState(obj, obj.Title, obj.Url);
+    // Custom history object
+    const customHistory = {
+      history: [],
+      currentIndex: -1,
+      
+      // Function to navigate to a new page and update the history
+      navigateTo(url) {
+        // Add the current page to the history if it's not a forward navigation
+        if (this.currentIndex < this.history.length - 1) {
+          this.history = this.history.slice(0, this.currentIndex + 1);
         }
-    }
+        this.history.push(url);
+        this.currentIndex = this.history.length - 1;
+        
+        // // Replace the page content with the new URL (you need to implement this)
+        // ReplacePage(url);
+        
+        // Update the browser's URL
+        window.history.pushState({ url }, '', url);
+        console.log(this.history, this.currentIndex);
+      },
+      
+      // Function to go back in history
+      historyBack() {
+        if (this.currentIndex > 0) {
+          this.currentIndex--;
+          const url = this.history[this.currentIndex];
+          ReplacePage(url, true);
+          window.history.pushState({ url, index:this.currentIndex }, '', url);
+        }
+      },
+      
+      // Function to go forward in history
+      historyForward() {
+        if (this.currentIndex < this.history.length - 1) {
+          this.currentIndex++;
+          const url = this.history[this.currentIndex];
+          ReplacePage(url, true);
+          window.history.pushState({ url, index:this.currentIndex }, '', url);
+        }
+      },
+    };
     
-    //
-    window.addEventListener('popstate', function (e) {
-        const state = e.state;
-        if (state !== null) {
-            ReplacePage(state.Url);
+    //If user presses back or forward button, navigate to the correct page
+    window.onpopstate = function(event) {
+        if (event.state) {
+            //check if the event.state.url is in the history and check if it is the previous or next page
+            if (customHistory.history.includes(event.state.url)) {
+                if (customHistory.currentIndex > event.state.index) {
+                    customHistory.historyBack();
+                } else if (customHistory.currentIndex < event.state.index) {
+                    customHistory.historyForward();
+                }
+            } else {
+                ReplacePage(event.state.url, true);
+            }
         }
-    });
+    };
     
     var loadingTexts = [
         "Tijd en Ruimte omwisselen",
@@ -418,30 +466,7 @@
         "Geen paniek... AHHHHH!",
         "Zorgen dat kabouters nog steeds kort zijn.",
         "IJs bakken...",
-    ];
-    
-    // let history = [];
-    // let historyIndex = 0;
-    //
-    // function goBack() {
-    //     if (historyIndex > 0) {
-    //         historyIndex--;
-    //         ReplacePage(history[historyIndex]);
-    //     }
-    // }
-    //
-    // function goForward() {
-    //     if (historyIndex < history.length - 1) {
-    //         historyIndex++;
-    //         ReplacePage(history[historyIndex]);
-    //     }
-    // }
-    //
-    // function addPageToHistory(url) {
-    //     history.push(url);
-    //     historyIndex = history.length - 1;
-    // }
-    
+    ];    
 </script>
 @await RenderSectionAsync("Scripts", false)
 @* <script> *@

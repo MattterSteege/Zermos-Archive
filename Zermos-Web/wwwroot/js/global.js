@@ -1,5 +1,4 @@
-﻿console.log("[ GLOBAL.JS ] loaded");
-document.addEventListener("DOMContentLoaded", function () {
+﻿document.addEventListener("DOMContentLoaded", function () {
   const elements = document.querySelectorAll(".svgText");
   // console.log(elements);
 
@@ -95,38 +94,6 @@ function addNotification(title, body, type) {
   });
 
   return notification;
-}
-
-//UPDATING ZERMOS OR FIXING STYLE ISSUES
-async function Update() {
-  /*                                    */
-  /*                                    */
-  /*    Nee, je moet Update(); typen    */
-  /*                                    */
-  /*                                    */
-
-  console.log("[ GLOBAL.JS ] Update uitvoeren");
-  reloadCss();
-  window.location.href = "/";
-}
-
-function reloadCss() {
-  const links = document.getElementsByTagName("link");
-  for (const cl in links) {
-    const link = links[cl];
-    if (link.rel === "stylesheet") link.href += "";
-  }
-}
-
-async function registerPeriodicNewsCheck() {
-  const registration = await navigator.serviceWorker.ready;
-  try {
-    await registration.periodicSync.register("get-latest-news", {
-      minInterval: 24 * 60 * 60 * 1000,
-    });
-  } catch {
-    console.log("Periodic Sync could not be registered!");
-  }
 }
 
 function arraysEqual(a, b) {

@@ -47,10 +47,21 @@
                             <div class="homework-bijlagen">
                                 @foreach (var bijlage in homeworkItem.studiewijzerItem.bijlagen)
                                 {
-                                    <a href="@bijlage.assemblyResults[0].fileUrl" target="_blank" class="homework-bijlage">
-                                        <span class="fa-solid fa-paperclip" style=" vertical-align: middle;"></span>
-                                        <p>@bijlage.omschrijving</p>
-                                    </a>
+                                    @if (bijlage.assemblyResults[0].fileUrl.EndsWith(".pdf"))
+                                    {
+                                        <a href="@(bijlage.assemblyResults[0].fileUrl + "#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0")" target="_blank" class="homework-bijlage">
+                                            <span class="fa-solid fa-paperclip" style=" vertical-align: middle;"></span>
+                                            <p>@bijlage.omschrijving</p>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@bijlage.assemblyResults[0].fileUrl" target="_blank" class="homework-bijlage">
+                                            <span class="fa-solid fa-paperclip" style=" vertical-align: middle;"></span>
+                                            <p>@bijlage.omschrijving</p>
+                                        </a>
+                                    }
+                                    
                                 }
                             </div>
                         }

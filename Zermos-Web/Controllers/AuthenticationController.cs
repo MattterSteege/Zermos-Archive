@@ -87,7 +87,7 @@ public class AuthenticationController : Controller
     }
 
     [NonAction]
-    private async Task<IActionResult> VerificationSuccess(string email, string ReturnUrl)
+    private async Task<IActionResult> VerificationSuccess(string email, string ReturnUrl, bool OneSessionLogin = false)
     {
         var claims = new List<Claim>
         {

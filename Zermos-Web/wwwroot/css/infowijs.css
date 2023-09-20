@@ -111,7 +111,7 @@ pre {
     cursor: pointer;
     color: var(--text-color);
     padding: var(--padding-small);
-
+    font-size: var(--font-size);
     display: block;
     background-color: var(--background-color);
     border: none;
@@ -159,6 +159,7 @@ img.photo-attachment {
     background: var(--overlay-color);
     padding: var(--padding);
     border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
 }
 
 .calendar-month-parent h1 {

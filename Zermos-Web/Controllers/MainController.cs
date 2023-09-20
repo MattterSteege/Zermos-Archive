@@ -70,7 +70,7 @@ namespace Zermos_Web.Controllers
         [Route("/serviceworker.js")]
         public IActionResult ServiceWorker()
         {
-            return File("~/serviceworker.js", "text/javascript");
+            return File("~/js/serviceworker.js", "text/javascript");
         }
         
         [Route(".well-known/microsoft-identity-association.json")]

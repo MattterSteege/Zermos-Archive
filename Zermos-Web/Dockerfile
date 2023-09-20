@@ -9,7 +9,7 @@ ENV DB_USER=root
 ENV DB_PASSWORD=REDACTED_DATABASE_PASSWORD
 ENV DB_HOST=REDACTED_IP_ADRESS
 ENV DB_PORT=3306
-ENV ZERMOS-WEB-VERSION=0.2.3
+ENV ZERMOS-WEB-VERSION=0.2.4
 
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
@@ -31,4 +31,3 @@ ENTRYPOINT ["dotnet", "Zermos-Web.dll"]
 VOLUME ["/dataprotection"]
 
 #hit the [Zermos-Web/Dockerfile - orange pi] run button and all will be handled automatically
-#don't forget to set the build type to release
