@@ -30,17 +30,17 @@
 
     let charsCount = 0;
 
-    notifications.removeClass("animate");
-
     for (let i = notifications.length - 1; i >= 0; i--) {
       const notification = notifications[i];
       charsCount += notification.getElementsByTagName("p")[0].innerText.length;
       await delay(500);
-      $(notification).addClass("animate");
+      notification.classList.add("animate");
 
       //when clicked: $(notification).removeClass("animate");
-      notification.addEventListener("click", function () {
-        $(notification).removeClass("animate");
+      notification.addEventListener("click", async function () {
+        notification.classList.remove("animate");
+        await delay(500);
+        notification.remove();
       });
     }
 
@@ -54,7 +54,8 @@
     for (let i = 0; i < notifications.length; i++) {
       const notification = notifications[i];
       await delay(500);
-      $(notification).removeClass("animate");
+      notification.classList.remove("animate");
+      notification.remove();
     }
   }
 

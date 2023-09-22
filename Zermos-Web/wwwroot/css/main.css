@@ -98,12 +98,12 @@
 .news-info {
     height: 60%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
+    align-items: start;
 }
 
-.news-title {
+.news-title, .news-time {
     height: 100%;
     font-weight: 700;
     font-size: var(--font-size);
@@ -115,8 +115,9 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-
 }
+
+
 
 .lesson-info {
     height: 60%;

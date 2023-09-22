@@ -1,9 +1,7 @@
 ﻿TODO: fix main menu
     Weather arround the school
-    Last SchoolNews
     
 
-TODO: CSS cleanup, it is really needed
 TODO: zelf lessen inplannen in je rooster
 TODO: When checking if user has cookie for cached data, check if the data is not null or empty
 TODO: make time use login, so the user get's logged out after the session is closed

@@ -9,47 +9,33 @@
 
     List<Appointment> zermeloTodayLessons = null;
     Appointment zermeloNextLesson = null;
+    
     Zermos_Web.Models.SomtodayGradesModel.Item somtodayLastGrade = null;
     DateTime nextLessonStart = DateTime.Now;
 
+    IGrouping<Guid, Message> infowijsMessage = null;
+    
     if (Model != null)
     {
         if (!string.IsNullOrEmpty(Model.cached_zermelo_schedule))
         {
-            var a = JsonConvert.DeserializeObject<ZermeloRoosterModel>(Model.cached_zermelo_schedule);
-            zermeloTodayLessons = a.response.data[0].appointments.Where(x => x.start.ToDateTime().Date == DateTime.Now.Date).ToList();
+            var zermeloRooster = JsonConvert.DeserializeObject<ZermeloRoosterModel>(Model.cached_zermelo_schedule);
+            zermeloTodayLessons = zermeloRooster.response.data[0].appointments.Where(x => x.start.ToDateTime().Date == DateTime.Now.Date).ToList();
             zermeloNextLesson = zermeloTodayLessons.Where(x => x.end.ToDateTime() > DateTime.Now).MinBy(x => x.start.ToDateTime());
             nextLessonStart = zermeloNextLesson?.start.ToDateTime().ConvertToNormalDutchTime() ?? DateTime.MinValue;
         }
 
         if (!string.IsNullOrEmpty(Model.cached_somtoday_grades))
         {
-            var a = JsonConvert.DeserializeObject<SomtodayGradesModel>(Model.cached_somtoday_grades);
-            somtodayLastGrade = a.items[0];
+            var somtodayGrades = JsonConvert.DeserializeObject<SomtodayGradesModel>(Model.cached_somtoday_grades);
+            somtodayLastGrade = somtodayGrades.items[0];
         }
-    }
-
-    string FormatSecondsToTime(int totalSeconds)
-    {
-        string hours = (totalSeconds / 3600).ToString();
-        string minutes = ((totalSeconds % 3600) / 60).ToString();
-        string seconds = (totalSeconds % 60).ToString();
-
-        if (seconds.Length == 1)
-            seconds = "0" + seconds;
-
-        if (minutes.Length == 1)
-            minutes = "0" + minutes;
-
-        if (hours.Length == 1)
-            hours = "0" + hours;
-
-        if (hours == "00")
-            if (minutes == "00")
-                return seconds + "s";
-            else
-                return minutes + ":" + seconds;
-        return hours + ":" + minutes + ":" + seconds;
+        
+        if (!string.IsNullOrEmpty(Model.cached_infowijs_news))
+        {
+            var infowijsMessages = JsonConvert.DeserializeObject<InfowijsMessagesModel>(Model.cached_infowijs_news ?? string.Empty, Converter.Settings);
+            infowijsMessage = infowijsMessages.Data.Messages.Where(x => x.Type != 12).GroupBy(x => x.GroupId).ToList()[^1];
+        }
     }
 }
 
@@ -69,7 +55,7 @@
                             <p class="lesson-subject">@(zermeloNextLesson?.subjects.Count > 0 ? zermeloNextLesson?.subjects[0] : "")</p>
                             <p class="lesson-teacher">@(zermeloNextLesson?.teachers.Count > 0 ? zermeloNextLesson?.teachers[0] : "")</p>
                             <p class="lesson-location" style="text-transform: unset;">@(zermeloNextLesson?.locations.Count > 0 ? zermeloNextLesson?.locations[0] : "")</p>
-                            <p id="class_starts_at" class="lesson-location @nextLessonStart.GetDateDifference(DateTime.Now).ToUnixTime()">@FormatSecondsToTime(nextLessonStart.GetDateDifference(DateTime.Now).ToUnixTime())</p>
+                            <p id="class_starts_at" class="lesson-location @nextLessonStart.GetDateDifference(DateTime.Now).ToUnixTime()">berekenen...</p>
                         }
                         else
                         {
@@ -79,7 +65,7 @@
                 </div>
             </div>
             <div class="icon">
-                <i class="fa-solid fa-calendar fa-fw card-icon active"></i>
+                <i class="fa-solid fa-calendar-day fa-fw card-icon active"></i>
             </div>
         </div>
 
@@ -96,18 +82,17 @@
                 <i class="fa-solid fa-line-chart fa-fw card-icon active"></i>
             </div>
         </div>
-
-        <div class="child last-grade">
+        
+        <div class="child last-news" onclick="ReplacePage('/Infowijs/Schoolnieuws')">
             <div class="information">
-                <h1 class="heading">Wat komt hier?</h1>
-                <div class="grade-info">
-                    <p class="grade-subject">Ik heb geen idee... Mischien iets met huiswerk , of met nieuwsberichten</p>
-                    <p class="grade-number"></p>
-                    <p class="grade-number"></p>
+                <h1 class="heading">Laatste nieuws:</h1>
+                <div class="news-info">
+                    <p class="news-title">@(infowijsMessage.FirstOrDefault(m => m.Type == 30)?.Content.ContentClass?.Title)</p>
+                    <p class="news-time">Verstuurd om: @(infowijsMessage.FirstOrDefault(m => m.Type == 30)?.CreatedAt.ToDateTime().ToString("HH:mm dd-MM-yyyy"))</p>
                 </div>
             </div>
             <div class="icon">
-                <i class="fa-solid fa-question fa-fw card-icon active"></i>
+                <i class="fa-solid fa-newspaper fa-fw card-icon active"></i>
             </div>
         </div>
 

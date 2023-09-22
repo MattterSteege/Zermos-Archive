@@ -30,6 +30,11 @@ public static class DateTimeUtils
         return new DateTime(1970, 1, 1, 1, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimeStamp);
     }
     
+    public static DateTime ToDateTime(this long? unixTimeStamp)
+    {
+        return new DateTime(1970, 1, 1, 1, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimeStamp ?? 0);
+    }
+    
     public static DateTime ToDateTime(this TimeSpan timeSpan)
     {
         return new DateTime(1970, 1, 1, 1, 0, 0, DateTimeKind.Utc).Add(timeSpan);
