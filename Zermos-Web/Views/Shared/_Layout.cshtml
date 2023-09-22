@@ -46,14 +46,14 @@
 
     <div class="bottom">
         <ul>
-            @* <li> *@
-            @*     <a onclick="ReplacePage('/Hoofdmenu')"> *@
-            @*         <div class="menu-item"> *@
-            @*             <i class="fa-solid fa-house menu-icons fa-fw @(currentPage == @Url.Action("index", "Main") ? "active" : "")"></i> *@
-            @*             <p>Hoofdmenu</p> *@
-            @*         </div> *@
-            @*     </a> *@
-            @* </li> *@
+            <li>
+                <a onclick="ReplacePage('/Hoofdmenu')">
+                    <div class="menu-item">
+                        <i class="fa-solid fa-house menu-icons fa-fw @(currentPage == @Url.Action("index", "Main") ? "active" : "")"></i>
+                        <p>Hoofdmenu</p>
+                    </div>
+                </a>
+            </li>
 
             <h5 class="Heading">Zermelo</h5>
 
@@ -211,6 +211,11 @@
             } else {
                 script.innerHTML = scriptToWorkWith.innerHTML;
             }
+
+            if (scriptToWorkWith.defer) {
+                script.defer = true;
+            }
+            
             script.id = "added-by-fetch";
             element.appendChild(script);
         }

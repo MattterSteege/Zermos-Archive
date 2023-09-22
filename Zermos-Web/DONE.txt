@@ -2,6 +2,14 @@
 
 - algemeen
     - De 'volgende' en 'vorige' knoppen bovenaan de (pc) pagina werken nu met de custom 'history api'
+    - Alle pagina's volgen nu een en dezelfde regels voor de layout
 
 - Account
     - Er is nu een uitlog knop... Dat duurde even...
+    
+- A wild Hoofdmenu appeard 😲
+    - Op het nieuwe hoofdmenu kan je de volgende dingen:
+        - Bekijk je volgende les (wie de docent is, waar het is, welk vak en hoelang nog tot de les begint)
+        - Bekijk je laatst binnen gekomen cijfer
+        - Bekijk wat het weer rondom de school is
+        - Je tas makkelijker in pakken met de handige afvinklijst

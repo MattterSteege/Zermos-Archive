@@ -7,6 +7,7 @@
 @{
     ViewBag.Title = "title";
 
+    List<Appointment> zermeloTodayLessons = null;
     Appointment zermeloNextLesson = null;
     Zermos_Web.Models.SomtodayGradesModel.Item somtodayLastGrade = null;
     DateTime nextLessonStart = DateTime.Now;
@@ -16,10 +17,11 @@
         if (!string.IsNullOrEmpty(Model.cached_zermelo_schedule))
         {
             var a = JsonConvert.DeserializeObject<ZermeloRoosterModel>(Model.cached_zermelo_schedule);
-            zermeloNextLesson = a.response.data[0].appointments?.GetClosestNextDate();
-            nextLessonStart = zermeloNextLesson?.start.ToDateTime().ConvertToNormalDutchTime() ?? DateTime.Now.ToUniversalTime().ConvertToNormalDutchTime();
-        } 
- 
+            zermeloTodayLessons = a.response.data[0].appointments.Where(x => x.start.ToDateTime().Date == DateTime.Now.Date).ToList();
+            zermeloNextLesson = zermeloTodayLessons.Where(x => x.end.ToDateTime() > DateTime.Now).MinBy(x => x.start.ToDateTime());
+            nextLessonStart = zermeloNextLesson?.start.ToDateTime().ConvertToNormalDutchTime() ?? DateTime.MinValue;
+        }
+
         if (!string.IsNullOrEmpty(Model.cached_somtoday_grades))
         {
             var a = JsonConvert.DeserializeObject<SomtodayGradesModel>(Model.cached_somtoday_grades);
@@ -29,11 +31,25 @@
 
     string FormatSecondsToTime(int totalSeconds)
     {
-        int hours = totalSeconds / 3600;
-        int minutes = (totalSeconds % 3600) / 60;
-        int seconds = totalSeconds % 60;
+        string hours = (totalSeconds / 3600).ToString();
+        string minutes = ((totalSeconds % 3600) / 60).ToString();
+        string seconds = (totalSeconds % 60).ToString();
 
-        return hours > 0 ? $"{hours}:{minutes}:{seconds}" : minutes > 0 ? $"{minutes}:{seconds}" : seconds > 0 ? $"{seconds}" : "nu";
+        if (seconds.Length == 1)
+            seconds = "0" + seconds;
+
+        if (minutes.Length == 1)
+            minutes = "0" + minutes;
+
+        if (hours.Length == 1)
+            hours = "0" + hours;
+
+        if (hours == "00")
+            if (minutes == "00")
+                return seconds + "s";
+            else
+                return minutes + ":" + seconds;
+        return hours + ":" + minutes + ":" + seconds;
     }
 }
 
@@ -47,10 +63,19 @@
             <div class="information">
                 <h1 class="heading">Volgende les:</h1>
                 <div class="lesson-info">
-                    <p class="lesson-subject">@(zermeloNextLesson?.subjects.Count > 0 ? zermeloNextLesson?.subjects[0] : "")</p>
-                    <p class="lesson-teacher">@(zermeloNextLesson?.teachers.Count > 0 ? zermeloNextLesson?.teachers[0] : "")</p>
-                    <p class="lesson-location" style="text-transform: unset;">@(zermeloNextLesson?.locations.Count > 0 ? zermeloNextLesson?.locations[0] : "")</p>
-                    <p id="class_starts_at" class="lesson-location @nextLessonStart.GetDateDifference(DateTime.Now.ToUniversalTime().ConvertToNormalDutchTime()).ToUnixTime()">@FormatSecondsToTime(nextLessonStart.GetDateDifference(DateTime.Now.ToUniversalTime().ConvertToNormalDutchTime()).ToUnixTime())</p>
+                    @{
+                        if (nextLessonStart != DateTime.MinValue)
+                        {
+                            <p class="lesson-subject">@(zermeloNextLesson?.subjects.Count > 0 ? zermeloNextLesson?.subjects[0] : "")</p>
+                            <p class="lesson-teacher">@(zermeloNextLesson?.teachers.Count > 0 ? zermeloNextLesson?.teachers[0] : "")</p>
+                            <p class="lesson-location" style="text-transform: unset;">@(zermeloNextLesson?.locations.Count > 0 ? zermeloNextLesson?.locations[0] : "")</p>
+                            <p id="class_starts_at" class="lesson-location @nextLessonStart.GetDateDifference(DateTime.Now).ToUnixTime()">@FormatSecondsToTime(nextLessonStart.GetDateDifference(DateTime.Now).ToUnixTime())</p>
+                        }
+                        else
+                        {
+                            <p class="lesson-subject">Geen les meer vandaag</p>
+                        }
+                    }
                 </div>
             </div>
             <div class="icon">
@@ -132,14 +157,29 @@
                 <div class="line current"></div>
             </div>
         </div>
-        <div class="child">
+        <div class="child paklijst">
+            <h1 class="heading">Paklijst</h1>
+            @foreach (var les in zermeloTodayLessons!.DistinctBy(x => x.subjects?[0]))
+            {
+                // toggle button that crosses out the lesson
 
+                <div class="paklijst-item">
+                    <div class="paklijst-item-text">
+                        <p class="paklijst-item-text-title">@les.subjects?[0]</p>
+                        <p class="paklijst-item-text-subtitle">@les.teachers?[0]</p>
+                    </div>
+                    <div class="paklijst-item-icon">
+                        <i class="fa-solid fa-check fa-fw card-icon active"></i>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>
 
-<script defer>  
+<script defer="defer">  
     RefreshWeer();
+    SetUpPakLijst();
     CalculateLessonTimeLeft();
 
     function RefreshWeer() {
@@ -243,8 +283,16 @@
             let minutes = Math.floor((timeLeft - (hours * 3600)) / 60);
             let seconds = timeLeft - (hours * 3600) - (minutes * 60);
             //seconds: 1 -> 01
-            if (seconds < 10) {
+            if (seconds < 10 && seconds !== 0) {
                 seconds = "0" + seconds;
+            }
+            
+            if (minutes < 10 && seconds !== 0) {
+                minutes = "0" + minutes;
+            }
+            
+            if (hours < 10 && hours !== 0) {
+                hours = "0" + hours;
             }
             
             if (hours === 0) {
@@ -261,5 +309,17 @@
                 clearInterval(interval);
             }
         }, 1000);
+    }
+    
+    function SetUpPakLijst() {
+        var list_items = document.getElementsByClassName('paklijst-item');
+        
+        for (var i = 0; i < list_items.length; i++) {
+          list_items[i].addEventListener("click", toggle);
+        }
+        
+        function toggle() {
+          this.classList.toggle("packed");
+        }
     }
 </script>

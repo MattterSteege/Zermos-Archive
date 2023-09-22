@@ -1,8 +1,5 @@
 ﻿TODO: fix main menu
     Weather arround the school
-    Next lesson
-    Paklijst
-    Last Grade
     Last SchoolNews
     
 
@@ -10,6 +7,11 @@ TODO: CSS cleanup, it is really needed
 TODO: zelf lessen inplannen in je rooster
 TODO: When checking if user has cookie for cached data, check if the data is not null or empty
 TODO: make time use login, so the user get's logged out after the session is closed
-TODO: make one font size with variables css (Style.css, Account.css School.css, Somtoday.css, Zermelo.css, Infowijs.css), Hoofdmenu.css, Koppelingen.css
 TODO: create a file viewer for homework etc. (it's meh now)
 TODO: fix the history system
+TODO: dagrooster
+TODO: instellingen pagina
+    Links-handige mode
+    Kleuren veranderen
+    etc.
+    
