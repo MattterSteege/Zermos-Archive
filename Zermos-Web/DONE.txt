@@ -5,6 +5,7 @@
     - Alle pagina's volgen nu een en dezelfde regels voor de layout
     - Alle nieuwe gebruikers (/de mensen die de notificatie nog niet ontvangen hebben) ontvangen nu een melding dat ze de docs moeten bekijken wat Zermos allemaal kan.
     - De 'notificatie' UI is nu iets makkelijker te bekijken
+    - Laptop gebruikers zien nu een leesbare tekst
 
 - Account
     - Er is nu een uitlog knop... Dat duurde even...
@@ -15,3 +16,4 @@
         - Bekijk je laatst binnen gekomen cijfer
         - Je tas makkelijker in pakken met de handige afvinklijst
         - het laatste schoolnieuws
+        - 'DOOR DE WIND, DOOR DE REGEN 🎵' Je ziet nu het komende weer boven de school.

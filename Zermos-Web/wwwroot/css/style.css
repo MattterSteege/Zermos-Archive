@@ -675,6 +675,17 @@ main.main::-webkit-scrollbar-track {
     }
 }
 
+@media only screen and (max-width: 40cm) {
+
+    body {
+        --font-size-heading: var(--font-size-heading-small);
+        --font-size: var(--font-size-small);
+        --padding: var(--padding-small);
+        --border-radius: var(--border-radius-small);
+        --button-height: var(--button-height-small);
+    }
+}
+
 @media only screen and (max-width: 1200px) {
 
     main.main {

@@ -60,6 +60,7 @@
                         else
                         {
                             <p class="lesson-subject">Geen les meer vandaag</p>
+                            <p id="class_starts_at" class="lesson-location 0"></p>
                         }
                     }
                 </div>
@@ -138,8 +139,9 @@
                 <div class="line"></div>
                 <div class="line"></div>
                 <div class="line"></div>
-                <div class="line"></div>
-                <div class="line current"></div>
+            </div>
+            <div class="line-overlay">
+                <div class="line current" style=""></div>
             </div>
         </div>
         <div class="child paklijst">
@@ -163,148 +165,222 @@
 </div>
 
 <script defer="defer">  
-    RefreshWeer();
-    SetUpPakLijst();
-    CalculateLessonTimeLeft();
+RefreshWeer();
+SetUpPakLijst();
+CalculateLessonTimeLeft();
 
-    function RefreshWeer() {
-        fetch('https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat=52.011194&lon=4.726696&region=nl&unit=mm/u')
-        .then(response => response.json())
-        .then(data => { 
+function RefreshWeer() {
+    let precipitation;
+
+    fetch(
+            "https://cdn-secure.buienalarm.nl/api/3.4/forecast.php?lat=52.011194&lon=4.726696&region=nl&unit=mm/u"
+        )
+        .then((response) => response.json())
+        .then((data) => {
             //temp text
-            document.querySelector(".weather-temp").innerText = (data["temp"] + "°C - " + data["precip"][2] + "mm/u");
-            
-            
-            
+            document.querySelector(".weather-temp").innerText =
+                data["temp"] + "°C - " + data["precip"][2] + "mm/u";
+
             //current time line
             let startUnix = data["start"];
             let endUnix = Number(data["start"]) + 7200;
             let currentUnix = Math.floor(Date.now() / 1000);
             let currentLine = document.querySelector(".current");
-            let widthOfWorkingFieldInPixels = document.querySelector(".weather-graph").clientWidth;
-            let widthOfASecondInPixels = widthOfWorkingFieldInPixels / 7200;
-            let currentLinePosition = (currentUnix - startUnix) * widthOfASecondInPixels;         
-            currentLine.style.left = (currentLinePosition + 12) + "px";
+            //get the percentage of the current time in the time line
+            let percentage =
+                ((currentUnix - startUnix) / (endUnix - startUnix)) * 100;
+            //percentage + var(--padding)
+            currentLine.style.left = percentage + "%";
+
+            //update the time line every second
+            let timeLineInterval = setInterval(() => {
+                let currentUnix = Math.floor(Date.now() / 1000);
+                let percentage = ((currentUnix - startUnix) / (endUnix - startUnix)) * 100;
+                currentLine.style.left = percentage + "%";
+                
+                //log which precipitation value is hovered over
+                let index = Math.round(percentage / 4.166666666666667);
+                document.querySelector(".weather-temp").innerText = data["temp"] + "°C - " + precipitation[index] + "mm/u";
+            }, 1000);
+
+            //when hovering over the .weather element
+            document.querySelector(".weather").addEventListener("mouseover", () => {
+                //get the x position of the mouse
+                let xOfMouse = event.clientX;
+                let xOfWeather = document.querySelector(".weather").getBoundingClientRect().x;
+                let weatherWidth = document.querySelector(".weather").getBoundingClientRect().width;
+                //get the percentage of the mouse position in the time line
+                let percentage = ((xOfMouse - xOfWeather * 2) / (weatherWidth - xOfWeather * 2)) * 100;
+                percentage = Math.max(0, Math.min(percentage, 100));
+                //set the current time line to the mouse position
+                //round to 1/24th of the time line
+                percentage = Math.round(percentage / 4.166666666666667) * 4.166666666666667;
+                currentLine.style.left = percentage + "%";
+
+                //log which precipitation value is hovered over
+                let index = Math.round(percentage / 4.166666666666667);
+                document.querySelector(".weather-temp").innerText = data["temp"] + "°C - " + precipitation[index] + "mm/u";
+
+                //stop updating the time line every second
+                clearInterval(timeLineInterval);
+            });
             
-            //interval of 5 to recalculate the position of the current line
-            var interval = setInterval(() => {
-                currentLinePosition = (Math.floor(Date.now() / 1000) - startUnix) * widthOfASecondInPixels;
-                currentLine.style.left = (currentLinePosition + 12) + "px";
-            }, 5000);
+            //when the mouse leaves the .weather element
+            document.querySelector(".weather").addEventListener("mouseleave", () => {
+                //start updating the time line every second
+                timeLineInterval = setInterval(() => {
+                    let currentUnix = Math.floor(Date.now() / 1000);
+                    let percentage = ((currentUnix - startUnix) / (endUnix - startUnix)) * 100;
+                    currentLine.style.left = percentage + "%";
+                    
+                    //log which precipitation value is hovered over
+                    let index = Math.round(percentage / 4.166666666666667);
+                    document.querySelector(".weather-temp").innerText = data["temp"] + "°C - " + precipitation[index] + "mm/u";
+                }, 1000);
+            });
             
+            //do the same when the user drags it on mobile
+            document.querySelector(".weather").addEventListener("touchmove", () => {
+                //get the x position of the mouse
+                let xOfMouse = event.touches[0].clientX;
+                let xOfWeather = document.querySelector(".weather").getBoundingClientRect().x;
+                let weatherWidth = document.querySelector(".weather").getBoundingClientRect().width;
+                //get the percentage of the mouse position in the time line
+                let percentage = ((xOfMouse - xOfWeather * 2) / (weatherWidth - xOfWeather * 2)) * 100;
+                percentage = Math.max(0, Math.min(percentage, 100));
+                //set the current time line to the mouse position
+                //round to 1/24th of the time line
+                percentage = Math.round(percentage / 4.166666666666667) * 4.166666666666667;
+                currentLine.style.left = percentage + "%";
+
+                //log which precipitation value is hovered over
+                let index = Math.round(percentage / 4.166666666666667);
+                document.querySelector(".weather-temp").innerText = data["temp"] + "°C - " + precipitation[index] + "mm/u";
+
+                //stop updating the time line every second
+                clearInterval(timeLineInterval);
+            });
             
-            
+            //when the user stops dragging
+            document.querySelector(".weather").addEventListener("touchend", () => {
+                //start updating the time line every second
+                timeLineInterval = setInterval(() => {
+                    let currentUnix = Math.floor(Date.now() / 1000);
+                    let percentage = ((currentUnix - startUnix) / (endUnix - startUnix)) * 100;
+                    currentLine.style.left = percentage + "%";
+                    
+                    //log which precipitation value is hovered over
+                    let index = Math.round(percentage / 4.166666666666667);
+                    document.querySelector(".weather-temp").innerText = data["temp"] + "°C - " + precipitation[index] + "mm/u";
+                }, 1000);
+            });
+
             //array of 25 - 10 5-minute intervals4
-            let precipitation = data["precip"];
-            //let precipitation = [0,0.2,0.2,0.3,0.5,0.1,0,0,0,0,0,0,4,5,3,1.2,0,1,0.5,0,0,0,0.2,0.1,0]; //test data
-           
-            const svgContainer = document.getElementsByClassName('weather-graph-underlay')[0];
+            precipitation = data["precip"];
+            //precipitation = [2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2]; //test data
+
+            const svgContainer = document.getElementsByClassName(
+                "weather-graph-underlay"
+            )[0];
             const svg = createSmoothBezierCurve(precipitation);
             svgContainer.appendChild(svg);
         });
-       
-        function createSmoothBezierCurve(numbers) {       
-            const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-            svg.setAttribute("preserveAspectRatio", "none");
-            svg.setAttribute("class", "graph-chart");
-            svg.setAttribute("viewBox", "0 0 250 300");
-            
-            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-            path.setAttribute("d", createBezierPath(numbers));
-            path.setAttribute("vector-effect", "non-scaling-stroke");
-            path.setAttribute("fill", "#00B3FF");
-            path.setAttribute("stroke", "#8ABAFF");
-            path.setAttribute("stroke-width", "0");
-            path.setAttribute("stroke-linecap", "butt");
-            
-            svg.appendChild(path);
-            
-            return svg;
-            
-            function createBezierPath(numbers) {
-                // Just like before, create the starting point
-                let path = "M" + (0) + " " + (300 - numbers[0] * 10);
-            
-                // Calculate the control points for the Bezier curves
-                for (let i = 1; i < numbers.length - 1; i++) {
-                    const x0 = (i - 1) * 10;
-                    const y0 = 300 - numbers[i - 1] * 10;
-            
-                    const x1 = i * 10;
-                    const y1 = 300 - numbers[i] * 10;
-            
-                    const x2 = (i + 1) * 10;
-                    const y2 = 300 - numbers[i + 1] * 10;
-            
-                    const x3 = (i + 2) * 10;
-                    const y3 = 300 - numbers[i + 2] * 10;
-                    
-                    if (isNaN(x0) || isNaN(y0) || isNaN(x1) || isNaN(y1) || isNaN(x2) || isNaN(y2) || isNaN(x3) || isNaN(y3)) {
-                        continue;
-                    }
-            
-                    const cp1x = Math.round(x1 + (x2 - x0) / 6);
-                    const cp1y = Math.round(y1 + (y2 - y0) / 6);
-            
-                    const cp2x = Math.round(x2 - (x3 - x1) / 6);
-                    const cp2y = Math.round(y2 - (y3 - y1) / 6);
-            
-                    path += "C" + cp1x + " " + cp1y + ", " + cp2x + " " + cp2y + ", " + x2 + " " + y2;
-                }
-            
-                // Add the final line segment to complete the path
-                path += "L" + (numbers.length * 10) + " " + (300 - numbers[numbers.length - 1] * 10);
-            
-                return path;
-            }
+
+    function createSmoothBezierCurve(data) {
+        // Find the highest value in the data
+        const topValue = Math.max(Math.max(...data), 3);
+
+        // create a value with which to scale the data, topvalue is the highest value possible and that is on 90% of the height of the svg
+        const scale = (300 / topValue) * 0.9;
+        const scale2 = 240 / 230;
+
+        // Create the path and set its stroke to the color of the line
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("stroke", "var(--tint-color)");
+        path.setAttribute("stroke-width", "0");
+        path.setAttribute("fill", "var(--tint-color)");
+
+        // Create the string that will hold all the coordinates
+        let d = "M 0 " + (300 - data[0] * scale * scale2) + " ";
+
+        // Loop over the data and add the coordinates to the string
+        console.log(data.length);
+        for (let i = 1; i < data.length; i++) {
+            let x = i * 10;
+            let y = 300 - (data[i] * scale);
+            d += "L " + x + " " + y + " ";
         }
+
+        // d += "M 0 " + (300 - data[0] * scale * scale2) + " ";
+        //
+        // for (let i = 1; i < data.length; i++) {
+        //   let x1 = (i - 1) * 10 * scale2;
+        //   let y1 = 300 - data[i - 1] * scale;
+        //   let x2 = i * 10 * scale2;
+        //   let y2 = 300 - data[i] * scale;
+        //   let x = (x1 + x2) / 2;
+        //   let y = (y1 + y2) / 2;
+        //   d += "Q " + x1 + " " + y1 + " " + x + " " + y + " ";
+        // }
+
+        d += "L 240 300 L 0 300";
+
+        // Set the string as the path's data
+        path.setAttribute("d", d);
+
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("preserveAspectRatio", "none");
+        svg.setAttribute("class", "graph-chart");
+        svg.setAttribute("viewBox", "0 0 240 300");
+        svg.appendChild(path);
+        return svg;
     }
-    
-    function CalculateLessonTimeLeft(){
-        let timeLeft = document.getElementById("class_starts_at").classList[1];
-        //set the time left to the element HH:MM:SS, but hide hours and minutes if they are 0, do this every second
-        var interval = setInterval(() => {
-            let hours = Math.floor(timeLeft / 3600);
-            let minutes = Math.floor((timeLeft - (hours * 3600)) / 60);
-            let seconds = timeLeft - (hours * 3600) - (minutes * 60);
-            //seconds: 1 -> 01
-            if (seconds < 10 && seconds !== 0) {
-                seconds = "0" + seconds;
-            }
-            
-            if (minutes < 10 && seconds !== 0) {
-                minutes = "0" + minutes;
-            }
-            
-            if (hours < 10 && hours !== 0) {
-                hours = "0" + hours;
-            }
-            
-            if (hours === 0) {
-                document.getElementById("class_starts_at").innerText = minutes + ":" + seconds;
-            }
-            else {
-                document.getElementById("class_starts_at").innerText = hours + ":" + minutes + ":" + seconds;
-            }
-            
-            timeLeft--;
-            
-            if (timeLeft <= 0) {
-                document.getElementById("class_starts_at").innerText = "nu";
-                clearInterval(interval);
-            }
-        }, 1000);
-    }
-    
-    function SetUpPakLijst() {
-        var list_items = document.getElementsByClassName('paklijst-item');
-        
-        for (var i = 0; i < list_items.length; i++) {
-          list_items[i].addEventListener("click", toggle);
+}
+
+function CalculateLessonTimeLeft() {
+    let timeLeft = document.getElementById("class_starts_at").classList[1];
+    //set the time left to the element HH:MM:SS, but hide hours and minutes if they are 0, do this every second
+    var interval = setInterval(() => {
+        let hours = Math.floor(timeLeft / 3600);
+        let minutes = Math.floor((timeLeft - (hours * 3600)) / 60);
+        let seconds = timeLeft - (hours * 3600) - (minutes * 60);
+        //seconds: 1 -> 01
+        if (seconds < 10 && seconds !== 0) {
+            seconds = "0" + seconds;
         }
-        
-        function toggle() {
-          this.classList.toggle("packed");
+
+        if (minutes < 10 && seconds !== 0) {
+            minutes = "0" + minutes;
         }
+
+        if (hours < 10 && hours !== 0) {
+            hours = "0" + hours;
+        }
+
+        if (hours === 0) {
+            document.getElementById("class_starts_at").innerText = minutes + ":" + seconds;
+        } else {
+            document.getElementById("class_starts_at").innerText = hours + ":" + minutes + ":" + seconds;
+        }
+
+        timeLeft--;
+
+        if (timeLeft <= 0) {
+            document.getElementById("class_starts_at").innerText = "nu";
+            clearInterval(interval);
+        }
+    }, 1000);
+}
+
+function SetUpPakLijst() {
+    var list_items = document.getElementsByClassName('paklijst-item');
+
+    for (var i = 0; i < list_items.length; i++) {
+        list_items[i].addEventListener("click", toggle);
     }
+
+    function toggle() {
+        this.classList.toggle("packed");
+    }
+}
 </script>
