@@ -1,11 +1,11 @@
 ---
 layout: default
-title: hoofdmenu
+title: Home
 nav_order: 0
 nav_exclude: false
 ---
 
-In deze documentatie vind je alles wat je moet weten over de Zermos app.
+Dit is de documentatie pagina voor Zermos! Hier vind je alles wat je moet weten/hoe je zo veel mogelijk uit Zermos haalt.
 
 ### koppelingen
   - [Zermelo](Zermelo)
@@ -23,6 +23,6 @@ In deze documentatie vind je alles wat je moet weten over de Zermos app.
 ### release notes
   - [Nieuwe functies](WhatsNew)
 
-*Als Zermos offline is volg dan dit stappenplan:
-1) is het weekend? -> Dat ben ik er mee bezig en ben ik zeer waarschijnlijk op de hoogt
-2) is het geen weekend -> Dan is er ets goed mis gegaan, ook nu ben ik waarschijnlijk op de hoogte
+*Als Zermos offline is, volg dan dit stappenplan:<br>
+1) is het weekend? -> Dat ben ik er mee bezig en ben ik zeer waarschijnlijk op de hoogte<br>
+2) is het geen weekend -> Dan is er iets goed mis gegaan, ook nu ben ik waarschijnlijk op de hoogte<br>

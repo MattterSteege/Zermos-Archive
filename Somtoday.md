@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Somtoday
+parent: koppelingen
 nav_exclude: false
 ---
 

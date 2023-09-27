@@ -5,13 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c3582447-ff79-4dd3-9c47-b4613b8d0576" name="Changes" comment="updated docs">
-      <change afterPath="$PROJECT_DIR$/FAQ.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Account.md" beforeDir="false" afterPath="$PROJECT_DIR$/Account.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Infowijs.md" beforeDir="false" afterPath="$PROJECT_DIR$/Infowijs.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/School.md" beforeDir="false" afterPath="$PROJECT_DIR$/School.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Somtoday.md" beforeDir="false" afterPath="$PROJECT_DIR$/Somtoday.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Zermelo.md" beforeDir="false" afterPath="$PROJECT_DIR$/Zermelo.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_layouts/forward.html" beforeDir="false" afterPath="$PROJECT_DIR$/_layouts/forward.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/index.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,6 +46,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;Docs&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/mattt/Documents/Github/Zermos&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -69,6 +69,8 @@
       <workItem from="1690391206713" duration="450000" />
       <workItem from="1690473705431" duration="3195000" />
       <workItem from="1691168347101" duration="2126000" />
+      <workItem from="1695404752744" duration="924000" />
+      <workItem from="1695838679504" duration="728000" />
     </task>
     <task id="LOCAL-00001" summary="added a test feature, redirect">
       <created>1675857654150</created>

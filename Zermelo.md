@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Zermelo
+parent: koppelingen
 nav_exclude: false
 ---
 

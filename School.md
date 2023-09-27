@@ -1,6 +1,7 @@
 ---
 layout: default
 title: School
+parent: koppelingen
 nav_exclude: false
 ---
 
