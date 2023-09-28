@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Zermos_Web.Utilities;
 
 //using WebEssentials.AspNetCore.Pwa;
 
@@ -46,7 +48,7 @@ namespace Zermos_Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
@@ -58,10 +60,13 @@ namespace Zermos_Web
                 await next();
                 if (context.Response is {StatusCode: 404, HasStarted: false})
                 {
+                    //log the error
+                    loggerFactory.CreateLogger("404").LogWarning($"404 error, user {context.User.FindFirst("email")} requested: \"{context.Request.Path}\", but page wasn't found");
+                    
                     context.Response.Redirect("/404");
                 }
             });
-
+            
             app.UseForwardedHeaders();
 
             app.UseStaticFiles();

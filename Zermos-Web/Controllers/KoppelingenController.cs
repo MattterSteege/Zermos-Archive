@@ -239,9 +239,17 @@ namespace Zermos_Web.Controllers
             return PartialView();
         }
 
+        [HttpGet]
+        [ZermosPage]
+        [Route("/Koppelingen/Zermelo/Wachtwoord")]
+        public IActionResult ZermeloWithPassword()
+        {
+            return PartialView();
+        }
 
         [HttpPost]
-        public async Task<IActionResult> Zermelo(string username, string password)
+        [Route("/Koppelingen/Zermelo/Wachtwoord")]
+        public async Task<IActionResult> ZermeloWithPassword(string username, string password)
         {
             var form = new Dictionary<string, string>();
             form.Add("username", username);
@@ -270,7 +278,7 @@ namespace Zermos_Web.Controllers
                 new FormUrlEncodedContent(form));
             responseString = await response.Content.ReadAsStringAsync();
 
-            if (!response.IsSuccessStatusCode) return RedirectToAction(nameof(Zermelo));
+            if (!response.IsSuccessStatusCode) return Ok("failed");
 
             var zermeloAuthentication = JsonConvert.DeserializeObject<ZermeloAuthenticatieModel>(responseString);
 
@@ -287,7 +295,7 @@ namespace Zermos_Web.Controllers
 
             await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
 
-            return RedirectToAction("ShowAccount", "Account");
+            return Ok("success");
         }
 
         [HttpGet]

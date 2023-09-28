@@ -635,11 +635,6 @@ namespace Zermos_Web.Controllers
 
             somtodayHuiswerk.items.AddRange(JsonConvert.DeserializeObject<SomtodayHomeworkModel>(await response.Content.ReadAsStringAsync()).items);
             
-
-            Console.WriteLine("\n\n\n\n");
-            Console.WriteLine(await response.Content.ReadAsStringAsync());
-            Console.WriteLine("\n\n\n\n");
-            
             return somtodayHuiswerk.items;
         }
 

@@ -6,9 +6,11 @@
     - Alle nieuwe gebruikers (/de mensen die de notificatie nog niet ontvangen hebben) ontvangen nu een melding dat ze de docs moeten bekijken wat Zermos allemaal kan.
     - De 'notificatie' UI is nu iets makkelijker te bekijken
     - Laptop gebruikers zien nu een leesbare tekst
+    - het opsporen van bugs is nu iets makkelijker geworden door backend logging (boeit je niks, maar ik ben er blij mee)
 
 - Account
     - Er is nu een uitlog knop... Dat duurde even...
+    - De 'opgeslagen informatie' zit nu achter een knop, dan is je scherm niet gelijk vol :)
     
 - A wild Hoofdmenu appeard 😲
     - Op het nieuwe hoofdmenu kan je de volgende dingen:
@@ -17,3 +19,17 @@
         - Je tas makkelijker in pakken met de handige afvinklijst
         - het laatste schoolnieuws
         - 'DOOR DE WIND, DOOR DE REGEN 🎵' Je ziet nu het komende weer boven de school.
+        - Bekijk het huiswerk voor morgen (want dat van vandaag heb je al gemaakt, toch?)
+
+- Koppelingen
+    - De UI van de koppelschermen is sterk verbeterd en is nu overal hetzelfde.
+    - Zermelo koppeling met je inloggegevens is nu weer beschikbaar.
+        
+- Infowijs - Schoolkalender
+    - Bepaalde data waren met 1 dag opgeschoven, dat is nu opgelost.
+    
+- Somtoday - Huiswerk
+    - code waarmee ik de huiswerk pagina getest heb is nu verwijderd
+    
+- School - Schoolklimaat
+    - Backend veranderingen zijn doorgevoerd, je ziet nu alle meters, ook als ze niet online zijn. Je kan ook zoeken op naam (?locatie=[bijv. a2]) en online status (/schoolklimaat?isOnline=[0 = offline, 1 = online, 2 = alles])

@@ -8,15 +8,14 @@
 <link rel="stylesheet" href="~/css/koppelingen.css" />
 
 <div class="login">
-    <div class="login-child">
-        <h1 class="child">Koppel Zermelo aan je account!</h1>
-        <p class="child">Om Zermelo aan je account te koppelen moet je een qr-code scannen. Deze code kun je vinden in Zermelo, <a target="_blank" href="https://ccg.zportal.nl/main">hier</a> om precies te zijn. Als je op de website van Zermelo bent, klik dan op 'koppelingen' (het deel icoontje links in de navigatiebalk) en daarna op 'koppel externe applicatie', scan de code en tada, ingelogd. Pas wel op, je hebt hier een computer voor de qr-code nodig en een mobiel om te scannen!</p>
-        <p class="child" style="display: none; margin-top: unset;">Uh oh, of je device heeft geen camera, of je browser ondersteund geen camera's. Probeer het op een ander device of met een andere browser.</p>
-        <div style="width: 100%; height: auto; border-radius: 7px; margin-top: 16px; overflow: hidden;" id="reader"></div>
-        <div id="result" style="display: none; margin-top: 16px; width: 100%; text-align: center"></div>
+    <div class="login-explanation">
+        <h1>Koppel Zermelo aan je account!</h1>
+        <p>Om Zermelo aan je account te koppelen moet je een qr-code scannen. Deze code kun je vinden in Zermelo, <a target="_blank" href="https://ccg.zportal.nl/main">hier</a> om precies te zijn. Als je op de website van Zermelo bent, klik dan op 'koppelingen' (het deel icoontje links in de navigatiebalk) en daarna op 'koppel externe applicatie', scan de code en tada, ingelogd. Pas wel op, je hebt hier een computer voor de qr-code nodig en een mobiel om te scannen!</p>
+        <p id="no-camera" style="display: none; margin-top: unset;">Uh oh, of je device heeft geen camera, of je browser ondersteund geen camera's. Probeer het op een ander device of met een andere browser.</p>
+        <div style="width: 100%; height: auto; border-radius: var(--border-radius); margin-top: var(--padding); overflow: hidden;" id="reader"></div>
+        <div id="result" style="display: none; margin-top: var(--padding); width: 100%; text-align: center"></div>
     </div>
 </div>
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
@@ -26,7 +25,6 @@ var waitForLoad = function () {
     if (typeof Html5Qrcode !== "undefined") {
         init();
     } else {
-        console.log('waiting');
         setTimeout(waitForLoad, 1000);
     }
 };
@@ -90,17 +88,23 @@ Html5Qrcode.getCameras().then(devices => {
         
     } else {
         // no camera found
-        document.getElementsByClassName('child')[0].style.display = 'none';
-        document.getElementsByClassName('child')[1].style.display = 'none';
-        document.getElementById('reader').style.display = 'none';
-        document.getElementsByClassName('child')[2].style.display = 'block';
+        var children = document.getElementsByClassName('login-explanation')[0].children;
+        for (var i = 0; i < children.length; i++) {
+            children[i].style.display = 'none';
+        }
+        
+        //show the no-camera element
+        document.getElementById('no-camera').style.display = 'block';
     }
     }).catch(err => {
         // no camera found
-        document.getElementsByClassName('child')[0].style.display = 'none';
-        document.getElementsByClassName('child')[1].style.display = 'none';
-        document.getElementById('reader').style.display = 'none';
-        document.getElementsByClassName('child')[2].style.display = 'block';
+        var children = document.getElementsByClassName('login-explanation')[0].children;
+        for (var i = 0; i < children.length; i++) {
+            children[i].style.display = 'none';
+        }
+        
+        //show the no-camera element
+        document.getElementById('no-camera').style.display = 'block';
     });
 }
 </script>

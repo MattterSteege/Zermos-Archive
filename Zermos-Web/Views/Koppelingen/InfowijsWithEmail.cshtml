@@ -7,23 +7,25 @@
 <link rel="stylesheet" href="~/css/koppelingen.css" />
 
 <div class="login">
-    <div class="login-child">
+    <div class="login-explanation">
+        <h1>Koppel Infowijs aan je account!</h1>
         <p class="child">Vul hier je schoolmail in.</p>
         <p class="child">Om Infowijs te koppelen aan je account, moet je eerst je schoolmail invullen. Je krijgt dan een mail met een knop, als je op die knop klikt wordt je doorgestuurd naar infowijs, je krijgt een groen vinkje te zien met de tekst '<b>Gelukt!</b>'. Als je dit ziet, open Zermos dan weer en klik op de knop 'check of je ingelogd bent' die dadelijk hieronder verschijnt.</p>
     </div>
     <form method="post" asp-controller="Koppelingen" asp-action="InfowijsWithEmail" class="form-control">
-        <input type="email" id="email" name="email" class="email" placeholder="schoolmail" />
-        <button type="submit" id="check" class="check" style="border-radius: 0 14px 14px 0;">Stuur mij de email</button>
+        <input class="input" type="email" id="email" name="email" placeholder="schoolmail" />
+        <button class="input submit" type="submit">Stuur mij de email</button>
     </form>
 </div>
 
 <div class="login" style="display: none">
-    <div class="login-child">
-        <p class="child">Check of je een mail hebt ontvangen</p>
-        <p class="child">Er is een mail gestuurd naar <b id="email-text">[Email]</b>, deze mail is namens 'Antonius (noreply@mailer.hoyapp.nl)' gestuurd. Klik op de knop in de mail, je krijgt een groen vinkje te zien met de tekst '<b>Gelukt!</b>'. Als je dit ziet, open Zermos dan weer en klik op de knop 'check of je ingelogd bent' hieronder</p>
+    <div class="login-explanation">
+        <h1>Koppel Infowijs aan je account!</h1>
+        <p>Check of je een mail hebt ontvangen</p>
+        <p>Er is een mail gestuurd naar <b id="email-text">[Email]</b>, deze mail is namens 'Antonius (noreply@mailer.hoyapp.nl)' gestuurd. Klik op de knop in de mail, je krijgt een groen vinkje te zien met de tekst '<b>Gelukt!</b>'. Als je dit ziet, open Zermos dan weer en klik op de knop 'check of je ingelogd bent' hieronder</p>
     </div>
     <form method="post" asp-controller="Koppelingen" asp-action="InfowijsWithEmail" class="form-control">
-        <button type="submit" id="check" class="check">Check of je ingelogd bent</button>
+        <button class="input submit" type="submit">Check of je ingelogd bent</button>
     </form>
 </div>
 
@@ -32,7 +34,7 @@
 document.getElementsByTagName("form")[0].addEventListener("submit", send);
 document.getElementsByTagName("form")[1].addEventListener("submit", send);
 var form = document.getElementsByTagName("form")[0];
-var button = document.getElementsByClassName("check")[0];
+var button = document.getElementsByClassName("submit")[0];
 
 function send(e) {
     e.preventDefault();
@@ -69,7 +71,7 @@ function send(e) {
                     
                     //set action url to the current url with the query string
                     form = document.getElementsByTagName("form")[1];
-                    button = document.getElementsByClassName("check")[1];
+                    button = document.getElementsByClassName("submit")[1];
                     
                     form.action = form.action + query;
                     

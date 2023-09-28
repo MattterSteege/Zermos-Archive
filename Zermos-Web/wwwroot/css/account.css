@@ -157,14 +157,18 @@
     padding-top: var(--padding);
 }
 
+/* if .opgeslagen-informatie-grid and .hidden*/
+
+.opgeslagen-informatie-grid.hidden {
+    height: 0;
+    overflow: hidden;
+    padding-top: 0;
+}
+
 .opgeslagen-informatie-grid p {
     padding: var(--padding-small);
     background: var(--background-color);
     border-radius: var(--border-radius-small);
-}
-
-.opgeslagen-informatie-grid p:hover {
-    background: var(--inactive-color);
 }
 
 .all-koppelingen {
@@ -205,6 +209,18 @@
 
 .zeker {
     background: var(--sure-color);
+}
+
+.overlay-opgeslagen-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.overlay-opgeslagen-info .right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 @media (max-width: 1000px) {

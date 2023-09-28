@@ -428,6 +428,7 @@
     display: grid !important;
     grid-template-columns: 1fr 1fr;
     overflow: hidden;
+    font-size: var(--font-size);
 }
 
 .option {

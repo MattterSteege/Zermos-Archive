@@ -28,9 +28,14 @@
         </div>
 
         <div class="information-item-parent" id="info">
-            <h1>Opgeslagen informatie</h1>
-            <p>De volgende dingen zijn opgeslagen om Zermos goed te kunnen gebruiken</p>
-            <div class="opgeslagen-informatie-grid">
+            <div class="overlay-opgeslagen-info">
+                <div class="left">
+                    <h1>Opgeslagen informatie</h1>
+                    <p>De volgende dingen zijn opgeslagen om Zermos goed te kunnen gebruiken (klik om te openen)</p>
+                </div>
+                <div class="right"><i class="fa-solid fa-angle-down" id="openCloseArrow" style="transition: all 0.5s ease 0s;"></i></div>
+            </div>
+            <div class="opgeslagen-informatie-grid hidden">
                 @{
                     //Loop trough all the properties of the user object and display them like this: [name]: [value (capt at 25 characters)]
                     foreach (var property in Model.GetType().GetProperties())
@@ -38,13 +43,13 @@
                         //<p>@property.Name: @property.GetValue(Model, null)?.ToString()</p>
                         //cap at an maximum of 25 chars, but it can be less
                         @* <p onclick="copyToClipboard('@property.GetValue(Model, null)?.ToString()?.Substring(0, (property.GetValue(Model, null)?.ToString()?.Length ?? 0) > 21 ? 21 : (property.GetValue(Model, null)?.ToString()?.Length ?? 0))')"><b>@property.Name</b>: @property.GetValue(Model, null)?.ToString()?.Substring(0, (property.GetValue(Model, null)?.ToString()?.Length ?? 0) > 21 ? 21 : (property.GetValue(Model, null)?.ToString()?.Length ?? 0))</p> *@
-                        
+
                         //if property is not { get; set; } then skip it
                         if (property.GetMethod == null || property.SetMethod == null || property.GetValue(Model, null) == null)
                         {
                             continue;
                         }
-                        
+
                         <p><b>@property.Name</b></p>
                     }
                 }
@@ -153,6 +158,10 @@
             </form>
         </div>
 
+        <div class="information-item-parent" id="opening_page">
+            <h1>Uitloggen?</h1>
+            <button onclick="ReplacePage('/logout')" class="koppel-knop ontkoppelen">Wil je uitloggen?</button>
+        </div>
     </div>
     <div class="items-container">
         <div class="item" onclick="doScrolling('profiel', 1000)" href="?profiel">
@@ -173,11 +182,6 @@
         <div class="item" onclick="doScrolling('opening_page', 1000)" href="?opening_page">
             Laad pagina
         </div>
-    </div>
-    
-    <div class="information-item-parent" id="opening_page">
-        <h1>Uitloggen?</h1>
-        <button onclick="ReplacePage('/logout')" class="koppel-knop ontkoppelen">Wil je uitloggen?</button>
     </div>
 </div>
 
@@ -291,6 +295,12 @@
         //add the 'active' class to the item who's top is the closest to the top of the mainElement when scrolling
         main.addEventListener('scroll', function() {
             setActive();
+        });
+        
+        //when clicking on #info, toggle the hidden class on the opgeslagen-informatie-grid
+        document.getElementById('info').addEventListener('click', function() {
+            document.querySelector('.opgeslagen-informatie-grid').classList.toggle('hidden');
+            document.getElementById('openCloseArrow').style.transform = document.getElementById('openCloseArrow').style.transform === 'rotate(180deg)' ? 'rotate(0deg)' : 'rotate(180deg)';
         });
     });
 </script>

@@ -7,13 +7,13 @@
 <link rel="stylesheet" href="~/css/koppelingen.css" />
 
 <div class="login">
-    <div class="login-child">
-        <h1 class="child">Koppel Zermelo aan je account!</h1>
-        <p class="child">Om Zermelo aan je account te koppelen moet je een code invoeren. Deze code kun je vinden in Zermelo, <a target="_blank" href="https://ccg.zportal.nl/main">hier</a> om precies te zijn. Als je op de website van Zermelo bent, klik dan op 'koppelingen' (het deel icoontje links in de navigatiebalk) en daarna op 'koppel externe applicatie', kopieer de code en plak die hieronder.</p>
+    <div class="login-explanation">
+        <h1>Koppel Zermelo aan je account!</h1>
+        <p>Om Zermelo aan je account te koppelen moet je een code invoeren. Deze code kun je vinden in Zermelo, <a target="_blank" href="https://ccg.zportal.nl/main">hier</a> om precies te zijn. Als je op de website van Zermelo bent, klik dan op 'koppelingen' (het deel icoontje links in de navigatiebalk) en daarna op 'koppel externe applicatie', kopieer de code en plak die hieronder.</p>
     </div>
     <form method="post" asp-controller="Koppelingen" asp-action="ZermeloWithCode" class="form-control">
-        <input type="text" name="code" placeholder="xxx xxx xxx xxx">
-        <button type="submit" class="check" style="width: 25%;">Inloggen</button>
+        <input class="input" type="text" name="code" placeholder="xxx xxx xxx xxx">
+        <button class="input submit" type="submit">Inloggen</button>
     </form>
 </div>
 

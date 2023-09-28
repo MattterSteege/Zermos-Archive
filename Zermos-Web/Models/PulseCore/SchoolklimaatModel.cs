@@ -9,4 +9,5 @@ public class SchoolklimaatModel
     public int humidityScore { get; set; }
     public string airQuality { get; set; }
     public int airQualityScore { get; set; }
+    public bool isOnline { get; set; }
 }

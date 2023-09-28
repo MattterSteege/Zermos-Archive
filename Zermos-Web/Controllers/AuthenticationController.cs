@@ -149,7 +149,7 @@ public class AuthenticationController : Controller
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync();
- 
+        _logger.LogInformation("User {email} logged out", User.FindFirst("email")?.Value);
         return PartialView("Login", new loginModel {code = 3});
     }
 

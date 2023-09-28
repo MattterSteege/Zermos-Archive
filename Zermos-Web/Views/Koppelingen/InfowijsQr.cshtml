@@ -6,21 +6,19 @@
 
 <link rel="stylesheet" href="~/css/koppelingen.css" />
 
-@{
-    <div class="login">
-        <div class="login-child">
-            <p class="child">Vul hier je schoolmail in.</p>
-            <p class="child">Scan deze code met de QR code scanner in de antonius app (Antonius app > Meer > Hoy Scan), klik daarna op 'check of je ingelogd bent' en je bent ingelogd!</p>
-            <img onload="imageLoaded()" src="https://chart.googleapis.com/chart?cht=qr&chl=@(ViewData["qr_text"])&chs=360x360&choe=UTF-8&chld=L|0" alt="qr code" class="img-thumbnail">
-            <div class="loading-icon">
-                <img src="/images/Loading-Icon-by-Kanggraphic-27-580x386-removebg-preview.png" >
-            </div>
+<div class="login">
+    <div class="login-explanation">
+        <p>Vul hier je schoolmail in.</p>
+        <p>Scan deze code met de QR code scanner in de antonius app (Antonius app > Meer > Hoy Scan), klik daarna op 'check of je ingelogd bent' en je bent ingelogd!</p>
+        <img onload="imageLoaded()" src="https://chart.googleapis.com/chart?cht=qr&chl=@(ViewData["qr_text"])&chs=360x360&choe=UTF-8&chld=L|0" alt="qr code" class="img-thumbnail">
+        <div class="loading-icon">
+            <img src="/images/Loading-Icon-by-Kanggraphic-27-580x386-removebg-preview.png" >
         </div>
-        <form method="post" asp-controller="Koppelingen" asp-action="InfowijsQr" asp-route-uuid="@ViewData["uuid"]" class="form-control" asp-route-retry="true">
-            <button type="submit" id="check" class="check">Check @((bool)ViewData["retry"]! ? "opnieuw" : "") of je ingelogd bent</button>
-        </form>
     </div>
-}
+    <form method="post" asp-controller="Koppelingen" asp-action="InfowijsQr" asp-route-uuid="@ViewData["uuid"]" class="form-control" asp-route-retry="true">
+        <button class="input submit" type="submit" id="check">Check @((bool)ViewData["retry"]! ? "opnieuw" : "") of je ingelogd bent</button>
+    </form>
+</div>
 
 <script>
     function imageLoaded() {
