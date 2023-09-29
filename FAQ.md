@@ -29,7 +29,7 @@ De veiligheid van jouw data is natuurlijk het belangrijkst, daarom ga ik daar zo
 
 ### Voor een Zermos account
 - je school-mail
-- thema voorkeur
+- verschillende instellingen (bijv. thema)
 
 ### Voor de Infowijs koppeling
 - een Infowijs toegangscode

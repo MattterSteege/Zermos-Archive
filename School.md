@@ -7,7 +7,7 @@ nav_exclude: false
 
 ## School
 
-Hierbij hoef je geen gegevens in te vullen, er wordt dus automatisch een link gelegd met school.
+Hierbij hoef je geen gegevens in te vullen, er wordt dus automatisch een link gelegd met school. Kort maar krachtig.
 
 | Toegang tot                            |
 |----------------------------------------|
