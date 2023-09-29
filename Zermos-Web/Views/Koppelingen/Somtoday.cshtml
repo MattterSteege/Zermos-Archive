@@ -42,7 +42,7 @@
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     if (xhr.responseText === "success") {
-                        ReplacePage('@Url.Action("ShowAccount", "Account")');
+                        ReplacePage('@Url.Action("Account", "Account")');
                     }
                     else {
                         button.innerHTML = "Log opnieuw in";

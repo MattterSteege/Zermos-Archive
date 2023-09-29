@@ -1,0 +1,95 @@
+﻿@model Infrastructure.Entities.user
+
+@{
+    ViewBag.Title = "title";
+
+}
+
+
+<link rel="stylesheet" href="/css/account.v2.css">
+
+<div class="settings-container">
+    <div class="setting-item">
+        <h1>Thema's</h1>
+        <p>Welke thema wil je gebruiken?</p>
+        <div class="settings-options">
+            <div id="1_light" onclick="UpdateTheme('light', this)" class="setting-button@(Model.theme == "light" ? " selected" : "")">licht</div>
+            <div id="1_dark" onclick="UpdateTheme('dark', this)" class="setting-button@(Model.theme == "dark" ? " selected" : "")">donker</div>
+            <div id="1_red" onclick="UpdateTheme('red', this)" class="setting-button@(Model.theme == "red" ? " selected" : "")">rood</div>
+            <div id="1_blue" onclick="UpdateTheme('blue', this)" class="setting-button@(Model.theme == "blue" ? " selected" : "")">blauw</div>
+            <div id="1_pink" onclick="UpdateTheme('pink', this)" class="setting-button@(Model.theme == "pink" ? " selected" : "")">roze</div>
+        </div>
+    </div>
+
+    <div class="setting-item">
+        <h1>Laad pagina</h1>
+        <p>Welke pagina wil je zien als je Zermos opent?</p>
+        <div class="settings-options">
+            <div id="2_Rooster" onclick="UpdateSetting('default_page', '/Zermelo/Rooster', this)" class="setting-button@(Model.default_page == "/Zermelo/Rooster" ? " selected" : "")">Je rooster</div>
+            <div id="2_Cijfers" onclick="UpdateSetting('default_page', '/Somtoday/Cijfers', this)" class="setting-button@(Model.default_page == "/Somtoday/Cijfers" ? " selected" : "")">Je cijfers</div>
+            <div id="2_Huiswerk" onclick="UpdateSetting('default_page', '/Somtoday/Huiswerk', this)" class="setting-button@(Model.default_page == "/Somtoday/Huiswerk" ? " selected" : "")">Je huiswerk</div>
+            <div id="2_Afwezigheid" onclick="UpdateSetting('default_page', '/Somtoday/Afwezigheid', this)" class="setting-button@(Model.default_page == "/Somtoday/Afwezigheid" ? " selected" : "")">Je afwezigheid</div>
+            <div id="2_SchoolNieuws" onclick="UpdateSetting('default_page', '/Infowijs/SchoolNieuws', this)" class="setting-button@(Model.default_page == "/Infowijs/SchoolNieuws" ? " selected" : "")">Het schoolnieuws</div>
+            <div id="2_SchoolKalender" onclick="UpdateSetting('default_page', '/Infowijs/SchoolKalender', this)" class="setting-button@(Model.default_page == "/Infowijs/SchoolKalender" ? " selected" : "")">De schoolkalender</div>
+            <div id="2_informatiebord" onclick="UpdateSetting('default_page', '/School/informatiebord', this)" class="setting-button@(Model.default_page == "/School/informatiebord" ? " selected" : "")">Het informatiebord</div>
+        </div>
+    </div>
+
+    <div class="setting-item">
+        <h1>Handig?</h1>
+        <p>Welke hand gebruik je voor zermos?</p>
+        <div class="settings-options">
+            <div id="3_Rechts" onclick="UpdateHandSide('right', this)" class="setting-button@(Model.default_page == "right" ? " selected" : "")">Met mijn rechter hand</div>
+            <div id="3_Links" onclick="UpdateHandSide('left', this)" class="setting-button@(Model.default_page == "left" ? " selected" : "")">Met mijn linker hand</div>
+        </div>
+    </div>
+</div>
+
+<script>
+function UpdateTheme(theme, element) {
+    document.documentElement.classList.remove("light");
+    document.documentElement.classList.remove("dark");
+    document.documentElement.classList.remove("red");
+    document.documentElement.classList.remove("blue");
+    document.documentElement.classList.remove("pink");
+    document.documentElement.classList.add(theme);
+    //expires in 60 days
+    document.cookie = "theme=" + theme + ";path=/;max-age=5184000";
+    UpdateSetting("theme", theme, element);
+}
+
+function UpdateHandSide(side, element) {
+    document.documentElement.classList.remove("left");
+    document.documentElement.classList.remove("right");
+    document.documentElement.classList.add(side);
+    document.cookie = "hand_side=" + side + ";path=/;max-age=5184000";
+    UpdateSetting("hand_side", side, element);
+}
+
+function UpdateSetting(key, value, element) {   
+    var url = "/Account/UpdateSetting?key=" + key + "&value=" + value;
+    fetch(url, {
+        method: 'POST'
+    })
+    //plain text is returned, either 200 or 400
+    .then(response => response.text())
+    .then((response) => {
+        //if status is 200
+        if (response === "200") {
+            
+            element = document.getElementById(element.id);
+            var siblings = element.parentNode.children;
+            
+            for (var i = 0; i < siblings.length; i++) {
+                siblings[i].classList.remove("selected");
+            }
+            
+            element.classList.add("selected");
+            
+        } else {
+            console.error("Error: " + response);
+        }
+    });
+}
+
+</script>

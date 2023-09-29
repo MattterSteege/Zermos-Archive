@@ -1,10 +1,12 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Infrastructure;
+using Infrastructure.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Zermos_Web.Models;
 using Zermos_Web.Models.Requirements;
 
 namespace Zermos_Web.Controllers
@@ -22,12 +24,20 @@ namespace Zermos_Web.Controllers
             _config = config;
             _users = users;
         }
-        
-        [HttpGet]
+
         [Authorize]
         [ZermosPage]
         [Route("/Account")]
-        public async Task<IActionResult> ShowAccount()
+        public async Task<IActionResult> Account()
+        {
+            return PartialView(await _users.GetUserAsync(User.FindFirstValue("email")));
+        }
+        
+        
+        [Authorize]
+        [ZermosPage]
+        [Route("/Account/Instellingen")]
+        public async Task<IActionResult> Settings()
         {
             return PartialView(await _users.GetUserAsync(User.FindFirstValue("email")));
         }
@@ -43,7 +53,7 @@ namespace Zermos_Web.Controllers
 
             await _users.UpdateUserAsync(HttpContext.User.FindFirstValue("email"), userToUpdate);
 
-            return RedirectToAction("ShowAccount");
+            return RedirectToAction("Account");
         }
         //https://demos.creative-tim.com/soft-ui-dashboard-tailwind/pages/profile.html
         
@@ -58,7 +68,22 @@ namespace Zermos_Web.Controllers
 
             await _users.UpdateUserAsync(HttpContext.User.FindFirstValue("email"), userToUpdate);
 
-            return RedirectToAction("ShowAccount");
+            return RedirectToAction("Account");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> UpdateSetting(string key, string value)
+        {
+            //only if the property which is being updated is a marked with the 'SettingAttribute'
+            var userToUpdate = await _users.GetUserAsync(HttpContext.User.FindFirstValue("email"));
+            var property = userToUpdate.GetType().GetProperty(key);
+            if (property == null) return BadRequest("Property not found");
+            var attribute = property.GetCustomAttributes(typeof(SettingAttribute), false);
+            if (attribute.Length == 0) return BadRequest("You may not alter this property");
+            property.SetValue(userToUpdate, value);
+            await _users.UpdateUserAsync(HttpContext.User.FindFirstValue("email"), userToUpdate);
+            return Ok("200");
         }
     }
 }

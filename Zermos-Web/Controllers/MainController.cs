@@ -25,14 +25,6 @@ namespace Zermos_Web.Controllers
         
         public IActionResult Index(string url = null)
         {
-            //addNotification("hey, nieuw hier?", "Je komt me niet bekend voor, als je Zermos beter wilt leren kennen kijk dan <a href='https://zermos-docs.kronk.tech'>de docs</a>", "info")
-            
-            if (!HttpContext.Request.Cookies.ContainsKey("is-not-new"))
-            {
-                HttpContext.AddNotification("hey, nieuw hier?", "Je komt me niet bekend voor, als je Zermos beter wilt leren kennen kijk dan <a href='https://zermos-docs.kronk.tech'>de docs</a>", NotificationCenter.NotificationType.INFO);
-                HttpContext.Response.Cookies.Append("is-not-new", "true", new Microsoft.AspNetCore.Http.CookieOptions {Expires = System.DateTime.Now.AddYears(1)});
-            }
-            
             if (url != null)
                 ViewData["url"] = url;
             else

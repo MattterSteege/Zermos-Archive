@@ -11,6 +11,11 @@
 - Account
     - Er is nu een uitlog knop... Dat duurde even...
     - De 'opgeslagen informatie' zit nu achter een knop, dan is je scherm niet gelijk vol :)
+    - Da's pech, instellingen weg. De instellingen zijn naar een eigen pagina verplaats, je bereikt het via 'Account' -> 'Instellingen' Ook krijgt het nu zijn eigen bullet point in de release notes.
+
+- Instellingen
+    - De Instellingen pagina heeft zijn eigen 'settings framework' gekregen zodat de pagina niet herladen hoefte worden als je iets veranderd.
+    - Links handige niet getreurd, je kan nu de UI omdraaien zodat je de knoppen aan de linkerkant hebt.
     
 - A wild Hoofdmenu appeard 😲
     - Op het nieuwe hoofdmenu kan je de volgende dingen:

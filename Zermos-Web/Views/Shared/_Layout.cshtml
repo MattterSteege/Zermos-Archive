@@ -1,11 +1,10 @@
-@using Microsoft.AspNetCore.Http
 @using Zermos_Web.Utilities
 @{
     var currentPage = $"/{ViewContext.RouteData.Values["controller"]}/{ViewContext.RouteData.Values["action"]?.ToString()?.Split("/")[0] ?? "index"}";
     var version = Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? TokenUtils.RandomString(10);
 }
 <!DOCTYPE html>
-<html lang="nl" class="@(Context.Request.Cookies["theme"] ?? "light")">
+<html lang="nl" class="@(Context.Request.Cookies["theme"] ?? "light") @(Context.Request.Cookies["hand_side"] ?? "right")">
 <head>
     <meta charset="UTF-8">
     <title>Zermos</title>
@@ -121,9 +120,9 @@
             </li>
 
             <li style="display: none" class="hidden-account">
-                <a onclick="ReplacePage('@Url.Action("ShowAccount", "Account")')">
+                <a onclick="ReplacePage('@Url.Action("Account", "Account")')">
                     <div class="menu-item">
-                        <i class="fa-solid fa-user menu-icons fa-fw @(currentPage == @Url.Action("ShowAccount", "Account") ? "active" : "")"></i>
+                        <i class="fa-solid fa-user menu-icons fa-fw @(currentPage == @Url.Action("Account", "Account") ? "active" : "")"></i>
                     </div>
                 </a>
             </li>
@@ -141,8 +140,8 @@
 
 <div class="top-bar">
     <div class="top-right-profile-picture">
-        <a onclick="ReplacePage('@Url.Action("ShowAccount", "Account")')">
-            <i class="fa-solid fa-user menu-icons fa-fw @(currentPage == @Url.Action("ShowAccount", "Account") ? "active" : "")"></i>
+        <a onclick="ReplacePage('@Url.Action("Account", "Account")')">
+            <i class="fa-solid fa-user menu-icons fa-fw @(currentPage == @Url.Action("Account", "Account") ? "active" : "")"></i>
         </a>
     </div>
 

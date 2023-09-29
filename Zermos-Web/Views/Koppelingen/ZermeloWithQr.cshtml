@@ -51,7 +51,7 @@ Html5Qrcode.getCameras().then(devices => {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                         if (xhr.responseText === "success") {
-                            ReplacePage('@Url.Action("ShowAccount", "Account")');
+                            ReplacePage('@Url.Action("Account", "Account")');
                         }
                         else {
                             document.getElementById('result').innerText = 'Deze QR-code is verlopen of al gebruikt, probeer het opnieuw met een nieuwe code.';

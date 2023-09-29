@@ -1,0 +1,48 @@
+﻿.settings-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: var(--padding);
+}
+
+.setting-item {
+    background: var(--overlay-color);
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+    box-shadow: var(--box-shadow);
+}
+
+.setting-item h1 {
+    font-size: var(--font-size-heading);
+    margin-bottom: var(--padding);
+}
+
+.setting-item p {
+    font-size: var(--font-size);
+    margin-bottom: var(--padding);
+}
+
+.setting-item .settings-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(200px, 100% / 4)), 1fr));
+    grid-gap: var(--padding);
+}
+
+.setting-item .settings-options .setting-button {
+    background: var(--background-color);
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+    font-size: var(--font-size);
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+}
+
+.setting-item .settings-options .setting-button:hover {
+    background-color: var(--inactive-color);
+}
+
+.setting-item .settings-options .setting-button.selected {
+    box-shadow: 0 0 var(--padding) var(--confirm-color);
+}

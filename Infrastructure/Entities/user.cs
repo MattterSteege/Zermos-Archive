@@ -3,6 +3,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Infrastructure.Utils;
 
 namespace Infrastructure.Entities
 {
@@ -11,8 +12,8 @@ namespace Infrastructure.Entities
         [Key] public string email { get; set; }
         public string name { get; set; }
         public string school_id { get; set; }
-        public string theme { get; set; }
-        public string default_page { get; set; }
+        [Setting] public string theme { get; set; }
+        [Setting] public string default_page { get; set; }
         public string custom_huiswerk { get; set; }
         
         //Token Related

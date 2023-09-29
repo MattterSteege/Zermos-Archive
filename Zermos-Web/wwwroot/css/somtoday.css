@@ -644,6 +644,13 @@
 
 }
 
+@media only screen and (max-width: 40cm) {
+    .homework-search {
+        left: calc(180px + var(--padding) * 4 + 96px);
+        top: var(--padding);
+    }
+}
+
 @media only screen and (max-width: 1200px) {
     .bottom-right-add-button {
         background: unset;
@@ -658,6 +665,11 @@
         overflow: hidden;
         border-radius: unset;
         margin: unset;
+    }
+    
+    .left .bottom-right-add-button {
+        bottom: 16px;
+        left: 16px;
     }
 
     .bottom-right-add-button a i {
@@ -685,6 +697,5 @@
     .top-30, .bottom-70 {
         height: auto;
     }
-
 }
 

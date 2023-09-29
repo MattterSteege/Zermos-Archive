@@ -51,7 +51,6 @@
 }
 
 <link rel="stylesheet" href="/css/main.css">
-<script src="/js/Hoofdmenu.js"></script>
 
 <div class="main-container">
 
@@ -264,6 +263,47 @@ function RefreshWeer() {
 
             //when the mouse leaves the .weather element
             document.querySelector(".weather").addEventListener("mouseleave", () => {
+                //start updating the time line every second
+                timeLineInterval = setInterval(() => {
+                    let currentUnix = Math.floor(Date.now() / 1000);
+                    let percentage =
+                        ((currentUnix - startUnix) / (endUnix - startUnix)) * 100;
+                    currentLine.style.left = percentage + "%";
+
+                    //log which precipitation value is hovered over
+                    let index = Math.round(percentage / 4.166666666666667);
+                    document.querySelector(".weather-temp").innerText =
+                        data["temp"] + "°C - " + precipitation[index] + "mm/u";
+                }, 1000);
+            });
+            
+            document.querySelector(".weather").addEventListener("touchmove", (event) => {
+                //get the x position of the mouse
+                let xOfMouse = event.touches[0].clientX;
+                let xOfWeather = getOffset(document.querySelector(".weather-graph")).left;
+                let weatherWidth = document.querySelector(".weather").getBoundingClientRect().width;
+                
+                //get the --padding value and remove the px
+                let padding = Number(getComputedStyle(document.querySelector(".weather-graph")).getPropertyValue("--padding").replace("px", ""));
+                //get the percentage of xOfMouse between xOfWeather and xOfWeather + weatherWidth
+                let percentage = ((xOfMouse - xOfWeather) / (weatherWidth - padding * 2)) * 100;
+                percentage = Math.max(0, Math.min(percentage, 100));
+                //set the current time line to the mouse position
+                //round to 1/24th of the time line
+                //so snap 1 should be 0 to 2.083333333333333, snap 2 should be 2.083333333333333 to 4.166666666666667, etc.
+                percentage = Math.round(percentage / 4.166666666666667) * 4.166666666666667;
+                currentLine.style.left = percentage + "%";
+
+                //log which precipitation value is hovered over
+                let index = Math.round(percentage / 4.166666666666667);
+                document.querySelector(".weather-temp").innerText =
+                    data["temp"] + "°C - " + precipitation[index] + "mm/u";
+
+                //stop updating the time line every second
+                clearInterval(timeLineInterval);
+            });
+
+            document.querySelector(".weather").addEventListener("touchend", () => {
                 //start updating the time line every second
                 timeLineInterval = setInterval(() => {
                     let currentUnix = Math.floor(Date.now() / 1000);

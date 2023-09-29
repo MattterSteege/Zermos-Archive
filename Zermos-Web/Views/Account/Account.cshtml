@@ -26,6 +26,11 @@
             
             <p>Je bent dit jaar <b>@afwezigheidCount</b> keer afwezig geweest@(afwezigheidCount == 0 ? ", ga zo door!" : ".")</p>
         </div>
+        
+        <div onclick="ReplacePage('@Url.Action("Settings", "Account")')" class="information-item-parent" id="instellingen" style="cursor: pointer;">
+            <h1 style="text-decoration: underline;">Instellingen</h1>
+            <p>Hier kan je verschillende instellingen aanpassen</p>
+        </div>
 
         <div class="information-item-parent" id="info">
             <div class="overlay-opgeslagen-info">
@@ -40,10 +45,6 @@
                     //Loop trough all the properties of the user object and display them like this: [name]: [value (capt at 25 characters)]
                     foreach (var property in Model.GetType().GetProperties())
                     {
-                        //<p>@property.Name: @property.GetValue(Model, null)?.ToString()</p>
-                        //cap at an maximum of 25 chars, but it can be less
-                        @* <p onclick="copyToClipboard('@property.GetValue(Model, null)?.ToString()?.Substring(0, (property.GetValue(Model, null)?.ToString()?.Length ?? 0) > 21 ? 21 : (property.GetValue(Model, null)?.ToString()?.Length ?? 0))')"><b>@property.Name</b>: @property.GetValue(Model, null)?.ToString()?.Substring(0, (property.GetValue(Model, null)?.ToString()?.Length ?? 0) > 21 ? 21 : (property.GetValue(Model, null)?.ToString()?.Length ?? 0))</p> *@
-
                         //if property is not { get; set; } then skip it
                         if (property.GetMethod == null || property.SetMethod == null || property.GetValue(Model, null) == null)
                         {
@@ -112,52 +113,6 @@
             </div>
         </div>
 
-        <div class="information-item-parent" id="theme">
-            <h1>Thema's</h1>
-            <p>Welke thema wil je gebruiken?</p>
-            <form method="POST" asp-controller="Account" asp-action="UpdateTheme" asp-route-newTheme="light">
-                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">licht</button>
-            </form>
-            <form method="POST" asp-controller="Account" asp-action="UpdateTheme" asp-route-newTheme="dark">
-                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Donker</button>
-            </form>
-            <form method="POST" asp-controller="Account" asp-action="UpdateTheme" asp-route-newTheme="red">
-                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Rood</button>
-            </form>
-            <form method="POST" asp-controller="Account" asp-action="UpdateTheme" asp-route-newTheme="blue">
-                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Blauw</button>
-            </form>
-            <form method="POST" asp-controller="Account" asp-action="UpdateTheme" asp-route-newTheme="pink">
-                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Roze</button>
-            </form>
-        </div>
-        
-        <div class="information-item-parent" id="opening_page">
-            <h1>Laad pagina</h1>
-            <p>Welke pagina wil je zien als je Zermos opent?</p>
-            <form method="POST" asp-controller="Account" asp-action="UpdateDefaultPage" asp-route-newDefaultPage="/Zermelo/Rooster">
-                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Je rooster</button>
-            </form>
-            <form method="POST" asp-controller="Account" asp-action="UpdateDefaultPage" asp-route-newDefaultPage="/Somtoday/Cijfers">
-                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Je cijfers</button>
-            </form>
-            <form method="POST" asp-controller="Account" asp-action="UpdateDefaultPage" asp-route-newDefaultPage="/Somtoday/Huiswerk">
-                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Je huiswerk</button>
-            </form>
-            <form method="POST" asp-controller="Account" asp-action="UpdateDefaultPage" asp-route-newDefaultPage="/Somtoday/Afwezigheid">
-                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Je afwezigheid</button>
-            </form>
-            <form method="POST" asp-controller="Account" asp-action="UpdateDefaultPage" asp-route-newDefaultPage="/Infowijs/SchoolNieuws">
-                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Het schoolnieuws</button>
-            </form>
-            <form method="POST" asp-controller="Account" asp-action="UpdateDefaultPage" asp-route-newDefaultPage="/Infowijs/SchoolKalender">
-                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">De schoolkalender</button>
-            </form>
-            <form method="POST" asp-controller="Account" asp-action="UpdateDefaultPage" asp-route-newDefaultPage="/School/informatiebord">
-                <button class="koppel-knop" style="background: var(--background-color) !important; color: var(--text-color);">Het informatiebord</button>
-            </form>
-        </div>
-
         <div class="information-item-parent" id="opening_page">
             <h1>Uitloggen?</h1>
             <button onclick="ReplacePage('/logout')" class="koppel-knop ontkoppelen">Wil je uitloggen?</button>
@@ -170,8 +125,11 @@
         <div class="item" onclick="doScrolling('profiel', 1000)" href="?afwezigheid">
             afwezigheid
         </div>
+        <div class="item" onclick="doScrolling('instellingen', 1000)" href="?instellingen">
+            instellingen
+        </div>
         <div class="item" onclick="doScrolling('info', 1000)" href="?info">
-            Opgeslagen informatie
+            opgeslagen informatie
         </div>
         <div class="item" onclick="doScrolling('koppelingen', 1000)" href="?koppelingen">
             koppelingen
@@ -194,25 +152,6 @@
             document.getElementById(app + '-first').style.display = 'block';
             document.getElementById(app + '-second').style.display = 'none';
         });
-    }
-
-    function copyToClipboard(s) {
-        //use clipboard api if available
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(s);
-            return;
-        }
-        
-        //fallback to old method
-        var el = document.createElement('textarea');
-        el.value = s;
-        el.setAttribute('readonly', '');
-        el.style.position = 'absolute';
-        el.style.left = '-9999px';
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand('copy');
-        document.body.removeChild(el);
     }
 
     function getElementY(query) {

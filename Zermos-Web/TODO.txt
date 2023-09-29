@@ -8,5 +8,7 @@ TODO: instellingen pagina
     Links-handige mode
     Kleuren veranderen
     etc.
-TODO: main menu
-    FIX THE CSS GOD DAMN IT
+TODO: fix main menu CSS
+TODO: fix account page css and html
+
+TODO: add left-right hand mode to database onder de naam hand_side
