@@ -108,11 +108,11 @@
         </ul>
 
     </div>
-    <div class="swipebubbles">
-        <div class="bubble left">
+    <div class="swipebubbles" style="display: none">
+        <div class="bubble" id="left" style="left: calc(-20% + 0px);">
             <i class="fa-solid fa-angle-left"></i>
         </div>
-        <div class="bubble right">
+        <div class="bubble" id="right" style="right: calc(-20% + 0px);">
             <i class="fa-solid fa-angle-right"></i>
         </div>
     </div>
@@ -214,7 +214,8 @@
     
     var touchstartX;
     var touchendX;
-    var threshold = 150 //px
+    //threshold is 30% of the width of main.main in px
+    var threshold = document.getElementsByClassName('main')[0].offsetWidth * 0.3;
         
     function checkDirection() {
         if (touchendX < touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
@@ -237,7 +238,7 @@
         
         if (e.changedTouches[0].screenX < touchstartX) {
 
-            var right = document.getElementsByClassName('right')[0];
+            var right = document.getElementById('right');
             right.style.right = 'calc(-20% + ' + swipeChange + 'px)';
             
             if (swipeChange > threshold) {
@@ -250,7 +251,7 @@
             }
         }
         else {
-            var left = document.getElementsByClassName('left')[0];
+            var left = document.getElementById('left');
             left.style.left = 'calc(-20%  + ' + swipeChange + 'px)';
             
             if (swipeChange > threshold) {
@@ -267,8 +268,8 @@
     
     main.addEventListener('touchend', e => {
         touchendX = e.changedTouches[0].screenX
-        document.getElementsByClassName('right')[0].style.right = 'calc(-20% + 0px)';
-        document.getElementsByClassName('left')[0].style.left = 'calc(-20% + 0px)';
+        document.getElementById('right').style.right = 'calc(-20% + 0px)';
+        document.getElementById('left').style.left = 'calc(-20% + 0px)';
         checkDirection()       
     });
     

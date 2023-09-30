@@ -99,22 +99,24 @@
         loadHomeworkSearch();
     
         //onload
-        function loadHomeworkSearch() {
-            
-            
+        function loadHomeworkSearch() {            
             //if the homeworkSearch is already loaded, don't load it again
             if (document.getElementsByClassName('homework-search').length > 0)
                 document.getElementsByClassName('homework-search')[0].remove();
-                                   
-            document.getElementsByClassName('top-bar')[0].innerHTML += '<div class="homework-search" id="added-by-fetch" style="display: none;"><p class="search-text">Zoek op huiswerk</p><div class="OpenSearchButton" style="position: unset;"><i class="fa-solid fa-angle-down" id="openCloseArrow"></i></div><div style="display: none" class="grade-notification"></div></div>';
-            document.getElementsByClassName('top-bar')[0].innerHTML += '<div class="homework-search homework-search-button-popup" id="added-by-fetch" style="display: none;"></div>';
+                
+            document.querySelector(".bottom ul").innerHTML += '<div class="homework-search" id="added-by-fetch" style="display: none;"><p class="search-text">Zoek op huiswerk</p><div class="OpenSearchButton" style="position: unset;"><i class="fa-solid fa-angle-down" id="openCloseArrow"></i></div><div style="display: none" class="grade-notification"></div></div>';
+            document.querySelector(".bottom ul").innerHTML += '<div class="homework-search homework-search-button-popup" id="added-by-fetch" style="display: none;"></div>';
             document.getElementsByClassName('homework-search-button-popup')[0].innerHTML += '<div class="option" id="type_options"><div class="option-toggle selected" id="huiswerk_toggle" onclick="toggleHuiswerk()">Huiswerk</div><div class="option-toggle selected" id="toetsen_toggle" onclick="toggleToetsen()">Toetsen</div><div class="option-toggle selected" id="grote_toetsen_toggle" onclick="toggleGroteToetsen()">Grote Toetsen</div></div>';
             document.getElementsByClassName('homework-search-button-popup')[0].innerHTML += '<div class="option" id="subject_options"></div>';
             document.getElementsByClassName('homework-search-button-popup')[0].innerHTML += '<div class="option" id="toggle_everything" style="grid-column: span 2; padding-top: 21px; padding-bottom: 7px;"><div class="option-toggle selected" id="everything_toggle" onclick="toggleEverything()">Alles</div></div>';
             
+            let startingHeight;
+            let startingWidth;
+            let endingWidth;
+            
             var isOpen = false;
             
-            document.getElementsByClassName('OpenSearchButton')[0].onclick = function() {
+            document.getElementsByClassName('OpenSearchButton')[0].parentElement.onclick = function() {
                 
                 if (isOpen)
                 {
@@ -123,6 +125,9 @@
                 }
                 else
                 {
+                    startingHeight = document.getElementsByClassName('homework-search')[0].offsetHeight;
+                    startingWidth = document.getElementsByClassName('homework-search')[0].offsetWidth;
+                    endingWidth = Math.min(startingWidth * 8, 420);
                     isOpen = true;
                     openSearchPopUp();
                 }
@@ -137,28 +142,37 @@
                 
                 searchPopup.style.height = (height > secondHeight ? height : secondHeight) + 'px';
                 
-                searchPopup.style.width = '420px';
+                searchPopup.style.width = endingWidth + 'px';
                 searchPopup.style.boxShadow = '0 0 15px rgba(0, 0, 0, 0.1)';
                 
                 var search = document.getElementsByClassName('homework-search')[0];
-                search.style.width = '420px';
+                search.style.width = endingWidth + 'px';
                 
                 //rotate openCloseArrow 180deg
                 document.getElementById('openCloseArrow').style.transform = 'rotate(180deg)';
+                
+                if (window.innerWidth <= 1200)
+                {
+                    searchPopup.style.right = 'calc(64px + var(--padding))';
+                    search.style.width = 'calc(48px + var(--padding) + 256px)';
+                }
             }
             
             function closeSearchPopUp() {
                 var searchPopup = document.getElementsByClassName('homework-search-button-popup')[0];
                 searchPopup.style.display = 'block';
-                searchPopup.style.height = '48px';
-                searchPopup.style.width = '210px';
+                searchPopup.style.height = startingHeight + 'px';
+                searchPopup.style.width = startingWidth + 'px';
                 searchPopup.style.boxShadow = 'none';
                 
                 var search = document.getElementsByClassName('homework-search')[0];
-                search.style.width = '210px';
+                search.style.width = startingWidth + 'px';
                 
                 //rotate openCloseArrow 180deg
                 document.getElementById('openCloseArrow').style.transform = 'rotate(0deg)';
+                
+                searchPopup.style.right = '16px';
+                search.style.right = '16px';
             }
         }
 

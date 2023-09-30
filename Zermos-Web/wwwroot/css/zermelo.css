@@ -362,9 +362,9 @@
         height: 100%;
         grid-row: 1;
         grid-column: 1;
-        display: flex;
+        display: flex !important;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
     }
 
     .hours-container ul {

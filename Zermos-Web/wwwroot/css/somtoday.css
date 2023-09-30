@@ -685,7 +685,7 @@
         font-size: unset;
     }
 
-    .bottom-right-add-button a i:before {
+    .bottom-right-add-button a i:before, .OpenSearchButton a i:before {
         color: var(--white-color);
         width: 16px;
         height: 16px;
@@ -696,6 +696,37 @@
 
     .top-30, .bottom-70 {
         height: auto;
+    }
+
+    .homework-search {
+        left: unset;
+        top: unset;
+        right: 16px;
+        bottom: calc(16px + 32px + 16px);
+        background: var(--accent-color);
+        color: var(--white-color);
+        height: 32px;
+        width: 32px;
+    }
+    
+    .homework-search .search-text {
+        display: none;
+    }
+    
+    .homework-search .OpenSearchButton {
+        padding-right: unset;
+        width: 32px;
+        transform: rotateZ(90deg);
+    }
+    
+    .homework-search .OpenSearchButton i {
+        margin-left: unset;
+    }
+
+    .homework-search-button-popup {
+        display: none;
+        background: var(--overlay-color);
+        padding-top: var(--padding);
     }
 }
 

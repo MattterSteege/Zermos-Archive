@@ -48,7 +48,7 @@
             <li>
                 <a onclick="ReplacePage('/Hoofdmenu')">
                     <div class="menu-item">
-                        <i class="fa-solid fa-house menu-icons fa-fw @(currentPage == @Url.Action("index", "Main") ? "active" : "")"></i>
+                        <i class="fa-solid fa-house menu-icons fa-fw"></i>
                         <p>Hoofdmenu</p>
                     </div>
                 </a>
@@ -59,7 +59,7 @@
             <li>
                 <a onclick="ReplacePage('@Url.Action("Rooster", "Zermelo")')">
                     <div class="menu-item">
-                        <i class="fa-solid fa-calendar-day menu-icons fa-fw @(currentPage == @Url.Action("Rooster", "Zermelo") ? "active" : "")"></i>
+                        <i class="fa-solid fa-calendar-day menu-icons fa-fw"></i>
                         <p>Rooster</p>
                     </div>
                 </a>
@@ -71,7 +71,7 @@
             <li>
                 <a onclick="ReplacePage('@Url.Action("Huiswerk", "Somtoday")')">
                     <div class="menu-item">
-                        <i class="fa-solid fa-pen-to-square menu-icons fa-fw @(currentPage == @Url.Action("Huiswerk", "Somtoday") ? "active" : "")"></i>
+                        <i class="fa-solid fa-pen-to-square menu-icons fa-fw"></i>
                         <p>Huiswerk</p>
                     </div>
                 </a>
@@ -80,7 +80,7 @@
             <li>
                 <a onclick="ReplacePage('@Url.Action("Cijfers", "Somtoday")')">
                     <div class="menu-item">
-                        <i class="fa-solid fa-line-chart menu-icons fa-fw @(currentPage == @Url.Action("Cijfers", "Somtoday") ? "active" : "")"></i>
+                        <i class="fa-solid fa-line-chart menu-icons fa-fw"></i>
                         <p>Cijfers</p>
                     </div>
                 </a>
@@ -92,7 +92,7 @@
             <li>
                 <a onclick="ReplacePage('@Url.Action("informatiebord", "School")')">
                     <div class="menu-item">
-                        <i class="fa-solid fa-info-circle menu-icons fa-fw @(currentPage == @Url.Action("Informatiebord", "School") ? "active" : "")"></i>
+                        <i class="fa-solid fa-info-circle menu-icons fa-fw"></i>
                         <p>Informatiebord</p>
                     </div>
                 </a>
@@ -104,7 +104,7 @@
             <li>
                 <a onclick="ReplacePage('@Url.Action("SchoolNieuws", "Infowijs")')">
                     <div class="menu-item">
-                        <i class="fa-solid fa-newspaper menu-icons fa-fw @(currentPage == @Url.Action("SchoolNieuws", "Infowijs") ? "active" : "")"></i>
+                        <i class="fa-solid fa-newspaper menu-icons fa-fw"></i>
                         <p>School nieuws</p>
                     </div>
                 </a>
@@ -113,7 +113,7 @@
             <li>
                 <a onclick="ReplacePage('@Url.Action("SchoolKalender", "Infowijs")')">
                     <div class="menu-item">
-                        <i class="fa-solid fa-calendar-days menu-icons fa-fw @(currentPage == @Url.Action("SchoolKalender", "Infowijs") ? "active" : "")"></i>
+                        <i class="fa-solid fa-calendar-days menu-icons fa-fw"></i>
                         <p>School kalender</p>
                     </div>
                 </a>
@@ -122,7 +122,7 @@
             <li style="display: none" class="hidden-account">
                 <a onclick="ReplacePage('@Url.Action("Account", "Account")')">
                     <div class="menu-item">
-                        <i class="fa-solid fa-user menu-icons fa-fw @(currentPage == @Url.Action("Account", "Account") ? "active" : "")"></i>
+                        <i class="fa-solid fa-user menu-icons fa-fw"></i>
                     </div>
                 </a>
             </li>
@@ -141,7 +141,7 @@
 <div class="top-bar">
     <div class="top-right-profile-picture">
         <a onclick="ReplacePage('@Url.Action("Account", "Account")')">
-            <i class="fa-solid fa-user menu-icons fa-fw @(currentPage == @Url.Action("Account", "Account") ? "active" : "")"></i>
+            <i class="fa-solid fa-user menu-icons fa-fw"></i>
         </a>
     </div>
 
@@ -193,6 +193,12 @@
 
     function ReplacePage(url, fromHistory = false) {
         document.body.removeAttribute("onload");
+        
+        //check if the url is the same as the current url
+        if (url === window.location.pathname) {
+            console.log("[ Zermos ] The url is the same as the current url, not navigating");
+            return;
+        }
         
         // Define a function to append a script to either the head or body
         function appendScript(element, scriptToWorkWith, isSrc) {
