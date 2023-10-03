@@ -28,7 +28,7 @@ namespace Zermos_Web.Controllers
             if (url != null)
                 ViewData["url"] = url;
             else
-                ViewData["url"] = Request.Cookies["default_page"] ?? "/Zermelo/Rooster";
+                ViewData["url"] = Request.Cookies["this_session_last_page"] ?? Request.Cookies["default_page"] ?? "/Zermelo/Rooster";
             
             return View();
         }

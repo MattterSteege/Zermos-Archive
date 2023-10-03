@@ -10,15 +10,15 @@
 
     List<Appointment> zermeloTodayLessons = null;
     Appointment zermeloNextLesson = null;
-    
+
     Zermos_Web.Models.SomtodayGradesModel.Item somtodayLastGrade = null;
     DateTime nextLessonStart = DateTime.Now;
-    
+
     int somtodayHuiswerkCount = 0;
     string SomtodayHuiswerkSubjects = string.Empty;
 
     IGrouping<Guid, Message> infowijsMessage = null;
-    
+
     if (Model != null)
     {
         if (!string.IsNullOrEmpty(Model.cached_zermelo_schedule))
@@ -32,16 +32,16 @@
         if (!string.IsNullOrEmpty(Model.cached_somtoday_grades))
         {
             var somtodayGrades = JsonConvert.DeserializeObject<SomtodayGradesModel>(Model.cached_somtoday_grades);
-            somtodayLastGrade = somtodayGrades.items[0];
+            somtodayLastGrade = somtodayGrades.items[^1];
         }
-        
+
         if (!string.IsNullOrEmpty(Model.cached_somtoday_homework))
         {
             var somtodayHomework = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(Model.cached_somtoday_homework).items.GroupBy(item => item.datumTijd.Date).Where(x => x.Key == DateTime.Now.Date.AddDays(1)).ToList();
             somtodayHuiswerkCount = somtodayHomework.Count > 0 ? somtodayHomework[0].Count() : 0;
             SomtodayHuiswerkSubjects = somtodayHomework.Count > 0 ? string.Join(", ", somtodayHomework[0].Select(x => x.lesgroep.vak.naam)) : string.Empty;
         }
-        
+
         if (!string.IsNullOrEmpty(Model.cached_infowijs_news))
         {
             var infowijsMessages = JsonConvert.DeserializeObject<InfowijsMessagesModel>(Model.cached_infowijs_news ?? string.Empty, Converter.Settings);
@@ -87,14 +87,14 @@
                 <div class="grade-info">
                     <p class="grade-subject">@somtodayLastGrade?.vak.naam:</p>
                     <p class="grade-number">@somtodayLastGrade?.geldendResultaat</p>
-                    <p class="grade-number">@(somtodayLastGrade?.weging == 0 ? somtodayLastGrade.examenWeging : 0)x</p>
+                    <p class="grade-number">@(somtodayLastGrade?.weging == 0 ? somtodayLastGrade.examenWeging : somtodayLastGrade?.weging)x</p>
                 </div>
             </div>
             <div class="icon">
                 <i class="fa-solid fa-line-chart fa-fw card-icon active"></i>
             </div>
         </div>
-        
+
         <div class="child last-news" onclick="ReplacePage('/Infowijs/Schoolnieuws')">
             <div class="information">
                 <h1 class="heading">Laatste nieuws:</h1>
@@ -107,16 +107,17 @@
                 <i class="fa-solid fa-newspaper fa-fw card-icon active"></i>
             </div>
         </div>
-        
-        @*als count=0 Je hebt geen huiswerk morgen, lekker zeg *@
-        @*als count>0 Je hebt morgen x huiswerk items, dat is voor de vakken: a,b,c...*@
-        
+
         <div class="child homewokr-count" onclick="ReplacePage('/Somtoday/Huiswerk')">
             <div class="information">
                 <h1 class="heading">Huiswerk voor morgen:</h1>
                 @if (somtodayHuiswerkCount == 0)
                 {
                     <p class="homework-count">Je hebt geen huiswerk morgen, lekker zeg</p>
+                }
+                else if (somtodayHuiswerkCount == 1)
+                {
+                    <p class="homework-count">Je hebt morgen heb je alleen voor @SomtodayHuiswerkSubjects huiswerk.</p>
                 }
                 else
                 {
@@ -144,35 +145,37 @@
                     <i class="fa-solid fa-cloud fa-fw card-icon active"></i>
                 </div>
             </div>
-            <div class="weather-graph-underlay">
-            </div>
-            <div class="weather-graph">
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-            </div>
-            <div class="line-overlay">
-                <div class="line current" style=""></div>
+            <div class="weather-graph-container">
+                <div class="weather-graph-underlay">
+                </div>
+                <div class="weather-graph">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+                <div class="line-overlay">
+                    <div class="line current" style=""></div>
+                </div>
             </div>
         </div>
         <div class="child paklijst">
@@ -207,14 +210,14 @@ function RefreshWeer() {
         .then((response) => response.json())
         .then((data) => {
             //temp text
-            document.querySelector(".weather-temp").innerText =
+            main.querySelector(".weather-temp").innerText =
                 data["temp"] + "°C - " + data["precip"][2] + "mm/u";
 
             //current time line
             let startUnix = data["start"];
             let endUnix = Number(data["start"]) + 7200;
             let currentUnix = Math.floor(Date.now() / 1000);
-            let currentLine = document.querySelector(".current");
+            let currentLine = main.querySelector(".current");
             //get the percentage of the current time in the time line
             let percentage =
                 ((currentUnix - startUnix) / (endUnix - startUnix)) * 100;
@@ -230,61 +233,40 @@ function RefreshWeer() {
 
                 //log which precipitation value is hovered over
                 let index = Math.round(percentage / 4.166666666666667);
-                document.querySelector(".weather-temp").innerText =
+                main.querySelector(".weather-temp").innerText =
                     data["temp"] + "°C - " + precipitation[index] + "mm/u";
             }, 1000);
 
             //when hovering over the .weather element
-            document.querySelector(".weather").addEventListener("mouseover", (event) => {
-                //get the x position of the mouse
-                let xOfMouse = event.clientX;
-                let xOfWeather = getOffset(document.querySelector(".weather-graph")).left;
-                let weatherWidth = document.querySelector(".weather").getBoundingClientRect().width;
-                
-                //get the --padding value and remove the px
-                let padding = Number(getComputedStyle(document.querySelector(".weather-graph")).getPropertyValue("--padding").replace("px", ""));
-                //get the percentage of xOfMouse between xOfWeather and xOfWeather + weatherWidth
-                let percentage = ((xOfMouse - xOfWeather) / (weatherWidth - padding * 2)) * 100;
-                percentage = Math.max(0, Math.min(percentage, 100));
-                //set the current time line to the mouse position
-                //round to 1/24th of the time line
-                //so snap 1 should be 0 to 2.083333333333333, snap 2 should be 2.083333333333333 to 4.166666666666667, etc.
-                percentage = Math.round(percentage / 4.166666666666667) * 4.166666666666667;
-                currentLine.style.left = percentage + "%";
-
-                //log which precipitation value is hovered over
-                let index = Math.round(percentage / 4.166666666666667);
-                document.querySelector(".weather-temp").innerText =
-                    data["temp"] + "°C - " + precipitation[index] + "mm/u";
-
-                //stop updating the time line every second
-                clearInterval(timeLineInterval);
+            main.addEventListener("mousemove", (event) => {
+                MoveWeatherLine(event)
             });
-
-            //when the mouse leaves the .weather element
-            document.querySelector(".weather").addEventListener("mouseleave", () => {
-                //start updating the time line every second
-                timeLineInterval = setInterval(() => {
-                    let currentUnix = Math.floor(Date.now() / 1000);
-                    let percentage =
-                        ((currentUnix - startUnix) / (endUnix - startUnix)) * 100;
-                    currentLine.style.left = percentage + "%";
-
-                    //log which precipitation value is hovered over
-                    let index = Math.round(percentage / 4.166666666666667);
-                    document.querySelector(".weather-temp").innerText =
-                        data["temp"] + "°C - " + precipitation[index] + "mm/u";
-                }, 1000);
-            });
+            main.querySelector(".weather").addEventListener("mouseleave", DefaultLineMovement);
             
-            document.querySelector(".weather").addEventListener("touchmove", (event) => {
-                //get the x position of the mouse
-                let xOfMouse = event.touches[0].clientX;
-                let xOfWeather = getOffset(document.querySelector(".weather-graph")).left;
-                let weatherWidth = document.querySelector(".weather").getBoundingClientRect().width;
+            //also for mobile users
+            main.querySelector(".weather").addEventListener("touchmove", (event) => {
+                MoveWeatherLine(event)
+            });
+            main.querySelector(".weather").addEventListener("touchend", DefaultLineMovement);
+            
+            function MoveWeatherLine(event) {
+                                
+                //let xOfMouse = mousex, if null or undefined, get the first touch, if null or undefined, set to 0
+                let xOfMouse = event?.touches?.[0]?.clientX ?? event?.clientX ?? 0;
+                let yOfMouse = event?.touches?.[0]?.clientY ?? event?.clientY ?? 0;
+                let xOfWeather = getOffset(main.querySelector(".weather-graph")).left;
+                let yOfWeather = getOffset(main.querySelector(".weather-graph")).top;
+                let weatherWidth = main.querySelector(".weather-graph").getBoundingClientRect().width;
+                let weatherHeight = main.querySelector(".weather-graph").getBoundingClientRect().height;
+                
+                //only if user mouse x and y are within bounds of the weather element
+                if (xOfMouse < xOfWeather || xOfMouse > xOfWeather + weatherWidth || yOfMouse < yOfWeather || yOfMouse > yOfWeather + weatherHeight)
+                {
+                    return;
+                }
                 
                 //get the --padding value and remove the px
-                let padding = Number(getComputedStyle(document.querySelector(".weather-graph")).getPropertyValue("--padding").replace("px", ""));
+                let padding = Number(getComputedStyle(main.querySelector(".weather-graph")).getPropertyValue("--padding").replace("px", ""));
                 //get the percentage of xOfMouse between xOfWeather and xOfWeather + weatherWidth
                 let percentage = ((xOfMouse - xOfWeather) / (weatherWidth - padding * 2)) * 100;
                 percentage = Math.max(0, Math.min(percentage, 100));
@@ -292,18 +274,22 @@ function RefreshWeer() {
                 //round to 1/24th of the time line
                 //so snap 1 should be 0 to 2.083333333333333, snap 2 should be 2.083333333333333 to 4.166666666666667, etc.
                 percentage = Math.round(percentage / 4.166666666666667) * 4.166666666666667;
-                currentLine.style.left = percentage + "%";
+                if (percentage === 100) 
+                    currentLine.style.left =  'calc(100% - 3px)';
+                else
+                    currentLine.style.left = percentage + "%";
+                
 
                 //log which precipitation value is hovered over
                 let index = Math.round(percentage / 4.166666666666667);
-                document.querySelector(".weather-temp").innerText =
+                main.querySelector(".weather-temp").innerText =
                     data["temp"] + "°C - " + precipitation[index] + "mm/u";
 
                 //stop updating the time line every second
                 clearInterval(timeLineInterval);
-            });
-
-            document.querySelector(".weather").addEventListener("touchend", () => {
+            }
+            
+            function DefaultLineMovement() {
                 //start updating the time line every second
                 timeLineInterval = setInterval(() => {
                     let currentUnix = Math.floor(Date.now() / 1000);
@@ -313,20 +299,24 @@ function RefreshWeer() {
 
                     //log which precipitation value is hovered over
                     let index = Math.round(percentage / 4.166666666666667);
-                    document.querySelector(".weather-temp").innerText =
+                    main.querySelector(".weather-temp").innerText =
                         data["temp"] + "°C - " + precipitation[index] + "mm/u";
                 }, 1000);
-            });
+            }
 
-            //array of 25 - 10 5-minute intervals4
+            //array of 25 - 10 5-minute intervals
             precipitation = data["precip"];
             //precipitation = [2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2]; //test data
 
-            const svgContainer = document.getElementsByClassName(
+            const svgContainer = main.getElementsByClassName(
                 "weather-graph-underlay"
             )[0];
             const svg = createSmoothBezierCurve(precipitation);
             svgContainer.appendChild(svg);
+            
+            main.addEventListener("main:unload", () => {
+                clearInterval(timeLineInterval);
+            });
         });
 
     function createSmoothBezierCurve(data) {
@@ -420,10 +410,13 @@ function CalculateLessonTimeLeft() {
             clearInterval(interval);
         }
     }, 1000);
+    main.addEventListener("main:unload", () => {
+        clearInterval(interval);
+    });
 }
 
 function SetUpPakLijst() {
-    var list_items = document.getElementsByClassName('paklijst-item');
+    var list_items = main.getElementsByClassName('paklijst-item');
 
     for (var i = 0; i < list_items.length; i++) {
         list_items[i].addEventListener("click", toggle);

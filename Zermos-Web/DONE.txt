@@ -7,12 +7,14 @@
     - De 'notificatie' UI is nu iets makkelijker te bekijken
     - Laptop gebruikers zien nu een leesbare tekst
     - het opsporen van bugs is nu iets makkelijker geworden door backend logging (boeit je niks, maar ik ben er blij mee)
+    - Het zelfgemaakt 'history' systeem werkt nu ook voor computer gebruikers (volgende en terug knoppen, mogelijk knoppen op je muis) en voor mobiele gebruikers (terug knop op je telefoon)
 
 - Account
     - Er is nu een uitlog knop... Dat duurde even...
     - De 'opgeslagen informatie' zit nu achter een knop, dan is je scherm niet gelijk vol :)
     - Da's pech, instellingen weg. De instellingen zijn naar een eigen pagina verplaats, je bereikt het via 'Account' -> 'Instellingen' Ook krijgt het nu zijn eigen bullet point in de release notes.
-
+    - CSS cleanup, hoe de pagina er uitziet is het zelfde, maar de code is nu iets netter.
+ 
 - Instellingen
     - De Instellingen pagina heeft zijn eigen 'settings framework' gekregen zodat de pagina niet herladen hoefte worden als je iets veranderd.
     - Links handige niet getreurd, je kan nu de UI omdraaien zodat je de knoppen aan de linkerkant hebt.

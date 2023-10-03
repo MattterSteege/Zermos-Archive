@@ -16,11 +16,9 @@
     @* <meta name="theme-color" content="#f8f9fa"> *@
     <meta name="theme-color" content="@(Context.Request.Cookies["theme"] == "light" || Context.Request.Cookies["theme"] == "blue" ? "#f8f9fa" : Context.Request.Cookies["theme"] == "dark" || Context.Request.Cookies["theme"] == "red" ? "#1a1a1a" : Context.Request.Cookies["theme"] == "pink" ? "#ffebf2" : "#f8f9fa")">
     <link rel="stylesheet" href="~/css/style.css?v=@version">
-
     @if (ViewContext.View.Path != "/Views/Shared/_Loading.cshtml")
     {
         <script src="~/js/global.js?v=@version"></script>
-
     }
     @if (!string.IsNullOrEmpty(ViewData["add_css"]?.ToString()))
     {
@@ -145,11 +143,11 @@
         </a>
     </div>
 
-    <div class="backbutton" onclick="customHistory.historyBack()">
+    <div class="backbutton" onclick="window.history.back()">
         <i class="fa-solid fa-angle-left"></i>
     </div>
 
-    <div class="forewardbutton" onclick="customHistory.historyForward()">
+    <div class="forewardbutton" onclick="window.history.forward()">
         <i class="fa-solid fa-angle-right"></i>
     </div>
 </div>
@@ -196,9 +194,10 @@
         
         //check if the url is the same as the current url
         if (url === window.location.pathname) {
-            console.log("[ Zermos ] The url is the same as the current url, not navigating");
             return;
         }
+        
+        main.dispatchEvent(new Event("main:unload"));    
         
         // Define a function to append a script to either the head or body
         function appendScript(element, scriptToWorkWith, isSrc) {
@@ -299,8 +298,11 @@
                     
                     html.remove();
                     
-                    if (!fromHistory)
-                        customHistory.navigateTo(url);
+                    if (!fromHistory) {
+                        window.location.hash = url;
+                        //set cookie 'this_session_last_page' to the current page, only session
+                        document.cookie = "this_session_last_page=" + url + "; path=/";
+                    }
                     
                     main.dispatchEvent(new Event("main:load"));    
                     
@@ -337,15 +339,17 @@
             return div.innerHTML;
         }
     }
+    
+    //on popstate, replace the page with what's after the hash
+    window.addEventListener('popstate', function(e) {
+        //if the hash is empty, don't replace the page
+        if (window.location.hash === "") {
+            return;
+        }
+        ReplacePage(window.location.hash.replace("#", ""), true);
+    });
+   
 </script>
 @await RenderSectionAsync("Scripts", false)
-@* <script> *@
-@*     if('serviceWorker' in navigator) { *@
-@*         navigator.serviceWorker.register('/serviceworker.js') *@
-@*             .then(function() { *@
-@*                 console.log("[ SERVICE WORKER ] Registered"); *@
-@*             }); *@
-@*     } *@
-@* </script> *@
 </body>
 </html>

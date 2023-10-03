@@ -139,12 +139,11 @@
 }
 
 .icon {
-    height: 80px;
     width: 33.33%;
     display: flex;
     justify-content: end;
     align-items: center;
-    padding-right: var(--padding);
+    padding: var(--padding);
 }
 
 .icon i {
@@ -181,18 +180,23 @@
 }
 
 .main-container .row-2 .child:nth-child(1) {
-    height: 250px;
+    height: auto;
     width: 100%;
     display: grid;
     grid-template-rows: 80px 146px;
     grid-template-columns: 1fr;
-    grid-gap: var(--padding);
     justify-content: flex-start;
     align-items: center;
     background: var(--overlay-color);
     border-radius: var(--border-radius);
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.weather-graph-container {
+    width: 100%;
+    height: 100%;
     padding: var(--padding);
+    position: relative;
 }
 
 .main-container .row-2 .child:nth-child(1) .header {
@@ -201,13 +205,15 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     border-radius: var(--border-radius);
 }
 
 .weather-graph {
-    /* width: 100%; */
-    height: 100%;
+    position: absolute;
+    width: calc(100% - var(--padding) * 2);
+    height: calc(100% - var(--padding) * 2);
+    
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -231,7 +237,10 @@
 }
 
 .line-overlay {
-    height: 100%;
+    position: absolute;
+    width: calc(100% - var(--padding) * 2);
+    height: calc(100% - var(--padding) * 2);
+    
     border: 1px solid var(--text-color);
     border-radius: var(--border-radius-small);
     grid-row: 2;
@@ -266,8 +275,11 @@
 }
 
 .weather-graph-underlay {
-    /* width: 100%; */
-    height: 100%;
+    position: absolute;
+    width: calc(100% - var(--padding) * 2);
+    height: calc(100% - var(--padding) * 2);
+    
+    
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;

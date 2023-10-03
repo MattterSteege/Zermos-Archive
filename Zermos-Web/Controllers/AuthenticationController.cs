@@ -153,6 +153,15 @@ public class AuthenticationController : Controller
         return PartialView("Login", new loginModel {code = 3});
     }
 
+    #if DEBUG
+    [ZermosPage]
+    [Route("/LoginPage")]
+    public async Task<IActionResult> TestPages(int code = 0)
+    {
+        return PartialView("Login", new loginModel {code = code});
+    }
+    #endif
+
     public class loginModel
     {
         public string email { get; set; }

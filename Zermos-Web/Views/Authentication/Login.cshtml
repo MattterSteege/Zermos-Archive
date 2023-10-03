@@ -17,91 +17,91 @@
     //when model is 3, say that the user is logged out
 }
 
-<link rel="stylesheet" href="/css/account.css">
+<link rel="stylesheet" href="/css/koppelingen.css">
 
 @if (Model == null || Model.code == 0)
 {
     <div class="login">
-        <div class="login-child">
-            <p class="child">Zermos gebruikt Microsoft om in te loggen!</p>
-            <p class="child">Om in te loggen bij Zermos moet je je microsoft account gebruiken. Je wordt, nadat je op de knop hieronder klikt, doorgestuurd naar de microsoft login pagina. Je volgd de aangegeven stappen en daarna wordt je weer terug gestuurd en ben je ingelogd.</p>
+        <div class="login-explanation">
+            <h1>Zermos gebruikt Microsoft om in te loggen!</h1>
+            <p>Om in te loggen bij Zermos moet je je microsoft account gebruiken. Je wordt, nadat je op de knop hieronder klikt, doorgestuurd naar de microsoft login pagina. Je volgd de aangegeven stappen en daarna wordt je weer terug gestuurd en ben je ingelogd.</p>
         </div>
-        <a href=@Model.email class="form-control">Open Microsoft</a>
+        <a href=@Model.email class="form-control login-explanation">Open Microsoft</a>
     </div>
 }
 else if (Model.code == 11)
 {
     <div class="login">
-        <div class="login-child">
-            <p class="child">Welkom terug!</p>
-            <p class="child">Er is een e-mail gestuurd naar <b>@(Model.email ?? "[email]")</b> met een link om in te loggen. Controleer je inbox, en klik op de link om direct toegang te krijgen. Als je de e-mail niet binnen enkele minuten ziet, controleer dan je spam map.</p>
+        <div class="login-explanation">
+            <h1>Welkom terug!</h1>
+            <p>Er is een e-mail gestuurd naar <b>@(Model.email ?? "[email]")</b> met een link om in te loggen. Controleer je inbox, en klik op de link om direct toegang te krijgen. Als je de e-mail niet binnen enkele minuten ziet, controleer dan je spam map.</p>
         </div>
     </div>
 }
 else if (Model.code == 12)
 {
     <div class="login">
-        <div class="login-child">
-            <p class="child">Welkom bij Zermos!</p>
-            <p class="child">Geweldig! We hebben zojuist een e-mail verzonden naar <b>@(Model.email ?? "[email]")</b> met de link om een account aan te maken. Ga snel naar je inbox om de e-mail te vinden. Als je de e-mail niet binnen enkele minuten ziet, controleer dan je spam map.</p>
+        <div class="login-explanation">
+            <h1>Welkom bij Zermos!</h1>
+            <p>Geweldig! We hebben zojuist een e-mail verzonden naar <b>@(Model.email ?? "[email]")</b> met de link om een account aan te maken. Ga snel naar je inbox om de e-mail te vinden. Als je de e-mail niet binnen enkele minuten ziet, controleer dan je spam map.</p>
         </div>
     </div>
 }
 else if (Model.code == 13)
 {
     <div class="login">
-        <div class="login-child">
-            <p class="child">Succes!</p>
-            <p class="child">Je bent succesvol ingelogd op je account. Welkom terug, <b>@(Model.email ?? "[email]")</b>! Je hebt nu volledige toegang tot alle functies en mogelijkheden, mits je ze gekoppeld heb.</p>
+        <div class="login-explanation">
+            <h1>Succes!</h1>
+            <p>Je bent succesvol ingelogd op je account. Welkom terug, <b>@(Model.email ?? "[email]")</b>! Je hebt nu volledige toegang tot alle functies en mogelijkheden, mits je ze gekoppeld heb.</p>
         </div>
     </div>
 }
 else if (Model.code == 21)
 {
     <div class="login">
-        <div class="login-child">
-            <p class="child">Deze gebruiker is niet gevonden.</p>
+        <div class="login-explanation">
+            <h1>Deze gebruiker is niet gevonden.</h1>
         </div>
     </div>
 }
 else if (Model.code == 22)
 {
     <div class="login">
-        <div class="login-child">
-            <p class="child">Deze verificatie code is verlopen.</p>
+        <div class="login-explanation">
+            <h1>Deze verificatie code is verlopen.</h1>
         </div>
     </div>
 }
 else if (Model.code == 23)
 {
     <div class="login">
-        <div class="login-child">
-            <p class="child">Deze verificatie code is niet geldig.</p>
+        <div class="login-explanation">
+            <h1>Deze verificatie code is niet geldig.</h1>
         </div>
     </div>
 }
 else if (Model.code == 24)
 {
     <div class="login">
-        <div class="login-child">
-            <p class="child">Deze gebruiker is al geverifieerd.</p>
+        <div class="login-explanation">
+            <h1>Deze gebruiker is al geverifieerd.</h1>
         </div>
     </div>
 }
 else if (Model.code == 3)
 {
     <div class="login">
-        <div class="login-child">
-            <p class="child">Uitgelogd!</p>
-            <p class="child">Je bent succesvol uitgelogd van je account. Je kan nu niet meer bij je gegevens, en je moet opnieuw inloggen om ze weer te kunnen zien.</p>
+        <div class="login-explanation">
+            <h1>Uitgelogd!</h1>
+            <p>Je bent succesvol uitgelogd van je account. Je kan nu niet meer bij je gegevens, en je moet opnieuw inloggen om ze weer te kunnen zien.</p>
         </div>
     </div>
 }
 else
 {
     <div class="login">
-        <div class="login-child">
-            <p class="child" style="color: #EB3628">Er is een onbekende fout opgetreden?</p>
+        <div class="login-explanation">
+            <h1 style="color: #EB3628">Er is een onbekende fout opgetreden?</h1>
         </div>
     </div>
 }

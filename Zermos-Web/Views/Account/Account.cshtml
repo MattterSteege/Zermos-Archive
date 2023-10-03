@@ -1,6 +1,4 @@
-﻿@* @using Zermos_Web.Utilities *@
-@using Zermos_Web.Utilities
-@using System.Security.Claims
+﻿@using Zermos_Web.Utilities
 @using Newtonsoft.Json
 @using Zermos_Web.Models.SomtodayAfwezigheidModel
 @model Infrastructure.Entities.user
@@ -8,138 +6,113 @@
 @{
     ViewBag.Title = "title";
 }
+
 <link rel="stylesheet" href="/css/account.css">
 
-<iframe name="update" id="update" style="display: none;"></iframe>
-<div class="information-group">
-    <div class="information-container">
-        <div class="information-item-parent" id="profiel">
-            <h1>Profiel</h1>
-            <p>@Model.email</p>
-        </div>
+<div class="account-container">
+    <div class="account-item">
+        <h1>Profiel</h1>
+        <p>@Model.email</p>
+    </div>
+    
+    <div onclick="ReplacePage('@Url.Action("Afwezigheid", "Somtoday")')" class="account-item clickable">
+        <h1>Afwezigheid</h1>
+        @{
+            int afwezigheidCount = JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(Model.cached_somtoday_absence.IsNullOrEmpty() ? "{\"items\":[]}" : Model.cached_somtoday_absence).items.Count;
+        }
         
-        <div onclick="ReplacePage('@Url.Action("Afwezigheid", "Somtoday")')" class="information-item-parent" id="afwezigheid" style="cursor: pointer;">
-            <h1 style="text-decoration: underline; cursor: pointer;" >Afwezigheid</h1>
+        <p>Je bent dit jaar <b>@afwezigheidCount</b> keer afwezig geweest@(afwezigheidCount == 0 ? ", ga zo door!" : ".")</p>
+    </div>
+    
+    <div onclick="ReplacePage('@Url.Action("Settings", "Account")')" class="account-item clickable">
+        <h1>Instellingen</h1>
+        <p>Hier kan je verschillende instellingen aanpassen</p>
+    </div>
+
+    <div class="account-item" id="info">
+        <div class="overlay-account-info-grid">
+            <div class="left">
+                <h1>Opgeslagen informatie</h1>
+                <p>De volgende dingen zijn opgeslagen om Zermos goed te kunnen gebruiken (klik om te openen)</p>
+            </div>
+            <div class="right"><i class="fa-solid fa-angle-down" id="openCloseArrow" style="transition: all 0.5s ease 0s;"></i></div>
+        </div>
+        <div class="account-info-grid hidden">
             @{
-                int afwezigheidCount = JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(Model.cached_somtoday_absence.IsNullOrEmpty() ? "{\"items\":[]}" : Model.cached_somtoday_absence).items.Count;
-            }
-            
-            <p>Je bent dit jaar <b>@afwezigheidCount</b> keer afwezig geweest@(afwezigheidCount == 0 ? ", ga zo door!" : ".")</p>
-        </div>
-        
-        <div onclick="ReplacePage('@Url.Action("Settings", "Account")')" class="information-item-parent" id="instellingen" style="cursor: pointer;">
-            <h1 style="text-decoration: underline;">Instellingen</h1>
-            <p>Hier kan je verschillende instellingen aanpassen</p>
-        </div>
-
-        <div class="information-item-parent" id="info">
-            <div class="overlay-opgeslagen-info">
-                <div class="left">
-                    <h1>Opgeslagen informatie</h1>
-                    <p>De volgende dingen zijn opgeslagen om Zermos goed te kunnen gebruiken (klik om te openen)</p>
-                </div>
-                <div class="right"><i class="fa-solid fa-angle-down" id="openCloseArrow" style="transition: all 0.5s ease 0s;"></i></div>
-            </div>
-            <div class="opgeslagen-informatie-grid hidden">
-                @{
-                    //Loop trough all the properties of the user object and display them like this: [name]: [value (capt at 25 characters)]
-                    foreach (var property in Model.GetType().GetProperties())
+                //Loop trough all the properties of the user object and display them like this: [name]: [value (capt at 25 characters)]
+                foreach (var property in Model.GetType().GetProperties())
+                {
+                    //if property is not { get; set; } then skip it
+                    if (property.GetMethod == null || property.SetMethod == null || property.GetValue(Model, null) == null)
                     {
-                        //if property is not { get; set; } then skip it
-                        if (property.GetMethod == null || property.SetMethod == null || property.GetValue(Model, null) == null)
-                        {
-                            continue;
-                        }
-
-                        <p><b>@property.Name</b></p>
+                        continue;
                     }
+
+                    <p><b>@property.Name</b></p>
                 }
-            </div>
-        </div>
-
-        <div class="information-item-parent" id="koppelingen">
-            <h1 onclick="ReplacePage('@Url.Action("Index", "Koppelingen")')" style="text-decoration: underline; cursor: pointer;">Koppelingen</h1>
-            <div class="opgeslagen-informatie-grid">
-                <div class="infowijs">
-                    @if (TokenUtils.CheckToken(Model.infowijs_access_token))
-                    {
-                        <p><b>Infowijs</b>, geldig tot: @(TokenUtils.GetTokenExpiration(Model.infowijs_access_token).ToString("d/M/yyyy"))</p>
-                        <button id="infowijs-first" onclick="AreYouSure('infowijs')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
-
-                        <form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="infowijs">
-                            <button id="infowijs-second" class="koppel-knop zeker" style="display: none">Zeker?</button>
-                        </form>
-                    }
-                    else
-                    {
-                        <p><b>Infowijs</b> is niet gekoppeld</p>
-                        <button onclick="ReplacePage('@Url.Action("Infowijs", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
-                    }
-                </div>
-                <div class="zermelo">
-                    @if (Model.zermelo_access_token_expires_at > DateTime.Now)
-                    {
-                        <p><b>Zermelo</b>, geldig tot: @(Model.zermelo_access_token_expires_at?.ToString("d/M/yyyy"))</p>
-                        <button id="zermelo-first" onclick="AreYouSure('zermelo')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
-
-                        <form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="zermelo">
-                            <button id="zermelo-second" class="koppel-knop zeker" style="display: none">Zeker?</button>
-                        </form>
-                    }
-                    else
-                    {
-                        <p><b>Zermelo</b> is niet gekoppeld</p>
-                        <button onclick="ReplacePage('@Url.Action("Zermelo", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
-                    }
-                </div>
-
-                <div class="somtoday">
-                    @if (TokenUtils.CheckToken(Model.somtoday_refresh_token))
-                    {
-                        <p><b>Somtoday</b>, geldig tot: @(TokenUtils.GetTokenExpiration(Model.somtoday_refresh_token).ToString("d/M/yyyy"))</p>
-                        <button id="somtoday-first" onclick="AreYouSure('somtoday')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
-
-                        <form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="somtoday">
-                            <button id="somtoday-second" class="koppel-knop zeker" style="display: none">Zeker?</button>
-                        </form>
-                    }
-                    else
-                    {
-                        <p><b>Somtoday</b> is niet gekoppeld</p>
-                        <button onclick="ReplacePage('@Url.Action("Somtoday", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
-                    }
-                </div>
-                
-            </div>
-        </div>
-
-        <div class="information-item-parent" id="opening_page">
-            <h1>Uitloggen?</h1>
-            <button onclick="ReplacePage('/logout')" class="koppel-knop ontkoppelen">Wil je uitloggen?</button>
+            }
         </div>
     </div>
-    <div class="items-container">
-        <div class="item" onclick="doScrolling('profiel', 1000)" href="?profiel">
-            profiel
+
+    <div class="account-item">
+        <h1 onclick="ReplacePage('@Url.Action("Index", "Koppelingen")')" style="text-decoration: underline; cursor: pointer;">Koppelingen</h1>
+        <div class="account-info-grid">
+            <div class="infowijs">
+                @if (TokenUtils.CheckToken(Model.infowijs_access_token))
+                {
+                    <p><b>Infowijs</b>, geldig tot: @(TokenUtils.GetTokenExpiration(Model.infowijs_access_token).ToString("d/M/yyyy"))</p>
+                    <button id="infowijs-first" onclick="AreYouSure('infowijs')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
+
+                    <form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="infowijs">
+                        <button id="infowijs-second" class="koppel-knop zeker" style="display: none">Zeker?</button>
+                    </form>
+                }
+                else
+                {
+                    <p><b>Infowijs</b> is niet gekoppeld</p>
+                    <button onclick="ReplacePage('@Url.Action("Infowijs", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
+                }
+            </div>
+            <div class="zermelo">
+                @if (Model.zermelo_access_token_expires_at > DateTime.Now)
+                {
+                    <p><b>Zermelo</b>, geldig tot: @(Model.zermelo_access_token_expires_at?.ToString("d/M/yyyy"))</p>
+                    <button id="zermelo-first" onclick="AreYouSure('zermelo')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
+
+                    <form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="zermelo">
+                        <button id="zermelo-second" class="koppel-knop zeker" style="display: none">Zeker?</button>
+                    </form>
+                }
+                else
+                {
+                    <p><b>Zermelo</b> is niet gekoppeld</p>
+                    <button onclick="ReplacePage('@Url.Action("Zermelo", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
+                }
+            </div>
+
+            <div class="somtoday">
+                @if (TokenUtils.CheckToken(Model.somtoday_refresh_token))
+                {
+                    <p><b>Somtoday</b>, geldig tot: @(TokenUtils.GetTokenExpiration(Model.somtoday_refresh_token).ToString("d/M/yyyy"))</p>
+                    <button id="somtoday-first" onclick="AreYouSure('somtoday')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
+
+                    <form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="somtoday">
+                        <button id="somtoday-second" class="koppel-knop zeker" style="display: none">Zeker?</button>
+                    </form>
+                }
+                else
+                {
+                    <p><b>Somtoday</b> is niet gekoppeld</p>
+                    <button onclick="ReplacePage('@Url.Action("Somtoday", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
+                }
+            </div>
+            
         </div>
-        <div class="item" onclick="doScrolling('profiel', 1000)" href="?afwezigheid">
-            afwezigheid
-        </div>
-        <div class="item" onclick="doScrolling('instellingen', 1000)" href="?instellingen">
-            instellingen
-        </div>
-        <div class="item" onclick="doScrolling('info', 1000)" href="?info">
-            opgeslagen informatie
-        </div>
-        <div class="item" onclick="doScrolling('koppelingen', 1000)" href="?koppelingen">
-            koppelingen
-        </div>
-        <div class="item" onclick="doScrolling('theme', 1000)" href="?theme">
-            Thema's
-        </div>
-        <div class="item" onclick="doScrolling('opening_page', 1000)" href="?opening_page">
-            Laad pagina
-        </div>
+    </div>
+
+    <div class="account-item">
+        <h1>Uitloggen?</h1>
+        <button onclick="ReplacePage('/logout')" class="koppel-knop ontkoppelen">Wil je uitloggen?</button>
     </div>
 </div>
 
@@ -153,92 +126,11 @@
             document.getElementById(app + '-second').style.display = 'none';
         });
     }
-
-    function getElementY(query) {
-        return main.scrollTop + document.getElementById(query).getBoundingClientRect().top
-    }
-
-    function doScrolling(element, duration) {
-        var startingY = main.scrollTop
-        var elementY = getElementY(element)
-        // If element is close to page's bottom then window will scroll only to some position above the element.
-        var targetY = document.body.scrollHeight - elementY < main.innerHeight ? document.body.scrollHeight - main.innerHeight : elementY
-        var diff = targetY - startingY
-
-        // Easing function: easeInOutCubic
-        // From: https://gist.github.com/gre/1650294
-        var easing = function(t) {
-            return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
-        }
-        var start
-
-        if (!diff) return
-        
-        diff -= 96;
-        
-        //add a percentage of diff to the duration
-        duration += Math.abs(diff / 10);
-
-        // Bootstrap our animation - it will get called right before next frame shall be rendered.
-        window.requestAnimationFrame(function step(timestamp) {
-            if (!start) start = timestamp
-            // Elapsed miliseconds since start of scrolling.
-            var time = timestamp - start
-            // Get percent of completion in range [0, 1].
-            var percent = Math.min(time / duration, 1)
-            // Apply the easing.
-            // It can cause bad-looking slow frames in browser performance tool, so be careful.
-            percent = easing(percent)
-
-            main.scrollTo(0, startingY + diff * percent)
-
-            // Proceed with animation as long as we wanted it to.
-            if (time < duration) {
-                window.requestAnimationFrame(step)
-            }
-        })
-    }
-
-     main.addEventListener('main:load', () => {
-        var indexItems = document.querySelectorAll('.items-container div');
-        var items = document.querySelectorAll('.information-item-parent');
-
-        //add the 'active' class to the item who's top is the closest to the top of the mainElement
-        function setActive() {
-          var closest = items[0];
-          var closestDistance = Math.abs(items[0].getBoundingClientRect().top - main.getBoundingClientRect().top - 96);
-        
-          for (var i = 1; i < items.length; i++) {
-            var distance = Math.abs(items[i].getBoundingClientRect().top - main.getBoundingClientRect().top - 96);
-            if (distance < closestDistance) {
-              closest = items[i];
-              closestDistance = distance;
-            }
-          }
-        
-          for (var i = 0; i < indexItems.length; i++) {
-            indexItems[i].classList.remove('active');
-          }
-        
-          for (var i = 0; i < indexItems.length; i++) {
-            if (indexItems[i].getAttribute('href') === '?' + closest.getAttribute('id')) {
-              indexItems[i].classList.add('active');
-              break;
-            }
-          }
-        }
-
-        //add the 'active' class to the item who's top is the closest to the top of the mainElement
-        setActive();
-
-        //add the 'active' class to the item who's top is the closest to the top of the mainElement when scrolling
-        main.addEventListener('scroll', function() {
-            setActive();
-        });
-        
+    
+     main.addEventListener('main:load', () => {   
         //when clicking on #info, toggle the hidden class on the opgeslagen-informatie-grid
         document.getElementById('info').addEventListener('click', function() {
-            document.querySelector('.opgeslagen-informatie-grid').classList.toggle('hidden');
+            document.querySelector('.account-info-grid').classList.toggle('hidden');
             document.getElementById('openCloseArrow').style.transform = document.getElementById('openCloseArrow').style.transform === 'rotate(180deg)' ? 'rotate(0deg)' : 'rotate(180deg)';
         });
     });

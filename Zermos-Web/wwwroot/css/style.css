@@ -150,7 +150,7 @@ body {
     display: flex;
     background: var(--overlay-color);
     width: 250px;
-    height: calc(100vh - calc(var(--padding) * 2));
+    height: calc(100% - calc(var(--padding) * 2));
     position: fixed;
     top: 0;
     flex-direction: column;
@@ -650,6 +650,7 @@ main.main::-webkit-scrollbar-track {
         --padding: var(--padding-small);
         --border-radius: var(--border-radius-small);
         --button-height: var(--button-height-small);
+        /*zoom: 70%;*/
     }
 
     .sidebar {
@@ -684,6 +685,10 @@ main.main::-webkit-scrollbar-track {
 
 @media only screen and (max-width: 1200px) {
 
+    body {
+        zoom: 100%;
+    }
+    
     main.main {
         z-index: 100;
         left: 0 !important;
