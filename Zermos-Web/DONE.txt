@@ -8,6 +8,7 @@
     - Laptop gebruikers zien nu een leesbare tekst
     - het opsporen van bugs is nu iets makkelijker geworden door backend logging (boeit je niks, maar ik ben er blij mee)
     - Het zelfgemaakt 'history' systeem werkt nu ook voor computer gebruikers (volgende en terug knoppen, mogelijk knoppen op je muis) en voor mobiele gebruikers (terug knop op je telefoon)
+    - Je instellingen worden nu op een nieuwe manier opgeslagen, dus het kan zijn dat je instellingen nu weg zijn, sorry daarvoor. Maar nu kan ik 100x makkelijker instellingen toevoegen.
 
 - Account
     - Er is nu een uitlog knop... Dat duurde even...

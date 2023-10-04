@@ -4,5 +4,3 @@ TODO: make time use login, so the user get's logged out after the session is clo
 TODO: create a file viewer for homework etc.
 TODO: fix the history system
 TODO: dagrooster
-
-TODO: add left-right hand mode to database onder de naam hand_side

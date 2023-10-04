@@ -1,8 +1,12 @@
 ﻿// ReSharper disable InconsistentNaming
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Infrastructure.Utils;
 
 namespace Infrastructure.Entities
@@ -12,8 +16,6 @@ namespace Infrastructure.Entities
         [Key] public string email { get; set; }
         public string name { get; set; }
         public string school_id { get; set; }
-        [Setting] public string theme { get; set; }
-        [Setting] public string default_page { get; set; }
         public string custom_huiswerk { get; set; }
         
         //Token Related
@@ -34,5 +36,85 @@ namespace Infrastructure.Entities
         public string cached_infowijs_news { get; set; }
         public string cached_school_informationscreen { get; set; }
         public string cached_zermelo_schedule { get; set; }
+        
+        //Settings
+        public string settings { get; set; }
+    
+        [NotMapped, Setting] 
+        public string theme
+        {
+            get => GetSetting("theme");
+            set => SetSetting("theme", value);
+        }
+    
+        [NotMapped, Setting] 
+        public string default_page
+        {
+            get => GetSetting("default_page");
+            set => SetSetting("default_page", value);
+        }
+    
+        [NotMapped, Setting] 
+        public string hand_side
+        {
+            get => GetSetting("hand_side");
+            set => SetSetting("hand_side", value);
+        }
+        
+        // Helper method to get a setting value
+        private string GetSetting(string settingName)
+        {
+            if (settings == null)
+            {
+                return null;
+            }
+
+            var settingsArray = settings.Split(';');
+            foreach (var setting in settingsArray)
+            {
+                var keyValue = setting.Split('=');
+                if (keyValue.Length == 2 && keyValue[0].Trim() == settingName)
+                {
+                    return keyValue[1].Trim();
+                }
+            }
+
+            return null;
+        }
+
+        // Helper method to set a setting value
+        private void SetSetting(string settingName, string settingValue)
+        {
+            if (settings == null)
+            {
+                settings = "";
+            }
+
+            var settingsArray = settings.Split(';');
+            var newSettings = new List<string>();
+
+            // Update or add the setting value
+            bool updated = false;
+            foreach (var setting in settingsArray)
+            {
+                var keyValue = setting.Split('=');
+                if (keyValue.Length == 2 && keyValue[0].Trim() == settingName)
+                {
+                    newSettings.Add($"{settingName}={settingValue}");
+                    updated = true;
+                }
+                else
+                {
+                    newSettings.Add(setting);
+                }
+            }
+
+            if (!updated)
+            {
+                newSettings.Add($"{settingName}={settingValue}");
+            }
+
+            settings = string.Join(";", newSettings);
+        }
     }
 }

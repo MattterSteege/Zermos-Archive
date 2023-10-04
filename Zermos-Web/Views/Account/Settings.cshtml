@@ -66,6 +66,11 @@ function UpdateHandSide(side, element) {
     UpdateSetting("hand_side", side, element);
 }
 
+function UpdateDefaultPage(page, element) {
+    document.cookie = "default_page=" + page + ";path=/;max-age=5184000";
+    UpdateSetting("default_page", page, element);
+}
+
 function UpdateSetting(key, value, element) {   
     var url = "/Account/UpdateSetting?key=" + key + "&value=" + value;
     fetch(url, {

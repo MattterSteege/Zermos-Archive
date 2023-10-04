@@ -236,6 +236,10 @@ function RefreshWeer() {
                 main.querySelector(".weather-temp").innerText =
                     data["temp"] + "°C - " + precipitation[index] + "mm/u";
             }, 1000);
+            
+            main.addEventListener("main:unload", () => {
+                clearInterval(timeLineInterval);
+            });
 
             //when hovering over the .weather element
             main.addEventListener("mousemove", (event) => {
@@ -291,6 +295,7 @@ function RefreshWeer() {
             
             function DefaultLineMovement() {
                 //start updating the time line every second
+                clearInterval(timeLineInterval);
                 timeLineInterval = setInterval(() => {
                     let currentUnix = Math.floor(Date.now() / 1000);
                     let percentage =
@@ -302,6 +307,11 @@ function RefreshWeer() {
                     main.querySelector(".weather-temp").innerText =
                         data["temp"] + "°C - " + precipitation[index] + "mm/u";
                 }, 1000);
+                
+                            
+                main.addEventListener("main:unload", () => {
+                    clearInterval(timeLineInterval);
+                });
             }
 
             //array of 25 - 10 5-minute intervals
@@ -313,10 +323,6 @@ function RefreshWeer() {
             )[0];
             const svg = createSmoothBezierCurve(precipitation);
             svgContainer.appendChild(svg);
-            
-            main.addEventListener("main:unload", () => {
-                clearInterval(timeLineInterval);
-            });
         });
 
     function createSmoothBezierCurve(data) {
