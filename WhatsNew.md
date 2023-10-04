@@ -6,6 +6,20 @@ nav_exclude: false
 
 # Release Notes - Versie 0.3 - 04-10-2023
 
+0.3.1 - Een beetje dit, een beetje dat, maar nu nog net iets meer
+
+- Hoofdmenu
+    - Uitgevallen lessen staan nu niet meer in de paklijst
+    - 'Volgende les' laat uitgevallen lessen nu ook neit zien
+
+- account - instellingen
+    - de 'handig' instelling laat nu ook zien welke je hebt gekozen
+    
+- Infowijs - Schoolkalender
+    - Datum's zijn weer gefixt (hoop ik, het is echt heel vervelend om mee te werken)
+
+# Release Notes - Versie 0.3 - 04-10-2023
+
 0.3 - Een beetje dit, een beetje dat
 
 - algemeen
