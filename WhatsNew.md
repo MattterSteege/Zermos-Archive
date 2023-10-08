@@ -4,7 +4,23 @@ title: what's new
 nav_exclude: false
 ---
 
-# Release Notes - Versie 0.3 - 04-10-2023
+# Release Notes - Versie 0.3.2 - 08-10-2023
+
+0.3.2 - Een beetje dit, een beetje dat, maar nu nog net iets meer
+- algemeen
+    - Als je je thema veranderd, krijgt de balk aan de bovenkant nu ook de juiste kleur.
+    - meedere kleine bugfixes die ik niet meer weet.
+
+- hoofdmenu
+    - De tijd tot de volgende les is nu weer synchroom met de Nederlandse tijdzone
+    
+- somtoday - huiswerk
+    - Als je huiswerk sorteert, dan worden de lege dagen nu ook weggehaald.
+
+- Zermelo - rooster
+    - Het rooster dat in de wintertijd ligt loop nu geen uur meer voor.
+
+# Release Notes - Versie 0.3.1 - 04-10-2023
 
 0.3.1 - Een beetje dit, een beetje dat, maar nu nog net iets meer
 
