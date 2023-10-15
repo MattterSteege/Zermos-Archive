@@ -488,53 +488,50 @@ namespace Zermos_Web.Controllers
         #endregion
         
         #region Teams
-#if DEBUG
+        
+#if RELEASE
+    const string redirectUrl = "https://zermos.kronk.tech/Koppelingen/Teams/Callback";
+#else
+        const string redirectUrl = "https://192.168.178.34:5001/Koppelingen/Teams/Callback";
+#endif
+        const string clientId = "REDACTED_MS_CLIENT_ID";
+        const string clientSecret = "lcV8Q~GbQjBv45fivMgN3ARP~UHPNSuV259gQcU7";
+        const string scopes = "profile offline_access openid";
+
         [ZermosPage]
+        [Route("/Koppelingen/Teams")]
         public IActionResult Teams()
         {
-            var redirectUrl = "https://localhost:5001/Koppelingen/Teams/Callback";
-            
-            redirectUrl = "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=REDACTED_MS_CLIENT_ID&response_type=code&redirect_uri=" + redirectUrl + "&response_mode=query&scope=User.Read offline_access&state=" + TokenUtils.RandomString();
-
-            return Redirect(redirectUrl);
+            string redirect = "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=" +
+                              clientId + "&response_type=code&redirect_uri=" + redirectUrl +
+                              "&response_mode=query&scope=" + scopes + "&state=" + TokenUtils.RandomString();
+            return PartialView(model: redirect);
         }
         
         [Route("/Koppelingen/Teams/Callback")]
-        [ZermosPage]
         public async Task<IActionResult> TeamsCallback(string code, string state, string session_state)
         {
-            var redirectUrl = "https://localhost:5001/Koppelingen/Teams/Callback";
-
             var client = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Post, "https://login.microsoftonline.com/organizations/oauth2/v2.0/token");
             var collection = new List<KeyValuePair<string, string>>();
-            collection.Add(new("client_id", "REDACTED_MS_CLIENT_ID"));
-            collection.Add(new("scope", "User.Read"));
-            //collection.Add(new("scope", "User.Read EduAssignments.Read"));
+            collection.Add(new("client_id", clientId));
+            collection.Add(new("scope", scopes));
             collection.Add(new("code", code));
             collection.Add(new("redirect_uri", redirectUrl));
             collection.Add(new("grant_type", "authorization_code"));
-            collection.Add(new("client_secret", "lcV8Q~GbQjBv45fivMgN3ARP~UHPNSuV259gQcU7"));
+            collection.Add(new("client_secret", clientSecret));
             var content = new FormUrlEncodedContent(collection);
             request.Content = content;
             var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
+            
+        
+            if (!response.IsSuccessStatusCode)
+            {
+                return Ok("failed");
+            }
 
-            var responseString = await response.Content.ReadAsStringAsync();
-            
-            var auth = JsonConvert.DeserializeObject<TeamsAuthenticationModel>(responseString);
-
-            request = new HttpRequestMessage(HttpMethod.Get, "https://graph.microsoft.com/v1.0/me");
-            request.Headers.Add("Accept", "application/json");
-            request.Headers.Add("Authorization", "Bearer " + auth.access_token);
-            
-            response = await client.SendAsync(request);
-            
-            var user = JsonConvert.DeserializeObject<TeamsUserModel>(await response.Content.ReadAsStringAsync());
-            
-            return Ok(user);
+            return Ok("success\n\n" + await response.Content.ReadAsStringAsync());
         }
-#endif
         #endregion
     }
 }

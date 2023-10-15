@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Zermos_Web.Models;
 
-public class TeamsUserModel
+public class MicrosoftUserModel
 {
     [JsonProperty("@odata.context")] 
     public string odatacontext { get; set; }

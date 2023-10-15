@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ZermosContext))]
-    partial class ZermosContextModelSnapshot : ModelSnapshot
+    [Migration("20231008131546_settings_system")]
+    partial class settings_system
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,9 +57,6 @@ namespace Infrastructure.Migrations
                     b.Property<string>("name")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("notities")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("school_id")
                         .HasColumnType("longtext");
 
@@ -72,7 +72,7 @@ namespace Infrastructure.Migrations
                     b.Property<string>("somtoday_student_id")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("microsoft_access_token")
+                    b.Property<string>("teams_access_token")
                         .HasColumnType("longtext");
 
                     b.Property<string>("teams_refresh_token")

@@ -57,6 +57,9 @@
         <_ContentIncludedByDefault Remove="test-JSON\Zermelo\26-2023_rooster.json" />
         <_ContentIncludedByDefault Remove="test-JSON\Zermelo\27-2023_rooster.json" />
         <_ContentIncludedByDefault Remove="test-JSON\Zermelo\28-2023_rooster.json" />
+        <_ContentIncludedByDefault Remove="Views\Notitie\AddNotities.cshtml" />
+        <_ContentIncludedByDefault Remove="Views\Notitie\GetNotitie.cshtml" />
+        <_ContentIncludedByDefault Remove="Views\Notitie\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
@@ -96,6 +99,9 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+
+
+
 
 
 

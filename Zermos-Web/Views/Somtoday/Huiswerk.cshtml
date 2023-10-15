@@ -418,5 +418,41 @@
             else
                 homeworkItem.style.display = "flex";
         }
+        
+        //loop through all the homework days, and if there are no homework items in the day that are visible, hide the day
+        var homeworkDays = document.getElementsByClassName("homework-day-parent");
+        for (var i = 0; i < homeworkDays.length; i++) {
+            var homeworkDay = homeworkDays[i];
+            var homeworkItems = homeworkDay.getElementsByClassName("homeworkItem");
+            
+            var visibleHomeworkItems = 0;
+            for (var j = 0; j < homeworkItems.length; j++) {
+                if (homeworkItems[j].style.display === "flex") {
+                    visibleHomeworkItems++;
+                    break;
+                }
+            }
+            
+            if (visibleHomeworkItems === 0)
+                homeworkDay.style.display = "none";
+            else
+                homeworkDay.style.display = "grid";
+        }
+    }
+    
+    function arraysEqual(a, b) {
+        //check if arrays are equal, but they do not have to be in the same order
+    
+        if (a === b) return true;
+        if (a == null || b == null) return false;
+        if (a.length !== b.length) return false;
+    
+        a.sort();
+        b.sort();
+    
+        for (var i = 0; i < a.length; ++i) {
+            if (a[i] !== b[i]) return false;
+        }
+        return true;
     }
 </script>

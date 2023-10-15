@@ -5,19 +5,13 @@
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class teams : Migration
+    public partial class notities : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "microsoft_access_token",
-                table: "users",
-                type: "longtext",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "teams_refresh_token",
+                name: "notities",
                 table: "users",
                 type: "longtext",
                 nullable: true);
@@ -27,11 +21,7 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "microsoft_access_token",
-                table: "users");
-
-            migrationBuilder.DropColumn(
-                name: "teams_refresh_token",
+                name: "notities",
                 table: "users");
         }
     }

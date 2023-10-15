@@ -27,7 +27,6 @@ namespace Infrastructure.Migrations
                     somtoday_refresh_token = table.Column<string>(type: "longtext", nullable: true),
                     somtoday_student_id = table.Column<string>(type: "longtext", nullable: true),
                     infowijs_access_token = table.Column<string>(type: "longtext", nullable: true),
-                    theme = table.Column<string>(type: "longtext", nullable: true),
                     VerificationToken = table.Column<string>(type: "longtext", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     VerifiedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)

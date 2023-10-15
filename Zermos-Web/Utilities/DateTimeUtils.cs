@@ -149,19 +149,32 @@ public static class DateTimeUtils
             return $"{diff.Days / 30} maand{(diff.Days / 30 > 1 ? "en" : "")}";
         return $"{diff.Days / 365} jaar";
     }
-
-    public static DateTime ConvertToNormalDutchTime(this DateTime inputDate)
+    
+    public static DateTime ConvertUnixTimestampToDutchTime(this int unixTimestamp)
     {
-        //convert dutch time to normal dutch time with DST
-        bool isDst = TimeZoneInfo.Local.IsDaylightSavingTime(inputDate);
-        if (isDst)
-            inputDate = inputDate.AddHours(1);
-        return inputDate;
+        // Define the Dutch timezone (Amsterdam) with DST support
+        TimeZoneInfo dutchTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+
+        // Convert Unix timestamp to DateTime
+        DateTime utcDateTime = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp).UtcDateTime;
+
+        // Convert to Dutch timezone
+        DateTime dutchTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, dutchTimeZone);
+
+        return dutchTime;
     }
     
-    //TSource type should be DateTime
-    public static Appointment GetClosestNextDate<T>(this IEnumerable<T> source) where T :  Appointment
+    public static int DutchDateTimeToUnixTimestamp(this DateTime dutchDateTime)
     {
-        return (source as T[] ?? source.ToArray()).Where(x => x.start.ToDateTime().ConvertToNormalDutchTime() > DateTime.Now).MinBy(x => x.start);
+        // Define the Dutch timezone (Amsterdam) with DST support
+        TimeZoneInfo dutchTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+
+        // Convert to UTC
+        DateTime utcDateTime = TimeZoneInfo.ConvertTimeToUtc(dutchDateTime, dutchTimeZone);
+
+        // Convert to Unix timestamp
+        int unixTimestamp = (int)utcDateTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+
+        return unixTimestamp;
     }
 }

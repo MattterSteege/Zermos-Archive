@@ -298,7 +298,7 @@
 .homework-bijlagen {
     display: flex;
     gap: var(--padding-small);
-    flex-direction: column;
+    flex-direction: row;
     margin-top: var(--padding-small);
 }
 

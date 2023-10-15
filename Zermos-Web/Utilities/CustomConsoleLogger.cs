@@ -59,6 +59,11 @@ class CustomConsoleLogger : ILogger
         
         Console.Write($"[{DateTime.Now:HH:mm:ss} {logLevel}]");
         Console.ResetColor();
-        Console.WriteLine($" {formatter(state, exception)}");
+        Console.Write($" {state} {exception?.Message}");
+        if (exception?.StackTrace != null)
+        {
+            Console.Write($"\n{exception.StackTrace}");
+        }
+        Console.WriteLine();
     }
 }

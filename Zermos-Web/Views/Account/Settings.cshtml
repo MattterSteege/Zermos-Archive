@@ -39,8 +39,8 @@
         <h1>Handig?</h1>
         <p>Welke hand gebruik je voor zermos?</p>
         <div class="settings-options">
-            <div id="3_Rechts" onclick="UpdateHandSide('right', this)" class="setting-button@(Model.default_page == "right" ? " selected" : "")">Met mijn rechter hand</div>
-            <div id="3_Links" onclick="UpdateHandSide('left', this)" class="setting-button@(Model.default_page == "left" ? " selected" : "")">Met mijn linker hand</div>
+            <div id="3_Rechts" onclick="UpdateHandSide('right', this)" class="setting-button@(Model.hand_side == "right" ? " selected" : "")">Met mijn rechter hand</div>
+            <div id="3_Links" onclick="UpdateHandSide('left', this)" class="setting-button@(Model.hand_side == "left" ? " selected" : "")">Met mijn linker hand</div>
         </div>
     </div>
 </div>
@@ -52,7 +52,9 @@ function UpdateTheme(theme, element) {
     document.documentElement.classList.remove("red");
     document.documentElement.classList.remove("blue");
     document.documentElement.classList.remove("pink");
+    document.querySelector("meta[name=theme-color]").setAttribute("content", theme === "light" || theme === "blue" ? "#f8f9fa" : theme === "dark" || theme === "red" ? "#1a1a1a" : theme === "pink" ? "#ffebf2" : "#f8f9fa");
     document.documentElement.classList.add(theme);
+    
     //expires in 60 days
     document.cookie = "theme=" + theme + ";path=/;max-age=5184000";
     UpdateSetting("theme", theme, element);

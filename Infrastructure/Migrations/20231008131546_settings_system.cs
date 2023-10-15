@@ -5,28 +5,28 @@
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class setting_system : Migration
+    public partial class settings_system : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "default_page",
-                table: "users");
-
-            migrationBuilder.RenameColumn(
-                name: "theme",
+            migrationBuilder.AddColumn<string>(
+                name: "settings",
                 table: "users",
-                newName: "settings");
+                type: "longtext",
+                nullable: true);
+            
+            migrationBuilder.DropColumn(
+                name: "default_page", 
+                table: "users");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
+            migrationBuilder.DropColumn(
                 name: "settings",
-                table: "users",
-                newName: "theme");
+                table: "users");
 
             migrationBuilder.AddColumn<string>(
                 name: "default_page",

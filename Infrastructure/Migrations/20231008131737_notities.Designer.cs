@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ZermosContext))]
-    [Migration("20231004081813_setting_system")]
-    partial class setting_system
+    [Migration("20231008131737_notities")]
+    partial class notities
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,6 +55,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("name")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("notities")
                         .HasColumnType("longtext");
 
                     b.Property<string>("school_id")

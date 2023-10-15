@@ -591,16 +591,27 @@ main.main::-webkit-scrollbar-track {
 }
 
 @keyframes loading-dots {
-     0% {
-         transform: scale(0);
-     }
-     50% {
-         transform: scale(1);
-     }
-     100% {
-         transform: scale(0);
-     }
- }
+    0% {
+        transform: scale(0) translateY(10px);
+        opacity: 0;
+    }
+    25% {
+        transform: scale(1) translateY(10px);
+        opacity: 1;
+    }
+    75% {
+        transform: scale(1) translateY(-10px);
+        opacity: 1;
+    }
+    90% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(0) translateY(10px);
+        opacity: 0;
+    }
+}
 
 .loader-text {
     font-size: 20px;

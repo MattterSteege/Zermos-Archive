@@ -84,9 +84,19 @@
                             var minuteHeight = 100f / 510f;
 
                             //get the date of the day that the appointments are for
-                            //8 * 60 + 20 = 500 minutes
-                            var dayStartUnix = appointmentList.ElementAt(0).start.ToDateTime().Date.AddMinutes(6 * 60 + 20).ToUnixTime();
-
+                            //8 * 60 + 20 = 500 minutes means 08:20
+                            var dayStartUnix = appointmentList.First().start; // this is unix. make the unix time to be the same date but the time should be 08:20
+                            dayStartUnix -= dayStartUnix % 86400; // remove the time from the unix time
+                            dayStartUnix += 8 * 60 * 60 + 20 * 60; // add 8 hours and 20 min to the unix time (08:20)
+                            
+                            // Define the time zones for UTC and the Dutch timezone
+                            TimeZoneInfo dutchTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"); // This ID represents the Dutch timezone
+                            DateTime utcDateTime = DateTimeOffset.FromUnixTimeSeconds(dayStartUnix).UtcDateTime;
+                            DateTime dutchDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, dutchTimeZone);
+                            TimeSpan timeDifference = dutchDateTime - utcDateTime;
+                            int timeDifferenceInSeconds = (int)timeDifference.TotalSeconds;
+                            
+                            dayStartUnix -= timeDifferenceInSeconds;
                         }
 
                         @foreach (var appointment in appointmentList)
@@ -95,7 +105,8 @@
                             //appointment height = (appointment end time - appointment start time) * minuteHeight
 
                             var appointmentHeight = (appointment.end - appointment.start) / 60f * minuteHeight;
-                            var appointmentTop = (appointment.start - dayStartUnix) / 60f * minuteHeight;
+                            var lessonStart = appointment.start;
+                            var appointmentTop = (lessonStart - dayStartUnix) / 60f * minuteHeight;
 
                             <div class="lesson-time-based @(appointment.cancelled ? "canceled" : "") @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.ObjectToBase64String())')">
                                 @(appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.subjects[0] + "</p>") : "")

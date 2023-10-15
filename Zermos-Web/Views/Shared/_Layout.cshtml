@@ -13,17 +13,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="manifest" href="/manifest.webmanifest"/>
-    @* <meta name="theme-color" content="#f8f9fa"> *@
     <meta name="theme-color" content="@(Context.Request.Cookies["theme"] == "light" || Context.Request.Cookies["theme"] == "blue" ? "#f8f9fa" : Context.Request.Cookies["theme"] == "dark" || Context.Request.Cookies["theme"] == "red" ? "#1a1a1a" : Context.Request.Cookies["theme"] == "pink" ? "#ffebf2" : "#f8f9fa")">
     <link rel="stylesheet" href="~/css/style.css?v=@version">
-    @if (ViewContext.View.Path != "/Views/Shared/_Loading.cshtml")
-    {
-        <script src="~/js/global.js?v=@version"></script>
-    }
-    @if (!string.IsNullOrEmpty(ViewData["add_css"]?.ToString()))
-    {
-        <link rel="stylesheet" href="~/css/@(ViewData["add_css"]).css?v=@version">
-    }
+    <script  src="/js/zermos-framework.js?v=@version"></script>
 </head>
 <body onload="ReplacePage('@ViewData["url"]');">
 <div class="sidebar">
@@ -183,173 +175,177 @@
     }
 }
 <script id="vital-script">
-    console.log('[ Zermos ] Zermos framework is geïnitialiseerd');
-    console.log('[ Zermos ] Je gebruikt Zermos versie @Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION")');
+console.log('[ Zermos ] Je gebruikt Zermos versie @Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION")');
+//check if zermos-framework.js file is loaded
 
-    var main = document.getElementById("main");
-    var content = document.getElementById("content");
-
-    function ReplacePage(url, fromHistory = false) {
-        document.body.removeAttribute("onload");
-        
-        //check if the url is the same as the current url
-        if (url === window.location.pathname) {
-            return;
-        }
-        
-        main.dispatchEvent(new Event("main:unload"));    
-        
-        // Define a function to append a script to either the head or body
-        function appendScript(element, scriptToWorkWith, isSrc) {
-            const script = document.createElement("script");
-            if (isSrc) {
-                script.src = scriptToWorkWith.src;
-                script.integrity = scriptToWorkWith.integrity;
-                script.crossOrigin = scriptToWorkWith.crossOrigin;
-                script.referrerPolicy = scriptToWorkWith.referrerPolicy;
-            } else {
-                script.innerHTML = scriptToWorkWith.innerHTML;
-            }
-
-            if (scriptToWorkWith.defer) {
-                script.defer = true;
-            }
-            
-            script.id = "added-by-fetch";
-            element.appendChild(script);
-        }
-
-        // Define a function to append a stylesheet link to the head
-        function appendStylesheet(href) {
-            const link = document.createElement("link");
-            link.rel = "stylesheet";
-            link.href = href + '?v=@version';
-            link.id = "added-by-fetch";
-            document.head.appendChild(link);
-            return link;
-        }
-        
-        document.getElementsByClassName("loader-text")[0].innerHTML = loadingTexts[Math.floor(Math.random() * loadingTexts.length)];
-
-        //set loading-text to one of the following
-        
-        content.style.opacity = "1";
-        // Make an AJAX request
-        $.ajax({
-            url: url,
-            success: function(data, textStatus, xhr){
-                
-                if (xhr.status === 299) {
-                    window.location.href = data;
-                    return;
-                }
-                
-                setTimeout(async function() {
-                    let i  ;
-                    //remove all items with id added-by-fetch
-                    const elements = document.querySelectorAll("#added-by-fetch");
-                    for (i= 0; i < elements.length; i++) {
-                        elements[i].remove();
-                    }
-                    
-                    // Update main content
-                    main.outerHTML = '<main class="main" id="main"></main>';
-                    main = document.getElementById("main");
-                    main.innerHTML = stripTag("link", stripTag("script", data));
-
-                    let html = document.createElement("html");
-                    html.innerHTML = data;
-                    
-                    const scripts = html.getElementsByTagName("script");
-
-                    for (i= 0; i < scripts.length; i++) {
-                        if (scripts[i].src) {
-                            appendScript(document.head, scripts[i], true);
-                        } else {
-                            appendScript(document.body, scripts[i], false);
-                        }
-                    }
-
-                    const links = html.getElementsByTagName("link");
-                    var amountOfStylesheets = links.length;
-                    for (i= 0; i < links.length; i++) {
-                        if (links[i].rel === "stylesheet") {
-                            var link = appendStylesheet(links[i].href);
-                            watchForLoading(link);
-                        }
-                    }
-                    
-                    function watchForLoading(link) {
-
-                        var interval = setInterval(function() {
-                            try {
-                                if (link.sheet != null && link.sheet.cssRules.length > 0) {
-                                    //if it is, the stylesheet is loaded
-                                    clearInterval(interval);
-                                    amountOfStylesheets--;
-                                }
-                            } catch (e) { }
-                        }, 50); 
-                    }
-                        
-                    while (amountOfStylesheets > 0) {
-                        await new Promise(res => setTimeout(res, 50));
-                    }
-                    
-                    html.remove();
-                    
-                    if (!fromHistory) {
-                        window.location.hash = url;
-                        //set cookie 'this_session_last_page' to the current page, only session
-                        document.cookie = "this_session_last_page=" + url + "; path=/";
-                    }
-                    
-                    main.dispatchEvent(new Event("main:load"));    
-                    
-                    content.style.opacity = "0";
-                }, 250);
-            },
-            error: function(xhr, status, error) {
-                //prevent error logging
-
-                //console.log(xhr, status, error);
-                
-                //if it is a 401, repolace /login
-                if (xhr.status === 401) {
-                    ReplacePage("/Login");
-                }
-                else
-                {
-                    document.getElementsByClassName("loader-text")[0].innerHTML = "De pagina kon niet opgevraagd worden, waarschijnlijk is Zermos even offline";
-                }
-            },
-            cache: false,
-            type: 'GET'
-        });
+let main = document.getElementById("main");
+const content = document.getElementById("content");
+let isRunning = false;
 
 
-        function stripTag(tag, data) {
-            const div = document.createElement('div');
-            div.innerHTML = data;
-            const scripts = div.getElementsByTagName(tag);
-            let i = scripts.length;
-            while (i--) {
-                scripts[i].parentNode.removeChild(scripts[i]);
-            }
-            return div.innerHTML;
-        }
+function ReplacePage(url, fromHistory = false) {     
+    if (isRunning) {
+        return;
     }
     
-    //on popstate, replace the page with what's after the hash
-    window.addEventListener('popstate', function(e) {
-        //if the hash is empty, don't replace the page
-        if (window.location.hash === "") {
-            return;
+    //if body has onload function, remove it
+    if (document.body.getAttribute('onload')) {
+        document.body.removeAttribute('onload');
+        //set url to the base url
+        history.replaceState(null, null, "/");
+    }
+
+    //check if the url is the same as the current url
+    if (url === window.location.pathname) {
+        return;
+    }
+
+    main.dispatchEvent(new Event("main:unload"));
+
+    // Define a function to append a script to either the head or body
+    function appendScript(element, scriptToWorkWith, isSrc) {
+        const script = document.createElement("script");
+        if (isSrc) {
+            script.src = scriptToWorkWith.src;
+            script.integrity = scriptToWorkWith.integrity;
+            script.crossOrigin = scriptToWorkWith.crossOrigin;
+            script.referrerPolicy = scriptToWorkWith.referrerPolicy;
+        } else {
+            script.innerHTML = scriptToWorkWith.innerHTML;
         }
-        ReplacePage(window.location.hash.replace("#", ""), true);
+
+        if (scriptToWorkWith.defer) {
+            script.defer = true;
+        }
+
+        script.id = "added-by-fetch";
+        element.appendChild(script);
+    }
+
+    // Define a function to append a stylesheet link to the head
+    function appendStylesheet(href) {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href + '?v=@version';
+        link.id = "added-by-fetch";
+        document.head.appendChild(link);
+        return link;
+    }
+
+    document.getElementsByClassName("loader-text")[0].innerHTML = loadingTexts[Math.floor(Math.random() * loadingTexts.length)];
+
+    //set loading-text to one of the following
+
+    content.style.opacity = "1";
+    // Make an AJAX request
+    isRunning = true;
+    $.ajax({
+        url: url,
+        success: function(data, textStatus, xhr) {
+
+            if (xhr.status === 299) {
+                window.location.href = data;
+                return;
+            }
+
+            setTimeout(async function() {
+                let i;
+                //remove all items with id added-by-fetch
+                const elements = document.querySelectorAll("#added-by-fetch");
+                for (i = 0; i < elements.length; i++) {
+                    elements[i].remove();
+                }
+
+                // Update main content
+                main.outerHTML = '<main class="main" id="main"></main>';
+                main = document.getElementById("main");
+                main.innerHTML = stripTag("link", stripTag("script", data));
+
+                let html = document.createElement("html");
+                html.innerHTML = data;
+
+                const scripts = html.getElementsByTagName("script");
+
+                for (i = 0; i < scripts.length; i++) {
+                    if (scripts[i].src) {
+                        appendScript(document.head, scripts[i], true);
+                    } else {
+                        appendScript(document.body, scripts[i], false);
+                    }
+                }
+
+                const links = html.getElementsByTagName("link");
+                let amountOfStylesheets = links.length;
+                for (i = 0; i < links.length; i++) {
+                    if (links[i].rel === "stylesheet") {
+                        const link = appendStylesheet(links[i].href);
+                        watchForLoading(link);
+                    }
+                }
+
+                function watchForLoading(link) {
+
+                    const interval = setInterval(function() {
+                        try {
+                            if (link.sheet != null && link.sheet.cssRules.length > 0) {
+                                //if it is, the stylesheet is loaded
+                                clearInterval(interval);
+                                amountOfStylesheets--;
+                            }
+                        } catch (e) {}
+                    }, 50);
+                }
+
+                while (amountOfStylesheets > 0) {
+                    await new Promise(res => setTimeout(res, 50));
+                }
+
+                html.remove();
+
+                if (!fromHistory) {
+                    window.location.hash = url;
+                    //set cookie 'this_session_last_page' to the current page, only session
+                    document.cookie = "this_session_last_page=" + url + "; path=/";
+                }
+
+                main.dispatchEvent(new Event("main:load"));
+
+                content.style.opacity = "0";
+                isRunning = false;
+            }, 250);
+        },
+        error: function(xhr) {
+            //prevent error logging
+
+            //console.log(xhr, status, error);
+
+            //if it is a 401, replace /login
+            if (xhr.status === 401) {
+                isRunning = false;
+                ReplacePage("/Login");
+            } else {
+                document.getElementsByClassName("loader-text")[0].innerHTML = "De pagina kon niet opgevraagd worden, waarschijnlijk is Zermos even offline";
+                isRunning = false;
+            }
+        },
+        cache: false,
+        type: 'GET'
     });
-   
+
+
+    function stripTag(tag, data) {
+        const div = document.createElement('div');
+        div.innerHTML = data;
+        const scripts = div.getElementsByTagName(tag);
+        let i = scripts.length;
+        while (i--) {
+            scripts[i].parentNode.removeChild(scripts[i]);
+        }
+        return div.innerHTML;
+    }
+}
+
+console.log('[ Zermos ] Zermos framework is geïnitialiseerd');
 </script>
-@await RenderSectionAsync("Scripts", false)
 </body>
 </html>

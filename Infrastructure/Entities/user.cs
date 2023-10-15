@@ -4,9 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Infrastructure.Utils;
 
 namespace Infrastructure.Entities
@@ -16,7 +13,10 @@ namespace Infrastructure.Entities
         [Key] public string email { get; set; }
         public string name { get; set; }
         public string school_id { get; set; }
+        
+        //Zermos related
         public string custom_huiswerk { get; set; }
+        public string notities { get; set; }
         
         //Token Related
         public string zermelo_access_token { get; set; }
@@ -25,8 +25,8 @@ namespace Infrastructure.Entities
         public string somtoday_refresh_token { get; set; }
         public string somtoday_student_id { get; set; }
         public string infowijs_access_token { get; set; }
-        public string teams_access_token { get; set; }
-        public string teams_refresh_token { get; set; }
+        public string microsoft_access_token { get; set; }
+        public string microsoft_refresh_token { get; set; }
 
         //cache related
         public string cached_somtoday_grades { get; set; }

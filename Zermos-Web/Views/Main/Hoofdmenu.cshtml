@@ -25,8 +25,8 @@
         {
             var zermeloRooster = JsonConvert.DeserializeObject<ZermeloRoosterModel>(Model.cached_zermelo_schedule);
             zermeloTodayLessons = zermeloRooster.response.data[0].appointments.Where(x => x.start.ToDateTime().Date == DateTime.Now.Date).ToList();
-            zermeloNextLesson = zermeloTodayLessons.Where(x => x.end.ToDateTime() > DateTime.Now).MinBy(x => x.start.ToDateTime());
-            nextLessonStart = zermeloNextLesson?.start.ToDateTime().ConvertToNormalDutchTime() ?? DateTime.MinValue;
+            zermeloNextLesson = zermeloTodayLessons.Where(x => x.end.ToDateTime() > DateTime.Now).Where(x => !x.cancelled).MinBy(x => x.start.ToDateTime());
+            nextLessonStart = zermeloNextLesson?.start.ConvertUnixTimestampToDutchTime() ?? DateTime.MinValue;
         }
 
         if (!string.IsNullOrEmpty(Model.cached_somtoday_grades))
@@ -63,9 +63,9 @@
                     @{
                         if (nextLessonStart != DateTime.MinValue)
                         {
-                            <p class="lesson-subject">@(zermeloNextLesson?.subjects.Count > 0 ? zermeloNextLesson?.subjects[0] : "")</p>
-                            <p class="lesson-teacher">@(zermeloNextLesson?.teachers.Count > 0 ? zermeloNextLesson?.teachers[0] : "")</p>
-                            <p class="lesson-location" style="text-transform: unset;">@(zermeloNextLesson?.locations.Count > 0 ? zermeloNextLesson?.locations[0] : "")</p>
+                            <p class="lesson-subject">@(zermeloNextLesson?.subjects.Count > 0 ? zermeloNextLesson.subjects[0] : "")</p>
+                            <p class="lesson-teacher">@(zermeloNextLesson?.teachers.Count > 0 ? zermeloNextLesson.teachers[0] : "")</p>
+                            <p class="lesson-location" style="text-transform: unset;">@(zermeloNextLesson?.locations.Count > 0 ? zermeloNextLesson.locations[0] : "")</p>
                             <p id="class_starts_at" class="lesson-location @nextLessonStart.GetDateDifference(DateTime.Now).ToUnixTime()">berekenen...</p>
                         }
                         else
@@ -99,8 +99,8 @@
             <div class="information">
                 <h1 class="heading">Laatste nieuws:</h1>
                 <div class="news-info">
-                    <p class="news-title">@(infowijsMessage.FirstOrDefault(m => m.Type == 30)?.Content.ContentClass?.Title)</p>
-                    <p class="news-time">Verstuurd om: @(infowijsMessage.FirstOrDefault(m => m.Type == 30)?.CreatedAt.ToDateTime().ToString("HH:mm dd-MM-yyyy"))</p>
+                    <p class="news-title">@(infowijsMessage?.FirstOrDefault(m => m.Type == 30)?.Content.ContentClass?.Title ?? "geen bericht gevonden")</p>
+                    <p class="news-time">Verstuurd om: @(infowijsMessage?.FirstOrDefault(m => m.Type == 30)?.CreatedAt.ToDateTime().ToString("HH:mm dd-MM-yyyy") ?? "")</p>
                 </div>
             </div>
             <div class="icon">
@@ -182,12 +182,15 @@
             <h1 class="heading">Paklijst</h1>
             @foreach (var les in zermeloTodayLessons!.DistinctBy(x => x.subjects?[0]))
             {
+                if(les.cancelled){ continue;}
+                
+                
                 // toggle button that crosses out the lesson
 
                 <div class="paklijst-item">
                     <div class="paklijst-item-text">
-                        <p class="paklijst-item-text-title">@les.subjects?[0]</p>
-                        <p class="paklijst-item-text-subtitle">@les.teachers?[0]</p>
+                        <p class="paklijst-item-text-title">@(les.subjects.Count > 0 ? les.subjects[0] : "-")</p>
+                        <p class="paklijst-item-text-subtitle">@(les.teachers.Count > 0 ? les.teachers[0] : "-")</p>
                     </div>
                     <div class="paklijst-item-icon">
                         <i class="fa-solid fa-check fa-fw card-icon active"></i>

@@ -19,8 +19,9 @@
 
                 @foreach (var homeworkItem in dayGroup)
                 {
-                    var startsAt = homeworkItem.startsAt.ToDateTime().ConvertToNormalDutchTime();
-                    var endsAt = homeworkItem.endsAt.ToDateTime().ConvertToNormalDutchTime();
+                    //utc, convert to dutch time with daylight saving
+                    var startsAt = homeworkItem.startsAt.ConvertUnixTimestampToDutchTime();
+                    var endsAt = homeworkItem.endsAt.ConvertUnixTimestampToDutchTime();
                     
                     <div class="calendar-item" style="@(endsAt < DateTime.Now ? "opacity: 0.5;" : "opacity: 1;")">
                         @homeworkItem.title <br/>

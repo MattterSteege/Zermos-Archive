@@ -1,6 +1,6 @@
 ﻿namespace Zermos_Web.Models;
 
-public class TeamsAuthenticationModel
+public class MicrosoftAuthenticationModel
 {
     public string token_type { get; set; }
     public string scope { get; set; }

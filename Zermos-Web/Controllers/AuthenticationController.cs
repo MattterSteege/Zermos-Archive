@@ -68,7 +68,7 @@ public class AuthenticationController : Controller
 
         var responseString = await response.Content.ReadAsStringAsync();
 
-        var auth = JsonConvert.DeserializeObject<TeamsAuthenticationModel>(responseString);
+        var auth = JsonConvert.DeserializeObject<MicrosoftAuthenticationModel>(responseString);
 
         request = new HttpRequestMessage(HttpMethod.Get, "https://graph.microsoft.com/v1.0/me");
         request.Headers.Add("Accept", "application/json");
@@ -81,7 +81,7 @@ public class AuthenticationController : Controller
             return VerificationFailed(23);
         }
 
-        var teamsUser = JsonConvert.DeserializeObject<TeamsUserModel>(await response.Content.ReadAsStringAsync());
+        var teamsUser = JsonConvert.DeserializeObject<MicrosoftUserModel>(await response.Content.ReadAsStringAsync());
         
         return await VerificationSuccess(teamsUser.mail, null);
     }

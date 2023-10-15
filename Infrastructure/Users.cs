@@ -24,7 +24,7 @@ namespace Infrastructure
         {
             #if RELEASE
             return null;
-            #endif
+            #elif DEBUG
             
             try
             {
@@ -34,6 +34,7 @@ namespace Infrastructure
             {
                 return new List<user>();
             }
+            #endif
         }
 
         /// <summary>
