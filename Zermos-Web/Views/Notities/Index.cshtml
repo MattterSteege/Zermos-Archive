@@ -1,8 +1,25 @@
-﻿@model dynamic
+﻿@using Zermos_Web.Models.Zermos
+@model Zermos_Web.Models.Zermos.NotitiesModel
 
 @{
     ViewBag.Title = "title";
-    Layout = "_Layout";
 }
 
-<h2>title</h2>
+<style>
+    .card {
+        cursor: pointer;
+        background: #00b894;
+        margin-bottom: 10px;
+    }
+</style>
+
+@foreach (NotitieBoek notitieBoek in Model.NotitieBoeken)
+{
+    string url = "/Notities/" + notitieBoek.Id;
+
+    <div class="card" onclick="window.location.href='@url'">
+        <h5>@notitieBoek.Naam</h5>
+        <h6>@notitieBoek.Id</h6>
+        <h6>@notitieBoek.Notities.Count</h6>
+    </div>
+}

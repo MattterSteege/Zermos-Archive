@@ -1,0 +1,28 @@
+﻿@using Zermos_Web.Models.Zermos
+@model Zermos_Web.Models.Zermos.NotitieBoek
+
+@{
+    ViewBag.Title = "title";
+}
+
+<style>
+    .card {
+        cursor: pointer;
+        background: #00b894;
+        margin-bottom: 10px;
+    }
+</style>
+
+@foreach (Notitie notitie in Model.Notities)
+{
+    //get current url
+    string url = Context.Request.Path + "/" + notitie.Id;
+
+    <div class="card" onclick="window.location.href='@url'">
+        <h5>@notitie.Titel</h5>
+        <h6>@notitie.Omschrijving</h6>
+        <h6>@notitie.Id</h6>
+        <h6>@notitie.Tags.Count</h6>
+        <h6>@notitie.Paragraphs.Count</h6>
+    </div>
+}

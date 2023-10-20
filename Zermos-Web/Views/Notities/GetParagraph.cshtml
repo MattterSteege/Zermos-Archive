@@ -1,0 +1,19 @@
+﻿@model Zermos_Web.Models.Zermos.Paragraph
+
+@{
+    Layout = null;
+}
+
+<style>
+    .card {
+        cursor: pointer;
+        background: #00b894;
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="card">
+    <h5>@Model.Naam</h5>
+    <h6>@Model.Id</h6>
+    <h6>@Model.Inhoud</h6>
+</div>
