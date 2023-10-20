@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Zermos_Web.Models.Requirements;
@@ -6,14 +7,9 @@ using Zermos_Web.Models.Requirements;
 namespace Zermos_Web.Controllers
 {
     [Route("[action]")]
-    public class ErrorController : Controller
+    public class ErrorController : BaseController
     {
-        private readonly ILogger<ErrorController> _logger;
-
-        public ErrorController(ILogger<ErrorController> logger)
-        {
-            _logger = logger;
-        }
+        public ErrorController(Users user, ILogger<BaseController> logger) : base(user, logger) { }
 
         [ZermosPage]
         [HttpGet("/Error")]

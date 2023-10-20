@@ -11,7 +11,7 @@
 
 }
 
-<link rel="stylesheet" href="~/css/infowijs.css" />
+<link rel="stylesheet" href="~/css/infowijs.css"/>
 
 <div class="message-container">
     <div class="later">
@@ -28,7 +28,7 @@
                 @if (title != null)
                 {
                     <h2 class="title">@title.Content.ContentClass?.Title</h2>
-                                                                       
+
                     @if (lastUpdated < title.CreatedAt.ToDateTime())
                     {
                         <div class="news-notification">
@@ -59,19 +59,15 @@
                 @{
                     IEnumerable<Message> messages3 = attachments as Message[] ?? attachments.ToArray();
                 }
-                <div class="attachments" style="padding: @(messages3.Any() ? "16px" : "0");">
+                <div class="attachments">
                     @foreach (var attachment in messages3)
                     {
-                        <div class="attachments">
-                            <p onclick="window.open('@attachment.Content.ContentClass.Url');" class="attachment">@(attachment.Content.ContentClass.Name + System.IO.Path.GetExtension(attachment.Content.ContentClass.Url.AbsolutePath))</p>
-                        </div>
+                        <p onclick="window.open('@attachment.Content.ContentClass.Url');" class="attachment">@(attachment.Content.ContentClass.Name + System.IO.Path.GetExtension(attachment.Content.ContentClass.Url.AbsolutePath))</p>
                     }
-                    
+
                     @foreach (var photo in photos)
                     {
-                        <div class="attachments">
-                            <img src="@photo.Content.String" alt="Foto" class="photo-attachment" onclick="window.open('@photo.Content.String');" />
-                        </div>
+                        <img src="@photo.Content.String" alt="Foto" class="photo-attachment" onclick="window.open('@photo.Content.String');"/>
                     }
                 </div>
             </div>

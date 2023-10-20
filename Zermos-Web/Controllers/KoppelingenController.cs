@@ -22,54 +22,48 @@ using Zermos_Web.Utilities;
 namespace Zermos_Web.Controllers
 {
     [Authorize]
-    public class KoppelingenController : Controller
+    public class KoppelingenController : BaseController
     {
-        private readonly ILogger<KoppelingenController> _logger;
-        private readonly HttpClient _infowijsHttpClient;
-        private readonly HttpClient _zermeloHttpClient;
-        private readonly HttpClient _somtodayHttpClient;
-        private readonly HttpClient _somtodayHttpClientWithoutRedirect;
-        private readonly HttpClient _httpClientWithoutRedirect;
-        private readonly Users _users;
-        private readonly Random _random;
-
-        public KoppelingenController(ILogger<KoppelingenController> logger, Users users)
+        public KoppelingenController(Users user, ILogger<BaseController> logger) : base(user, logger)
         {
-            _logger = logger;
-            _users = users;
-            _infowijsHttpClient = new HttpClient
-            {
-                DefaultRequestHeaders =
-                {
-                    {"accept", "application/vnd.infowijs.v1+json"},
-                    {"x-infowijs-client", "nl.infowijs.hoy.android/nl.infowijs.client.antonius"}
-                }
-            };
-            _zermeloHttpClient = new HttpClient()
-            {
-                DefaultRequestHeaders =
-                {
-                    {"User-Agent", "Zermos-Web"}
-                }
-            };
-            _somtodayHttpClient = new HttpClient()
-            {
-                DefaultRequestHeaders =
-                {
-                    {"origin", "https://inloggen.somtoday.nl"},
-                    {"accept", "application/json"}
-                }
-            };
-            _somtodayHttpClientWithoutRedirect = new HttpClient(new HttpClientHandler {AllowAutoRedirect = false})
-            {
-                DefaultRequestHeaders =
-                {
-                    {"origin", "https://inloggen.somtoday.nl"},
-                }
-            };
-            _httpClientWithoutRedirect = new HttpClient(new HttpClientHandler {AllowAutoRedirect = false});
-            _random = new Random();
         }
+
+        private readonly HttpClient _infowijsHttpClient = new()
+        {
+            DefaultRequestHeaders =
+            {
+                {"accept", "application/vnd.infowijs.v1+json"},
+                {"x-infowijs-client", "nl.infowijs.hoy.android/nl.infowijs.client.antonius"}
+            }
+        };
+
+        private readonly HttpClient _zermeloHttpClient = new()
+        {
+            DefaultRequestHeaders =
+            {
+                {"User-Agent", "Zermos-Web"}
+            }
+        };
+
+        private readonly HttpClient _somtodayHttpClient = new()
+        {
+            DefaultRequestHeaders =
+            {
+                {"origin", "https://inloggen.somtoday.nl"},
+                {"accept", "application/json"}
+            }
+        };
+
+        private readonly HttpClient _somtodayHttpClientWithoutRedirect =
+            new(new HttpClientHandler {AllowAutoRedirect = false})
+            {
+                DefaultRequestHeaders =
+                {
+                    {"origin", "https://inloggen.somtoday.nl"},
+                }
+            };
+
+        private readonly HttpClient _httpClientWithoutRedirect = new(new HttpClientHandler {AllowAutoRedirect = false});
 
         [HttpGet]
         [ZermosPage]
@@ -81,47 +75,44 @@ namespace Zermos_Web.Controllers
         #region ontkoppelen
 
         [HttpPost("ontkoppel/{app}")]
-        public async Task<IActionResult> Ontkoppel(string app)
+        public IActionResult Ontkoppel(string app)
         {
             switch (app)
             {
                 case "infowijs":
-                    await _users.UpdateUserAsync(User.FindFirstValue("email"),
-                        new user {infowijs_access_token = string.Empty});
+                    ZermosUser = new user {infowijs_access_token = string.Empty};
                     return Redirect("/account");
 
                 case "somtoday":
-                    await _users.UpdateUserAsync(User.FindFirstValue("email"),
-                        new user
-                        {
-                            somtoday_access_token = string.Empty, somtoday_refresh_token = string.Empty,
-                            somtoday_student_id = string.Empty
-                        });
+                    ZermosUser = new user
+                    {
+                        somtoday_access_token = string.Empty, somtoday_refresh_token = string.Empty,
+                        somtoday_student_id = string.Empty
+                    };
                     return Redirect("/account");
 
                 case "zermelo":
-                    await _users.UpdateUserAsync(User.FindFirstValue("email"),
-                        new user
-                        {
-                            zermelo_access_token = string.Empty, zermelo_access_token_expires_at = DateTime.MinValue
-                        });
+                    ZermosUser = new user
+                    {
+                        zermelo_access_token = string.Empty, zermelo_access_token_expires_at = DateTime.MinValue
+                    };
                     return Redirect("/account");
 
                 default:
                     return Redirect("/account");
             }
         }
-
         #endregion
 
         #region infowijs
+
         [HttpGet]
         [ZermosPage]
         public IActionResult Infowijs()
         {
             return PartialView();
         }
-        
+
         [HttpGet]
         [Route("Koppelingen/Infowijs/Email")]
         [ZermosPage]
@@ -130,12 +121,13 @@ namespace Zermos_Web.Controllers
             ViewData["retry"] = false;
             return PartialView(model: "");
         }
-        
+
         [HttpPost]
         [Route("Koppelingen/Infowijs/Email")]
-        public async Task<IActionResult> InfowijsWithEmail(string email, string customer_product_id, string user_id, string id)
+        public async Task<IActionResult> InfowijsWithEmail(string email, string customer_product_id, string user_id,
+            string id)
         {
-            if (email != null && (customer_product_id == null || user_id ==  null || id == null))
+            if (email != null && (customer_product_id == null || user_id == null || id == null))
             {
                 var url1 = "https://api.infowijs.nl/sessions";
                 var response1 = _infowijsHttpClient.PostAsync(url1, new StringContent(JsonConvert.SerializeObject(new
@@ -143,28 +135,31 @@ namespace Zermos_Web.Controllers
                     username = email,
                     communityName = "antonius"
                 }), Encoding.UTF8, "application/json")).Result;
-            
+
                 var result1 = response1.Content.ReadAsStringAsync().Result;
-                var antoniusAppAuthenticatieModelData = JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModel>(result1);
-            
+                var antoniusAppAuthenticatieModelData =
+                    JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModel>(result1);
+
                 // ViewData["email"] = email;
                 // ViewData["customer_product_id"] = antoniusAppAuthenticatieModelData.data.customer_product_id;
                 // ViewData["user_id"] = antoniusAppAuthenticatieModelData.data.user_id;
                 // ViewData["id"] = antoniusAppAuthenticatieModelData.data.id;
                 // ViewData["retry"] = false;
-                return Ok("?" + email + "?customer_product_id=" + antoniusAppAuthenticatieModelData.data.customer_product_id + "&user_id=" + antoniusAppAuthenticatieModelData.data.user_id + "&id=" + antoniusAppAuthenticatieModelData.data.id);
+                return Ok("?" + email + "?customer_product_id=" +
+                          antoniusAppAuthenticatieModelData.data.customer_product_id + "&user_id=" +
+                          antoniusAppAuthenticatieModelData.data.user_id + "&id=" +
+                          antoniusAppAuthenticatieModelData.data.id);
             }
 
-            var response2 = await _infowijsHttpClient.PostAsync("https://api.infowijs.nl/sessions/" + id + "/77584871-d26b-11ea-8b2e-060ffde8896c/" + user_id, null);
+            var response2 = await _infowijsHttpClient.PostAsync(
+                "https://api.infowijs.nl/sessions/" + id + "/77584871-d26b-11ea-8b2e-060ffde8896c/" + user_id, null);
             var result2 = await response2.Content.ReadAsStringAsync();
-            
+
             try
             {
-
                 var jwt = JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModelAuthSuccess>(result2).data;
 
-                await _users.UpdateUserAsync(User.FindFirstValue("email"),
-                    new user {infowijs_access_token = jwt});
+                ZermosUser = new user {infowijs_access_token = jwt};
 
                 return Ok("success");
             }
@@ -173,7 +168,7 @@ namespace Zermos_Web.Controllers
                 return Ok("failed");
             }
         }
-        
+
         [HttpGet]
         [Route("Koppelingen/Infowijs/Qr")]
         [ZermosPage]
@@ -186,7 +181,7 @@ namespace Zermos_Web.Controllers
                 ViewData["retry"] = retry;
                 return PartialView(model: "");
             }
-            
+
             var url1 = "https://api.infowijs.nl/sessions/transfer";
             var response1 = await _infowijsHttpClient.PostAsync(url1, null);
             var result1 = await response1.Content.ReadAsStringAsync();
@@ -208,7 +203,7 @@ namespace Zermos_Web.Controllers
             {
                 return Ok("failed");
             }
-            
+
             var url = "https://api.infowijs.nl/sessions/transfer/" + uuid;
             var response = await _infowijsHttpClient.GetAsync(url);
             var result = await response.Content.ReadAsStringAsync();
@@ -220,14 +215,15 @@ namespace Zermos_Web.Controllers
                 ViewData["retry"] = true;
                 return Ok("failed");
             }
-            
+
             var jwt = JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModelAuthSuccess>(result).data;
 
             var email = User.FindFirstValue("email");
-            await _users.UpdateUserAsync(email, new user {infowijs_access_token = jwt});
+            ZermosUser = new user {infowijs_access_token = jwt};
 
             return Ok("success");
         }
+
         #endregion
 
         #region Zermelo
@@ -284,7 +280,7 @@ namespace Zermos_Web.Controllers
 
             var zermeloUser = await GetZermeloUser(zermeloAuthentication.access_token);
 
-            var user = new user
+            ZermosUser = new user 
             {
                 zermelo_access_token = zermeloAuthentication.access_token,
                 school_id = zermeloUser.response.data[0].code,
@@ -292,8 +288,6 @@ namespace Zermos_Web.Controllers
                        zermeloUser.response.data[0].lastName,
                 zermelo_access_token_expires_at = DateTime.Now.AddMonths(2)
             };
-
-            await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
 
             return Ok("success");
         }
@@ -337,7 +331,7 @@ namespace Zermos_Web.Controllers
 
             var zermeloUser = await GetZermeloUser(zermeloAuthentication.access_token);
 
-            var user = new user
+            ZermosUser = new user
             {
                 zermelo_access_token = zermeloAuthentication.access_token,
                 school_id = zermeloUser.response.data[0].code,
@@ -345,7 +339,7 @@ namespace Zermos_Web.Controllers
                        zermeloUser.response.data[0].lastName,
                 zermelo_access_token_expires_at = DateTime.Now.AddMonths(2)
             };
-            await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
+            
 
             return Ok("success");
         }
@@ -433,7 +427,7 @@ namespace Zermos_Web.Controllers
             user.somtoday_access_token = somtodayAuthentication.access_token;
             user.somtoday_refresh_token = somtodayAuthentication.refresh_token;
 
-            await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
+            ZermosUser = user;
             return Ok("success");
         }
 
@@ -469,7 +463,7 @@ namespace Zermos_Web.Controllers
             const string chars = "abcdefghijklmnopqrstuvwxyz123456789";
             var nonce = new char[128];
             for (var i = 0; i < nonce.Length; i++)
-                nonce[i] = chars[_random.Next(0, chars.Length)];
+                nonce[i] = chars[new Random().Next(0, chars.Length)];
 
             return new string(nonce);
         }
@@ -486,9 +480,9 @@ namespace Zermos_Web.Controllers
         }
 
         #endregion
-        
+
         #region Teams
-        
+
 #if RELEASE
     const string redirectUrl = "https://zermos.kronk.tech/Koppelingen/Teams/Callback";
 #else
@@ -507,12 +501,13 @@ namespace Zermos_Web.Controllers
                               "&response_mode=query&scope=" + scopes + "&state=" + TokenUtils.RandomString();
             return PartialView(model: redirect);
         }
-        
+
         [Route("/Koppelingen/Teams/Callback")]
         public async Task<IActionResult> TeamsCallback(string code, string state, string session_state)
         {
             var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://login.microsoftonline.com/organizations/oauth2/v2.0/token");
+            var request = new HttpRequestMessage(HttpMethod.Post,
+                "https://login.microsoftonline.com/organizations/oauth2/v2.0/token");
             var collection = new List<KeyValuePair<string, string>>();
             collection.Add(new("client_id", clientId));
             collection.Add(new("scope", scopes));
@@ -523,8 +518,8 @@ namespace Zermos_Web.Controllers
             var content = new FormUrlEncodedContent(collection);
             request.Content = content;
             var response = await client.SendAsync(request);
-            
-        
+
+
             if (!response.IsSuccessStatusCode)
             {
                 return Ok("failed");
@@ -532,6 +527,7 @@ namespace Zermos_Web.Controllers
 
             return Ok("success\n\n" + await response.Content.ReadAsStringAsync());
         }
+
         #endregion
     }
 }

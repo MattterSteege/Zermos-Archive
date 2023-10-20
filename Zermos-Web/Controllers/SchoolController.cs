@@ -20,20 +20,15 @@ using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
-    public class SchoolController : Controller
+    public class SchoolController : BaseController
     {
-        private readonly ILogger<SchoolController> _logger;
-        private readonly Users _users;
+        public SchoolController(Users user, ILogger<BaseController> logger) : base(user, logger) { }
+        
         private readonly HttpClient _httpClient = new()
         {
             BaseAddress = new Uri("https://app.factorylab.nl/strukton/sensor/")
         };
-        
-        public SchoolController(ILogger<SchoolController> logger, Users users)
-        {
-            _logger = logger;
-            _users = users;
-        }
+
 
         [ZermosPage]
         public async Task<IActionResult> Informatiebord()
@@ -51,8 +46,7 @@ namespace Zermos_Web.Controllers
                         DateTime.Now.Hour < 12 || lastModified.Hour >= 12 && lastModified.Hour < 24 &&
                         DateTime.Now.Hour >= 12 && DateTime.Now.Hour < 24)
                     {
-                        return PartialView(JsonConvert.DeserializeObject<List<InformatieBoordModel>>(
-                            (await _users.GetUserAsync(User.FindFirstValue("email"))).cached_school_informationscreen));
+                        return PartialView(JsonConvert.DeserializeObject<List<InformatieBoordModel>>(ZermosUser.cached_school_informationscreen));
                     }
                 }
             }
@@ -98,10 +92,10 @@ namespace Zermos_Web.Controllers
 
             if (User.Identity is {IsAuthenticated: true})
             {
-                await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+                ZermosUser = new user
                 {
                     cached_school_informationscreen = JsonConvert.SerializeObject(model)
-                });
+                };
 
                 Response.Cookies.Append("cached-school-informationscreen", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"),
                     new CookieOptions {Expires = DateTime.Now.AddDays(60)});

@@ -15,17 +15,9 @@ using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
-    public class ZermeloController : Controller
+    public class ZermeloController : BaseController
     {
-        private readonly ILogger<ZermeloController> _logger;
-        private readonly Users _users;
-
-
-        public ZermeloController(ILogger<ZermeloController> logger, Users users)
-        {
-            _logger = logger;
-            _users = users;
-        }
+        public ZermeloController(Users user, ILogger<BaseController> logger) : base(user, logger) { }
 
         [Authorize]
         [ZermeloRequirement]
@@ -39,7 +31,7 @@ namespace Zermos_Web.Controllers
 
             var date = year + (week.ToCharArray().Length == 1 ? "0" + week : week);
 
-            var user = await _users.GetUserAsync(User.FindFirstValue("email"));
+            var user = ZermosUser;
 
             var baseURL = "https://ccg.zportal.nl/api/v3/liveschedule" +
                           $"?access_token={user.zermelo_access_token}" +
@@ -54,7 +46,7 @@ namespace Zermos_Web.Controllers
             {   
                 if (week == DateTime.Now.GetWeekNumber().ToString() && year == DateTime.Now.Year.ToString())
                 {
-                    await _users.UpdateUserAsync(User.FindFirstValue("email"), new user {cached_zermelo_schedule = "{\"response\":{\"data\":[{\"Items\":[{\"appointments\":[]}]}]}}"});
+                    ZermosUser = new user {cached_zermelo_schedule = "{\"response\":{\"data\":[{\"Items\":[{\"appointments\":[]}]}]}}"};
                 }
                 
                 HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je rooster kon niet worden geladen, waarschijnlijk is je Zermelo token verlopen", NotificationCenter.NotificationType.ERROR);
@@ -63,7 +55,7 @@ namespace Zermos_Web.Controllers
 
             if (week == DateTime.Now.GetWeekNumber().ToString() && year == DateTime.Now.Year.ToString())
             {
-                await _users.UpdateUserAsync(User.FindFirstValue("email"), new user {cached_zermelo_schedule = await response.Content.ReadAsStringAsync()});
+                ZermosUser = new user {cached_zermelo_schedule = await response.Content.ReadAsStringAsync()};
             }
             
             var zermeloRoosterModel = JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync());

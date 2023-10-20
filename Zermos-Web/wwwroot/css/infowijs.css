@@ -90,17 +90,16 @@ pre {
 }
 
 .message .attachments {
-    margin-top: var(--padding);
     display: flex;
     flex-direction: column;
-    margin-bottom: auto;
+    justify-content: flex-end;
+    height: 100%;
 }
 
 .message div.attachment {
     border-radius: var(--border-radius-small);
     cursor: pointer;
     color: var(--text-color);
-
     display: block;
     background-color: var(--background-color);
     border: none;
@@ -118,6 +117,8 @@ pre {
     outline: none;
     
     text-align: center;
+    margin-top: var(--padding);
+    height: var(--button-height);
 }
 
 img.photo-attachment {
@@ -131,6 +132,7 @@ img.photo-attachment {
     border: none;
     outline: none;
     text-align: center;
+    margin-top: var(--padding);
 }
 
 .message .read-more-btn {

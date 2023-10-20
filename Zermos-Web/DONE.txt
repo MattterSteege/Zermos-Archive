@@ -1,1 +1,5 @@
 ﻿0.4 - Notities
+
+- algemeen
+    - grote veranderingen in de code die mijn leven makkelijker maken :)
+    - Verschillende UI verbeteringen

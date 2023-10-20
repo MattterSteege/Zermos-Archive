@@ -25,18 +25,11 @@ using Item = Zermos_Web.Models.SomtodayGradesModel.Item;
 
 namespace Zermos_Web.Controllers
 {
-    public class SomtodayController : Controller
+    public class SomtodayController : BaseController
     {
-        private readonly HttpClient _httpClient;
-        private readonly ILogger<SomtodayController> _logger;
-        private readonly Users _users;
-
-        public SomtodayController(ILogger<SomtodayController> logger, Users users)
-        {
-            _logger = logger;
-            _users = users;
-            _httpClient = new HttpClient();
-        }
+        public SomtodayController(Users user, ILogger<BaseController> logger) : base(user, logger) { }
+        
+        private readonly HttpClient _httpClient = new();
 
         #region Cijfers
 
@@ -50,10 +43,10 @@ namespace Zermos_Web.Controllers
             
             if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
             {
-                return PartialView(JsonConvert.DeserializeObject<SomtodayGradesModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_somtoday_grades ?? string.Empty));
+                return PartialView(JsonConvert.DeserializeObject<SomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? string.Empty));
             }
 
-            var user = await _users.GetUserAsync(User.FindFirstValue("email"));
+            var user = ZermosUser;
 
             var access_token = user.somtoday_access_token;
             
@@ -64,10 +57,10 @@ namespace Zermos_Web.Controllers
 
             var grades = await fetchGrades(access_token, user.somtoday_student_id);
             
-            await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+            ZermosUser = new user
             {
                 cached_somtoday_grades = JsonConvert.SerializeObject(grades)
-            });
+            };
             
             Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
 
@@ -102,12 +95,11 @@ namespace Zermos_Web.Controllers
             var somtodayAuthentication =
                 JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(response.Content.ReadAsStringAsync().Result);
 
-            var user = new user
+            ZermosUser = new user
             {
                 somtoday_access_token = somtodayAuthentication.access_token,
                 somtoday_refresh_token = somtodayAuthentication.refresh_token
             };
-            await _users.UpdateUserAsync(User.FindFirstValue("email"), user);
             return somtodayAuthentication.access_token;
         }
 
@@ -119,11 +111,11 @@ namespace Zermos_Web.Controllers
             
             if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
             {
-                grades = JsonConvert.DeserializeObject<SomtodayGradesModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_somtoday_grades ?? string.Empty);
+                grades = JsonConvert.DeserializeObject<SomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? string.Empty);
             }
             else
             {
-                var user = await _users.GetUserAsync(User.FindFirstValue("email"));
+                var user = ZermosUser;
 
                 var access_token = user.somtoday_access_token;
             
@@ -134,10 +126,10 @@ namespace Zermos_Web.Controllers
 
                 grades = await fetchGrades(access_token, user.somtoday_student_id);
             
-                await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+                ZermosUser = new user
                 {
                     cached_somtoday_grades = JsonConvert.SerializeObject(grades)
-                });
+                };
             
                 Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
             }
@@ -167,11 +159,11 @@ namespace Zermos_Web.Controllers
             
             if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
             {
-                grades = JsonConvert.DeserializeObject<SomtodayGradesModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_somtoday_grades ?? string.Empty);
+                grades = JsonConvert.DeserializeObject<SomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? string.Empty);
             }
             else
             {
-                var user = await _users.GetUserAsync(User.FindFirstValue("email"));
+                var user = ZermosUser;
 
                 var access_token = user.somtoday_access_token;
             
@@ -182,10 +174,10 @@ namespace Zermos_Web.Controllers
 
                 grades = await fetchGrades(access_token, user.somtoday_student_id);
             
-                await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+                ZermosUser = new user
                 {
                     cached_somtoday_grades = JsonConvert.SerializeObject(grades)
-                });
+                };
             
                 Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
             }
@@ -201,11 +193,11 @@ namespace Zermos_Web.Controllers
             
             if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
             {
-                somtodayGradesModel = JsonConvert.DeserializeObject<SomtodayGradesModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_somtoday_grades ?? string.Empty);
+                somtodayGradesModel = JsonConvert.DeserializeObject<SomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? string.Empty);
             }
             else
             {
-                var user = await _users.GetUserAsync(User.FindFirstValue("email"));
+                var user = ZermosUser;
 
                 var access_token = user.somtoday_access_token;
             
@@ -215,11 +207,11 @@ namespace Zermos_Web.Controllers
                 }
 
                 somtodayGradesModel = await fetchGrades(access_token, user.somtoday_student_id);
-            
-                await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+
+                ZermosUser = new user
                 {
                     cached_somtoday_grades = JsonConvert.SerializeObject(somtodayGradesModel)
-                });
+                };
             
                 Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
             }
@@ -546,13 +538,13 @@ namespace Zermos_Web.Controllers
             
             if (Request.Cookies.ContainsKey("cached-somtoday-homework"))
             {
-                var cache = (await _users.GetUserAsync(User.FindFirstValue("email"))).cached_somtoday_homework;
+                var cache = (ZermosUser).cached_somtoday_homework;
                 var homework = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(cache);
                 homework.items.AddRange(await GetRemappedCustomHuiswerk());
                 return PartialView(Sort(homework));
             }
 
-            var user = await _users.GetUserAsync(User.FindFirstValue("email"));
+            var user = ZermosUser;
 
             var access_token = user.somtoday_access_token;
             
@@ -588,10 +580,10 @@ namespace Zermos_Web.Controllers
             
             somtodayHuiswerk.items.AddRange(await GetWeekAndDayHomework(access_token, dagen));
 
-            await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+            ZermosUser = new user
             {
                 cached_somtoday_homework = JsonConvert.SerializeObject(somtodayHuiswerk)
-            });
+            };
             
             somtodayHuiswerk.items.AddRange(await GetRemappedCustomHuiswerk());
 
@@ -641,7 +633,7 @@ namespace Zermos_Web.Controllers
         [NonAction]
         private async Task<List<Models.somtodayHomeworkModel.Item>> GetRemappedCustomHuiswerk()
         {
-            var customHomeworkItems = JsonConvert.DeserializeObject<List<CustomHuiswerkModel>>((await _users.GetUserAsync(User.FindFirstValue("email"))).custom_huiswerk ?? "[]") ?? new List<CustomHuiswerkModel>();
+            var customHomeworkItems = JsonConvert.DeserializeObject<List<CustomHuiswerkModel>>((ZermosUser).custom_huiswerk ?? "[]") ?? new List<CustomHuiswerkModel>();
             var remapedHomework = new List<Models.somtodayHomeworkModel.Item>(capacity:  customHomeworkItems.Count);
 
             foreach (var customHomeworkItem in customHomeworkItems)
@@ -712,18 +704,16 @@ namespace Zermos_Web.Controllers
             }
             
             var userEmail = User.FindFirstValue("email");
-            var user = await _users.GetUserAsync(userEmail);
+            var user = ZermosUser;
 
             var homework = JsonConvert.DeserializeObject<List<CustomHuiswerkModel>>(user.custom_huiswerk ?? "[]") ?? new List<CustomHuiswerkModel>();
 
             homework.Add(new CustomHuiswerkModel(title, description, date, false, homework.Count + 1));
-
-            user = new user
+            
+            ZermosUser = new user
             {
                 custom_huiswerk = JsonConvert.SerializeObject(homework)
             };
-
-            await _users.UpdateUserAsync(userEmail, user);
             
             return Ok();
         }
@@ -733,8 +723,7 @@ namespace Zermos_Web.Controllers
         [HttpDelete("Somtoday/Huiswerk/Nieuw")]
         public async Task<IActionResult> NieuwHuiswerk(int id)
         {
-            var userEmail = User.FindFirstValue("email");
-            var user = await _users.GetUserAsync(userEmail);
+            var user = ZermosUser;
             
             var homework = JsonConvert.DeserializeObject<List<CustomHuiswerkModel>>(user.custom_huiswerk) ?? new List<CustomHuiswerkModel>();
             
@@ -742,7 +731,7 @@ namespace Zermos_Web.Controllers
             
             user.custom_huiswerk = JsonConvert.SerializeObject(homework);
             
-            await _users.UpdateUserAsync(userEmail, user);
+                        ZermosUser = user;
             
             return Ok();
         }
@@ -772,14 +761,14 @@ namespace Zermos_Web.Controllers
         {
             if (Request.Cookies.ContainsKey("cached-somtoday-absence"))
             {
-                return PartialView(JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_somtoday_absence ?? string.Empty));
+                return PartialView(JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(ZermosUser.cached_somtoday_absence ?? string.Empty));
             }
 
             SchooljaarUtils.Schooljaar currentSchoolyear = SchooljaarUtils.getCurrentSchooljaar();
             
             //https://api.somtoday.nl/rest/v1/waarnemingen?waarnemingSoort=Afwezig
             
-            var user = await _users.GetUserAsync(User.FindFirstValue("email"));
+            var user = ZermosUser;
             
             var access_token = user.somtoday_access_token;
             
@@ -808,10 +797,10 @@ namespace Zermos_Web.Controllers
             
             if (currentSchoolyear.vanafDatumDate < DateTime.Now && DateTime.Now < currentSchoolyear.totDatumDate)
             {
-                await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+                ZermosUser = new user
                 {
                     cached_somtoday_absence = JsonConvert.SerializeObject(somtodayAfwezigheid)
-                });
+                };
                 
                 Response.Cookies.Append("cached-somtoday-absence", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddHours(12)});
 

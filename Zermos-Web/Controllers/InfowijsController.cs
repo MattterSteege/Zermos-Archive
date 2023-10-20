@@ -10,7 +10,6 @@ using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zermos_Web.Models;
@@ -18,27 +17,18 @@ using Zermos_Web.Models.Requirements;
 
 namespace Zermos_Web.Controllers
 {
-    public class InfowijsController : Controller
+    public class InfowijsController : BaseController
     {
-        private readonly IConfiguration _config;
-        private readonly ILogger<InfowijsController> _logger;
-        private readonly Users _users;
-        private readonly HttpClient _httpClient;
-
-        public InfowijsController(ILogger<InfowijsController> logger, IConfiguration config, Users users)
+        public InfowijsController(Users user, ILogger<BaseController> logger) : base(user, logger) { }
+        
+        private readonly HttpClient _httpClient = new()
         {
-            _logger = logger;
-            _config = config;
-            _users = users;
-            _httpClient = new HttpClient
+            DefaultRequestHeaders =
             {
-                DefaultRequestHeaders =
-                {
-                    {"accept", "application/vnd.infowijs.v1+json"},
-                    {"x-infowijs-client", "nl.infowijs.hoy.android/nl.infowijs.client.antonius"}
-                }
-            };
-        }
+                {"accept", "application/vnd.infowijs.v1+json"},
+                {"x-infowijs-client", "nl.infowijs.hoy.android/nl.infowijs.client.antonius"}
+            }
+        };
 
         [Authorize]
         [ZermosPage]
@@ -47,10 +37,11 @@ namespace Zermos_Web.Controllers
         public async Task<IActionResult> SchoolNieuws()
         {
             ViewData["add_css"] = "infowijs";
-            
+
             if (Request.Cookies.ContainsKey("cached-infowijs-news"))
             {
-                return PartialView(JsonConvert.DeserializeObject<InfowijsMessagesModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_infowijs_news ?? string.Empty, Converter.Settings).Data.Messages
+                return PartialView(JsonConvert
+                    .DeserializeObject<InfowijsMessagesModel>(ZermosUser.cached_infowijs_news ?? string.Empty, Converter.Settings).Data.Messages
                     .Where(x => x.Type != 12).Reverse().GroupBy(x => x.GroupId).ToList());
             }
 
@@ -63,12 +54,12 @@ namespace Zermos_Web.Controllers
             /*
                 type catalog:
                 1: means message contents
-                2: means that that is an attached file (bijlage)     
+                2: means that that is an attached file (bijlage)
                 3: means that it contains an foto
-                
+
                 12: probably means nothing, but is a divider between messages
-                
-                30: contains information about sender/reader and the title of the post 
+
+                30: contains information about sender/reader and the title of the post
             */
 
             //remove all messages that have type 12, then reverse the list so that the newest messages are on top, then group all the messages by groupid
@@ -77,13 +68,14 @@ namespace Zermos_Web.Controllers
                     Converter.Settings).Data.Messages
                 .Where(x => x.Type != 12).Reverse().GroupBy(x => x.GroupId).ToList();
 
-            await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+            ZermosUser = new user
             {
                 cached_infowijs_news = await response.Content.ReadAsStringAsync()
-            });
-            
-            Response.Cookies.Append("cached-infowijs-news", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
-            
+            };
+
+            Response.Cookies.Append("cached-infowijs-news", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"),
+                new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
+
             return PartialView(infowijsMessage);
         }
 
@@ -94,10 +86,10 @@ namespace Zermos_Web.Controllers
         public async Task<IActionResult> SchoolKalender()
         {
             ViewData["add_css"] = "infowijs";
-            
+
             if (Request.Cookies.ContainsKey("cached-infowijs-calendar"))
             {
-                return PartialView(JsonConvert.DeserializeObject<InfowijsEventsModel>(_users.GetUserAsync(User.FindFirstValue("email")).Result.cached_infowijs_calendar ?? string.Empty, Converter.Settings).data);
+                return PartialView(JsonConvert.DeserializeObject<InfowijsEventsModel>(ZermosUser.cached_infowijs_calendar ?? string.Empty, Converter.Settings).data);
             }
 
             //https://antonius.hoyapp.nl/hoy/v1/events
@@ -105,13 +97,14 @@ namespace Zermos_Web.Controllers
                 new AuthenticationHeaderValue("Bearer", await GetSessionToken());
 
             var response = await _httpClient.GetAsync("https://antonius.hoyapp.nl/hoy/v1/events");
-            
-            await _users.UpdateUserAsync(User.FindFirstValue("email"), new user
+
+            ZermosUser = new user
             {
                 cached_infowijs_calendar = await response.Content.ReadAsStringAsync()
-            });
-            
-            Response.Cookies.Append("cached-infowijs-calendar", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddDays(1)});
+            };
+
+            Response.Cookies.Append("cached-infowijs-calendar", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"),
+                new CookieOptions {Expires = DateTime.Now.AddDays(1)});
 
             return PartialView(JsonConvert
                 .DeserializeObject<InfowijsEventsModel>(await response.Content.ReadAsStringAsync(),
@@ -121,8 +114,7 @@ namespace Zermos_Web.Controllers
         [NonAction]
         private async Task<string> GetSessionToken()
         {
-            var mainAccessToken =
-                (await _users.GetUserAsync(User.FindFirstValue("email"))).infowijs_access_token;
+            var mainAccessToken = ZermosUser.infowijs_access_token;
 
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.infowijs.nl/sessions/access_token");
             request.Headers.Add("Authorization", "Bearer " + mainAccessToken);
@@ -133,11 +125,11 @@ namespace Zermos_Web.Controllers
             var accessToken = JsonConvert.DeserializeObject<InfowijsAccessTokenModel>(responseString);
             return accessToken.data;
         }
-        
+
         public IActionResult SchoolWiki(string query)
         {
             //curl --location 'https://aboarc8x9f-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id=ABOARC8X9F&x-algolia-api-key=1c110b29cea05e83dce945e2c5594f2f' --header 'Content-Type: text/plain' --data '{"requests":[{"indexName":"schoolwiki.113-prod.185f99fe-1aea-4110-9d14-6c76533a352c","params":"query=PTA&hitsPerPage=100"}]}'
-            
+
             var body =
                 "{\"requests\":[{\"indexName\":\"schoolwiki.113-prod.185f99fe-1aea-4110-9d14-6c76533a352c\",\"params\":\"query=" +
                 query +
@@ -146,9 +138,10 @@ namespace Zermos_Web.Controllers
                 .PostAsync(
                     "https://aboarc8x9f-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id=ABOARC8X9F&x-algolia-api-key=1c110b29cea05e83dce945e2c5594f2f",
                     new StringContent(body, Encoding.UTF8, "application/json")).Result;
-            
-            var schoolWikiModel = JsonConvert.DeserializeObject<SchoolWikiModel>(response.Content.ReadAsStringAsync().Result);
-            
+
+            var schoolWikiModel =
+                JsonConvert.DeserializeObject<SchoolWikiModel>(response.Content.ReadAsStringAsync().Result);
+
             return Json(schoolWikiModel.results[0].hits);
         }
     }

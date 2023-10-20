@@ -43,7 +43,7 @@
                 foreach (var property in Model.GetType().GetProperties())
                 {
                     //if property is not { get; set; } then skip it
-                    if (property.GetMethod == null || property.SetMethod == null || property.GetValue(Model, null) == null)
+                    if (property.GetMethod == null || property.SetMethod == null || property.GetValue(Model, null) == null || property.Name == "settings")
                     {
                         continue;
                     }

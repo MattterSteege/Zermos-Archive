@@ -12,17 +12,10 @@ using Zermos_Web.Utilities;
 namespace Zermos_Web.Controllers
 {
     //[Route("[action]")]
-    public class MainController : Controller
+    public class MainController : BaseController
     {
-        private readonly ILogger<MainController> _logger;
-        private readonly Users _users;
+        public MainController(Users user, ILogger<BaseController> logger) : base(user, logger) { }
 
-        public MainController(ILogger<MainController> logger, Users users)
-        {
-            _logger = logger;
-            _users = users;
-        }
-        
         public IActionResult Index(string url = null)
         {
             if (url != null)
@@ -39,8 +32,7 @@ namespace Zermos_Web.Controllers
         public async Task<IActionResult> Hoofdmenu()
         {
             ViewData["add_css"] = "hoofdmenu";
-            HttpContext.AddNotification("Pas op", "Deze pagina is no niet af, er kunnen nog bugs in zitten", NotificationCenter.NotificationType.WARNING);
-            return PartialView(await _users.GetUserAsync(User.FindFirstValue("email")));
+            return PartialView(ZermosUser);
         }
 
         //to send the correct deeplink format do this: location.href = 'web+zermos://' + url;

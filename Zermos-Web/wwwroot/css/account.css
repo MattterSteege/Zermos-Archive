@@ -53,6 +53,10 @@
     background: var(--deny-color);
 }
 
+.koppelen {
+    background: var(--confirm-color);
+}
+
 .koppel-knop {
     color: var(--white-color);
     border-radius: var(--border-radius-small);
