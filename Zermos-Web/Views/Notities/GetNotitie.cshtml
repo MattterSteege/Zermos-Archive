@@ -1,175 +1,29 @@
-﻿@model Zermos_Web.Models.Zermos.Notitie
+﻿@using Zermos_Web.Utilities
+@model Zermos_Web.Models.Zermos.Notitie
 
 @{
     Layout = null;
 }
-<script src="/js/Sortable.js"></script>
-<script src="https://kit.fontawesome.com/052f5fa8f8.js" crossorigin="anonymous"></script>
-<style>
-    * {
-        margin: 0;
-        padding: 0;
+<link rel="stylesheet" href="/css/notities.css">
+<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
 
-        box-sizing: border-box;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
-
-    body {
-        background: #f8f9fa;
-        width: 100vw;
-        height: 100vh;
-        display: grid;
-    }
-
-    .split {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        height: 100%;
-        overflow-x: hidden;
-    }
-
-    .buttons {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        padding-top: 10px;
-    }
-
-    .buttons .button {
-        width: calc(100% - 20px);
-        margin-left: 10px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        font-weight: bold;
-        cursor: pointer;
-        color: rgba(0, 0, 0, 0.50);
-        border: 1px solid black;
-        background: #fff;
-        border-radius: 10px;
-        margin-bottom: 10px;
-    }
-
-    .parts-container {
-        width: calc(100% - 20px);
-        margin-left: 10px;
-        height: 100%;
-    }
-
-    .part {
-        border: 1px solid black;
-        background: #fff;
-        border-radius: 10px;
-        margin: 10px;
-    }
-
-    .part.title {
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        font-weight: bold;
-        cursor: pointer;
-        color: rgba(0, 0, 0, 0.50);
-    }
-
-    .part.title:hover {
-        color: rgba(0, 0, 0, 1);
-    }
-
-    .part.toc {
-        height: 50px;
-    }
-
-    .part.content {
-        height: auto;
-    }
-
-    .part.content .top {
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px;
-    }
-
-    .part.content .top .title {
-        font-weight: bold;
-        cursor: pointer;
-        color: rgba(0, 0, 0, 0.50);
-        margin-right: auto;
-    }
-
-    .part.content .top i {
-        font-weight: bold;
-        cursor: pointer;
-        color: rgba(0, 0, 0, 0.50);
-    }
-
-    .part.content .content-preview {
-        height: 60px;
-        width: 100%;
-        overflow-y: hidden;
-        padding: 0 10px 10px;
-        line-height:20px;
-    }
-
-    .part.end {
-        height: 50px;
-    }
-</style>
-
-<div class="split">
-    <div class="buttons">
-        <div onclick="AddContent()" class="button">Voeg Paragraaf toe</div>
-        <div onclick="Export()" class="button">Exporteer</div>
-    </div>
-    <div class="parts-container">
-        <div contenteditable="true" class="part title">[klik om title aan te passen]</div>
-        <div class="content-container">
-            @foreach(var paragraph in Model.Paragraphs.OrderBy(x => x.ranking).ToList())
-            {
-                <div class="part content" id="@paragraph.Id">
-                    <div class="top">
-                        <div contenteditable="true" class="title">@paragraph.Naam</div>
-                        <i onclick="GoToEditingPage('@paragraph.Id')" class="fa-solid fa-edit fa-fw"></i>
-                        <i onclick="RemoveContent('@paragraph.Id')" class="fa-solid fa-trash fa-fw"></i>
-                        <i class="fa-solid fa-grip-lines fa-fw"></i>
-                    </div>
-                    <div class="content-preview">@paragraph.Inhoud</div>
+<div class="notitie-card-editor-container">
+    <input id="nameInput" class="notitie-card title" onBlur="changeName()" value="@Model.Titel"/>
+    <div class="notitie-card-editor-content-container">
+        @foreach(var paragraph in Model.Paragraphs.OrderBy(x => x.ranking).ToList())
+        {
+            <div class="notitie-card content" id="@paragraph.Id">
+                <div class="top">
+                    <div class="title">@paragraph.Naam</div>
+                    <i onclick="ReplacePage('@Context.Request.Path/@paragraph.Id')" class="fa-solid fa-edit fa-fw"></i>
+                    <i onclick="RemoveContent('@paragraph.Id')" class="fa-solid fa-trash fa-fw"></i>
+                    <i class="fa-solid fa-grip-lines fa-fw"></i>
                 </div>
-            }
-        </div>
+                <div class="content-preview">@paragraph.Inhoud.FirstChars(600, true)</div>
+            </div>
+        }
     </div>
 </div>
-
-@* <div class="card"> *@
-@*     <h5>@Model.Titel</h5> *@
-@*     <h6>@Model.Omschrijving</h6> *@
-@*     <h6>@Model.Id</h6> *@
-@*     @foreach(var tag in Model.Tags) *@
-@*     { *@
-@*         <h6>@tag</h6> *@
-@*     } *@
-@*     @foreach(var paragraph in Model.Paragraphs) *@
-@*     { *@
-@*         string url = Context.Request.Path + "/" + paragraph.Id; *@
-@*         <div class="card" style="background: red" onclick="window.location.href='@url'"> *@
-@*             <h6>@paragraph.Naam</h6> *@
-@*             <h6>@paragraph.Id</h6> *@
-@*             <h6>@paragraph.Inhoud</h6> *@
-@*         </div> *@
-@*     } *@
-@* </div> *@
 
 <script>
     function AddContent(naam) {
@@ -178,6 +32,12 @@
         xhr.open("POST", "@Context.Request.Path", true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify({ "Naam": naam, "Inhoud": "" }));
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                ReplacePage('@Context.Request.Path');
+            }
+        };
+        
     }
     
     function RemoveContent(id) {
@@ -192,21 +52,38 @@
         element.parentNode.removeChild(element);
     }
     
-    function GoToEditingPage(id) {
-        window.location.href = "@Context.Request.Path" + "/" + id;
+    var currentName = "@Model.Titel";
+    function changeName() {
+        if (currentName === document.getElementById("nameInput").value) {
+            return;
+        }
+        var name = document.getElementById("nameInput").value;
+        var xhr = new XMLHttpRequest();
+        xhr.open("PUT", "@Context.Request.Path", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({ "Titel": name }));
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                currentName = name;
+            }
+        };
     }
 
-    //dragging
-    var foo = document.querySelector('.content-container');
-    Sortable.create(foo, {
-        handle: '.fa-grip-lines', // handle's class
-        animation: 100,
-        onUpdate: function (evt) {
-            //update ranking
-            var xhr = new XMLHttpRequest();
-            xhr.open("PUT", "@Context.Request.Path" + "/" + evt.item.id, true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(JSON.stringify({ "Ranking": evt.newIndex + 1 }));
-        }
-    });
+   //dragging    
+   //wait for Sortable to load
+   document.querySelector('script[src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"]')
+   .onload = function () {
+        console.log("[ Zermos ] Sortable loaded");
+         Sortable.create(document.querySelector('.notitie-card-editor-content-container'), {
+              handle: '.fa-grip-lines', // handle's class
+              animation: 100,
+              onUpdate: function (evt) {
+                //update ranking
+                var xhr = new XMLHttpRequest();
+                xhr.open("PUT", "@Context.Request.Path" + "/" + evt.item.id, true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send(JSON.stringify({ "Ranking": evt.newIndex + 1 }));
+              }
+         });
+     }
 </script>

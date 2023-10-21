@@ -6,6 +6,7 @@ using Infrastructure.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Zermos_Web.Models.Requirements;
 using Zermos_Web.Models.Zermos;
 
 namespace Zermos_Web.Controllers
@@ -22,6 +23,7 @@ namespace Zermos_Web.Controllers
 
         #region Notitie boeken
 
+        [ZermosPage]
         [Route("/Notities")]
         [Route("/Notities/Boeken")]
         public IActionResult Index()
@@ -41,6 +43,7 @@ namespace Zermos_Web.Controllers
         #region Notitie boek
 
         [HttpGet]
+        [ZermosPage]
         [Route("/Notities/{notitieboekId}")]
         public IActionResult GetNoteBook(string notitieboekId)
         {
@@ -48,7 +51,7 @@ namespace Zermos_Web.Controllers
             var notitieBoek = model.NotitieBoeken.FirstOrDefault(x => x.Id == notitieboekId);
             return PartialView(notitieBoek);
         }
-
+        
         [HttpPost]
         [Route("/Notities/")]
         public IActionResult AddNoteBook([FromBody] NotitieBoek notitieBoek)
@@ -67,12 +70,70 @@ namespace Zermos_Web.Controllers
         #region Notities
 
         [HttpGet]
+        [ZermosPage]
         [Route("/Notities/{notitieboekId}/{notitieId}")]
         public IActionResult GetNotitie(string notitieboekId, string notitieId)
         {
             var model = ParseNotitiesModel();
             var notitie = model.NotitieBoeken.FirstOrDefault(x => x.Id == notitieboekId)?.Notities.FirstOrDefault(x => x.Id == notitieId);
             return PartialView(notitie);
+        }
+        
+        [HttpPut]
+        [Route("/Notities/{notitieboekId}/{notitieId}")]
+        public IActionResult UpdateNotitie(string notitieboekId, string notitieId, [FromBody] Notitie notitie)
+        {
+            var model = ParseNotitiesModel();
+            var notitieBoek = model.NotitieBoeken.FirstOrDefault(x => x.Id == notitieboekId);
+            var oldNotitie = notitieBoek?.Notities.FirstOrDefault(x => x.Id == notitieId);
+            if (oldNotitie != null)
+            {
+                if (notitie.Titel != null && notitie.Titel != oldNotitie.Titel)
+                    oldNotitie.Titel = notitie.Titel;
+                
+                if (notitie.Omschrijving != null && notitie.Omschrijving != oldNotitie.Omschrijving)
+                    oldNotitie.Omschrijving = notitie.Omschrijving;
+                
+                if (notitie.Tags != null && notitie.Tags != oldNotitie.Tags)
+                    oldNotitie.Tags = notitie.Tags;
+                
+                if (notitie.ranking != 0 && notitie.ranking != oldNotitie.ranking)
+                {
+                    int rankingDifference = notitie.ranking - oldNotitie.ranking;
+                    
+                    // If the ranking is higher than the old ranking, we need to move the other notities down
+                    if (rankingDifference > 0)
+                    {
+                        // Get all the notities that need to be moved down
+                        var notitiesToMoveDown = notitieBoek.Notities.Where(x => x.ranking > oldNotitie.ranking && x.ranking <= notitie.ranking).ToList();
+                        foreach (var notitieToMoveDown in notitiesToMoveDown)
+                        {
+                            notitieToMoveDown.ranking--;
+                        }
+                    }
+                    
+                    // If the ranking is lower than the old ranking, we need to move the other notities up
+                    if (rankingDifference < 0)
+                    {
+                        // Get all the notities that need to be moved up
+                        var notitiesToMoveUp = notitieBoek.Notities.Where(x => x.ranking < oldNotitie.ranking && x.ranking >= notitie.ranking).ToList();
+                        foreach (var notitieToMoveUp in notitiesToMoveUp)
+                        {
+                            notitieToMoveUp.ranking++;
+                        }
+                    }
+                    
+                    oldNotitie.ranking = notitie.ranking;
+                    
+                    //sort the list
+                    notitieBoek.Notities = notitieBoek.Notities.OrderBy(x => x.ranking).ToList();
+                }
+                
+                ZermosUser = new user {notities = JsonConvert.SerializeObject(model)};
+                return Ok();
+            }
+            
+            return NotFound();
         }
 
         [HttpPost]
@@ -99,6 +160,7 @@ namespace Zermos_Web.Controllers
         #region Paragrafen
 
         [HttpGet]
+        [ZermosPage]
         [Route("/Notities/{notitieboekId}/{notitieId}/{paragraphId}")]
         public IActionResult GetParagraph(string notitieboekId, string notitieId, string paragraphId)
         {

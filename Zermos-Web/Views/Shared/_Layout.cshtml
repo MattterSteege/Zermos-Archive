@@ -15,7 +15,7 @@
     <link rel="manifest" href="/manifest.webmanifest"/>
     <meta name="theme-color" content="@(Context.Request.Cookies["theme"] == "light" || Context.Request.Cookies["theme"] == "blue" ? "#f8f9fa" : Context.Request.Cookies["theme"] == "dark" || Context.Request.Cookies["theme"] == "red" ? "#1a1a1a" : Context.Request.Cookies["theme"] == "pink" ? "#ffebf2" : "#f8f9fa")">
     <link rel="stylesheet" href="~/css/style.css?v=@version">
-    <script  src="/js/zermos-framework.js?v=@version"></script>
+    <script src="/js/zermos-framework.js?v=@version"></script>
 </head>
 <body onload="ReplacePage('@ViewData["url"]');">
 <div class="sidebar">
@@ -40,6 +40,15 @@
                     <div class="menu-item">
                         <i class="fa-solid fa-house menu-icons fa-fw"></i>
                         <p>Hoofdmenu</p>
+                    </div>
+                </a>
+            </li>
+            
+            <li>
+                <a onclick="ReplacePage('/Notities')">
+                    <div class="menu-item">
+                        <i class="fa-solid fa-book menu-icons fa-fw"></i>
+                        <p>Notities</p>
                     </div>
                 </a>
             </li>
@@ -207,9 +216,12 @@ function ReplacePage(url, fromHistory = false) {
         const script = document.createElement("script");
         if (isSrc) {
             script.src = scriptToWorkWith.src;
-            script.integrity = scriptToWorkWith.integrity;
-            script.crossOrigin = scriptToWorkWith.crossOrigin;
-            script.referrerPolicy = scriptToWorkWith.referrerPolicy;
+            if (script.integrity)
+                script.integrity = scriptToWorkWith.integrity;
+            if (script.crossOrigin)
+                script.crossOrigin = scriptToWorkWith.crossOrigin;
+            if (script.referrerPolicy)
+                script.referrerPolicy = scriptToWorkWith.referrerPolicy;
         } else {
             script.innerHTML = scriptToWorkWith.innerHTML;
         }

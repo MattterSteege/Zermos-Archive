@@ -1,0 +1,265 @@
+﻿.notitie-card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(355px, 100% / 3)), 1fr));
+    grid-gap: var(--padding);
+    margin-bottom: var(--padding);
+}
+
+.notitie-card {
+    background: var(--overlay-color);
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    padding: var(--padding);
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.notitie-card h1 {
+    font-size: var(--font-size-heading);
+    font-weight: 700;
+    margin: 0;
+    height: fit-content;
+}
+
+.notitie-card p {
+    font-size: var(--font-size);
+    font-weight: 700;
+    margin: 0;
+    height: fit-content;
+}
+
+.notitie-card .tags {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    height: 100%;
+    gap: var(--padding);
+}
+
+.notitie-card .tags .tag {
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    color: var(--text-color);
+    display: block;
+    background-color: var(--background-color);
+    border: none;
+    outline: none;
+    padding: var(--padding-small) var(--padding);
+}
+
+
+
+
+.notitie-card-editor-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: var(--padding);
+    margin-bottom: var(--padding);
+}
+
+.notitie-card-editor-container input {
+    padding-left: var(--padding);
+    height: calc(var(--padding) * 4);
+    font-size: var(--font-size-heading);
+}
+
+.notitie-card-editor-content-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: var(--padding);
+    margin-bottom: var(--padding);
+}
+
+.notitie-card.content .top {
+    display: flex;
+    justify-content: space-between;
+}
+
+.notitie-card.content .top .title {
+    margin-right: auto;
+    font-size: var(--font-size-heading);
+    color: var(--text-color);
+}
+
+.notitie-card.content .top i {
+    cursor: pointer;
+    margin-left: var(--padding);
+}
+
+.notitie-card.content .top i:hover {
+    color: var(--text-color);
+}
+
+.notitie-card.content .content-preview {
+    font-size: var(--font-size);
+    color: var(--text-color);
+    word-wrap: break-word;
+}
+
+
+/*add button*/
+.bottom-right-add-button {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background: var(--background-color);
+    display: grid !important;
+    place-items: center;
+    margin: var(--padding);
+    cursor: pointer;
+    overflow: hidden;
+    transition: all ease 0.3s;
+}
+
+.bottom-right-add-button a {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    place-items: center;
+    justify-items: center;
+}
+
+.bottom-right-add-button a i {
+    background: var(--accent-color);
+    color: var(--white-color);
+    align-content: center;
+    justify-content: center;
+    display: grid;
+    font-size: 1.5rem;
+    width: 100%;
+    height: 100%;
+}
+
+.bottom-right-add-button a i:before {
+    font-size: 1.5rem;
+    color: var(--white-color);
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+/*noinspection CssInvalidPropertyValue*/
+.popup {
+    height: 150px;
+    width: 400px;
+    background: var(--background-color);
+    position: fixed;
+    bottom: var(--padding);
+    right: var(--padding);
+    border-radius: 25px;
+    box-shadow: var(--box-shadow);
+    padding: 13px;
+    display: flex;
+    grid-gap: var(--padding);
+    align-items: flex-start;
+    transition: all ease 0.3s;
+    overflow: hidden;
+    text-wrap: nowrap;
+}
+
+.popup.hidden {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+}
+
+/*<div class="Naam"><label for="date">Welke naam moet dit notitieboek krijgen?</label><input type="text" name="Naam" id="Naam" placeholder="Naam"></div>*/
+
+#add-item .Naam {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: var(--padding);
+}
+
+#add-item .Naam label {
+    font-size: var(--font-size-heading);
+    color: var(--text-color);
+    font-weight: 700;
+}
+
+#add-item .Naam input {
+    height: var(--button-height);
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0 var(--padding);
+    font-size: var(--font-size);
+    font-weight: 500;
+    color: var(--text-color);
+    background: var(--overlay-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+#add-item .submit {
+    height: var(--button-height);
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0 var(--padding);
+    font-size: var(--font-size);
+    box-shadow: var(--box-shadow);
+    background: var(--accent-color);
+    color: white;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: var(--padding);
+    text-align: start;
+}
+
+@media only screen and (max-width: 1200px) {
+    .bottom-right-add-button {
+        background: unset;
+        position: fixed;
+        bottom: var(--padding);
+        right: var(--padding);
+        height: 32px;
+        width: 32px;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        overflow: hidden;
+        border-radius: unset;
+        margin: unset;
+    }
+
+    .left .bottom-right-add-button {
+        bottom: var(--padding);
+        left: var(--padding);
+    }
+
+    .bottom-right-add-button a i {
+        display: grid;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--border-radius-small);
+        transition: 0.3s;
+        box-shadow: unset;
+        background: var(--accent-color);
+        color: var(--white-color);
+        align-content: center;
+        font-size: unset;
+    }
+
+    .bottom-right-add-button a i:before, .OpenSearchButton a i:before {
+        color: var(--white-color);
+        width: var(--padding);
+        height: var(--padding);
+        font-size: var(--padding);
+        text-align: center;
+        position: relative;
+    }
+}

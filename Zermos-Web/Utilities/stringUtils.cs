@@ -30,6 +30,25 @@ namespace Zermos_Web.Utilities
             var returna = string.Join(" ", words.Take(wordCount));
             return returna;
         }
+        
+        /// <summary>
+        /// Returns a string with the first x characters of the string.
+        /// </summary>
+        /// <param name="str">The string to get the first x characters of. I.E. Lorem ipsum dolor sit amet</param>
+        /// <param name="charCount">The amount of characters to get. I.E. 10</param>
+        /// <param name="addDots">If true, adds dots to the end of the string. I.E. Lorem ipsu..., but only if the string is longer than the amount of characters.</param>
+        /// <returns>The string with the first x characters. I.E. Lorem ipsu</returns>
+        public static string FirstChars(this string str, int charCount, bool addDots = false)
+        {
+            if (string.IsNullOrEmpty(str))
+                return str;
+            if (str.Length <= charCount)
+                return str;
+            var returna = str.Substring(0, charCount);
+            if (addDots)
+                returna += "...";
+            return returna;
+        }
 
         /// <summary>
         /// Returns true if the string is null or empty.
