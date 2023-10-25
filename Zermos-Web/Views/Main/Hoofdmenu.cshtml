@@ -39,7 +39,7 @@
         {
             var somtodayHomework = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(Model.cached_somtoday_homework).items.GroupBy(item => item.datumTijd.Date).Where(x => x.Key == DateTime.Now.Date.AddDays(1)).ToList();
             somtodayHuiswerkCount = somtodayHomework.Count > 0 ? somtodayHomework[0].Count() : 0;
-            SomtodayHuiswerkSubjects = somtodayHomework.Count > 0 ? string.Join(", ", somtodayHomework[0].Select(x => x.lesgroep.vak.naam)) : string.Empty;
+            SomtodayHuiswerkSubjects = somtodayHomework.Count > 0 ? string.Join(", ", somtodayHomework[0].Select(x => x.lesgroep?.vak?.naam ?? "")) : string.Empty;
         }
 
         if (!string.IsNullOrEmpty(Model.cached_infowijs_news))

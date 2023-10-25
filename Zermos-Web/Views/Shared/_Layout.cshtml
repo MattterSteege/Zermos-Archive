@@ -16,6 +16,8 @@
     <meta name="theme-color" content="@(Context.Request.Cookies["theme"] == "light" || Context.Request.Cookies["theme"] == "blue" ? "#f8f9fa" : Context.Request.Cookies["theme"] == "dark" || Context.Request.Cookies["theme"] == "red" ? "#1a1a1a" : Context.Request.Cookies["theme"] == "pink" ? "#ffebf2" : "#f8f9fa")">
     <link rel="stylesheet" href="~/css/style.css?v=@version">
     <script src="/js/zermos-framework.js?v=@version"></script>
+    <script src="/js/Zermos-modal.js?v=@version"></script>
+    <link rel="stylesheet" href="/css/modal.css?v=@version">
 </head>
 <body onload="ReplacePage('@ViewData["url"]');">
 <div class="sidebar">

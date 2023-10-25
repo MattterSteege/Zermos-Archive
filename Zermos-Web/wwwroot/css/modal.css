@@ -1,0 +1,143 @@
+﻿.modal-background {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-background .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--padding);
+    background: var(--overlay-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.modal-background .modal .modal-content {
+}
+
+.modal-background .modal .modal-content h2 {
+    font-size: var(--font-size-heading);
+    margin-bottom: var(--padding);
+}
+
+.modal-background .modal .modal-content p {
+    font-size: var(--font-size);
+    margin-bottom: var(--padding);
+}
+
+/* SINGLE INPUT */
+.modal-background .modal input[type="text"] {
+    height: var(--button-height);
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0 var(--padding);
+    font-size: var(--font-size);
+    font-weight: 500;
+    color: var(--text-color);
+    background: var(--overlay-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: var(--padding);
+}
+
+/* Dropdown */
+.modal-background .modal select {
+    height: var(--button-height);
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0 var(--padding);
+    font-size: var(--font-size);
+    font-weight: 500;
+    color: var(--text-color);
+    background: var(--overlay-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: var(--padding);
+}
+.modal-background .modal select:hover {
+    cursor: pointer;
+}
+
+.modal-background .modal select option {
+    height: var(--button-height);
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0 var(--padding);
+    font-size: var(--font-size);
+    font-weight: 500;
+    color: var(--text-color);
+    background: var(--overlay-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: var(--padding);
+}
+
+/* MULTIPLE LINES */
+.modal-background .modal textarea {
+    height: 100px;
+    min-height: 100px;
+    max-height: 500px;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    border: none;
+    outline: none;
+    padding: var(--padding);
+    font-size: var(--font-size);
+    font-weight: 500;
+    color: var(--text-color);
+    background: var(--overlay-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: var(--padding);
+}
+
+/* DATE */
+.modal-background .modal input[type="date"] {
+    height: var(--button-height);
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0 var(--padding);
+    font-size: var(--font-size);
+    font-weight: 500;
+    color: var(--text-color);
+    background: var(--overlay-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: var(--padding);
+}
+
+
+/* BUTTON */
+.modal-background .modal button {
+    height: var(--button-height);
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0 var(--padding);
+    font-size: var(--font-size);
+    font-weight: 500;
+    color: var(--white-color);
+    background: var(--accent-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}

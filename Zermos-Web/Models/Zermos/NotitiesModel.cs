@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Zermos_Web.Models.Zermos
 {
@@ -9,6 +10,7 @@ namespace Zermos_Web.Models.Zermos
 
     public class NotitieBoek
     {
+        public DateTime lastEdit { get; set; }
         public string Id { get; set; }
         public int ranking { get; set; }
         public string Naam { get; set; }
@@ -17,6 +19,7 @@ namespace Zermos_Web.Models.Zermos
 
     public class Notitie
     {
+        public DateTime lastEdit { get; set; }
         public string Id { get; set; }
         public int ranking { get; set; }
         public string Titel { get; set; }

@@ -1,4 +1,101 @@
-﻿.notitie-card-container {
+﻿/*INDEX*/
+.table {
+    width: 100%;
+    background: var(--overlay-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+    margin-bottom: var(--padding);
+    border-collapse: collapse;
+}
+
+.table-header {
+    background: var(--overlay-color);
+    color: var(--text-color);
+    font-size: var(--font-size-heading);
+    font-weight: 700;
+    text-align: left;
+    border-bottom: 1px solid var(--text-color);
+}
+
+.table-header th {
+    padding: var(--padding);
+}
+
+.table-row {
+    background: var(--overlay-color);
+    color: var(--text-color);
+    font-size: var(--font-size);
+    font-weight: 500;
+    padding: var(--padding);
+    border-bottom: 1px solid var(--overlay-color);
+    transition: all ease 0.3s;
+}
+
+.actions-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: var(--padding);
+    align-items: center;
+    background: var(--overlay-color);
+    padding: var(--padding);
+    padding-top: 0;
+    padding-bottom: 0;
+    border-radius: var(--border-radius);
+    transition: all ease 0.3s;
+    height: calc(4 * var(--padding));
+    margin-bottom: var(--padding);
+    overflow-y: hidden;
+    position: relative;
+}
+
+.actions-row div {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--padding);
+    justify-content: center;
+    height: var(--button-height);
+    color: var(--text-color);
+    font-size: var(--font-size);
+    background: var(--overlay-overlay-color);
+    padding: var(--padding);
+    border-radius: var(--border-radius-small);
+}
+
+.table-row.selected {
+    background: var(--overlay-overlay-color);
+}
+
+.table-row:last-child td{
+    border-bottom: unset;
+}
+
+.table-row td {
+    padding: var(--padding);
+    border-bottom: 1px solid var(--text-color);
+}
+
+.table-row td:first-child {
+    border-bottom: unset;
+}
+
+.table-row:hover {
+    background-color: var(--overlay-overlay-color);
+}
+
+
+
+
+
+
+
+
+
+
+
+.notitie-card-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(355px, 100% / 3)), 1fr));
     grid-gap: var(--padding);
@@ -151,7 +248,6 @@
 
 /*noinspection CssInvalidPropertyValue*/
 .popup {
-    height: 150px;
     width: 400px;
     background: var(--background-color);
     position: fixed;
@@ -170,11 +266,9 @@
 
 .popup.hidden {
     width: 50px;
-    height: 50px;
+    height: 50px !important;
     border-radius: 25px;
 }
-
-/*<div class="Naam"><label for="date">Welke naam moet dit notitieboek krijgen?</label><input type="text" name="Naam" id="Naam" placeholder="Naam"></div>*/
 
 #add-item .Naam {
     width: 100%;

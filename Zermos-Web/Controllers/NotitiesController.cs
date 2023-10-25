@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zermos_Web.Models.Requirements;
 using Zermos_Web.Models.Zermos;
+using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
@@ -25,7 +26,6 @@ namespace Zermos_Web.Controllers
 
         [ZermosPage]
         [Route("/Notities")]
-        [Route("/Notities/Boeken")]
         public IActionResult Index()
         {
             var notes = ParseNotitiesModel();
@@ -41,7 +41,6 @@ namespace Zermos_Web.Controllers
         #endregion
 
         #region Notitie boek
-
         [HttpGet]
         [ZermosPage]
         [Route("/Notities/{notitieboekId}")]
@@ -52,19 +51,90 @@ namespace Zermos_Web.Controllers
             return PartialView(notitieBoek);
         }
         
+        [HttpPut]
+        [Route("/Notities/{notitieboekId}")]
+        public IActionResult UpdateNoteBook(string notitieboekId, [FromBody] NotitieBoek notitieBoek)
+        {
+            var model = ParseNotitiesModel();
+            var oldNotitieBoek = model.NotitieBoeken.FirstOrDefault(x => x.Id == notitieboekId);
+            if (oldNotitieBoek != null)
+            {
+                if (notitieBoek.Naam != null && notitieBoek.Naam != oldNotitieBoek.Naam)
+                    oldNotitieBoek.Naam = notitieBoek.Naam;
+                
+                if (notitieBoek.ranking != 0 && notitieBoek.ranking != oldNotitieBoek.ranking)
+                {
+                    int rankingDifference = notitieBoek.ranking - oldNotitieBoek.ranking;
+                    
+                    // If the ranking is higher than the old ranking, we need to move the other notitieboeken down
+                    if (rankingDifference > 0)
+                    {
+                        // Get all the notitieboeken that need to be moved down
+                        var notitieBoekenToMoveDown = model.NotitieBoeken.Where(x => x.ranking > oldNotitieBoek.ranking && x.ranking <= notitieBoek.ranking).ToList();
+                        foreach (var notitieBoekToMoveDown in notitieBoekenToMoveDown)
+                        {
+                            notitieBoekToMoveDown.ranking--;
+                        }
+                    }
+                    
+                    // If the ranking is lower than the old ranking, we need to move the other notitieboeken up
+                    if (rankingDifference < 0)
+                    {
+                        // Get all the notitieboeken that need to be moved up
+                        var notitieBoekenToMoveUp = model.NotitieBoeken.Where(x => x.ranking < oldNotitieBoek.ranking && x.ranking >= notitieBoek.ranking).ToList();
+                        foreach (var notitieBoekToMoveUp in notitieBoekenToMoveUp)
+                        {
+                            notitieBoekToMoveUp.ranking++;
+                        }
+                    }
+                    
+                    oldNotitieBoek.ranking = notitieBoek.ranking;
+                    
+                    //sort the list
+                    model.NotitieBoeken = model.NotitieBoeken.OrderBy(x => x.ranking).ToList();
+                }
+                
+                oldNotitieBoek.lastEdit = DateTime.Now;
+                
+                ZermosUser = new user {notities = JsonConvert.SerializeObject(model)};
+                return Ok();
+            }
+            
+            return NotFound();
+        }
+        
+        [HttpDelete]
+        [Route("/Notities/{notitieboekId}")]
+        public IActionResult DeleteNoteBook(string notitieboekId)
+        {
+            var model = ParseNotitiesModel();
+            var notitieBoek = model.NotitieBoeken.FirstOrDefault(x => x.Id == notitieboekId);
+            if (notitieBoek != null)
+            {
+                model.NotitieBoeken.Remove(notitieBoek);
+                ZermosUser = new user {notities = JsonConvert.SerializeObject(model)};
+                return Ok();
+            }
+
+            return NotFound();
+        }
+
         [HttpPost]
         [Route("/Notities/")]
         public IActionResult AddNoteBook([FromBody] NotitieBoek notitieBoek)
         {
+            
             var model = ParseNotitiesModel();
+            if (notitieBoek.Naam.IsNullOrEmpty())
+                notitieBoek.Naam = "Nieuw notitieboek " + (model.NotitieBoeken.Count + 1);
             notitieBoek.Id = Guid.NewGuid().ToString();
             notitieBoek.ranking = model.NotitieBoeken.Count + 1;
             notitieBoek.Notities = new List<Notitie>();
+            notitieBoek.lastEdit = DateTime.Now;
             model.NotitieBoeken.Add(notitieBoek);
             ZermosUser = new user {notities = JsonConvert.SerializeObject(model)};
             return Ok();
         }
-
         #endregion
 
         #region Notities
@@ -129,6 +199,8 @@ namespace Zermos_Web.Controllers
                     notitieBoek.Notities = notitieBoek.Notities.OrderBy(x => x.ranking).ToList();
                 }
                 
+                notitieBoek.lastEdit = DateTime.Now;
+                
                 ZermosUser = new user {notities = JsonConvert.SerializeObject(model)};
                 return Ok();
             }
@@ -148,6 +220,7 @@ namespace Zermos_Web.Controllers
                 notitie.ranking = notitieBoek.Notities.Count + 1;
                 notitie.Paragraphs = new List<Paragraph>();
                 notitieBoek.Notities.Add(notitie);
+                notitieBoek.lastEdit = DateTime.Now;
                 ZermosUser = new user {notities = JsonConvert.SerializeObject(model)};
                 return Ok();
             }
@@ -223,6 +296,7 @@ namespace Zermos_Web.Controllers
                     notitie.Paragraphs = notitie.Paragraphs.OrderBy(x => x.ranking).ToList();
                 }
                 
+                notitieBoek.lastEdit = DateTime.Now;
                 
                 ZermosUser = new user {notities = JsonConvert.SerializeObject(model)};
                 return Ok();
@@ -260,6 +334,7 @@ namespace Zermos_Web.Controllers
                 paragraph.Id = Guid.NewGuid().ToString();
                 paragraph.ranking = notitieBoek.Notities.FirstOrDefault(x => x.Id == notitieId)?.Paragraphs.Count + 1 ?? 1;
                 notitieBoek.Notities.FirstOrDefault(x => x.Id == notitieId)?.Paragraphs.Add(paragraph);
+                notitieBoek.lastEdit = DateTime.Now;
                 ZermosUser = new user {notities = JsonConvert.SerializeObject(model)};
                 return Ok();
             }

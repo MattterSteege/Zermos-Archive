@@ -14,7 +14,6 @@
     --deny-color: #d63031;
     --sure-color: #000000;
     --white-color: #ffffff;
-    --overlay-hover-color: #f3f6f4;
 
     --border-radius: 14px;
     --border-radius-small: 7px;
@@ -37,6 +36,7 @@
 .dark {
     --background-color: #1a1a1a;
     --overlay-color: #2d2d2d;
+    --overlay-overlay-color: #414141;
     --text-color: #b9b9b9;
     --accent-color: linear-gradient(335deg, rgb(121, 40, 202), rgb(255, 0, 128));
     --active-color: linear-gradient(335deg, rgb(121, 40, 202), rgb(255, 0, 128));
@@ -52,6 +52,7 @@
 .blue {
     --background-color: #f8f9fa;
     --overlay-color: #ffffff;
+    --overlay-overlay-color: #f3f6f4;
     --text-color: #344767;
     --text-color-light: #6c757d;
     --accent-color: linear-gradient(335deg, #6ba9ff, #ccf2ff);
@@ -68,6 +69,7 @@
 .red {
     --background-color: #1a1a1a;
     --overlay-color: #2d2d2d;
+    --overlay-overlay-color: #414141;
     --text-color: #b9b9b9;
     --accent-color: linear-gradient(335deg, rgb(255, 0, 0), rgb(130 26 26));
     --active-color: linear-gradient(335deg, rgb(255, 0, 0), rgb(130 26 26));
@@ -83,6 +85,7 @@
 .pink {
     --background-color: #ffebf2;
     --overlay-color: #ffffff;
+    --overlay-overlay-color: #f3f6f4;
     --text-color: #344767;
     --text-color-light: #6c757d;
     --accent-color: linear-gradient(335deg, #ff6ba9, #ffccf2);
@@ -836,4 +839,26 @@ main.main::-webkit-scrollbar-track {
     .sidebar .bottom {
         bottom: 0;
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }

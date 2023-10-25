@@ -3,73 +3,140 @@
 
 @{
     ViewBag.Title = "title";
+    Model.NotitieBoeken = Model.NotitieBoeken.OrderBy(x => x.Naam).ToList();
 }
 
 <link rel="stylesheet" href="/css/notities.css">
 
-<div class="notitie-card-container">
+<div class="actions-row" style="height: 0; margin-bottom: 0;">
+    <div id="change-name" onclick="UpdateName(document.querySelector('.selected').getAttribute('note-id'))">
+        <i class="fa-solid fa-edit"></i>
+        Naam wijzigen
+    </div>
+    <div id="delete" onclick="deleteNotebook(document.querySelector('.selected').getAttribute('note-id'))">
+        <i class="fa-solid fa-trash"></i>
+        Verwijderen
+    </div>
+    <div onclick="alert('Deze functie is nog niet geimplementeerd')">
+        <i class="fa-solid fa-file-export"></i>
+        Exporteren
+    </div>
+</div>
+
+<table class="table">
+    <tr class="table-header">
+        <th scope="col" style="width: 0;"></th>
+        <th scope="col" style="width: 0;"><i class="fa-solid fa-file"></i></th>
+        <th scope="col">Notitieboek naam</th>
+        <th scope="col">Notities</th>
+        <th scope="col">Laatst aangepast</th>
+    </tr>
+
     @foreach (NotitieBoek notitieBoek in Model.NotitieBoeken)
     {
         string url = "/Notities/" + notitieBoek.Id;
 
-        <div class="notitie-card" onclick="ReplacePage('@url')">
-            <h1>@notitieBoek.Naam</h1>
-            <p>Dit notitieboek bevat @notitieBoek.Notities.Count notitie@(notitieBoek.Notities.Count == 1 ? "" : "s")</p>
-        </div>
+        <tr class="table-row" note-id="@notitieBoek.Id">
+            <td><i class="fa-regular fa-circle"></i></td>
+            <td><i class="fa-solid fa-folder"></i></td>
+            <td class="notitieboek-naam" onclick="ReplacePage('@url')">@notitieBoek.Naam</td>
+            <td>@notitieBoek.Notities.Count</td>
+            <td>@notitieBoek.lastEdit.ToString("dd/MM/yyyy")</td>
+        </tr>
     }
-</div>
+</table>
+
 
 <script>
-//onload
-loadHomeworkSearch();
+var selectable = document.getElementsByClassName('fa-circle');
 
-function loadHomeworkSearch() {            
-    //if the homeworkSearch is already loaded, don't load it again
-    if (document.getElementsByClassName('bottom-right-add-button').length > 0)
-        document.getElementsByClassName('bottom-right-add-button')[0].remove();
-        
-    document.querySelector(".bottom ul").innerHTML += 
-    '<div class="bottom-right-add-button" id="added-by-fetch" style="display: none; z-index: 100">' +
-        '<a style="position: unset;">' +
-            '<i class="fa-solid fa-plus" id="ToggleButton"></i>' +
-        '</a>'+
-    '</div>';
-    
-    document.querySelector(".bottom ul").innerHTML += 
-    '<div class="popup hidden" id="added-by-fetch"></div>';
-    
-    document.querySelector('.popup').innerHTML += 
-    '<form class="add-item" id="add-item" style="width: 100%;">'+
-        '<div class="Naam">'+
-            '<label for="date">Welke naam moet dit notitieboek krijgen?</label>'+
-            '<input type="text" name="Naam" id="Naam" placeholder="Naam"/>'+
-        '</div>'+
-        '<button type="submit" class="submit">Notitieboek toevoegen</button>'+
-    '</form>';
-    
-    var isOpen = false;
-    
-    document.querySelector('#ToggleButton').parentElement.onclick = function() {
-        
-        if (isOpen)
-            closeSearchPopUp();
-        else
-            openSearchPopUp();
-        isOpen = !isOpen;
+for (var i = 0; i < selectable.length; i++) {
+    selectable[i].onclick = function() {
+        if (this.classList.contains('fa-circle')) {
+            document.querySelectorAll('.fa-check-circle').forEach(element => {
+                element.classList.remove('fa-check-circle');
+                element.classList.add('fa-circle');
+                element.parentElement.parentElement.classList.remove('selected');
+            });
+
+            this.classList.remove('fa-circle');
+            this.classList.add('fa-check-circle');
+            this.parentElement.parentElement.classList.add('selected');
+
+            document.querySelector('.actions-row').style.height = "";
+            document.querySelector('.actions-row').style.marginBottom = "";
+        } else {
+            this.classList.remove('fa-check-circle');
+            this.classList.add('fa-circle');
+            this.parentElement.parentElement.classList.remove('selected');
+            document.querySelector('.actions-row').style.height = "0";
+            document.querySelector('.actions-row').style.marginBottom = "0";
+        }
     };
-    
-    function openSearchPopUp() {
-        //remove the 'hidden' class
-        document.getElementsByClassName('popup')[0].classList.remove('hidden');
-        //add transform: rotateZ(45deg); to bottom-right-add-button
-        document.querySelector('.bottom-right-add-button').style.transform = 'rotateZ(135deg)';
-    }
-    
-    function closeSearchPopUp() {
-        //add the 'hidden' class
-        document.getElementsByClassName('popup')[0].classList.add('hidden');
-        //remove transform: rotateZ(45deg); from bottom-right-add-button
-        document.querySelector('.bottom-right-add-button').style.transform = 'rotateZ(0deg)';
-    }
 }
+
+function deleteNotebook(uuid) {
+    fetch('@Context.Request.Path' + uuid, {
+        method: 'DELETE'
+    }).then(response => {
+        if (response.status === 200) {
+            ReplacePage('/Notities');
+        }
+    }).catch(error => {
+        console.error(error);
+    });
+}
+
+function UpdateName(uuid) {
+    new ZermosModal()
+    .addTitle("Naam wijzigen")
+    .addInput("Wat wil je dat de nieuwe naam wordt?")
+    .setSubmitButtonLabel("Naam wijzigen")
+    .onSubmit((name) => {
+        fetch('@Context.Request.Path' + uuid, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({Naam: name})
+            }).then(response => {
+                if (response.status === 200) {
+                    ReplacePage('/Notities');
+                }
+            }).catch(error => {
+                console.error(error);
+            });
+    })
+    .open();
+}
+    
+document.querySelector(".bottom ul").innerHTML +=
+'<div class="bottom-right-add-button" id="added-by-fetch" style="display: none; z-index: 100">' +
+    '<a style="position: unset;">' +
+        '<i class="fa-solid fa-plus" id="ToggleButton"></i>' +
+    '</a>'+
+'</div>';
+
+document.querySelector('#ToggleButton').parentElement.onclick = function() {
+     new ZermosModal()
+    .addTitle("Nieuw notitieboek")
+    .addInput("Wat wil je dat de nieuwe naam wordt?")
+    .setSubmitButtonLabel("Naam wijzigen")
+    .onSubmit((naam) => {
+        fetch('@Context.Request.Path', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({Naam: naam})
+        }).then(response => {
+            if (response.status === 200) {
+                ReplacePage('/Notities');
+            }
+        }).catch(error => {
+            console.error(error);
+        });
+    })
+    .open();
+};
 </script>

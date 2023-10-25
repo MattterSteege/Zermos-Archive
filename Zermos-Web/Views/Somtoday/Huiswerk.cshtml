@@ -96,85 +96,112 @@
     var allSubjects = ["@(Html.Raw(string.Join("\",\"", Model.items.Select(x => (x.lesgroep?.vak.naam) ?? "Onbekend").Distinct())))"];
     var allContent = ["@(Html.Raw(string.Join("\",\"", Model.items.Select(x => x.studiewijzerItem.huiswerkType.ToLower()).Distinct())))"];
     
-        loadHomeworkSearch();
-    
-        //onload
-        function loadHomeworkSearch() {            
-            //if the homeworkSearch is already loaded, don't load it again
-            if (document.getElementsByClassName('homework-search').length > 0)
-                document.getElementsByClassName('homework-search')[0].remove();
-                
-            document.querySelector(".bottom ul").innerHTML += '<div class="homework-search" id="added-by-fetch" style="display: none;"><p class="search-text">Zoek op huiswerk</p><div class="OpenSearchButton" style="position: unset;"><i class="fa-solid fa-angle-down" id="openCloseArrow"></i></div><div style="display: none" class="grade-notification"></div></div>';
-            document.querySelector(".bottom ul").innerHTML += '<div class="homework-search homework-search-button-popup" id="added-by-fetch" style="display: none;"></div>';
-            document.getElementsByClassName('homework-search-button-popup')[0].innerHTML += '<div class="option" id="type_options"><div class="option-toggle selected" id="huiswerk_toggle" onclick="toggleHuiswerk()">Huiswerk</div><div class="option-toggle selected" id="toetsen_toggle" onclick="toggleToetsen()">Toetsen</div><div class="option-toggle selected" id="grote_toetsen_toggle" onclick="toggleGroteToetsen()">Grote Toetsen</div></div>';
-            document.getElementsByClassName('homework-search-button-popup')[0].innerHTML += '<div class="option" id="subject_options"></div>';
-            document.getElementsByClassName('homework-search-button-popup')[0].innerHTML += '<div class="option" id="toggle_everything" style="grid-column: span 2; padding-top: 21px; padding-bottom: 7px;"><div class="option-toggle selected" id="everything_toggle" onclick="toggleEverything()">Alles</div></div>';
+    loadHomeworkSearch();
+
+    //onload
+    function loadHomeworkSearch() {            
+        //if the homeworkSearch is already loaded, don't load it again
+        if (document.getElementsByClassName('homework-search').length > 0)
+            document.getElementsByClassName('homework-search')[0].remove();
             
-            let startingHeight;
-            let startingWidth;
-            let endingWidth;
+        document.querySelector(".bottom ul").innerHTML += '<div class="homework-search" id="added-by-fetch" style="display: none;"><p class="search-text">Zoek op huiswerk</p><div class="OpenSearchButton" style="position: unset;"><i class="fa-solid fa-angle-down" id="openCloseArrow"></i></div><div style="display: none" class="grade-notification"></div></div>';
+        document.querySelector(".bottom ul").innerHTML += '<div class="homework-search homework-search-button-popup" id="added-by-fetch" style="display: none;"></div>';
+        document.getElementsByClassName('homework-search-button-popup')[0].innerHTML += '<div class="option" id="type_options"><div class="option-toggle selected" id="huiswerk_toggle" onclick="toggleHuiswerk()">Huiswerk</div><div class="option-toggle selected" id="toetsen_toggle" onclick="toggleToetsen()">Toetsen</div><div class="option-toggle selected" id="grote_toetsen_toggle" onclick="toggleGroteToetsen()">Grote Toetsen</div></div>';
+        document.getElementsByClassName('homework-search-button-popup')[0].innerHTML += '<div class="option" id="subject_options"></div>';
+        document.getElementsByClassName('homework-search-button-popup')[0].innerHTML += '<div class="option" id="toggle_everything" style="grid-column: span 2; padding-top: 21px; padding-bottom: 7px;"><div class="option-toggle selected" id="everything_toggle" onclick="toggleEverything()">Alles</div></div>';
+        
+        let startingHeight;
+        let startingWidth;
+        let endingWidth;
+        
+        var isOpen = false;
+        
+        document.getElementsByClassName('OpenSearchButton')[0].parentElement.onclick = function() {
             
-            var isOpen = false;
-            
-            document.getElementsByClassName('OpenSearchButton')[0].parentElement.onclick = function() {
-                
-                if (isOpen)
-                {
-                    isOpen = false;
-                    closeSearchPopUp();
-                }
-                else
-                {
-                    startingHeight = document.getElementsByClassName('homework-search')[0].offsetHeight;
-                    startingWidth = document.getElementsByClassName('homework-search')[0].offsetWidth;
-                    endingWidth = Math.min(startingWidth * 8, 420);
-                    isOpen = true;
-                    openSearchPopUp();
-                }
-            };
-            
-            function openSearchPopUp() {
-                var searchPopup = document.getElementsByClassName('homework-search-button-popup')[0];
-                searchPopup.style.display = 'block';
-                
-                var height = (document.getElementById("subject_options").children.length * 33) + ((document.getElementById("subject_options").children.length - 1) * 7) + 48 + 61;
-                var secondHeight = (document.getElementById("type_options").children.length * 33) + ((document.getElementById("type_options").children.length - 1) * 7) + 48 + 61;
-                
-                searchPopup.style.height = (height > secondHeight ? height : secondHeight) + 'px';
-                
-                searchPopup.style.width = endingWidth + 'px';
-                searchPopup.style.boxShadow = '0 0 15px rgba(0, 0, 0, 0.1)';
-                
-                var search = document.getElementsByClassName('homework-search')[0];
-                search.style.width = endingWidth + 'px';
-                
-                //rotate openCloseArrow 180deg
-                document.getElementById('openCloseArrow').style.transform = 'rotate(180deg)';
-                
-                if (window.innerWidth <= 1200)
-                {
-                    searchPopup.style.right = 'calc(64px + var(--padding))';
-                    search.style.width = 'calc(48px + var(--padding) + 256px)';
-                }
+            if (isOpen)
+            {
+                isOpen = false;
+                closeSearchPopUp();
             }
+            else
+            {
+                startingHeight = document.getElementsByClassName('homework-search')[0].offsetHeight;
+                startingWidth = document.getElementsByClassName('homework-search')[0].offsetWidth;
+                endingWidth = Math.min(startingWidth * 8, 420);
+                isOpen = true;
+                openSearchPopUp();
+            }
+        };
+        
+        function openSearchPopUp() {
+            var searchPopup = document.getElementsByClassName('homework-search-button-popup')[0];
+            searchPopup.style.display = 'block';
             
-            function closeSearchPopUp() {
-                var searchPopup = document.getElementsByClassName('homework-search-button-popup')[0];
-                searchPopup.style.display = 'block';
-                searchPopup.style.height = startingHeight + 'px';
-                searchPopup.style.width = startingWidth + 'px';
-                searchPopup.style.boxShadow = 'none';
-                
-                var search = document.getElementsByClassName('homework-search')[0];
-                search.style.width = startingWidth + 'px';
-                
-                //rotate openCloseArrow 180deg
-                document.getElementById('openCloseArrow').style.transform = 'rotate(0deg)';
-                
-                searchPopup.style.right = '16px';
-                search.style.right = '16px';
+            var height = (document.getElementById("subject_options").children.length * 33) + ((document.getElementById("subject_options").children.length - 1) * 7) + 48 + 61;
+            var secondHeight = (document.getElementById("type_options").children.length * 33) + ((document.getElementById("type_options").children.length - 1) * 7) + 48 + 61;
+            
+            searchPopup.style.height = (height > secondHeight ? height : secondHeight) + 'px';
+            
+            searchPopup.style.width = endingWidth + 'px';
+            searchPopup.style.boxShadow = '0 0 15px rgba(0, 0, 0, 0.1)';
+            
+            var search = document.getElementsByClassName('homework-search')[0];
+            search.style.width = endingWidth + 'px';
+            
+            //rotate openCloseArrow 180deg
+            document.getElementById('openCloseArrow').style.transform = 'rotate(180deg)';
+            
+            if (window.innerWidth <= 1200)
+            {
+                searchPopup.style.right = 'calc(64px + var(--padding))';
+                search.style.width = 'calc(48px + var(--padding) + 256px)';
             }
         }
+        
+        function closeSearchPopUp() {
+            var searchPopup = document.getElementsByClassName('homework-search-button-popup')[0];
+            searchPopup.style.display = 'block';
+            searchPopup.style.height = startingHeight + 'px';
+            searchPopup.style.width = startingWidth + 'px';
+            searchPopup.style.boxShadow = 'none';
+            
+            var search = document.getElementsByClassName('homework-search')[0];
+            search.style.width = startingWidth + 'px';
+            
+            //rotate openCloseArrow 180deg
+            document.getElementById('openCloseArrow').style.transform = 'rotate(0deg)';
+            
+            searchPopup.style.right = '16px';
+            search.style.right = '16px';
+        }
+    }
+    
+    function AddHomework() {
+        new ZermosModal()
+        .addTitle("Huiswerk toevoegen")
+        .addDateInput("Wanneer moet het huiswerk af zijn?")
+        .addInput("Welke titel krijgt het huiswerk?")
+        .addMultilineInput("Wat is de beschrijving van het huiswerk?")
+        .setSubmitButtonLabel("Huiswerk toevoegen")
+        .onSubmit((date, titel, desc) => {
+            date = date + "T00:00:00";
+            
+            fetch('/Somtoday/Huiswerk/Nieuw', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ "deadline": date, "titel": titel, "omschrijving": desc })
+            }).then(response => {
+                if (response.status === 200) {
+                    ReplacePage('/Somtoday/Huiswerk');
+                }
+            }).catch(error => {
+                console.error(error);
+            });
+        })
+        .open();
+    }
 
     function WantToDeleteHomeworkSure(s) {
     
@@ -214,7 +241,7 @@
     bottomRightAddButton.className = "bottom-right-add-button";
     bottomRightAddButton.id = "added-by-fetch";
     bottomRightAddButton.style.display = "none";
-    bottomRightAddButton.innerHTML = '<a onclick="ReplacePage(\'/Somtoday/Huiswerk/Nieuw\')"><i class="fa-solid fa-plus center"></i></a>';
+    bottomRightAddButton.innerHTML = '<a onclick="AddHomework()"><i class="fa-solid fa-plus center"></i></a>';
     
     document.querySelector(".bottom ul").appendChild(bottomRightAddButton);
     

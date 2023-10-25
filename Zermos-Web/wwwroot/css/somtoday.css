@@ -81,7 +81,7 @@
 }
 
 .vak:hover {
-    background: var(--overlay-hover-color);
+    background: var(--overlay-overlay-color);
 }
 
 .vak:hover:has(.top-30 .sufficient) {

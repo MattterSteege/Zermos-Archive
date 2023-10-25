@@ -675,40 +675,18 @@ namespace Zermos_Web.Controllers
 
             return remapedHomework;
         }
-
-        [Authorize]
-        [SomtodayRequirement]
-        [ZermosPage]
-        [HttpGet("Somtoday/Huiswerk/Nieuw")]
-        public IActionResult NieuwHuiswerk()
-        {
-            ViewData["add_css"] = "somtoday";
-            return PartialView();
-        }
         
         [Authorize]
         [SomtodayRequirement]
         [HttpPost("Somtoday/Huiswerk/Nieuw")]
-        public async Task<IActionResult> NieuwHuiswerkPOST()
+        public IActionResult NieuwHuiswerkPOST([FromBody] CustomHuiswerkModel customHuiswerkModel)
         {
-            //from form
-            var title = Request.Form["title"];
-            var description = Request.Form["description"];
-            var date = DateTime.ParseExact(Request.Form["date"], "yyyy-MM-dd", CultureInfo.InvariantCulture);
-            
-            
-            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(description))
-            {
-                HttpContext.AddNotification("Bijna", "Je hebt of geen titel, of geen datum ingevult, beide velden zijn nodig om huiswerk aan te maken", NotificationCenter.NotificationType.INFO);
-                return Forbid();
-            }
-            
-            var userEmail = User.FindFirstValue("email");
-            var user = ZermosUser;
+            var homework = JsonConvert.DeserializeObject<List<CustomHuiswerkModel>>(ZermosUser.custom_huiswerk ?? "[]") ?? new List<CustomHuiswerkModel>();
 
-            var homework = JsonConvert.DeserializeObject<List<CustomHuiswerkModel>>(user.custom_huiswerk ?? "[]") ?? new List<CustomHuiswerkModel>();
-
-            homework.Add(new CustomHuiswerkModel(title, description, date, false, homework.Count + 1));
+            customHuiswerkModel.id = homework.Count + 1;
+            customHuiswerkModel.gemaakt = false;
+            
+            homework.Add(customHuiswerkModel);
             
             ZermosUser = new user
             {
@@ -731,7 +709,7 @@ namespace Zermos_Web.Controllers
             
             user.custom_huiswerk = JsonConvert.SerializeObject(homework);
             
-                        ZermosUser = user;
+            ZermosUser = user;
             
             return Ok();
         }
