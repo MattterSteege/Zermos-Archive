@@ -11,6 +11,9 @@
 }
 
 <link rel="stylesheet" href="/css/notities.css">
+<script src="https://unpkg.com/docx@7.1.0/build/index.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+<script defer src="/js/note-export.js"></script>
 
 <div class="actions-row" style="height: 0; margin-bottom: 0;">
     <div id="change-name" onclick="UpdateName(document.querySelector('.selected').getAttribute('note-id'))">
@@ -21,7 +24,7 @@
         <i class="fa-solid fa-trash"></i>
         Verwijderen
     </div>
-    <div onclick="alert('Deze functie is nog niet geimplementeerd')">
+    <div onclick="exportToDocx(document.querySelector('.selected').getAttribute('note-id'))">
         <i class="fa-solid fa-file-export"></i>
         Exporteren
     </div>
@@ -121,6 +124,22 @@ function UpdateName(uuid) {
             });
     })
     .open();
+}
+
+function exportToDocx(uuid) {
+    console.log(uuid, '@Context.Request.Path/' + uuid + '/export');
+    //get JSON
+    fetch('@Context.Request.Path/' + uuid + '/export', {
+        method: 'GET'
+    }).then(response => {
+        if (response.status === 200) {
+            response.json().then(json => {
+                generate(json);
+            });
+        }
+    }).catch(error => {
+        console.error(error);
+    });
 }
     
 document.querySelector(".bottom ul").innerHTML +=

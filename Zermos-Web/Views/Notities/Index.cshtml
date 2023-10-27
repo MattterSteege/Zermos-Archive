@@ -7,6 +7,7 @@
 }
 
 <link rel="stylesheet" href="/css/notities.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <div class="actions-row" style="height: 0; margin-bottom: 0;">
     <div id="change-name" onclick="UpdateName(document.querySelector('.selected').getAttribute('note-id'))">
@@ -76,15 +77,25 @@ for (var i = 0; i < selectable.length; i++) {
 }
 
 function deleteNotebook(uuid) {
-    fetch('@Context.Request.Path' + uuid, {
-        method: 'DELETE'
-    }).then(response => {
-        if (response.status === 200) {
-            ReplacePage('/Notities');
+    new ZermosModal()
+    .addTitle("Notitieboek verwijderen")
+    .addDescription("Weet je zeker dat je dit notitieboek wilt verwijderen? Vul de naam van het notitieboek in om te bevestigen.")
+    .addInput(document.querySelector('.selected .notitieboek-naam').innerText)
+    .setSubmitButtonLabel("Verwijderen")
+    .onSubmit((input) => {
+        if (input === document.querySelector('.selected .notitieboek-naam').innerText) {   
+            fetch('@Context.Request.Path/' + uuid, {
+                    method: 'DELETE'
+                }).then(response => {
+                    if (response.status === 200) {
+                        ReplacePage('/Notities');
+                    }
+                }).catch(error => {
+                    console.error(error);
+                });
         }
-    }).catch(error => {
-        console.error(error);
-    });
+    })
+    .open();
 }
 
 function UpdateName(uuid) {

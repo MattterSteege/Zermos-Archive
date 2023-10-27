@@ -343,5 +343,17 @@ namespace Zermos_Web.Controllers
         }
 
         #endregion
+
+        #region exort
+        [HttpGet]
+        [Route("/Notities/{notitieboekId}/{notitieId}/export")]
+        public IActionResult GetParagraphExport(string notitieboekId, string notitieId)
+        {
+            var model = ParseNotitiesModel();
+            var notitieBoek = model.NotitieBoeken.FirstOrDefault(x => x.Id == notitieboekId);
+            var notitie = notitieBoek?.Notities.FirstOrDefault(x => x.Id == notitieId);
+            return Json(notitie);
+        }
+        #endregion
     }
 }
