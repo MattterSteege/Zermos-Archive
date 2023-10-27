@@ -227,6 +227,13 @@ namespace Zermos_Web.Controllers
         #endregion
 
         #region Zermelo
+        [HttpGet]
+        [ZermosPage]
+        [Route("/Koppelingen/Zermelo/Ongekoppeld")]
+        public IActionResult ZermeloNietGekoppeld()
+        {
+            return PartialView();
+        }
 
         [HttpGet]
         [ZermosPage]

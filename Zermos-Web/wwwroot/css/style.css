@@ -840,25 +840,3 @@ main.main::-webkit-scrollbar-track {
         bottom: 0;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-.modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-    height: 400px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}

@@ -105,7 +105,7 @@ function deleteNotebook(uuid) {
 
 function UpdateName(uuid) {
     new ZermosModal()
-    .addTitle("Modal Title")
+    .setTitle("Modal Title")
     .addInput("Wat wil je dat de nieuwe naam wordt?")
     .setSubmitButtonLabel("Naam wijzigen")
     .onSubmit((name) => {

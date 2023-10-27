@@ -1,41 +1,56 @@
-﻿class ZermosModal {
+﻿/*
+    .addButton("", () => {
+        
+    })
+ */
+
+
+class ZermosModal {
     constructor() {
         this.title = '';
-        this.description = '';
-        this.inputs = [];
+        this.fields = [];
         this.onSubmitCallback = null;
         this.onCloseCallback = null;
+        this.closingDisabled = false;
         this.fadeDuration = 500;
         this.submitButtonLabel = 'Verstuur!';
     }
 
-    addTitle(title) {
-        this.title = title;
-        return this;
-    }
-
-    addDescription(description) {
-        this.description = description;
+    //ADDERS
+    addText(text) {
+        this.fields.push(["text",text]);
         return this;
     }
 
     addInput(input) {
-        this.inputs.push(["text_input",input]);
+        this.fields.push(["text_input",input]);
         return this;
     }
     
     addMultilineInput(input) {
-        this.inputs.push(["multiline_input", input]);
+        this.fields.push(["multiline_input", input]);
         return this;
     }
     
     addSelectInput(input, options) {
-        this.inputs.push(["select_input", input, options]);
+        this.fields.push(["select_input", input, options]);
         return this;
     }
     
     addDateInput(input) {
-        this.inputs.push(["date_input", input]);
+        this.fields.push(["date_input", input]);
+        return this;
+    }
+
+    addButton(label, callback) {
+        this.fields.push(["button", label, callback]);
+        return this;
+    }
+    
+    
+    //SETTERS
+    setTitle(title) {
+        this.title = title;
         return this;
     }
     
@@ -48,7 +63,13 @@
         this.submitButtonLabel = label;
         return this;
     }
+    
+    disableClose() {
+        this.closingDisabled = true;
+        return this;
+    }
 
+    //CALLBACKS
     onSubmit(callback) {
         this.onSubmitCallback = callback;
         return this;
@@ -60,6 +81,12 @@
     }
 
     open() {
+        //remove any existing modal
+        const existingModal = document.querySelector('#modal');
+        if (existingModal) {
+            document.body.removeChild(existingModal);
+        }
+        
         // Create the modal HTML, add event listeners, and display it
         const modal = createModal.call(this);
 
@@ -67,17 +94,16 @@
             const modal = createDivWithClass('modal');
 
             const modalContent = createDivWithClass('modal-content');
-            modalContent.innerHTML = `
-                <h2>${this.title}</h2>
-                <p>${this.description}</p>
-              `;
+            var title = document.createElement('h1');
+            title.textContent = this.title;
+            modalContent.appendChild(title);
 
-            const inputs = createInputFields(this.inputs);
+            const fields = createInputFields(this.fields);
 
             const submitButton = createButton('submitBtn', this.submitButtonLabel);
 
             modal.appendChild(modalContent);
-            modal.appendChild(inputs);
+            modal.appendChild(fields);
             modal.appendChild(submitButton);
 
             const modalBackground = createDivWithClass('modal-background');
@@ -94,9 +120,9 @@
             return div;
         }
 
-        function createInputFields(inputs) {
+        function createInputFields(fields) {
             const inputContainer = createDivWithClass('input-container');
-            inputs.forEach((input, index) => {
+            fields.forEach((input, index) => {
                 let inputField;
                 
                 if (input[0] === "text_input") 
@@ -107,6 +133,10 @@
                     inputField = createMultilineInput(`input${index}`, input[1]);
                 else if (input[0] === "date_input")
                     inputField = createDateInput(`input${index}`, input[1]);
+                else if (input[0] === "button")
+                    inputField = createButton(`input${index}`, input[1], input[2]);
+                else if (input[0] === "text")
+                    inputField = createText(input[1]);
 
                 inputContainer.appendChild(inputField);
             });
@@ -148,11 +178,18 @@
             return input;
         }
         
-        function createButton(id, label) {
+        function createButton(id, label, callback) {
             const button = document.createElement('button');
             button.id = id;
             button.textContent = label;
+            button.addEventListener('click', callback);
             return button;
+        }
+        
+        function createText(text) {
+            const p = document.createElement('p');
+            p.textContent = text;
+            return p;
         }
 
         function fade(element, opacity, duration) {
@@ -176,7 +213,7 @@
 
         submitButton.addEventListener('click', () => {
             if (this.onSubmitCallback) {
-                const inputValues = this.inputs.map((_, i) => {
+                const inputValues = this.fields.map((_, i) => {
                     const inputElement = modal.querySelector(`#input${i}`);
                     if (!inputElement || !inputElement.value) {
                         return null;
@@ -189,9 +226,10 @@
         });
         
         document.querySelector('#modal').addEventListener('click', (e) => {
-            if (this.onCloseCallback) {
-                this.onCloseCallback();
-            }
+            if (this.closingDisabled) return;
+            
+            if (this.onCloseCallback) this.onCloseCallback();
+            
             
             //if the one clicked is not the background (modal), return
             if (e.target.id !== 'modal') return;

@@ -15,7 +15,7 @@ namespace Zermos_Web.Models.Requirements
             
             if (string.IsNullOrEmpty(user.zermelo_access_token)) 
             {
-                context.Result = new RedirectResult("/koppelingen/zermelo");
+                context.Result = new RedirectResult("/koppelingen/zermelo/ongekoppeld");
                 return;
             }
 

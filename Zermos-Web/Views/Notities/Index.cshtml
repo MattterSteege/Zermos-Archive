@@ -78,8 +78,8 @@ for (var i = 0; i < selectable.length; i++) {
 
 function deleteNotebook(uuid) {
     new ZermosModal()
-    .addTitle("Notitieboek verwijderen")
-    .addDescription("Weet je zeker dat je dit notitieboek wilt verwijderen? Vul de naam van het notitieboek in om te bevestigen.")
+    .setTitle("Notitieboek verwijderen")
+    .addText("Weet je zeker dat je dit notitieboek wilt verwijderen? Vul de naam van het notitieboek in om te bevestigen.")
     .addInput(document.querySelector('.selected .notitieboek-naam').innerText)
     .setSubmitButtonLabel("Verwijderen")
     .onSubmit((input) => {

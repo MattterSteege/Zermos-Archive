@@ -263,6 +263,12 @@ function ReplacePage(url, fromHistory = false) {
             }
 
             setTimeout(async function() {
+                //remove any existing modal
+                const existingModal = document.querySelector('#modal');
+                if (existingModal) {
+                    document.body.removeChild(existingModal);
+                }
+                
                 let i;
                 //remove all items with id added-by-fetch
                 const elements = document.querySelectorAll("#added-by-fetch");
