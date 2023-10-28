@@ -15,7 +15,7 @@
 
 .modal-background .modal {
     position: fixed;
-    width: 400px;
+    width: min(400px, calc(100% - var(--padding) * 2 - 64px));
     height: auto;
     display: flex;
     flex-direction: column;

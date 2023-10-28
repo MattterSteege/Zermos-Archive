@@ -16,7 +16,7 @@ namespace Zermos_Web.Models.Requirements
             if (string.IsNullOrEmpty(user?.somtoday_access_token) && string.IsNullOrEmpty(user?.somtoday_refresh_token))
             {
                 // User does not have the desired value, redirect to /a/login
-                context.Result = new RedirectResult("/koppelingen/somtoday");
+                context.Result = new RedirectResult("/Koppelingen/Somtoday/Ongekoppeld");
                 return;
             }
 

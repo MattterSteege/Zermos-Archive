@@ -105,6 +105,13 @@ namespace Zermos_Web.Controllers
         #endregion
 
         #region infowijs
+        [HttpGet]
+        [ZermosPage]
+        [Route("/Koppelingen/Infowijs/Ongekoppeld")]
+        public IActionResult InfowijsNietGekoppeld()
+        {
+            return PartialView();
+        }
 
         [HttpGet]
         [ZermosPage]
@@ -363,6 +370,13 @@ namespace Zermos_Web.Controllers
         #endregion
 
         #region Somtoday
+        [HttpGet]
+        [ZermosPage]
+        [Route("/Koppelingen/Somtoday/Ongekoppeld")]
+        public IActionResult SomtodayNietGekoppeld()
+        {
+            return PartialView();
+        }
 
         [HttpGet]
         [ZermosPage]
