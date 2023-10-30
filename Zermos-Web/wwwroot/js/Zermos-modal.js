@@ -263,13 +263,13 @@ class ZermosModal {
             if (this.onSubmitCallback) {
                 const inputValues = this.fields.map((_, i) => {
                     const inputElement = modal.querySelector(`#input${i}`);
-                    if ((!inputElement || !inputElement.value) && !inputElement.children[0].value) {
+                    if ((!inputElement || !inputElement.value) && !inputElement?.children[0]?.children[0]?.value) {
                         return null;
                     }
                     
-                    return inputElement.value || Array.from(document.querySelector('.multi-toggle').children).map(child => child.checked);
+                    return inputElement.value === undefined ? Array.from(inputElement.children).map(child => child.children[0].checked) : inputElement.value;
                 });
-                this.onSubmitCallback(...inputValues);
+                this.onSubmitCallback(...inputValues.filter(value => value !== null));
             }
             document.body.removeChild(modal);
         });

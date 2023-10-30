@@ -95,120 +95,18 @@
     //make an array of all the homework items, title, content, bijlagen, date, 
     var allSubjects = ["@(Html.Raw(string.Join("\",\"", Model.items.Select(x => (x.lesgroep?.vak.naam) ?? "Onbekend").Distinct())))"];
     var allContent = ["@(Html.Raw(string.Join("\",\"", Model.items.Select(x => x.studiewijzerItem.huiswerkType.ToLower()).Distinct())))"];
-    
-    loadHomeworkSearch();
+          
+    if (document.getElementsByClassName('homework-search').length > 0)
+        document.getElementsByClassName('homework-search')[0].remove(); 
+        
+    document.querySelector(".bottom ul").innerHTML += '<div class="homework-search" id="added-by-fetch" style="display: none;" onclick="loadHomeworkSorting()" >'+
+                                                      '    <p class="search-text">Zoek op huiswerk</p>'+
+                                                      '    <div class="OpenSearchButton" style="position: unset;">'+
+                                                      '        <i class="fa-solid fa-search" id="openCloseArrow"></i>'+
+                                                      '    </div>'+
+                                                      '    <div style="display: none" class="grade-notification"></div>'+
+                                                      '</div>';
 
-    //onload
-    function loadHomeworkSearch() {            
-        //if the homeworkSearch is already loaded, don't load it again
-        if (document.getElementsByClassName('homework-search').length > 0)
-            document.getElementsByClassName('homework-search')[0].remove();
-            
-        document.querySelector(".bottom ul").innerHTML += '<div class="homework-search" id="added-by-fetch" style="display: none;"><p class="search-text">Zoek op huiswerk</p><div class="OpenSearchButton" style="position: unset;"><i class="fa-solid fa-angle-down" id="openCloseArrow"></i></div><div style="display: none" class="grade-notification"></div></div>';
-        document.querySelector(".bottom ul").innerHTML += '<div class="homework-search homework-search-button-popup" id="added-by-fetch" style="display: none;"></div>';
-        document.getElementsByClassName('homework-search-button-popup')[0].innerHTML += '<div class="option" id="type_options"><div class="option-toggle selected" id="huiswerk_toggle" onclick="toggleHuiswerk()">Huiswerk</div><div class="option-toggle selected" id="toetsen_toggle" onclick="toggleToetsen()">Toetsen</div><div class="option-toggle selected" id="grote_toetsen_toggle" onclick="toggleGroteToetsen()">Grote Toetsen</div></div>';
-        document.getElementsByClassName('homework-search-button-popup')[0].innerHTML += '<div class="option" id="subject_options"></div>';
-        document.getElementsByClassName('homework-search-button-popup')[0].innerHTML += '<div class="option" id="toggle_everything" style="grid-column: span 2; padding-top: 21px; padding-bottom: 7px;"><div class="option-toggle selected" id="everything_toggle" onclick="toggleEverything()">Alles</div></div>';
-        
-        let startingHeight;
-        let startingWidth;
-        let endingWidth;
-        
-        var isOpen = false;
-        
-        document.getElementsByClassName('OpenSearchButton')[0].parentElement.onclick = function() {
-            
-            if (isOpen)
-            {
-                isOpen = false;
-                closeSearchPopUp();
-            }
-            else
-            {
-                startingHeight = document.getElementsByClassName('homework-search')[0].offsetHeight;
-                startingWidth = document.getElementsByClassName('homework-search')[0].offsetWidth;
-                endingWidth = Math.min(startingWidth * 8, 420);
-                isOpen = true;
-                openSearchPopUp();
-            }
-        };
-        
-        function openSearchPopUp() {
-            var searchPopup = document.getElementsByClassName('homework-search-button-popup')[0];
-            searchPopup.style.display = 'block';
-            
-            var height = (document.getElementById("subject_options").children.length * 33) + ((document.getElementById("subject_options").children.length - 1) * 7) + 48 + 61;
-            var secondHeight = (document.getElementById("type_options").children.length * 33) + ((document.getElementById("type_options").children.length - 1) * 7) + 48 + 61;
-            
-            searchPopup.style.height = (height > secondHeight ? height : secondHeight) + 'px';
-            
-            searchPopup.style.width = endingWidth + 'px';
-            searchPopup.style.boxShadow = '0 0 15px rgba(0, 0, 0, 0.1)';
-            
-            var search = document.getElementsByClassName('homework-search')[0];
-            search.style.width = endingWidth + 'px';
-            
-            //rotate openCloseArrow 180deg
-            document.getElementById('openCloseArrow').style.transform = 'rotate(180deg)';
-            
-            if (window.innerWidth <= 1200)
-            {
-                searchPopup.style.right = 'calc(64px + var(--padding))';
-                search.style.width = 'calc(48px + var(--padding) + 256px)';
-            }
-            
-            // var trueFalseArrayForSubjects = [];
-            // for (var i = 0; i < allSubjects.length; i++) {
-            //     if (vakkenCurrentlyShown.includes(allSubjects[i]))
-            //         trueFalseArrayForSubjects.push(false);
-            //     else
-            //         trueFalseArrayForSubjects.push(true);
-            // }
-            //
-            // var trueFalseArrayForTypes = [];
-            // for (var i = 0; i < allContent.length; i++) {
-            //     if (typesCurrentlyShown.includes(allContent[i]))
-            //         trueFalseArrayForTypes.push(false);
-            //     else
-            //         trueFalseArrayForTypes.push(true);
-            // }
-            //
-            //
-            // new ZermosModal()
-            // .setTitle("Huiswerk verbergen")
-            // .addText("Klik op een vak om het huiswerk van dat vak te verbergen of te tonen of te verbergen.")
-            // .addMultiToggles(allSubjects, trueFalseArrayForSubjects)
-            // .addText("Klik op een type huiswerk om het huiswerk van dat type te verbergen of te tonen.")
-            // .addMultiToggles(allContent, trueFalseArrayForTypes)
-            // .addText("Klik op 'Alles' om alle huiswerk te tonen.")
-            // .addButton("alles aan/uit", () => {
-            //     toggleEverything();
-            // })
-            // .setSubmitButtonLabel("terug naar huiswerk")
-            // .onSubmit((vakkenToggled, huiswerkToggled) => {
-            //     console.log(vakkenToggled, vakkenCurrentlyShown);
-            //     console.log(huiswerkToggled, typesCurrentlyShown);
-            // })                  
-            // .open();
-        }
-        
-        function closeSearchPopUp() {
-            var searchPopup = document.getElementsByClassName('homework-search-button-popup')[0];
-            searchPopup.style.display = 'block';
-            searchPopup.style.height = startingHeight + 'px';
-            searchPopup.style.width = startingWidth + 'px';
-            searchPopup.style.boxShadow = 'none';
-            
-            var search = document.getElementsByClassName('homework-search')[0];
-            search.style.width = startingWidth + 'px';
-            
-            //rotate openCloseArrow 180deg
-            document.getElementById('openCloseArrow').style.transform = 'rotate(0deg)';
-            
-            searchPopup.style.right = '16px';
-            search.style.right = '16px';
-        }
-    }
     
     function AddHomework() {
         new ZermosModal()
@@ -307,54 +205,50 @@
             }, 750);
         }
     });
-        
-    function getElementY(query) {
-        return main.scrollTop + document.querySelector(query).getBoundingClientRect().top
-    }
-
-    function doScrolling(element, duration) {
-        var startingY = main.scrollTop
-        var elementY = getElementY(element)
-        // If element is close to page's bottom then window will scroll only to some position above the element.
-        var targetY = document.body.scrollHeight - elementY < main.innerHeight ? document.body.scrollHeight - main.innerHeight : elementY
-        var diff = targetY - startingY
-
-        // Easing function: easeInOutCubic
-        // From: https://gist.github.com/gre/1650294
-        var easing = function(t) {
-            return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
-        }
-        var start
-
-        if (!diff) return
-        
-        diff -= 96;
-        
-        //add a percentage of diff to the duration
-        duration += Math.abs(diff / 10);
-
-        // Bootstrap our animation - it will get called right before next frame shall be rendered.
-        window.requestAnimationFrame(function step(timestamp) {
-            if (!start) start = timestamp
-            // Elapsed miliseconds since start of scrolling.
-            var time = timestamp - start
-            // Get percent of completion in range [0, 1].
-            var percent = Math.min(time / duration, 1)
-            // Apply the easing.
-            // It can cause bad-looking slow frames in browser performance tool, so be careful.
-            percent = easing(percent)
-
-            main.scrollTo(0, startingY + diff * percent)
-
-            // Proceed with animation as long as we wanted it to.
-            if (time < duration) {
-                window.requestAnimationFrame(step)
-            }
-        })
-    }
-    
     
     //========================================HOMEWORK SORTING========================================
+    function loadHomeworkSorting() {            
+            var trueFalseArrayForSubjects = [];
+            for (var i = 0; i < allSubjects.length; i++) {
+                if (vakkenCurrentlyShown.includes(allSubjects[i]))
+                    trueFalseArrayForSubjects.push(false);
+                else
+                    trueFalseArrayForSubjects.push(true);
+            }
+    
+            var trueFalseArrayForTypes = [];
+            for (var i = 0; i < allContent.length; i++) {
+                if (typesCurrentlyShown.includes(allContent[i]))
+                    trueFalseArrayForTypes.push(false);
+                else
+                    trueFalseArrayForTypes.push(true);
+            }
+    
+    
+            new ZermosModal()
+            .setTitle("Huiswerk verbergen")
+            .addText("Klik op een vak om het huiswerk van dat vak te verbergen of te tonen of te verbergen.")
+            .addMultiToggles(allSubjects, trueFalseArrayForSubjects)
+            .addText("Klik op een type huiswerk om het huiswerk van dat type te verbergen of te tonen.")
+            .addMultiToggles(allContent, trueFalseArrayForTypes)
+            .addText("Klik op 'Alles' om alle huiswerk te tonen.")
+            .addButton("alles aan", () => {
+                toggleEverything();
+            })
+            .setSubmitButtonLabel("terug naar huiswerk")
+            .onSubmit((vakkenToggled, huiswerkToggled) => {
+                for (var i = 0; i < vakkenToggled.length; i++) {
+                    if (vakkenToggled[i] === true)
+                        SortHomework("", allSubjects[i]);
+                }
+                for (var i = 0; i < huiswerkToggled.length; i++) {
+                    if (huiswerkToggled[i] === true)
+                        SortHomework(allContent[i], "");
+                }
+            })                  
+            .open();
+        }
+    
     var vakkenCurrentlyShown = [...allSubjects];
     var typesCurrentlyShown = [...allContent];
     
@@ -369,25 +263,13 @@
     function toggleToetsen() { SortHomework("toets", ""); }
     function toggleGroteToetsen() { SortHomework("grote_toets", ""); }
     function toggleEverything() { SortHomework("*", "*"); }
-    
-    vakkenCurrentlyShown.forEach(function (vak) {
-        document.getElementById("subject_options").innerHTML += '<div class="option-toggle selected" id="' + vak.toLowerCase().replace(" ", "_") + '_toggle" onclick="SortHomework(\'\', \'' + vak + '\')">' + vak + '</div>';
-    });    
-    
+
     function SortHomework(typeToToggle, vakToToggle) {
         
         if (typeToToggle === "*" && vakToToggle === "*")
         {
             vakkenCurrentlyShown = [...allSubjects];
             typesCurrentlyShown = [...allContent];
-            
-            document.getElementById("huiswerk_toggle").classList.add("selected");
-            document.getElementById("toetsen_toggle").classList.add("selected");
-            document.getElementById("grote_toetsen_toggle").classList.add("selected");
-            
-            vakkenCurrentlyShown.forEach(function (vak) {
-                document.getElementById(vak.toLowerCase().replace(" ", "_") + "_toggle").classList.add("selected");
-            });
             
             document.getElementsByClassName("grade-notification")[0].style.display = "none";
         }
@@ -397,69 +279,39 @@
             if (typeToToggle === "huiswerk")
             {
                 if (typesCurrentlyShown.includes("huiswerk"))
-                {
                     typesCurrentlyShown.splice(typesCurrentlyShown.indexOf("huiswerk"), 1);
-                    document.getElementById("huiswerk_toggle").classList.remove("selected");
-                }
                 else
-                {
                     typesCurrentlyShown.push("huiswerk");   
-                    document.getElementById("huiswerk_toggle").classList.add("selected");
-                }
-                
             }
             else if (typeToToggle === "toets")
             {
                 if (typesCurrentlyShown.includes("toets"))
-                {
                     typesCurrentlyShown.splice(typesCurrentlyShown.indexOf("toets"), 1);
-                    document.getElementById("toetsen_toggle").classList.remove("selected");
-                }
                 else
-                {
                     typesCurrentlyShown.push("toets");   
-                    document.getElementById("toetsen_toggle").classList.add("selected");
-                }
             }
             else if (typeToToggle === "grote_toets")
             {
                 if (typesCurrentlyShown.includes("grote_toets"))
-                {
                     typesCurrentlyShown.splice(typesCurrentlyShown.indexOf("grote_toets"), 1);
-                    document.getElementById("grote_toetsen_toggle").classList.remove("selected");
-                }
                 else
-                {
                     typesCurrentlyShown.push("grote_toets");   
-                    document.getElementById("grote_toetsen_toggle").classList.add("selected");
-                }
             }
         }
         
         if (vakToToggle !== "" && vakToToggle !== "*")
         {
             if (vakkenCurrentlyShown.includes(vakToToggle))
-            {
                 vakkenCurrentlyShown.splice(vakkenCurrentlyShown.indexOf(vakToToggle), 1);
-                document.getElementById(vakToToggle.toLowerCase().replace(" ", "_") + "_toggle").classList.remove("selected");
-            }
             else
-            {
                 vakkenCurrentlyShown.push(vakToToggle);   
-                document.getElementById(vakToToggle.toLowerCase().replace(" ", "_") + "_toggle").classList.add("selected");
-            }
         }
         
         if (arraysEqual(vakkenCurrentlyShown, allSubjects) && arraysEqual(typesCurrentlyShown, allContent)) 
-        {
-            document.getElementsByClassName("grade-notification")[0].style.display = "none";
-            document.getElementById("everything_toggle").classList.add("selected");
-        }
+            document.getElementsByClassName("grade-notification")[0].style.display = "none";  
         else
-        {
             document.getElementsByClassName("grade-notification")[0].style.display = "flex";
-            document.getElementById("everything_toggle").classList.remove("selected");
-        }
+        
         
         //get all the homework items
         var homeworkItems = document.getElementsByClassName("homeworkItem");
