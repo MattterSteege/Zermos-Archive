@@ -117,7 +117,7 @@ namespace Infrastructure
                 }
             }
 
-            _context.users.Update(userToUpdate);
+            if (userToUpdate != null) _context.users.Update(userToUpdate);
             await _context.SaveChangesAsync();
         }
     }

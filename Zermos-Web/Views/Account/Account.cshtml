@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="/css/account.css">
 
 <div class="account-container">
-    <div class="account-item">
+    <div class="account-item" onclick="OpenDebug()">
         <h1>Profiel</h1>
         <p>@Model.email</p>
     </div>
@@ -117,6 +117,14 @@
 </div>
 
 <script>
+    var clicked = 0;
+    function OpenDebug() {
+        clicked++;
+        if (clicked === 3) {
+            ReplacePage('@Url.Action("Debug", "Account")');
+        }
+    }
+
     function AreYouSure(app) {
         document.getElementById(app + '-first').style.display = 'none';
         document.getElementById(app + '-second').style.display = 'block';

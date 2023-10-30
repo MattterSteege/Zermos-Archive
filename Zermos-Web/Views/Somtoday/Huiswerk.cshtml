@@ -156,6 +156,40 @@
                 searchPopup.style.right = 'calc(64px + var(--padding))';
                 search.style.width = 'calc(48px + var(--padding) + 256px)';
             }
+            
+            // var trueFalseArrayForSubjects = [];
+            // for (var i = 0; i < allSubjects.length; i++) {
+            //     if (vakkenCurrentlyShown.includes(allSubjects[i]))
+            //         trueFalseArrayForSubjects.push(false);
+            //     else
+            //         trueFalseArrayForSubjects.push(true);
+            // }
+            //
+            // var trueFalseArrayForTypes = [];
+            // for (var i = 0; i < allContent.length; i++) {
+            //     if (typesCurrentlyShown.includes(allContent[i]))
+            //         trueFalseArrayForTypes.push(false);
+            //     else
+            //         trueFalseArrayForTypes.push(true);
+            // }
+            //
+            //
+            // new ZermosModal()
+            // .setTitle("Huiswerk verbergen")
+            // .addText("Klik op een vak om het huiswerk van dat vak te verbergen of te tonen of te verbergen.")
+            // .addMultiToggles(allSubjects, trueFalseArrayForSubjects)
+            // .addText("Klik op een type huiswerk om het huiswerk van dat type te verbergen of te tonen.")
+            // .addMultiToggles(allContent, trueFalseArrayForTypes)
+            // .addText("Klik op 'Alles' om alle huiswerk te tonen.")
+            // .addButton("alles aan/uit", () => {
+            //     toggleEverything();
+            // })
+            // .setSubmitButtonLabel("terug naar huiswerk")
+            // .onSubmit((vakkenToggled, huiswerkToggled) => {
+            //     console.log(vakkenToggled, vakkenCurrentlyShown);
+            //     console.log(huiswerkToggled, typesCurrentlyShown);
+            // })                  
+            // .open();
         }
         
         function closeSearchPopUp() {

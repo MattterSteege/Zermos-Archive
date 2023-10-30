@@ -1,13 +1,20 @@
 ﻿0.4 - Notities
 
+- debug
+    - Er is een nieuwe pagina waarop je verschillende dingen kunt refreshen, voor als Zermos niet optimaal werkt, maar dit hoef je eigenlijk nooit te gebruiken.
+
 - algemeen
     - grote veranderingen in de code die mijn leven makkelijker maken :)
     - Verschillende UI verbeteringen
     - als je dingen moet invullen, dan krijg je nu netjes een popup met een tekstveld en uitleg, dit is een heel nieuw (uiteraad zelfgemaakt) systeem
     - Als je een systeem niet gekoppeld hebt, dan krijg je nu een veel netter pagina te zien met een uitleg en een link naar de originele pagina.
+    - Een kleine cleanup voor de UI, niets bijzonders
     
 - notities - wacht er zijn nu notities?????!?!?!?
     - Zermos is blij om een nieuwe functie te introduceren: notities! Je kan een of meer notitieboek(en) aanmaken (voor elk vak een bijvoorbeeld) en daar kan je verschillende hoofdstukken aan toevoegen. Elke notitie is opgebouwd uit paragrafen die je los van elkaar kan aanmaken. onderling kan je ze verschuiven en aanpassen naar hoe jij het wilt. Als je klaarbent met een notitie klik je op exporteren en Zermos maakt een heel mooi bestand voor je met een inhoudsopgave, pagina nummers alles. Zo iets handigs heb je nog nooit gezien!
     
 - Somtoday - custom huiswerk
     - het aanmaken van huiswerk gaat nu via de custom popup's, dit scheelt weer het laden van een nieuwe pagina en scheelt mij ongeveer 200% code
+    
+- Hoofdmenu
+    - De afteltijd gaat nu wel goed en loopt geen +1 of +2 uur achter

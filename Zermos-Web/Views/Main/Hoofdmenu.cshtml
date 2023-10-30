@@ -66,12 +66,12 @@
                             <p class="lesson-subject">@(zermeloNextLesson?.subjects.Count > 0 ? zermeloNextLesson.subjects[0] : "")</p>
                             <p class="lesson-teacher">@(zermeloNextLesson?.teachers.Count > 0 ? zermeloNextLesson.teachers[0] : "")</p>
                             <p class="lesson-location" style="text-transform: unset;">@(zermeloNextLesson?.locations.Count > 0 ? zermeloNextLesson.locations[0] : "")</p>
-                            <p id="class_starts_at" class="lesson-location @nextLessonStart.GetDateDifference(DateTime.Now).ToUnixTime()">berekenen...</p>
+                            <p id="class_starts_at" class="lesson-location" data-start="@nextLessonStart.GetDateDifference(DateTime.UtcNow.toDutchDate()).ToUnixTime()">berekenen...</p>
                         }
                         else
                         {
                             <p class="lesson-subject">Geen les meer vandaag</p>
-                            <p id="class_starts_at" class="lesson-location 0"></p>
+                            <p id="class_starts_at" class="lesson-location" data-start="0"></p>
                         }
                     }
                 </div>
@@ -387,7 +387,7 @@ function RefreshWeer() {
 }
 
 function CalculateLessonTimeLeft() {
-    let timeLeft = document.getElementById("class_starts_at").classList[1];
+    let timeLeft = document.querySelector("#class_starts_at").dataset.start;
     //set the time left to the element HH:MM:SS, but hide hours and minutes if they are 0, do this every second
     var interval = setInterval(() => {
         let hours = Math.floor(timeLeft / 3600);

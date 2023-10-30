@@ -177,4 +177,9 @@ public static class DateTimeUtils
 
         return unixTimestamp;
     }
+
+    public static DateTime toDutchDate(this DateTime utc)
+    {
+        return TimeZoneInfo.ConvertTimeFromUtc(utc, TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+    }
 }

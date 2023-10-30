@@ -1,0 +1,58 @@
+﻿@model Infrastructure.Entities.user
+
+@{
+    ViewBag.Title = "title";
+}
+
+<link rel="stylesheet" href="/css/account.css">
+
+<div class="account-container">
+    <div class="account-item">
+        <h1>BELANGRIJK!</h1>
+        <p>Deze pagina is bedoeld om dingen te testen en is voor de normale gebruiker niet bedoeld. Als je problemen ondervindt met Zermos en je is verteld om deze pagina te openen. Blijf dan lekker rondhangen :) Om een setting aan te passen moet je 2x klikken, dit is om zeker te zijn dat je iets niet per ongeluk aan past.</p>
+    </div>
+    
+    <div class="account-item" onclick="RefreshCSS()">
+        <h1>CSS refreshen</h1>
+        <p>Als Zermos er niet helemaal tof uitziet, dan kan je hier de CSS refreshen. Ik kan je ook aanraden om gelijk de JS te refreshen, maar dat hoeft niet.</p>
+    </div>
+    
+    <div class="account-item" onclick="RefreshJS()">
+        <h1>JS refreshen</h1>
+        <p>Als Zermos niet helemaal lekker werkt, dan kan je hier de JS refreshen. Ik kan je ook aanraden om gelijk de CSS te refreshen, maar dat hoeft niet.</p>
+    </div>
+    
+    <div class="account-item" onclick="TogglePreviews()">
+        <h1>Previews aan/uit</h1>
+        <p>Als je previews aan hebt staan, dan kan je de previews van de verschillende pagina's zien. Dit is handig als je een preview wilt zien van een feature die nog niet af is. Weet wel dat alles aangepast kan worden en zeer instabiel is in de werking.</p>
+    </div>
+</div>
+
+<script>
+    function RefreshCSS() {
+        var links = document.getElementsByTagName("link");
+        for (var cl in links) {
+            var link = links[cl];
+            if (link.rel === "stylesheet") {
+                //replace the ?v= with a random string of 10 long
+                link.href = link.href.replace(/\?v=.*$/, "?v=" + Math.random().toString(36).substring(2, 12));
+            }
+        }
+    }
+    
+    function RefreshJS() {
+        var scripts = document.getElementsByTagName("script");
+        for (var cl in scripts) {
+            var script = scripts[cl];
+            if (script.src !== undefined) {
+                //replace the ?v= with a random string of 10 long
+                script.src = script.src.replace(/\?v=.*$/, "?v=" + Math.random().toString(36).substring(2, 12));
+            }
+        }
+    }
+    
+    function TogglePreviews() {
+        document.cookie = "preview=" + (document.cookie.indexOf("preview=true") === -1 ? "true" : "false") + ";path=/;SameSite=Strict;Expires=Fri, 31 Dec 9999 23:59:59 GMT";
+        location.reload();
+    }
+</script>

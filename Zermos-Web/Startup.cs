@@ -43,6 +43,7 @@ namespace Zermos_Web
                     options.Cookie.IsEssential = true;
                 });
             
+            
             //sets the data protection keys to be stored in the /dataprotection folder (in the docker volume dataprotection)
             services.AddDataProtection().PersistKeysToFileSystem(new System.IO.DirectoryInfo("/dataprotection"));
         }

@@ -47,6 +47,17 @@ class ZermosModal {
         return this;
     }
     
+    addToggle(label, toggled) {
+        this.fields.push(["toggle", label, toggled]);
+        return this;
+    }
+    
+    addMultiToggles(toggles, toggled) {
+        //make a list of toggles which collectively return an array of true/false values
+        //this array is then returned to the callback
+        this.fields.push(["multi_toggle", toggles, toggled]);
+        return this;
+    }
     
     //SETTERS
     setTitle(title) {
@@ -137,6 +148,10 @@ class ZermosModal {
                     inputField = createButton(`input${index}`, input[1], input[2]);
                 else if (input[0] === "text")
                     inputField = createText(input[1]);
+                else if (input[0] === "toggle")
+                    inputField = createToggle(`input${index}`, input[1], input[2]);
+                else if (input[0] === "multi_toggle")
+                    inputField = createMultiToggle(`input${index}`, input[1], input[2]);
 
                 inputContainer.appendChild(inputField);
             });
@@ -186,6 +201,39 @@ class ZermosModal {
             return button;
         }
         
+        function createToggle(id, label, toggled) {
+            const toggleParent = document.createElement('div');
+            toggleParent.classList.add('toggle-parent');
+            
+            const toggle = document.createElement('input');
+            toggle.id = id;
+            toggle.type = "checkbox";
+            toggle.textContent = label;
+            toggle.checked = toggled;
+            toggle.addEventListener('click', () => {
+                toggle.classList.toggle('active');
+            });
+            
+            const toggleLabel = document.createElement('label');
+            toggleLabel.htmlFor = id;
+            toggleLabel.textContent = label;
+            
+            toggleParent.appendChild(toggle);
+            toggleParent.appendChild(toggleLabel);
+                        
+            return toggleParent;
+        }
+        
+        function createMultiToggle(id, labels, toggled) {
+            const toggle = document.createElement('div');
+            toggle.id = id;
+            toggle.classList.add('multi-toggle');
+            labels.forEach((label, index) => {
+                toggle.appendChild(createToggle(`${id}${index}`, label, toggled[index]));
+            });
+            return toggle;
+        }
+        
         function createText(text) {
             const p = document.createElement('p');
             p.textContent = text;
@@ -215,10 +263,11 @@ class ZermosModal {
             if (this.onSubmitCallback) {
                 const inputValues = this.fields.map((_, i) => {
                     const inputElement = modal.querySelector(`#input${i}`);
-                    if (!inputElement || !inputElement.value) {
+                    if ((!inputElement || !inputElement.value) && !inputElement.children[0].value) {
                         return null;
                     }
-                    return inputElement.value;
+                    
+                    return inputElement.value || Array.from(document.querySelector('.multi-toggle').children).map(child => child.checked);
                 });
                 this.onSubmitCallback(...inputValues);
             }
@@ -227,7 +276,6 @@ class ZermosModal {
         
         document.querySelector('#modal').addEventListener('click', (e) => {
             if (this.closingDisabled) return;
-            
             if (this.onCloseCallback) this.onCloseCallback();
             
             

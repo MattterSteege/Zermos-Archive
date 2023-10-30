@@ -52,7 +52,7 @@ namespace Zermos_Web.Controllers
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
-                access_token = await RefreshToken(user.somtoday_refresh_token);
+                access_token = RefreshToken(user.somtoday_refresh_token);
             }
 
             var grades = await fetchGrades(access_token, user.somtoday_student_id);
@@ -67,7 +67,7 @@ namespace Zermos_Web.Controllers
             return PartialView(grades);
         }
 
-        public async Task<string> RefreshToken(string token = null)
+        public string RefreshToken(string token = null)
         {
             if (token == null) return null;
 
@@ -121,7 +121,7 @@ namespace Zermos_Web.Controllers
             
                 if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
                 {
-                    access_token = await RefreshToken(user.somtoday_refresh_token);
+                    access_token = RefreshToken(user.somtoday_refresh_token);
                 }
 
                 grades = await fetchGrades(access_token, user.somtoday_student_id);
@@ -169,7 +169,7 @@ namespace Zermos_Web.Controllers
             
                 if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
                 {
-                    access_token = await RefreshToken(user.somtoday_refresh_token);
+                    access_token = RefreshToken(user.somtoday_refresh_token);
                 }
 
                 grades = await fetchGrades(access_token, user.somtoday_student_id);
@@ -203,7 +203,7 @@ namespace Zermos_Web.Controllers
             
                 if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
                 {
-                    access_token = await RefreshToken(user.somtoday_refresh_token);
+                    access_token = RefreshToken(user.somtoday_refresh_token);
                 }
 
                 somtodayGradesModel = await fetchGrades(access_token, user.somtoday_student_id);
@@ -550,7 +550,7 @@ namespace Zermos_Web.Controllers
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
-                access_token = await RefreshToken(user.somtoday_refresh_token);
+                access_token = RefreshToken(user.somtoday_refresh_token);
             }
 
             var _startDate = DateTime.Now.AddDays(-dagen).ToString("yyyy-MM-dd");
@@ -752,7 +752,7 @@ namespace Zermos_Web.Controllers
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
-                access_token = await RefreshToken(user.somtoday_refresh_token);
+                access_token = RefreshToken(user.somtoday_refresh_token);
             }
             
             var baseurl = $"https://api.somtoday.nl/rest/v1/absentiemeldingen?begindatumtijd={currentSchoolyear.vanafDatumDate:yyyy-MM-dd}&einddatumtijd={currentSchoolyear.totDatumDate:yyyy-MM-dd}";

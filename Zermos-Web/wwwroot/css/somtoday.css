@@ -377,7 +377,7 @@
     background: var(--overlay-color);
     position: fixed;
     top: 16px;
-    left: 410px;
+    left: 404px;
     border-radius: var(--border-radius);
     display: flex !important;
     align-items: center;
@@ -385,13 +385,13 @@
     cursor: pointer;
     font-weight: 700;
     color: var(--text-color);
-    transition: all 0.25s;
+    transition: width 0.3s, height 0.3s;
 }
 
 .homework-search i {
     margin-left: 8px;
     cursor: pointer;
-    transition: all 0.25s ease 0s;
+    transition: all 0.3s ease 0s;
 }
 
 .homework-search i::before {
@@ -423,7 +423,7 @@
     width: 210px;
     z-index: -1;
     height: 48px;
-    transition: all 0.25s;
+    transition: width 0.3s, height 0.3s;
     padding-top: 48px;
     display: grid !important;
     grid-template-columns: 1fr 1fr;
@@ -467,7 +467,7 @@
     background: var(--background-color);
     display: grid !important;
     place-items: center;
-    margin: 16px;
+    margin: var(--padding);
     cursor: pointer;
     overflow: hidden;
 }

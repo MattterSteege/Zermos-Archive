@@ -46,5 +46,14 @@ namespace Zermos_Web.Controllers
             ZermosUser = userToUpdate;
             return Ok("200");
         }
+
+                
+        [Authorize]
+        [ZermosPage]
+        [Route("/Account/Debug")]
+        public IActionResult Debug()
+        {
+            return PartialView(ZermosUser);
+        }
     }
 }

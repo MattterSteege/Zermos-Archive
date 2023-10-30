@@ -11,6 +11,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    backdrop-filter: blur(var(--padding));
+    -webkit-backdrop-filter: blur(var(--padding));
 }
 
 .modal-background .modal {
@@ -139,6 +141,46 @@
     background: var(--accent-color);
     border-radius: var(--border-radius-small);
     box-shadow: var(--box-shadow);
+}
+
+/* SINGEL TOGGLE INPUT */
+.modal-background .modal .toggle-parent {
+    display: flex;
+    gap: var(--padding);
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: var(--button-height);
+}
+
+.modal-background .modal .toggle-parent input[type="checkbox"] {
+    height: var(--button-height);
+    width: var(--button-height);
+    border-radius: var(--border-radius-small);
+}
+
+.modal-background .modal .toggle-parent label {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: var(--button-height);
+    padding: 0 var(--padding);
+    font-size: var(--font-size);
+    font-weight: 500;
+    color: var(--text-color);
+    border-radius: var(--border-radius-small);
+    box-shadow: var(--box-shadow);
+}
+
+/* TOGGLE GROUP INPUT */
+.modal-background .modal .multi-toggle {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(135px, 100% / 3)), 1fr));
+    grid-gap: var(--padding);
+    margin-bottom: var(--padding);
 }
 
 /* TEXT */
