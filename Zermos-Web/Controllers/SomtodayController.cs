@@ -681,6 +681,9 @@ namespace Zermos_Web.Controllers
         [HttpPost("Somtoday/Huiswerk/Nieuw")]
         public IActionResult NieuwHuiswerkPOST([FromBody] CustomHuiswerkModel customHuiswerkModel)
         {
+            if (customHuiswerkModel == null)
+                return BadRequest();
+            
             var homework = JsonConvert.DeserializeObject<List<CustomHuiswerkModel>>(ZermosUser.custom_huiswerk ?? "[]") ?? new List<CustomHuiswerkModel>();
 
             customHuiswerkModel.id = homework.Count + 1;

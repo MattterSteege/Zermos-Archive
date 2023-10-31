@@ -229,3 +229,49 @@ function doScrolling(element, duration) {
         }
     })
 }
+
+//==============================BUTTON SYSTEM==============================
+function createButtonForSidebar(icon, onclick) {
+    const mainButton = document.createElement("li");
+    mainButton.classList.add("menu-item");
+    mainButton.classList.add("menu-item-custom");
+    mainButton.id = "added-by-fetch";
+    mainButton.addEventListener("click", onclick);
+    
+    const buttonIcon = document.createElement("div");
+    buttonIcon.classList.add("fa-solid");
+    buttonIcon.classList.add(icon);
+    buttonIcon.classList.add("menu-icons");
+    buttonIcon.classList.add("menu-icons-custom");
+    buttonIcon.classList.add("fa-fw");
+    mainButton.appendChild(buttonIcon);
+    
+    return mainButton;
+}
+
+var buttonCount = 0;
+function createButtonForBottomRight(icon, onclick) {
+    const mainButton = document.createElement("li");
+    mainButton.classList.add("menu-item-Right");
+    mainButton.classList.add("menu-item-Right-custom");
+    mainButton.id = "added-by-fetch";
+    mainButton.addEventListener("click", onclick);
+    mainButton.style.bottom = `calc(var(--padding) + ${buttonCount * 48}px + var(--padding) * ${buttonCount})`;
+    buttonCount++;
+    
+    const buttonIcon = document.createElement("div");
+    buttonIcon.classList.add("fa-solid");
+    buttonIcon.classList.add(icon);
+    buttonIcon.classList.add("menu-icons");
+    buttonIcon.classList.add("menu-icons-custom");
+    buttonIcon.classList.add("fa-fw");
+    mainButton.appendChild(buttonIcon);
+    
+    return mainButton;
+}
+
+function addButtonToPage(icon, onclick) {
+    buttonCount = document.querySelectorAll('.menu-item-custom').length;
+    document.querySelector(".bottom ul").appendChild(createButtonForSidebar(icon, onclick));
+    document.querySelector(".bottom ul").appendChild(createButtonForBottomRight(icon, onclick));
+}

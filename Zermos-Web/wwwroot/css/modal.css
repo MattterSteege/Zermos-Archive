@@ -13,6 +13,7 @@
     align-items: center;
     backdrop-filter: blur(var(--padding));
     -webkit-backdrop-filter: blur(var(--padding));
+    opacity: 0;
 }
 
 .modal-background .modal {
@@ -28,9 +29,6 @@
     box-shadow: var(--box-shadow);
 }
 
-.modal-background .modal .modal-content {
-}
-
 .modal-background .modal .modal-content h1 {
     font-size: var(--font-size-heading);
     margin-bottom: var(--padding);
@@ -39,6 +37,10 @@
 .modal-background .modal .modal-content p {
     font-size: var(--font-size);
     margin-bottom: var(--padding);
+}
+
+#submitBtn {
+    margin-bottom: 0;
 }
 
 /* SINGLE INPUT */
@@ -141,6 +143,7 @@
     background: var(--accent-color);
     border-radius: var(--border-radius-small);
     box-shadow: var(--box-shadow);
+    margin-bottom: var(--padding);
 }
 
 /* SINGEL TOGGLE INPUT */

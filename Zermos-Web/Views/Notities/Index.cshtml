@@ -100,11 +100,11 @@ function deleteNotebook(uuid) {
 
 function UpdateName(uuid) {
     new ZermosModal()
-    .addTitle("Naam wijzigen")
+    .setTitle("Naam wijzigen")
     .addInput("Wat wil je dat de nieuwe naam wordt?")
     .setSubmitButtonLabel("Naam wijzigen")
     .onSubmit((name) => {
-        fetch('@Context.Request.Path' + uuid, {
+        fetch('@Context.Request.Path/' + uuid, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -121,16 +121,11 @@ function UpdateName(uuid) {
     .open();
 }
     
-document.querySelector(".bottom ul").innerHTML +=
-'<div class="bottom-right-add-button" id="added-by-fetch" style="display: none; z-index: 100">' +
-    '<a style="position: unset;">' +
-        '<i class="fa-solid fa-plus" id="ToggleButton"></i>' +
-    '</a>'+
-'</div>';
+addButtonToPage('fa-plus', AddNotebook)
 
-document.querySelector('#ToggleButton').parentElement.onclick = function() {
+function AddNotebook() {
      new ZermosModal()
-    .addTitle("Nieuw notitieboek")
+    .setTitle("Nieuw notitieboek")
     .addInput("Wat wil je dat de nieuwe naam wordt?")
     .setSubmitButtonLabel("Naam wijzigen")
     .onSubmit((naam) => {

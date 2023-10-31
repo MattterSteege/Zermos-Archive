@@ -105,7 +105,7 @@ function deleteNotebook(uuid) {
 
 function UpdateName(uuid) {
     new ZermosModal()
-    .setTitle("Modal Title")
+    .setTitle("Notitie naam wijzigen")
     .addInput("Wat wil je dat de nieuwe naam wordt?")
     .setSubmitButtonLabel("Naam wijzigen")
     .onSubmit((name) => {
@@ -142,16 +142,11 @@ function exportToDocx(uuid) {
     });
 }
     
-document.querySelector(".bottom ul").innerHTML +=
-'<div class="bottom-right-add-button" id="added-by-fetch" style="display: none; z-index: 100">' +
-    '<a style="position: unset;">' +
-        '<i class="fa-solid fa-plus" id="ToggleButton"></i>' +
-    '</a>'+
-'</div>';
+addButtonToPage('fa-plus', addNote)
 
-document.querySelector('#ToggleButton').parentElement.onclick = function() {
+function addNote() {
      new ZermosModal()
-    .addTitle("Nieuwe notitie")
+    .setTitle("Nieuwe notitie")
     .addInput("Wat wil je dat de nieuwe naam wordt?")
     .addInput("Wat is de omschrijving?")
     .addInput("Wat zijn de tags?")

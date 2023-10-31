@@ -316,10 +316,37 @@ body {
     justify-content: flex-start;
 }
 
+.menu-item.menu-item-custom {
+    display: none;
+}
+
 .menu-item:hover {
     background: var(--background-color);
     color: var(--white-color);
     transition: background-color 0.3s;
+}
+
+.menu-item-Right {
+    position: fixed;
+    bottom: var(--padding);
+    right: var(--padding);
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: var(--accent-color);
+    color: var(--white-color);
+}
+
+.menu-item-Right .menu-icons.menu-icons-custom {
+    background: unset;
+    color: var(--white-color);
+    margin-right: unset;
 }
 
 .sidebar .bottom ul li {
@@ -348,6 +375,11 @@ body {
     width: 32px !important;
     height: 32px;
     margin-right: var(--padding);
+}
+
+.menu-icons.menu-icons-custom {
+    background: var(--accent-color);
+    color: var(--white-color);
 }
 
 .menu-icons::before {
@@ -787,6 +819,14 @@ main.main::-webkit-scrollbar-track {
         align-items: center;
         justify-content: center;
         font-size: var(--font-size-small);
+    }
+
+    .menu-item.menu-item-custom {
+        display: flex;
+    }
+
+    .menu-item-Right {
+        display: none;
     }
 
     .menu-item p {

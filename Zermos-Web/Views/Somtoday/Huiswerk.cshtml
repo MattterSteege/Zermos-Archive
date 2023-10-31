@@ -93,21 +93,11 @@
 
 <script>
     //make an array of all the homework items, title, content, bijlagen, date, 
-    var allSubjects = ["@(Html.Raw(string.Join("\",\"", Model.items.Select(x => (x.lesgroep?.vak.naam) ?? "Onbekend").Distinct())))"];
-    var allContent = ["@(Html.Raw(string.Join("\",\"", Model.items.Select(x => x.studiewijzerItem.huiswerkType.ToLower()).Distinct())))"];
-          
-    if (document.getElementsByClassName('homework-search').length > 0)
-        document.getElementsByClassName('homework-search')[0].remove(); 
-        
-    document.querySelector(".bottom ul").innerHTML += '<div class="homework-search" id="added-by-fetch" style="display: none;" onclick="loadHomeworkSorting()" >'+
-                                                      '    <p class="search-text">Zoek op huiswerk</p>'+
-                                                      '    <div class="OpenSearchButton" style="position: unset;">'+
-                                                      '        <i class="fa-solid fa-search" id="openCloseArrow"></i>'+
-                                                      '    </div>'+
-                                                      '    <div style="display: none" class="grade-notification"></div>'+
-                                                      '</div>';
-
+    var allSubjects = ["@Html.Raw(string.Join("\",\"", Model.items.Select(x => x.lesgroep?.vak.naam ?? "Onbekend").OrderBy(x => x).Distinct()))"];
+    var allContent = ['huiswerk', 'toets', 'grote_toets'];
     
+    addButtonToPage('fa-plus', AddHomework)
+        
     function AddHomework() {
         new ZermosModal()
         .setTitle("Huiswerk toevoegen")
@@ -168,14 +158,6 @@
         }
         catch{}
     }
-
-    bottomRightAddButton = document.createElement("div");
-    bottomRightAddButton.className = "bottom-right-add-button";
-    bottomRightAddButton.id = "added-by-fetch";
-    bottomRightAddButton.style.display = "none";
-    bottomRightAddButton.innerHTML = '<a onclick="AddHomework()"><i class="fa-solid fa-plus center"></i></a>';
-    
-    document.querySelector(".bottom ul").appendChild(bottomRightAddButton);
     
     main.addEventListener("main:load", function () {  
         //if the url has the parameter "les" then scroll to that homework item's parent
@@ -207,21 +189,23 @@
     });
     
     //========================================HOMEWORK SORTING========================================
+    addButtonToPage('fa-search', loadHomeworkSorting)
+    
     function loadHomeworkSorting() {            
             var trueFalseArrayForSubjects = [];
             for (var i = 0; i < allSubjects.length; i++) {
                 if (vakkenCurrentlyShown.includes(allSubjects[i]))
-                    trueFalseArrayForSubjects.push(false);
-                else
                     trueFalseArrayForSubjects.push(true);
+                else
+                    trueFalseArrayForSubjects.push(false);
             }
     
             var trueFalseArrayForTypes = [];
             for (var i = 0; i < allContent.length; i++) {
                 if (typesCurrentlyShown.includes(allContent[i]))
-                    trueFalseArrayForTypes.push(false);
-                else
                     trueFalseArrayForTypes.push(true);
+                else
+                    trueFalseArrayForTypes.push(false);
             }
     
     
@@ -233,38 +217,33 @@
             .addMultiToggles(allContent, trueFalseArrayForTypes)
             .addText("Klik op 'Alles' om alle huiswerk te tonen.")
             .addButton("alles aan", () => {
-                toggleEverything();
+                ToggleHomework("*", "*", true);
+                document.querySelectorAll('.input-container input').forEach(input => {
+                    input.checked = true;
+                });
             })
             .setSubmitButtonLabel("terug naar huiswerk")
             .onSubmit((vakkenToggled, huiswerkToggled) => {
+                var whatShouldBeToggledSubject = [];
+                var whatShouldBeToggledType = [];
+                
                 for (var i = 0; i < vakkenToggled.length; i++) {
-                    if (vakkenToggled[i] === true)
-                        SortHomework("", allSubjects[i]);
+                    whatShouldBeToggledSubject.push( [ allSubjects[i], vakkenToggled[i] ] );
                 }
+                
                 for (var i = 0; i < huiswerkToggled.length; i++) {
-                    if (huiswerkToggled[i] === true)
-                        SortHomework(allContent[i], "");
+                    whatShouldBeToggledType.push( [ allContent[i], huiswerkToggled[i] ] );
                 }
+                
+                ToggleHomework(whatShouldBeToggledType, whatShouldBeToggledSubject);
             })                  
             .open();
         }
     
     var vakkenCurrentlyShown = [...allSubjects];
     var typesCurrentlyShown = [...allContent];
-    
-    if (!allContent.includes("huiswerk"))
-        document.getElementById("huiswerk_toggle").style.display = "none";
-    if (!allContent.includes("toets"))
-        document.getElementById("toetsen_toggle").style.display = "none";
-    if (!allContent.includes("grote_toets"))
-        document.getElementById("grote_toetsen_toggle").style.display = "none";
-    
-    function toggleHuiswerk() { SortHomework("huiswerk", ""); }
-    function toggleToetsen() { SortHomework("toets", ""); }
-    function toggleGroteToetsen() { SortHomework("grote_toets", ""); }
-    function toggleEverything() { SortHomework("*", "*"); }
 
-    function SortHomework(typeToToggle, vakToToggle) {
+    function ToggleHomework(typeToToggle, vakToToggle) {
         
         if (typeToToggle === "*" && vakToToggle === "*")
         {
@@ -272,46 +251,7 @@
             typesCurrentlyShown = [...allContent];
             
             document.getElementsByClassName("grade-notification")[0].style.display = "none";
-        }
-
-        if (typeToToggle !== "" && typeToToggle !== "*")
-        {
-            if (typeToToggle === "huiswerk")
-            {
-                if (typesCurrentlyShown.includes("huiswerk"))
-                    typesCurrentlyShown.splice(typesCurrentlyShown.indexOf("huiswerk"), 1);
-                else
-                    typesCurrentlyShown.push("huiswerk");   
-            }
-            else if (typeToToggle === "toets")
-            {
-                if (typesCurrentlyShown.includes("toets"))
-                    typesCurrentlyShown.splice(typesCurrentlyShown.indexOf("toets"), 1);
-                else
-                    typesCurrentlyShown.push("toets");   
-            }
-            else if (typeToToggle === "grote_toets")
-            {
-                if (typesCurrentlyShown.includes("grote_toets"))
-                    typesCurrentlyShown.splice(typesCurrentlyShown.indexOf("grote_toets"), 1);
-                else
-                    typesCurrentlyShown.push("grote_toets");   
-            }
-        }
-        
-        if (vakToToggle !== "" && vakToToggle !== "*")
-        {
-            if (vakkenCurrentlyShown.includes(vakToToggle))
-                vakkenCurrentlyShown.splice(vakkenCurrentlyShown.indexOf(vakToToggle), 1);
-            else
-                vakkenCurrentlyShown.push(vakToToggle);   
-        }
-        
-        if (arraysEqual(vakkenCurrentlyShown, allSubjects) && arraysEqual(typesCurrentlyShown, allContent)) 
-            document.getElementsByClassName("grade-notification")[0].style.display = "none";  
-        else
-            document.getElementsByClassName("grade-notification")[0].style.display = "flex";
-        
+        }        
         
         //get all the homework items
         var homeworkItems = document.getElementsByClassName("homeworkItem");
@@ -321,15 +261,33 @@
             //get the homework item
             var homeworkItem = homeworkItems[i];
             
-            //get the vak and type of the homework item
-            var vak = homeworkItem.getAttribute("vak");
-            var type = homeworkItem.getAttribute("huiswerkType");
+            // Initialize variables to track visibility
+            var isVisible = true;
             
-            //if the vak and/or the is not in the array of vakken and/or types, hide the homework item
-            if (!vakkenCurrentlyShown.includes(vak) || !typesCurrentlyShown.includes(type))
-                homeworkItem.style.display = "none";
-            else
-                homeworkItem.style.display = "flex";
+            // get the vak and type of the homework item
+            var vak = homeworkItem.getAttribute("vak");
+            var type = homeworkItem.getAttribute("huiswerktype");
+            
+            
+            // Iterate over typeToToggle and vakToToggle arrays
+            for (var j = 0; j < typeToToggle.length; j++) {
+                if (type === typeToToggle[j][0]) {
+                    isVisible = typeToToggle[j][1];
+                    typesCurrentlyShown[j] = isVisible ? typeToToggle[j][0] : "";
+                    break;
+                }
+            }
+            
+            for (var j = 0; j < vakToToggle.length; j++) {
+                if (vak === vakToToggle[j][0] && isVisible) {
+                    isVisible = vakToToggle[j][1];
+                    vakkenCurrentlyShown[j] = isVisible ? vakToToggle[j][0] : "";
+                    break;
+                }
+            }
+            
+            // Set the visibility of homeworkItem based on the isVisible variable
+            homeworkItem.style.display = isVisible ? "flex" : "none";
         }
         
         //loop through all the homework days, and if there are no homework items in the day that are visible, hide the day
@@ -351,21 +309,5 @@
             else
                 homeworkDay.style.display = "grid";
         }
-    }
-    
-    function arraysEqual(a, b) {
-        //check if arrays are equal, but they do not have to be in the same order
-    
-        if (a === b) return true;
-        if (a == null || b == null) return false;
-        if (a.length !== b.length) return false;
-    
-        a.sort();
-        b.sort();
-    
-        for (var i = 0; i < a.length; ++i) {
-            if (a[i] !== b[i]) return false;
-        }
-        return true;
     }
 </script>

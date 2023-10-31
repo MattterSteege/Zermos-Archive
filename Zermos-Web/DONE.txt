@@ -7,6 +7,7 @@
     - grote veranderingen in de code die mijn leven makkelijker maken :)
     - Verschillende UI verbeteringen
     - als je dingen moet invullen, dan krijg je nu netjes een popup met een tekstveld en uitleg, dit is een heel nieuw (uiteraad zelfgemaakt) systeem
+    - Alle knoppen die buiten het navigatie menu vallen (en de accent kleur hebben) volgen nu allemaal dezelfde code en werken dus allemaal hetzelfde, NETJUHS.
     - Als je een systeem niet gekoppeld hebt, dan krijg je nu een veel netter pagina te zien met een uitleg en een link naar de originele pagina.
     - Een kleine cleanup voor de UI, niets bijzonders
     
@@ -15,6 +16,9 @@
     
 - Somtoday - custom huiswerk
     - het aanmaken van huiswerk gaat nu via de custom popup's, dit scheelt weer het laden van een nieuwe pagina en scheelt mij ongeveer 200% code
+    
+- Somtoday - huiswerk
+    - Het filteren van huiswerk gaat nu ook via de custom popup's, stukken netter dit :)
     
 - Hoofdmenu
     - De afteltijd gaat nu wel goed en loopt geen +1 of +2 uur achter

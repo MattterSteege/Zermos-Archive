@@ -314,12 +314,26 @@
     text-align: start;
 }
 
+.bottom-right-add-button {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background: var(--background-color);
+    display: grid !important;
+    place-items: center;
+    margin: var(--padding);
+    cursor: pointer;
+    overflow: hidden;
+}
+
 @media only screen and (max-width: 1200px) {
     .bottom-right-add-button {
         background: unset;
         position: fixed;
-        bottom: var(--padding);
-        right: var(--padding);
+        right: 16px;
         height: 32px;
         width: 32px;
         display: grid;
@@ -331,11 +345,20 @@
     }
 
     .left .bottom-right-add-button {
-        bottom: var(--padding);
-        left: var(--padding);
+        bottom: 16px;
+        left: 16px;
     }
 
-    .bottom-right-add-button a i {
+    .bottom-right-add-button .OpenSearchButton {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+    }
+
+    .bottom-right-add-button .OpenSearchButton i {
         display: grid;
         align-items: center;
         justify-content: center;
@@ -345,14 +368,16 @@
         background: var(--accent-color);
         color: var(--white-color);
         align-content: center;
+        width: 100%;
         font-size: unset;
+        height: 100%;
     }
-
-    .bottom-right-add-button a i:before, .OpenSearchButton a i:before {
+    
+    .bottom-right-add-button .OpenSearchButton i:before {
         color: var(--white-color);
-        width: var(--padding);
-        height: var(--padding);
-        font-size: var(--padding);
+        width: 16px;
+        height: 16px;
+        font-size: 16px;
         text-align: center;
         position: relative;
     }

@@ -241,17 +241,10 @@ class ZermosModal {
         }
 
         function fade(element, opacity, duration) {
-            var ease = function (t) {return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1};
-            var start = performance.now();
-            var from = element.style.opacity || 0;
-            requestAnimationFrame(function tick(timestamp) {
-                    var progress = timestamp - start;
-                    element.style.opacity = +from + (opacity - from) * ease(progress / duration);
-                    if (progress < duration) {
-                        requestAnimationFrame(tick);
-                    }
-                }
-            );
+            setTimeout(() => {
+                element.style.transition = `opacity ${duration}ms`;
+                element.style.opacity = opacity;
+            }, 10);
         }
         
         document.body.appendChild(modal);

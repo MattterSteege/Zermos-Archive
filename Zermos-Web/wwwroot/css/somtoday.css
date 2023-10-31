@@ -410,7 +410,6 @@
 }
 
 .OpenSearchButton {
-    padding-right: var(--padding);
     height: 100%;
     width: 36px;
     display: flex;
@@ -464,12 +463,13 @@
     height: 50px;
     width: 50px;
     border-radius: 50%;
-    background: var(--background-color);
+    background: var(--accent-color);
     display: grid !important;
     place-items: center;
     margin: var(--padding);
     cursor: pointer;
     overflow: hidden;
+    color: var(--white-color);
 }
 
 .bottom-right-add-button a {
@@ -653,9 +653,7 @@
 
 @media only screen and (max-width: 1200px) {
     .bottom-right-add-button {
-        background: unset;
         position: fixed;
-        bottom: 16px;
         right: 16px;
         height: 32px;
         width: 32px;
@@ -663,7 +661,7 @@
         place-items: center;
         cursor: pointer;
         overflow: hidden;
-        border-radius: unset;
+        border-radius: var(--border-radius);
         margin: unset;
     }
     
@@ -672,7 +670,16 @@
         left: 16px;
     }
 
-    .bottom-right-add-button a i {
+    .bottom-right-add-button .OpenSearchButton {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+    }
+
+    .bottom-right-add-button .OpenSearchButton i {
         display: grid;
         align-items: center;
         justify-content: center;
@@ -680,12 +687,13 @@
         transition: 0.3s;
         box-shadow: unset;
         background: var(--accent-color);
-        color: var(--white-color);
         align-content: center;
+        width: 100%;
         font-size: unset;
+        height: 100%;
     }
-
-    .bottom-right-add-button a i:before, .OpenSearchButton a i:before {
+    
+    .homework-search .OpenSearchButton i:before, .bottom-right-add-button .OpenSearchButton i:before {
         color: var(--white-color);
         width: 16px;
         height: 16px;
