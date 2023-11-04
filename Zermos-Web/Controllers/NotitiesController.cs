@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Infrastructure;
 using Infrastructure.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -12,6 +13,7 @@ using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
+    [Authorize]
     public class NotitiesController : BaseController
     {
         public NotitiesController(Users user, ILogger<BaseController> logger) : base(user, logger) { }
@@ -245,6 +247,7 @@ namespace Zermos_Web.Controllers
         }
         
         [HttpPut]
+        [RateLimit(3 , 10)]
         [Route("/Notities/{notitieboekId}/{notitieId}/{paragraphId}")]
         public IActionResult UpdateParagraph(string notitieboekId, string notitieId, string paragraphId, [FromBody] Paragraph paragraph)
         {
@@ -254,10 +257,6 @@ namespace Zermos_Web.Controllers
             var oldParagraph = notitie?.Paragraphs.FirstOrDefault(x => x.Id == paragraphId);
             if (oldParagraph != null)
             {
-                // oldParagraph.ranking = paragraph.ranking != 0 ? paragraph.ranking : oldParagraph.ranking;
-                // oldParagraph.Inhoud = paragraph.Inhoud ?? oldParagraph.Inhoud;
-                // oldParagraph.Naam = paragraph.Naam ?? oldParagraph.Naam;
-                
                 if (paragraph.Naam != null && paragraph.Naam != oldParagraph.Naam)
                     oldParagraph.Naam = paragraph.Naam;
                 
@@ -344,7 +343,7 @@ namespace Zermos_Web.Controllers
 
         #endregion
 
-        #region exort
+        #region export
         [HttpGet]
         [Route("/Notities/{notitieboekId}/{notitieId}/export")]
         public IActionResult GetParagraphExport(string notitieboekId, string notitieId)

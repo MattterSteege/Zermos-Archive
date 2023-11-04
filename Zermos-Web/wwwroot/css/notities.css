@@ -166,6 +166,7 @@
     padding-left: var(--padding);
     height: calc(var(--padding) * 4);
     font-size: var(--font-size-heading);
+    border: transparent;
 }
 
 .notitie-card-editor-content-container {
@@ -328,6 +329,42 @@
     cursor: pointer;
     overflow: hidden;
 }
+
+/*
+<!-- title input field -->
+<div class="paragraph-editor-container">
+    <input id="nameInput" class="notitie-card title" onBlur="changeName()" value="@Model.Naam" />
+</div>
+<!-- small text editor -->
+<div class="paragraph-editor-container" style="height: calc(100% - var(--padding) * 5); margin-bottom: 0">
+    <textarea id="editor" name="editor" rows="10" cols="80">
+            @Model.Inhoud
+    </textarea>
+</div>
+*/
+
+.paragraph-editor-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: var(--padding);
+    margin-bottom: var(--padding);
+}
+
+.paragraph-editor-container input {
+    padding-left: var(--padding);
+    height: calc(var(--padding) * 4);
+    font-size: var(--font-size-heading);
+    border: transparent;
+}
+
+.paragraph-editor-container textarea {
+    padding-left: var(--padding);
+    font-size: var(--font-size-heading);
+    border-radius: var(--border-radius);
+    border: transparent;
+    height: 100%;
+}
+
 
 @media only screen and (max-width: 1200px) {
     .bottom-right-add-button {

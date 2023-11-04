@@ -324,12 +324,8 @@ function ReplacePage(url, fromHistory = false) {
                 }
 
                 html.remove();
-
-                if (!fromHistory) {
-                    window.location.hash = url;
-                    //set cookie 'this_session_last_page' to the current page, only session
-                    document.cookie = "this_session_last_page=" + url + "; path=/";
-                }
+                
+                window.location.hash = url;
 
                 main.dispatchEvent(new Event("main:load"));
 
@@ -338,10 +334,6 @@ function ReplacePage(url, fromHistory = false) {
             }, 250);
         },
         error: function(xhr) {
-            //prevent error logging
-
-            //console.log(xhr, status, error);
-
             //if it is a 401, replace /login
             if (xhr.status === 401) {
                 isRunning = false;
@@ -366,6 +358,11 @@ function ReplacePage(url, fromHistory = false) {
         }
         return div.innerHTML;
     }
+}
+
+window.onbeforeunload = function() {
+    //save the current url in a cookie
+    document.cookie = "this_session_last_page=" + window.location.hash.slice(1) + ";path=/";
 }
 
 console.log('[ Zermos ] Zermos framework is geïnitialiseerd');

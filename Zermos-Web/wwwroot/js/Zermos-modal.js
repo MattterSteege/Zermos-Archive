@@ -1,11 +1,4 @@
-﻿/*
-    .addButton("", () => {
-        
-    })
- */
-
-
-class ZermosModal {
+﻿class ZermosModal {
     constructor() {
         this.title = '';
         this.fields = [];

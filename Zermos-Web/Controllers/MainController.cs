@@ -1,13 +1,9 @@
-﻿using System.Net.Http;
-using System.Security.Claims;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Zermos_Web.Models.Requirements;
-using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
@@ -15,24 +11,37 @@ namespace Zermos_Web.Controllers
     public class MainController : BaseController
     {
         public MainController(Users user, ILogger<BaseController> logger) : base(user, logger) { }
-
+        
         public IActionResult Index(string url = null)
         {
+            if ((User.Identity == null || !User.Identity.IsAuthenticated) && url == null)
+                return PartialView("ZermosPromo");
+            
             if (url != null)
                 ViewData["url"] = url;
+            else if (Request.Cookies["this_session_last_page"] != null)
+            {
+                ViewData["url"] = Request.Cookies["this_session_last_page"];
+                Response.Cookies.Delete("this_session_last_page");
+            }
             else
-                ViewData["url"] = Request.Cookies["this_session_last_page"] ?? Request.Cookies["default_page"] ?? "/Zermelo/Rooster";
+                ViewData["url"] = Request.Cookies["default_page"] ?? "/Zermelo/Rooster";
             
             return View();
         }
         
-        [Authorize]
         [ZermosPage]
+        [Authorize]
         [Route("/Hoofdmenu")]
-        public async Task<IActionResult> Hoofdmenu()
+        public IActionResult Hoofdmenu()
         {
-            ViewData["add_css"] = "hoofdmenu";
             return PartialView(ZermosUser);
+        }
+        
+        [Route("/ZermosPromo")]
+        public IActionResult ZermosPromo()
+        {
+            return View();
         }
 
         //to send the correct deeplink format do this: location.href = 'web+zermos://' + url;

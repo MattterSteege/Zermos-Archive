@@ -27,7 +27,10 @@ namespace Zermos_Web
                     logging.SetMinimumLevel(LogLevel.Warning);
 #endif
                 })
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
         }
     }
 }

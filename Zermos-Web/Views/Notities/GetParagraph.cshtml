@@ -4,16 +4,53 @@
     Layout = null;
 }
 
-<style>
-    .card {
-        cursor: pointer;
-        background: #00b894;
-        margin-bottom: 10px;
-    }
-</style>
+<link rel="stylesheet" href="/css/notities.css">
 
-<div class="card">
-    <h5>@Model.Naam</h5>
-    <h6>@Model.Id</h6>
-    <h6>@Model.Inhoud</h6>
+<!-- title input field -->
+<div class="paragraph-editor-container">
+    <input id="nameInput" class="notitie-card title" onBlur="changeName()" value="@Model.Naam" />
 </div>
+<!-- small text editor -->
+<div class="paragraph-editor-container" style="height: calc(100% - var(--padding) * 5); margin-bottom: 0">
+    <textarea id="editor" name="editor" rows="10" cols="80">@Model.Inhoud</textarea>
+</div>
+<!-- save button -->
+<script>
+
+//save every 10 seconds
+var lastSaveName = document.getElementById("nameInput").value;
+var lastSaveContent = document.getElementById("editor").value;
+
+// setInterval(() => {
+//     save();
+// }, 10000);
+
+addButtonToPage("fa-save", () => {
+    save();
+});
+
+document.addEventListener("keydown", function (e) {
+    if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        save();
+    }
+});
+
+function save() {
+
+    //if (lastSaveName !== document.getElementById("nameInput").value && lastSaveContent !== document.getElementById("editor").value) {
+        //lastSaveName = document.getElementById("nameInput").value;
+        //lastSaveContent = document.getElementById("editor").value;
+    //}
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open("PUT", "@Context.Request.Path", true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({ "Naam": document.getElementById("nameInput").value,"Inhoud": document.getElementById("editor").value }));
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            console.log("saved");
+        }
+    };
+}
+</script>

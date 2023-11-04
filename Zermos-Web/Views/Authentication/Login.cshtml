@@ -55,6 +55,10 @@ else if (Model.code == 13)
             <p>Je bent succesvol ingelogd op je account. Welkom terug, <b>@(Model.email ?? "[email]")</b>! Je hebt nu volledige toegang tot alle functies en mogelijkheden, mits je ze gekoppeld heb.</p>
         </div>
     </div>
+    
+    <script>
+    window.location.hash = "#/Login/Callback";
+    </script>
 }
 else if (Model.code == 21)
 {

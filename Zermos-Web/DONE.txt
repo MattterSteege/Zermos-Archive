@@ -10,6 +10,7 @@
     - Alle knoppen die buiten het navigatie menu vallen (en de accent kleur hebben) volgen nu allemaal dezelfde code en werken dus allemaal hetzelfde, NETJUHS.
     - Als je een systeem niet gekoppeld hebt, dan krijg je nu een veel netter pagina te zien met een uitleg en een link naar de originele pagina.
     - Een kleine cleanup voor de UI, niets bijzonders
+    - Om te voorkomen dat in het notitie systeem een te grote hoeveelheid aan request wordt gestuurd zijn er rate limits toegevoegd, dit betekend dat je niet meer dan X request per X seconden kan sturen. Je zult hier geen last van hebben, het betekend dat je maximaal 3 keer per 10 seconden kan opslaan, dat is meer dan genoeg.
     
 - notities - wacht er zijn nu notities?????!?!?!?
     - Zermos is blij om een nieuwe functie te introduceren: notities! Je kan een of meer notitieboek(en) aanmaken (voor elk vak een bijvoorbeeld) en daar kan je verschillende hoofdstukken aan toevoegen. Elke notitie is opgebouwd uit paragrafen die je los van elkaar kan aanmaken. onderling kan je ze verschuiven en aanpassen naar hoe jij het wilt. Als je klaarbent met een notitie klik je op exporteren en Zermos maakt een heel mooi bestand voor je met een inhoudsopgave, pagina nummers alles. Zo iets handigs heb je nog nooit gezien!

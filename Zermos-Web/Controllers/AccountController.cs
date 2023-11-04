@@ -8,6 +8,7 @@ using Zermos_Web.Models.Requirements;
 
 namespace Zermos_Web.Controllers
 {
+    //https://demos.creative-tim.com/soft-ui-dashboard-tailwind/pages/profile.html
     [Route("account/[action]")]
     public class AccountController : BaseController
     {
@@ -29,8 +30,14 @@ namespace Zermos_Web.Controllers
         {
             return PartialView(ZermosUser);
         }
-        //https://demos.creative-tim.com/soft-ui-dashboard-tailwind/pages/profile.html
-
+        
+        [Authorize]
+        [ZermosPage]
+        [Route("/Account/Debug")]
+        public IActionResult Debug()
+        {
+            return PartialView(ZermosUser);
+        }
 
         [HttpPost]
         [Authorize]
@@ -45,15 +52,6 @@ namespace Zermos_Web.Controllers
             property.SetValue(userToUpdate, value);
             ZermosUser = userToUpdate;
             return Ok("200");
-        }
-
-                
-        [Authorize]
-        [ZermosPage]
-        [Route("/Account/Debug")]
-        public IActionResult Debug()
-        {
-            return PartialView(ZermosUser);
         }
     }
 }

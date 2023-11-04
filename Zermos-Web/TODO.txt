@@ -4,3 +4,8 @@ TODO: make time use login, so the user get's logged out after the session is clo
 TODO: create a file viewer for homework etc.
 TODO: dagrooster
 TODO: auto update afwezigheid after 1 day
+TODO: welkom scherm voor nieuwe mensen (AKA: zermos_tutorial_done == null or false)
+TODO: stress test the new refresh system
+TODO: fix de promo page
+TODO: make the note system return the note on adding, so client side can add it to the list
+TODO: logicly name note pages

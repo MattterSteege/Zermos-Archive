@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Zermos_Web.Utilities;
 
 //using WebEssentials.AspNetCore.Pwa;
 
@@ -43,6 +42,10 @@ namespace Zermos_Web
                     options.Cookie.IsEssential = true;
                 });
             
+            // services.AddRateLimiter(rateLimiterOptions =>
+            // {
+            //     rateLimiterOptions.RejectionStatusCode = 429;
+            // });
             
             //sets the data protection keys to be stored in the /dataprotection folder (in the docker volume dataprotection)
             services.AddDataProtection().PersistKeysToFileSystem(new System.IO.DirectoryInfo("/dataprotection"));
@@ -51,11 +54,6 @@ namespace Zermos_Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            if (env.IsDevelopment())
-                app.UseDeveloperExceptionPage();
-            else
-                app.UseExceptionHandler("/Error");
-
             app.Use(async (context, next) =>
             {
                 await next();
@@ -68,7 +66,16 @@ namespace Zermos_Web
                 }
             });
             
+            if (env.IsDevelopment())
+                app.UseDeveloperExceptionPage();
+            else
+                app.UseExceptionHandler("/Error");
+            
+            app.UseRateLimiter();
+            
             app.UseForwardedHeaders();
+
+            app.UseHttpsRedirection();
 
             app.UseStaticFiles();
 
