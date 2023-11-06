@@ -9,15 +9,12 @@ namespace Infrastructure.Context
     {
         public bool DatabaseAvailable { get; set; } = false;
 
-        public ZermosContext()
-        {
-        }
-
-        public ZermosContext(DbContextOptions<ZermosContext> options) : base(options)
-        {
-        }
+        public ZermosContext() { }
+        public ZermosContext(DbContextOptions<ZermosContext> options) : base(options) {}
 
         public virtual DbSet<user> users { get; set; }
+        public virtual DbSet<note> notes { get; set; }
+        
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

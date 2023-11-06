@@ -330,19 +330,6 @@
     overflow: hidden;
 }
 
-/*
-<!-- title input field -->
-<div class="paragraph-editor-container">
-    <input id="nameInput" class="notitie-card title" onBlur="changeName()" value="@Model.Naam" />
-</div>
-<!-- small text editor -->
-<div class="paragraph-editor-container" style="height: calc(100% - var(--padding) * 5); margin-bottom: 0">
-    <textarea id="editor" name="editor" rows="10" cols="80">
-            @Model.Inhoud
-    </textarea>
-</div>
-*/
-
 .paragraph-editor-container {
     display: grid;
     grid-template-columns: 1fr;
@@ -365,6 +352,128 @@
     height: 100%;
 }
 
+/*<div class="top-lint">
+    <div class="left-lint">
+        
+        <div class="back"></div>
+        <div class="forward"></div>
+        <div class="bold"></div>
+        <div class="italic"></div>
+        <div class="underline"></div>
+        <div class="strikethrough"></div>
+        <div class="align-left"></div>
+        <div class="align-center"></div>
+        <div class="align-right"></div>
+        
+        <input id="nameInput" type="text" value="@Model.Naam" />
+    </div>
+    
+    <div class="right-lint">
+        
+    </div>
+</div>*/
+
+.top-lint {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--padding);
+    margin-bottom: var(--padding);
+}
+
+.top-lint .left-lint {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: var(--padding);
+}
+
+.top-lint .left-lint .back {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.top-lint .left-lint .forward {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.top-lint .left-lint .bold {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.top-lint .left-lint .italic {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.top-lint .left-lint .underline {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.top-lint .left-lint .strikethrough {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.top-lint .left-lint .align-left {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.top-lint .left-lint .align-center {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.top-lint .left-lint .align-right {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.top-lint .left-lint #nameInput {
+    height: 100%;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 0 var(--padding);
+    font-size: var(--font-size-heading);
+    font-weight: 500;
+    color: var(--text-color);
+    background: var(--overlay-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.top-lint .right-lint {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--padding);
+}
 
 @media only screen and (max-width: 1200px) {
     .bottom-right-add-button {

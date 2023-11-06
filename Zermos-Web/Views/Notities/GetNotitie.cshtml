@@ -15,7 +15,7 @@
             <div class="notitie-card content" id="@paragraph.Id">
                 <div class="top">
                     <div class="title">@paragraph.Naam</div>
-                    <i onclick="ReplacePage('@Context.Request.Path/@paragraph.Id')" class="fa-solid fa-edit fa-fw"></i>
+                    <i onclick="window.location.href='@Context.Request.Path/@paragraph.Id'" class="fa-solid fa-edit fa-fw"></i>
                     <i onclick="RemoveContent('@paragraph.Id')" class="fa-solid fa-trash fa-fw"></i>
                     <i class="fa-solid fa-grip-lines fa-fw"></i>
                 </div>

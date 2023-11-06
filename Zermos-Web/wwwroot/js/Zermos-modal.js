@@ -274,5 +274,17 @@
                 document.body.removeChild(modal);
             }, this.fadeDuration);
         });
+
+        //if the user presses enter go to the next input field, if there is one otherwise submit
+        document.querySelector('#modal').addEventListener('keydown', (e) => {
+            if (e.key === "Enter") {
+                const nextInput = e.target.nextElementSibling;
+                if (nextInput) {
+                    nextInput.focus();
+                } else {
+                    submitButton.click();
+                }
+            }
+        });
     }
 }

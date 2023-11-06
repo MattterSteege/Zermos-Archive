@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -16,7 +17,12 @@ namespace Zermos_Web.Controllers
     [Authorize]
     public class NotitiesController : BaseController
     {
-        public NotitiesController(Users user, ILogger<BaseController> logger) : base(user, logger) { }
+        private readonly Notes _notes;
+        
+        public NotitiesController(Users user, ILogger<BaseController> logger, Notes notes) : base(user, logger)
+        {
+            _notes = notes;
+        }
 
         // JSON Parsing Helper
         private NotitiesModel ParseNotitiesModel()
