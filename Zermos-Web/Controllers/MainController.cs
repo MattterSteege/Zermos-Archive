@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Zermos_Web.Models.Requirements;
+using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
@@ -16,16 +17,29 @@ namespace Zermos_Web.Controllers
         {
             if ((User.Identity == null || !User.Identity.IsAuthenticated) && url == null)
                 return PartialView("ZermosPromo");
-            
+
             if (url != null)
+            {
                 ViewData["url"] = url;
+            }
             else if (Request.Cookies["this_session_last_page"] != null)
             {
                 ViewData["url"] = Request.Cookies["this_session_last_page"];
                 Response.Cookies.Delete("this_session_last_page");
             }
             else
+            {
                 ViewData["url"] = Request.Cookies["default_page"] ?? "/Zermelo/Rooster";
+            }
+
+            if (ViewData["url"] != null && ViewData["url"].ToString().IsNullOrEmpty())
+            {
+                ViewData["url"] = "/";
+            }
+            else if (ViewData["url"] == null)
+            {
+                ViewData["url"] = "/";
+            }
             
             return View();
         }

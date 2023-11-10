@@ -57,6 +57,7 @@ public class AuthenticationController : BaseController
 
         if (!response.IsSuccessStatusCode)
         {
+            Log(LogLevel.Error, response.StatusCode.ToString() + " " + response.ReasonPhrase);
             return VerificationFailed(4);
         }
 

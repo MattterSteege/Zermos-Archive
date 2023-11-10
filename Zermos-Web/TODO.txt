@@ -6,7 +6,9 @@ TODO: dagrooster
 TODO: auto update afwezigheid after 1 day
 TODO: stress test the new refresh system
 TODO: fix de promo page
+
+
 TODO: make the note system return the note on adding, so client side can add it to the list
 TODO: logically name note pages
-
 TODO: make the note system use the new note database system
+TODO: might replace the note taking system with onedrive loaded file with a link to the online word editor

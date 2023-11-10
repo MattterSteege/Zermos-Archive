@@ -1,7 +1,7 @@
-﻿0.4 - Notities
+﻿0.4 - nog iets meer content
 
 - debug
-    - Er is een nieuwe pagina waarop je verschillende dingen kunt refreshen, voor als Zermos niet optimaal werkt, maar dit hoef je eigenlijk nooit te gebruiken.
+    - Er is een nieuwe pagina waarop je verschillende dingen kunt refreshen, voor als Zermos niet optimaal werkt, maar dit hoef je eigenlijk nooit te gebruiken. Je komt hier door naar 'Account' te gaan en dan 3x op 'Profiel' te klikken
 
 - algemeen
     - grote veranderingen in de code die mijn leven makkelijker maken :)
@@ -14,7 +14,8 @@
     
 - notities - wacht er zijn nu notities?????!?!?!?
     - Zermos is blij om een nieuwe functie te introduceren: notities! Je kan een of meer notitieboek(en) aanmaken (voor elk vak een bijvoorbeeld) en daar kan je verschillende hoofdstukken aan toevoegen. Elke notitie is opgebouwd uit paragrafen die je los van elkaar kan aanmaken. onderling kan je ze verschuiven en aanpassen naar hoe jij het wilt. Als je klaarbent met een notitie klik je op exporteren en Zermos maakt een heel mooi bestand voor je met een inhoudsopgave, pagina nummers alles. Zo iets handigs heb je nog nooit gezien!
-    
+    - Gezien de huidige staat van Zermos Learn (notitie systeem) heb ik besloten om dit deel van Zermos op pauze te zetten en me te richten op andere delen van Zermos. Het is een veel te groot project. Mocht je toch willen zien op dan de 'debug pagina' en klik op 'Previews aan/uit'
+        
 - Somtoday - custom huiswerk
     - het aanmaken van huiswerk gaat nu via de custom popup's, dit scheelt weer het laden van een nieuwe pagina en scheelt mij ongeveer 200% code
     

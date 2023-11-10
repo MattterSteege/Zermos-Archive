@@ -540,7 +540,7 @@ namespace Zermos_Web.Controllers
             {
                 var cache = (ZermosUser).cached_somtoday_homework;
                 var homework = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(cache);
-                homework.items.AddRange(await GetRemappedCustomHuiswerk());
+                homework.items.AddRange(GetRemappedCustomHuiswerk());
                 return PartialView(Sort(homework));
             }
 
@@ -571,7 +571,7 @@ namespace Zermos_Web.Controllers
             if (response.IsSuccessStatusCode == false)
             {
                 HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je Huiswerk op Somtoday kon niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", NotificationCenter.NotificationType.ERROR);
-                return PartialView(Sort(new SomtodayHomeworkModel() {items = await GetRemappedCustomHuiswerk()}));
+                return PartialView(Sort(new SomtodayHomeworkModel() {items = GetRemappedCustomHuiswerk()}));
             }
 
             var somtodayHuiswerk =
@@ -585,7 +585,7 @@ namespace Zermos_Web.Controllers
                 cached_somtoday_homework = JsonConvert.SerializeObject(somtodayHuiswerk)
             };
             
-            somtodayHuiswerk.items.AddRange(await GetRemappedCustomHuiswerk());
+            somtodayHuiswerk.items.AddRange(GetRemappedCustomHuiswerk());
 
             somtodayHuiswerk = Sort(somtodayHuiswerk);
             
@@ -631,7 +631,7 @@ namespace Zermos_Web.Controllers
         }
 
         [NonAction]
-        private async Task<List<Models.somtodayHomeworkModel.Item>> GetRemappedCustomHuiswerk()
+        private List<Models.somtodayHomeworkModel.Item> GetRemappedCustomHuiswerk()
         {
             var customHomeworkItems = JsonConvert.DeserializeObject<List<CustomHuiswerkModel>>((ZermosUser).custom_huiswerk ?? "[]") ?? new List<CustomHuiswerkModel>();
             var remapedHomework = new List<Models.somtodayHomeworkModel.Item>(capacity:  customHomeworkItems.Count);
@@ -702,7 +702,7 @@ namespace Zermos_Web.Controllers
         [Authorize]
         [SomtodayRequirement]
         [HttpDelete("Somtoday/Huiswerk/Nieuw")]
-        public async Task<IActionResult> NieuwHuiswerk(int id)
+        public IActionResult NieuwHuiswerk(int id)
         {
             var user = ZermosUser;
             

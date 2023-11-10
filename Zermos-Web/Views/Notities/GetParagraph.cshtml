@@ -5,203 +5,46 @@
     //https://www.htmeditor.com
 }
 
-<link rel="stylesheet" href="/css/notitie-editor.css" />
+<style>
+    .full-screen {
+        width: 100% !important;
+        height: 100% !important;
+        background-color: #fff;
+        color: #000;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+    }
+    
+    .full-screen textarea {
+        width: 100% !important;
+        height: 100% !important;
+        background-color: #fff;
+        color: #000;
+        overflow: hidden;
+        padding: var(--padding);
+        font-size: var(--font-size);
+        border-radius: var(--border-radius);
+    }
+</style>
 
 <div class="full-screen">
-    <div class="top-lint">
-        <div class="action-bar">
-            <div class="action">
-                File
-            </div>
-            <div class="action">
-                Edit
-            </div>
-            <div class="action">
-                View
-            </div>
-            <div class="action">
-                Format
-            </div>
-            <div class="action">
-                Tools
-            </div>
-            <div class="action">
-                Help
-            </div>
-
-            <div class="spacer"></div>
-            
-            <div class="action" onclick="enterFullscreen()">
-                Fullscreen
-            </div>
-        </div>
-
-
-        <div class="tool-bar">
-
-            <div class="group">
-                <div class="action dropdown">
-                    <select id="fonts" name="fonts">
-                        <option value="Arial">Arial</option>
-                        <option value="Times New Roman">Times New Roman</option>
-                        <option value="Courier New">Courier New</option>
-                        <option value="Verdana">Verdana</option>
-                        <option value="Georgia">Georgia</option>
-                        <option value="Palatino">Palatino</option>
-                        <option value="Garamond">Garamond</option>
-                        <option value="Bookman">Bookman</option>
-                        <option value="Comic Sans MS">Comic Sans MS</option>
-                        <option value="Trebuchet MS">Trebuchet MS</option>
-                        <option value="Arial Black">Arial Black</option>
-                        <option value="Impact">Impact</option>
-                        <option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
-                        <option value="Tahoma">Tahoma</option>
-                        <option value="Courier New">Courier New</option>
-                        <option value="Lucida Console">Lucida Console</option>
-                    </select>
-
-                    <i class="fas fa-caret-down"></i>
-
-                </div>
-                <div class="action dropdown">
-
-                    <select id="sizes" name="sizes">
-                        <option value="8">8pt</option>
-                        <option value="10">10pt</option>
-                        <option value="12">12pt</option>
-                        <option value="14">14pt</option>
-                        <option value="18">18pt</option>
-                        <option value="24">24pt</option>
-                        <option value="36">36pt</option>
-                    </select>
-
-                    <i class="fas fa-caret-down"></i>
-                </div>
-                <div class="action dropdown">
-
-                    <select id="types" name="types">
-                        <option value="Paragraph">Paragraph</option>
-                        <option value="Heading 1">Heading 1</option>
-                        <option value="Heading 2">Heading 2</option>
-                        <option value="Heading 3">Heading 3</option>
-                        <option value="Heading 4">Heading 4</option>
-                        <option value="Heading 5">Heading 5</option>
-                        <option value="Heading 6">Heading 6</option>
-                    </select>
-
-                    <i class="fas fa-caret-down"></i>
-                </div>
-            </div>
-
-            <div class="group">
-                <div class="action">
-                    <i class="fas fa-align-left"></i>
-                </div>
-                <div class="action">
-                    <i class="fas fa-align-center"></i>
-                </div>
-                <div class="action">
-                    <i class="fas fa-align-right"></i>
-                </div>
-
-                <div class="action">
-                    <i class="fas fa-align-justify"></i>
-                </div>
-            </div>
-
-            <div class="group">
-                <div class="action">
-                    <i class="fas fa-table"></i>
-                </div>
-            </div>
-
-            <div class="group">
-                <div class="action">
-                    <i class="fas fa-undo"></i>
-                </div>
-                <div class="action">
-                    <i class="fas fa-redo"></i>
-                </div>
-            </div>
-
-            <div class="group">
-                <div class="action">
-                    <i class="fas fa-bold"></i>
-                </div>
-                <div class="action">
-                    <i class="fas fa-italic"></i>
-                </div>
-                <div class="action">
-                    <i class="fas fa-underline"></i>
-                </div>
-                <div class="action">
-                    <i class="fas fa-strikethrough"></i>
-                </div>
-            </div>
-
-            <div class="group">
-                <div class="action">
-                    <i class="fas fa-font"></i>
-                </div>
-                <div class="action">
-                    <i class="fas fa-highlighter"></i>
-                </div>
-                <div class="action">
-                    <i class="fas fa-times"></i>
-                </div>
-            </div>
-
-            <div class="group">
-                <div class="action">
-                    <i class="fa-regular fa-face-laugh"></i>
-                </div>
-                <div class="action">
-                    <i class="fas fa-infinity"></i>
-                </div>
-            </div>
-
-            <div class="group">
-                <div class="action">
-                    <i class="fas fa-link"></i>
-                </div>
-                <div class="action">
-                    <i class="fas fa-image"></i>
-                </div>
-                <div class="action">
-                    <i class="fa-solid fa-square-arrow-up-right"></i>
-                </div>
-                <div class="action">
-                    <i class="fas fa-code"></i>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    
-    <div class="editor">
-        <textarea name="editor" id="editor" cols="30" rows="10"></textarea>
-    </div>
+    <textarea name="editor" id="1" cols="30" rows="10">Momenteel is deze functie niet echt onderhouden en de kans dat dit weer verdwijnt is groot :( te groot project.</textarea>
 </div>
 
 <script>
 
-    document.getElementsByClassName("loader-text")[0].innerHTML = "Online notitie editor laden";
-    var interval = setInterval(function () {
-            content.style.opacity = 1;
-            clearInterval(interval);
-    }, 10);
-    
-    function enterFullscreen() {
-        //fullscreen is on toggle it off
-        if (document.fullscreenElement) {
-            document.exitFullscreen();
-        }
-        
-        //fullscreen is off toggle it on
-        else {
-            document.querySelector(".full-screen").requestFullscreen({ navigationUI: "hide" });
-        }
+function enterFullscreen() {
+    //fullscreen is on toggle it off
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
     }
-   
-    content.style.opacity = 0;
+
+    //fullscreen is off toggle it on
+    else {
+        document.querySelector(".full-screen").requestFullscreen({
+            navigationUI: "hide"
+        });
+    }
+}
 </script>

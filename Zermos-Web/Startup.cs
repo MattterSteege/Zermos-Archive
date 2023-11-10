@@ -76,8 +76,6 @@ namespace Zermos_Web
             
             app.UseForwardedHeaders();
 
-            app.UseHttpsRedirection();
-
             app.UseStaticFiles();
 
             app.UseRouting();
