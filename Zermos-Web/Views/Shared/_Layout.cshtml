@@ -266,7 +266,7 @@ function ReplacePage(url, fromHistory = false) {
             }
             
             if (data.startsWith('<!DOCTYPE html>')) {
-                addNotification("Er is iets fout gegaan", "tijdens het inladen van een pagina is iets mis gegaan, je wordt naar je rooster omgeleid", "error");
+                isRunning = false;
                 ReplacePage("/Zermelo/Rooster");
                 return;
             }
@@ -373,17 +373,15 @@ window.onbeforeunload = function() {
 
 console.log('[ Zermos ] Zermos framework is geïnitialiseerd');
 </script>
-<script id="vital-script">
-    //register service worker
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/serviceworker.js?v=@version', {scope: '/'})
-            .then(function(registration) {
-                console.log('[ Zermos ] Service worker is geregistreerd');
-            })
-            .catch(function(error) {
-                console.log('[ Zermos ] Service worker registratie is mislukt', error);
-            });
-    }
-</script>
+@* <script id="vital-script"> *@
+@*     //register service worker *@
+@*     if ('serviceWorker' in navigator) { *@
+@*       // Let's register our serviceworker *@
+@*       navigator.serviceWorker.register('/serviceworker.js?v=@version', { *@
+@*         // The scope cannot be parent to the script url *@
+@*         scope: '/' *@
+@*       }); *@
+@*     } *@
+@* </script> *@
 </body>
 </html>

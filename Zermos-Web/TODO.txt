@@ -1,7 +1,6 @@
 ﻿TODO: zelf lessen inplannen in je rooster
 TODO: When checking if user has cookie for cached data, check if the data is not null or empty
 TODO: make time use login, so the user get's logged out after the session is closed
-TODO: create a file viewer for homework etc.
 TODO: dagrooster
 TODO: auto update afwezigheid after 1 day
 TODO: stress test the new refresh system

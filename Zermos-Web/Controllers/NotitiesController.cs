@@ -34,7 +34,7 @@ namespace Zermos_Web.Controllers
 
         [ZermosPage]
         [Route("/Notities")]
-        public IActionResult Index()
+        public IActionResult Notebooks()
         {
             var notes = ParseNotitiesModel();
             if (notes.NotitieBoeken == null)
@@ -52,7 +52,7 @@ namespace Zermos_Web.Controllers
         [HttpGet]
         [ZermosPage]
         [Route("/Notities/{notitieboekId}")]
-        public IActionResult GetNoteBook(string notitieboekId)
+        public IActionResult Notebook(string notitieboekId)
         {
             var model = ParseNotitiesModel();
             var notitieBoek = model.NotitieBoeken.FirstOrDefault(x => x.Id == notitieboekId);
@@ -150,7 +150,7 @@ namespace Zermos_Web.Controllers
         [HttpGet]
         [ZermosPage]
         [Route("/Notities/{notitieboekId}/{notitieId}")]
-        public IActionResult GetNotitie(string notitieboekId, string notitieId)
+        public IActionResult Note(string notitieboekId, string notitieId)
         {
             var model = ParseNotitiesModel();
             var notitie = model.NotitieBoeken.FirstOrDefault(x => x.Id == notitieboekId)?.Notities.FirstOrDefault(x => x.Id == notitieId);
@@ -243,13 +243,24 @@ namespace Zermos_Web.Controllers
         [HttpGet]
         [ZermosPage]
         [Route("/Notities/{notitieboekId}/{notitieId}/{paragraphId}")]
-        public IActionResult GetParagraph(string notitieboekId, string notitieId, string paragraphId)
+        public IActionResult Paragraph(string notitieboekId, string notitieId, string paragraphId)
         {
             var model = ParseNotitiesModel();
             var notitieBoek = model.NotitieBoeken.FirstOrDefault(x => x.Id == notitieboekId);
             var notitie = notitieBoek?.Notities.FirstOrDefault(x => x.Id == notitieId);
             var paragraph = notitie?.Paragraphs.FirstOrDefault(x => x.Id == paragraphId);
             return PartialView(paragraph);
+        }
+        
+        [HttpGet]
+        [Route("/Notities/{notitieboekId}/{notitieId}/{paragraphId}.json")]
+        public IActionResult GetParagraphJson(string notitieboekId, string notitieId, string paragraphId)
+        {
+            var model = ParseNotitiesModel();
+            var notitieBoek = model.NotitieBoeken.FirstOrDefault(x => x.Id == notitieboekId);
+            var notitie = notitieBoek?.Notities.FirstOrDefault(x => x.Id == notitieId);
+            var paragraph = notitie?.Paragraphs.FirstOrDefault(x => x.Id == paragraphId);
+            return Json(paragraph?.Inhoud ?? "");
         }
         
         [HttpPut]
@@ -352,7 +363,7 @@ namespace Zermos_Web.Controllers
         #region export
         [HttpGet]
         [Route("/Notities/{notitieboekId}/{notitieId}/export")]
-        public IActionResult GetParagraphExport(string notitieboekId, string notitieId)
+        public IActionResult NoteExport(string notitieboekId, string notitieId)
         {
             var model = ParseNotitiesModel();
             var notitieBoek = model.NotitieBoeken.FirstOrDefault(x => x.Id == notitieboekId);

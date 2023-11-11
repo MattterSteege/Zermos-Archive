@@ -789,6 +789,64 @@ namespace Zermos_Web.Controllers
             
             return PartialView(somtodayAfwezigheid);
         }
+        
+        [Authorize]
+        [SomtodayRequirement]
+        [HttpGet("/Somtoday/Afwezigheid/Count")]
+        public async Task<IActionResult> AfwezigheidCount()
+        {
+            //if Response.Cookies.Append("cached-somtoday-absence", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddHours(12)}); exists
+            if (Request.Cookies.ContainsKey("cached-somtoday-absence"))
+            {
+                var cache = ZermosUser.cached_somtoday_absence;
+                var absence = JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(cache);
+                return Ok(absence.items.Count);
+            }
+            
+            SchooljaarUtils.Schooljaar currentSchoolyear = SchooljaarUtils.getCurrentSchooljaar();
+            
+            var user = ZermosUser;
+            
+            var access_token = user.somtoday_access_token;
+            
+            if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
+            {
+                access_token = RefreshToken(user.somtoday_refresh_token);
+            }
+            
+            var baseurl = $"https://api.somtoday.nl/rest/v1/absentiemeldingen?begindatumtijd={currentSchoolyear.vanafDatumDate:yyyy-MM-dd}&einddatumtijd={currentSchoolyear.totDatumDate:yyyy-MM-dd}";
+            
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + access_token);
+            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+            
+            var response = await _httpClient.GetAsync(baseurl);
+            
+            if (response.IsSuccessStatusCode == false)
+            {
+                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je Afwezigheid op Somtoday kon niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", NotificationCenter.NotificationType.ERROR);
+                return Ok(0);
+            }
+            
+            var somtodayAfwezigheid =
+                JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(
+                    await response.Content.ReadAsStringAsync());
+            
+            if (currentSchoolyear.vanafDatumDate < DateTime.Now && DateTime.Now < currentSchoolyear.totDatumDate)
+            {
+                ZermosUser = new user
+                {
+                    cached_somtoday_absence = JsonConvert.SerializeObject(somtodayAfwezigheid)
+                };
+                
+                Response.Cookies.Append("cached-somtoday-absence", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddHours(12)});
+
+            }
+            
+            return Ok(somtodayAfwezigheid.items.Count);
+        }   
+        
+        
         #endregion
     }
 }

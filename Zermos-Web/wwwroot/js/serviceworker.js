@@ -1,1 +1,1 @@
-﻿console.log('Hello from serviceworker.js');
+﻿console.log('Service Worker Loaded...');
