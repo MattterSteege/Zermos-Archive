@@ -284,3 +284,25 @@ let isMobile = () => !!(navigator.userAgent.match(/Android/i) ||
     navigator.userAgent.match(/iPod/i) ||
     navigator.userAgent.match(/BlackBerry/i) ||
     navigator.userAgent.match(/Windows Phone/i));
+
+function copyToClipboard(text) {
+    //first with the new api
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text);
+    } else {
+        //fallback to the old api
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            document.execCommand("copy");
+        } catch (err) {
+            console.error("Fallback: Oops, unable to copy", err);
+        }
+
+        document.body.removeChild(textArea);
+    }
+}

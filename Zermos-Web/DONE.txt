@@ -1,10 +1,10 @@
-﻿0.4 - nog iets meer content
+﻿0.4 - TEAMS BETA & nog iets meer content
 
 - debug
     - Er is een nieuwe pagina waarop je verschillende dingen kunt refreshen, voor als Zermos niet optimaal werkt, maar dit hoef je eigenlijk nooit te gebruiken. Je komt hier door naar 'Account' te gaan en dan 3x op 'Profiel' te klikken
 
 - Account
-    - Hoevaak je afwezig bent geweest wordt nu ververst als je op de pagina komt, eerst was dat alleen als je op de afwezigheid pagina kwam.
+    - Hoevaak je afwezig bent geweest wordt nu elke dag ververst (mits je op de account pagina komt), eerst was dat alleen als je op de afwezigheid pagina kwam.
 
 - algemeen
     - grote veranderingen in de code die mijn leven makkelijker maken :)

@@ -249,7 +249,15 @@ namespace Zermos_Web.Controllers
             var notitieBoek = model.NotitieBoeken.FirstOrDefault(x => x.Id == notitieboekId);
             var notitie = notitieBoek?.Notities.FirstOrDefault(x => x.Id == notitieId);
             var paragraph = notitie?.Paragraphs.FirstOrDefault(x => x.Id == paragraphId);
-            return PartialView(paragraph);
+            
+            switch (paragraph.Type)
+            {
+                case "mindmap":
+                    return PartialView("MindmapEditor", paragraph);
+                case "text":
+                default:
+                    return PartialView("TextEditor", paragraph);
+            }
         }
         
         [HttpGet]

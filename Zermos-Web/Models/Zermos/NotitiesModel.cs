@@ -34,5 +34,6 @@ namespace Zermos_Web.Models.Zermos
         public int ranking { get; set; }
         public string Naam { get; set; }
         public string Inhoud { get; set; }
+        public string Type { get; set; }
     }
 }

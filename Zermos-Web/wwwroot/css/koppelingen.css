@@ -178,3 +178,91 @@
     display: flex;
     flex-direction: column;
 }
+
+/*<!-- Make a code block with copy button -->*/
+/*<div class="code-child">*/
+/*    <div class="codeblock">*/
+/*        <div class="codeblock-header">*/
+/*            <h1>Code blok</h1>*/
+/*            <button class="copy-button" onclick="copyToClipboard('@Model')">Kopieer</button>*/
+/*            </div>*/
+/*        <div class="codeblock-content">*/
+/*            <p>Plak deze code in de Microsoft app</p>*/
+/*            <code>@Model</code>*/
+/*        </div>*/
+/*    </div>*/
+/*</div>*/
+
+.login-explanation .code-child {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    gap: var(--padding-small);
+    justify-content: center;
+    align-items: center;
+    margin-top: max(var(--padding), auto);
+    padding: unset;
+}
+
+.login-explanation .code-child .codeblock {
+    background: var(--overlay-color);
+    border-radius: var(--border-radius);
+    padding-top: var(--padding);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.login-explanation .code-child .codeblock .codeblock-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.login-explanation .code-child .codeblock .codeblock-header h1 {
+    font-size: var(--font-size-heading);
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.login-explanation .code-child .codeblock .codeblock-header .copy-button {
+    font-size: var(--font-size);
+    text-decoration: none;
+    height: var(--button-height);
+    text-align: center;
+    background: var(--accent-color);
+    border-radius: var(--border-radius-small);
+    justify-content: center;
+    color: var(--white-color);
+    font-weight: 700;
+    padding: var(--padding-small);
+    display: flex;
+    flex-direction: column;
+    outline: transparent;
+    border: none;
+    width: 100px;
+    align-items: center;
+}
+
+.login-explanation .code-child .codeblock .codeblock-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    gap: var(--padding-small);
+    justify-content: center;
+    align-items: center;
+    margin-top: var(--padding);
+    padding: var(--padding);
+    background: var(--text-color);
+    border-radius: var(--border-radius);
+}
+
+.login-explanation .code-child .codeblock .codeblock-content code {
+    font-size: var(--font-size);
+    font-weight: 700;
+    color: var(--white-color);
+    font-family: monospace;
+}

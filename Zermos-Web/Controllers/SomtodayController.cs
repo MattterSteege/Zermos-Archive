@@ -734,8 +734,8 @@ namespace Zermos_Web.Controllers
         
         #region Afwezigheid
         [Authorize]
-        [SomtodayRequirement]
         [ZermosPage]
+        [SomtodayRequirement]
         [HttpGet("/Account/Afwezigheid")]
         [HttpGet("/Somtoday/Afwezigheid")]
         public async Task<IActionResult> Afwezigheid()

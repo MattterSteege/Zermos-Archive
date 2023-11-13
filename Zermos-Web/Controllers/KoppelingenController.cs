@@ -62,6 +62,16 @@ namespace Zermos_Web.Controllers
                     {"origin", "https://inloggen.somtoday.nl"},
                 }
             };
+        
+        private readonly HttpClient _microsoftHttpClient = new()
+        {
+            BaseAddress = new Uri("https://login.microsoftonline.com/organizations/oauth2/v2.0/token"),
+            DefaultRequestHeaders =
+            {
+                {"origin", "https://developer.microsoft.com"},
+                {"accept", "application/json"}
+            }
+        };
 
         private readonly HttpClient _httpClientWithoutRedirect = new(new HttpClientHandler {AllowAutoRedirect = false});
 
@@ -503,50 +513,56 @@ namespace Zermos_Web.Controllers
         #endregion
 
         #region Teams
-
-#if RELEASE
-    const string redirectUrl = "https://zermos.kronk.tech/Koppelingen/Teams/Callback";
-#else
-        const string redirectUrl = "https://192.168.178.34:5001/Koppelingen/Teams/Callback";
-#endif
-        const string clientId = "REDACTED_MS_CLIENT_ID";
-        const string clientSecret = "lcV8Q~GbQjBv45fivMgN3ARP~UHPNSuV259gQcU7";
-        const string scopes = "profile offline_access openid";
-
+        [HttpGet]
         [ZermosPage]
-        [Route("/Koppelingen/Teams")]
-        public IActionResult Teams()
+        [Route("/Koppelingen/Microsoft/Ongekoppeld")]
+        public IActionResult MicrosoftNietGekoppeld()
         {
-            string redirect = "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=" +
-                              clientId + "&response_type=code&redirect_uri=" + redirectUrl +
-                              "&response_mode=query&scope=" + scopes + "&state=" + TokenUtils.RandomString();
-            return PartialView(model: redirect);
+            return PartialView();
         }
 
-        [Route("/Koppelingen/Teams/Callback")]
-        public async Task<IActionResult> TeamsCallback(string code, string state, string session_state)
+        [HttpGet]
+        [ZermosPage]
+        public IActionResult Microsoft()
         {
-            var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Post,
-                "https://login.microsoftonline.com/organizations/oauth2/v2.0/token");
+            string jsCode = "const k=localStorage,a=JSON.parse(k.getItem('msal.account.keys'))||{};for(const e in a)if(a.hasOwnProperty(e)){let t=k.getItem(a[e]);if(t)try{let s=JSON.parse(t);if(s&&s.username&&s.username.includes('ccg')){for(let r in k)if(r.startsWith(s.homeAccountId)){let c=k.getItem(r);if(c&&c.includes('Refresh')){let i=JSON.parse(c);i.secret&&(console.log('Gekopieerd!'),copy(i.secret))}}}}catch(n){}}";
+            
+            return PartialView(model: jsCode);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Microsoft(string refreshToken)
+        {
             var collection = new List<KeyValuePair<string, string>>();
-            collection.Add(new("client_id", clientId));
-            collection.Add(new("scope", scopes));
-            collection.Add(new("code", code));
-            collection.Add(new("redirect_uri", redirectUrl));
-            collection.Add(new("grant_type", "authorization_code"));
-            collection.Add(new("client_secret", clientSecret));
+            collection.Add(new("client_id", "de8bc8b5-d9f9-48b1-a8ad-b748da725064"));
+            collection.Add(new("scope", "Acronym.Read.All DeviceManagementConfiguration.Read.All DeviceManagementConfiguration.ReadWrite.All DeviceManagementManagedDevices.Read.All DeviceManagementManagedDevices.ReadWrite.All DeviceManagementServiceConfig.Read.All DeviceManagementServiceConfig.ReadWrite.All Directory.AccessAsUser.All Directory.ReadWrite.All eDiscovery.Read.All eDiscovery.ReadWrite.All Files.Read.All Files.ReadWrite Files.ReadWrite.All Files.ReadWrite.AppFolder Files.ReadWrite.Selected Group.ReadWrite.All Mail.Read Mail.ReadBasic Notes.ReadWrite.All Notifications.ReadWrite.CreatedByApp openid People.Read profile Sites.Read.All Tasks.Read User.Read User.Read.All User.ReadBasic.All UserActivity.ReadWrite.CreatedByApp UserNotification.ReadWrite.CreatedByApp email"));
+            collection.Add(new("grant_type", "refresh_token"));
+            collection.Add(new("refresh_token", refreshToken));
             var content = new FormUrlEncodedContent(collection);
-            request.Content = content;
-            var response = await client.SendAsync(request);
-
-
+            
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                Content = content,
+            };
+            
+            var response = await _microsoftHttpClient.SendAsync(request);
+            
             if (!response.IsSuccessStatusCode)
             {
                 return Ok("failed");
             }
+            
+            var microsoftAuthentication = JsonConvert.DeserializeObject<MicrosoftAuthenticationModel>(await response.Content.ReadAsStringAsync());
 
-            return Ok("success\n\n" + await response.Content.ReadAsStringAsync());
+            ZermosUser = new user
+            {
+                teams_access_token = microsoftAuthentication.access_token,
+                teams_refresh_token = microsoftAuthentication.refresh_token
+            };
+            
+            return Ok("success");
         }
 
         #endregion

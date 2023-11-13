@@ -1,0 +1,269 @@
+﻿@model MicrosoftOnedriveFileModel
+
+@{
+    ViewBag.Title = "title";
+}
+
+<link rel="stylesheet" href="/css/microsoft.css">
+
+<div class="actions-row" style="height: 0; margin-bottom: 0;">
+    <div id="change-name" onclick="UpdateName(document.querySelector('.selected').getAttribute('note-id'))">
+        <i class="fa-solid fa-edit"></i>
+        Naam wijzigen
+    </div>
+    <div id="delete" onclick="deleteNotebook(document.querySelector('.selected').getAttribute('note-id'))">
+        <i class="fa-solid fa-trash"></i>
+        Verwijderen
+    </div>
+    <div onclick="alert('Deze functie is nog niet geimplementeerd')">
+        <i class="fa-solid fa-file-export"></i>
+        Exporteren
+    </div>
+</div>
+
+<table class="table">
+    <tbody>
+        <tr class="table-header">
+            <th scope="col" style="width: 0;"></th>
+            <th scope="col" style="width: 0;"><i class="fa-solid fa-file"></i></th>
+            <th scope="col">Naam</th>
+            <th scope="col">Items</th>
+            <th scope="col">Laatst gewijzigd</th>
+            <th scope="col">Grootte</th>
+        </tr>
+    </tbody>
+
+    <!-- space all the columns -->
+    
+    <!-- Here comes the magic -->
+    
+    <tbody>
+    
+        <tr class="table-row" note-id="01TBTB7D6SRKWO56V4FBFL3AMSHMQMYNWH">
+            <td><i class="fa-regular fa-circle"></i></td>
+            <td><i class="fa-solid fa-folder"></i></td>
+            <td class="notitieboek-naam" onclick="FetchNew('01TBTB7D6SRKWO56V4FBFL3AMSHMQMYNWH')">1VA</td>
+            <td>4</td>
+            <td>14-10-2021 08:18</td>
+            <td>3,19 Megabyte</td>
+        </tr>
+        <tr class="table-row" note-id="01TBTB7D64AS7KMQIT4ZD3ZYFXMTD2647R">
+            <td><i class="fa-regular fa-circle"></i></td>
+            <td><i class="fa-solid fa-folder"></i></td>
+            <td class="notitieboek-naam" onclick="FetchNew('01TBTB7D64AS7KMQIT4ZD3ZYFXMTD2647R')">2VC</td>
+            <td>30</td>
+            <td>15-10-2021 06:26</td>
+            <td>335,61 Megabyte</td>
+        </tr>
+        <tr class="table-row" note-id="01TBTB7D3LPX72YBMP6ZDJSFBG6QV3SNX6">
+            <td><i class="fa-regular fa-circle"></i></td>
+            <td><i class="fa-solid fa-folder"></i></td>
+            <td class="notitieboek-naam" onclick="FetchNew('01TBTB7D3LPX72YBMP6ZDJSFBG6QV3SNX6')">3VC</td>
+            <td>13</td>
+            <td>15-10-2021 06:26</td>
+            <td>14,69 Megabyte</td>
+        </tr>
+        <tr class="table-row" note-id="01TBTB7D4LY7PVCVQKMVBYSYY4ZF3X3Z3X">
+            <td><i class="fa-regular fa-circle"></i></td>
+            <td><i class="fa-solid fa-folder"></i></td>
+            <td class="notitieboek-naam" onclick="FetchNew('01TBTB7D4LY7PVCVQKMVBYSYY4ZF3X3Z3X')">4VA</td>
+            <td>11</td>
+            <td>11-09-2022 10:25</td>
+            <td>666,84 Megabyte</td>
+        </tr>
+        <tr class="table-row" note-id="01TBTB7D3G3EQ6S6IIA5DIDLFYXQU4KQXD">
+            <td><i class="fa-regular fa-circle"></i></td>
+            <td><i class="fa-solid fa-folder"></i></td>
+            <td class="notitieboek-naam" onclick="FetchNew('01TBTB7D3G3EQ6S6IIA5DIDLFYXQU4KQXD')">5VA</td>
+            <td>9</td>
+            <td>26-08-2023 09:19</td>
+            <td>33,67 Megabyte</td>
+        </tr>
+        <tr class="table-row" note-id="01TBTB7DZEKMNVGN4PCRDYDLVOOBORPU7H">
+            <td><i class="fa-regular fa-circle"></i></td>
+            <td><i class="fa-solid fa-folder"></i></td>
+            <td class="notitieboek-naam" onclick="FetchNew('01TBTB7DZEKMNVGN4PCRDYDLVOOBORPU7H')">Bijlagen</td>
+            <td>0</td>
+            <td>18-09-2023 10:34</td>
+            <td>0 Byte</td>
+        </tr>
+        <tr class="table-row" note-id="01TBTB7D3COCEV6TYBZRG2FXYJ4UBUXSBG">
+            <td><i class="fa-regular fa-circle"></i></td>
+            <td><i class="fa-solid fa-folder"></i></td>
+            <td class="notitieboek-naam" onclick="FetchNew('01TBTB7D3COCEV6TYBZRG2FXYJ4UBUXSBG')">Chatbestanden van Microsoft Teams</td>
+            <td>1</td>
+            <td>13-10-2023 11:40</td>
+            <td>1,88 Kilobyte</td>
+        </tr>
+        <tr class="table-row" note-id="01TBTB7D67XJGAV4WISVGJ43Q6WNWTXX4F">
+            <td><i class="fa-regular fa-circle"></i></td>
+            <td><i class="fa-solid fa-folder"></i></td>
+            <td class="notitieboek-naam" onclick="FetchNew('01TBTB7D67XJGAV4WISVGJ43Q6WNWTXX4F')">Shared</td>
+            <td>1</td>
+            <td>07-10-2023 11:13</td>
+            <td>73,54 Megabyte</td>
+        </tr>
+
+    </tbody>
+    
+</table>
+
+
+
+<script>
+//add a div after the <!-- space all the columns --> comment
+var findComments = function(el) {
+    var arr = [];
+    for(var i = 0; i < el.childNodes.length; i++) {
+        var node = el.childNodes[i];
+        if(node.nodeType === 8) {
+            arr.push(node);
+        } else {
+            arr.push.apply(arr, findComments(node));
+        }
+    }
+    return arr;
+};
+
+var comments = findComments(main);
+comments.forEach(element => {
+    if (element.nodeValue === " space all the columns ") {
+        var space = document.createElement('div');
+        space.classList.add('spacer');
+        space.attributes['colspan'] = 100;
+        element.after(space);
+    }
+});
+
+//FetchNew('root'); //fetches the root folder
+
+function deleteNotebook(uuid) {
+    new ZermosModal()
+    .setTitle("Notitieboek verwijderen")
+    .addText("Weet je zeker dat je dit notitieboek wilt verwijderen? Vul de naam van het notitieboek in om te bevestigen.")
+    .addInput(document.querySelector('.selected .notitieboek-naam').innerText)
+    .setSubmitButtonLabel("Verwijderen")
+    .onSubmit((input) => {
+        if (input === document.querySelector('.selected .notitieboek-naam').innerText) {   
+            fetch('@Context.Request.Path/' + uuid, {
+                    method: 'DELETE'
+                }).then(response => {
+                    if (response.status === 200) {
+                        ReplacePage('/Notities');
+                    }
+                }).catch(error => {
+                    console.error(error);
+                });
+        }
+    })
+    .open();
+}
+
+function UpdateName(uuid) {
+    new ZermosModal()
+    .setTitle("Naam wijzigen")
+    .addInput("Wat wil je dat de nieuwe naam wordt?")
+    .setSubmitButtonLabel("Naam wijzigen")
+    .onSubmit((name) => {
+        fetch('@Context.Request.Path/' + uuid, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({Naam: name})
+            }).then(response => {
+                if (response.status === 200) {
+                    ReplacePage('/Notities');
+                }
+            }).catch(error => {
+                console.error(error);
+            });
+    })
+    .open();
+}
+    
+addButtonToPage('fa-plus', AddNotebook)
+
+function AddNotebook() {
+     new ZermosModal()
+    .setTitle("Nieuw notitieboek")
+    .addInput("Wat wil je dat de nieuwe naam wordt?")
+    .setSubmitButtonLabel("Naam wijzigen")
+    .onSubmit((naam) => {
+        fetch('@Context.Request.Path', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({Naam: naam})
+        }).then(response => {
+            if (response.status === 200) {
+                ReplacePage('/Notities');
+            }
+        }).catch(error => {
+            console.error(error);
+        });
+    })
+    .open();
+}
+
+function FetchNew(id) {      
+    //xhr
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/Microsoft/Onedrive/" + id);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("Accept", "application/json");
+     
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                
+                //returns html
+                //remove every tr.table-row
+                var rows = main.querySelectorAll('.table-row');
+                rows.forEach(element => {
+                    element.remove();
+                });
+                
+                //add new rows
+                main.querySelector('.table').innerHTML += xhr.responseText;
+                
+                addSelectables();                
+            } else {
+                alert("Er is iets fout gegaan, probeer het later opnieuw.");
+            }
+        }
+    }
+    
+    xhr.send();
+}
+
+function addSelectables() {
+    var selectable = document.getElementsByClassName('fa-circle');
+    
+    for (var i = 0; i < selectable.length; i++) {
+        selectable[i].onclick = function() {
+            if (this.classList.contains('fa-circle')) {
+                document.querySelectorAll('.fa-check-circle').forEach(element => {
+                    element.classList.remove('fa-check-circle');
+                    element.classList.add('fa-circle');
+                    element.parentElement.parentElement.classList.remove('selected');
+                });
+    
+                this.classList.remove('fa-circle');
+                this.classList.add('fa-check-circle');
+                this.parentElement.parentElement.classList.add('selected');
+    
+                document.querySelector('.actions-row').style.height = "";
+                document.querySelector('.actions-row').style.marginBottom = "";
+            } else {
+                this.classList.remove('fa-check-circle');
+                this.classList.add('fa-circle');
+                this.parentElement.parentElement.classList.remove('selected');
+                document.querySelector('.actions-row').style.height = "0";
+                document.querySelector('.actions-row').style.marginBottom = "0";
+            }
+        };
+    }
+}
+</script>

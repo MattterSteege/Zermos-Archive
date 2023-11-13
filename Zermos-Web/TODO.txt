@@ -2,9 +2,10 @@
 TODO: When checking if user has cookie for cached data, check if the data is not null or empty
 TODO: make time use login, so the user get's logged out after the session is closed
 TODO: dagrooster
-TODO: auto update afwezigheid after 1 day
 TODO: stress test the new refresh system
 TODO: fix de promo page
+TODO: rename teams_access_token to microsoft_access_token and teams_refresh_token to microsoft_refresh_token
+TODO: make a right to middle sliding in animation when onedrive loaded
 
 
 TODO: make the note system return the note on adding, so client side can add it to the list

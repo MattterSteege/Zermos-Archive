@@ -1,0 +1,110 @@
+﻿/*INDEX*/
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.spacer {
+    height: var(--padding);
+}
+
+.table-header {
+    color: var(--text-color);
+    font-size: var(--font-size-heading);
+    font-weight: 700;
+    text-align: left;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+}
+
+.table-header th {
+    padding: var(--padding);
+    background: var(--overlay-color);
+}
+
+.table-header th:first-child {
+    border-top-left-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
+}
+
+.table-header th:last-child {
+    border-top-right-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+}
+
+.table-row {
+    background: var(--overlay-color);
+    color: var(--text-color);
+    font-size: var(--font-size);
+    font-weight: 500;
+    padding: var(--padding);
+}
+
+.table-row:first-child td:first-child {
+    border-top-left-radius: var(--border-radius);
+}
+
+.table-row:first-child td:last-child {
+    border-top-right-radius: var(--border-radius);
+}
+
+.table-row:last-child td:first-child {
+    border-bottom-left-radius: var(--border-radius);
+}
+
+.table-row:last-child td:last-child {
+    border-bottom-right-radius: var(--border-radius);
+}
+
+.actions-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: var(--padding);
+    align-items: center;
+    background: var(--overlay-color);
+    padding: var(--padding);
+    padding-top: 0;
+    padding-bottom: 0;
+    border-radius: var(--border-radius);
+    transition: all ease 0.3s;
+    height: calc(4 * var(--padding));
+    margin-bottom: var(--padding);
+    overflow-y: hidden;
+    position: relative;
+}
+
+.actions-row div {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--padding);
+    justify-content: center;
+    height: var(--button-height);
+    color: var(--text-color);
+    font-size: var(--font-size);
+    background: var(--overlay-overlay-color);
+    padding: var(--padding);
+    border-radius: var(--border-radius-small);
+}
+
+.table-row.selected {
+    background: var(--overlay-overlay-color);
+}
+
+.table-row:last-child td{
+    border-bottom: unset;
+}
+
+.table-row td {
+    padding: var(--padding);
+    border-bottom: 1px solid var(--text-color);
+}
+
+.table-row td:first-child {
+    border-bottom: unset;
+}
+
+.table-row:hover {
+    background-color: var(--overlay-overlay-color);
+}

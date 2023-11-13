@@ -352,27 +352,6 @@
     height: 100%;
 }
 
-/*<div class="top-lint">
-    <div class="left-lint">
-        
-        <div class="back"></div>
-        <div class="forward"></div>
-        <div class="bold"></div>
-        <div class="italic"></div>
-        <div class="underline"></div>
-        <div class="strikethrough"></div>
-        <div class="align-left"></div>
-        <div class="align-center"></div>
-        <div class="align-right"></div>
-        
-        <input id="nameInput" type="text" value="@Model.Naam" />
-    </div>
-    
-    <div class="right-lint">
-        
-    </div>
-</div>*/
-
 .top-lint {
     display: flex;
     flex-direction: row;
@@ -474,57 +453,3 @@
     align-items: center;
     gap: var(--padding);
 }
-
-/*@media only screen and (max-width: 1200px) {*/
-/*    .bottom-right-add-button {*/
-/*        background: unset;*/
-/*        position: fixed;*/
-/*        right: 16px;*/
-/*        height: 32px;*/
-/*        width: 32px;*/
-/*        display: grid;*/
-/*        place-items: center;*/
-/*        cursor: pointer;*/
-/*        overflow: hidden;*/
-/*        border-radius: unset;*/
-/*        margin: unset;*/
-/*    }*/
-
-/*    .left .bottom-right-add-button {*/
-/*        bottom: 16px;*/
-/*        left: 16px;*/
-/*    }*/
-
-/*    .bottom-right-add-button .OpenSearchButton {*/
-/*        width: 32px;*/
-/*        height: 32px;*/
-/*        display: flex;*/
-/*        justify-content: center;*/
-/*        align-items: center;*/
-/*        align-content: center;*/
-/*    }*/
-
-/*    .bottom-right-add-button .OpenSearchButton i {*/
-/*        display: grid;*/
-/*        align-items: center;*/
-/*        justify-content: center;*/
-/*        border-radius: var(--border-radius-small);*/
-/*        transition: 0.3s;*/
-/*        box-shadow: unset;*/
-/*        background: var(--accent-color);*/
-/*        color: var(--white-color);*/
-/*        align-content: center;*/
-/*        width: 100%;*/
-/*        font-size: unset;*/
-/*        height: 100%;*/
-/*    }*/
-/*    */
-/*    .bottom-right-add-button .OpenSearchButton i:before {*/
-/*        color: var(--white-color);*/
-/*        width: 16px;*/
-/*        height: 16px;*/
-/*        font-size: 16px;*/
-/*        text-align: center;*/
-/*        position: relative;*/
-/*    }*/
-/*}*/

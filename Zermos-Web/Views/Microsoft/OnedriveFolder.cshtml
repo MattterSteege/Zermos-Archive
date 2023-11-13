@@ -1,0 +1,22 @@
+﻿@using Zermos_Web.Utilities
+@model MicrosoftOnedriveFileModel
+
+@foreach (Value folderOrFile in Model.value)
+{
+    <tr class="table-row" note-id="@folderOrFile.id">
+        <td><i class="fa-regular fa-circle"></i></td>
+        <td><i class="fa-solid fa-folder"></i></td>
+        @if (folderOrFile.folder != null)
+        {
+            <td class="notitieboek-naam" onclick="FetchNew('@folderOrFile.id')">@folderOrFile.name</td>
+        }
+        else
+        {
+            <td class="notitieboek-naam" onclick="window.open('@folderOrFile.webUrl', '_blank')">@folderOrFile.name</td>
+        }
+        <td>@(folderOrFile.folder?.childCount ?? 0)</td>
+        <td>@(folderOrFile.fileSystemInfo?.lastModifiedDateTime.ToString("dd-MM-yyyy HH:mm") ?? "")</td>
+        <td>@folderOrFile.size.FormatFileSize(FileSizeUtils.FileSizeUnit.Byte)</td>
+    </tr>
+}
+

@@ -107,6 +107,26 @@
                 }
             </div>
             
+            @if (Context.Request.Cookies["preview"] == "true")
+            {
+                <div class="microsoft">
+                    @if (TokenUtils.CheckToken(Model.teams_access_token))
+                    {
+                        <p><b>Microsoft</b>, geldig tot: @(TokenUtils.GetTokenExpiration(Model.teams_access_token).ToString("d/M/yyyy"))</p>
+                        <button id="microsoft-first" onclick="AreYouSure('microsoft')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
+    
+                        <form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="somtoday">
+                            <button id="microsoft-second" class="koppel-knop zeker" style="display: none">Zeker?</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <p><b>Somtoday</b> is niet gekoppeld</p>
+                        <button onclick="ReplacePage('@Url.Action("Somtoday", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
+                    }
+                </div>
+            }
+            
         </div>
     </div>
 
