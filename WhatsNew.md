@@ -3,6 +3,36 @@ layout: default
 title: what's new
 nav_exclude: false
 ---
+# Release Notes - Versie 0.4 - 14-11-2023
+
+0.4 - MICROSOFT BETA & nog iets meer content
+
+- debug
+    - Er is een nieuwe pagina waarop je verschillende dingen kunt refreshen, voor als Zermos niet optimaal werkt, maar dit hoef je eigenlijk nooit te gebruiken. Je komt hier door naar 'Account' te gaan en dan 3x op 'Profiel' te klikken
+
+- Account
+    - Hoevaak je afwezig bent geweest wordt nu elke dag ververst (mits je op de account pagina komt), eerst was dat alleen als je op de afwezigheid pagina kwam.
+
+- algemeen
+    - grote veranderingen in de code die mijn leven makkelijker maken :)
+    - Verschillende UI verbeteringen
+    - als je dingen moet invullen, dan krijg je nu netjes een popup met een tekstveld en uitleg, dit is een heel nieuw (uiteraad zelfgemaakt) systeem
+    - Alle knoppen die buiten het navigatie menu vallen (en de accent kleur hebben) volgen nu allemaal dezelfde code en werken dus allemaal hetzelfde, NETJUHS.
+    - Als je een systeem niet gekoppeld hebt, dan krijg je nu een veel netter pagina te zien met een uitleg en een link naar de originele pagina.
+    - Een kleine cleanup voor de UI, niets bijzonders
+    - Om te voorkomen dat in het notitie systeem een te grote hoeveelheid aan request wordt gestuurd zijn er rate limits toegevoegd, dit betekend dat je niet meer dan X request per X seconden kan sturen. Je zult hier geen last van hebben, het betekend dat je maximaal 3 keer per 10 seconden kan opslaan, dat is meer dan genoeg.
+ 
+- Somtoday - custom huiswerk
+    - het aanmaken van huiswerk gaat nu via de custom popup's, dit scheelt weer het laden van een nieuwe pagina en scheelt mij ongeveer 200% code
+    
+- Somtoday - huiswerk
+    - Het filteren van huiswerk gaat nu ook via de custom popup's, stukken netter dit :)
+    
+- Hoofdmenu
+    - De afteltijd gaat nu wel goed en loopt geen +1 of +2 uur achter
+    
+- Microsoft - Onedrive
+    -Dit zit nu nog achter de 'previews', maar het begint te wekren.
 
 # Release Notes - Versie 0.3.2 - 08-10-2023
 
