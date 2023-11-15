@@ -8,12 +8,16 @@
     height: var(--padding);
 }
 
+tbody {
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+}
+
 .table-header {
     color: var(--text-color);
     font-size: var(--font-size-heading);
     font-weight: 700;
     text-align: left;
-    box-shadow: var(--box-shadow);
     border-radius: var(--border-radius);
 }
 
@@ -98,7 +102,6 @@
 
 .table-row td {
     padding: var(--padding);
-    border-bottom: 1px solid var(--text-color);
 }
 
 .table-row td:first-child {

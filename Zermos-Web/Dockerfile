@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 MAINTAINER Matt ter Steege <matttersteege@gmail.com>
 WORKDIR /app
 EXPOSE 80
@@ -9,10 +9,10 @@ ENV DB_USER=root
 ENV DB_PASSWORD=REDACTED_DATABASE_PASSWORD
 ENV DB_HOST=REDACTED_IP_ADRESS
 ENV DB_PORT=3306
-ENV ZERMOS-WEB-VERSION=0.3.2
+ENV ZERMOS-WEB-VERSION=0.4.0
 
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["Zermos-Web/Zermos-Web.csproj", "Zermos-Web/"]
 COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]

@@ -5,7 +5,6 @@ TODO: dagrooster
 TODO: stress test the new refresh system
 TODO: fix de promo page
 TODO: rename teams_access_token to microsoft_access_token and teams_refresh_token to microsoft_refresh_token
-TODO: make a right to middle sliding in animation when onedrive loaded
 
 
 TODO: make the note system return the note on adding, so client side can add it to the list

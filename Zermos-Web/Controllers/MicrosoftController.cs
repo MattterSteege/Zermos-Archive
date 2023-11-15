@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zermos_Web.Models;
 using Zermos_Web.Models.Requirements;
+using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
@@ -44,13 +45,17 @@ namespace Zermos_Web.Controllers
         [NonAction]
         private async Task<string> GetAccessToken()
         {
+            string access_token = ZermosUser.teams_access_token;
+            if (access_token != null && TokenUtils.CheckToken(access_token))
+                return access_token;
+            
             string refresh_token = ZermosUser.teams_refresh_token;
             if (refresh_token == null)
                 return null;
             
             var collection = new List<KeyValuePair<string, string>>();
-            collection.Add(new("client_id", "de8bc8b5-d9f9-48b1-a8ad-b748da725064"));
-            collection.Add(new("scope", "Acronym.Read.All DeviceManagementConfiguration.Read.All DeviceManagementConfiguration.ReadWrite.All DeviceManagementManagedDevices.Read.All DeviceManagementManagedDevices.ReadWrite.All DeviceManagementServiceConfig.Read.All DeviceManagementServiceConfig.ReadWrite.All Directory.AccessAsUser.All Directory.ReadWrite.All eDiscovery.Read.All eDiscovery.ReadWrite.All Files.Read.All Files.ReadWrite Files.ReadWrite.All Files.ReadWrite.AppFolder Files.ReadWrite.Selected Group.ReadWrite.All Mail.Read Mail.ReadBasic Notes.ReadWrite.All Notifications.ReadWrite.CreatedByApp openid People.Read profile Sites.Read.All Tasks.Read User.Read User.Read.All User.ReadBasic.All UserActivity.ReadWrite.CreatedByApp UserNotification.ReadWrite.CreatedByApp email"));
+            collection.Add(new("client_id", "5e3ce6c0-2b1f-4285-8d4b-75ee78787346"));
+            collection.Add(new("scope", "https://graph.microsoft.com//.default openid profile offline_access"));
             collection.Add(new("grant_type", "refresh_token"));
             collection.Add(new("refresh_token", refresh_token));
             var content = new FormUrlEncodedContent(collection);

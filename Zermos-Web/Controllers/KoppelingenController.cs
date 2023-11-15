@@ -96,7 +96,8 @@ namespace Zermos_Web.Controllers
                 case "somtoday":
                     ZermosUser = new user
                     {
-                        somtoday_access_token = string.Empty, somtoday_refresh_token = string.Empty,
+                        somtoday_access_token = string.Empty, 
+                        somtoday_refresh_token = string.Empty,
                         somtoday_student_id = string.Empty
                     };
                     return Redirect("/account");
@@ -104,7 +105,16 @@ namespace Zermos_Web.Controllers
                 case "zermelo":
                     ZermosUser = new user
                     {
-                        zermelo_access_token = string.Empty, zermelo_access_token_expires_at = DateTime.MinValue
+                        zermelo_access_token = string.Empty, 
+                        zermelo_access_token_expires_at = DateTime.MinValue
+                    };
+                    return Redirect("/account");
+                
+                case "microsoft":
+                    ZermosUser = new user
+                    {
+                        teams_access_token = string.Empty, 
+                        teams_refresh_token = string.Empty
                     };
                     return Redirect("/account");
 
@@ -525,7 +535,7 @@ namespace Zermos_Web.Controllers
         [ZermosPage]
         public IActionResult Microsoft()
         {
-            string jsCode = "const k=localStorage,a=JSON.parse(k.getItem('msal.account.keys'))||{};for(const e in a)if(a.hasOwnProperty(e)){let t=k.getItem(a[e]);if(t)try{let s=JSON.parse(t);if(s&&s.username&&s.username.includes('ccg')){for(let r in k)if(r.startsWith(s.homeAccountId)){let c=k.getItem(r);if(c&&c.includes('Refresh')){let i=JSON.parse(c);i.secret&&(console.log('Gekopieerd!'),copy(i.secret))}}}}catch(n){}}";
+            string jsCode = "const k=localStorage;for(let i=0;i<k.length;i++){let e=k.key(i),t=k.getItem(e);try{let r=JSON.parse(t);r&&r.credentialType&&\"RefreshToken\"===r.credentialType&&copy(r.secret)}catch(c){}window.close();}";
             
             return PartialView(model: jsCode);
         }
@@ -535,8 +545,8 @@ namespace Zermos_Web.Controllers
         public async Task<IActionResult> Microsoft(string refreshToken)
         {
             var collection = new List<KeyValuePair<string, string>>();
-            collection.Add(new("client_id", "de8bc8b5-d9f9-48b1-a8ad-b748da725064"));
-            collection.Add(new("scope", "Acronym.Read.All DeviceManagementConfiguration.Read.All DeviceManagementConfiguration.ReadWrite.All DeviceManagementManagedDevices.Read.All DeviceManagementManagedDevices.ReadWrite.All DeviceManagementServiceConfig.Read.All DeviceManagementServiceConfig.ReadWrite.All Directory.AccessAsUser.All Directory.ReadWrite.All eDiscovery.Read.All eDiscovery.ReadWrite.All Files.Read.All Files.ReadWrite Files.ReadWrite.All Files.ReadWrite.AppFolder Files.ReadWrite.Selected Group.ReadWrite.All Mail.Read Mail.ReadBasic Notes.ReadWrite.All Notifications.ReadWrite.CreatedByApp openid People.Read profile Sites.Read.All Tasks.Read User.Read User.Read.All User.ReadBasic.All UserActivity.ReadWrite.CreatedByApp UserNotification.ReadWrite.CreatedByApp email"));
+            collection.Add(new("client_id", "5e3ce6c0-2b1f-4285-8d4b-75ee78787346"));
+            collection.Add(new("scope", "https://graph.microsoft.com//.default openid profile offline_access"));
             collection.Add(new("grant_type", "refresh_token"));
             collection.Add(new("refresh_token", refreshToken));
             var content = new FormUrlEncodedContent(collection);

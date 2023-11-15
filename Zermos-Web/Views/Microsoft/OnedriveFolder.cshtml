@@ -5,13 +5,14 @@
 {
     <tr class="table-row" note-id="@folderOrFile.id">
         <td><i class="fa-regular fa-circle"></i></td>
-        <td><i class="fa-solid fa-folder"></i></td>
         @if (folderOrFile.folder != null)
         {
+            <td><i class="fa-solid fa-folder"></i></td>
             <td class="notitieboek-naam" onclick="FetchNew('@folderOrFile.id')">@folderOrFile.name</td>
         }
         else
         {
+            <td><i class="fa-solid fa-file"></i></td>
             <td class="notitieboek-naam" onclick="window.open('@folderOrFile.webUrl', '_blank')">@folderOrFile.name</td>
         }
         <td>@(folderOrFile.folder?.childCount ?? 0)</td>

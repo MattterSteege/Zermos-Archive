@@ -34,77 +34,7 @@
     </tbody>
 
     <!-- space all the columns -->
-    
-    <!-- Here comes the magic -->
-    
-    <tbody>
-    
-        <tr class="table-row" note-id="01TBTB7D6SRKWO56V4FBFL3AMSHMQMYNWH">
-            <td><i class="fa-regular fa-circle"></i></td>
-            <td><i class="fa-solid fa-folder"></i></td>
-            <td class="notitieboek-naam" onclick="FetchNew('01TBTB7D6SRKWO56V4FBFL3AMSHMQMYNWH')">1VA</td>
-            <td>4</td>
-            <td>14-10-2021 08:18</td>
-            <td>3,19 Megabyte</td>
-        </tr>
-        <tr class="table-row" note-id="01TBTB7D64AS7KMQIT4ZD3ZYFXMTD2647R">
-            <td><i class="fa-regular fa-circle"></i></td>
-            <td><i class="fa-solid fa-folder"></i></td>
-            <td class="notitieboek-naam" onclick="FetchNew('01TBTB7D64AS7KMQIT4ZD3ZYFXMTD2647R')">2VC</td>
-            <td>30</td>
-            <td>15-10-2021 06:26</td>
-            <td>335,61 Megabyte</td>
-        </tr>
-        <tr class="table-row" note-id="01TBTB7D3LPX72YBMP6ZDJSFBG6QV3SNX6">
-            <td><i class="fa-regular fa-circle"></i></td>
-            <td><i class="fa-solid fa-folder"></i></td>
-            <td class="notitieboek-naam" onclick="FetchNew('01TBTB7D3LPX72YBMP6ZDJSFBG6QV3SNX6')">3VC</td>
-            <td>13</td>
-            <td>15-10-2021 06:26</td>
-            <td>14,69 Megabyte</td>
-        </tr>
-        <tr class="table-row" note-id="01TBTB7D4LY7PVCVQKMVBYSYY4ZF3X3Z3X">
-            <td><i class="fa-regular fa-circle"></i></td>
-            <td><i class="fa-solid fa-folder"></i></td>
-            <td class="notitieboek-naam" onclick="FetchNew('01TBTB7D4LY7PVCVQKMVBYSYY4ZF3X3Z3X')">4VA</td>
-            <td>11</td>
-            <td>11-09-2022 10:25</td>
-            <td>666,84 Megabyte</td>
-        </tr>
-        <tr class="table-row" note-id="01TBTB7D3G3EQ6S6IIA5DIDLFYXQU4KQXD">
-            <td><i class="fa-regular fa-circle"></i></td>
-            <td><i class="fa-solid fa-folder"></i></td>
-            <td class="notitieboek-naam" onclick="FetchNew('01TBTB7D3G3EQ6S6IIA5DIDLFYXQU4KQXD')">5VA</td>
-            <td>9</td>
-            <td>26-08-2023 09:19</td>
-            <td>33,67 Megabyte</td>
-        </tr>
-        <tr class="table-row" note-id="01TBTB7DZEKMNVGN4PCRDYDLVOOBORPU7H">
-            <td><i class="fa-regular fa-circle"></i></td>
-            <td><i class="fa-solid fa-folder"></i></td>
-            <td class="notitieboek-naam" onclick="FetchNew('01TBTB7DZEKMNVGN4PCRDYDLVOOBORPU7H')">Bijlagen</td>
-            <td>0</td>
-            <td>18-09-2023 10:34</td>
-            <td>0 Byte</td>
-        </tr>
-        <tr class="table-row" note-id="01TBTB7D3COCEV6TYBZRG2FXYJ4UBUXSBG">
-            <td><i class="fa-regular fa-circle"></i></td>
-            <td><i class="fa-solid fa-folder"></i></td>
-            <td class="notitieboek-naam" onclick="FetchNew('01TBTB7D3COCEV6TYBZRG2FXYJ4UBUXSBG')">Chatbestanden van Microsoft Teams</td>
-            <td>1</td>
-            <td>13-10-2023 11:40</td>
-            <td>1,88 Kilobyte</td>
-        </tr>
-        <tr class="table-row" note-id="01TBTB7D67XJGAV4WISVGJ43Q6WNWTXX4F">
-            <td><i class="fa-regular fa-circle"></i></td>
-            <td><i class="fa-solid fa-folder"></i></td>
-            <td class="notitieboek-naam" onclick="FetchNew('01TBTB7D67XJGAV4WISVGJ43Q6WNWTXX4F')">Shared</td>
-            <td>1</td>
-            <td>07-10-2023 11:13</td>
-            <td>73,54 Megabyte</td>
-        </tr>
 
-    </tbody>
     
 </table>
 
@@ -135,7 +65,7 @@ comments.forEach(element => {
     }
 });
 
-//FetchNew('root'); //fetches the root folder
+FetchNew('root'); //fetches the root folder
 
 function deleteNotebook(uuid) {
     new ZermosModal()
@@ -218,16 +148,29 @@ function FetchNew(id) {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 
-                //returns html
-                //remove every tr.table-row
-                var rows = main.querySelectorAll('.table-row');
-                rows.forEach(element => {
-                    element.remove();
-                });
+                var oldTbody = document.querySelectorAll('.table tbody')[1] ?? document.createElement('tbody');
+                oldTbody.style.position = "relative";
+                oldTbody.style.left = "-100vw";
+                oldTbody.style.opacity = "0";
+                oldTbody.style.transition = "left 0.5s, opacity 0.5s";
+                setTimeout(() => {
+                    oldTbody.remove();
                 
-                //add new rows
-                main.querySelector('.table').innerHTML += xhr.responseText;
+                    var tbody = document.createElement('tbody');
+                    tbody.innerHTML = xhr.responseText;
+                    tbody.style.position = "relative";
+                    tbody.style.left = "100vw";
+                    tbody.style.opacity = "0";
+                    tbody.style.transition = "left 0.5s, opacity 0.5s";
+                    document.querySelector('.table').appendChild(tbody);
+                    
+                    setTimeout(() => {
+                        tbody.style.left = "0";
+                        tbody.style.opacity = "1";
+                    }, 10);
                 
+                }, 500);
+
                 addSelectables();                
             } else {
                 alert("Er is iets fout gegaan, probeer het later opnieuw.");
