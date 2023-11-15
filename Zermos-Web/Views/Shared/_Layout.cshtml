@@ -78,7 +78,7 @@
                 </a>
             </li>
 
-            @if (Context.Request.Cookies["preview"] == "true")
+            @if ((Context.Request.Cookies["preview"] ?? "").Contains("microsoft"))
             {
                 <h5 class="Heading">Microsoft</h5>
                 

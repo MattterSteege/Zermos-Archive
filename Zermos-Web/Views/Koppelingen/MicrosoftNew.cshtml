@@ -1,0 +1,13 @@
+﻿@model string
+
+@{
+    ViewBag.Title = "title";
+}
+
+<h2>Redirecting to: @Model</h2>
+
+<script>
+  setTimeout(function () {
+    window.location.href = '@Html.Raw(Model)';
+  }, 1000);
+</script>

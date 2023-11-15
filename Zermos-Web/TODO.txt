@@ -5,9 +5,4 @@ TODO: dagrooster
 TODO: stress test the new refresh system
 TODO: fix de promo page
 TODO: rename teams_access_token to microsoft_access_token and teams_refresh_token to microsoft_refresh_token
-
-
-TODO: make the note system return the note on adding, so client side can add it to the list
-TODO: logically name note pages
-TODO: make the note system use the new note database system
-TODO: might replace the note taking system with onedrive loaded file with a link to the online word editor
+TODO: rework zermelo koppeling system with enw update

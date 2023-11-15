@@ -27,6 +27,7 @@
     background: var(--overlay-color);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
+    color: var(--text-color);
 }
 
 .modal-background .modal .modal-content h1 {

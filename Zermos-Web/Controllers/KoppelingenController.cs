@@ -540,9 +540,8 @@ namespace Zermos_Web.Controllers
             return PartialView(model: jsCode);
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> Microsoft(string refreshToken)
+        public async Task<IActionResult> MicrosoftOld(string refreshToken)
         {
             var collection = new List<KeyValuePair<string, string>>();
             collection.Add(new("client_id", "5e3ce6c0-2b1f-4285-8d4b-75ee78787346"));
@@ -574,7 +573,7 @@ namespace Zermos_Web.Controllers
             
             return Ok("success");
         }
-
+        
         #endregion
     }
 }

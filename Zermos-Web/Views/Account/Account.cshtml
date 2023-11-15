@@ -107,7 +107,7 @@
                 }
             </div>
             
-            @if (Context.Request.Cookies["preview"] == "true")
+            @if ((Context.Request.Cookies["preview"] ?? "").Contains("microsoft"))
             {
                 <div class="microsoft">
                     @if (TokenUtils.CheckToken(Model.teams_access_token))

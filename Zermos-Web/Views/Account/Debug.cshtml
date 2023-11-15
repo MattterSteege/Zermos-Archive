@@ -22,9 +22,9 @@
         <p>Als Zermos niet helemaal lekker werkt, dan kan je hier de JS refreshen. Ik kan je ook aanraden om gelijk de CSS te refreshen, maar dat hoeft niet.</p>
     </div>
     
-    <div class="account-item" onclick="TogglePreviews()">
-        <h1>Previews aan/uit</h1>
-        <p>Als je previews aan hebt staan, dan kan je de previews van de verschillende pagina's zien. Dit is handig als je een preview wilt zien van een feature die nog niet af is. Weet wel dat alles aangepast kan worden en zeer instabiel is in de werking.</p>
+    <div class="account-item" onclick="TogglePreview('microsoft')">
+        <h1>Microsoft aan/uit</h1>
+        <p>Bekijk de Microsoft koppelingen preview.</p>
     </div>
 </div>
 
@@ -51,8 +51,21 @@
         }
     }
     
-    function TogglePreviews() {
-        document.cookie = "preview=" + (document.cookie.indexOf("preview=true") === -1 ? "true" : "false") + ";path=/;SameSite=Strict;Expires=Fri, 31 Dec 9999 23:59:59 GMT";
+    //cookie preview=microsoft,somtoday,zermelo > TogglePreview("microsoft") > preview=somtoday,zermelo
+    function TogglePreview(preview) {
+        var cookie = document.cookie;
+        var previewCookie = cookie.split(";").find((c) => c.trim().startsWith("preview="));
+        if (previewCookie === undefined) {
+            document.cookie = "preview=" + preview;
+        } else {
+            var previews = previewCookie.split("=")[1].split(",");
+            if (previews.includes(preview)) {
+                previews.splice(previews.indexOf(preview), 1);
+            } else {
+                previews.push(preview);
+            }
+            document.cookie = "preview=" + previews.join(",");
+        }
         location.reload();
     }
 </script>

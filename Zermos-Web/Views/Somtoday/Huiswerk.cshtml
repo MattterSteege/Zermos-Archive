@@ -94,7 +94,7 @@
 <script>
     //make an array of all the homework items, title, content, bijlagen, date, 
     var allSubjects = ["@Html.Raw(string.Join("\",\"", Model.items.Select(x => x.lesgroep?.vak.naam ?? "Onbekend").OrderBy(x => x).Distinct()))"];
-    var allContent = ['huiswerk', 'toets', 'grote_toets'];
+    var allContent = ['huiswerk', 'toets', 'grote toets'];
     
     addButtonToPage('fa-plus', AddHomework)
         
@@ -249,8 +249,6 @@
         {
             vakkenCurrentlyShown = [...allSubjects];
             typesCurrentlyShown = [...allContent];
-            
-            document.getElementsByClassName("grade-notification")[0].style.display = "none";
         }        
         
         //get all the homework items
