@@ -13,7 +13,6 @@ namespace Infrastructure.Context
         public ZermosContext(DbContextOptions<ZermosContext> options) : base(options) {}
 
         public virtual DbSet<user> users { get; set; }
-        public virtual DbSet<note> notes { get; set; }
         
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

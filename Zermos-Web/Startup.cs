@@ -28,7 +28,6 @@ namespace Zermos_Web
             services.AddControllersWithViews();
             services.AddDbContext<ZermosContext>();
             services.AddScoped<Users>();
-            services.AddScoped<Notes>();
 
             var cookieExpiration = TimeSpan.FromDays(60);
 

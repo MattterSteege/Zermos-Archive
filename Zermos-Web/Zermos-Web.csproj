@@ -27,6 +27,10 @@
         <_ContentIncludedByDefault Remove="Views\Notitie\AddNotities.cshtml" />
         <_ContentIncludedByDefault Remove="Views\Notitie\GetNotitie.cshtml" />
         <_ContentIncludedByDefault Remove="Views\Notitie\Index.cshtml" />
+        <_ContentIncludedByDefault Remove="wwwroot\css\Zermos-Notes\notities.css" />
+        <_ContentIncludedByDefault Remove="wwwroot\css\Zermos-Notes\trix.css" />
+        <_ContentIncludedByDefault Remove="wwwroot\js\Zermos-Notes\trix.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\js\Zermos-Notes\zermos-mindmap.js" />
     </ItemGroup>
 
     <ItemGroup>

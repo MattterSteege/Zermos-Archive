@@ -16,7 +16,6 @@ namespace Infrastructure.Entities
         
         //Zermos related
         public string custom_huiswerk { get; set; }
-        public string notities { get; set; }
         
         //Token Related
         public string zermelo_access_token { get; set; }
