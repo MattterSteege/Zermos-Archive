@@ -72,6 +72,11 @@
         this.closingDisabled = true;
         return this;
     }
+    
+    hideSubmitButton() {
+        this.submitButtonLabel = null;
+        return this;
+    }
 
     //CALLBACKS
     onSubmit(callback) {
@@ -96,6 +101,7 @@
 
         function createModal() {
             const modal = createDivWithClass('modal');
+            modal.id = 'modal';
 
             const modalContent = createDivWithClass('modal-content');
             var title = document.createElement('h1');
@@ -103,12 +109,13 @@
             modalContent.appendChild(title);
 
             const fields = createInputFields(this.fields);
-
+            
             const submitButton = createButton('submitBtn', this.submitButtonLabel);
 
             modal.appendChild(modalContent);
             modal.appendChild(fields);
-            modal.appendChild(submitButton);
+            if (submitButton !== null)
+                modal.appendChild(submitButton);
 
             const modalBackground = createDivWithClass('modal-background');
             modalBackground.id = 'modal';
@@ -187,6 +194,8 @@
         }
         
         function createButton(id, label, callback) {
+            if (!label) return null;
+            
             const button = document.createElement('button');
             button.id = id;
             button.textContent = label;
@@ -229,7 +238,7 @@
         
         function createText(text) {
             const p = document.createElement('p');
-            p.textContent = text;
+            p.innerHTML = text;
             return p;
         }
 

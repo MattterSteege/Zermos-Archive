@@ -20,9 +20,9 @@ namespace Zermos_Web.Controllers
         public ZermeloController(Users user, ILogger<BaseController> logger) : base(user, logger) { }
 
         [Authorize]
-        [ZermeloRequirement]
         [ZermosPage]
-        public async Task<IActionResult> Rooster(string year, string week)
+        [ZermeloRequirement]
+        public async Task<IActionResult> Rooster(string year, string week, bool compact = false)
         {
             year ??= DateTime.Now.Year.ToString();
             week ??= DateTime.Now.GetWeekNumber().ToString();
@@ -48,7 +48,7 @@ namespace Zermos_Web.Controllers
                 }
                 
                 HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je rooster kon niet worden geladen, waarschijnlijk is je Zermelo token verlopen", NotificationCenter.NotificationType.ERROR);
-                return PartialView(new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>(), MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year)}}}});
+                return compact ? PartialView("Rooster-week", new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>(), MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year)}}}}) : PartialView(new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>(), MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year)}}}});
             }
 
             if (week == DateTime.Now.GetWeekNumber().ToString() && year == DateTime.Now.Year.ToString())
@@ -59,7 +59,7 @@ namespace Zermos_Web.Controllers
             var zermeloRoosterModel = JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync());
             zermeloRoosterModel.response.data[0].MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year);
 
-            return PartialView(zermeloRoosterModel);
+            return compact ? PartialView("Rooster-week", zermeloRoosterModel) : PartialView(zermeloRoosterModel);
         }
     }
 }

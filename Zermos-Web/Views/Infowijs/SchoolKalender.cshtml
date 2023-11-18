@@ -65,7 +65,7 @@
     }
 
     // Check if the URL contains a target element ID and scroll to it
-    main.addEventListener('main:load', () => {
+    main.addEventListener('main:before-load', () => {
         const targetElementId = getTargetElementId();
         if (targetElementId) {
             const targetElement = document.getElementById(targetElementId);

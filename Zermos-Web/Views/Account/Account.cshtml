@@ -155,7 +155,7 @@
         });
     }
     
-     main.addEventListener('main:load', () => {   
+     main.addEventListener('main:before-load', () => {   
         //when clicking on #info, toggle the hidden class on the opgeslagen-informatie-grid
         document.getElementById('info').addEventListener('click', function() {
             document.querySelector('.account-info-grid').classList.toggle('hidden');

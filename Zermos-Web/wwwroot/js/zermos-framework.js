@@ -1,113 +1,4 @@
-﻿//on popstate, replace the page with what's after the hash
-window.addEventListener('popstate', function(e) {
-    //if the hash is empty, don't replace the page
-    if (window.location.hash === "") {
-        return;
-    }
-    ReplacePage(window.location.hash.replace("#", ""), true);
-});
-
-document.addEventListener("DOMContentLoaded", async function () {
-    await initializeNotifications();
-    console.log("[ GLOBAL.JS ] Notificaties geïnitialiseerd");
-});
-
-//==============================NOTIFICATION SYSTEM==============================
-
-async function initializeNotifications() {
-    const elements = document.querySelectorAll(".svgText");
-    // console.log(elements);
-
-    elements.forEach(function (element) {
-        element.addEventListener("mouseover", function () {
-            element.classList.add("animating");
-        });
-
-        element.addEventListener("transitionend", function () {
-            element.classList.remove("animating");
-        });
-    });
-
-    //remove the version after 5 seconds, fade
-    setTimeout(() => {
-        //fade .version out in 1s
-        $(".version").fadeOut(1000, () => {
-            //remove .version from the DOM
-            $(".version").remove();
-        });
-    }, 5000);
-
-    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-
-    const notifications = $(".notification");
-    let charsCount = 0;
-    //for each notification, add the .animate class, but only if the previous notification has been animated with an delay of 500ms, the first one also gets a delay of 500ms
-    for (let i = notifications.length - 1; i >= 0; i--) {
-        const notification = notifications[i];
-        charsCount += notification.getElementsByTagName("p")[0].innerText.length;
-        await delay(500);
-        notification.classList.add("animate");
-
-        //when clicked: $(notification).removeClass("animate");
-        notification.addEventListener("click", async function () {
-            notification.classList.remove("animate");
-            await delay(500);
-            notification.remove();
-        });
-    }
-
-    //a person reads around 265 characters per minute, as calculated here: https://ux.stackexchange.com/questions/22520/how-long-does-it-take-to-read-x-number-of-characters
-    //so we wait 2 seconds and add 60 seconds for each 265 words, with a character average if 4.7 per word, which means +/- 1245,5 characters per minute
-    //so: 2 seconds + 60 seconds for each 1245,5 characters
-    const delayTime = 2000 + (charsCount / 1245.5) * 60000;
-    //console.log(delayTime);
-    await delay(delayTime);
-
-    for (let i = 0; i < notifications.length; i++) {
-        const notification = notifications[i];
-        await delay(500);
-        notification.classList.remove("animate");
-        notification.remove();
-    }
-}
-
-function addNotification(title, body, type) {
-    const notification = document.createElement("div");
-    notification.classList.add("notification");
-    notification.classList.add(type);
-
-    const titleElement = document.createElement("h1");
-    titleElement.innerText = title;
-    notification.appendChild(titleElement);
-
-    const bodyElement = document.createElement("p");
-    bodyElement.innerText = body;
-    notification.appendChild(bodyElement);
-
-    //add to .notifications
-    document.querySelector(".notifications").appendChild(notification);
-
-    new Promise((res) => setTimeout(res, 500)).then(() => {
-        $(notification).addClass("animate");
-
-        notification.addEventListener(
-            "click",
-            function () {
-                $(notification).removeClass("animate");
-            },
-            false
-        );
-
-        new Promise((res) => setTimeout(res, 5000)).then(() => {
-            $(notification).removeClass("animate");
-        });
-    });
-
-    return notification;
-}
-
-//==============================LOADING SYSTEM==============================
-
+﻿//==============================VARIABLES==============================
 var loadingTexts = [
     "Tijd en Ruimte omwisselen",
     "heftig rond draaien",
@@ -237,7 +128,7 @@ function createButtonForSidebar(icon, onclick) {
     mainButton.classList.add("menu-item-custom");
     mainButton.id = "added-by-fetch";
     mainButton.addEventListener("click", onclick);
-    
+
     const buttonIcon = document.createElement("div");
     buttonIcon.classList.add("fa-solid");
     buttonIcon.classList.add(icon);
@@ -245,7 +136,7 @@ function createButtonForSidebar(icon, onclick) {
     buttonIcon.classList.add("menu-icons-custom");
     buttonIcon.classList.add("fa-fw");
     mainButton.appendChild(buttonIcon);
-    
+
     return mainButton;
 }
 
@@ -258,7 +149,7 @@ function createButtonForBottomRight(icon, onclick) {
     mainButton.addEventListener("click", onclick);
     mainButton.style.bottom = `calc(var(--padding) + ${buttonCount * 48}px + var(--padding) * ${buttonCount})`;
     buttonCount++;
-    
+
     const buttonIcon = document.createElement("div");
     buttonIcon.classList.add("fa-solid");
     buttonIcon.classList.add(icon);
@@ -266,7 +157,7 @@ function createButtonForBottomRight(icon, onclick) {
     buttonIcon.classList.add("menu-icons-custom");
     buttonIcon.classList.add("fa-fw");
     mainButton.appendChild(buttonIcon);
-    
+
     return mainButton;
 }
 
@@ -304,5 +195,59 @@ function copyToClipboard(text) {
         }
 
         document.body.removeChild(textArea);
+    }
+}
+
+//==============================EVENT SYSTEM==============================
+// Make sure only one event listener is added for each type to the #main element
+let eventListeners = [];
+
+function addEventListenerToMain(type, listener) {
+    // Check if an event listener of the same type already exists for #main
+    const existingListener = eventListeners.find(
+        (eventListener) => eventListener.type === type && eventListener.listener === listener
+    );
+
+    // If not, add the new listener to #main and store it in the eventListeners array
+    if (!existingListener) {
+        eventListeners.push({
+            type: type,
+            listener: listener,
+        });
+        main.addEventListener(type, listener);
+    }
+}
+
+const getEventListenersFromMain = () => eventListeners;
+
+function removeEventListenerFromMain(type, listener) {
+    // Remove the listener from the eventListeners array
+    eventListeners = eventListeners.filter(
+        (eventListener) => !(eventListener.type === type && eventListener.listener === listener)
+    );
+
+    // Remove the listener from #main
+    main.removeEventListener(type, listener);
+}
+
+//==============================SHARING SYSTEM==============================
+async function ZermosShareImage(title, text, blob) {
+    const data = {
+        files: [
+            new File([blob], 'file.png', {
+                type: blob.type,
+            }),
+        ],
+        title: title,
+        text: text,
+    };
+    try {
+        if (!(navigator.canShare(data))) {
+            return {name: "NotSupportedError", message: "Your browser does not support this feature"};
+        }
+        await navigator.share(data);
+        return true;
+    } catch (err) {
+        return {name: err.name, message: err.message};
     }
 }

@@ -8,14 +8,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Zermos</title>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" crossorigin="anonymous" rel="stylesheet"/>
     <script src="https://kit.fontawesome.com/052f5fa8f8.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="manifest" href="/manifest.webmanifest"/>
     <meta name="theme-color" content="@(Context.Request.Cookies["theme"] == "light" || Context.Request.Cookies["theme"] == "blue" ? "#f8f9fa" : Context.Request.Cookies["theme"] == "dark" || Context.Request.Cookies["theme"] == "red" ? "#1a1a1a" : Context.Request.Cookies["theme"] == "pink" ? "#ffebf2" : "#f8f9fa")">
     <link rel="stylesheet" href="~/css/style.css?v=@version">
-    <script src="/js/zermos-framework.js?v=@version"></script>
+    <script defer src="/js/zermos-framework.js?v=@version"></script>
     <script src="/js/Zermos-modal.js?v=@version"></script>
     <link rel="stylesheet" href="/css/modal.css?v=@version">
 </head>
@@ -173,36 +173,37 @@
     @RenderBody()
 </main>
 
-@{
-    //if body isn't _Loading.cshtml show notifs
-    if (ViewContext.View.Path != "/Views/Shared/_Loading.cshtml")
-    {
-        <div class="notifications">
-            @foreach (var notification in Context.GetNotifications())
-            {
-                <div class="notification @notification.Type">
-                    <h1>@notification.Type - @notification.Title</h1>
-                    <p>@Html.Raw(notification.Body)</p>
-                </div>
-            }
-        </div>
-
-    }
-}
+@* @{ *@
+@*     //if body isn't _Loading.cshtml show notifs *@
+@*     if (ViewContext.View.Path != "/Views/Shared/_Loading.cshtml") *@
+@*     { *@
+@*         <div class="notifications"> *@
+@*             @foreach (var notification in Context.GetNotifications()) *@
+@*             { *@
+@*                 <div class="notification @notification.Type"> *@
+@*                     <h1>@notification.Type - @notification.Title</h1> *@
+@*                     <p>@Html.Raw(notification.Body)</p> *@
+@*                 </div> *@
+@*             } *@
+@*         </div> *@
+@* *@
+@*     } *@
+@* } *@
 <script id="vital-script">
-console.log('[ Zermos ] Je gebruikt Zermos versie @Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION")');
-//check if zermos-framework.js file is loaded
-
 let main = document.getElementById("main");
 const content = document.getElementById("content");
 let isRunning = false;
+let timerStart;
 
-
-function ReplacePage(url, fromHistory = false) {     
+function ReplacePage(url) {
     if (isRunning) {
         return;
     }
     
+    //start timer
+    timerStart = performance.now();   
+    
+
     //if body has onload function, remove it
     if (document.body.getAttribute('onload')) {
         document.body.removeAttribute('onload');
@@ -265,7 +266,7 @@ function ReplacePage(url, fromHistory = false) {
                 window.location.href = data;
                 return;
             }
-            
+
             if (data.startsWith('<!DOCTYPE html>')) {
                 isRunning = false;
                 ReplacePage("/Zermelo/Rooster");
@@ -278,7 +279,7 @@ function ReplacePage(url, fromHistory = false) {
                 if (existingModal) {
                     document.body.removeChild(existingModal);
                 }
-                
+
                 let i;
                 //remove all items with id added-by-fetch
                 const elements = document.querySelectorAll("#added-by-fetch");
@@ -331,13 +332,20 @@ function ReplacePage(url, fromHistory = false) {
                 }
 
                 html.remove();
-                
+
                 window.location.hash = url;
 
-                main.dispatchEvent(new Event("main:load"));
+                main.dispatchEvent(new Event("main:before-load"));
 
                 content.style.opacity = "0";
                 isRunning = false;
+                
+                setTimeout(function() {
+                    //log the time it took to load the page
+                    main.dispatchEvent(new Event("main:after-load"));
+                    const timerEnd = performance.now();
+                    console.log(`Page load took ${timerEnd - timerStart}ms`);
+                }, 250);
             }, 250);
         },
         error: function(xhr) {
@@ -365,6 +373,8 @@ function ReplacePage(url, fromHistory = false) {
         }
         return div.innerHTML;
     }
+    
+
 }
 
 window.onbeforeunload = function() {
@@ -372,7 +382,11 @@ window.onbeforeunload = function() {
     document.cookie = "this_session_last_page=" + window.location.hash.slice(1) + ";path=/";
 }
 
-console.log('[ Zermos ] Zermos framework is geïnitialiseerd');
+window.onpopstate = function(e) {
+    //if the hash is empty, don't replace the page
+    if (window.location.hash === "") return;
+    ReplacePage(window.location.hash.replace("#", ""));
+}
 </script>
 @* <script id="vital-script"> *@
 @*     //register service worker *@

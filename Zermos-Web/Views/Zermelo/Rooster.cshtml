@@ -7,346 +7,335 @@
     ViewData["title"] = "title";
 }
 
-<link rel="stylesheet" href="~/css/zermelo.css" />
+<link rel="stylesheet" href="/css/zermelo.css" />
+<script src="/js/dom-to-image.js"></script>
 
 <div class="main-container">
-    
-    <div id="@Model.response.data[0].MondayOfAppointmentsWeek.ToUnixTime()" class="MondayOfAppointmentsWeek" style="display: none">@Model.response.data[0].MondayOfAppointmentsWeek.ToUnixTime()</div>
-    <div class="Week" style="display: none">@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()</div>
-    
-    <div class="times-container">
-        <ul>
-            <!--        20 horizontal lines-->
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-        </ul>
-    </div>
-    <div class="days-container">
-        <ul>
-            <li></li>
-            <li>Ma</li>
-            <li>Di</li>
-            <li>Wo</li>
-            <li>Do</li>
-            <li>Vr</li>
-        </ul>
-    </div>
-    <div class="hours-container">
-        <ul>
-            <li></li>
-            <li>08:20</li> <!-- 1st hour -->
-            <li>09:10</li> <!-- 2nd hour -->
-            <li>10:00</li> <!-- break -->
-            <li>10:15</li> <!-- 3rd hour -->
-            <li>11:05</li> <!-- 4th hour -->
-            <li>11:55</li> <!-- break -->
-            <li>12:25</li> <!-- 5th hour -->
-            <li>13:15</li> <!-- 6th hour -->
-            <li>14:05</li> <!-- 7th hour -->
-            <li>14:55</li> <!-- break -->
-            <li>15:10</li> <!-- 8th hour -->
-            <li>16:00</li> <!-- 9th hour -->
-            <li></li> <!-- end schoolday -->
-        </ul>
-    </div>
-    <div class="lessons-container">
-        <ul>
-            @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
-            {
-                @if (Model.response.data[0].appointments.Count == 0)
-                {
-                    <li class="empty">Wow, de hele week vrij!</li>
-                    break;
-                }
-
-                if (day != DayOfWeek.Saturday && day != DayOfWeek.Sunday)
-                {
-                    <li class="lesdag">
-                        @{
-                            IEnumerable<Appointment> appointmentList = Model.response.data[0].appointments.Where(a => a.start.ToDateTime().DayOfWeek == day).ToList();
-
-                            if (!appointmentList.Any())
-                                continue;
-
-                            //100 means 100% of the height of the container
-                            //510 means 510 minutes between 08:20 and 16:50
-                            var minuteHeight = 100f / 510f;
-
-                            //get the date of the day that the appointments are for
-                            //8 * 60 + 20 = 500 minutes means 08:20
-                            var dayStartUnix = appointmentList.First().start; // this is unix. make the unix time to be the same date but the time should be 08:20
-                            dayStartUnix -= dayStartUnix % 86400; // remove the time from the unix time
-                            dayStartUnix += 8 * 60 * 60 + 20 * 60; // add 8 hours and 20 min to the unix time (08:20)
-                            
-                            // Define the time zones for UTC and the Dutch timezone
-                            TimeZoneInfo dutchTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"); // This ID represents the Dutch timezone
-                            DateTime utcDateTime = DateTimeOffset.FromUnixTimeSeconds(dayStartUnix).UtcDateTime;
-                            DateTime dutchDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, dutchTimeZone);
-                            TimeSpan timeDifference = dutchDateTime - utcDateTime;
-                            int timeDifferenceInSeconds = (int)timeDifference.TotalSeconds;
-                            
-                            dayStartUnix -= timeDifferenceInSeconds;
-                        }
-
-                        @foreach (var appointment in appointmentList)
-                        {
-                            //percentage from top = (appointment start time - dayStartUnix) * minuteHeight *@
-                            //appointment height = (appointment end time - appointment start time) * minuteHeight
-
-                            var appointmentHeight = (appointment.end - appointment.start) / 60f * minuteHeight;
-                            var lessonStart = appointment.start;
-                            var appointmentTop = (lessonStart - dayStartUnix) / 60f * minuteHeight;
-
-                            <div class="lesson-time-based @(appointment.cancelled ? "canceled" : "") @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.ObjectToBase64String())')">
-                                @(appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.subjects[0] + "</p>") : "")
-                                @(appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.locations[0] + "</p>") : "")
-                            </div>
-                        }
-                    </li>
-                }
-            }
-        </ul>
-
-    </div>
-    <div class="swipebubbles" style="display: none">
-        <div class="bubble" id="left" style="left: calc(-20% + 0px);">
-            <i class="fa-solid fa-angle-left"></i>
-        </div>
-        <div class="bubble" id="right" style="right: calc(-20% + 0px);">
-            <i class="fa-solid fa-angle-right"></i>
-        </div>
-    </div>
-    <div class="lesson-detail" style="display: none">
-        <div class="inside">
-            <p class="vak">[vak]</p>
-            <div class="generic">
-                <p class="docent">[docent]</p>
-                <p class="lokaal">[lokaal]</p>
-                <p class="groep">[groep]</p>
+    <div class="week-carousel" id="week-carousel">
+        <div class="week" data-week="@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()"></div>
+        <div class="week" data-week="@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()" data-unix="@Model.response.data[0].MondayOfAppointmentsWeek.ToUnixTime()">
+            <div class="times-container">
+                <ul>
+                    <!--        20 horizontal lines-->
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
             </div>
-            <p class="tijd">[tijd]</p>
-            <div class="statuses">
+            <div class="days-container">
+                <ul>
+                    <li>@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()</li>
+                    <li>Ma<div class="date"> - @Model.response.data[0].MondayOfAppointmentsWeek.ToString("dd MMM")</div></li>
+                    <li>Di<div class="date"> - @Model.response.data[0].MondayOfAppointmentsWeek.AddDays(1).ToString("dd MMM")</div></li>
+                    <li>Wo<div class="date"> - @Model.response.data[0].MondayOfAppointmentsWeek.AddDays(2).ToString("dd MMM")</div></li>
+                    <li>Do<div class="date"> - @Model.response.data[0].MondayOfAppointmentsWeek.AddDays(3).ToString("dd MMM")</div></li>
+                    <li>Vr<div class="date"> - @Model.response.data[0].MondayOfAppointmentsWeek.AddDays(4).ToString("dd MMM")</div></li>
+                </ul>
+            </div>
+            <div class="hours-container">
+                <ul>
+                    <li></li>
+                    <li>08:20</li> <!-- 1st hour -->
+                    <li>09:10</li> <!-- 2nd hour -->
+                    <li>10:00</li> <!-- break -->
+                    <li>10:15</li> <!-- 3rd hour -->
+                    <li>11:05</li> <!-- 4th hour -->
+                    <li>11:55</li> <!-- break -->
+                    <li>12:25</li> <!-- 5th hour -->
+                    <li>13:15</li> <!-- 6th hour -->
+                    <li>14:05</li> <!-- 7th hour -->
+                    <li>14:55</li> <!-- break -->
+                    <li>15:10</li> <!-- 8th hour -->
+                    <li>16:00</li> <!-- 9th hour -->
+                    <li></li> <!-- end schoolday -->
+                </ul>
+            </div>
+            <div class="lessons-container">
+                <ul>
+                    @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+                    {
+                        @if (Model.response.data[0].appointments.Count == 0)
+                        {
+                            <li class="empty">Wow, de hele week vrij!</li>
+                            break;
+                        }
+                
+                        if (day != DayOfWeek.Saturday && day != DayOfWeek.Sunday)
+                        {
+                            <li class="lesdag">
+                                @{
+                                    IEnumerable<Appointment> appointmentList = Model.response.data[0].appointments.Where(a => a.start.ToDateTime().DayOfWeek == day).ToList();
+                
+                                    if (!appointmentList.Any())
+                                        continue;
+                
+                                    //100 means 100% of the height of the container
+                                    //510 means 510 minutes between 08:20 and 16:50
+                                    var minuteHeight = 100f / 510f;
+                
+                                    //get the date of the day that the appointments are for
+                                    //8 * 60 + 20 = 500 minutes means 08:20
+                                    var dayStartUnix = appointmentList.First().start; // this is unix. make the unix time to be the same date but the time should be 08:20
+                                    dayStartUnix -= dayStartUnix % 86400; // remove the time from the unix time
+                                    dayStartUnix += 8 * 60 * 60 + 20 * 60; // add 8 hours and 20 min to the unix time (08:20)
+                
+                                    // Define the time zones for UTC and the Dutch timezone
+                                    TimeZoneInfo dutchTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"); // This ID represents the Dutch timezone
+                                    DateTime utcDateTime = DateTimeOffset.FromUnixTimeSeconds(dayStartUnix).UtcDateTime;
+                                    DateTime dutchDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, dutchTimeZone);
+                                    TimeSpan timeDifference = dutchDateTime - utcDateTime;
+                                    int timeDifferenceInSeconds = (int) timeDifference.TotalSeconds;
+                
+                                    dayStartUnix -= timeDifferenceInSeconds;
+                                }
+                
+                                @foreach (var appointment in appointmentList)
+                                {
+                                    //percentage from top = (appointment start time - dayStartUnix) * minuteHeight *@
+                                    //appointment height = (appointment end time - appointment start time) * minuteHeight
+                
+                                    var appointmentHeight = (appointment.end - appointment.start) / 60f * minuteHeight;
+                                    var lessonStart = appointment.start;
+                                    var appointmentTop = (lessonStart - dayStartUnix) / 60f * minuteHeight;
+                
+                                    <div class="lesson-time-based @(appointment.cancelled ? "canceled" : "") @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.ObjectToBase64String())')">
+                                        @(appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.subjects[0] + "</p>") : "")
+                                        @(appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.locations[0] + "</p>") : "")
+                                    </div>
+                                }
+                            </li>
+                        }
+                    }
+                </ul>
                 
             </div>
-            <div class="show-homework">
-                Bekijk huiswerk
-            </div>
         </div>
+        <div class="week" data-week="@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()"></div>
     </div>
 </div>
 
 <script>
-    loadDatepicker();
+var weeks = document.getElementsByClassName('week');
+var weekCarousel = document.getElementById('week-carousel');
+var currentWeekShowing = weeks[1].dataset.week;
+var currentWeekShowingPercentage = -100;
+var transition = 'left 0.5s ease-in-out';
+var isFetching = false; // Flag to track whether a fetch operation is in progress
 
-    //onload
-    function loadDatepicker () {
-        
-        
-        //if the datepicker is already loaded, don't load it again
-        if (document.getElementsByClassName('datepicker').length > 0)
-            document.getElementsByClassName('datepicker')[0].remove();
-        
-        let week = document.getElementsByClassName('Week')[0].innerHTML;
-        let MondayOfAppointmentsWeek = new Date(document.getElementsByClassName('MondayOfAppointmentsWeek')[0].innerHTML * 1000);
-                               
-        //create a div
-        var datepickerParent = document.createElement('div');
-        datepickerParent.className = 'datepicker';
-        datepickerParent.style.display = 'none';
-        datepickerParent.id = 'added-by-fetch';
-        
-        //create a div
-        var backbutton = document.createElement('div');
-        backbutton.className = 'backbutton';
-        backbutton.style.position = 'unset';
-        backbutton.onclick = function() {               
-            PreviousWeek();
-        };
-        //create an i
-        var backbuttonI = document.createElement('i');
-        backbuttonI.className = 'fa-solid fa-angle-left';
-        //append the i to the div
-        backbutton.appendChild(backbuttonI);
-        //append the div to 'datepickerParent'
-        datepickerParent.appendChild(backbutton);
-        
-        //create a p
-        var weektext = document.createElement('p');
-        weektext.innerHTML = 'Week ' + week;
-        //append the p to 'datepickerParent'
-        datepickerParent.appendChild(weektext);
-        
-        //create a p
-        var date = document.createElement('p');
-        date.className = 'date';
-        date.innerHTML = ', ' + MondayOfAppointmentsWeek.getDate() + ' - ' + (MondayOfAppointmentsWeek.getDate() + 6) + ' ' + MondayOfAppointmentsWeek.toLocaleString('nl-NL', { month: 'long' }) + ' ' + MondayOfAppointmentsWeek.getFullYear();
-        //append the p to 'datepickerParent'
-        datepickerParent.appendChild(date);
-        
-        //create a div
-        var forwardbutton = document.createElement('div');
-        forwardbutton.className = 'forewardbutton';
-        forwardbutton.style.position = 'unset';
-        forwardbutton.onclick = function() {
-            NextWeek();
-        };
-        //create an i
-        var forwardbuttonI = document.createElement('i');
-        forwardbuttonI.className = 'fa-solid fa-angle-right';
-        //append the i to the div
-        forwardbutton.appendChild(forwardbuttonI);
-        //append the div to 'datepickerParent'
-        datepickerParent.appendChild(forwardbutton);
-        
-        //append the div to 'top-bar'
-        document.getElementsByClassName('top-bar')[0].appendChild(datepickerParent);
+function NextWeek(isInitial = false) {
+    if (!isFetching || isInitial) {
+        isFetching = true;
+        return fetchWeek(Number(weeks[weeks.length - 1].dataset.week) + 1, true, isInitial);
     }
-    
-    function NextWeek() {
-        var week = document.getElementsByClassName('Week')[0].innerHTML;
-        ReplacePage("/Zermelo/Rooster?week=" + (Number(week) + 1));
+}
+
+function PreviousWeek(isInitial = false) {
+    if (!isFetching || isInitial) {
+        isFetching = true;
+        return fetchWeek(Number(weeks[0].dataset.week) - 1, false, isInitial);
     }
-    
-    function PreviousWeek() {
-        var week = document.getElementsByClassName('Week')[0].innerHTML;
-        ReplacePage("/Zermelo/Rooster?week=" + (Number(week) - 1));
-    }
-    
+}
+
+function fetchWeek(week, append, isInitial = false) {
+    setTimeout(() => {
+        fetch('/zermelo/rooster?week=' + week + '&compact=true&no-framework=true')
+            .then(response => response.text())
+            .then((html) => {
+                //turn the html string into an html element
+                var parser = new DOMParser();
+                var newWeek = parser.parseFromString(html, 'text/html').getElementsByClassName('week')[0];
+
+                if (isInitial) {
+                    if (append)
+                        weeks[2].replaceWith(newWeek);
+                    else
+                        weeks[0].replaceWith(newWeek);
+                } else {
+
+                    //if append = true, add it after the last html item in the carousel, else add it before the first html item in the carousel
+                    if (append) {
+                        weeks[0].replaceWith(newWeek);
+                        //set as last in sibling hierarchy
+                        weeks[2].after(weeks[0]);
+                    } else {
+                        weeks[2].replaceWith(newWeek);
+                        //set as first in sibling hierarchy
+                        weeks[0].before(weeks[2]);
+                    }
+
+                    weekCarousel.style.transition = 'none';
+                    weekCarousel.style.left = 'calc(-100% - var(--padding))';
+                    setTimeout(() => {
+                        weekCarousel.style.transition = transition;
+                    }, 10);
+                }
+
+                isFetching = false; // Reset the flag after fetch is complete
+            })
+            .catch(error => {
+                console.error('Error fetching week:', error);
+                isFetching = false; // Reset the flag on error
+            });
+    }, 500);
+}
+
+addEventListenerToMain('main:after-load', () => {
+    NextWeek(true);
+    PreviousWeek(true);
+});
+
+
+//when i click and drag, the carousel should move. When the threshold of 30% of the width of the carousel is reached and the user let's go, the carousel should move to the next week (or previous week)
+addEventListenerToMain('main:before-load', () => {
     var touchstartX;
+    var touchmoveX;
     var touchendX;
-    //threshold is 30% of the width of main.main in px
-    var threshold = document.getElementsByClassName('main')[0].offsetWidth * 0.3;
-        
-    function checkDirection() {
-        if (touchendX < touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
-            NextWeek();
-        } 
-        else if (touchendX > touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
-            PreviousWeek();
-        }
-    }
-    
-    main.addEventListener('touchstart', e => {
-      touchstartX = e.changedTouches[0].screenX
-    });
-    
-    main.addEventListener('touchmove', e => {
-      //if swiping left, use .left
-        //if swiping right, use .right
-        
-        var swipeChange = Math.abs(e.changedTouches[0].screenX - touchstartX);
-        
-        if (e.changedTouches[0].screenX < touchstartX) {
+    var threshold = weekCarousel.offsetWidth * 0.1;
+    var isDragging = false;
 
-            var right = document.getElementById('right');
-            right.style.right = 'calc(-20% + ' + swipeChange + 'px)';
-            
-            if (swipeChange > threshold) {
-                right.style.background = 'var(--confirm-color)';
-                right.style.opacity = '1';
-            }
-            else {
-                right.style.background = 'var(--text-color)';
-                right.style.opacity = '0.5';
-            }
+    addEventListenerToMain('mousedown', e => handleDragStart(e.clientX));
+    addEventListenerToMain('touchstart', e => handleDragStart(e.touches[0].clientX));
+
+    addEventListenerToMain('mousemove', e => handleDragMove(e.clientX));
+    addEventListenerToMain('touchmove', e => handleDragMove(e.touches[0].clientX));
+
+    addEventListenerToMain('mouseup', e => handleDragEnd(e.clientX));
+    addEventListenerToMain('touchend', e => handleDragEnd(e.changedTouches[0].clientX));
+    
+    addEventListenerToMain('mouseleave', e => handleDragEnd(e.clientX));
+    addEventListenerToMain('touchcancel', e => handleDragEnd(e.changedTouches[0].clientX));
+
+    function handleDragStart(clientX) {
+        isDragging = true;
+        touchstartX = clientX;
+        touchmoveX = clientX;
+    }
+
+    function handleDragMove(clientX) {
+        if (!isDragging || isFetching) return; // Stop dragging if a fetch is in progress
+
+        weekCarousel.style.left = (currentWeekShowingPercentage + (clientX - touchstartX) / weekCarousel.offsetWidth * 100) + '%';
+        touchmoveX = clientX;
+    }
+
+    function handleDragEnd(clientX) {
+        if (!isDragging || isFetching) return; // Stop dragging if a fetch is in progress
+
+        isDragging = false;
+        touchendX = clientX;
+        
+        if (touchendX < touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
+            weekCarousel.style.left = 'calc(-200% - var(--padding) * 2)'
+            NextWeek();
+        } else if (touchendX > touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
+            weekCarousel.style.left = '0%'
+            PreviousWeek();
         }
         else {
-            var left = document.getElementById('left');
-            left.style.left = 'calc(-20%  + ' + swipeChange + 'px)';
-            
-            if (swipeChange > threshold) {
-                left.style.background = 'var(--confirm-color)';
-                left.style.opacity = '1';
-                
-            }
-            else {
-                left.style.background = 'var(--text-color)';
-                left.style.opacity = '0.5';
-            }
+            weekCarousel.style.left = 'calc(-100% - var(--padding))'
         }
-    });
-    
-    main.addEventListener('touchend', e => {
-        touchendX = e.changedTouches[0].screenX
-        document.getElementById('right').style.right = 'calc(-20% + 0px)';
-        document.getElementById('left').style.left = 'calc(-20% + 0px)';
-        checkDirection()       
-    });
-    
-    main.addEventListener('main:load', e => {
-        var lessonDetail = document.getElementsByClassName('lesson-detail')[0];
-        lessonDetail.style = '';
-    });
-    
-    function OpenLessonDetail(base64){
-        var lessonDetail = document.getElementsByClassName('lesson-detail')[0];
-        var subject = lessonDetail.getElementsByClassName('vak')[0];
-        var teacher = lessonDetail.getElementsByClassName('docent')[0];
-        var location = lessonDetail.getElementsByClassName('lokaal')[0];
-        var time = lessonDetail.getElementsByClassName('tijd')[0];
-        var group = lessonDetail.getElementsByClassName('groep')[0];
-        var statuses = lessonDetail.getElementsByClassName('statuses')[0];
-        var showHomework = lessonDetail.getElementsByClassName('show-homework')[0];
-
-        const json = JSON.parse(atob(base64));
-        
-        subject.innerHTML = json.subjects[0] ?? '?';
-        
-        teacher.innerHTML = json.teachers[0] ?? '?';
-        location.innerHTML = json.locations[0] ?? '?';
-        group.innerHTML = json.groups[0] ?? '?';
-        
-        showHomework.onclick = function(e) {
-            ReplacePage('/Somtoday/Huiswerk?les=' + json.start);
-        };
-                
-        //start and end time should be in the format of 08:20 - 09:10
-        var start = new Date(json.start * 1000);
-        var end = new Date(json.end * 1000);
-        
-        time.innerHTML = start.getHours() + ':' + (start.getMinutes() < 10 ? '0' + start.getMinutes() : start.getMinutes()) + ' - ' + end.getHours() + ':' + (end.getMinutes() < 10 ? '0' + end.getMinutes() : end.getMinutes());
-        
-        statuses.innerHTML = '';
-        
-        //loop trough the statuses and add the 'nl' value to the statuses div
-        for (var i = 0; i < json.status.length; i++) {
-            var status = json.status[i];
-            
-            if (status['code'] === 2002)
-                continue;
-            
-            var statusDiv = document.createElement('p');
-            statusDiv.className = 'status';
-            statusDiv.innerHTML = "• " + status.nl;
-            statuses.appendChild(statusDiv);
-        }
-        
-        
-        lessonDetail.style.opacity = '1';
-        lessonDetail.style.pointerEvents = 'all';
-        lessonDetail.style.visibility = 'visible';
-        
-        //add to lessondetail and to .inside a click event that logs which element is clicked
-        lessonDetail.onclick = function(e) {
-            if (e.target === lessonDetail) {
-                lessonDetail.style.opacity = '0';
-                lessonDetail.style.pointerEvents = 'none';
-                lessonDetail.style.visibility = 'hidden';
-            }
-        };
-        
-        if (json.subjects.length === 0)
-            showHomework.style.display = 'none';
     }
+});
+
+addButtonToPage('fa-arrow-right', () => {
+    weekCarousel.style.left = 'calc(-200% - var(--padding) * 2)'
+    NextWeek();
+});
+
+addButtonToPage('fa-arrow-left', () => {
+    weekCarousel.style.left = '0%'
+    PreviousWeek();
+});
+
+function OpenLessonDetail(base64){
+    const json = JSON.parse(atob(base64));
+    
+    var lessonDetail = new ZermosModal()
+    .setTitle((json.subjects[0] ?? '?') + " - " + new Date(json.start * 1000).toLocaleDateString("nl-NL", { weekday: 'long', month: 'short', day: 'numeric'}));
+    
+    if (json.teachers.length > 0) 
+        lessonDetail.addText("Je hebt les van " + json.teachers.join(", ") + ".");
+    if (json.locations.length > 0) 
+        lessonDetail.addText("In lokaal " + json.locations.join(", ") + ".");
+    if (json.groups.length > 0) 
+        lessonDetail.addText("Met groep " + json.groups.join(", ") + ".");   
+    
+    lessonDetail.addText("De les is van: " + new Date(json.start * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1] + " tot " + new Date(json.end * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1]);
+    
+    lessonDetail.addText("&ZeroWidthSpace;")
+    .setSubmitButtonLabel("Bekijk huiswerk")
+    .onSubmit(() => {
+        ReplacePage('/Somtoday/Huiswerk?les=' + json.start);
+    });
+    
+    // .addButton("Bekijk huiswerk", () => {
+    //     ReplacePage('/Somtoday/Huiswerk?les=' + json.start);
+    // })
+    // .addButton("Delen", () => {        
+    //     var shareText = "hey, ik heb van " + new Date(json.start * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1] + " tot " + new Date(json.end * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1] + " " + (json.subjects[0] ?? '?') + " van " + (json.teachers[0] ?? '?') + " in " + (json.locations[0] ?? '?') + "." 
+    //     //console.log(shareText);
+    //    
+    //     domtoimage.toBlob(document.getElementById('modal'), {quality: 1})
+    //     .then(async function (blob) {
+    //         console.log(blob);
+    //         //make the image smaller, the same size as the html element
+    //         blob = await resizeImage(blob, 500, 500);
+    //          ZermosShareImage('Zermos', shareText, blob).then((returned) => {
+    //              console.log(returned);
+    //              if (returned !== true) 
+    //                 document.querySelector('#input6').value = returned.message;
+    //          });
+    //     });
+    //    
+    //     function resizeImage(blob, maxWidth, maxHeight) {
+    //         return new Promise((resolve, reject) => {
+    //             var img = new Image();
+    //             img.src = URL.createObjectURL(blob);
+    //             img.onload = function() {
+    //                 var width = img.width;
+    //                 var height = img.height;
+    //                 if (width > height) {
+    //                     if (width > maxWidth) {
+    //                         height *= maxWidth / width;
+    //                         width = maxWidth;
+    //                     }
+    //                 } else {
+    //                     if (height > maxHeight) {
+    //                         width *= maxHeight / height;
+    //                         height = maxHeight;
+    //                     }
+    //                 }
+    //                 var canvas = document.createElement('canvas');
+    //                 canvas.width = width;
+    //                 canvas.height = height;
+    //                 var ctx = canvas.getContext("2d");
+    //                 ctx.drawImage(img, 0, 0, width, height);
+    //                 ctx.canvas.toBlob((blob) => {
+    //                     resolve(blob);
+    //                 }, "image/jpeg", 1);
+    //             }
+    //         })
+    //     }
+    // });
+    
+    for (var i = 0; i < json.status.length; i++) {
+        var status = json.status[i];
+
+        if (status['code'] === 2002) continue;
+        
+        lessonDetail.addText("• " + status.nl);
+    }
+    
+    lessonDetail.open();
+}
 </script>

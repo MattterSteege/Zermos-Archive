@@ -159,7 +159,7 @@
         catch{}
     }
     
-    main.addEventListener("main:load", function () {  
+    main.addEventListener("main:before-load", function () {  
         //if the url has the parameter "les" then scroll to that homework item's parent
         const searchParams = new URLSearchParams(window.location.search);
         const les = searchParams.get('les');

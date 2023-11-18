@@ -57,17 +57,4 @@
             <a onclick="ReplacePage('@Url.Action("ZermeloWithQr", "Koppelingen")')">Koppel Zermelo met een QR-code</a>
         </div>
     </div>
-    
-    @if (Context.Request.Cookies["preview"] == "true")
-    {
-        <div class="microsoft">
-            <h1>Microsoft</h1>
-            <p>Zermos <b>X</b> Microsoft, nogsteeds testen</p>
-            <div class="spacer" style="padding: 0; margin-top: 8px"></div>
-            <div class="methods">
-                @* <a asp-controller="Koppelingen" asp-action="Zermelo">Koppel Zermelo met je wachtwoord</a> @*For when the UI is done, but with koppelcode and QR it is quite unnecesairy*@  
-                <a onclick="ReplacePage('@Url.Action("Microsoft", "Koppelingen")')">Spooky scary method</a>
-            </div>
-        </div>
-    }
 </div>

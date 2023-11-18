@@ -5,4 +5,8 @@ TODO: dagrooster
 TODO: stress test the new refresh system
 TODO: fix de promo page
 TODO: rename teams_access_token to microsoft_access_token and teams_refresh_token to microsoft_refresh_token
-TODO: rework zermelo koppeling system with enw update
+
+TODO: Zermelo rework
+    connecting
+    schedule dragging system (small cleanup and consistency)
+    Add lesson image sharing
