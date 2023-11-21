@@ -3,6 +3,26 @@ layout: default
 title: what's new
 nav_exclude: false
 ---
+
+# Release Notes - Versie 0.4.1 - 21-11-2023
+4.1 - Zermelo baby
+
+- debug
+    - Er is een nieuwe preview toegevoegd 'Zermelo sharing', hiermee kan j eje rooster delen, ik wil het systeem van dingen delen met vrienden via een link doorvoeren in meer dingen zoals cijfers. Maar omdat je voor nu de gedeelde links niet kan verwijderen blijft het eventjes in Beta
+
+- notities
+    - Ik heb het notities systeem weer verwijderd, het kostte teveel werk en ik was er niet blij mee, balen, maar het was toch pas in de beta versie.
+    - Ook de Beta Microsoft koppeling is verwijderd, omdat het niet werkte. punt.
+    
+- Zermelo - Rooster
+    - Ik heb de werking van het rooster verbeterd, het is nu sneller en beter (goh).
+    - Het rooster werkt nu op 1 pagina, je krijgt dus niet elke keer een nieuw laadscherm.
+    - De les details, werkt nu op de vertrouwde po-pup code, nice.
+        - Ook is de datum nu makkelijk verwerkt met tijden en al.
+    - Er zijn nu makkelijke knoppen om naar de volgende en vorige dag te gaan. op zowel mobiel als desktop.
+    - Screenshots sturen van je rooster om te vergelijken? Nah, stuur je rooster door via een link die je kan delen! Dat is de Zermos manier.
+    - De pagina waarop je Zermelo kan koppelen is nu opnieuw getypt, omdat Zermelo een nieuwe API heeft en je nu via de mobiele app kan koppelen.
+
 # Release Notes - Versie 0.4 - 14-11-2023
 
 0.4 - MICROSOFT BETA & nog iets meer content
