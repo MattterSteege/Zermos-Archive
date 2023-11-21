@@ -28,6 +28,7 @@ namespace Zermos_Web
             services.AddControllersWithViews();
             services.AddDbContext<ZermosContext>();
             services.AddScoped<Users>();
+            services.AddScoped<Shares>();
 
             var cookieExpiration = TimeSpan.FromDays(60);
 
@@ -41,11 +42,6 @@ namespace Zermos_Web
                     options.Cookie.MaxAge = cookieExpiration;
                     options.Cookie.IsEssential = true;
                 });
-            
-            // services.AddRateLimiter(rateLimiterOptions =>
-            // {
-            //     rateLimiterOptions.RejectionStatusCode = 429;
-            // });
             
             //sets the data protection keys to be stored in the /dataprotection folder (in the docker volume dataprotection)
             services.AddDataProtection().PersistKeysToFileSystem(new System.IO.DirectoryInfo("/dataprotection"));

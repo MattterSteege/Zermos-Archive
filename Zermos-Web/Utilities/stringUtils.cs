@@ -69,8 +69,19 @@ namespace Zermos_Web.Utilities
         public static string ObjectToBase64String(this object obj)
         {
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
-            string base64 = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(json));
-            return base64;
+            return System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(json));
+        }
+        
+        /// <summary>
+        /// Returns an object of type T from a base64 string.
+        /// </summary>
+        /// <param name="base64">The base64 string to convert to an object.</param>
+        /// <typeparam name="T">The type of the object to return.</typeparam>
+        /// <returns>The object of type T from the base64 string.</returns>
+        public static T Base64StringToObject<T>(this string base64)
+        {
+            string json = System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(base64));
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
         }
     }
 }

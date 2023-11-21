@@ -140,15 +140,61 @@ function createButtonForSidebar(icon, onclick) {
     return mainButton;
 }
 
-var buttonCount = 0;
-function createButtonForBottomRight(icon, onclick) {
+var buttonCountHorizontalTopRight = 1;
+var buttonCountVerticalTopRight = 1;
+var buttonCountHorizontalBottomRight = 0;
+var buttonCountVerticalBottomRight = 0;
+var bottomRightCornerOccupied = false;
+
+// Enum for vertical alignment
+const VerticalAlignment = {
+    TB: "TopRightToBottom",
+    TL: "TopRightToLeft",
+    BL: "BottomRightToLeft",
+    BT: "BottomRightToTop"
+};
+
+const Background = {
+    Accent: "accent-color",
+    Primary: "overlay-color",
+}
+
+function createButtonForBottomRight(icon, onclick, verticalAlignment, background) {
     const mainButton = document.createElement("li");
-    mainButton.classList.add("menu-item-Right");
-    mainButton.classList.add("menu-item-Right-custom");
+    mainButton.classList.add("menu-item-right");
+    mainButton.style.background = `var(--${background})`;
     mainButton.id = "added-by-fetch";
     mainButton.addEventListener("click", onclick);
-    mainButton.style.bottom = `calc(var(--padding) + ${buttonCount * 48}px + var(--padding) * ${buttonCount})`;
-    buttonCount++;
+
+    switch (verticalAlignment) {
+        case VerticalAlignment.TB: //done
+            mainButton.style.top = `calc(var(--padding) + ${buttonCountVerticalTopRight * 48}px + var(--padding) * ${buttonCountVerticalTopRight})`;
+            buttonCountVerticalTopRight++;
+            break;
+        case VerticalAlignment.TL: //done
+            mainButton.style.top = `var(--padding)`;
+            mainButton.style.right = `calc(var(--padding) + ${buttonCountHorizontalTopRight * 48}px + var(--padding) * ${buttonCountHorizontalTopRight})`;
+            buttonCountHorizontalTopRight++;
+            break;
+        case VerticalAlignment.BL:
+            mainButton.style.bottom = `var(--padding)`;
+            mainButton.style.right = `calc(var(--padding) + ${buttonCountHorizontalBottomRight * 48}px + var(--padding) * ${buttonCountHorizontalBottomRight})`;
+            buttonCountHorizontalBottomRight++;
+            bottomRightCornerOccupied = true;
+            break;
+        default:
+        case VerticalAlignment.BT:
+            mainButton.style.bottom = `calc(var(--padding) + ${buttonCountVerticalBottomRight * 48}px + var(--padding) * ${buttonCountVerticalBottomRight})`;
+            buttonCountVerticalBottomRight++;
+            bottomRightCornerOccupied = true;
+            break;
+    }
+    
+    if (bottomRightCornerOccupied && (buttonCountVerticalBottomRight === 0 || buttonCountHorizontalBottomRight === 0))
+        if (buttonCountVerticalBottomRight === 0)
+            buttonCountVerticalBottomRight++;
+        else
+            buttonCountHorizontalBottomRight++;
 
     const buttonIcon = document.createElement("div");
     buttonIcon.classList.add("fa-solid");
@@ -156,15 +202,28 @@ function createButtonForBottomRight(icon, onclick) {
     buttonIcon.classList.add("menu-icons");
     buttonIcon.classList.add("menu-icons-custom");
     buttonIcon.classList.add("fa-fw");
+    
+    if (background === Background.Accent) 
+        buttonIcon.style.color = "var(--white-color)";
+    else
+        buttonIcon.style.color = "var(--text-color)";
+    
     mainButton.appendChild(buttonIcon);
 
     return mainButton;
 }
 
-function addButtonToPage(icon, onclick) {
-    buttonCount = document.querySelectorAll('.menu-item-custom').length;
+function addButtonToPage(icon, onclick, verticalAlignment = VerticalAlignment.BT, background = Background.Accent) {
+    var buttons = document.querySelectorAll(".menu-item-right");
+    if (buttons.length === 0) {
+        buttonCountHorizontalTopRight = 1;
+        buttonCountVerticalTopRight = 1;
+        buttonCountHorizontalBottomRight = 0;
+        buttonCountVerticalBottomRight = 0;
+        bottomRightCornerOccupied = false;
+    }
     document.querySelector(".bottom ul").appendChild(createButtonForSidebar(icon, onclick));
-    document.querySelector(".bottom ul").appendChild(createButtonForBottomRight(icon, onclick));
+    document.querySelector(".bottom ul").appendChild(createButtonForBottomRight(icon, onclick, verticalAlignment, background));
 }
 
 //==============================UTILITY FUNCTIONS==============================

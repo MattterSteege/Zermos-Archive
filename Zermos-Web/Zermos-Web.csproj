@@ -31,6 +31,8 @@
         <_ContentIncludedByDefault Remove="wwwroot\css\Zermos-Notes\trix.css" />
         <_ContentIncludedByDefault Remove="wwwroot\js\Zermos-Notes\trix.js" />
         <_ContentIncludedByDefault Remove="wwwroot\js\Zermos-Notes\zermos-mindmap.js" />
+        <_ContentIncludedByDefault Remove="Views\Microsoft\Onderive.cshtml" />
+        <_ContentIncludedByDefault Remove="Views\Microsoft\OnedriveFolder.cshtml" />
     </ItemGroup>
 
     <ItemGroup>

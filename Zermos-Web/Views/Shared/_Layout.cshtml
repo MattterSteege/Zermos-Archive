@@ -1,4 +1,5 @@
 @using Zermos_Web.Utilities
+@using Microsoft.AspNetCore.Http
 @{
     var currentPage = $"/{ViewContext.RouteData.Values["controller"]}/{ViewContext.RouteData.Values["action"]?.ToString()?.Split("/")[0] ?? "index"}";
     var version = Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? TokenUtils.RandomString(10);
@@ -19,7 +20,7 @@
     <script src="/js/Zermos-modal.js?v=@version"></script>
     <link rel="stylesheet" href="/css/modal.css?v=@version">
 </head>
-<body onload="ReplacePage('@ViewData["url"]');">
+<body onload="ReplacePage('@ViewData["url"]'); checkVersion();">
 <div class="sidebar">
     <div class="top">
         <!--        6 SVG's with the letters Z,E,R,M,O & S width should be 1/6 of 100%-->
@@ -173,23 +174,7 @@
     @RenderBody()
 </main>
 
-@* @{ *@
-@*     //if body isn't _Loading.cshtml show notifs *@
-@*     if (ViewContext.View.Path != "/Views/Shared/_Loading.cshtml") *@
-@*     { *@
-@*         <div class="notifications"> *@
-@*             @foreach (var notification in Context.GetNotifications()) *@
-@*             { *@
-@*                 <div class="notification @notification.Type"> *@
-@*                     <h1>@notification.Type - @notification.Title</h1> *@
-@*                     <p>@Html.Raw(notification.Body)</p> *@
-@*                 </div> *@
-@*             } *@
-@*         </div> *@
-@* *@
-@*     } *@
-@* } *@
-<script id="vital-script">
+<script id="vital-script" defer>
 let main = document.getElementById("main");
 const content = document.getElementById("content");
 let isRunning = false;
@@ -204,12 +189,12 @@ function ReplacePage(url) {
     timerStart = performance.now();   
     
 
-    //if body has onload function, remove it
-    if (document.body.getAttribute('onload')) {
-        document.body.removeAttribute('onload');
-        //set url to the base url
-        history.replaceState(null, null, "/");
-    }
+    // //if body has onload function, remove it
+    // if (document.body.getAttribute('onload')) {
+    //     document.body.removeAttribute('onload');
+    //     //set url to the base url
+    //     history.replaceState(null, null, "/");
+    // }
 
     //check if the url is the same as the current url
     if (url === window.location.pathname) {
@@ -278,6 +263,7 @@ function ReplacePage(url) {
                 const existingModal = document.querySelector('#modal');
                 if (existingModal) {
                     document.body.removeChild(existingModal);
+                    checkVersion();
                 }
 
                 let i;
@@ -345,6 +331,7 @@ function ReplacePage(url) {
                     main.dispatchEvent(new Event("main:after-load"));
                     const timerEnd = performance.now();
                     console.log(`Page load took ${timerEnd - timerStart}ms`);
+                    return true;
                 }, 250);
             }, 250);
         },
@@ -382,21 +369,39 @@ window.onbeforeunload = function() {
     document.cookie = "this_session_last_page=" + window.location.hash.slice(1) + ";path=/";
 }
 
-window.onpopstate = function(e) {
+window.onpopstate = function() {
     //if the hash is empty, don't replace the page
     if (window.location.hash === "") return;
     ReplacePage(window.location.hash.replace("#", ""));
 }
+
+@{
+    var currentVersion = Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION");
+    var userVersion = Context.Request.Cookies["version"] ?? "0.0.0";
+    
+    Context.Response.Cookies.Append("version", currentVersion ?? "-1", new CookieOptions
+    {
+        Expires = DateTime.Now.AddYears(1),
+        SameSite = SameSiteMode.Strict,
+        Secure = true
+    });
+}
+
+var checkVersionInt = 0;
+function checkVersion() {
+    if ("@currentVersion" !== "@userVersion" && checkVersionInt <= 1) {
+        //if the user version is not the same as the current version, show a message
+
+        new ZermosModal()
+        .setTitle("Zermos is geupdate!")
+        .addText("Zermos is weer een versietje ouder 🥳. Er zijn natuurlijk weer nieuwe functies toegevoegd en bugs gefixt. Veel plezier met de nieuwe versie!")
+        .addText("Je gebruikt nu versie @currentVersion, de vorige keer dat je Zermos bezocht was dat versie @userVersion.")
+        .setSubmitButtonLabel("Let's go, ik ben er klaar voor!")
+        .open();
+        
+        checkVersionInt++;
+    }
+}
 </script>
-@* <script id="vital-script"> *@
-@*     //register service worker *@
-@*     if ('serviceWorker' in navigator) { *@
-@*       // Let's register our serviceworker *@
-@*       navigator.serviceWorker.register('/serviceworker.js?v=@version', { *@
-@*         // The scope cannot be parent to the script url *@
-@*         scope: '/' *@
-@*       }); *@
-@*     } *@
-@* </script> *@
 </body>
 </html>

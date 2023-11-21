@@ -144,7 +144,10 @@
     background: var(--accent-color);
     border-radius: var(--border-radius-small);
     box-shadow: var(--box-shadow);
-    margin-bottom: var(--padding);
+}
+
+.modal-background .modal button#submitBtn {
+    margin-top: var(--padding);
 }
 
 /* SINGEL TOGGLE INPUT */

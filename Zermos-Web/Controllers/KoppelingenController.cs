@@ -24,9 +24,7 @@ namespace Zermos_Web.Controllers
     [Authorize]
     public class KoppelingenController : BaseController
     {
-        public KoppelingenController(Users user, ILogger<BaseController> logger) : base(user, logger)
-        {
-        }
+        public KoppelingenController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
 
         private readonly HttpClient _infowijsHttpClient = new()
         {
@@ -62,16 +60,6 @@ namespace Zermos_Web.Controllers
                     {"origin", "https://inloggen.somtoday.nl"},
                 }
             };
-        
-        private readonly HttpClient _microsoftHttpClient = new()
-        {
-            BaseAddress = new Uri("https://login.microsoftonline.com/organizations/oauth2/v2.0/token"),
-            DefaultRequestHeaders =
-            {
-                {"origin", "https://developer.microsoft.com"},
-                {"accept", "application/json"}
-            }
-        };
 
         private readonly HttpClient _httpClientWithoutRedirect = new(new HttpClientHandler {AllowAutoRedirect = false});
 
@@ -107,14 +95,6 @@ namespace Zermos_Web.Controllers
                     {
                         zermelo_access_token = string.Empty, 
                         zermelo_access_token_expires_at = DateTime.MinValue
-                    };
-                    return Redirect("/account");
-                
-                case "microsoft":
-                    ZermosUser = new user
-                    {
-                        teams_access_token = string.Empty, 
-                        teams_refresh_token = string.Empty
                     };
                     return Redirect("/account");
 
@@ -265,14 +245,6 @@ namespace Zermos_Web.Controllers
         [HttpGet]
         [ZermosPage]
         public IActionResult Zermelo()
-        {
-            return PartialView();
-        }
-
-        [HttpGet]
-        [ZermosPage]
-        [Route("/Koppelingen/Zermelo/Wachtwoord")]
-        public IActionResult ZermeloWithPassword()
         {
             return PartialView();
         }
@@ -520,60 +492,6 @@ namespace Zermos_Web.Controllers
             return code;
         }
 
-        #endregion
-
-        #region Teams
-        [HttpGet]
-        [ZermosPage]
-        [Route("/Koppelingen/Microsoft/Ongekoppeld")]
-        public IActionResult MicrosoftNietGekoppeld()
-        {
-            return PartialView();
-        }
-
-        [HttpGet]
-        [ZermosPage]
-        public IActionResult Microsoft()
-        {
-            string jsCode = "const k=localStorage;for(let i=0;i<k.length;i++){let e=k.key(i),t=k.getItem(e);try{let r=JSON.parse(t);r&&r.credentialType&&\"RefreshToken\"===r.credentialType&&copy(r.secret)}catch(c){}window.close();}";
-            
-            return PartialView(model: jsCode);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> MicrosoftOld(string refreshToken)
-        {
-            var collection = new List<KeyValuePair<string, string>>();
-            collection.Add(new("client_id", "5e3ce6c0-2b1f-4285-8d4b-75ee78787346"));
-            collection.Add(new("scope", "https://graph.microsoft.com//.default openid profile offline_access"));
-            collection.Add(new("grant_type", "refresh_token"));
-            collection.Add(new("refresh_token", refreshToken));
-            var content = new FormUrlEncodedContent(collection);
-            
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                Content = content,
-            };
-            
-            var response = await _microsoftHttpClient.SendAsync(request);
-            
-            if (!response.IsSuccessStatusCode)
-            {
-                return Ok("failed");
-            }
-            
-            var microsoftAuthentication = JsonConvert.DeserializeObject<MicrosoftAuthenticationModel>(await response.Content.ReadAsStringAsync());
-
-            ZermosUser = new user
-            {
-                teams_access_token = microsoftAuthentication.access_token,
-                teams_refresh_token = microsoftAuthentication.refresh_token
-            };
-            
-            return Ok("success");
-        }
-        
         #endregion
     }
 }

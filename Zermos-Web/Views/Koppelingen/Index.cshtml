@@ -51,8 +51,6 @@
         <p>In het rooster staan alle lessen die je hebt op een dag.</p>
         <div class="spacer" style="padding: 0; margin-top: 8px"></div>
         <div class="methods">
-            @* <a asp-controller="Koppelingen" asp-action="Zermelo">Koppel Zermelo met je wachtwoord</a> @*For when the UI is done, but with koppelcode and QR it is quite unnecesairy*@  
-            <a onclick="ReplacePage('@Url.Action("ZermeloWithPassword", "Koppelingen")')">Koppel Zermelo met je inloggegevens</a>
             <a onclick="ReplacePage('@Url.Action("ZermeloWithCode", "Koppelingen")')">Koppel Zermelo met een koppelcode</a>
             <a onclick="ReplacePage('@Url.Action("ZermeloWithQr", "Koppelingen")')">Koppel Zermelo met een QR-code</a>
         </div>

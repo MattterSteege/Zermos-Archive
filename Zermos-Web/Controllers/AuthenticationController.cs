@@ -17,7 +17,7 @@ namespace Zermos_Web.Controllers;
 
 public class AuthenticationController : BaseController
 {
-    public AuthenticationController(Users user, ILogger<BaseController> logger) : base(user, logger) { }
+    public AuthenticationController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
     
 #if RELEASE
     const string redirectUrl = "https://zermos.kronk.tech/Login/Callback";

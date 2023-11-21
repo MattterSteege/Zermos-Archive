@@ -9,7 +9,7 @@ namespace Zermos_Web.Controllers
     [Route("[action]")]
     public class ErrorController : BaseController
     {
-        public ErrorController(Users user, ILogger<BaseController> logger) : base(user, logger) { }
+        public ErrorController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
 
         [ZermosPage]
         [HttpGet("/Error")]

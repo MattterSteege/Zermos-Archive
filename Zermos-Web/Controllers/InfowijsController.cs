@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Infrastructure;
@@ -19,7 +18,7 @@ namespace Zermos_Web.Controllers
 {
     public class InfowijsController : BaseController
     {
-        public InfowijsController(Users user, ILogger<BaseController> logger) : base(user, logger) { }
+        public InfowijsController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
         
         private readonly HttpClient _httpClient = new()
         {

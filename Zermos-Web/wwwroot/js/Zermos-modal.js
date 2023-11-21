@@ -29,9 +29,9 @@
         this.fields.push(["select_input", input, options]);
         return this;
     }
-    
-    addDateInput(input) {
-        this.fields.push(["date_input", input]);
+
+    addDateInput(input, defaultDate) {
+        this.fields.push(["date_input", input, defaultDate]);
         return this;
     }
 
@@ -143,7 +143,7 @@
                 else if (input[0] === "multiline_input")
                     inputField = createMultilineInput(`input${index}`, input[1]);
                 else if (input[0] === "date_input")
-                    inputField = createDateInput(`input${index}`, input[1]);
+                    inputField = createDateInput(`input${index}`, input[1], input[2]);
                 else if (input[0] === "button")
                     inputField = createButton(`input${index}`, input[1], input[2]);
                 else if (input[0] === "text")
@@ -185,11 +185,14 @@
             return input;
         }
         
-        function createDateInput(id, placeholder) {
+        function createDateInput(id, placeholder, defaultDate) {
             const input = document.createElement('input');
             input.id = id;
             input.type = "date";
             input.placeholder = placeholder;
+            if (defaultDate) {
+                input.value = defaultDate.toLocaleString('sv-SE').split(' ')[0];
+            }
             return input;
         }
         
@@ -253,21 +256,24 @@
         fade(modal, 1, this.fadeDuration);
 
         const submitButton = modal.querySelector('#submitBtn');
+        
 
-        submitButton.addEventListener('click', () => {
-            if (this.onSubmitCallback) {
-                const inputValues = this.fields.map((_, i) => {
-                    const inputElement = modal.querySelector(`#input${i}`);
-                    if ((!inputElement || !inputElement.value) && !inputElement?.children[0]?.children[0]?.value) {
-                        return null;
-                    }
-                    
-                    return inputElement.value === undefined ? Array.from(inputElement.children).map(child => child.children[0].checked) : inputElement.value;
-                });
-                this.onSubmitCallback(...inputValues.filter(value => value !== null));
-            }
-            document.body.removeChild(modal);
-        });
+        if (submitButton) {
+            submitButton.addEventListener('click', () => {
+                if (this.onSubmitCallback) {
+                    const inputValues = this.fields.map((_, i) => {
+                        const inputElement = modal.querySelector(`#input${i}`);
+                        if ((!inputElement || !inputElement.value) && !inputElement?.children[0]?.children[0]?.value) {
+                            return null;
+                        }
+
+                        return inputElement.value === undefined ? Array.from(inputElement.children).map(child => child.children[0].checked) : inputElement.value;
+                    });
+                    this.onSubmitCallback(...inputValues.filter(value => value !== null));
+                }
+                document.body.removeChild(modal);
+            });
+        }
         
         document.querySelector('#modal').addEventListener('click', (e) => {
             if (this.closingDisabled) return;

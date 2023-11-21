@@ -326,7 +326,7 @@ body {
     transition: background-color 0.3s;
 }
 
-.menu-item-Right {
+.menu-item-right {
     position: fixed;
     bottom: var(--padding);
     right: var(--padding);
@@ -343,7 +343,7 @@ body {
     color: var(--white-color);
 }
 
-.menu-item-Right .menu-icons.menu-icons-custom {
+.menu-item-right .menu-icons.menu-icons-custom {
     background: unset;
     color: var(--white-color);
     margin-right: unset;
@@ -825,7 +825,7 @@ main.main::-webkit-scrollbar-track {
         display: flex;
     }
 
-    .menu-item-Right {
+    .menu-item-right {
         display: none;
     }
 

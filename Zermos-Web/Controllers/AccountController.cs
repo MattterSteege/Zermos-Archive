@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Infrastructure;
+using Infrastructure.Entities;
 using Infrastructure.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ namespace Zermos_Web.Controllers
     [Route("account/[action]")]
     public class AccountController : BaseController
     {
-        public AccountController(Users user, ILogger<BaseController> logger) : base(user, logger) { }
+        public AccountController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
 
         [Authorize]
         [ZermosPage]

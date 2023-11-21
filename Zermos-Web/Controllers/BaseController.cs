@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -9,14 +10,17 @@ namespace Zermos_Web.Controllers
     public abstract class BaseController : Controller
     {
         private readonly Users _user;
+        private readonly Shares _share;
         private readonly ILogger<BaseController> _logger;
 
-        protected BaseController(Users user, ILogger<BaseController> logger)
+        protected BaseController(Users user, Shares share, ILogger<BaseController> logger)
         {
             _user = user;
+            _share = share;
             _logger = logger;
         }
 
+        // USER METHODS
         protected string ZermosEmail => User.FindFirstValue("email");
         
         protected user ZermosUser
@@ -25,9 +29,28 @@ namespace Zermos_Web.Controllers
             set => _user.UpdateUserAsync(ZermosEmail, value).Wait();
         }
         
+        // LOGGING METHODS
         protected void Log(LogLevel logLevel, string message)
         {
             _logger.Log(logLevel, message);
+        }
+        
+        
+        // SHARE METHODS
+        protected async Task<share> AddShare(share share)
+        {
+            await _share.AddShareAsync(share);
+            return share;
+        }
+        
+        protected async Task<share> GetShare(string key)
+        {
+            return await _share.GetShareAsync(key);
+        }
+        
+        protected async Task DeleteShare(string key)
+        {
+            await _share.DeleteShareAsync(key);
         }
     }
 }

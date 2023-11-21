@@ -26,6 +26,11 @@
         <h1>Microsoft aan/uit</h1>
         <p>Bekijk de Microsoft koppelingen preview.</p>
     </div>
+    
+    <div class="account-item" onclick="TogglePreview('zermelo_share')">
+        <h1>zermelo schedule share aan/uit</h1>
+        <p>Bekijk deze zermelo rooster deel preview.</p>
+    </div>
 </div>
 
 <script>
@@ -51,20 +56,20 @@
         }
     }
     
-    //cookie preview=microsoft,somtoday,zermelo > TogglePreview("microsoft") > preview=somtoday,zermelo
+    //cookie preview=microsoft-somtoday-zermelo > TogglePreview("microsoft") > preview=somtoday-zermelo
     function TogglePreview(preview) {
         var cookie = document.cookie;
         var previewCookie = cookie.split(";").find((c) => c.trim().startsWith("preview="));
         if (previewCookie === undefined) {
             document.cookie = "preview=" + preview;
         } else {
-            var previews = previewCookie.split("=")[1].split(",");
+            var previews = previewCookie.split("=")[1].split("-");
             if (previews.includes(preview)) {
                 previews.splice(previews.indexOf(preview), 1);
             } else {
                 previews.push(preview);
             }
-            document.cookie = "preview=" + previews.join(",");
+            document.cookie = "preview=" + previews.join("-");
         }
         location.reload();
     }

@@ -22,7 +22,7 @@ namespace Zermos_Web.Controllers
 {
     public class SchoolController : BaseController
     {
-        public SchoolController(Users user, ILogger<BaseController> logger) : base(user, logger) { }
+        public SchoolController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
         
         private readonly HttpClient _httpClient = new()
         {
