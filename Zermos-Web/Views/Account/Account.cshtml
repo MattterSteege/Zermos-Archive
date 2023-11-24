@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="/css/account.css">
 
 <div class="account-container">
-    <div class="account-item" onclick="OpenDebug()">
+    <div class="account-item" onclick="OpenDebug()" id="profile">
         <h1>Profiel</h1>
         <p>@Model.email</p>
     </div>
@@ -148,4 +148,8 @@
         //set the text of the afwezigheid item to the amount of afwezigheid items
         document.querySelector('.account-item.clickable p').innerHTML = `Je bent dit jaar <b>${data}</b> keer afwezig geweest${data === 0 ? ', ga zo door!' : '.'}`;
     });
+    
+    //get version cookie
+    var version = document.cookie.split('; ').find(row => row.startsWith('version')).split('=')[1];
+    document.querySelector('#profile h1').innerHTML = "Profiel van Zermos versie " + version;
 </script>

@@ -504,11 +504,13 @@ main.main::-webkit-scrollbar-track {
     position: fixed;
     bottom: var(--padding);
     right: var(--padding);
-    width: 250px;
+    width: auto;
     height: auto;
     padding: var(--padding);
-    background: var(--confirm-color);
+    background: var(--overlay-color);
     border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    color: var(--text-color);
     z-index: 1000;
 }
 

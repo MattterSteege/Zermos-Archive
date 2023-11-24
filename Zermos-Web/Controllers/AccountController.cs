@@ -54,5 +54,20 @@ namespace Zermos_Web.Controllers
             ZermosUser = userToUpdate;
             return Ok("200");
         }
+        
+        [HttpGet]
+        [Authorize]
+        public IActionResult GetSetting(string key)
+        {
+            //only if the property which is being updated is a marked with the 'SettingAttribute'
+            var userToUpdate = ZermosUser;
+            var property = userToUpdate.GetType().GetProperty(key);
+            if (property == null) return BadRequest("Property not found");
+            var attribute = property.GetCustomAttributes(typeof(SettingAttribute), false);
+            if (attribute.Length == 0) return BadRequest("You may not request this property");
+            attribute = property.GetCustomAttributes(typeof(RequestableAttribute), false);
+            if (attribute.Length == 0) return BadRequest("You may not request this property");
+            return Ok(property.GetValue(userToUpdate));
+        }
     }
 }

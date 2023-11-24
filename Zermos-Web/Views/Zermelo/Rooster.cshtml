@@ -188,14 +188,14 @@ function fetchWeek(week, append, isInitial = false) {
     }, 500);
 }
 
-addEventListenerToMain('main:after-load', () => {
+Zermos.mainAfterLoad = () => {
     NextWeek(true);
     PreviousWeek(true);
-});
+};
 
 
 //when i click and drag, the carousel should move. When the threshold of 30% of the width of the carousel is reached and the user let's go, the carousel should move to the next week (or previous week)
-addEventListenerToMain('main:before-load', () => {
+Zermos.mainBeforeLoad = () => {
     var touchstartX;
     var touchmoveX;
     var touchendX;
@@ -244,7 +244,7 @@ addEventListenerToMain('main:before-load', () => {
             weekCarousel.style.left = 'calc(-100% - var(--padding))'
         }
     }
-});
+};
 
 //next week button
 addButtonToPage('fa-arrow-right', () => {

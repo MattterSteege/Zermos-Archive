@@ -60,6 +60,13 @@ namespace Infrastructure.Entities
             set => SetSetting("hand_side", value);
         }
         
+        [NotMapped, Setting, Requestable] 
+        public string version_used
+        {
+            get => GetSetting("version_used");
+            set => SetSetting("version_used", value);
+        }
+        
         // Helper method to get a setting value
         private string GetSetting(string settingName)
         {

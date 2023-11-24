@@ -1,14 +1,1 @@
-﻿4.1
-
-notities
-    - Ik heb het notities systeem weer verwijderd, het kostte teveel werk en ik was er niet blij mee, balen, maar het was toch pas in de beta versie.
-    - Ook de Beta Microsoft koppeling is verwijderd, omdat het niet werkte. punt.
-    
-Zermelo - Rooster
-    - Ik heb de werking van het rooster verbeterd, het is nu sneller en beter (goh).
-    - Het rooster werkt nu op 1 pagina, je krijgt dus niet elke keer een nieuw laadscherm.
-    - De les details, werkt nu op de vertrouwde po-pup code, nice.
-        - Ook is de datum nu makkelijk verwerkt met tijden en al.
-    - Er zijn nu makkelijke knoppen om naar de volgende en vorige dag te gaan. op zowel mobiel als desktop.
-    - Screenshots sturen van je rooster om te vergelijken? Nah, stuur je rooster door via een link die je kan delen! Dat is de Zermos manier.
-    - De pagina waarop je Zermelo kan koppelen is nu opnieuw getypt, omdat Zermelo een nieuwe API heeft en je nu via de mobiele app kan koppelen.
+﻿

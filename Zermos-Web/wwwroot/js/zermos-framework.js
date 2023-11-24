@@ -1,4 +1,14 @@
-﻿//==============================VARIABLES==============================
+﻿const Zermos = {
+    CurrentVersion: "",
+    //main:load event
+    //main:before-load event
+    //main:before-unload event
+    mainBeforeLoad: function (callback) {},
+    mainAfterLoad: function (callback) {},
+    mainUnload: function (callback) {},
+};
+
+//==============================VARIABLES==============================
 var loadingTexts = [
     "Tijd en Ruimte omwisselen",
     "heftig rond draaien",
@@ -289,6 +299,10 @@ function removeEventListenerFromMain(type, listener) {
     main.removeEventListener(type, listener);
 }
 
+window.addEventListener("main:before-unload", () =>  Zermos.mainBeforeLoad());
+window.addEventListener("main:load", () => Zermos.mainOnLoad());
+window.addEventListener("main:before-unload", () => Zermos.mainBeforeUnload());
+
 //==============================SHARING SYSTEM==============================
 async function ZermosShareImage(title, text, blob) {
     const data = {
@@ -310,3 +324,46 @@ async function ZermosShareImage(title, text, blob) {
         return {name: err.name, message: err.message};
     }
 }
+
+//==============================UPDATE SYSTEM==============================
+window.addEventListener("main:before-load", () => {
+    //if the user version is not the same as the current version, show a message
+
+    fetch("/Account/GetSetting?key=version_used", {
+        method: 'GET'
+    })
+    //returns a string like 0.4.1.
+    .then(response => response.text())
+    .then((response) => {
+        if (response !== Zermos.CurrentVersion) {
+            //show modal
+            new ZermosModal()
+                .setTitle("Zermos is geupdate!")
+                .addText("Zermos is weer een versietje ouder 🥳. Er zijn natuurlijk weer nieuwe functies toegevoegd en bugs gefixt. Veel plezier met de nieuwe versie!")
+                .addText("Je gebruikt nu versie " + Zermos.CurrentVersion + ", de vorige keer dat je Zermos bezocht was dat versie " + response)
+                .setSubmitButtonLabel("Let's go, ik ben er klaar voor!")
+                .onSubmit(function() {
+                    var url = "/Account/UpdateSetting?key=version_used&value=" + Zermos.CurrentVersion;
+                    fetch(url, {
+                        method: 'POST'
+                    });
+                })
+                .open();
+        }
+        else if (response === ""){
+            var url = "/Account/UpdateSetting?key=version_used&value=" + Zermos.CurrentVersion;
+            fetch(url, {
+                method: 'POST'
+            });
+        }
+    });
+});
+
+//==============================MODAL SYSTEM==============================
+window.addEventListener('main:before-unload', (e) => {
+    //remove any existing modal
+    const existingModal = document.querySelector('#modal');
+    if (existingModal) {
+        document.body.removeChild(existingModal);
+    }
+});

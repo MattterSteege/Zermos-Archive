@@ -20,7 +20,7 @@
     <script src="/js/Zermos-modal.js?v=@version"></script>
     <link rel="stylesheet" href="/css/modal.css?v=@version">
 </head>
-<body onload="ReplacePage('@ViewData["url"]'); checkVersion();">
+<body>
 <div class="sidebar">
     <div class="top">
         <!--        6 SVG's with the letters Z,E,R,M,O & S width should be 1/6 of 100%-->
@@ -174,11 +174,19 @@
     @RenderBody()
 </main>
 
-<script id="vital-script" defer>
+<script id="vital-script" defer="defer">
 let main = document.getElementById("main");
 const content = document.getElementById("content");
 let isRunning = false;
 let timerStart;
+
+window.onload = () => {
+    Zermos.CurrentVersion = "@Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION")";
+    console.log(`Zermos-web versie: ${Zermos.CurrentVersion}`);
+    console.log(`Zermos-framework is geladen`);
+    history.replaceState(null, null, "/");
+    ReplacePage('@ViewData["url"]');
+}
 
 function ReplacePage(url) {
     if (isRunning) {
@@ -187,21 +195,14 @@ function ReplacePage(url) {
     
     //start timer
     timerStart = performance.now();   
-    
-
-    // //if body has onload function, remove it
-    // if (document.body.getAttribute('onload')) {
-    //     document.body.removeAttribute('onload');
-    //     //set url to the base url
-    //     history.replaceState(null, null, "/");
-    // }
 
     //check if the url is the same as the current url
     if (url === window.location.pathname) {
         return;
     }
 
-    main.dispatchEvent(new Event("main:unload"));
+    window.dispatchEvent(new Event("main:unload"));
+    Zermos.mainUnload();
 
     // Define a function to append a script to either the head or body
     function appendScript(element, scriptToWorkWith, isSrc) {
@@ -259,12 +260,6 @@ function ReplacePage(url) {
             }
 
             setTimeout(async function() {
-                //remove any existing modal
-                const existingModal = document.querySelector('#modal');
-                if (existingModal) {
-                    document.body.removeChild(existingModal);
-                    checkVersion();
-                }
 
                 let i;
                 //remove all items with id added-by-fetch
@@ -321,14 +316,16 @@ function ReplacePage(url) {
 
                 window.location.hash = url;
 
-                main.dispatchEvent(new Event("main:before-load"));
+                window.dispatchEvent(new Event("main:before-load"));
+                Zermos.mainBeforeLoad();
 
                 content.style.opacity = "0";
                 isRunning = false;
                 
                 setTimeout(function() {
                     //log the time it took to load the page
-                    main.dispatchEvent(new Event("main:after-load"));
+                    window.dispatchEvent(new Event("main:after-load"));
+                    Zermos.mainAfterLoad();
                     const timerEnd = performance.now();
                     console.log(`Page load took ${timerEnd - timerStart}ms`);
                     return true;
@@ -373,34 +370,6 @@ window.onpopstate = function() {
     //if the hash is empty, don't replace the page
     if (window.location.hash === "") return;
     ReplacePage(window.location.hash.replace("#", ""));
-}
-
-@{
-    var currentVersion = Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION");
-    var userVersion = Context.Request.Cookies["version"] ?? "0.0.0";
-    
-    Context.Response.Cookies.Append("version", currentVersion ?? "-1", new CookieOptions
-    {
-        Expires = DateTime.Now.AddYears(1),
-        SameSite = SameSiteMode.Strict,
-        Secure = true
-    });
-}
-
-var checkVersionInt = 0;
-function checkVersion() {
-    if ("@currentVersion" !== "@userVersion" && checkVersionInt <= 1) {
-        //if the user version is not the same as the current version, show a message
-
-        new ZermosModal()
-        .setTitle("Zermos is geupdate!")
-        .addText("Zermos is weer een versietje ouder 🥳. Er zijn natuurlijk weer nieuwe functies toegevoegd en bugs gefixt. Veel plezier met de nieuwe versie!")
-        .addText("Je gebruikt nu versie @currentVersion, de vorige keer dat je Zermos bezocht was dat versie @userVersion.")
-        .setSubmitButtonLabel("Let's go, ik ben er klaar voor!")
-        .open();
-        
-        checkVersionInt++;
-    }
 }
 </script>
 </body>
