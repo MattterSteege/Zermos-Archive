@@ -83,5 +83,15 @@ namespace Zermos_Web.Utilities
             string json = System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(base64));
             return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
         }
+        
+        public static string IntToBase64String(this int i)
+        {
+            return System.Convert.ToBase64String(System.BitConverter.GetBytes(i));
+        }
+        
+        public static string StringToBase64String(this string str)
+        {
+            return System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(str));
+        }
     }
 }

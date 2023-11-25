@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
@@ -46,6 +47,11 @@ namespace Zermos_Web.Controllers
         protected async Task<share> GetShare(string key)
         {
             return await _share.GetShareAsync(key);
+        }
+        
+        protected async Task<List<share>> GetShares()
+        {
+            return await _share.GetSharesAsync(ZermosEmail);
         }
         
         protected async Task DeleteShare(string key)

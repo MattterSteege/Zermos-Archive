@@ -1,1 +1,12 @@
-﻿
+﻿0.4.2 - Zermelo strikes back
+
+- Zermelo - Rooster
+    - kleine visuele aanpassingen
+    
+- Account
+    - Al je gedeelde links naar data zijn nu te zien op je account pagina.
+    - Afwezigheid is in een popup te zien, geen nieuwe pagina die ingeladen hoeft te worden dus!
+    
+- Somtoday
+    - Er zijn nu geen cijfers meer met een +NaN% erachter, maar gewoon een 100%. Dit had te maken met de weging van het eerste cijfer van dat vak (dat was een 0).
+    - Statestieken zijn een beetje gerefresh, minder bugs, meer betrouwbaarheid.

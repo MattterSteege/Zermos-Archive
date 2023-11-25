@@ -203,6 +203,7 @@ function ReplacePage(url) {
 
     window.dispatchEvent(new Event("main:unload"));
     Zermos.mainUnload();
+    Zermos.mainUnload = () => {};
 
     // Define a function to append a script to either the head or body
     function appendScript(element, scriptToWorkWith, isSrc) {
@@ -318,6 +319,7 @@ function ReplacePage(url) {
 
                 window.dispatchEvent(new Event("main:before-load"));
                 Zermos.mainBeforeLoad();
+                Zermos.mainBeforeLoad = () => {};
 
                 content.style.opacity = "0";
                 isRunning = false;
@@ -326,6 +328,7 @@ function ReplacePage(url) {
                     //log the time it took to load the page
                     window.dispatchEvent(new Event("main:after-load"));
                     Zermos.mainAfterLoad();
+                    Zermos.mainAfterLoad = () => {};
                     const timerEnd = performance.now();
                     console.log(`Page load took ${timerEnd - timerStart}ms`);
                     return true;

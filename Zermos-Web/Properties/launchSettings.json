@@ -28,8 +28,7 @@
         "DB_NAME": "REDACTED_DATABASE_NAME",
         "DB_PORT": "3306",
         "DB_HOST": "REDACTED_IP_ADRESS",
-        "DB_USER": "root",
-        "ZERMOS-WEB-VERSION": "DEV"
+        "DB_USER": "root"
       },
       "preserveCompilationContext": true,
       "applicationUrl": "https://localhost:5001;http://localhost:5000;https://192.168.178.34:5001;http://192.168.178.34:5000"

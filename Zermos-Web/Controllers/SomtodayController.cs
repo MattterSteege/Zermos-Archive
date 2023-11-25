@@ -40,6 +40,7 @@ namespace Zermos_Web.Controllers
         public async Task<IActionResult> Cijfers()
         {
             ViewData["add_css"] = "somtoday";
+            Response.Cookies.Append("last-seen-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddYears(1)});
             
             if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
             {
@@ -152,40 +153,6 @@ namespace Zermos_Web.Controllers
         }
 
         [ZermosPage]
-        [HttpGet("Somtoday/Cijfers/{vak}/{id}")]
-        public async Task<IActionResult> CijferData(string id)
-        {
-            SomtodayGradesModel grades;
-            
-            if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
-            {
-                grades = JsonConvert.DeserializeObject<SomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? string.Empty);
-            }
-            else
-            {
-                var user = ZermosUser;
-
-                var access_token = user.somtoday_access_token;
-            
-                if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
-                {
-                    access_token = RefreshToken(user.somtoday_refresh_token);
-                }
-
-                grades = await fetchGrades(access_token, user.somtoday_student_id);
-            
-                ZermosUser = new user
-                {
-                    cached_somtoday_grades = JsonConvert.SerializeObject(grades)
-                };
-            
-                Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
-            }
-
-            return PartialView(grades.items.Find(x => x.links[0].id == id));
-        }
-
-        [ZermosPage]
         [HttpGet("Somtoday/Cijfers/{vak}/Statestieken")]
         public async Task<IActionResult> CijferStatestieken(string vak, bool asPFD = false)
         {
@@ -236,16 +203,20 @@ namespace Zermos_Web.Controllers
             (ViewData["stats"] as Dictionary<string, string>)?.Add("vak", grades.vak.naam);
             (ViewData["stats"] as Dictionary<string, string>)?.Add("hoogste", grades.grades.Max(x => x.geldendResultaat).ToString());
             (ViewData["stats"] as Dictionary<string, string>)?.Add("laagste", grades.grades.Min(x => x.geldendResultaat).ToString());
-            (ViewData["stats"] as Dictionary<string, string>)?.Add("weging", grades.grades.Sum(x => x.weging == 0 ? x.examenWeging : x.weging).ToString()); 
-            // (ViewData["stats"] as Dictionary<string, string>)?.Add("som", the grades resultaat times it weight);
-            (ViewData["stats"] as Dictionary<string, string>)?.Add("som", grades.grades.Sum(x => NumberUtils.ParseFloat(x.geldendResultaat) * x.weging == 0 ? x.examenWeging : x.weging).ToString("0.0000000000", System.Globalization.CultureInfo.InvariantCulture));
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("weging", grades.grades.Sum(x => x.weging == 0 ? x.examenWeging : x.weging).ToString());
 
+            var som = 0f;
+            foreach (Item grade in grades.grades)
+            {
+                som += NumberUtils.ParseFloat(grade.geldendResultaat) * (grade.weging == 0 ? grade.examenWeging : grade.weging);
+            }
+
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("som", som.ToString("0.0000000000", CultureInfo.InvariantCulture));
+            
             var charts = new List<Chart>();
             charts.Add(GenerateGradeOverTimeAndGradeAverage(grades));
             charts.Add(GetVoldoendeOndervoldoendeRatio(grades));
             charts.Add(GetMostCommonGrade(grades));
-            //charts.Add(GetStandardDeviationChart(grades));
-
 
             return PartialView(charts);
         }
@@ -344,42 +315,47 @@ namespace Zermos_Web.Controllers
 
         private Chart GetVoldoendeOndervoldoendeRatio(sortedGrades grades)
         {
-            var chart = CreateChart("Voldoende/Ondervoldoende Ratio", false);
-            chart.Type = Enums.ChartType.Pie;
-
+            var chart = CreateChart("Voldoende/Ondervoldoende Ratio");
+            chart.Type = Enums.ChartType.Bar;
+            
             var data = new Data();
-            data.Labels = new List<string> {"Voldoende", "Onvoldoende"};
-
-            var dataset = new PieDataset
+            data.Labels = new List<string>();
+            
+            var dataset = new BarDataset
             {
-                BackgroundColor = new List<ChartColor>
-                    {ChartColor.FromHexString("#00ff00"), ChartColor.FromHexString("#ff0000")},
-                HoverBackgroundColor = new List<ChartColor>
-                    {ChartColor.FromHexString("#00ff00"), ChartColor.FromHexString("#ff0000")},
-                Data = new List<double?>()
+                Data = new List<double?>(),
+                BackgroundColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
+                BorderColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
+                BorderWidth = new List<int> {1},
+                BarPercentage = 0.5,
+                BarThickness = 6,
+                MaxBarThickness = 8,
+                MinBarLength = 2
             };
-
-            var voldoende = 0;
-            var onvoldoende = 0;
-
-            foreach (var grade in grades.grades)
-                if (NumberUtils.ParseFloat(grade.geldendResultaat) >= 5.5)
-                    voldoende++;
-                else
-                    onvoldoende++;
-
-            dataset.Data.Add(voldoende);
-            dataset.Data.Add(onvoldoende);
-
+            
             data.Datasets = new List<Dataset> {dataset};
             chart.Data = data;
-
+            
+            var doubleList = new List<double?> {0, 0};
+            var stringList = new List<string> {"Voldoende", "Ondervoldoende"};
+            
+            foreach (var grade in grades.grades)
+            {
+                if (NumberUtils.ParseFloat(grade.geldendResultaat) >= 5.5)
+                    doubleList[0]++;
+                else
+                    doubleList[1]++;
+            }
+            
+            dataset.Data = doubleList;
+            data.Labels = stringList;
+            
             return chart;
         }
 
         private Chart GenerateGradeOverTimeAndGradeAverage(sortedGrades grades)
         {
-            var chart = CreateChart("Cijfer en gemiddelde over tijd");
+            var chart = CreateChart("Standaard deviatie");
             chart.Type = Enums.ChartType.Line;
             chart.Options.Scales["y"] = new Scale {Min = 0, Max = 10};
 
@@ -424,11 +400,11 @@ namespace Zermos_Web.Controllers
                 gradesArray[grades.grades.IndexOf(grade)] = NumberUtils.ParseFloat(grade.geldendResultaat);
                 gradesWeight[grades.grades.IndexOf(grade)] = grade.weging == 0 ? grade.examenWeging : grade.weging;
             }
-
+            
             chart.Data.Datasets.Add(new LineDataset
             {
                 Fill = "false",
-                Data = NumberUtils.CalculateWeightedAverageSnapshots(gradesArray, gradesWeight),
+                Data = NumberUtils.CalculateStandardDeviationSnapshots(gradesArray, gradesWeight),
                 Tension = 0.2,
                 BackgroundColor = new List<ChartColor> {ChartColor.FromHexString("#F2542D")},
                 BorderColor = new List<ChartColor> {ChartColor.FromHexString("#F2542D")},
@@ -447,17 +423,13 @@ namespace Zermos_Web.Controllers
                 PointHitRadius = new List<int> {10},
                 SpanGaps = false
             });
+            
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("gemiddelde", chart.Data.Datasets[1].Data[^1]?.ToString("0.0000000000", CultureInfo.InvariantCulture));
 
-            (ViewData["stats"] as Dictionary<string, string>)?.Add("gemiddelde", chart.Data.Datasets[1].Data[^1]?.ToString("0.0000000000", System.Globalization.CultureInfo.InvariantCulture));
-
+            
             return chart;
         }
-
-        private Chart GetStandardDeviationChart(sortedGrades grades)
-        {
-            return null;
-        }
-
+        
         public SomtodayGradesModel Sort(SomtodayGradesModel grades)
         {
             if (grades == null) return new SomtodayGradesModel() {items = new List<Item>()};
@@ -789,64 +761,6 @@ namespace Zermos_Web.Controllers
             
             return PartialView(somtodayAfwezigheid);
         }
-        
-        [Authorize]
-        [SomtodayRequirement]
-        [HttpGet("/Somtoday/Afwezigheid/Count")]
-        public async Task<IActionResult> AfwezigheidCount()
-        {
-            //if Response.Cookies.Append("cached-somtoday-absence", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddHours(12)}); exists
-            if (Request.Cookies.ContainsKey("cached-somtoday-absence"))
-            {
-                var cache = ZermosUser.cached_somtoday_absence;
-                var absence = JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(cache);
-                return Ok(absence.items.Count);
-            }
-            
-            SchooljaarUtils.Schooljaar currentSchoolyear = SchooljaarUtils.getCurrentSchooljaar();
-            
-            var user = ZermosUser;
-            
-            var access_token = user.somtoday_access_token;
-            
-            if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
-            {
-                access_token = RefreshToken(user.somtoday_refresh_token);
-            }
-            
-            var baseurl = $"https://api.somtoday.nl/rest/v1/absentiemeldingen?begindatumtijd={currentSchoolyear.vanafDatumDate:yyyy-MM-dd}&einddatumtijd={currentSchoolyear.totDatumDate:yyyy-MM-dd}";
-            
-            _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + access_token);
-            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-            
-            var response = await _httpClient.GetAsync(baseurl);
-            
-            if (response.IsSuccessStatusCode == false)
-            {
-                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je Afwezigheid op Somtoday kon niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", NotificationCenter.NotificationType.ERROR);
-                return Ok(0);
-            }
-            
-            var somtodayAfwezigheid =
-                JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(
-                    await response.Content.ReadAsStringAsync());
-            
-            if (currentSchoolyear.vanafDatumDate < DateTime.Now && DateTime.Now < currentSchoolyear.totDatumDate)
-            {
-                ZermosUser = new user
-                {
-                    cached_somtoday_absence = JsonConvert.SerializeObject(somtodayAfwezigheid)
-                };
-                
-                Response.Cookies.Append("cached-somtoday-absence", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddHours(12)});
-
-            }
-            
-            return Ok(somtodayAfwezigheid.items.Count);
-        }   
-        
-        
         #endregion
     }
 }

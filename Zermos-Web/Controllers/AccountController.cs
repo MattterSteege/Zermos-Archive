@@ -18,9 +18,15 @@ namespace Zermos_Web.Controllers
         [Authorize]
         [ZermosPage]
         [Route("/Account")]
-        public IActionResult Account()
+        public async Task<IActionResult> Account()
         {
-            return PartialView(ZermosUser);
+            dynamic model = new
+            {
+                user = ZermosUser,
+                shares = await GetShares()
+            };
+            
+            return PartialView(model);
         }
         
         

@@ -132,12 +132,13 @@ function doScrolling(element, duration) {
 }
 
 //==============================BUTTON SYSTEM==============================
-function createButtonForSidebar(icon, onclick) {
+function createButtonForSidebar(icon, onclick, background) {
     const mainButton = document.createElement("li");
     mainButton.classList.add("menu-item");
     mainButton.classList.add("menu-item-custom");
     mainButton.id = "added-by-fetch";
     mainButton.addEventListener("click", onclick);
+
 
     const buttonIcon = document.createElement("div");
     buttonIcon.classList.add("fa-solid");
@@ -145,7 +146,13 @@ function createButtonForSidebar(icon, onclick) {
     buttonIcon.classList.add("menu-icons");
     buttonIcon.classList.add("menu-icons-custom");
     buttonIcon.classList.add("fa-fw");
+    buttonIcon.style.background = `var(--${background === Background.Primary ? 'inactive-color' : background})`;
     mainButton.appendChild(buttonIcon);
+    
+    if (background === Background.Accent)
+        buttonIcon.style.color = "var(--white-color)";
+    else
+        buttonIcon.style.color = "var(--text-color)";
 
     return mainButton;
 }
@@ -232,7 +239,10 @@ function addButtonToPage(icon, onclick, verticalAlignment = VerticalAlignment.BT
         buttonCountVerticalBottomRight = 0;
         bottomRightCornerOccupied = false;
     }
-    document.querySelector(".bottom ul").appendChild(createButtonForSidebar(icon, onclick));
+    if (verticalAlignment === VerticalAlignment.BL || verticalAlignment === VerticalAlignment.BT)
+        document.querySelector(".bottom ul").appendChild(createButtonForSidebar(icon, onclick, background));
+    else
+        document.querySelector(".bottom ul .spacer").after(createButtonForSidebar(icon, onclick, background));
     document.querySelector(".bottom ul").appendChild(createButtonForBottomRight(icon, onclick, verticalAlignment, background));
 }
 

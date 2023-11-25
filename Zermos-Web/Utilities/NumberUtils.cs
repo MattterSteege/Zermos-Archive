@@ -49,6 +49,10 @@ namespace Zermos_Web.Utilities
 
             for (var i = 0; i < grades.Length; i++)
             {
+                if (weights[i] == 0)
+                    continue;
+                
+                
                 sum += grades[i] * weights[i];
                 weightSum += weights[i];
 

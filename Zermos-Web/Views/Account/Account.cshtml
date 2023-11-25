@@ -1,10 +1,14 @@
 ﻿@using Zermos_Web.Utilities
 @using Newtonsoft.Json
 @using Zermos_Web.Models.SomtodayAfwezigheidModel
-@model Infrastructure.Entities.user
+@using Infrastructure.Entities
+@using Item = Zermos_Web.Models.SomtodayAfwezigheidModel.Item
+@model dynamic
 
 @{
     ViewBag.Title = "title";
+
+    SomtodayAfwezigheidModel somtodayAfwezigheid = JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(Model.user.cached_somtoday_absence ?? string.Empty);
 }
 
 <link rel="stylesheet" href="/css/account.css">
@@ -12,16 +16,20 @@
 <div class="account-container">
     <div class="account-item" onclick="OpenDebug()" id="profile">
         <h1>Profiel</h1>
-        <p>@Model.email</p>
+        <p>@Model.user.email</p>
     </div>
     
-    <div onclick="ReplacePage('@Url.Action("Afwezigheid", "Somtoday")')" class="account-item clickable">
+    <div onclick="ShowAbscence()" class="account-item clickable">
         <h1>Afwezigheid</h1>
-        @{
-            int afwezigheidCount = JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(Model.cached_somtoday_absence.IsNullOrEmpty() ? "{\"items\":[]}" : Model.cached_somtoday_absence).items.Count;
+        <p>Je bent dit jaar <b>@(somtodayAfwezigheid.items.Count)</b> keer afwezig geweest. @(somtodayAfwezigheid.items.Count == 0 ? "Ga zo door!" : "")</p>
+    </div>
+    
+    <div onclick="ReplacePage('@Url.Action("Account", "Account")')" class="account-item clickable">
+        <h1>Gedeelde links</h1>
+        @foreach(share share in Model.shares)
+        {
+            <p><b>@share.page</b> - geldig tot: @share.expires_at.ToString("d/M/yyyy") - <a href="@share.url">Bekijk hier</a></p>
         }
-        
-        <p>Je bent dit jaar <b>[]</b> keer afwezig geweest.</p>
     </div>
     
     <div onclick="ReplacePage('@Url.Action("Settings", "Account")')" class="account-item clickable">
@@ -40,10 +48,10 @@
         <div class="account-info-grid hidden">
             @{
                 //Loop trough all the properties of the user object and display them like this: [name]: [value (capt at 25 characters)]
-                foreach (var property in Model.GetType().GetProperties())
+                foreach (var property in ((user) Model.user).GetType().GetProperties())
                 {
                     //if property is not { get; set; } then skip it
-                    if (property.GetMethod == null || property.SetMethod == null || property.GetValue(Model, null) == null || property.Name == "settings")
+                    if (property.GetMethod == null || property.SetMethod == null || property.GetValue((user) Model.user, null) == null || property.Name == "settings")
                     {
                         continue;
                     }
@@ -58,9 +66,9 @@
         <h1 onclick="ReplacePage('@Url.Action("Index", "Koppelingen")')" style="text-decoration: underline; cursor: pointer;">Koppelingen</h1>
         <div class="account-info-grid">
             <div class="infowijs">
-                @if (TokenUtils.CheckToken(Model.infowijs_access_token))
+                @if (TokenUtils.CheckToken(((user) Model.user).infowijs_access_token))
                 {
-                    <p><b>Infowijs</b>, geldig tot: @(TokenUtils.GetTokenExpiration(Model.infowijs_access_token).ToString("d/M/yyyy"))</p>
+                    <p><b>Infowijs</b>, geldig tot: @(TokenUtils.GetTokenExpiration(((user) Model.user).infowijs_access_token).ToString("d/M/yyyy"))</p>
                     <button id="infowijs-first" onclick="AreYouSure('infowijs')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
 
                     <form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="infowijs">
@@ -74,9 +82,9 @@
                 }
             </div>
             <div class="zermelo">
-                @if (Model.zermelo_access_token_expires_at > DateTime.Now)
+                @if (((user) Model.user).zermelo_access_token_expires_at > DateTime.Now)
                 {
-                    <p><b>Zermelo</b>, geldig tot: @(Model.zermelo_access_token_expires_at?.ToString("d/M/yyyy"))</p>
+                    <p><b>Zermelo</b>, geldig tot: @(((user) Model.user).zermelo_access_token_expires_at?.ToString("d/M/yyyy"))</p>
                     <button id="zermelo-first" onclick="AreYouSure('zermelo')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
 
                     <form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="zermelo">
@@ -91,9 +99,9 @@
             </div>
 
             <div class="somtoday">
-                @if (TokenUtils.CheckToken(Model.somtoday_refresh_token))
+                @if (TokenUtils.CheckToken(((user) Model.user).somtoday_refresh_token))
                 {
-                    <p><b>Somtoday</b>, geldig tot: @(TokenUtils.GetTokenExpiration(Model.somtoday_refresh_token).ToString("d/M/yyyy"))</p>
+                    <p><b>Somtoday</b>, geldig tot: @(TokenUtils.GetTokenExpiration(((user) Model.user).somtoday_refresh_token).ToString("d/M/yyyy"))</p>
                     <button id="somtoday-first" onclick="AreYouSure('somtoday')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
 
                     <form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="somtoday">
@@ -135,21 +143,32 @@
         });
     }
     
-     main.addEventListener('main:before-load', () => {   
+     Zermos.mainBeforeLoad = () => {   
         //when clicking on #info, toggle the hidden class on the opgeslagen-informatie-grid
         document.getElementById('info').addEventListener('click', function() {
             document.querySelector('.account-info-grid').classList.toggle('hidden');
             document.getElementById('openCloseArrow').style.transform = document.getElementById('openCloseArrow').style.transform === 'rotate(180deg)' ? 'rotate(0deg)' : 'rotate(180deg)';
         });
-    });
+    };
     
-    //fetch /Somtoday/Afwezigheid/Count
-    fetch('/Somtoday/Afwezigheid/Count').then(res => res.json()).then(data => {        
-        //set the text of the afwezigheid item to the amount of afwezigheid items
-        document.querySelector('.account-item.clickable p').innerHTML = `Je bent dit jaar <b>${data}</b> keer afwezig geweest${data === 0 ? ', ga zo door!' : '.'}`;
-    });
+    //fetch /Refresh the absence data
+    fetch('/Somtoday/Afwezigheid?no-framework');
     
-    //get version cookie
-    var version = document.cookie.split('; ').find(row => row.startsWith('version')).split('=')[1];
-    document.querySelector('#profile h1').innerHTML = "Profiel van Zermos versie " + version;
+    function ShowAbscence() {
+        var abscenceModal = new ZermosModal()
+        @{
+            foreach (Item item in somtodayAfwezigheid.items)
+            {
+<text>
+        .addText('<div><b>@item.absentieReden.omschrijving @(item.opmerkingen.Length == 0 ? "" : " - " + item.opmerkingen)</b></div>')
+        .addText('<div>@(item.beginDatumTijd.Hour == 0 || item.eindDatumTijd.Hour == 0 || item.beginDatumTijd.Day != item.eindDatumTijd.Day ? item.beginDatumTijd.ToString("dddd d MMMM") + " - " + item.eindDatumTijd.ToString("dddd d MMMM") : item.beginDatumTijd.Hour == 0 && item.eindDatumTijd.Hour == 23 ? item.beginDatumTijd.ToString("dddd d MMMM") : item.beginDatumTijd.ToString("dddd d MMMM HH:mm") + " - " + item.eindDatumTijd.ToString("HH:mm"))</div>')
+</text>
+            }
+        }
+        
+        .setTitle('Afwezigheid')
+        .setSubmitButtonLabel('Sluiten')
+        .open();
+        
+    }
 </script>

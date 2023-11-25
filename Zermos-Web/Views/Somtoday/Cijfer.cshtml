@@ -1,6 +1,7 @@
 ﻿@using System.Globalization
 @using System.Text
 @using Newtonsoft.Json
+@using Zermos_Web.Models.somtodayHomeworkModel
 @using Zermos_Web.Utilities
 @model Zermos_Web.Models.SomtodayGradesModel.sortedGrades
 
@@ -14,7 +15,7 @@
 
     <div class="vak" style="height: auto">
         <a onclick="ReplacePage('@Url.Action("CijferStatestieken", "Somtoday", new {vak = Model.vak.afkorting.Capitalize()})')" style="display: flex; align-content: center; justify-content: center; flex-wrap: wrap;">
-            <div class="top-30 fade-out" style="justify-content: center; align-items: center;">
+            <div class="top-30 fade-out" style="justify-content: center; align-items: center; margin-bottom: 0">
                 <p>Cijfer statestieken</p>
             </div>
             <div class="background">
@@ -23,24 +24,43 @@
         </a>
     </div>
 
-    @{
-        @foreach (var vak in Model.grades)
-        {
-            float geldendResultaat;
-            NumberUtils.TryParseFloat(vak.geldendResultaat, out geldendResultaat);
+    @foreach (var vak in Model.grades)
+    {
+        float geldendResultaat;
+        NumberUtils.TryParseFloat(vak.geldendResultaat, out geldendResultaat);
 
-            <div class="vak">
-                <a onclick="ReplacePage('@Url.Action("CijferData", "Somtoday", new {vak = vak.vak.afkorting.Capitalize(), id = vak.links[0].id})')">
-                    <div class="top-30">
-                        <p>@vak.vak.naam</p>
-                        <p>@(vak.weging == 0 ? vak.examenWeging : vak.weging)x</p>
-                        <p class="@(geldendResultaat >= 5.5f ? "sufficient" : "insufficient ")">@(vak.resultaatLabelAfkorting == "V" ? "V" : geldendResultaat.ToString("0.0", CultureInfo.InvariantCulture))</p>
-                    </div>
-                    <div class="bottom-70">
-                        <p>@vak.omschrijving</p>
-                    </div>
-                </a>
-            </div>
-        }
+        <div class="vak">
+            <a onclick="@(vak.links[0].id.StringToBase64String().Replace("=", ""))()">
+                <div class="top-30">
+                    <p>@vak.vak.naam</p>
+                    <p>@(vak.weging == 0 ? vak.examenWeging : vak.weging)x</p>
+                    <p class="@(geldendResultaat >= 5.5f ? "sufficient" : "insufficient ")">@(vak.resultaatLabelAfkorting == "V" ? "V" : geldendResultaat.ToString("0.0", CultureInfo.InvariantCulture))</p>
+                </div>
+                <div class="bottom-70">
+                    <p>@vak.omschrijving</p>
+                </div>
+            </a>
+        </div>
     }
 </div>
+            
+<script>
+@foreach(var vak in Model.grades)
+{
+    string function = $"function {vak.links[0].id.StringToBase64String().Replace("=", "")}() {{\n" +
+                      $"    new ZermosModal()\n" +
+                      $"    .setTitle('{vak.vak.naam}')\n" +
+                      $"    .addText('Omschrijving: {vak.omschrijving}')\n" +
+                      $"    .addText('Weging: {(vak.weging == 0 ? vak.examenWeging : vak.weging)}x')\n" +
+                      $"    .addText('Geldend resultaat: {vak.geldendResultaat}')\n" +
+                      $"    .addText('Invoerdatum: {vak.datumInvoer.ToString("dd MMMM yyyy HH:mm:ss")}')\n" +
+                      $"    .setSubmitButtonLabel('Sluiten')\n" +
+                      $"    .open();\n" +
+                      $"}}";
+        
+    <text>
+@Html.Raw(function)
+    </text>
+    
+}
+</script>

@@ -25,15 +25,15 @@
     
     <div class="stats">
         <h1>Wat moet ik halen?</h1>
-        <input type="text" id="grade_wmih" placeholder="Wat moet ik halen?" />
-        <input type="text" id="weight_wmih" placeholder="Hoe vaak telt de toets mee?" />
+        <input type="number" id="grade_wmih" placeholder="Welk cijfer wil je staan?" min="0" value="5.5" step="0.1">
+        <input type="number" id="weight_wmih" placeholder="Hoe vaak telt de toets mee?" min="0" step="1">
         <h1 style="display: none; text-align: center; margin: auto;" id="result_wmih"></h1>
     </div>
     
     <div class="stats">
         <h1>Wat ga ik staan?</h1>
-        <input type="text" id="grade_wgis" placeholder="Wat ga ik halen?" />
-        <input type="text" id="weight_wgis" placeholder="Hoe vaak telt de toets mee?" />
+        <input type="number" id="grade_wgis" placeholder="Welk cijfer ga je halen?" min="0" value="5.5" step="0.1">
+        <input type="number" id="weight_wgis" placeholder="Hoe vaak telt de toets mee?" min="0" step="1">
         <h1 style="display: none; text-align: center; margin: auto;" id="result_wgis"></h1>
     </div>
 </div>
@@ -42,10 +42,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 
-    document.getElementById("main").addEventListener("main:before-load", function () {
-        //wait 100ms and then load the charts
-        setTimeout(load, 100);
-    });
+    Zermos.mainBeforeLoad = () => load();
 
     @Html.Raw($"function load() {{{string.Join("", Model.Select((m, i) => m.CreateChartCode(letters[i].ToString())))}}}");
     
@@ -61,7 +58,10 @@
     weight_wmih.addEventListener("change", function () { wmih(); });
     
     //calculation function
-    function wmih() {
+    function wmih() {       
+        
+        console.log(grade_wmih.value, weight_wmih.value);
+        
         const totaleWeging = @((ViewData["stats"] as Dictionary<string, string>)?["weging"]) + parseInt(weight_wmih.value);
         const alBehaaldePunten = @((ViewData["stats"] as Dictionary<string, string>)?["som"]);
         const nogTeBehalen = parseFloat(grade_wmih.value) * totaleWeging - alBehaaldePunten;

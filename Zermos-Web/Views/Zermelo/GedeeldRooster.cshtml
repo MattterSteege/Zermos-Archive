@@ -35,11 +35,11 @@
             <div class="days-container">
                 <ul>
                     <li>@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()</li>
-                    <li>Ma<div class="date"> - @Model.response.data[0].MondayOfAppointmentsWeek.ToString("dd MMM")</div></li>
-                    <li>Di<div class="date"> - @Model.response.data[0].MondayOfAppointmentsWeek.AddDays(1).ToString("dd MMM")</div></li>
-                    <li>Wo<div class="date"> - @Model.response.data[0].MondayOfAppointmentsWeek.AddDays(2).ToString("dd MMM")</div></li>
-                    <li>Do<div class="date"> - @Model.response.data[0].MondayOfAppointmentsWeek.AddDays(3).ToString("dd MMM")</div></li>
-                    <li>Vr<div class="date"> - @Model.response.data[0].MondayOfAppointmentsWeek.AddDays(4).ToString("dd MMM")</div></li>
+                    <li>Ma<div class="date">@Model.response.data[0].MondayOfAppointmentsWeek.ToString("dd MMM")</div></li>
+                    <li>Di<div class="date">@Model.response.data[0].MondayOfAppointmentsWeek.AddDays(1).ToString("dd MMM")</div></li>
+                    <li>Wo<div class="date">@Model.response.data[0].MondayOfAppointmentsWeek.AddDays(2).ToString("dd MMM")</div></li>
+                    <li>Do<div class="date">@Model.response.data[0].MondayOfAppointmentsWeek.AddDays(3).ToString("dd MMM")</div></li>
+                    <li>Vr<div class="date">@Model.response.data[0].MondayOfAppointmentsWeek.AddDays(4).ToString("dd MMM")</div></li>
                 </ul>
             </div>
             <div class="hours-container">

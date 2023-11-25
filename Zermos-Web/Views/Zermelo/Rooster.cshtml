@@ -35,11 +35,11 @@
             <div class="days-container">
                 <ul>
                     <li>@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()</li>
-                    <li>Ma<div class="date"> - @Model.response.data[0].MondayOfAppointmentsWeek.ToString("dd MMM")</div></li>
-                    <li>Di<div class="date"> - @Model.response.data[0].MondayOfAppointmentsWeek.AddDays(1).ToString("dd MMM")</div></li>
-                    <li>Wo<div class="date"> - @Model.response.data[0].MondayOfAppointmentsWeek.AddDays(2).ToString("dd MMM")</div></li>
-                    <li>Do<div class="date"> - @Model.response.data[0].MondayOfAppointmentsWeek.AddDays(3).ToString("dd MMM")</div></li>
-                    <li>Vr<div class="date"> - @Model.response.data[0].MondayOfAppointmentsWeek.AddDays(4).ToString("dd MMM")</div></li>
+                    <li>Ma<div class="date">@Model.response.data[0].MondayOfAppointmentsWeek.ToString("dd MMM")</div></li>
+                    <li>Di<div class="date">@Model.response.data[0].MondayOfAppointmentsWeek.AddDays(1).ToString("dd MMM")</div></li>
+                    <li>Wo<div class="date">@Model.response.data[0].MondayOfAppointmentsWeek.AddDays(2).ToString("dd MMM")</div></li>
+                    <li>Do<div class="date">@Model.response.data[0].MondayOfAppointmentsWeek.AddDays(3).ToString("dd MMM")</div></li>
+                    <li>Vr<div class="date">@Model.response.data[0].MondayOfAppointmentsWeek.AddDays(4).ToString("dd MMM")</div></li>
                 </ul>
             </div>
             <div class="hours-container">
@@ -290,44 +290,39 @@ var lessonDetail = new ZermosModal()
     
     lessonDetail.open();
 }
-</script>
 
-@if ((Context.Request.Cookies["preview"] ?? "").Contains("zermelo_share"))
-{
-    <script>
-    // share button
-    addButtonToPage('fa-share-alt', () => {
-       
-        new ZermosModal()
-        .setTitle("Deel je rooster")
-        .addText("Deel je rooster met je vrienden! De pagina die je nu ziet wordt als link gedeeld, zij hoeven geen account hiervoor te hebben.")
-        .addDateInput("Wat is de verval datum?", new Date(Date.now() + 604800000))
-        .hideSubmitButton()
-        .addButton("Deel", () => {
-            
-            const date = document.getElementById('input1').value;
-            const dateObject = new Date(date);
-            console.log(dateObject);
-            
-            var expires_at = Math.floor(dateObject.getTime() / 1000);
-            
-            //return's an plan string url
-            fetch('/zermelo/GenereerToken?year=' + weeks[1].dataset.year + '&week=' + weeks[1].dataset.week + '&expires_at=' + expires_at)
-            .then(response => response.text())
-            .then((url) => {
-                new ZermosModal()
-                .setTitle("Deel je rooster")
-                .addText("Deel je rooster met je vrienden! De pagina die je nu ziet wordt als link gedeeld, zij hoeven geen account hiervoor te hebben.")
-                .addText("De link is: " + url)
-                .hideSubmitButton()
-                .addButton("Kopieer link", () => {
-                    copyToClipboard(url);
-                })
-                .open();
-            });
-        })
-        .open();
+// share button
+addButtonToPage('fa-share-alt', () => {
+   
+    new ZermosModal()
+    .setTitle("Deel je rooster")
+    .addText("Deel je rooster met je vrienden! De pagina die je nu ziet wordt als link gedeeld, zij hoeven geen account hiervoor te hebben.")
+    .addDateInput("Wat is de verval datum?", new Date(Date.now() + 604800000))
+    .hideSubmitButton()
+    .addButton("Deel", () => {
         
-    }, VerticalAlignment.TL, Background.Primary);
-    </script>
-}
+        const date = document.getElementById('input1').value;
+        const dateObject = new Date(date);
+        console.log(dateObject);
+        
+        var expires_at = Math.floor(dateObject.getTime() / 1000);
+        
+        //return's an plan string url
+        fetch('/zermelo/GenereerToken?year=' + weeks[1].dataset.year + '&week=' + weeks[1].dataset.week + '&expires_at=' + expires_at)
+        .then(response => response.text())
+        .then((url) => {
+            new ZermosModal()
+            .setTitle("Deel je rooster")
+            .addText("Deel je rooster met je vrienden! De pagina die je nu ziet wordt als link gedeeld, zij hoeven geen account hiervoor te hebben.")
+            .addText("De link is: " + url)
+            .hideSubmitButton()
+            .addButton("Kopieer link", () => {
+                copyToClipboard(url);
+            })
+            .open();
+        });
+    })
+    .open();
+    
+}, VerticalAlignment.TL, Background.Primary);
+</script>
