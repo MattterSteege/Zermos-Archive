@@ -200,7 +200,6 @@ namespace Zermos_Web.Controllers
             var grades = sortedGrades.Find(x => string.Equals(x.vak.afkorting, vak, StringComparison.CurrentCultureIgnoreCase));
 
             ViewData["stats"] = new Dictionary<string, string>();
-            (ViewData["stats"] as Dictionary<string, string>)?.Add("vak", grades.vak.naam);
             (ViewData["stats"] as Dictionary<string, string>)?.Add("hoogste", grades.grades.Max(x => x.geldendResultaat).ToString());
             (ViewData["stats"] as Dictionary<string, string>)?.Add("laagste", grades.grades.Min(x => x.geldendResultaat).ToString());
             (ViewData["stats"] as Dictionary<string, string>)?.Add("weging", grades.grades.Sum(x => x.weging == 0 ? x.examenWeging : x.weging).ToString());
@@ -214,11 +213,18 @@ namespace Zermos_Web.Controllers
             (ViewData["stats"] as Dictionary<string, string>)?.Add("som", som.ToString("0.0000000000", CultureInfo.InvariantCulture));
             
             var charts = new List<Chart>();
-            charts.Add(GenerateGradeOverTimeAndGradeAverage(grades));
             charts.Add(GetVoldoendeOndervoldoendeRatio(grades));
+            charts.Add(GenerateGradeOverTimeAndGradeAverage(grades));
             charts.Add(GetMostCommonGrade(grades));
 
-            return PartialView(charts);
+            dynamic model = new
+            {
+                charts = charts,
+                stats = ViewData["stats"] as Dictionary<string, string>,
+                grades = grades
+            };
+            
+            return PartialView(model);
         }
 
         private Chart CreateChart(string title, bool showHeight = true)
@@ -315,47 +321,45 @@ namespace Zermos_Web.Controllers
 
         private Chart GetVoldoendeOndervoldoendeRatio(sortedGrades grades)
         {
-            var chart = CreateChart("Voldoende/Ondervoldoende Ratio");
-            chart.Type = Enums.ChartType.Bar;
-            
+            var chart = CreateChart("Percentage voldoende", false);
+            chart.Type = Enums.ChartType.Pie;
+
             var data = new Data();
-            data.Labels = new List<string>();
-            
-            var dataset = new BarDataset
+            data.Labels = new List<string> {"Voldoende", "Onvoldoende"};
+
+            var dataset = new PieDataset
             {
-                Data = new List<double?>(),
-                BackgroundColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
-                BorderColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
-                BorderWidth = new List<int> {1},
-                BarPercentage = 0.5,
-                BarThickness = 6,
-                MaxBarThickness = 8,
-                MinBarLength = 2
+                BackgroundColor = new List<ChartColor>
+                    {ChartColor.FromHexString("#00ff00"), ChartColor.FromHexString("#ff0000")},
+                HoverBackgroundColor = new List<ChartColor>
+                    {ChartColor.FromHexString("#00ff00"), ChartColor.FromHexString("#ff0000")},
+                Data = new List<double?>()
             };
-            
+
+            var voldoende = 0;
+            var onvoldoende = 0;
+
+            foreach (var grade in grades.grades)
+                if (NumberUtils.ParseFloat(grade.geldendResultaat) >= 5.5)
+                    voldoende++;
+                else
+                    onvoldoende++;
+
+            dataset.Data.Add(voldoende);
+            dataset.Data.Add(onvoldoende);
+
             data.Datasets = new List<Dataset> {dataset};
             chart.Data = data;
-            
-            var doubleList = new List<double?> {0, 0};
-            var stringList = new List<string> {"Voldoende", "Ondervoldoende"};
-            
-            foreach (var grade in grades.grades)
-            {
-                if (NumberUtils.ParseFloat(grade.geldendResultaat) >= 5.5)
-                    doubleList[0]++;
-                else
-                    doubleList[1]++;
-            }
-            
-            dataset.Data = doubleList;
-            data.Labels = stringList;
+
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("voldoendes", voldoende.ToString());
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("onvoldoendes", onvoldoende.ToString());
             
             return chart;
         }
 
         private Chart GenerateGradeOverTimeAndGradeAverage(sortedGrades grades)
         {
-            var chart = CreateChart("Standaard deviatie");
+            var chart = CreateChart("cijfers en gemiddelde over tijd");
             chart.Type = Enums.ChartType.Line;
             chart.Options.Scales["y"] = new Scale {Min = 0, Max = 10};
 
@@ -706,7 +710,6 @@ namespace Zermos_Web.Controllers
         
         #region Afwezigheid
         [Authorize]
-        [ZermosPage]
         [SomtodayRequirement]
         [HttpGet("/Account/Afwezigheid")]
         [HttpGet("/Somtoday/Afwezigheid")]
@@ -714,7 +717,7 @@ namespace Zermos_Web.Controllers
         {
             if (Request.Cookies.ContainsKey("cached-somtoday-absence"))
             {
-                return PartialView(JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(ZermosUser.cached_somtoday_absence ?? string.Empty));
+                return Ok("Data was not old enough to be refreshed");
             }
 
             SchooljaarUtils.Schooljaar currentSchoolyear = SchooljaarUtils.getCurrentSchooljaar();
@@ -740,8 +743,7 @@ namespace Zermos_Web.Controllers
             
             if (response.IsSuccessStatusCode == false)
             {
-                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je Afwezigheid op Somtoday kon niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", NotificationCenter.NotificationType.ERROR);
-                return PartialView(new SomtodayAfwezigheidModel {items = new List<Models.SomtodayAfwezigheidModel.Item>()});
+                return Ok("Failed to fetch data");
             }
             
             var somtodayAfwezigheid =
@@ -759,7 +761,7 @@ namespace Zermos_Web.Controllers
 
             }
             
-            return PartialView(somtodayAfwezigheid);
+            return Ok("Data was refreshed");
         }
         #endregion
     }

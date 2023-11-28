@@ -1,9 +1,5 @@
 ﻿@model dynamic
 
-@{
-    ViewBag.Title = "title";
-}
-
 <link rel="stylesheet" href="/css/infowijs.css" />
 
 <div class="calander-group" style="filter: blur(var(--padding))">
@@ -690,7 +686,7 @@
     setActive();
 
     //add the 'active' class to the item who's top is the closest to the top of the mainElement when scrolling
-    main.addEventListener('scroll', function() {
+    addEventListenerToMain('scroll', function() {
         setActive();
 
         var max_scroll = this.scrollHeight - this.clientHeight - 100;
@@ -715,11 +711,9 @@
         main.scrollBy( 0, 1 );
     }, 10 );
     
-    main.addEventListener("main:unload", function() {
+    Zermos.mainUnload = () => {
         clearInterval(interval);
-    } );
-    
-    
+    }
     
     new ZermosModal()
     .setTitle("Infowijs is niet gekoppeld")

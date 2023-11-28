@@ -3,7 +3,6 @@
 @model List<IGrouping<Guid, Message>>
 
 @{
-    ViewBag.Title = "title";
     var wordCount = 150;
     Context.Response.Cookies.Append("last-seen-infowijs-news", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddDays(60)});
 

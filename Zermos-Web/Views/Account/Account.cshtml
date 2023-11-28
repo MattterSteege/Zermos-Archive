@@ -6,8 +6,6 @@
 @model dynamic
 
 @{
-    ViewBag.Title = "title";
-
     SomtodayAfwezigheidModel somtodayAfwezigheid = JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(Model.user.cached_somtoday_absence ?? string.Empty);
 }
 
@@ -152,7 +150,7 @@
     };
     
     //fetch /Refresh the absence data
-    fetch('/Somtoday/Afwezigheid?no-framework');
+    fetch('/Somtoday/Afwezigheid');
     
     function ShowAbscence() {
         var abscenceModal = new ZermosModal()

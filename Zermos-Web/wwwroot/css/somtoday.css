@@ -82,14 +82,6 @@
     background: var(--overlay-overlay-color);
 }
 
-.vak:hover:has(.top-30 .sufficient) {
-    box-shadow: 0 0 15px rgba(0, 184, 148, 0.75);
-}
-
-.vak:hover:has(.top-30 .insufficient) {
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.75);
-}
-
 .vak a {
     text-decoration: none;
     color: var(--text-color);
@@ -202,8 +194,17 @@
     flex-direction: column;
 }
 
+.stats-container .stats.horizontal-split, .stats-container .stats .horizontal-split {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-gap: var(--padding);
+    height: 100%;
+    width: 100%;
+}
+
 .stats-container .stats canvas {
-    max-height: 250px;
+    width: 100% !important;
+    height: 100% !important;
 }
 
 .stats-container .stats .stats-vak {

@@ -336,7 +336,7 @@ async function ZermosShareImage(title, text, blob) {
 }
 
 //==============================UPDATE SYSTEM==============================
-window.addEventListener("main:before-load", () => {
+Zermos.mainBeforeLoad = () => {
     //if the user version is not the same as the current version, show a message
 
     fetch("/Account/GetSetting?key=version_used", {
@@ -367,7 +367,7 @@ window.addEventListener("main:before-load", () => {
             });
         }
     });
-});
+};
 
 //==============================MODAL SYSTEM==============================
 window.addEventListener('main:before-unload', (e) => {

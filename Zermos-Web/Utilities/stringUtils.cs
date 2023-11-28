@@ -93,5 +93,15 @@ namespace Zermos_Web.Utilities
         {
             return System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(str));
         }
+        
+        public static string TakeFirstLetters(this string str, int count)
+        {
+            if (string.IsNullOrEmpty(str))
+                return str;
+            if (str.Length <= count)
+                return str;
+            var returna = str.Substring(0, count);
+            return returna;
+        }
     }
 }

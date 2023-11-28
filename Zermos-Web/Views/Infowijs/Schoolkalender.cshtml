@@ -2,7 +2,6 @@
 @model System.Collections.Generic.List<Zermos_Web.Models.Datum>
 
 @{
-    ViewBag.Title = "title";
     var groupedByMonth = Model.GroupBy(item => item.startsAt.ToDateTime().Year).SelectMany(group => group.GroupBy(item => item.startsAt.ToDateTime().Month));
     var culture = new CultureInfo("nl-NL");
 }
@@ -49,7 +48,7 @@
         @foreach (var dayGroup in groupedByMonth)
         {
             var startsAt = dayGroup.First().startsAt.ToDateTime();
-            <div class="month" onclick="doScrolling('@startsAt.ToString("M-yy")', 1000)" href="?@startsAt.ToString("M-yy")">
+            <div class="month" onclick="doScrolling(`[id='@startsAt.ToString("M-yy")']`, 1000)" href="?@startsAt.ToString("M-yy")">
                 @startsAt.ToString("MMMM", culture)
             </div>
         }
@@ -65,12 +64,12 @@
     }
 
     // Check if the URL contains a target element ID and scroll to it
-    main.addEventListener('main:before-load', () => {
+    Zermos.mainBeforeLoad = () => {
         const targetElementId = getTargetElementId();
         if (targetElementId) {
             const targetElement = document.getElementById(targetElementId);
             if (targetElement) {
-                doScrolling(targetElementId, 1000)
+                doScrolling(`[id='` + targetElementId + `']`, 1000);
             }
         }
 
@@ -109,5 +108,5 @@
         main.addEventListener('scroll', function() {
             setActive();
         });
-    });
+    }
 </script>

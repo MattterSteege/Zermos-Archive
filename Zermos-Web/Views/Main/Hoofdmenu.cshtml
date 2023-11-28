@@ -4,10 +4,7 @@
 @using Zermos_Web.Models.somtodayHomeworkModel
 @model Infrastructure.Entities.user
 
-
 @{
-    ViewBag.Title = "title";
-
     List<Appointment> zermeloTodayLessons = null;
     Appointment zermeloNextLesson = null;
 
@@ -202,6 +199,8 @@
 </div>
 
 <script defer="defer">  
+var intervals = [];
+
 RefreshWeer();
 SetUpPakLijst();
 CalculateLessonTimeLeft();
@@ -223,12 +222,12 @@ function RefreshWeer() {
             let currentLine = main.querySelector(".current");
             //get the percentage of the current time in the time line
             let percentage =
-                ((currentUnix - startUnix) / (endUnix - startUnix)) * 100;
+            ((currentUnix - startUnix) / (endUnix - startUnix)) * 100, timeLineInterval;
             //percentage + var(--padding)
             currentLine.style.left = percentage + "%";
 
             //update the time line every second
-            let timeLineInterval = setInterval(() => {
+            intervals.push(setInterval(() => {
                 let currentUnix = Math.floor(Date.now() / 1000);
                 let percentage =
                     ((currentUnix - startUnix) / (endUnix - startUnix)) * 100;
@@ -238,14 +237,10 @@ function RefreshWeer() {
                 let index = Math.round(percentage / 4.166666666666667);
                 main.querySelector(".weather-temp").innerText =
                     data["temp"] + "°C - " + precipitation[index] + "mm/u";
-            }, 1000);
-            
-            main.addEventListener("main:unload", () => {
-                clearInterval(timeLineInterval);
-            });
+            }, 1000));
 
             //when hovering over the .weather element
-            main.addEventListener("mousemove", (event) => {
+            addEventListenerToMain("mousemove", (event) => {
                 MoveWeatherLine(event)
             });
             main.querySelector(".weather").addEventListener("mouseleave", DefaultLineMovement);
@@ -310,11 +305,7 @@ function RefreshWeer() {
                     main.querySelector(".weather-temp").innerText =
                         data["temp"] + "°C - " + precipitation[index] + "mm/u";
                 }, 1000);
-                
-                            
-                main.addEventListener("main:unload", () => {
-                    clearInterval(timeLineInterval);
-                });
+                intervals.push(timeLineInterval);
             }
 
             //array of 25 - 10 5-minute intervals
@@ -387,9 +378,41 @@ function RefreshWeer() {
 }
 
 function CalculateLessonTimeLeft() {
-    let timeLeft = document.querySelector("#class_starts_at").dataset.start;
+    
+    @{
+        string lessonJSON = "[";
+
+        foreach (Appointment zermeloTodayLesson in zermeloTodayLessons)
+        {
+            lessonJSON += "{";
+            lessonJSON += $"\"start\": \"{zermeloTodayLesson.start.ToDateTime().ToString("HH:mm")}\",";
+            lessonJSON += $"\"end\": \"{zermeloTodayLesson.end.ToDateTime().ToString("HH:mm")}\",";
+            lessonJSON += $"\"vak\": \"{zermeloTodayLesson.subjects[0]}\",";
+            lessonJSON += $"\"docent\": \"{zermeloTodayLesson.teachers[0]}\",";
+            lessonJSON += $"\"lokaal\": \"{zermeloTodayLesson.locations[0]}\",";
+            lessonJSON += $"\"uitval\": \"{zermeloTodayLesson.cancelled}\"";
+            lessonJSON += "},";
+        }
+        
+        lessonJSON = lessonJSON.TrimEnd(',');
+        lessonJSON += "]";
+    }        
+    
+    let lessonTimes = JSON.parse('@Html.Raw(lessonJSON)');
+
+    var nextLesson = lessonTimes.find(x => new Date().getHours() < x.start.split(':')[0] || (new Date().getHours() == x.start.split(':')[0] && new Date().getMinutes() < x.start.split(':')[1]));
+    if (nextLesson == null) {
+        nextLesson = lessonTimes[0];
+    }
+    
+    console.log(nextLesson);
+    
+    //get the time left in seconds
+    let timeLeft = (nextLesson.start.split(':')[0] * 3600 + nextLesson.start.split(':')[1] * 60) - (new Date().getHours() * 3600 + new Date().getMinutes() * 60 + new Date().getSeconds());
+    
+    //let timeLeft = document.querySelector("#class_starts_at").dataset.start;
     //set the time left to the element HH:MM:SS, but hide hours and minutes if they are 0, do this every second
-    var interval = setInterval(() => {
+    var item = intervals.push(setInterval(() => {
         let hours = Math.floor(timeLeft / 3600);
         let minutes = Math.floor((timeLeft - (hours * 3600)) / 60);
         let seconds = timeLeft - (hours * 3600) - (minutes * 60);
@@ -416,12 +439,26 @@ function CalculateLessonTimeLeft() {
 
         if (timeLeft <= 0) {
             document.getElementById("class_starts_at").innerText = "nu";
-            clearInterval(interval);
+            
+            nextLesson = lessonTimes.find(x => new Date().getHours() < x.start.split(':')[0] || (new Date().getHours() == x.start.split(':')[0] && new Date().getMinutes() < x.start.split(':')[1]));
+            if (nextLesson == null) {
+                nextLesson = lessonTimes[0];
+            }
+            
+            console.log(nextLesson);
+            
+            //get the time left in seconds
+            timeLeft = (nextLesson.start.split(':')[0] * 3600 + nextLesson.start.split(':')[1] * 60) - (new Date().getHours() * 3600 + new Date().getMinutes() * 60 + new Date().getSeconds());
+            
         }
-    }, 1000);
-    main.addEventListener("main:unload", () => {
-        clearInterval(interval);
-    });
+    }, 1000));
+}
+
+Zermos.mainUnload = () => {
+    for (let i = 0; i < intervals.length; i++) {
+        clearInterval(intervals[i]);
+    }
+    intervals = [];
 }
 
 function SetUpPakLijst() {

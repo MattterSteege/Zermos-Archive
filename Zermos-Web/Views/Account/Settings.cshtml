@@ -1,11 +1,5 @@
 ﻿@model Infrastructure.Entities.user
 
-@{
-    ViewBag.Title = "title";
-
-}
-
-
 <link rel="stylesheet" href="/css/account.css">
 
 <div class="settings-container">
@@ -29,8 +23,8 @@
             <div id="2_Cijfers" onclick="UpdateSetting('default_page', '/Somtoday/Cijfers', this)" class="setting-button@(Model.default_page == "/Somtoday/Cijfers" ? " selected" : "")">Je cijfers</div>
             <div id="2_Huiswerk" onclick="UpdateSetting('default_page', '/Somtoday/Huiswerk', this)" class="setting-button@(Model.default_page == "/Somtoday/Huiswerk" ? " selected" : "")">Je huiswerk</div>
             <div id="2_Afwezigheid" onclick="UpdateSetting('default_page', '/Somtoday/Afwezigheid', this)" class="setting-button@(Model.default_page == "/Somtoday/Afwezigheid" ? " selected" : "")">Je afwezigheid</div>
-            <div id="2_SchoolNieuws" onclick="UpdateSetting('default_page', '/Infowijs/SchoolNieuws', this)" class="setting-button@(Model.default_page == "/Infowijs/SchoolNieuws" ? " selected" : "")">Het schoolnieuws</div>
-            <div id="2_SchoolKalender" onclick="UpdateSetting('default_page', '/Infowijs/SchoolKalender', this)" class="setting-button@(Model.default_page == "/Infowijs/SchoolKalender" ? " selected" : "")">De schoolkalender</div>
+            <div id="2_SchoolNieuws" onclick="UpdateSetting('default_page', '/Infowijs/Schoolnieuws', this)" class="setting-button@(Model.default_page == "/Infowijs/Schoolnieuws" ? " selected" : "")">Het schoolnieuws</div>
+            <div id="2_SchoolKalender" onclick="UpdateSetting('default_page', '/Infowijs/Schoolkalender', this)" class="setting-button@(Model.default_page == "/Infowijs/Schoolkalender" ? " selected" : "")">De schoolkalender</div>
             <div id="2_informatiebord" onclick="UpdateSetting('default_page', '/School/informatiebord', this)" class="setting-button@(Model.default_page == "/School/informatiebord" ? " selected" : "")">Het informatiebord</div>
         </div>
     </div>

@@ -1,5 +1,8 @@
 ﻿0.4.2 - Zermelo strikes back
 
+- algemeen
+    - De laatste door jouw gebruikte Zermos versie is nu in de databse opgeslagen, nu krijg je dus niet op je laptop, pc, telefoon etc. apart een melding, maar op de eerste die je gebruikt. Ook krijg je nu niet elke keer dat je Zermos opent een melding, maar alleen als er een nieuwe versie is.
+
 - Zermelo - Rooster
     - kleine visuele aanpassingen
     
@@ -7,6 +10,15 @@
     - Al je gedeelde links naar data zijn nu te zien op je account pagina.
     - Afwezigheid is in een popup te zien, geen nieuwe pagina die ingeladen hoeft te worden dus!
     
-- Somtoday
+- Somtoday - cijfers
     - Er zijn nu geen cijfers meer met een +NaN% erachter, maar gewoon een 100%. Dit had te maken met de weging van het eerste cijfer van dat vak (dat was een 0).
     - Statestieken zijn een beetje gerefresh, minder bugs, meer betrouwbaarheid.
+
+- Somtoday - Huiswerk
+    - De knop 'bekijk huiswerk' werkt nu weer, ik had niet door dat ik hem kapoet had gemaakt :(
+    
+- Infowijs - schoolkalender
+    - De schoolkalender scrollt nu weer automatisch naar de juiste maand, dit was kapot gegaan door een update van de site die ik niet had doorgevoerd, heel sad.
+    
+- Hoofdmenu
+    - Ik heb de aftelklok voor de volgende les (hopelijk) gefixt, hij telt nu niet alleen maar naar je eerste les, maar de eerstvolgende les.

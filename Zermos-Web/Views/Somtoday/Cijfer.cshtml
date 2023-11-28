@@ -1,13 +1,6 @@
 ﻿@using System.Globalization
-@using System.Text
-@using Newtonsoft.Json
-@using Zermos_Web.Models.somtodayHomeworkModel
 @using Zermos_Web.Utilities
 @model Zermos_Web.Models.SomtodayGradesModel.sortedGrades
-
-@{
-    ViewBag.Title = "title";
-}
 
 <link rel="stylesheet" href="~/css/somtoday.css" />
 
@@ -18,26 +11,26 @@
             <div class="top-30 fade-out" style="justify-content: center; align-items: center; margin-bottom: 0">
                 <p>Cijfer statestieken</p>
             </div>
-            <div class="background">
-                <img class="image"/>
-            </div>
+            @* <div class="background"> *@
+            @*     <img class="image"/> *@
+            @* </div> *@
         </a>
     </div>
 
-    @foreach (var vak in Model.grades)
+    @foreach (var grade in Model.grades)
     {
         float geldendResultaat;
-        NumberUtils.TryParseFloat(vak.geldendResultaat, out geldendResultaat);
+        NumberUtils.TryParseFloat(grade.geldendResultaat, out geldendResultaat);
 
         <div class="vak">
-            <a onclick="@(vak.links[0].id.StringToBase64String().Replace("=", ""))()">
+            <a onclick="@(grade.links[0].id.StringToBase64String().Replace("=", ""))()">
                 <div class="top-30">
-                    <p>@vak.vak.naam</p>
-                    <p>@(vak.weging == 0 ? vak.examenWeging : vak.weging)x</p>
-                    <p class="@(geldendResultaat >= 5.5f ? "sufficient" : "insufficient ")">@(vak.resultaatLabelAfkorting == "V" ? "V" : geldendResultaat.ToString("0.0", CultureInfo.InvariantCulture))</p>
+                    <p>@grade.vak.naam</p>
+                    <p>@(grade.weging == 0 ? grade.examenWeging : grade.weging)x</p>
+                    <p class="@(NumberUtils.ParseFloat(grade.geldendResultaat) >= 5.5f ? "sufficient" : "insufficient ")">@(grade.resultaatLabelAfkorting == "V" ? "V" : geldendResultaat.ToString("0.0", CultureInfo.InvariantCulture))</p>
                 </div>
                 <div class="bottom-70">
-                    <p>@vak.omschrijving</p>
+                    <p>@grade.omschrijving</p>
                 </div>
             </a>
         </div>

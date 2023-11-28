@@ -2,9 +2,13 @@
 TODO: When checking if user has cookie for cached data, check if the data is not null or empty
 TODO: make time use login, so the user get's logged out after the session is closed
 TODO: dagrooster
-TODO: stress test the new refresh system
-TODO: fix de promo page
+
 
 TODO: transition to Zermos.mainAfterLoad, Zermos.mainBeforeLoad, Zermos.mainUnload. This makes it so only 1 function is called when the page is loaded, and 1 when the page is unloaded. This makes it so that other functions can't be called when the page is not loaded yet, and makes it so that the page can't be unloaded when it's not loaded yet.
+    - Zermelo - DONE
+    - Somtoday - DONE
+    - Infowijs - DONE
+    - Hoofdpage
 
 TODO: make specific work with the popup system
+TODO: make better error page when logging in fails

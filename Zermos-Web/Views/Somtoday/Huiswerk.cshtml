@@ -2,9 +2,6 @@
 @model Zermos_Web.Models.somtodayHomeworkModel.SomtodayHomeworkModel
 
 @{
-    ViewBag.Title = "title";
-
-
     var groupedHomework = Model.items.GroupBy(item => item.datumTijd.Date);
     bool nextHomeworkFound = false;
     int dayId = 0; 
@@ -159,11 +156,11 @@
         catch{}
     }
     
-    main.addEventListener("main:before-load", function () {  
+    Zermos.mainBeforeLoad = () => {  
         //if the url has the parameter "les" then scroll to that homework item's parent
-        const searchParams = new URLSearchParams(window.location.search);
-        const les = searchParams.get('les');
-        if (les !== null) {
+        var params = '@Html.Raw(Json.Serialize(Context.Request.Query))';
+        var les = params.match(/\"les",\"value":\[\"([0-9]*)\"\]/)?.[1];
+        if (les !== undefined) {
             const homeworkItem = document.querySelector('[time="' + les + '"]');
             if (homeworkItem !== null) {
                 //scroll to the homework item's parent
@@ -186,7 +183,7 @@
                 document.getElementById("next-homework").classList.add("blink");
             }, 750);
         }
-    });
+    }
     
     //========================================HOMEWORK SORTING========================================
     addButtonToPage('fa-search', loadHomeworkSorting)

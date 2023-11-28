@@ -1,8 +1,5 @@
 ﻿@model dynamic
 
-@{
-    ViewBag.Title = "title";
-}
 
 <link rel="stylesheet" href="/css/somtoday.css">
 
@@ -392,10 +389,7 @@
 </div>
 
 <script>
-// it's a div, that holds your news
-// it holds ul with news in li elements
-// it holds ul with news in li elements
-main.addEventListener( "scroll", function() {
+addEventListenerToMain( "scroll", function() {
 var max_scroll = this.scrollHeight - this.clientHeight - 100;
 var current_scroll = this.scrollTop;
 var bottom = 100;
@@ -418,9 +412,9 @@ var interval = setInterval( function() {
     main.scrollBy( 0, 1 );
 }, 10 );
 
-main.addEventListener("main:unload", function() {
+Zermos.mainUnload = () => {
     clearInterval(interval);
-} );
+}
 
 
 

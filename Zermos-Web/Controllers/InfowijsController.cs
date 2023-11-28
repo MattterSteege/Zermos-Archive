@@ -33,7 +33,7 @@ namespace Zermos_Web.Controllers
         [ZermosPage]
         [HttpGet]
         [InfowijsRequirement]
-        public async Task<IActionResult> SchoolNieuws()
+        public async Task<IActionResult> Schoolnieuws()
         {
             ViewData["add_css"] = "infowijs";
 
@@ -48,8 +48,10 @@ namespace Zermos_Web.Controllers
             _httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", GetSessionToken().Result);
             var response = _httpClient
-                .GetAsync("https://antonius.hoyapp.nl/hoy/v3/messages?include_archived=0&since=3500000").Result;
+                .GetAsync("https://antonius.hoyapp.nl/hoy/v3/messages?include_archived=0&since=4500000").Result;
 
+            
+            dynamic a = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
             /*
                 type catalog:
                 1: means message contents
@@ -82,7 +84,7 @@ namespace Zermos_Web.Controllers
         [Authorize]
         [InfowijsRequirement]
         [ZermosPage]
-        public async Task<IActionResult> SchoolKalender()
+        public async Task<IActionResult> Schoolkalender()
         {
             ViewData["add_css"] = "infowijs";
 

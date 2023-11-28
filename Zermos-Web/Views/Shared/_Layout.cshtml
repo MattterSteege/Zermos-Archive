@@ -108,19 +108,19 @@
             <h5 class="Heading">De Antonius app</h5>
 
             <li>
-                <a onclick="ReplacePage('@Url.Action("SchoolNieuws", "Infowijs")')">
+                <a onclick="ReplacePage('@Url.Action("Schoolnieuws", "Infowijs")')">
                     <div class="menu-item">
                         <i class="fa-solid fa-newspaper menu-icons fa-fw"></i>
-                        <p>School nieuws</p>
+                        <p>Schoolnieuws</p>
                     </div>
                 </a>
             </li>
 
             <li>
-                <a onclick="ReplacePage('@Url.Action("SchoolKalender", "Infowijs")')">
+                <a onclick="ReplacePage('@Url.Action("Schoolkalender", "Infowijs")')">
                     <div class="menu-item">
                         <i class="fa-solid fa-calendar-days menu-icons fa-fw"></i>
-                        <p>School kalender</p>
+                        <p>Schoolkalender</p>
                     </div>
                 </a>
             </li>
@@ -158,6 +158,7 @@
     <div class="forewardbutton" onclick="window.history.forward()">
         <i class="fa-solid fa-angle-right"></i>
     </div>
+
 </div>
 
 <div id="content">
@@ -317,7 +318,6 @@ function ReplacePage(url) {
 
                 window.location.hash = url;
 
-                window.dispatchEvent(new Event("main:before-load"));
                 Zermos.mainBeforeLoad();
                 Zermos.mainBeforeLoad = () => {};
 
