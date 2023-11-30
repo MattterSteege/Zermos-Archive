@@ -2,6 +2,7 @@
     constructor() {
         this.title = '';
         this.fields = [];
+        this.elements = [];
         this.onSubmitCallback = null;
         this.onCloseCallback = null;
         this.closingDisabled = false;
@@ -88,6 +89,12 @@
         this.onCloseCallback = callback;
         return this;
     }
+    
+    //HELPERS
+    getConstructorValues() {
+        console.log(this);
+        return this;
+    }
 
     open() {
         //remove any existing modal
@@ -109,6 +116,7 @@
             modalContent.appendChild(title);
 
             const fields = createInputFields(this.fields);
+            this.elements = fields.children;
             
             const submitButton = createButton('submitBtn', this.submitButtonLabel);
 
@@ -137,7 +145,7 @@
                 let inputField;
                 
                 if (input[0] === "text_input") 
-                    inputField = createInput(`input${index}`, 'text', input[1]);
+                    inputField = createInput(`input${index}`, input[1]);
                 else if (input[0] === "select_input")
                     inputField = createSelectInput(`input${index}`, input[2]);
                 else if (input[0] === "multiline_input")
@@ -158,30 +166,33 @@
             return inputContainer;
         }
 
-        function createInput(id, type, placeholder) {
+        function createInput(id, placeholder) {
             const input = document.createElement('input');
             input.id = id;
-            input.type = type;
+            input.type = "text";
             input.placeholder = placeholder;
+            input.dataset.type = "single_text_input";
             return input;
         }
 
         function createSelectInput(id, options) {
-            const select = document.createElement('select');
-            select.id = id;
+            const input = document.createElement('select');
+            input.id = id;
             options.forEach((option) => {
                 const optionElement = document.createElement('option');
                 optionElement.value = option;
                 optionElement.textContent = option;
-                select.appendChild(optionElement);
+                input.appendChild(optionElement);
             });
-            return select;
+            input.dataset.type = "select";
+            return input;
         }
         
         function createMultilineInput(id, placeholder) {
             const input = document.createElement('textarea');
             input.id = id;
             input.placeholder = placeholder;
+            input.dataset.type = "multiline_text_input";
             return input;
         }
         
@@ -193,6 +204,7 @@
             if (defaultDate) {
                 input.value = defaultDate.toLocaleString('sv-SE').split(' ')[0];
             }
+            input.dataset.type = "date";
             return input;
         }
         
@@ -203,6 +215,7 @@
             button.id = id;
             button.textContent = label;
             button.addEventListener('click', callback);
+            button.dataset.type = "button";
             return button;
         }
         
@@ -226,6 +239,7 @@
             toggleParent.appendChild(toggle);
             toggleParent.appendChild(toggleLabel);
                         
+            toggleParent.dataset.type = "single_toggle";
             return toggleParent;
         }
         
@@ -236,12 +250,14 @@
             labels.forEach((label, index) => {
                 toggle.appendChild(createToggle(`${id}${index}`, label, toggled[index]));
             });
+            toggle.dataset.type = "multi_toggle";
             return toggle;
         }
         
         function createText(text) {
             const p = document.createElement('p');
             p.innerHTML = text;
+            p.dataset.type = "text";
             return p;
         }
 
@@ -261,13 +277,32 @@
         if (submitButton) {
             submitButton.addEventListener('click', () => {
                 if (this.onSubmitCallback) {
-                    const inputValues = this.fields.map((_, i) => {
-                        const inputElement = modal.querySelector(`#input${i}`);
-                        if ((!inputElement || !inputElement.value) && !inputElement?.children[0]?.children[0]?.value) {
-                            return null;
+                    // const inputValues = this.fields.map((_, i) => {
+                    //     const inputElement = modal.querySelector(`#input${i}`);
+                    //     if ((!inputElement || !inputElement.value) && !inputElement?.children[0]?.children[0]?.value) {
+                    //         return null;
+                    //     }
+                    //
+                    //     return inputElement.value === undefined ? Array.from(inputElement.children).map(child => child.children[0].checked) : inputElement.value;
+                    // });
+                    // this.onSubmitCallback(...inputValues.filter(value => value !== null));
+                    
+                    const inputValues = Array.from(this.elements).map((inputElement) => {
+                        if (inputElement.dataset.type === "text") return null;
+                        if (inputElement.dataset.type === "button") return null;
+                        
+                        
+                        //special case for toggles
+                        if (inputElement.dataset.type === "single_toggle") {
+                            return inputElement.children[0].checked;
+                        } else if (inputElement.dataset.type === "multi_toggle") {
+                            return Array.from(inputElement.children).map(child => child.children[0].checked);
+                        } 
+                        
+                        //everything else
+                        else {
+                            return inputElement.value;
                         }
-
-                        return inputElement.value === undefined ? Array.from(inputElement.children).map(child => child.children[0].checked) : inputElement.value;
                     });
                     this.onSubmitCallback(...inputValues.filter(value => value !== null));
                 }
@@ -288,18 +323,6 @@
             setTimeout(() => {
                 document.body.removeChild(modal);
             }, this.fadeDuration);
-        });
-
-        //if the user presses enter go to the next input field, if there is one otherwise submit
-        document.querySelector('#modal').addEventListener('keydown', (e) => {
-            if (e.key === "Enter") {
-                const nextInput = e.target.nextElementSibling;
-                if (nextInput) {
-                    nextInput.focus();
-                } else {
-                    submitButton.click();
-                }
-            }
         });
     }
 }

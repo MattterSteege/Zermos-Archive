@@ -501,6 +501,14 @@ namespace Zermos_Web.Controllers
 
             return Sort(grades);
         }
+
+        [Authorize]
+        [HttpGet("/Somtoday/Cijfers/GenereerToken")]
+        [SomtodayRequirement]
+        public async Task<IActionResult> GenereerToken(string vakken, bool show_individual_grades, DateTime? expires_at, int max_uses = int.MaxValue)
+        {
+            return Ok("test + " + vakken + " " + show_individual_grades + " " + expires_at + " " + max_uses);
+        }
         #endregion
 
         #region huiswerk

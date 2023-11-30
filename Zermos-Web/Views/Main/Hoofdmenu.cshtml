@@ -63,12 +63,12 @@
                             <p class="lesson-subject">@(zermeloNextLesson?.subjects.Count > 0 ? zermeloNextLesson.subjects[0] : "")</p>
                             <p class="lesson-teacher">@(zermeloNextLesson?.teachers.Count > 0 ? zermeloNextLesson.teachers[0] : "")</p>
                             <p class="lesson-location" style="text-transform: unset;">@(zermeloNextLesson?.locations.Count > 0 ? zermeloNextLesson.locations[0] : "")</p>
-                            <p id="class_starts_at" class="lesson-location" data-start="@nextLessonStart.GetDateDifference(DateTime.UtcNow.toDutchDate()).ToUnixTime()">berekenen...</p>
+                            <p id="class_starts_at" class="lesson-location">berekenen...</p>
                         }
                         else
                         {
                             <p class="lesson-subject">Geen les meer vandaag</p>
-                            <p id="class_starts_at" class="lesson-location" data-start="0"></p>
+                            <p id="class_starts_at" class="lesson-location"></p>
                         }
                     }
                 </div>
@@ -441,6 +441,12 @@ function CalculateLessonTimeLeft() {
             document.getElementById("class_starts_at").innerText = "nu";
             
             nextLesson = lessonTimes.find(x => new Date().getHours() < x.start.split(':')[0] || (new Date().getHours() == x.start.split(':')[0] && new Date().getMinutes() < x.start.split(':')[1]));
+            
+            if (nextLesson.cancelled) {
+                //get the index of the next lesson
+                nextLesson = lessonTimes[lessonTimes.indexOf(nextLesson) + 1] ?? lessonTimes[0];
+            }
+            
             if (nextLesson == null) {
                 nextLesson = lessonTimes[0];
             }
@@ -449,7 +455,10 @@ function CalculateLessonTimeLeft() {
             
             //get the time left in seconds
             timeLeft = (nextLesson.start.split(':')[0] * 3600 + nextLesson.start.split(':')[1] * 60) - (new Date().getHours() * 3600 + new Date().getMinutes() * 60 + new Date().getSeconds());
-            
+            //.lesson-subject .lesson-teacher .lesson-location are the elements that need to be updated
+            document.querySelector(".lesson-subject").innerText = nextLesson.vak;
+            document.querySelector(".lesson-teacher").innerText = nextLesson.docent;
+            document.querySelector(".lesson-location").innerText = nextLesson.lokaal;
         }
     }, 1000));
 }

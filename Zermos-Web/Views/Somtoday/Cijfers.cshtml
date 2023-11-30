@@ -96,3 +96,56 @@
         }
     </div>
 </div>
+
+<script>
+
+//get all the sortedGrades.vak.naam and put them in an array with quotes around them 
+var vakken = ["@Html.Raw(string.Join("\",\"", sortedGrades.Select(x => x.vak.naam).Distinct()))"];
+var short = ["@Html.Raw(string.Join("\",\"", sortedGrades.Select(x => x.vak.afkorting).Distinct()))"];
+
+// share button
+addButtonToPage('fa-share-from-square', () => {
+   
+    new ZermosModal()
+    .setTitle("Deel je cijfers")
+    .addText("Deel je cijfers met je vrienden! Kies hieronder een datum tot wanneer je cijfers gedeeld mogen worden, welke cijfers zichtbaar zijn én of ze alleen je gemiddelde mogen zien of ook de individuele cijfers plus statestieken.")
+    .addDateInput("Wat is de verval datum?", new Date(Date.now() + 604800000))
+    .addToggle("Laat individuele cijfers zien", false)
+    .addMultiToggles(vakken, vakken, vakken.map(vak => true))
+    .setSubmitButtonLabel("Deel")
+    .onSubmit((date, indivd, allowed) => {
+        
+        //make date to a dd-mm-yyyy format
+        var expires_at = date.split('-').reverse().join('-');
+        
+        
+        
+        var vakken = [];
+        for (var i = 0; i < allowed.length; i++) {
+            if (allowed[i]) {
+                vakken.push(short[i]);
+            }
+        }
+        
+        console.log(vakken, allowed);
+        
+        //return's an plan string url
+        fetch('/Somtoday/Cijfers/GenereerToken?expires_at=' + expires_at + '&vakken=' + vakken.join(',') + '&show_individual_grades=' + document.getElementById('input2').checked)
+        .then(response => response.text())
+        .then((url) => {
+            new ZermosModal()
+            .setTitle("Deel je cijfers")
+            .addText("Deel je cijfers met je vrienden, zij hoeven geen account hiervoor te hebben.")
+            .addText("De link is: " + url)
+            .hideSubmitButton()
+            .addButton("Kopieer link", () => {
+                copyToClipboard(url);
+            })
+            .open();
+        });
+
+    })
+    .open();
+    
+}, VerticalAlignment.TL, Background.Primary);
+</script>
