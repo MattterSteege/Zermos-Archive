@@ -4,8 +4,38 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - Versie 0.4.3 - 01-12-2023
+Dit is een kleine update, maar wel een handige, ik wou het gewoon eventje snel uitbrengen!
+0.4.3 - Sharing is caring
+
+- Somtoday - Cijfers
+    - Je kan nu je cijfers delen met je vrienden (en opa en oma natuurlijk) Dit doe je heel makkelijk. Ga naar je cijfers, klik op het deel icoontje en kies uit een paar opties (welke vakken, tot waaneer mogen ze het bekijken en of ze alleen het gemiddelde zien of ook de cijfers zelf)
+
+# Release Notes - Versie 0.4.2 - 28-11-2023
+0.4.2 - Zermelo strikes back
+
+- Zermelo - Rooster
+    - kleine visuele aanpassingen
+    
+- Account
+    - Al je gedeelde links naar data zijn nu te zien op je account pagina.
+    - Afwezigheid is in een popup te zien, geen nieuwe pagina die ingeladen hoeft te worden dus!
+    
+- Somtoday - cijfers
+    - Er zijn nu geen cijfers meer met een +NaN% erachter, maar gewoon een 100%. Dit had te maken met de weging van het eerste cijfer van dat vak (dat was een 0).
+    - Statestieken zijn een beetje gerefresh, minder bugs, meer betrouwbaarheid.
+
+- Somtoday - Huiswerk
+    - De knop 'bekijk huiswerk' werkt nu weer, ik had niet door dat ik hem kapoet had gemaakt :(
+    
+- Infowijs - schoolkalender
+    - De schoolkalender scrollt nu weer automatisch naar de juiste maand, dit was kapot gegaan door een update van de site die ik niet had doorgevoerd, heel sad.
+    
+- Hoofdmenu
+    - Ik heb de aftelklok voor de volgende les (hopelijk) gefixt, hij telt nu niet alleen maar naar je eerste les, maar de eerstvolgende les.
+
 # Release Notes - Versie 0.4.1 - 21-11-2023
-4.1 - Zermelo baby
+0.4.1 - Zermelo baby
 
 - debug
     - Er is een nieuwe preview toegevoegd 'Zermelo sharing', hiermee kan j eje rooster delen, ik wil het systeem van dingen delen met vrienden via een link doorvoeren in meer dingen zoals cijfers. Maar omdat je voor nu de gedeelde links niet kan verwijderen blijft het eventjes in Beta
