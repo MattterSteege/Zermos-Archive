@@ -39,7 +39,6 @@ namespace Zermos_Web.Controllers
         [HttpGet("Somtoday/Cijfers")]
         public async Task<IActionResult> Cijfers()
         {
-            ViewData["add_css"] = "somtoday";
             Response.Cookies.Append("last-seen-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddYears(1)});
             
             if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
@@ -507,7 +506,92 @@ namespace Zermos_Web.Controllers
         [SomtodayRequirement]
         public async Task<IActionResult> GenereerToken(string vakken, bool show_individual_grades, DateTime? expires_at, int max_uses = int.MaxValue)
         {
-            return Ok("test + " + vakken + " " + show_individual_grades + " " + expires_at + " " + max_uses);
+            expires_at ??= DateTime.Now.AddDays(7);
+            
+            var user = ZermosUser;
+
+            var access_token = user.somtoday_access_token;
+            
+            if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
+            {
+                access_token = RefreshToken(user.somtoday_refresh_token);
+            }
+
+            var grades = await fetchGrades(access_token, user.somtoday_student_id);
+            
+            ZermosUser = new user
+            {
+                cached_somtoday_grades = JsonConvert.SerializeObject(grades)
+            };
+            
+            Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
+
+            string[] vakkenArray = vakken.Split(',');
+            
+            var sortedGrades = new List<sortedGrades>();
+            
+            foreach (var grade in grades.items)
+            {
+                var vakWithGrades = sortedGrades.Find(x => x.vak.naam == grade.vak.naam);
+                if (vakWithGrades == null)
+                {
+                    vakWithGrades = new sortedGrades();
+                    vakWithGrades.vak = grade.vak;
+                    vakWithGrades.grades = new List<Item>();
+                    sortedGrades.Add(vakWithGrades);
+                }
+                vakWithGrades.grades.Add(grade);
+            }
+            
+            var gradesToShare = new List<Item>();
+            foreach (var vak in vakkenArray)
+            {
+                var vakWithGrades = sortedGrades.Find(x => string.Equals(x.vak.afkorting, vak, StringComparison.CurrentCultureIgnoreCase));
+                if (vakWithGrades == null) continue;
+                gradesToShare.AddRange(vakWithGrades.grades);
+            }
+            
+            var token = TokenUtils.RandomString(20,
+                TokenUtils.RandomStringType.Numbers & TokenUtils.RandomStringType.LowerCase &
+                TokenUtils.RandomStringType.UpperCase);
+            
+            share share = new share
+            {
+                key = token,
+                email = ZermosEmail,
+                value = (show_individual_grades ? 1 : 0) + gradesToShare.ObjectToBase64String(),
+                page = "/Somtoday/Cijfers/Gedeeld",
+                expires_at = (DateTime) expires_at,
+                max_uses = max_uses
+            };
+            
+            await AddShare(share);
+            
+            return Ok(share.url);
+        }
+        
+        [ZermosPage]
+        [HttpGet("/Somtoday/Cijfers/Gedeeld")]
+        public async Task<IActionResult> GedeeldeCijfers(string token)
+        {
+            var grades = await GetShare(token);
+            
+            if (grades == null)
+                return NotFound();
+            
+            if (grades.expires_at < DateTime.Now)
+            {
+                await DeleteShare(token);
+                return NotFound();
+            }
+            
+            dynamic model = new
+            {
+                grades = grades.value.Substring(1).Base64StringToObject<List<Item>>(),
+                show_individual_grades = grades.value[0] == '1'
+            };
+            
+            return PartialView(model);
         }
         #endregion
 

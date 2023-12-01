@@ -202,7 +202,6 @@ function ReplacePage(url) {
         return;
     }
 
-    window.dispatchEvent(new Event("main:unload"));
     Zermos.mainUnload();
     Zermos.mainUnload = () => {};
 
@@ -326,7 +325,6 @@ function ReplacePage(url) {
                 
                 setTimeout(function() {
                     //log the time it took to load the page
-                    window.dispatchEvent(new Event("main:after-load"));
                     Zermos.mainAfterLoad();
                     Zermos.mainAfterLoad = () => {};
                     const timerEnd = performance.now();

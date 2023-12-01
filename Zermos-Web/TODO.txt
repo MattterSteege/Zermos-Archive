@@ -13,3 +13,4 @@ TODO: transition to Zermos.mainAfterLoad, Zermos.mainBeforeLoad, Zermos.mainUnlo
 TODO: make specific work with the popup system
 TODO: make better error page when logging in fails
 TODO: implement backend grade sharing
+TODO: turn the api's into custom classes

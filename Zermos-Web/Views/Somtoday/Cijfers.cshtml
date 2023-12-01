@@ -87,8 +87,8 @@
                         </div>
                         <div class="bottom-70">
                             <p style="flex-grow: 1; text-align: end;">Laatste cijfer:</p>
-                            <p style="margin-left: 16px; flex-grow: 1;" class="@(NumberUtils.ParseFloat(vak.grades[^1].geldendResultaat) >= 5.5f ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</p>
-                            <p style="margin-left: 16px; flex-grow: 1;" class="@(gradeChange > 0 ? "sufficient" : "insufficient ")">@($"{(gradeChange > 0 ? "+" : "")}{gradeChange}%")</p>
+                            <p style="flex-grow: 1; text-align: center;" class="@(NumberUtils.ParseFloat(vak.grades[^1].geldendResultaat) >= 5.5f ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</p>
+                            <p style="flex-grow: 1; text-align: start;" class="@(gradeChange > 0 ? "sufficient" : "insufficient ")">@($"{(gradeChange > 0 ? "+" : "")}{gradeChange}%")</p>
                         </div>
                     </div>
                 </a>
@@ -108,7 +108,7 @@ addButtonToPage('fa-share-from-square', () => {
    
     new ZermosModal()
     .setTitle("Deel je cijfers")
-    .addText("Deel je cijfers met je vrienden! Kies hieronder een datum tot wanneer je cijfers gedeeld mogen worden, welke cijfers zichtbaar zijn én of ze alleen je gemiddelde mogen zien of ook de individuele cijfers plus statestieken.")
+    .addText("Deel je cijfers met je vrienden! Kies hieronder een datum tot wanneer je cijfers gedeeld mogen worden, welke cijfers zichtbaar zijn én of ze alleen je gemiddelde mogen zien of ook de individuele cijfers. Pas wel op, nieuwe cijfers blijven niet automatisch gedeeld worden, je moet dus een nieuwe link genereren als je nieuwe cijfers wilt delen.")
     .addDateInput("Wat is de verval datum?", new Date(Date.now() + 604800000))
     .addToggle("Laat individuele cijfers zien", false)
     .addMultiToggles(vakken, vakken, vakken.map(vak => true))
@@ -116,7 +116,8 @@ addButtonToPage('fa-share-from-square', () => {
     .onSubmit((date, indivd, allowed) => {
         
         //make date to a dd-mm-yyyy format
-        var expires_at = date.split('-').reverse().join('-');
+        var expires_at = date.split('-');
+        expires_at = expires_at[1] + '-' + expires_at[0] + '-' + expires_at[2];
         
         
         

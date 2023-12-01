@@ -1,8 +1,5 @@
 ﻿const Zermos = {
     CurrentVersion: "",
-    //main:load event
-    //main:before-load event
-    //main:before-unload event
     mainBeforeLoad: function (callback) {},
     mainAfterLoad: function (callback) {},
     mainUnload: function (callback) {},
@@ -351,6 +348,9 @@ Zermos.mainBeforeLoad = () => {
                 .setTitle("Zermos is geupdate!")
                 .addText("Zermos is weer een versietje ouder 🥳. Er zijn natuurlijk weer nieuwe functies toegevoegd en bugs gefixt. Veel plezier met de nieuwe versie!")
                 .addText("Je gebruikt nu versie " + Zermos.CurrentVersion + ", de vorige keer dat je Zermos bezocht was dat versie " + response)
+                .addButton("Check wat er nieuw is", function() {
+                    window.open("https://zermos-docs.kronk.tech/WhatsNew.html", "_blank");
+                })
                 .setSubmitButtonLabel("Let's go, ik ben er klaar voor!")
                 .onSubmit(function() {
                     var url = "/Account/UpdateSetting?key=version_used&value=" + Zermos.CurrentVersion;

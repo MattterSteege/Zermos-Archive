@@ -104,7 +104,7 @@ namespace Zermos_Web.Controllers
                 key = token,
                 email = ZermosEmail,
                 value = zermeloRoosterModel.ObjectToBase64String(),
-                page = "/Zermelo/GedeeldRooster",
+                page = "/Zermelo/Rooster/Gedeeld",
                 expires_at = (DateTime) expires_at,
                 max_uses = max_uses
             };
@@ -115,6 +115,7 @@ namespace Zermos_Web.Controllers
         }
 
         [ZermosPage]
+        [HttpGet("/Zermelo/Rooster/Gedeeld")]
         public async Task<IActionResult> GedeeldRooster(string token)
         {
             var rooster = await GetShare(token);

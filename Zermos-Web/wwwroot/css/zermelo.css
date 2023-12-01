@@ -308,11 +308,15 @@ ul:has(> li.empty) {
 @media screen and (max-width: 600px) {
 
     .days-container ul li {
+        padding: unset;
+        padding-top: 4px;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        height: 40px;
-        padding: unset;
         gap: 0;
+    }
+
+    .days-container ul li .date {
+        margin-bottom: auto;
     }
 }

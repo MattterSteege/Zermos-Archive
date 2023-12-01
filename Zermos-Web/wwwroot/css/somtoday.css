@@ -94,6 +94,14 @@
     font-weight: 700;
 }
 
+.vak .top-30 p:first-child {
+    margin-right: auto;
+}
+
+.vak .top-30 p:nth-child(2) {
+    margin-right: calc(var(--padding) * 4);
+}
+
 .vak h1 {
     font-weight: 700;
     transition: opacity 0.3s;
