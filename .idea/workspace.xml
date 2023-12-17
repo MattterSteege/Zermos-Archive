@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c3582447-ff79-4dd3-9c47-b4613b8d0576" name="Changes" comment="updated docs">
+      <change afterPath="$PROJECT_DIR$/Wat-kan-Zermos.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FAQ.md" beforeDir="false" afterPath="$PROJECT_DIR$/FAQ.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/School.md" beforeDir="false" afterPath="$PROJECT_DIR$/School.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Zermelo.md" beforeDir="false" afterPath="$PROJECT_DIR$/Zermelo.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/index.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,9 +67,6 @@
       <workItem from="1691168347101" duration="2126000" />
       <workItem from="1695404752744" duration="924000" />
       <workItem from="1695838679504" duration="728000" />
-      <workItem from="1695888037062" duration="4000" />
-      <workItem from="1695888078592" duration="1639000" />
-      <workItem from="1695979430891" duration="331000" />
     </task>
     <task id="LOCAL-00001" summary="added a test feature, redirect">
       <created>1675857654150</created>

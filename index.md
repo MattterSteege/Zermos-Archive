@@ -1,28 +1,16 @@
----
-layout: default
-title: Home
-nav_order: 0
-nav_exclude: false
----
 
-Dit is de documentatie pagina voor Zermos! Hier vind je alles wat je moet weten/hoe je zo veel mogelijk uit Zermos haalt.
+Hey, welkom. Leuk dat je geïnteresseerd bent in Zermos! Zermos is een webapplicatie die je net iets meer helpt. Zermos geeft jou de mogelijkheid om zowel Somtoday, Zermelo als Infowijs te koppelen aan je account en het in een oogopslag allemaal binnen te krijgen, super handig. Deze pagina's zijn bedoeld om jou wegwijs te maken in Zermos.
 
-### koppelingen
-  - [Zermelo](Zermelo)
-  - [SOMtoday](Somtoday)
-  - [De Antonius app](Infowijs)
-  - [De school zelf](School)
+Om kort op te sommen wat Zermos allemaal kan, als jij alles gekoppeld hebt:
+* Zermos laat je je rooster zien en delen met al je vrienden.
+* Zermos laat je je cijfers in groter detail bekijken.
+* Zermos geeft jou de mogelijkheid om zelf huiswerk in te plannen en te filteren.
+* En nog veel meer, bekijk alle mogelijkheden [hier](Wat-kan-Zermos).
 
-### Account
-  - [Inloggen](Account)
-  - [Uitloggen](Account)
+Nu vraag je je zeker af, ik wil **nu** een Zermos account, hoe doe ik dat? Dat laat ik je [hier](account) zien.
 
-### Vragen
-  - [Veelgestelde vragen](FAQ)
+Oke top, nu heb je een account, maar hoe koppel je alle apps? Dat laat ik je [hier voor Zermelo](Zermelo), [hier voor Somtoday](Somtoday) en [hier voor Infowijs](Infowijs) zien.
 
-### release notes
-  - [Nieuwe functies](WhatsNew)
+Als je nog een paar vragen hebt, misschien heb ik ze [hier](FAQ) wel alvast beantwoord.
 
-*Als Zermos offline is, volg dan dit stappenplan:<br>
-1) is het weekend? -> Dat ben ik er mee bezig en ben ik zeer waarschijnlijk op de hoogte<br>
-2) is het geen weekend -> Dan is er iets goed mis gegaan, ook nu ben ik waarschijnlijk op de hoogte<br>
+En tot slot, als je wilt zien wat er nieuw is in de laatste versie van Zermos, dan kun je dat [hier](WhatsNew) bekijken.
