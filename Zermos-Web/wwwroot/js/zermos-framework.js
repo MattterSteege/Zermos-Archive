@@ -3,6 +3,7 @@
     mainBeforeLoad: function (callback) {},
     mainAfterLoad: function (callback) {},
     mainUnload: function (callback) {},
+    checkForUpdates: function (callback) {},
 };
 
 //==============================VARIABLES==============================
@@ -274,6 +275,15 @@ function copyToClipboard(text) {
     }
 }
 
+function waitForObject(obj, callback, interval = 100) {
+    if (typeof obj !== 'undefined') {
+        callback(obj);
+    } else {
+        setTimeout(function () {
+            waitForObject(obj, callback, interval);
+        }, interval);
+    }
+}
 //==============================EVENT SYSTEM==============================
 // Make sure only one event listener is added for each type to the #main element
 let eventListeners = [];
@@ -333,7 +343,8 @@ async function ZermosShareImage(title, text, blob) {
 }
 
 //==============================UPDATE SYSTEM==============================
-Zermos.mainBeforeLoad = () => {
+var alreadyChecked = false;
+Zermos.checkForUpdates = () => {
     //if the user version is not the same as the current version, show a message
 
     fetch("/Account/GetSetting?key=version_used", {
@@ -352,6 +363,7 @@ Zermos.mainBeforeLoad = () => {
                     window.open("https://zermos-docs.kronk.tech/WhatsNew.html", "_blank");
                 })
                 .setSubmitButtonLabel("Let's go, ik ben er klaar voor!")
+                .disableClose()
                 .onSubmit(function() {
                     var url = "/Account/UpdateSetting?key=version_used&value=" + Zermos.CurrentVersion;
                     fetch(url, {
@@ -366,14 +378,7 @@ Zermos.mainBeforeLoad = () => {
                 method: 'POST'
             });
         }
+
+        alreadyChecked = true;
     });
 };
-
-//==============================MODAL SYSTEM==============================
-window.addEventListener('main:before-unload', (e) => {
-    //remove any existing modal
-    const existingModal = document.querySelector('#modal');
-    if (existingModal) {
-        document.body.removeChild(existingModal);
-    }
-});

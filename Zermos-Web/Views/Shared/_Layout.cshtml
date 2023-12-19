@@ -182,11 +182,14 @@ let isRunning = false;
 let timerStart;
 
 window.onload = () => {
-    Zermos.CurrentVersion = "@Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION")";
-    console.log(`Zermos-web versie: ${Zermos.CurrentVersion}`);
-    console.log(`Zermos-framework is geladen`);
-    history.replaceState(null, null, "/");
-    ReplacePage('@ViewData["url"]');
+    waitForObject(Zermos, function () {
+        Zermos.CurrentVersion = "@Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION")";
+        console.log(`Zermos-web versie: ${Zermos.CurrentVersion}`);
+        console.log(`Zermos-framework is geladen`);
+        Zermos.checkForUpdates();
+        history.replaceState(null, null, "/");
+        ReplacePage('@ViewData["url"]');
+    }, 500);
 }
 
 function ReplacePage(url) {
