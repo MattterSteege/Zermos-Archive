@@ -130,11 +130,16 @@ var weeks = document.getElementsByClassName('week');
 var weekCarousel = document.getElementById('week-carousel');
 var isFetching = false; // Flag to track whether a fetch operation is in progress
 
-function NextWeek(isInitial = false) {
+function NextWeek(isInitial = false, noAnimation = false) {
     if (!isFetching || isInitial) {
         isFetching = true;
+        disableButtons();
         
-        weekCarousel.style.transform = 'translateX(-66.6666%)';
+        if (!isInitial && !noAnimation) {
+            ease('-33.3333', '-66.6666', 500, (value) => {
+                weekCarousel.style.transform = 'translateX(' + value + '%)';
+            });
+        }
         
         var weekToFetch = Number(weeks[2].dataset.week) + 1;
         var yearToFetch = Number(weeks[2].dataset.year);
@@ -149,11 +154,17 @@ function NextWeek(isInitial = false) {
 }
 
 
-function PreviousWeek(isInitial = false) {
+function PreviousWeek(isInitial = false, noAnimation = false) {
     if (!isFetching || isInitial) {
         isFetching = true;
+        disableButtons()
         
-        weekCarousel.style.transform = 'translateX(0)';
+        if (!isInitial && !noAnimation) {
+            //ease to translateX(0) using code
+            ease('-33.3333', '0', 500, (value) => {
+                weekCarousel.style.transform = 'translateX(' + value + '%)';
+            });
+        }
         
         var weekToFetch = Number(weeks[0].dataset.week) - 1;
         var yearToFetch = Number(weeks[0].dataset.year);
@@ -162,48 +173,105 @@ function PreviousWeek(isInitial = false) {
             weekToFetch = 52;
             yearToFetch -= 1;
         }
-
+        
         fetchWeek(weekToFetch, yearToFetch, false, isInitial);
     }
+}
+
+function ease(start, end, time, callback) {
+    start = Number(start);
+    end = Number(end);
+    const startTime = Date.now();
+    const duration = time;
+    
+    function update() {
+        const currentTime = Date.now();
+        const elapsed = currentTime - startTime;
+    
+        if (elapsed >= duration) {
+          clearInterval(interval);
+          callback(end);
+        } 
+        else {
+            const progress = elapsed / duration;
+            const easedValue = start + (end - start) * (progress * (2 - progress));
+            callback(easedValue);
+        }
+    }
+    
+    const interval = setInterval(update, 10); // Update approximately every 16 milliseconds
+}
+
+function disableButtons() {
+    var rightButtons = document.querySelectorAll('.fa-arrow-right');
+    var leftButtons = document.querySelectorAll('.fa-arrow-left');
+    
+    // Enable the right buttons
+    rightButtons.forEach(function(button) {
+        button.classList.add("disabled")
+    });
+
+    // Enable the left buttons
+    leftButtons.forEach(function(button) {
+        button.classList.add("disabled")
+    });
+}
+
+function enableButtons() {
+    // Get all buttons with the specified classes
+    var rightButtons = document.querySelectorAll('.fa-arrow-right');
+    var leftButtons = document.querySelectorAll('.fa-arrow-left');
+
+    // Disable the right buttons
+    rightButtons.forEach(function(button) {
+        button.classList.remove("disabled");
+    });
+
+    // Disable the left buttons
+    leftButtons.forEach(function(button) {
+        button.classList.remove("disabled");
+    });
 }
 
 function fetchWeek(week, year, append, isInitial = false) {
     setTimeout(() => {
         fetch('/zermelo/rooster?week=' + week + '&year=' + year + '&compact=true&no-framework=true')
-            .then(response => response.text())
-            .then((html) => {
-                //turn the html string into an html element
-                var parser = new DOMParser();
-                var newWeek = parser.parseFromString(html, 'text/html').getElementsByClassName('week')[0];
-
-                if (isInitial) {
-                    if (append)
-                        weeks[2].replaceWith(newWeek);
-                    else
-                        weeks[0].replaceWith(newWeek);
+        .then(response => response.text())
+        .then((html) => {
+            //turn the html string into an html element
+            var parser = new DOMParser();
+            var newWeek = parser.parseFromString(html, 'text/html').getElementsByClassName('week')[0];
+    
+            if (isInitial) {
+                if (append)
+                    weeks[2].replaceWith(newWeek);
+                else
+                    weeks[0].replaceWith(newWeek);
+            } else {
+    
+                //if append = true, add it after the last html item in the carousel, else add it before the first html item in the carousel
+                if (append) {
+                    weeks[0].replaceWith(newWeek);
+                    //set as last in sibling hierarchy
+                    weeks[2].after(weeks[0]);
                 } else {
-
-                    //if append = true, add it after the last html item in the carousel, else add it before the first html item in the carousel
-                    if (append) {
-                        weeks[0].replaceWith(newWeek);
-                        //set as last in sibling hierarchy
-                        weeks[2].after(weeks[0]);
-                    } else {
-                        weeks[2].replaceWith(newWeek);
-                        //set as first in sibling hierarchy
-                        weeks[0].before(weeks[2]);
-                    }
-
+                    weeks[2].replaceWith(newWeek);
+                    //set as first in sibling hierarchy
+                    weeks[0].before(weeks[2]);
                 }
                 
                 weekCarousel.style.transform = 'translateX(-33.3333%)';
-
-                isFetching = false; // Reset the flag after fetch is complete
-            })
-            .catch(error => {
-                console.error('Error fetching week:', error);
-                isFetching = false; // Reset the flag on error
-            });
+            }
+            
+    
+            isFetching = false; // Reset the flag after fetch is complete
+            enableButtons();
+        })
+        .catch(error => {
+            console.error('Error fetching week:', error);
+            isFetching = false; // Reset the flag on error\
+            enableButtons();
+        });
     }, 500);
 }
 
@@ -234,6 +302,7 @@ Zermos.mainBeforeLoad = () => {
     addEventListenerToMain('touchcancel', e => handleDragEnd(e.changedTouches[0].clientX));
 
     function handleDragStart(clientX) {
+        if (isFetching) return; // Stop dragging if a fetch is in progress
         isDragging = true;
         touchstartX = clientX;
         touchmoveX = clientX;
@@ -246,7 +315,6 @@ Zermos.mainBeforeLoad = () => {
         var mainContainer = document.getElementsByClassName('main-container')[0];
         var percentageFromLeftStart = ((touchstartX - mainContainer.getBoundingClientRect().left) / mainContainer.offsetWidth * 100) / 3;
         var percentageFromLeft = ((clientX - mainContainer.getBoundingClientRect().left) / mainContainer.offsetWidth * 100) /3;
-        console.log(percentageFromLeft, percentageFromLeftStart);
 
         weekCarousel.style.transform = 'translateX(' + -(33.3333 - (percentageFromLeft - percentageFromLeftStart)) + '%)';
         touchmoveX = clientX;
@@ -256,17 +324,30 @@ Zermos.mainBeforeLoad = () => {
         if (!isDragging || isFetching) return; // Stop dragging if a fetch is in progress
 
         isDragging = false;
+        
         touchendX = clientX;
         
+        var percentage = weekCarousel.style.transform;
+        percentage = percentage.replace("translateX(", "").replace("%)", "");
+        
         if (touchendX < touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
-            weekCarousel.style.transform = 'translateX(-66.6666%)';
-            NextWeek();
+            console.log("next");
+            ease(percentage, '-66.6666', 200, (value) => {
+                weekCarousel.style.transform = 'translateX(' + value + '%)';
+            });
+            NextWeek(false, true);
         } else if (touchendX > touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
-            weekCarousel.style.transform = 'translateX(0%)';
-            PreviousWeek();
+            console.log("prev");
+            ease(percentage, '0', 200, (value) => {
+                weekCarousel.style.transform = 'translateX(' + value + '%)';
+            });
+            PreviousWeek(false, true);
         }
         else {
-            weekCarousel.style.transform = 'translateX(-33.3333%)';
+            console.log("no change");
+            ease(percentage, '-33.3333', 200, (value) => {
+                weekCarousel.style.transform = 'translateX(' + value + '%)';
+            });
         }
     }
 };
@@ -328,7 +409,6 @@ addButtonToPage('fa-share-from-square', () => {
         
         const date = document.getElementById('input1').value;
         const dateObject = new Date(date);
-        console.log(dateObject);
         
         var expires_at = Math.floor(dateObject.getTime() / 1000);
         

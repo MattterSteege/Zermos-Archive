@@ -120,6 +120,12 @@
 /*    border-radius: var(--border-radius);*/
 /*}*/
 
+.disabled {
+    filter: grayscale(1) !important;
+    opacity: 50% !important;
+    cursor: not-allowed !important;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -380,6 +386,12 @@ body {
 .menu-icons.menu-icons-custom {
     background: var(--accent-color);
     color: var(--white-color);
+}
+
+.menu-item:disabled .menu-icons {
+    opacity: 50%;
+    filter: grayscale(1);
+    cursor: not-allowed;
 }
 
 .menu-icons::before {

@@ -1,4 +1,4 @@
-﻿0.4.4 - Klaar voor iedereen eigenlijk wel
+﻿0.4.3 - Sharing is caring
 
 - authentificatie en autorisatie
     - het aanmaken van een account is nu opnieuw van de grond af aan opgebouwd en werkt nu wél zoals ik het wil.
@@ -9,6 +9,7 @@
     
 - Zermelo - Rooster
     - De paklijst in nu te vinden bij je rooster door op het 'lijst' icoontje te drukken.
+    - Het swipen is nu veeeeel smoother
     
 - SOmtoday - cijferstatestieken
     - een volgorde probleem is nu opgelsot, nice.
