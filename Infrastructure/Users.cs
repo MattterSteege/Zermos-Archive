@@ -91,7 +91,10 @@ namespace Infrastructure
             var userToUpdate = await _context.users.FirstOrDefaultAsync(x => x.email == email.ToLower());
 
             if (userToUpdate == null)
+            {
                 await AddUserAsync(user);
+                return;
+            }
 
             var userProperties = typeof(user).GetProperties();
 

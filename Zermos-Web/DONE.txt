@@ -1,4 +1,14 @@
-﻿0.4.3 - Sharing is caring
+﻿0.4.4 - Klaar voor iedereen eigenlijk wel
 
-- Somtoday - Cijfers
-    - Je kan nu je cijfers delen met je vrienden (en opa en oma natuurlijk) Dit doe je heel makkelijk. Ga naar je cijfers, klik op het deel icoontje en kies uit een paar opties (welke vakken, tot waaneer mogen ze het bekijken en of ze alleen het gemiddelde zien of ook de cijfers zelf)
+- authentificatie en autorisatie
+    - het aanmaken van een account is nu opnieuw van de grond af aan opgebouwd en werkt nu wél zoals ik het wil.
+    - het kon gebeuren dat je in 'account limbo' kwam, waarbij je geen account had, maar wel ingelogd was. Dit is nu opgelost, je wordt nu automatisch uitgelogd als je geen account hebt.
+    
+- Hoofdmenu
+    - Het hoofdmenu bestaat niet meer, het was echt te veel werk voor zo weinig functionaliteit, dus houdoe.
+    
+- Zermelo - Rooster
+    - De paklijst in nu te vinden bij je rooster door op het 'lijst' icoontje te drukken.
+    
+- SOmtoday - cijferstatestieken
+    - een volgorde probleem is nu opgelsot, nice.

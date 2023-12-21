@@ -306,7 +306,8 @@
                     });
                     this.onSubmitCallback(...inputValues.filter(value => value !== null));
                 }
-                document.body.removeChild(modal);
+                if (modal)
+                    document.body.removeChild(modal);
             });
         }
         
@@ -325,4 +326,9 @@
             }, this.fadeDuration);
         });
     }
+}
+
+function unloadModal() {
+    if (document.querySelector('#modal'))
+        document.body.removeChild(document.querySelector('#modal'));
 }

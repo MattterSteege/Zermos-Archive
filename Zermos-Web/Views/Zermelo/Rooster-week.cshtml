@@ -3,7 +3,7 @@
 @using System.Globalization
 @model Zermos_Web.Models.zermelo.ZermeloRoosterModel
 
-<div class="week" data-week="@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()" data-unix="@Model.response.data[0].MondayOfAppointmentsWeek.ToUnixTime()">
+<div class="week" data-week="@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.response.data[0].MondayOfAppointmentsWeek.Year" data-unix="@Model.response.data[0].MondayOfAppointmentsWeek.ToUnixTime()">
     <div class="times-container">
         <ul>
             <!--        20 horizontal lines-->

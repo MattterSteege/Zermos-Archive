@@ -35,7 +35,7 @@ namespace Zermos_Web.Controllers
         {
             ViewData["add_css"] = "school";
 
-            if (User.Identity is {IsAuthenticated: true})
+            if (User.Identity is {IsAuthenticated: true} && ZermosUser != null)
             {
                 if (Request.Cookies.ContainsKey("cached-school-informationscreen"))
                 {
@@ -90,7 +90,7 @@ namespace Zermos_Web.Controllers
                 }
             }
 
-            if (User.Identity is {IsAuthenticated: true})
+            if (User.Identity is {IsAuthenticated: true} && ZermosUser != null)
             {
                 ZermosUser = new user
                 {

@@ -350,10 +350,17 @@ Zermos.checkForUpdates = () => {
     fetch("/Account/GetSetting?key=version_used", {
         method: 'GET'
     })
-    //returns a string like 0.4.1.
-    .then(response => response.text())
+    //returns a string like 0.4.1. or a 400
+    .then(response => {
+        // Check if the response status is in the range of 200 to 299
+        if (!response.ok) {
+            // Do not show the modal if a 400 status code is returned
+            return Promise.reject(response.text());
+        }
+        return response.text();
+    })
     .then((response) => {
-        if (response !== Zermos.CurrentVersion) {
+        if (response !== Zermos.CurrentVersion && response !== "" && !alreadyChecked) {
             //show modal
             new ZermosModal()
                 .setTitle("Zermos is geupdate!")
@@ -380,5 +387,36 @@ Zermos.checkForUpdates = () => {
         }
 
         alreadyChecked = true;
-    });
+    })
+    .catch(_ => _);
 };
+
+Zermos.mainUnload.bind(() => {
+    console.log("unloading");
+});
+
+//==============================TITLE TEXT==============================
+document.addEventListener('DOMContentLoaded', function() {
+    const elements = document.querySelectorAll('.svgText');
+    // console.log(elements);
+
+    elements.forEach(function(element) {
+        element.addEventListener('mouseover', function() {
+            element.classList.add('animating');
+        });
+
+        element.addEventListener('transitionend', function() {
+            element.classList.remove('animating');
+        });
+    });
+
+
+    //remove the version after 5 seconds, fade
+    setTimeout(() => {
+        //fade .version out in 1s
+        $(".version").fadeOut(1000, () => {
+            //remove .version from the DOM
+            $(".version").remove();
+        });
+    }, 5000);
+});

@@ -52,6 +52,7 @@ namespace Zermos_Web.Controllers
         {
             //only if the property which is being updated is a marked with the 'SettingAttribute'
             var userToUpdate = ZermosUser;
+            if (userToUpdate == null) return BadRequest("No account was found");
             var property = userToUpdate.GetType().GetProperty(key);
             if (property == null) return BadRequest("Property not found");
             var attribute = property.GetCustomAttributes(typeof(SettingAttribute), false);
@@ -67,6 +68,7 @@ namespace Zermos_Web.Controllers
         {
             //only if the property which is being updated is a marked with the 'SettingAttribute'
             var userToUpdate = ZermosUser;
+            if (userToUpdate == null) return BadRequest("No account was found");
             var property = userToUpdate.GetType().GetProperty(key);
             if (property == null) return BadRequest("Property not found");
             var attribute = property.GetCustomAttributes(typeof(SettingAttribute), false);

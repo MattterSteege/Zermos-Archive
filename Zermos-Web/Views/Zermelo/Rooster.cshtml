@@ -1,10 +1,11 @@
 ﻿@using System.Globalization
+@using Newtonsoft.Json
 @using Zermos_Web.Models.zermelo
 @using Zermos_Web.Utilities
 @model Zermos_Web.Models.zermelo.ZermeloRoosterModel
 
 @{
-    ViewData["title"] = "title";
+    var zermeloTodayLessons = Model.response.data[0].appointments.Where(x => x.start.ToDateTime().Date == DateTime.Now.Date).ToList();
 }
 
 <link rel="stylesheet" href="/css/zermelo.css" />
@@ -12,7 +13,7 @@
 
 <div class="main-container">
     <div class="week-carousel" id="week-carousel">
-        <div class="week" data-week="@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.response.data[0].MondayOfAppointmentsWeek.Year"></div>
+        <div class="week" data-week="@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.response.data[0].MondayOfAppointmentsWeek.Year" data-unix="@Model.response.data[0].MondayOfAppointmentsWeek.ToUnixTime()"></div>
         <div class="week" data-week="@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.response.data[0].MondayOfAppointmentsWeek.Year" data-unix="@Model.response.data[0].MondayOfAppointmentsWeek.ToUnixTime()">
             <div class="times-container">
                 <ul>
@@ -120,34 +121,55 @@
                 
             </div>
         </div>
-        <div class="week" data-week="@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.response.data[0].MondayOfAppointmentsWeek.Year"></div>
+        <div class="week" data-week="@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.response.data[0].MondayOfAppointmentsWeek.Year" data-unix="@Model.response.data[0].MondayOfAppointmentsWeek.ToUnixTime()"></div>
     </div>
 </div>
 
 <script>
 var weeks = document.getElementsByClassName('week');
 var weekCarousel = document.getElementById('week-carousel');
-var currentWeekShowingPercentage = -100;
-var transition = 'left 0.5s ease-in-out';
 var isFetching = false; // Flag to track whether a fetch operation is in progress
 
 function NextWeek(isInitial = false) {
     if (!isFetching || isInitial) {
         isFetching = true;
-        return fetchWeek(Number(weeks[weeks.length - 1].dataset.week) + 1, true, isInitial);
+        
+        weekCarousel.style.transform = 'translateX(-66.6666%)';
+        
+        var weekToFetch = Number(weeks[2].dataset.week) + 1;
+        var yearToFetch = Number(weeks[2].dataset.year);
+        
+        if (weekToFetch === 53) {
+            weekToFetch = 1;
+            yearToFetch += 1;
+        }
+
+        fetchWeek(weekToFetch, yearToFetch, true, isInitial);
     }
 }
+
 
 function PreviousWeek(isInitial = false) {
     if (!isFetching || isInitial) {
         isFetching = true;
-        return fetchWeek(Number(weeks[0].dataset.week) - 1, false, isInitial);
+        
+        weekCarousel.style.transform = 'translateX(0)';
+        
+        var weekToFetch = Number(weeks[0].dataset.week) - 1;
+        var yearToFetch = Number(weeks[0].dataset.year);
+        
+        if (weekToFetch === 0) {
+            weekToFetch = 52;
+            yearToFetch -= 1;
+        }
+
+        fetchWeek(weekToFetch, yearToFetch, false, isInitial);
     }
 }
 
-function fetchWeek(week, append, isInitial = false) {
+function fetchWeek(week, year, append, isInitial = false) {
     setTimeout(() => {
-        fetch('/zermelo/rooster?week=' + week + '&compact=true&no-framework=true')
+        fetch('/zermelo/rooster?week=' + week + '&year=' + year + '&compact=true&no-framework=true')
             .then(response => response.text())
             .then((html) => {
                 //turn the html string into an html element
@@ -172,12 +194,9 @@ function fetchWeek(week, append, isInitial = false) {
                         weeks[0].before(weeks[2]);
                     }
 
-                    weekCarousel.style.transition = 'none';
-                    weekCarousel.style.left = 'calc(-100% - var(--padding))';
-                    setTimeout(() => {
-                        weekCarousel.style.transition = transition;
-                    }, 10);
                 }
+                
+                weekCarousel.style.transform = 'translateX(-33.3333%)';
 
                 isFetching = false; // Reset the flag after fetch is complete
             })
@@ -222,8 +241,14 @@ Zermos.mainBeforeLoad = () => {
 
     function handleDragMove(clientX) {
         if (!isDragging || isFetching) return; // Stop dragging if a fetch is in progress
+        
+        //log the current percentage of the main-container where the mosue is hovering (0% = left, 100% = right)
+        var mainContainer = document.getElementsByClassName('main-container')[0];
+        var percentageFromLeftStart = ((touchstartX - mainContainer.getBoundingClientRect().left) / mainContainer.offsetWidth * 100) / 3;
+        var percentageFromLeft = ((clientX - mainContainer.getBoundingClientRect().left) / mainContainer.offsetWidth * 100) /3;
+        console.log(percentageFromLeft, percentageFromLeftStart);
 
-        weekCarousel.style.left = (currentWeekShowingPercentage + (clientX - touchstartX) / weekCarousel.offsetWidth * 100) + '%';
+        weekCarousel.style.transform = 'translateX(' + -(33.3333 - (percentageFromLeft - percentageFromLeftStart)) + '%)';
         touchmoveX = clientX;
     }
 
@@ -234,27 +259,27 @@ Zermos.mainBeforeLoad = () => {
         touchendX = clientX;
         
         if (touchendX < touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
-            weekCarousel.style.left = 'calc(-200% - var(--padding) * 2)'
+            weekCarousel.style.transform = 'translateX(-66.6666%)';
             NextWeek();
         } else if (touchendX > touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
-            weekCarousel.style.left = '0%'
+            weekCarousel.style.transform = 'translateX(0%)';
             PreviousWeek();
         }
         else {
-            weekCarousel.style.left = 'calc(-100% - var(--padding))'
+            weekCarousel.style.transform = 'translateX(-33.3333%)';
         }
     }
 };
 
 //next week button
 addButtonToPage('fa-arrow-right', () => {
-    weekCarousel.style.left = 'calc(-200% - var(--padding) * 2)'
+    weekCarousel.style.transform = 'translateX(-66.6666%);'
     NextWeek();
 }, VerticalAlignment.BL);
 
 //previous week button
 addButtonToPage('fa-arrow-left', () => {
-    weekCarousel.style.left = '0%'
+    weekCarousel.style.transform = 'translateX(0%);'
     PreviousWeek();
 }, VerticalAlignment.BL);
 
@@ -322,6 +347,26 @@ addButtonToPage('fa-share-from-square', () => {
             .open();
         });
     })
+    .open();
+    
+}, VerticalAlignment.TL, Background.Primary);
+
+// share button
+addButtonToPage('fa-list', () => {
+   
+    new ZermosModal()
+    .setTitle("Je paklijst")
+    .setSubmitButtonLabel("Oke")
+    .addText("Je hebt vandaag de volgende vakken:")
+    @{
+        foreach (Appointment les in zermeloTodayLessons)
+        {
+            if(les.cancelled){ continue;}
+
+            @Html.Raw("    .addText(\"" + (les.subjects.Count > 0 ? les.subjects[0] : "-") + " van " + (les.teachers.Count > 0 ? les.teachers[0] : "-") + "\")")
+        }
+    }
+    
     .open();
     
 }, VerticalAlignment.TL, Background.Primary);

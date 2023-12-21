@@ -15,14 +15,23 @@ using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers;
 
-public class AuthenticationController : BaseController
+public class AuthenticationController : Controller
 {
-    public AuthenticationController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
+    private readonly Users _user;
+    private readonly Shares _share;
+    private readonly ILogger<BaseController> _logger;
+
+    public AuthenticationController(Users user, Shares share, ILogger<BaseController> logger)
+    {
+        _user = user;
+        _share = share;
+        _logger = logger;
+    }
     
 #if RELEASE
     const string redirectUrl = "https://zermos.kronk.tech/Login/Callback";
 #else
-    const string redirectUrl = "https://192.168.178.34:5001/Login/Callback";
+    const string redirectUrl = "https://localhost:5001/Login/Callback";
 #endif
     const string clientId = "REDACTED_MS_CLIENT_ID";
     const string clientSecret = "lcV8Q~GbQjBv45fivMgN3ARP~UHPNSuV259gQcU7";
@@ -34,7 +43,7 @@ public class AuthenticationController : BaseController
         string redirect = "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=" +
                           clientId + "&response_type=code&redirect_uri=" + redirectUrl +
                           "&response_mode=query&scope=User.Read&state=" + TokenUtils.RandomString();
-        return PartialView("Login", new loginModel {email = redirect, code = 0});
+         return PartialView("Login", new loginModel {email = redirect, code = 0});
     }
 
     [ZermosPage]
@@ -57,7 +66,7 @@ public class AuthenticationController : BaseController
 
         if (!response.IsSuccessStatusCode)
         {
-            Log(LogLevel.Error, response.StatusCode.ToString() + " " + response.ReasonPhrase);
+            _logger.Log(LogLevel.Error, response.StatusCode.ToString() + " " + response.ReasonPhrase);
             return VerificationFailed(4);
         }
 
@@ -90,7 +99,7 @@ public class AuthenticationController : BaseController
             new("role", "user"),
         };
 
-        var user = ZermosUser;
+        var user = await _user.GetUserAsync(email);
         
         if (user == null)
         {
@@ -99,14 +108,14 @@ public class AuthenticationController : BaseController
                 email = email,
                 theme = "light"
             };
-            ZermosUser = user;
+            await _user.UpdateUserAsync(email, user);
         }
 
         HttpContext.Response.Cookies.Append("theme", user.theme ?? "light");
 
         await HttpContext.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "user", "role")));
 
-        Log(LogLevel.Information,$"User {email} logged in");
+        _logger.Log(LogLevel.Information,$"User {email} logged in");
 
         if (string.IsNullOrEmpty(ReturnUrl))
         {
@@ -122,19 +131,19 @@ public class AuthenticationController : BaseController
         switch (code)
         {
             case 21:
-                Log(LogLevel.Warning, "User not found in database, returned code 21");
+                _logger.Log(LogLevel.Warning, "User not found in database, returned code 21");
                 return PartialView("Login", new loginModel {code = 21});
             case 22:
-                Log(LogLevel.Warning, "Token expired, returned code 22");
+                _logger.Log(LogLevel.Warning, "Token expired, returned code 22");
                 return PartialView("Login", new loginModel {code = 22});
             case 23:
-                Log(LogLevel.Warning, "Token incorrect, returned code 23");
+                _logger.Log(LogLevel.Warning, "Token incorrect, returned code 23");
                 return PartialView("Login", new loginModel {code = 23});
             case 24:
-                Log(LogLevel.Warning, "User already verified, returned code 24");
+                _logger.Log(LogLevel.Warning, "User already verified, returned code 24");
                 return PartialView("Login", new loginModel {code = 24});
             default:
-                Log(LogLevel.Warning, "Unknown error, returned code 4");
+                _logger.Log(LogLevel.Warning, "Unknown error, returned code 4");
                 return PartialView("Login", new loginModel {code = 4});
         }
     }
@@ -144,7 +153,7 @@ public class AuthenticationController : BaseController
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync();
-        Log(LogLevel.Information, $"User {ZermosEmail} logged out");
+        _logger.Log(LogLevel.Information, $"User {User.FindFirstValue("email")} logged out");
         return PartialView("Login", new loginModel {code = 3});
     }
 

@@ -35,20 +35,6 @@ namespace Zermos_Web.Controllers
             return View();
         }
         
-        [ZermosPage]
-        [Authorize]
-        [Route("/Hoofdmenu")]
-        public IActionResult Hoofdmenu()
-        {
-            return PartialView(ZermosUser);
-        }
-        
-        [Route("/ZermosPromo")]
-        public IActionResult ZermosPromo()
-        {
-            return View();
-        }
-
         //to send the correct deeplink format do this: location.href = 'web+zermos://' + url;
         [Route("/Deeplink")]
         public IActionResult Deeplink(string data = null)

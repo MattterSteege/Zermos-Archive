@@ -6,23 +6,23 @@
 }
 
 .main-container .week-carousel {
-    width: 100%;
+    flex: 1;
+    width: 300%;
+    min-width: 300%;
     height: 100%;
-    position: relative;
-    left: calc(-100% - var(--padding));
-    top: 0;
-    display: grid;
-    grid-template-columns: 100% 100% 100%;
-    grid-gap: var(--padding);
-    transition: left 0.5s ease-in-out 0s;
+    overflow: hidden;
+    display: flex;
+    will-change: transform;
+    transform: translateX(-33.3333%);
 }
 
 .main-container .week {
-    width: 100%;
-    height: 100%;
     position: relative;
-    left: 0;
-    top: 0;
+    min-width: 33.33%;
+    width: 33.33%;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
     border: 1px solid var(--inactive-color);
     border-radius: var(--border-radius);
 }

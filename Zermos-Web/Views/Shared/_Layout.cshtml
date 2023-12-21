@@ -38,14 +38,6 @@
 
     <div class="bottom">
         <ul>
-            <li>
-                <a onclick="ReplacePage('/Hoofdmenu')">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-house menu-icons fa-fw"></i>
-                        <p>Hoofdmenu</p>
-                    </div>
-                </a>
-            </li>
 
             <h5 class="Heading">Zermelo</h5>
 
@@ -206,6 +198,7 @@ function ReplacePage(url) {
     }
 
     Zermos.mainUnload();
+    unloadModal();
     Zermos.mainUnload = () => {};
 
     // Define a function to append a script to either the head or body

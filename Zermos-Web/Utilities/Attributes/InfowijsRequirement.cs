@@ -12,6 +12,12 @@ namespace Zermos_Web.Models.Requirements
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var user = ((Users)context.HttpContext.RequestServices.GetService(typeof(Users)))?.GetUserAsync(context.HttpContext.User.FindFirstValue("email")).Result;
+            if (user == null) 
+            {
+                // User does not exist, redirect to /a/login
+                context.Result = new RedirectResult("/Login");
+                return;
+            }
             
             if (string.IsNullOrEmpty(user.infowijs_access_token)) 
             {

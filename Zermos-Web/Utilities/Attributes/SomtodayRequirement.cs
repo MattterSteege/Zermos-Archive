@@ -13,6 +13,13 @@ namespace Zermos_Web.Models.Requirements
         {
             var user = ((Users)context.HttpContext.RequestServices.GetService(typeof(Users)))?.GetUserAsync(context.HttpContext.User.FindFirstValue("email")).Result;
             
+            if (user == null) 
+            {
+                // User does not exist, redirect to /a/login
+                context.Result = new RedirectResult("/Login");
+                return;
+            }
+            
             if (string.IsNullOrEmpty(user?.somtoday_access_token) && string.IsNullOrEmpty(user?.somtoday_refresh_token))
             {
                 // User does not have the desired value, redirect to /a/login

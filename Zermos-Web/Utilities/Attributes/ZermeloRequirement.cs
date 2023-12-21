@@ -13,6 +13,13 @@ namespace Zermos_Web.Models.Requirements
         {
             var user = ((Users)context.HttpContext.RequestServices.GetService(typeof(Users)))?.GetUserAsync(context.HttpContext.User.FindFirstValue("email")).Result;
             
+            if (user == null) 
+            {
+                // User does not exist, redirect to /a/login
+                context.Result = new RedirectResult("/Login");
+                return;
+            }
+            
             if (string.IsNullOrEmpty(user.zermelo_access_token)) 
             {
                 context.Result = new RedirectResult("/Koppelingen/Zermelo/Ongekoppeld");

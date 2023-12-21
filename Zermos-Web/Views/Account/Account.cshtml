@@ -6,7 +6,7 @@
 @model dynamic
 
 @{
-    SomtodayAfwezigheidModel somtodayAfwezigheid = JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(Model.user.cached_somtoday_absence ?? string.Empty);
+    SomtodayAfwezigheidModel somtodayAfwezigheid = JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(Model.user.cached_somtoday_absence ?? "{\"items\": []}");
 }
 
 <link rel="stylesheet" href="/css/account.css">
@@ -17,12 +17,15 @@
         <p>@Model.user.email</p>
     </div>
     
-    <div onclick="ShowAbscence()" class="account-item clickable">
-        <h1>Afwezigheid</h1>
-        <p>Je bent dit jaar <b>@(somtodayAfwezigheid.items.Count)</b> keer afwezig geweest. @(somtodayAfwezigheid.items.Count == 0 ? "Ga zo door!" : "")</p>
-    </div>
+    @if(Model.user.cached_somtoday_absence != null)
+    {
+        <div onclick="ShowAbscence()" class="account-item clickable">
+            <h1>Afwezigheid</h1>
+            <p>Je bent dit jaar <b>@(somtodayAfwezigheid.items.Count)</b> keer afwezig geweest. @(somtodayAfwezigheid.items.Count == 0 ? "Ga zo door!" : "")</p>
+        </div>
+    }
     
-    <div onclick="ReplacePage('@Url.Action("Account", "Account")')" class="account-item clickable">
+    <div class="account-item">
         <h1>Gedeelde links</h1>
         @foreach(share share in Model.shares)
         {
