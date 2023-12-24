@@ -660,6 +660,7 @@ main.main::-webkit-scrollbar-track {
     font-size: 20px;
     font-weight: 600;
     color: var(--text-color);
+    text-align: center;
 }
 
 .loader-text .loading-dots {
@@ -863,10 +864,6 @@ main.main::-webkit-scrollbar-track {
     }
 
     .top-bar {
-        display: none;
-    }
-
-    .loader-text {
         display: none;
     }
 }

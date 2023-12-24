@@ -1,0 +1,96 @@
+﻿@model object
+
+<link rel="stylesheet" href="/css/main.css">
+
+<div class="pc">
+    <div class="title">
+        Welkom bij Zermos!
+    </div>
+    <div class="ondertitel">
+        Zo te zien ben je nieuw bij Zermos, wat leuk! Om je op weg te helpen heb ik een kleine tutorial gemaakt.
+    </div>
+    
+    <div class="cards">
+        
+    </div>
+</div>
+
+<div id="overlay">
+    <div class="left" style="left: 0"></div>
+    <div class="right" style="right: 0"></div>
+    <div class="top" style="top: 0"></div>
+    <div class="bottom" style="bottom: 0"></div>
+    <div class="corners"></div>
+</div>
+
+<script>
+    Zermos.mainAfterLoad = () => {
+        var overlay = document.getElementById('overlay');
+        document.body.appendChild(overlay);
+    };
+    
+    Zermos.mainUnload = () => {
+        var overlay = document.getElementById('overlay');
+        document.body.removeChild(overlay);
+    };
+
+    function createOverlay(query) {
+        
+        var overlay = document.getElementById('overlay');
+        var screenwidth = overlay.getBoundingClientRect().width;
+        var screenheight = overlay.getBoundingClientRect().height;
+
+        //get the element
+        
+        var element = document.querySelector(query);
+        //get the percentage from top, bottom, left and right
+        var rect = element.getBoundingClientRect();
+        //calc the left right top bottom
+        var top = ((rect.top) / screenheight) * 100;
+        var bottom = ((screenheight - rect.bottom) / screenheight) * 100;
+        var left = ((rect.left) / screenwidth) * 100;
+        var right = ((screenwidth - rect.right) / screenwidth) * 100;
+
+        //make the hights and widths of the left, right etc. divs
+        overlay.querySelector('.left').style.width = left + '%';
+        overlay.querySelector('.right').style.width = right + '%';
+
+
+        var topElement = overlay.querySelector('.top');
+        topElement.style.height = top + '%';
+        topElement.style.width = (100 - left - right) + '%';
+        topElement.style.left = left + '%';
+
+        var bottomElement = overlay.querySelector('.bottom');
+        bottomElement.style.height = bottom + '%';
+        bottomElement.style.width = (100 - left - right) + '%';
+        bottomElement.style.left = left + '%';
+
+        var corners = overlay.querySelector('.corners');
+        
+        const cornersStyle = {
+            top: top + '%',
+            left: left + '%',
+            width: (100 - left - right) + '%',
+            height: (100 - top - bottom) + '%'
+        };
+        
+        corners.style = Object.keys(cornersStyle).map(key => `${key}: ${cornersStyle[key]};`).join(' ');
+    }
+    
+    function startTutorial() {
+        createOverlay('.top');
+        
+        setTimeout(() => {
+            createOverlay('.bottom ul li')
+            
+            setTimeout(() => {
+                createOverlay('.bottom ul li:nth-child(4)');
+                
+                setTimeout(() => {
+                    createOverlay('.bottom ul li:nth-child(5)');
+                    }, 1000);
+                }, 1000);
+        }, 1000);
+    }
+</script>

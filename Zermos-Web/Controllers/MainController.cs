@@ -28,9 +28,9 @@ namespace Zermos_Web.Controllers
                 ViewData["url"] = Request.Cookies["default_page"] ?? "/Zermelo/Rooster";
             
             if (ViewData["url"] != null && ViewData["url"].ToString().IsNullOrEmpty())
-                ViewData["url"] = "/";
+                ViewData["url"] = Request.Cookies["default_page"] ?? "/Zermelo/Rooster";
             else if (ViewData["url"] == null)
-                ViewData["url"] = "/";
+                ViewData["url"] = Request.Cookies["default_page"] ?? "/Zermelo/Rooster";
             
             return View();
         }
@@ -75,6 +75,13 @@ namespace Zermos_Web.Controllers
                     }
                 }
             }, new JsonSerializerOptions {WriteIndented = true });
+        }
+
+        [ZermosPage]
+        [Route("/EersteKeer")]
+        public IActionResult EersteKeer()
+        {
+            return PartialView();
         }
     }
 }

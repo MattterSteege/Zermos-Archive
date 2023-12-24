@@ -223,5 +223,11 @@ namespace Zermos_Web.Controllers
 
             return schoolklimaatModels;
         }
+        
+        [Route("/School/Printen")]
+        public IActionResult Printen()
+        {
+            return StatusCode(299, "https://print.carmel.nl/RicohmyPrint/Account/ExternalLogin/?AuthenticationType=OpenID");
+        }
     }
 }

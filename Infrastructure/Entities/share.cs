@@ -13,7 +13,7 @@ public class share
     public DateTime expires_at { get; set; }
     public int max_uses { get; set; }
     #if DEBUG
-    [NotMapped] public string url => $"https://192.168.178.34:5001" + page + "?token=" + key;
+    [NotMapped] public string url => $"https://192.168.178.22:5001" + page + "?token=" + key;
     #elif RELEASE
     [NotMapped] public string url => $"https://zermos.kronk.tech" + page + "?token=" + key;
     #endif

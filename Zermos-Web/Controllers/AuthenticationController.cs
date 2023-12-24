@@ -31,7 +31,7 @@ public class AuthenticationController : Controller
 #if RELEASE
     const string redirectUrl = "https://zermos.kronk.tech/Login/Callback";
 #else
-    const string redirectUrl = "https://localhost:5001/Login/Callback";
+    const string redirectUrl = "https://192.168.178.22:5001/Login/Callback";
 #endif
     const string clientId = "REDACTED_MS_CLIENT_ID";
     const string clientSecret = "lcV8Q~GbQjBv45fivMgN3ARP~UHPNSuV259gQcU7";
@@ -93,6 +93,8 @@ public class AuthenticationController : Controller
     [NonAction]
     private async Task<IActionResult> VerificationSuccess(string email, string ReturnUrl, bool OneSessionLogin = false)
     {
+        bool newUser = false;
+        
         var claims = new List<Claim>
         {
             new("email", email),
@@ -109,6 +111,7 @@ public class AuthenticationController : Controller
                 theme = "light"
             };
             await _user.UpdateUserAsync(email, user);
+            newUser = true;
         }
 
         HttpContext.Response.Cookies.Append("theme", user.theme ?? "light");
@@ -116,6 +119,11 @@ public class AuthenticationController : Controller
         await HttpContext.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "user", "role")));
 
         _logger.Log(LogLevel.Information,$"User {email} logged in");
+        
+        if (newUser)
+        {
+            return RedirectToAction("EersteKeer", "Main");
+        }
 
         if (string.IsNullOrEmpty(ReturnUrl))
         {

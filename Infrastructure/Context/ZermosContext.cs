@@ -44,7 +44,7 @@ namespace Infrastructure.Context
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connection = "server=localhost;port=3306;user=root;database=REDACTED_DATABASE_NAME";
+            string connection = "server=REDACTED_IP_ADRESS;user=root;password=REDACTED_DATABASE_PASSWORD;database=REDACTED_DATABASE_NAME;port=3306;Connect Timeout=5;";
             if (IsDatabaseConnectionValid(connection))
             {
                 optionsBuilder.UseMySQL(connection);
