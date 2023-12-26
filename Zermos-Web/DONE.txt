@@ -1,5 +1,8 @@
 ﻿0.4.3 - Sharing is caring
 
+- Eerste keer
+    - De eerste keer dat je een Zermos account aan maakt krijg je nu een kleine uitleg pagina te zien, zodat je weet wat je kan verwachten.
+
 - authentificatie en autorisatie
     - het aanmaken van een account is nu opnieuw van de grond af aan opgebouwd en werkt nu wél zoals ik het wil.
     - het kon gebeuren dat je in 'account limbo' kwam, waarbij je geen account had, maar wel ingelogd was. Dit is nu opgelost, je wordt nu automatisch uitgelogd als je geen account hebt.
@@ -11,5 +14,5 @@
     - De paklijst in nu te vinden bij je rooster door op het 'lijst' icoontje te drukken.
     - Het swipen is nu veeeeel smoother
     
-- SOmtoday - cijferstatestieken
+- Somtoday - cijferstatestieken
     - een volgorde probleem is nu opgelsot, nice.

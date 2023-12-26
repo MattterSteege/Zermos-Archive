@@ -1,96 +1,297 @@
 ﻿@model object
 
 <link rel="stylesheet" href="/css/main.css">
+<script src="js/Zermos-tour.js"></script>
 
-<div class="pc">
-    <div class="title">
-        Welkom bij Zermos!
-    </div>
-    <div class="ondertitel">
-        Zo te zien ben je nieuw bij Zermos, wat leuk! Om je op weg te helpen heb ik een kleine tutorial gemaakt.
-    </div>
-    
-    <div class="cards">
-        
-    </div>
+<div id="start" class="start" onclick="startingAnimation()">
+    Start!
 </div>
 
-<div id="overlay">
-    <div class="left" style="left: 0"></div>
-    <div class="right" style="right: 0"></div>
-    <div class="top" style="top: 0"></div>
-    <div class="bottom" style="bottom: 0"></div>
-    <div class="corners"></div>
+<div id="zermos">
+    ZERMOS
 </div>
 
 <script>
-    Zermos.mainAfterLoad = () => {
-        var overlay = document.getElementById('overlay');
-        document.body.appendChild(overlay);
-    };
+
+function startingAnimation() {
+    //add animate class to start
+    document.getElementById("start").classList.add("animate");
+    document.getElementById("zermos").classList.add("animate");
+    setTimeout(() => {
+        ReplacePage('/koppelingen');
+    }, 3000);
+}
+
+Zermos.mainAfterLoad = () => {
     
-    Zermos.mainUnload = () => {
-        var overlay = document.getElementById('overlay');
-        document.body.removeChild(overlay);
-    };
-
-    function createOverlay(query) {
-        
-        var overlay = document.getElementById('overlay');
-        var screenwidth = overlay.getBoundingClientRect().width;
-        var screenheight = overlay.getBoundingClientRect().height;
-
-        //get the element
-        
-        var element = document.querySelector(query);
-        //get the percentage from top, bottom, left and right
-        var rect = element.getBoundingClientRect();
-        //calc the left right top bottom
-        var top = ((rect.top) / screenheight) * 100;
-        var bottom = ((screenheight - rect.bottom) / screenheight) * 100;
-        var left = ((rect.left) / screenwidth) * 100;
-        var right = ((screenwidth - rect.right) / screenwidth) * 100;
-
-        //make the hights and widths of the left, right etc. divs
-        overlay.querySelector('.left').style.width = left + '%';
-        overlay.querySelector('.right').style.width = right + '%';
-
-
-        var topElement = overlay.querySelector('.top');
-        topElement.style.height = top + '%';
-        topElement.style.width = (100 - left - right) + '%';
-        topElement.style.left = left + '%';
-
-        var bottomElement = overlay.querySelector('.bottom');
-        bottomElement.style.height = bottom + '%';
-        bottomElement.style.width = (100 - left - right) + '%';
-        bottomElement.style.left = left + '%';
-
-        var corners = overlay.querySelector('.corners');
-        
-        const cornersStyle = {
-            top: top + '%',
-            left: left + '%',
-            width: (100 - left - right) + '%',
-            height: (100 - top - bottom) + '%'
-        };
-        
-        corners.style = Object.keys(cornersStyle).map(key => `${key}: ${cornersStyle[key]};`).join(' ');
-    }
+    //if url contains ?notour, don't show tour
+    if (window.location.href.includes('?notour')) return;
     
-    function startTutorial() {
-        createOverlay('.top');
+    let tour = new ZermosTour()
+
+    if (window.innerWidth > 1200) {
+        tour.queue([
+            {
+                el: '.top',
+                options: {
+                    layerEvent: tour.next.bind(tour),
+                    slotPosition: 'right'
+                },
+                slot: 'Welkom bij Zermos, je krijgt nu een kleine tutorial waar je alles kan vinden, succes :)'
+            },
+            {
+                el: '#rooster',
+                options: {
+                    layerEvent: tour.next.bind(tour),
+                    slotPosition: 'right'
+                },
+                slot: 'Hier vind je je rooster.'
+            }, {
+                el: '#huiswerk',
+                options: {
+                    layerEvent: tour.next.bind(tour),
+                    slotPosition: 'right'
+                },
+                slot: 'Hier vind je je huiswerk en je zelf-ingeplande huiswerk.'
+            },
+            {
+                el: '#cijfers',
+                options: {
+                    layerEvent: tour.next.bind(tour),
+                    slotPosition: 'right'
+                },
+                slot: 'Hier vind je je cijfers en cijferstatestieken.'
+            },
+            {
+                el: '#informatiebord',
+                options: {
+                    layerEvent: tour.next.bind(tour),
+                    slotPosition: 'right'
+                },
+                slot: 'Hier vind je het nieuws dat op het TV scherm bij de kluisjes staat.'
+            },
         
-        setTimeout(() => {
-            createOverlay('.bottom ul li')
-            
-            setTimeout(() => {
-                createOverlay('.bottom ul li:nth-child(4)');
-                
-                setTimeout(() => {
-                    createOverlay('.bottom ul li:nth-child(5)');
-                    }, 1000);
-                }, 1000);
-        }, 1000);
+            {
+                el: '#printen',
+                options: {
+                    layerEvent: tour.next.bind(tour),
+                    slotPosition: 'right'
+                },
+                slot: 'Door hier te klikken wordt je automatisch doorgelinkt naar de website om te printen, mits je ingelogd bent bij Microsoft, anders moet je dat nog even doen.'
+            },
+        
+            {
+                el: '#schoolnieuws',
+                options: {
+                    layerEvent: tour.next.bind(tour),
+                    slotPosition: 'right'
+                },
+                slot: 'Hier staan de nieuwsberichten uit de Antonius app.'
+            },
+            {
+                el: '#schoolkalender',
+                options: {
+                    layerEvent: tour.next.bind(tour),
+                    slotPosition: 'right'
+                },
+                slot: 'Hier staat de kalender van de school.'
+            },
+            {
+                el: '#account-1',
+                options: {
+                    layerEvent: tour.next.bind(tour),
+                    slotPosition: 'left'
+                },
+                slot: 'Hier vind je je account, instellingen, afwezigheid én je koppelingen.'
+            },
+            {
+                el: '.docs',
+                options: {
+                    layerEvent: tour.next.bind(tour),
+                    slotPosition: 'right'
+                },
+                slot: 'Als je vragen hebt kun je hier vaak even kijken of er al een antwoord is.'
+            },
+            {
+                el: '#start',
+                options: {
+                    layerEvent: tour.next.bind(tour),
+                    slotPosition: 'bottom'
+                },
+                slot: 'Als je er klaar voor bent, klik dan hier om te starten met het koppelen van alle apps.'
+            }
+        ]).run();    
     }
+    else 
+    {
+        if (document.querySelector('html').classList.contains('right'))
+        {
+            tour.queue([
+                {
+                    el: '.top',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'left'
+                    },
+                    slot: 'Welkom bij Zermos, je krijgt nu een kleine tutorial waar je alles kan vinden, succes :)'
+                },
+                {
+                    el: '#rooster',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'left'
+                    },
+                    slot: 'Hier vind je je rooster.'
+                }, {
+                    el: '#huiswerk',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'left'
+                    },
+                    slot: 'Hier vind je je huiswerk en je zelf-ingeplande huiswerk.'
+                },
+                {
+                    el: '#cijfers',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'left'
+                    },
+                    slot: 'Hier vind je je cijfers en cijferstatestieken.'
+                },
+                {
+                    el: '#informatiebord',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'left'
+                    },
+                    slot: 'Hier vind je het nieuws dat op het TV scherm bij de kluisjes staat.'
+                },
+                {
+                    el: '#printen',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'left'
+                    },
+                    slot: 'Door hier te klikken wordt je automatisch doorgelinkt naar de website om te printen, mits je ingelogd bent bij Microsoft, anders moet je dat nog even doen.'
+                },
+                {
+                    el: '#schoolnieuws',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'left'
+                    },
+                    slot: 'Hier staan de nieuwsberichten uit de Antonius app.'
+                },
+                {
+                    el: '#schoolkalender',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'left'
+                    },
+                    slot: 'Hier staat de kalender van de school.'
+                },
+                {
+                    el: '#account-2',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'left'
+                    },
+                    slot: 'Hier vind je je account, instellingen, afwezigheid én je koppelingen.'
+                },
+                {
+                    el: '#start',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'bottom'
+                    },
+                    slot: 'Als je er klaar voor bent, klik dan hier om te starten met het koppelen van alle apps.'
+                }
+            ]).run();
+        }
+        else
+        {
+            tour.queue([
+                {
+                    el: '.top',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'right'
+                    },
+                    slot: 'Welkom bij Zermos, je krijgt nu een kleine tutorial waar je alles kan vinden, succes :)'
+                },
+                {
+                    el: '#rooster',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'right'
+                    },
+                    slot: 'Hier vind je je rooster.'
+                }, {
+                    el: '#huiswerk',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'right'
+                    },
+                    slot: 'Hier vind je je huiswerk en je zelf-ingeplande huiswerk.'
+                },
+                {
+                    el: '#cijfers',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'right'
+                    },
+                    slot: 'Hier vind je je cijfers en cijferstatestieken.'
+                },
+                {
+                    el: '#informatiebord',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'right'
+                    },
+                    slot: 'Hier vind je het nieuws dat op het TV scherm bij de kluisjes staat.'
+                },
+                {
+                    el: '#printen',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'right'
+                    },
+                    slot: 'Door hier te klikken wordt je automatisch doorgelinkt naar de website om te printen, mits je ingelogd bent bij Microsoft, anders moet je dat nog even doen.'
+                },
+                {
+                    el: '#schoolnieuws',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'right'
+                    },
+                    slot: 'Hier staan de nieuwsberichten uit de Antonius app.'
+                },
+                {
+                    el: '#schoolkalender',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'right'
+                    },
+                    slot: 'Hier staat de kalender van de school.'
+                },
+                {
+                    el: '#account-2',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'right'
+                    },
+                    slot: 'Hier vind je je account, instellingen, afwezigheid én je koppelingen.'
+                },
+                {
+                    el: '#start',
+                    options: {
+                        layerEvent: tour.next.bind(tour),
+                        slotPosition: 'bottom'
+                    },
+                    slot: 'Als je er klaar voor bent, klik dan hier om te starten met het koppelen van alle apps.'
+                }
+            ]).run();
+        }
+    }
+}
 </script>

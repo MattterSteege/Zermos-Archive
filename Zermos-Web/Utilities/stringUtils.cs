@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Zermos_Web.Utilities
 {
@@ -103,5 +104,17 @@ namespace Zermos_Web.Utilities
             var returna = str.Substring(0, count);
             return returna;
         }
+
+        public static string ReplaceNewLines(this string str)
+        {
+            // Replace newlines with spaces
+            string result = str.Replace("\n", " ").Replace("\r", "");
+
+            // Remove newline if it has a space before it
+            result = Regex.Replace(result, @"(\s+)\n", "$1");
+
+            return result;
+        }
+
     }
 }

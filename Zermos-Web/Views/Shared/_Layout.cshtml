@@ -41,7 +41,7 @@
 
             <h5 class="Heading">Zermelo</h5>
 
-            <li>
+            <li id="rooster">
                 <a onclick="ReplacePage('@Url.Action("Rooster", "Zermelo")')">
                     <div class="menu-item">
                         <i class="fa-solid fa-calendar-day menu-icons fa-fw"></i>
@@ -53,7 +53,7 @@
 
             <h5 class="Heading">SOMtoday</h5>
 
-            <li>
+            <li id="huiswerk">
                 <a onclick="ReplacePage('@Url.Action("Huiswerk", "Somtoday")')">
                     <div class="menu-item">
                         <i class="fa-solid fa-pen-to-square menu-icons fa-fw"></i>
@@ -62,7 +62,7 @@
                 </a>
             </li>
 
-            <li>
+            <li id="cijfers">
                 <a onclick="ReplacePage('@Url.Action("Cijfers", "Somtoday")')">
                     <div class="menu-item">
                         <i class="fa-solid fa-line-chart menu-icons fa-fw"></i>
@@ -71,23 +71,9 @@
                 </a>
             </li>
 
-            @if ((Context.Request.Cookies["preview"] ?? "").Contains("microsoft"))
-            {
-                <h5 class="Heading">Microsoft</h5>
-                
-                <li>
-                    <a onclick="ReplacePage('/Microsoft/Onedrive')">
-                        <div class="menu-item">
-                            <i class="fa-solid fa-book menu-icons fa-fw"></i>
-                            <p>Onedrive</p>
-                        </div>
-                    </a>
-                </li>
-            }
-
             <h5 class="Heading">School</h5>
 
-            <li>
+            <li id="informatiebord">
                 <a onclick="ReplacePage('@Url.Action("informatiebord", "School")')">
                     <div class="menu-item">
                         <i class="fa-solid fa-info-circle menu-icons fa-fw"></i>
@@ -96,7 +82,7 @@
                 </a>
             </li>
             
-            <li>
+            <li id="printen">
                 <a onclick="ReplacePage('@Url.Action("Printen", "School")')">
                     <div class="menu-item">
                         <i class="fa-solid fa-print menu-icons fa-fw"></i>
@@ -108,7 +94,7 @@
 
             <h5 class="Heading">De Antonius app</h5>
 
-            <li>
+            <li id="schoolnieuws">
                 <a onclick="ReplacePage('@Url.Action("Schoolnieuws", "Infowijs")')">
                     <div class="menu-item">
                         <i class="fa-solid fa-newspaper menu-icons fa-fw"></i>
@@ -117,7 +103,7 @@
                 </a>
             </li>
 
-            <li>
+            <li id="schoolkalender">
                 <a onclick="ReplacePage('@Url.Action("Schoolkalender", "Infowijs")')">
                     <div class="menu-item">
                         <i class="fa-solid fa-calendar-days menu-icons fa-fw"></i>
@@ -126,7 +112,7 @@
                 </a>
             </li>
 
-            <li style="display: none" class="hidden-account">
+            <li style="display: none" class="hidden-account" id="account-2">
                 <a onclick="ReplacePage('@Url.Action("Account", "Account")')">
                     <div class="menu-item">
                         <i class="fa-solid fa-user menu-icons fa-fw"></i>
@@ -146,7 +132,7 @@
 </div>
 
 <div class="top-bar">
-    <div class="top-right-profile-picture">
+    <div class="top-right-profile-picture" id="account-1">
         <a onclick="ReplacePage('@Url.Action("Account", "Account")')">
             <i class="fa-solid fa-user menu-icons fa-fw"></i>
         </a>
