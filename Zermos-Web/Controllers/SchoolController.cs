@@ -22,33 +22,20 @@ namespace Zermos_Web.Controllers
 {
     public class SchoolController : BaseController
     {
-        public SchoolController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
+        public SchoolController(Users user, Shares share, ILogger<BaseController> logger, GlobalVariables globalVariables) : base(user, share, logger, globalVariables) { }
         
         private readonly HttpClient _httpClient = new()
         {
             BaseAddress = new Uri("https://app.factorylab.nl/strukton/sensor/")
         };
-
-
+        
+        
         [ZermosPage]
         public async Task<IActionResult> Informatiebord()
         {
-            ViewData["add_css"] = "school";
-
-            if (User.Identity is {IsAuthenticated: true} && ZermosUser != null)
+            if (GlobalVariables.SchoolInfobordLastMod.AddHours(1) > DateTime.Now && GlobalVariables.SchoolInfobord.Count > 0)
             {
-                if (Request.Cookies.ContainsKey("cached-school-informationscreen"))
-                {
-                    var lastModified =
-                        DateTime.Parse(Request.Cookies["cached-school-informationscreen"] ?? string.Empty);
-
-                    if (lastModified.Hour >= 0 && lastModified.Hour < 12 && DateTime.Now.Hour >= 0 &&
-                        DateTime.Now.Hour < 12 || lastModified.Hour >= 12 && lastModified.Hour < 24 &&
-                        DateTime.Now.Hour >= 12 && DateTime.Now.Hour < 24)
-                    {
-                        return PartialView(JsonConvert.DeserializeObject<List<InformatieBoordModel>>(ZermosUser.cached_school_informationscreen));
-                    }
-                }
+                return PartialView(GlobalVariables.SchoolInfobord);
             }
 
             var model = new List<InformatieBoordModel>();
@@ -90,16 +77,8 @@ namespace Zermos_Web.Controllers
                 }
             }
 
-            if (User.Identity is {IsAuthenticated: true} && ZermosUser != null)
-            {
-                ZermosUser = new user
-                {
-                    cached_school_informationscreen = JsonConvert.SerializeObject(model)
-                };
-
-                Response.Cookies.Append("cached-school-informationscreen", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"),
-                    new CookieOptions {Expires = DateTime.Now.AddDays(60)});
-            }
+            GlobalVariables.SchoolInfobord = model;
+            GlobalVariables.SchoolInfobordLastMod = DateTime.Now;
 
             return PartialView(model);
         }

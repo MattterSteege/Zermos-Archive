@@ -16,3 +16,6 @@
     
 - Somtoday - cijferstatestieken
     - een volgorde probleem is nu opgelsot, nice.
+
+- School - Infomatiebord
+    - het caching systeem is nu opnieuw opgebouwd, en werkt globaal en niet per gebruiker. Dit scheelt een hoop data en tijd.

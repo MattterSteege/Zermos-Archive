@@ -49,9 +49,7 @@ namespace Zermos_Web.Controllers
                 new AuthenticationHeaderValue("Bearer", GetSessionToken().Result);
             var response = _httpClient
                 .GetAsync("https://antonius.hoyapp.nl/hoy/v3/messages?include_archived=0&since=4500000").Result;
-
             
-            dynamic a = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
             /*
                 type catalog:
                 1: means message contents

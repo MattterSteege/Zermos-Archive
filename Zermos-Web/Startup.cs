@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Zermos_Web.Controllers;
 
 //using WebEssentials.AspNetCore.Pwa;
 
@@ -29,6 +30,8 @@ namespace Zermos_Web
             services.AddDbContext<ZermosContext>();
             services.AddScoped<Users>();
             services.AddScoped<Shares>();
+            
+            services.AddSingleton<GlobalVariables>();
 
             var cookieExpiration = TimeSpan.FromDays(60);
 

@@ -53,10 +53,6 @@ else if (Model.code == 13)
             <p>Je bent succesvol ingelogd op je account. Welkom terug, <b>@(Model.email ?? "[email]")</b>! Je hebt nu volledige toegang tot alle functies en mogelijkheden, mits je ze gekoppeld heb.</p>
         </div>
     </div>
-    
-    <script>
-    window.location.hash = "#/Login/Callback";
-    </script>
 }
 else if (Model.code == 21)
 {
@@ -103,7 +99,7 @@ else
 {
     <div class="login">
         <div class="login-explanation">
-            <h1 style="color: #EB3628">Er is een onbekende fout opgetreden?</h1>
+            <h1 style="color: #EB3628">Er is een onbekende fout opgetreden? Vaak help opnieuw proberen.</h1>
         </div>
     </div>
 }

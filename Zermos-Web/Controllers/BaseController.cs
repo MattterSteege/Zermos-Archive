@@ -13,12 +13,14 @@ namespace Zermos_Web.Controllers
         private readonly Users _user;
         private readonly Shares _share;
         private readonly ILogger<BaseController> _logger;
+        private readonly GlobalVariables _globalVariables;
 
-        protected BaseController(Users user, Shares share, ILogger<BaseController> logger)
+        protected BaseController(Users user, Shares share, ILogger<BaseController> logger, GlobalVariables globalVariables = null)
         {
             _user = user;
             _share = share;
             _logger = logger;
+            _globalVariables = globalVariables;
         }
 
         // USER METHODS
@@ -36,6 +38,8 @@ namespace Zermos_Web.Controllers
             _logger.Log(logLevel, message);
         }
         
+        // GLOBAL VARIABLES METHODS
+        protected GlobalVariables GlobalVariables => _globalVariables;
         
         // SHARE METHODS
         protected async Task<share> AddShare(share share)
