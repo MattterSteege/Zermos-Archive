@@ -18,7 +18,7 @@ namespace Zermos_Web.Controllers
 {
     public class InfowijsController : BaseController
     {
-        public InfowijsController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
+        public InfowijsController(Users user, Shares share, ILogger<BaseController> logger, GlobalVariables globalVariables) : base(user, share, logger, globalVariables) { }
         
         private readonly HttpClient _httpClient = new()
         {
@@ -86,9 +86,9 @@ namespace Zermos_Web.Controllers
         {
             ViewData["add_css"] = "infowijs";
 
-            if (Request.Cookies.ContainsKey("cached-infowijs-calendar"))
+            if (GlobalVariables.SchoolJaarKalenderLastMod.AddHours(1) > DateTime.Now && GlobalVariables.SchoolJaarKalender != null)
             {
-                return PartialView(JsonConvert.DeserializeObject<InfowijsEventsModel>(ZermosUser.cached_infowijs_calendar ?? string.Empty, Converter.Settings).data);
+                return PartialView(GlobalVariables.SchoolJaarKalender.data);
             }
 
             //https://antonius.hoyapp.nl/hoy/v1/events
@@ -97,17 +97,10 @@ namespace Zermos_Web.Controllers
 
             var response = await _httpClient.GetAsync("https://antonius.hoyapp.nl/hoy/v1/events");
 
-            ZermosUser = new user
-            {
-                cached_infowijs_calendar = await response.Content.ReadAsStringAsync()
-            };
+            GlobalVariables.SchoolJaarKalenderLastMod = DateTime.Now;
+            GlobalVariables.SchoolJaarKalender = JsonConvert.DeserializeObject<InfowijsEventsModel>(await response.Content.ReadAsStringAsync(), Converter.Settings);
 
-            Response.Cookies.Append("cached-infowijs-calendar", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"),
-                new CookieOptions {Expires = DateTime.Now.AddDays(1)});
-
-            return PartialView(JsonConvert
-                .DeserializeObject<InfowijsEventsModel>(await response.Content.ReadAsStringAsync(),
-                    Converter.Settings).data);
+            return PartialView(GlobalVariables.SchoolJaarKalender.data);
         }
 
         [NonAction]

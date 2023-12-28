@@ -67,6 +67,11 @@ class ZermosTour {
             this.layer.setAttribute('class', this.options.prefix + '-layer');
             this.layer.setAttribute('style', layerStyle());
             this.layer.addEventListener('click', this.options.layerEvent);
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'Space' || e.code === 'ArrowRight' || e.code === 'ArrowDown' || e.code === 'Enter') {
+                    this.options.layerEvent();
+                }
+            });
             document.body.appendChild(this.layer);
         }
     }

@@ -41,19 +41,19 @@ namespace Zermos_Web.Controllers
             
             if (response.IsSuccessStatusCode == false)
             {   
-                if (week == DateTime.Now.GetWeekNumber().ToString() && year == DateTime.Now.Year.ToString())
-                {
-                    ZermosUser = new user {cached_zermelo_schedule = "{\"response\":{\"data\":[{\"Items\":[{\"appointments\":[]}]}]}}"};
-                }
+                // if (week == DateTime.Now.GetWeekNumber().ToString() && year == DateTime.Now.Year.ToString())
+                // {
+                //     ZermosUser = new user {cached_zermelo_schedule = "{\"response\":{\"data\":[{\"Items\":[{\"appointments\":[]}]}]}}"};
+                // }
                 
                 HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je rooster kon niet worden geladen, waarschijnlijk is je Zermelo token verlopen", NotificationCenter.NotificationType.ERROR);
                 return compact ? PartialView("Rooster-week", new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>(), MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year)}}}}) : PartialView(new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>(), MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year)}}}});
             }
 
-            if (week == DateTime.Now.GetWeekNumber().ToString() && year == DateTime.Now.Year.ToString())
-            {
-                ZermosUser = new user {cached_zermelo_schedule = await response.Content.ReadAsStringAsync()};
-            }
+            // if (week == DateTime.Now.GetWeekNumber().ToString() && year == DateTime.Now.Year.ToString())
+            // {
+            //     ZermosUser = new user {cached_zermelo_schedule = await response.Content.ReadAsStringAsync()};
+            // }
             
             var zermeloRoosterModel = JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync());
             zermeloRoosterModel.response.data[0].MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year);

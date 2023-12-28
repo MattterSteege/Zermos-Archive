@@ -17,5 +17,8 @@
 - Somtoday - cijferstatestieken
     - een volgorde probleem is nu opgelsot, nice.
 
+- Infowijs - Schoolkalender
+    - Het caching systeem dat ik heb gemaakt voor het Informatiebord is nu ook toegepast op de schoolkalender, dit scheelt erg wat laadtijd.
+
 - School - Infomatiebord
     - het caching systeem is nu opnieuw opgebouwd, en werkt globaal en niet per gebruiker. Dit scheelt een hoop data en tijd.
