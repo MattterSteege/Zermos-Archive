@@ -4,6 +4,32 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - Versie 0.4.4 - 28-12-2023
+0.4.3 - Het oude jaar uit met een klapper
+
+- Eerste keer
+    - De eerste keer dat je een Zermos account aan maakt krijg je nu een kleine uitleg pagina te zien, zodat je weet wat je kan verwachten.
+
+- authentificatie en autorisatie
+    - het aanmaken van een account is nu opnieuw van de grond af aan opgebouwd en werkt nu wél zoals ik het wil.
+    - het kon gebeuren dat je in 'account limbo' kwam, waarbij je geen account had, maar wel ingelogd was. Dit is nu opgelost, je wordt nu automatisch uitgelogd als je in de databse hebt.
+    
+- Hoofdmenu
+    - Het hoofdmenu bestaat niet meer, het was echt te veel werk voor zo weinig functionaliteit, dus houdoe.
+    
+- Zermelo - Rooster
+    - De paklijst in nu te vinden bij je rooster door op het 'lijst' icoontje te drukken.
+    - Het swipen is nu veeeeel smoother
+    
+- Somtoday - cijferstatestieken
+    - een volgorde probleem is nu opgelsot, nice.
+
+- Infowijs - Schoolkalender
+    - Het caching systeem dat ik heb gemaakt voor het Informatiebord is nu ook toegepast op de schoolkalender, dit scheelt erg wat laadtijd.
+
+- School - Infomatiebord
+    - het caching systeem is nu opnieuw opgebouwd, en werkt globaal en niet per gebruiker. Dit scheelt een hoop data en tijd.
+
 # Release Notes - Versie 0.4.3 - 01-12-2023
 Dit is een kleine update, maar wel een handige, ik wou het gewoon eventje snel uitbrengen!
 0.4.4 - Sharing is caring
