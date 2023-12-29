@@ -1,5 +1,4 @@
 Ben je benieuwd wat Zermos allemaal kan? Ik zet het hieronder even allemaal op een rijtje voor je.
-# Zermos
 
 ## Zermelo
 Zermos moet je eigenlijk zien als Zermelo++ (en dan nog 3 plusjes) dit kan allemaal met Zermos:\
@@ -19,3 +18,4 @@ Zermos heeft ook Somtoday verbeterd, dit vind je onder andere terug in de kleine
 Als je ook nog eens kiest om Infowijs aan je Zermos account te koppelen, dan krijg je toegang tot nog meer leuke dingen.
 * Het schoolnieuws, dus alle 'belangrijke' berichtjes die de school verstuurd heeft staan allemaal in Zermos
 * De schoolkalender ook, zo zie je altijd wat de school voor je in petto heeft de komende maanden.
+* En tot slot, het feit dat je niet meer op je telefoon hoeft te kijken voor alle berichten, want Zermos kan je ook gewoon op je computer gebruiken.

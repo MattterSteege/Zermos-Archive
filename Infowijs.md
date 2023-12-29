@@ -27,7 +27,7 @@ Om Zermos met Infowijs te koppelen, volg de onderstaande stappen. Dit is binnen 
    3. Open outlook en bekijk de mail van 'Antonius', klik vervolgens op 'Log Nu in!'*
    4. Als er staat 'Gelukt!' ga dan terug naar Zermos en klik op 'Check of je bent ingelogd' en je bent ingelogd!
 
-   <br><br>**Mocht het gebeuren dat De Antonius app opent als je op 'Log Nu in!' ga dan gewoon terug naar Zermos en volg de rest van de stappen er is niks fout gegaan, dit is gewoon een (vervelende) feature van Infowijs*
+**Mocht het gebeuren dat De Antonius app opent als je op 'Log Nu in!' ga dan gewoon terug naar Zermos en volg de rest van de stappen er is niks fout gegaan, dit is gewoon een (vervelende) feature van Infowijs*<br><br>
 
 2. **Met de QR-code** (heb je telefoon én laptop nodig)
    1. Ga naar https://zermos.kronk.tech/Koppelingen/Infowijs/Qr

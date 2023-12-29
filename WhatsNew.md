@@ -6,7 +6,7 @@ nav_exclude: false
 
 # Release Notes - Versie 0.4.3 - 01-12-2023
 Dit is een kleine update, maar wel een handige, ik wou het gewoon eventje snel uitbrengen!
-0.4.3 - Sharing is caring
+0.4.4 - Sharing is caring
 
 - Somtoday - Cijfers
     - Je kan nu je cijfers delen met je vrienden (en opa en oma natuurlijk) Dit doe je heel makkelijk. Ga naar je cijfers, klik op het deel icoontje en kies uit een paar opties (welke vakken, tot waaneer mogen ze het bekijken en of ze alleen het gemiddelde zien of ook de cijfers zelf)
