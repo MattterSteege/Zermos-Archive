@@ -5,7 +5,7 @@ nav_exclude: false
 ---
 
 # Release Notes - Versie 0.4.4 - 28-12-2023
-0.4.3 - Het oude jaar uit met een klapper
+0.4.4 - Het oude jaar uit met een klapper
 
 - Eerste keer
     - De eerste keer dat je een Zermos account aan maakt krijg je nu een kleine uitleg pagina te zien, zodat je weet wat je kan verwachten.
@@ -32,7 +32,7 @@ nav_exclude: false
 
 # Release Notes - Versie 0.4.3 - 01-12-2023
 Dit is een kleine update, maar wel een handige, ik wou het gewoon eventje snel uitbrengen!
-0.4.4 - Sharing is caring
+0.4.3 - Sharing is caring
 
 - Somtoday - Cijfers
     - Je kan nu je cijfers delen met je vrienden (en opa en oma natuurlijk) Dit doe je heel makkelijk. Ga naar je cijfers, klik op het deel icoontje en kies uit een paar opties (welke vakken, tot waaneer mogen ze het bekijken en of ze alleen het gemiddelde zien of ook de cijfers zelf)
