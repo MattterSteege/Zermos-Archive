@@ -4,6 +4,12 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - Versie 0.4.4.1 - 06-01-2024
+0.4.4.1 - Hotfix for Somtoday
+
+- Je kan nu wel inloggen als je een SOMtoday wachtwoord hebt met speciale tekens
+- Een fout met week huiswerk is opgelost.
+
 # Release Notes - Versie 0.4.4 - 28-12-2023
 0.4.4 - Het oude jaar uit met een klapper
 
