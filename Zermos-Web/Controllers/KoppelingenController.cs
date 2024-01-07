@@ -381,6 +381,9 @@ namespace Zermos_Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Somtoday(string username, string password)
         {
+            username = Encoding.UTF8.GetString(Convert.FromBase64String(username));
+            password = Encoding.UTF8.GetString(Convert.FromBase64String(password));
+            
             var tokens = GenerateTokens();
             //0 = code verifier
             //1 = code challenge

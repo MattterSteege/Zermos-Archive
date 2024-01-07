@@ -7,6 +7,8 @@ namespace Zermos_Web.Utilities;
 
 public static class SchooljaarUtils
 {
+    public static Schooljaar currentSchooljaar => getCurrentSchooljaar();
+
     public class Schooljaar
     {
         public string naam { get; set; }

@@ -692,7 +692,7 @@ namespace Zermos_Web.Controllers
                 HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je \"week huiswerk\" op somtoday kon niet opgevraagd worden, je \"dag huiswerk\" is wel opgevraagd", NotificationCenter.NotificationType.WARNING);
                 return somtodayHuiswerk.items;
             }
-
+            
             somtodayHuiswerk.items.AddRange(JsonConvert.DeserializeObject<SomtodayHomeworkModel>(await response.Content.ReadAsStringAsync()).items);
             
             return somtodayHuiswerk.items;
@@ -701,7 +701,7 @@ namespace Zermos_Web.Controllers
         [NonAction]
         private List<Models.somtodayHomeworkModel.Item> GetRemappedCustomHuiswerk()
         {
-            var customHomeworkItems = JsonConvert.DeserializeObject<List<CustomHuiswerkModel>>((ZermosUser).custom_huiswerk ?? "[]") ?? new List<CustomHuiswerkModel>();
+            var customHomeworkItems = JsonConvert.DeserializeObject<List<CustomHuiswerkModel>>(ZermosUser.custom_huiswerk ?? "[]") ?? new List<CustomHuiswerkModel>();
             var remapedHomework = new List<Models.somtodayHomeworkModel.Item>(capacity:  customHomeworkItems.Count);
 
             foreach (var customHomeworkItem in customHomeworkItems)

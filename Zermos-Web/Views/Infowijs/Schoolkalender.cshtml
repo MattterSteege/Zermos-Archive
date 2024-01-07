@@ -2,7 +2,12 @@
 @model System.Collections.Generic.List<Zermos_Web.Models.Datum>
 
 @{
-    var groupedByMonth = Model.GroupBy(item => item.startsAt.ToDateTime().Year).SelectMany(group => group.GroupBy(item => item.startsAt.ToDateTime().Month));
+    var items = Model;
+    var groupedByMonth = items
+        .GroupBy(item => item.startsAt.ToDateTime().Year)
+        .SelectMany(yearGroup => yearGroup
+        .GroupBy(item => item.startsAt.ToDateTime().Month));
+
     var culture = new CultureInfo("nl-NL");
 }
 
@@ -10,53 +15,82 @@
 
 <div class="calander-group">
     <div class="calendar-container">
-        @foreach (var dayGroup in groupedByMonth)
+        @foreach (var monthGroup in groupedByMonth)
         {
-            <div class="calendar-month-parent" id="@(dayGroup.First()?.startsAt.ToDateTime().ToString("M-yy") ?? "Geen datum!?")">
+            if (monthGroup.Last().endsAt.ToDateTime() < DateTime.Now)
+                continue;
+            
+            
+            var monthYear = monthGroup.First().startsAt.ToDateTime().ToString("M-yy");
+            var startsAtMonthYear = monthGroup.First().startsAt.ToDateTime();
+            var monthName = startsAtMonthYear.ToString("MMMM yyyy", culture);
 
-                <h1>@(dayGroup.First()?.startsAt.ToDateTime().ToString("MMMM yyyy", new CultureInfo("nl-NL")) ?? "Geen datum!?")</h1>
+            <div class="calendar-month-parent" id="@monthYear">
+                <h1>@monthName</h1>
 
-                @foreach (var homeworkItem in dayGroup)
+                @foreach (var calenderItem in monthGroup)
                 {
-                    //utc, convert to dutch time with daylight saving
-                    var startsAt = homeworkItem.startsAt.ConvertUnixTimestampToDutchTime();
-                    var endsAt = homeworkItem.endsAt.ConvertUnixTimestampToDutchTime();
+                    if (calenderItem.endsAt.ToDateTime() < DateTime.Now)
+                        continue;
                     
-                    <div class="calendar-item" style="@(endsAt < DateTime.Now ? "opacity: 0.5;" : "opacity: 1;")">
-                        @homeworkItem.title <br/>
+                    var startsAt = calenderItem.startsAt.ConvertUnixTimestampToDutchTime();
+                    var endsAt = calenderItem.endsAt.ConvertUnixTimestampToDutchTime();
+                    var itemDate = startsAt.Date;
 
-                        @if (startsAt.Date == endsAt.Date && homeworkItem.isAllDay == false)
+                    <div class="calendar-item" style="@(endsAt < DateTime.Now ? "opacity: 0.5;" : "opacity: 1;")">
+                        @calenderItem.title <br/>
+
+                        @if (itemDate == endsAt.Date && !calenderItem.isAllDay)
                         {
                             @(startsAt.ToString("dddd d MMMM HH:mm", culture) + " - " + endsAt.ToString("HH:mm", culture))
                         }
-                        else if (startsAt.Date != endsAt.Date && homeworkItem.isAllDay == false)
+                        else if (itemDate != endsAt.Date && !calenderItem.isAllDay)
                         {
                             @(startsAt.ToString("dddd d MMMM", culture) + " t/m " + endsAt.AddDays(-1).ToString("dddd d MMMM", culture))
                         }
-                        else if (homeworkItem.isAllDay)
+                        else if (calenderItem.isAllDay)
                         {
                             @startsAt.ToString("dddd d MMMM", culture)
                         }
                         <br/>
-                        
                     </div>
                 }
             </div>
         }
     </div>
+
     <div class="dates-container">
-        @foreach (var dayGroup in groupedByMonth)
-        {
-            var startsAt = dayGroup.First().startsAt.ToDateTime();
-            <div class="month" onclick="doScrolling(`[id='@startsAt.ToString("M-yy")']`, 1000)" href="?@startsAt.ToString("M-yy")">
-                @startsAt.ToString("MMMM", culture)
-            </div>
-        }
+        @* @foreach (var monthGroup in groupedByMonth) *@
+        @* { *@
+        @*     var startsAtMonthYear = monthGroup.First().startsAt.ToDateTime(); *@
+        @*     var monthYear = startsAtMonthYear.ToString("M-yy"); *@
+        @* *@
+        @*     <div class="month" onclick="doScrolling('[id=\'@monthYear\']', 1000)" href="?@monthYear"> *@
+        @*         @startsAtMonthYear.ToString("MMMM", culture) *@
+        @*     </div> *@
+        @* } *@
     </div>
 </div>
 
 
 <script>
+    function createDatesContainer() {
+        var datesContainer = document.querySelector('.dates-container');
+        var items = document.querySelectorAll('.calendar-month-parent');
+        
+        for (var i = 0; i < items.length; i++) {
+            var month = document.createElement('div');
+            month.classList.add('month');
+            month.setAttribute('href', '?' + items[i].getAttribute('id'));
+            month.innerHTML = items[i].querySelector('h1').innerHTML.split(' ')[0];
+            datesContainer.appendChild(month);
+            
+            month.addEventListener('click', function() {
+                doScrolling(`[id='` + this.getAttribute('href').replace('?', '') + `']`, 1000);
+            });
+        }
+    }
+
     // Function to extract the target element ID from the URL
     function getTargetElementId() {
         var d = new Date();
@@ -65,6 +99,8 @@
 
     // Check if the URL contains a target element ID and scroll to it
     Zermos.mainBeforeLoad = () => {
+        createDatesContainer();
+        
         const targetElementId = getTargetElementId();
         if (targetElementId) {
             const targetElement = document.getElementById(targetElementId);

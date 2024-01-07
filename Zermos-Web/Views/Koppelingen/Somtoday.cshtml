@@ -27,7 +27,7 @@
         for (var i = 0; i < inputs.length; i++) {
             var input = inputs[i];
             if (input.type === "hidden") continue;
-            url += (i === 0 ? "?" : "&") + input.name + "=" + input.value;
+            url += (i === 0 ? "?" : "&") + input.name + "=" + btoa(input.value);
         }
         
         var button = document.getElementsByTagName("button")[0];

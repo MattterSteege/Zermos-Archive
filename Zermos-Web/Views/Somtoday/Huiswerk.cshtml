@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using Zermos_Web.Utilities
 @model Zermos_Web.Models.somtodayHomeworkModel.SomtodayHomeworkModel
 
 @{
@@ -12,6 +13,8 @@
 <div class="homework-container">
     @foreach (var dayGroup in groupedHomework)
     {
+        if (dayGroup.Key > SchooljaarUtils.currentSchooljaar.totDatumDate) continue;
+        
         //if date is after today and nextHomeworkFound is false
         string id = "";
         if (dayGroup.First().datumTijd.Date > DateTime.Now.Date.AddDays(DateTime.Now.Hour < 17 ? -1 : 0) && !nextHomeworkFound)
@@ -26,6 +29,8 @@
 
             @foreach (var homeworkItem in dayGroup)
             {
+                if (homeworkItem.datumTijd.Date > SchooljaarUtils.currentSchooljaar.totDatumDate) continue;
+                
                 <div class="homeworkItem @homeworkItem.studiewijzerItem.huiswerkType?.ToLower() @(homeworkItem.studiewijzerItem.bijlagen?.Count > 0 ? "bijlagen" : "") @(homeworkItem.huiswerkType)" time="@homeworkItem.datumTijd.ToUnixTime()" vak="@(homeworkItem.lesgroep?.vak.naam ?? "Onbekend")" bijlagen="@homeworkItem.studiewijzerItem.bijlagen?.Count" huiswerkType="@homeworkItem.studiewijzerItem.huiswerkType?.ToLower()">
                     <div class="homeworkItem-top">
                         <p style="width: fit-content;">

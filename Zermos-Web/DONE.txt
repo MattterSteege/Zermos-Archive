@@ -1,24 +1,7 @@
-﻿0.4.3 - Sharing is caring
+﻿0.4.5 - Alles is voor Bassie
 
-- Eerste keer
-    - De eerste keer dat je een Zermos account aan maakt krijg je nu een kleine uitleg pagina te zien, zodat je weet wat je kan verwachten.
+Deze update is puur bugfixes enz. de code die op de achtergrond werkt is nu veel beter voor mij. Jullie zien niets anders dan een paar ms snellere laadtijden.
 
-- authentificatie en autorisatie
-    - het aanmaken van een account is nu opnieuw van de grond af aan opgebouwd en werkt nu wél zoals ik het wil.
-    - het kon gebeuren dat je in 'account limbo' kwam, waarbij je geen account had, maar wel ingelogd was. Dit is nu opgelost, je wordt nu automatisch uitgelogd als je geen account hebt.
-    
-- Hoofdmenu
-    - Het hoofdmenu bestaat niet meer, het was echt te veel werk voor zo weinig functionaliteit, dus houdoe.
-    
 - Zermelo - Rooster
-    - De paklijst in nu te vinden bij je rooster door op het 'lijst' icoontje te drukken.
-    - Het swipen is nu veeeeel smoother
+    - De API service is nu veel beter geschreven en kan miner snel falen.
     
-- Somtoday - cijferstatestieken
-    - een volgorde probleem is nu opgelsot, nice.
-
-- Infowijs - Schoolkalender
-    - Het caching systeem dat ik heb gemaakt voor het Informatiebord is nu ook toegepast op de schoolkalender, dit scheelt erg wat laadtijd.
-
-- School - Infomatiebord
-    - het caching systeem is nu opnieuw opgebouwd, en werkt globaal en niet per gebruiker. Dit scheelt een hoop data en tijd.

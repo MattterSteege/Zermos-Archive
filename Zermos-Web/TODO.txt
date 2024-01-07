@@ -5,3 +5,9 @@ TODO: dagrooster
 
 TODO: make better error page when logging in fails
 TODO: turn the api's into custom classes
+
+TODO: Zermelo API revamp
+    Model: done
+    API: done
+    Controller: done
+    View: done

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Zermos_Web.APIs;
 using Zermos_Web.Models.Requirements;
 using Zermos_Web.Models.zermelo;
 using Zermos_Web.Utilities;
@@ -17,6 +18,7 @@ namespace Zermos_Web.Controllers
     public class ZermeloController : BaseController
     {
         public ZermeloController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
+        ZermeloApi zermeloApi = new ZermeloApi(new HttpClient());
 
         [Authorize]
         [ZermosPage]
@@ -25,40 +27,9 @@ namespace Zermos_Web.Controllers
         {
             year ??= DateTime.Now.Year.ToString();
             week ??= DateTime.Now.GetWeekNumber().ToString();
+            week = week.ToCharArray().Length == 1 ? "0" + week : week;
 
-            var date = year + (week.ToCharArray().Length == 1 ? "0" + week : week);
-
-            var user = ZermosUser;
-
-            var baseURL = "https://ccg.zportal.nl/api/v3/liveschedule" +
-                          $"?access_token={user.zermelo_access_token}" +
-                          $"&student={user.school_id}" +
-                          $"&week={date}";
-
-            //GET request
-            using var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync(baseURL);
-            
-            if (response.IsSuccessStatusCode == false)
-            {   
-                // if (week == DateTime.Now.GetWeekNumber().ToString() && year == DateTime.Now.Year.ToString())
-                // {
-                //     ZermosUser = new user {cached_zermelo_schedule = "{\"response\":{\"data\":[{\"Items\":[{\"appointments\":[]}]}]}}"};
-                // }
-                
-                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je rooster kon niet worden geladen, waarschijnlijk is je Zermelo token verlopen", NotificationCenter.NotificationType.ERROR);
-                return compact ? PartialView("Rooster-week", new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>(), MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year)}}}}) : PartialView(new ZermeloRoosterModel{ response = new Response { data = new List<Items> { new() { appointments = new List<Appointment>(), MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year)}}}});
-            }
-
-            // if (week == DateTime.Now.GetWeekNumber().ToString() && year == DateTime.Now.Year.ToString())
-            // {
-            //     ZermosUser = new user {cached_zermelo_schedule = await response.Content.ReadAsStringAsync()};
-            // }
-            
-            var zermeloRoosterModel = JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync());
-            zermeloRoosterModel.response.data[0].MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year);
-
-            return compact ? PartialView("Rooster-week", zermeloRoosterModel) : PartialView(zermeloRoosterModel);
+            return compact ? PartialView("Rooster-week", await zermeloApi.GetRoosterAsync(ZermosUser, year, week)) : PartialView(await zermeloApi.GetRoosterAsync(ZermosUser, year, week));
         }
 
         [Authorize]
@@ -66,40 +37,16 @@ namespace Zermos_Web.Controllers
         public async Task<IActionResult> GenereerToken(string year, string week, DateTime? expires_at, int max_uses = int.MaxValue)
         {
             if (string.IsNullOrEmpty(year) || string.IsNullOrEmpty(week))
-            {
                 return BadRequest("Year or week is null or empty");
-            }
             
             expires_at ??= DateTime.Now.AddDays(7);
-
-            var date = year + (week.ToCharArray().Length == 1 ? "0" + week : week);
-
-            var user = ZermosUser;
-
-            var baseURL = "https://ccg.zportal.nl/api/v3/liveschedule" +
-                          $"?access_token={user.zermelo_access_token}" +
-                          $"&student={user.school_id}" +
-                          $"&week={date}";
-
-            ZermeloRoosterModel zermeloRoosterModel;
+            week = week.ToCharArray().Length == 1 ? "0" + week : week;
             
-            //GET request
-            using var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync(baseURL);
+            var zermeloRoosterModel = await zermeloApi.GetRoosterAsync(ZermosUser, year, week);
             
-            if (response.IsSuccessStatusCode == false)
-            {   
-                return BadRequest("Fetching Zermelo schedule failed");
-            }
+            var token = TokenUtils.RandomString(20);
             
-            zermeloRoosterModel = JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync());
-            zermeloRoosterModel.response.data[0].MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year);
-            
-            var token = TokenUtils.RandomString(20,
-                TokenUtils.RandomStringType.Numbers & TokenUtils.RandomStringType.LowerCase &
-                TokenUtils.RandomStringType.UpperCase);
-            
-            share share = new share
+            string url = (await AddShare(new share
             {
                 key = token,
                 email = ZermosEmail,
@@ -107,11 +54,9 @@ namespace Zermos_Web.Controllers
                 page = "/Zermelo/Rooster/Gedeeld",
                 expires_at = (DateTime) expires_at,
                 max_uses = max_uses
-            };
+            })).url;
             
-            await AddShare(share);
-            
-            return Ok(share.url);
+            return Ok(url);
         }
 
         [ZermosPage]

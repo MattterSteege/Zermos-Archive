@@ -100,69 +100,63 @@ namespace Zermos_Web.Utilities
         [Flags]
         public enum RandomStringType
         {
-            LowerCase,
-            UpperCase,
-            Numbers,
-            SpecialCharacters
+            LowerCase = 1,
+            UpperCase = 2,
+            Numbers = 4,
+            SpecialCharacters = 8
         }
 
 
         /* This is the probablility table when RandomStringType is set to LowerCase, UpperCase and Numbers
         
-        | Length | Probability              | Probability (%)              |
-        |--------|--------------------------|------------------------------|
-        | 1      | 1.61 x 10^-2             | 1.61 x 10^-2 %              |
-        | 2      | 2.60 x 10^-4             | 2.60 x 10^-4 %              |
-        | 3      | 4.19 x 10^-6             | 4.19 x 10^-6 %              |
-        | 4      | 6.75 x 10^-8             | 6.75 x 10^-8 %              |
-        | 5      | 1.09 x 10^-9             | 1.09 x 10^-9 %              |
-        | 6      | 1.76 x 10^-11            | 1.76 x 10^-11 %             |
-        | 7      | 2.84 x 10^-13            | 2.84 x 10^-13 %             |
-        | 8      | 4.58 x 10^-15            | 4.58 x 10^-15 %             |
-        | 9      | 7.39 x 10^-17            | 7.39 x 10^-17 %             |
-        | 10     | 1.19 x 10^-18            | 1.19 x 10^-18 %             |
-        | 11     | 1.92 x 10^-20            | 1.92 x 10^-20 %             |
-        | 12     | 3.10 x 10^-22            | 3.10 x 10^-22 %             |
-        | 13     | 5.00 x 10^-24            | 5.00 x 10^-24 %             |
-        | 14     | 8.06 x 10^-26            | 8.06 x 10^-26 %             |
-        | 15     | 1.30 x 10^-27            | 1.30 x 10^-27 %             |
-        | 16     | 2.10 x 10^-29            | 2.10 x 10^-29 %             |
-        | 17     | 3.39 x 10^-31            | 3.39 x 10^-31 %             |
-        | 18     | 5.47 x 10^-33            | 5.47 x 10^-33 %             |
-        | 19     | 8.82 x 10^-35            | 8.82 x 10^-35 %             |
-        | 20     | 1.42 x 10^-36            | 1.42 x 10^-36 %             | 
+        | Length | Probability              |
+        |--------|--------------------------|
+        | 1      | 1.61 x 10^-2             |
+        | 2      | 2.60 x 10^-4             |
+        | 3      | 4.19 x 10^-6             |
+        | 4      | 6.75 x 10^-8             |
+        | 5      | 1.09 x 10^-9             |
+        | 6      | 1.76 x 10^-11            |
+        | 7      | 2.84 x 10^-13            |
+        | 8      | 4.58 x 10^-15            |
+        | 9      | 7.39 x 10^-17            |
+        | 10     | 1.19 x 10^-18            |
+        | 11     | 1.92 x 10^-20            |
+        | 12     | 3.10 x 10^-22            |
+        | 13     | 5.00 x 10^-24            |
+        | 14     | 8.06 x 10^-26            |
+        | 15     | 1.30 x 10^-27            |
+        | 16     | 2.10 x 10^-29            |
+        | 17     | 3.39 x 10^-31            |
+        | 18     | 5.47 x 10^-33            |
+        | 19     | 8.82 x 10^-35            |
+        | 20     | 1.42 x 10^-36            |
         
         The calculation for this table is: (1/26)^x * 100 where x is the length of the string */
 
         /// <summary>
         /// Show implementation of this method to show the probability of a string being generated.
         /// </summary>
-        public static string RandomString(int length = 6, RandomStringType type = RandomStringType.UpperCase)
+        public static string RandomString(int length = 6, RandomStringType type = RandomStringType.UpperCase | RandomStringType.LowerCase | RandomStringType.Numbers)
         {
             var chars = "";
-            switch (type)
-            {
-                case RandomStringType.LowerCase:
-                    chars += "abcdefghijklmnopqrstuvwxyz";
-                    break;
-                case RandomStringType.UpperCase:
-                    chars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                    break;
-                case RandomStringType.Numbers:
-                    chars += "0123456789";
-                    break;
-                case RandomStringType.SpecialCharacters:
-                    chars += "!\"§$%&/()=?`´*+~#'-_.:,;<>|\\";
-                    break;
-            }
-            
+
+            if (type.HasFlag(RandomStringType.LowerCase))
+                chars += "abcdefghijklmnopqrstuvwxyz";
+            if (type.HasFlag(RandomStringType.UpperCase))
+                chars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            if (type.HasFlag(RandomStringType.Numbers))
+                chars += "0123456789";
+            if (type.HasFlag(RandomStringType.SpecialCharacters))
+                chars += "!\"§$%&/()=?`´*+~#'-_.:,;<>|\\";
+    
             var result = "";
             for (var i = 0; i < length; i++)
                 result += chars[Random.Next(0, chars.Length)];
 
-
             return result;
         }
+
         
         public static bool IsValidBase64String(string input)
         {

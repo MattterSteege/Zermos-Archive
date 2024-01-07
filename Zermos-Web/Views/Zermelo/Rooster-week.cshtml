@@ -3,7 +3,7 @@
 @using System.Globalization
 @model Zermos_Web.Models.zermelo.ZermeloRoosterModel
 
-<div class="week" data-week="@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.response.data[0].MondayOfAppointmentsWeek.Year" data-unix="@Model.response.data[0].MondayOfAppointmentsWeek.ToUnixTime()">
+<div class="week" data-week="@Model.MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.MondayOfAppointmentsWeek.Year" data-unix="@Model.MondayOfAppointmentsWeek.ToUnixTime()">
     <div class="times-container">
         <ul>
             <!--        20 horizontal lines-->
@@ -24,12 +24,12 @@
     </div>
     <div class="days-container">
         <ul>
-            <li>@Model.response.data[0].MondayOfAppointmentsWeek.GetWeekNumber()</li>
-            <li>Ma<div class="date">@Model.response.data[0].MondayOfAppointmentsWeek.ToString("dd MMM")</div></li>
-            <li>Di<div class="date">@Model.response.data[0].MondayOfAppointmentsWeek.AddDays(1).ToString("dd MMM")</div></li>
-            <li>Wo<div class="date">@Model.response.data[0].MondayOfAppointmentsWeek.AddDays(2).ToString("dd MMM")</div></li>
-            <li>Do<div class="date">@Model.response.data[0].MondayOfAppointmentsWeek.AddDays(3).ToString("dd MMM")</div></li>
-            <li>Vr<div class="date">@Model.response.data[0].MondayOfAppointmentsWeek.AddDays(4).ToString("dd MMM")</div></li>
+            <li>@Model.MondayOfAppointmentsWeek.GetWeekNumber()</li>
+            <li>Ma<div class="date">@Model.MondayOfAppointmentsWeek.ToString("dd MMM")</div></li>
+            <li>Di<div class="date">@Model.MondayOfAppointmentsWeek.AddDays(1).ToString("dd MMM")</div></li>
+            <li>Wo<div class="date">@Model.MondayOfAppointmentsWeek.AddDays(2).ToString("dd MMM")</div></li>
+            <li>Do<div class="date">@Model.MondayOfAppointmentsWeek.AddDays(3).ToString("dd MMM")</div></li>
+            <li>Vr<div class="date">@Model.MondayOfAppointmentsWeek.AddDays(4).ToString("dd MMM")</div></li>
         </ul>
     </div>
     <div class="hours-container">
@@ -54,7 +54,7 @@
         <ul>
             @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
             {
-                @if (Model.response.data[0].appointments.Count == 0)
+                @if (Model.appointments.Count == 0)
                 {
                     <li class="empty">Wow, de hele week vrij!</li>
                     break;
@@ -64,7 +64,7 @@
                 {
                     <li class="lesdag">
                         @{
-                            IEnumerable<Appointment> appointmentList = Model.response.data[0].appointments.Where(a => a.start.ToDateTime().DayOfWeek == day).ToList();
+                            IEnumerable<Appointment> appointmentList = Model.appointments.Where(a => a.start.ToDateTime().DayOfWeek == day).ToList();
 
                             if (!appointmentList.Any())
                                 continue;
