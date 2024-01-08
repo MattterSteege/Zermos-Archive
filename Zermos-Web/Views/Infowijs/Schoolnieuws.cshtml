@@ -15,7 +15,7 @@
 <div class="message-container">
     <div class="later">
         @foreach (var messageGroup in Model)
-        {
+        { 
             <div class="message">
                 @{
                     var title = messageGroup.FirstOrDefault(m => m.Type == 30);
@@ -40,7 +40,7 @@
 
                     @foreach (var content in contents)
                     {
-                        @if (content.Content.String.Split(new char[] {' ', '\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).Length < wordCount)
+                        @if (content.Content.String.Split(new[] {' ', '\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).Length < wordCount)
                         {
                             <pre class="content">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</pre>
                         }
@@ -92,6 +92,14 @@
             btnText.innerHTML = "Lees minder";
             moreText.style.display = "inline";
             base.style.display = "none";
+        }
+    }
+    
+    Zermos.mainBeforeLoad = () =>{
+        //reverse the order of the messages
+        var messages = document.getElementsByClassName("message");
+        for (var i = 0; i < messages.length; i++) {
+            messages[i].parentNode.insertBefore(messages[i], messages[i].parentNode.firstChild);
         }
     }
 </script>

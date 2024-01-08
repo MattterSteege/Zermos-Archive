@@ -9,15 +9,31 @@ using Zermos_Web.Utilities;
 
 namespace Zermos_Web.APIs
 {
+    /// <summary>
+    /// Represents a class for interacting with the Zermelo API to retrieve schedule information.
+    /// </summary>
     public class ZermeloApi
     {
         private readonly HttpClient _httpClient;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ZermeloApi"/> class.
+        /// </summary>
+        /// <param name="httpClient">The HttpClient instance used for making API requests.</param>
+        /// <exception cref="ArgumentNullException">Thrown if the provided HttpClient is null.</exception>
         public ZermeloApi(HttpClient httpClient)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
-
+        
+        /// <summary>
+        /// Retrieves the Zermelo schedule for a specified user, year, and week.
+        /// </summary>
+        /// <param name="user">The user for whom the schedule is requested.</param>
+        /// <param name="year">The year for which the schedule is requested.</param>
+        /// <param name="week">The week for which the schedule is requested.</param>
+        /// <returns>A <see cref="Task{TResult}"/> representing the asynchronous operation with the Zermelo schedule model.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if user, access token, school ID, year, or week is null or empty.</exception>
         public async Task<ZermeloRoosterModel> GetRoosterAsync(user user, string year, string week)
         {
             if (user.zermelo_access_token.IsNullOrEmpty() || user.school_id.IsNullOrEmpty()) throw new ArgumentNullException(nameof(user));
@@ -40,6 +56,7 @@ namespace Zermos_Web.APIs
             return zermeloRoosterModel;
         }
 
+        // Private method to create an empty ZermeloRoosterModel for error handling.
         private ZermeloRoosterModel EmptyModel()
         {
             return new ZermeloRoosterModel

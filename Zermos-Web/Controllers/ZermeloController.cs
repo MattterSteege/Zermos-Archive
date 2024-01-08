@@ -18,7 +18,7 @@ namespace Zermos_Web.Controllers
     public class ZermeloController : BaseController
     {
         public ZermeloController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
-        ZermeloApi zermeloApi = new ZermeloApi(new HttpClient());
+        ZermeloApi zermeloApi = new(new HttpClient());
 
         [Authorize]
         [ZermosPage]
