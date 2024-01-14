@@ -8,7 +8,7 @@
     var zermeloTodayLessons = Model.appointments.Where(x => x.start.ToDateTime().Date == DateTime.Now.Date).ToList();
 }
 
-<link rel="stylesheet" href="/css/zermelo.css" />
+<link rel="stylesheet" href="/css/zermelo.css"/>
 <script src="/js/dom-to-image.js"></script>
 
 <div class="main-container">
@@ -36,11 +36,26 @@
             <div class="days-container">
                 <ul>
                     <li>@Model.MondayOfAppointmentsWeek.GetWeekNumber()</li>
-                    <li>Ma<div class="date">@Model.MondayOfAppointmentsWeek.ToString("dd MMM")</div></li>
-                    <li>Di<div class="date">@Model.MondayOfAppointmentsWeek.AddDays(1).ToString("dd MMM")</div></li>
-                    <li>Wo<div class="date">@Model.MondayOfAppointmentsWeek.AddDays(2).ToString("dd MMM")</div></li>
-                    <li>Do<div class="date">@Model.MondayOfAppointmentsWeek.AddDays(3).ToString("dd MMM")</div></li>
-                    <li>Vr<div class="date">@Model.MondayOfAppointmentsWeek.AddDays(4).ToString("dd MMM")</div></li>
+                    <li>
+                        Ma
+                        <div class="date">@Model.MondayOfAppointmentsWeek.ToString("dd MMM")</div>
+                    </li>
+                    <li>
+                        Di
+                        <div class="date">@Model.MondayOfAppointmentsWeek.AddDays(1).ToString("dd MMM")</div>
+                    </li>
+                    <li>
+                        Wo
+                        <div class="date">@Model.MondayOfAppointmentsWeek.AddDays(2).ToString("dd MMM")</div>
+                    </li>
+                    <li>
+                        Do
+                        <div class="date">@Model.MondayOfAppointmentsWeek.AddDays(3).ToString("dd MMM")</div>
+                    </li>
+                    <li>
+                        Vr
+                        <div class="date">@Model.MondayOfAppointmentsWeek.AddDays(4).ToString("dd MMM")</div>
+                    </li>
                 </ul>
             </div>
             <div class="hours-container">
@@ -70,57 +85,87 @@
                             <li class="empty">Wow, de hele week vrij!</li>
                             break;
                         }
-                
+
                         if (day != DayOfWeek.Saturday && day != DayOfWeek.Sunday)
                         {
                             <li class="lesdag">
                                 @{
                                     IEnumerable<Appointment> appointmentList = Model.appointments.Where(a => a.start.ToDateTime().DayOfWeek == day).ToList();
-                
+
                                     if (!appointmentList.Any())
                                         continue;
-                
+
                                     //100 means 100% of the height of the container
                                     //510 means 510 minutes between 08:20 and 16:50
                                     var minuteHeight = 100f / 510f;
-                
+
                                     //get the date of the day that the appointments are for
                                     //8 * 60 + 20 = 500 minutes means 08:20
                                     var dayStartUnix = appointmentList.First().start; // this is unix. make the unix time to be the same date but the time should be 08:20
                                     dayStartUnix -= dayStartUnix % 86400; // remove the time from the unix time
                                     dayStartUnix += 8 * 60 * 60 + 20 * 60; // add 8 hours and 20 min to the unix time (08:20)
-                
+
                                     // Define the time zones for UTC and the Dutch timezone
                                     TimeZoneInfo dutchTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"); // This ID represents the Dutch timezone
                                     DateTime utcDateTime = DateTimeOffset.FromUnixTimeSeconds(dayStartUnix).UtcDateTime;
                                     DateTime dutchDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, dutchTimeZone);
                                     TimeSpan timeDifference = dutchDateTime - utcDateTime;
                                     int timeDifferenceInSeconds = (int) timeDifference.TotalSeconds;
-                
+
                                     dayStartUnix -= timeDifferenceInSeconds;
 
                                     int lastLessonStart = 0;
                                 }
-                
+
                                 @foreach (var appointment in appointmentList)
                                 {
                                     //percentage from top = (appointment start time - dayStartUnix) * minuteHeight *@
                                     //appointment height = (appointment end time - appointment start time) * minuteHeight
-                
+
                                     var appointmentHeight = (appointment.end - appointment.start) / 60f * minuteHeight;
                                     var lessonStart = appointment.start;
                                     var appointmentTop = (lessonStart - dayStartUnix) / 60f * minuteHeight;
-                
-                                    <div class="lesson-time-based @(appointment.cancelled ? "canceled" : "") @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.ObjectToBase64String())')">
-                                        @(appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.subjects[0] + "</p>") : "")
-                                        @(appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.locations[0] + "</p>") : "")
-                                    </div>
+
+                                    if (appointment.actions.Count == 0)
+                                    {
+                                        <div class="lesson-time-based @(appointment.cancelled ? "canceled" : "") @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.ObjectToBase64String())')">
+                                            @(appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.subjects[0] + "</p>") : "")
+                                            @(appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.locations[0] + "</p>") : "")
+                                        </div>
+                                    }
+                                    else if (appointment.appointmentType == "conflict")
+                                    {
+                                        <div class="lesson-time-based @(appointment.actions[0].appointment.cancelled ? "canceled" : "") conflict" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px); width: calc(50% - 4px);" onclick="OpenLessonDetail('@(appointment.actions[0].appointment.ObjectToBase64String())')">
+                                            @(appointment.actions[0].appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.subjects[0] + "</p>") : "")
+                                            @(appointment.actions[0].appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.locations[0] + "</p>") : "")
+                                        </div>
+                                        
+                                        <div class="lesson-time-based @(appointment.actions[1].appointment.cancelled ? "canceled" : "")" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px); width: calc(50% - 8px); left: 50%;" onclick="OpenLessonDetail('@(appointment.actions[1].appointment.ObjectToBase64String())')">
+                                            @(appointment.actions[1].appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.actions[1].appointment.subjects[0] + "</p>") : "")
+                                            @(appointment.actions[1].appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.actions[1].appointment.locations[0] + "</p>") : "")
+                                        </div>
+                                    }
+                                    else if (appointment.appointmentType == "choice" && appointment.actions.Count == 1)
+                                    {
+                                        <div class="lesson-time-based @(appointment.actions[0].appointment.cancelled ? "canceled" : "") choice" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.actions[0].appointment.ObjectToBase64String())')">
+                                            @(appointment.actions[0].appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.subjects[0] + "</p>") : "")
+                                            @(appointment.actions[0].appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.locations[0] + "</p>") : "")
+                                        </div>
+                                    }
+                                    //choice of more than 1 actions
+                                    // else (appointment.appointmentType == "choice" && appointment.actions.Count == 0)
+                                    // {
+                                    //     <div class="lesson-time-based @(appointment.cancelled ? "canceled" : "") @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.ObjectToBase64String())')">
+                                    //         @(appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.subjects[0] + "</p>") : "")
+                                    //         @(appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.locations[0] + "</p>") : "")
+                                    //     </div>
+                                    // }
                                 }
                             </li>
                         }
                     }
                 </ul>
-                
+
             </div>
         </div>
         <div class="week" data-week="@Model.MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.MondayOfAppointmentsWeek.Year" data-unix="@Model.MondayOfAppointmentsWeek.ToUnixTime()"></div>
@@ -450,7 +495,10 @@ addButtonToPage('fa-list', () => {
     @{
         foreach (Appointment les in zermeloTodayLessons.Distinct())
         {
-            if(les.cancelled){ continue;}
+            if (les.cancelled)
+            {
+                continue;
+            }
 
             @Html.Raw("    .addText(\"" + (les.subjects.Count > 0 ? les.subjects[0] : "-") + " van " + (les.teachers.Count > 0 ? les.teachers[0] : "-") + "\")")
         }

@@ -11,3 +11,6 @@ Deze update is puur bugfixes enz. de code die op de achtergrond werkt is nu veel
     
 - Account
     - Als je nog nooit afwezig bent geweest (wow, hoe doe je dat?) dan laadt je account nu wel in, dit is een test die ik over het hoofd hebt gezien.
+    
+- Somtoday - cijfers
+    - Een probleem met de beschrijving van specifieke cijfers is nui opgelost.

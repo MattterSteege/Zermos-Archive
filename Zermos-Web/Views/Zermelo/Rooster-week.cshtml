@@ -98,10 +98,32 @@
                             var lessonStart = appointment.start;
                             var appointmentTop = (lessonStart - dayStartUnix) / 60f * minuteHeight;
 
-                            <div class="lesson-time-based @(appointment.cancelled ? "canceled" : "") @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.ObjectToBase64String())')">
-                                @(appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.subjects[0] + "</p>") : "")
-                                @(appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.locations[0] + "</p>") : "")
-                            </div>
+                            if (appointment.actions.Count == 0)
+                            {
+                                <div class="lesson-time-based @(appointment.cancelled ? "canceled" : "") @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.ObjectToBase64String())')">
+                                    @(appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.subjects[0] + "</p>") : "")
+                                    @(appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.locations[0] + "</p>") : "")
+                                </div>
+                            }
+                            else if (appointment.appointmentType == "conflict")
+                            {
+                                <div class="lesson-time-based @(appointment.actions[0].appointment.cancelled ? "canceled" : "") conflict" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px); width: calc(50% - 4px);" onclick="OpenLessonDetail('@(appointment.actions[0].appointment.ObjectToBase64String())')">
+                                    @(appointment.actions[0].appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.subjects[0] + "</p>") : "")
+                                    @(appointment.actions[0].appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.locations[0] + "</p>") : "")
+                                </div>
+                                
+                                <div class="lesson-time-based @(appointment.actions[1].appointment.cancelled ? "canceled" : "")" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px); width: calc(50% - 8px); left: 50%;" onclick="OpenLessonDetail('@(appointment.actions[1].appointment.ObjectToBase64String())')">
+                                    @(appointment.actions[1].appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.actions[1].appointment.subjects[0] + "</p>") : "")
+                                    @(appointment.actions[1].appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.actions[1].appointment.locations[0] + "</p>") : "")
+                                </div>
+                            }
+                            else if (appointment.appointmentType == "choice" && appointment.actions.Count == 1)
+                            {
+                                <div class="lesson-time-based @(appointment.actions[0].appointment.cancelled ? "canceled" : "") choice" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.actions[0].appointment.ObjectToBase64String())')">
+                                    @(appointment.actions[0].appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.subjects[0] + "</p>") : "")
+                                    @(appointment.actions[0].appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.locations[0] + "</p>") : "")
+                                </div>
+                            }
                         }
                     </li>
                 }

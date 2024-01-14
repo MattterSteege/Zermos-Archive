@@ -43,7 +43,7 @@
     string function = $"function {vak.links[0].id.StringToBase64String().Replace("=", "")}() {{\n" +
                       $"    new ZermosModal()\n" +
                       $"    .setTitle('{vak.vak.naam}')\n" +
-                      $"    .addText('Omschrijving: {vak.omschrijving}')\n" +
+                      $"    .addText(`Omschrijving: {vak.omschrijving}`)\n" +
                       $"    .addText('Weging: {(vak.weging == 0 ? vak.examenWeging : vak.weging)}x')\n" +
                       $"    .addText('Geldend resultaat: {vak.geldendResultaat}')\n" +
                       $"    .addText('Invoerdatum: {vak.datumInvoer.ToString("dd MMMM yyyy HH:mm:ss")}')\n" +
