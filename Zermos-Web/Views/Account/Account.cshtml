@@ -3,6 +3,7 @@
 @using Zermos_Web.Models.SomtodayAfwezigheidModel
 @using Infrastructure.Entities
 @using Item = Zermos_Web.Models.SomtodayAfwezigheidModel.Item
+@using System.Security.Claims
 @model dynamic
 
 @{
@@ -158,12 +159,32 @@
     function ShowAbscence() {
         var abscenceModal = new ZermosModal()
         @{
-            foreach (Item item in somtodayAfwezigheid.items)
+            if (somtodayAfwezigheid == null || somtodayAfwezigheid.items == null || somtodayAfwezigheid.items.Count == 0)
             {
 <text>
-        .addText('<div><b>@item.absentieReden.omschrijving @(item.opmerkingen.Length == 0 ? "" : " - " + item.opmerkingen)</b></div>')
+        .addText('<div>Je bent dit jaar nog niet afwezig geweest!</div>')
+</text>
+            }
+            else
+            {
+                foreach (Item item in somtodayAfwezigheid.items)
+                {
+                    try
+                    {
+<text>
+        .addText('<div><b>@item.absentieReden?.omschrijving @(item.opmerkingen?.Length == 0 ? "" : " - " + (item.opmerkingen ?? ""))</b></div>')
         .addText('<div>@(item.beginDatumTijd.Hour == 0 || item.eindDatumTijd.Hour == 0 || item.beginDatumTijd.Day != item.eindDatumTijd.Day ? item.beginDatumTijd.ToString("dddd d MMMM") + " - " + item.eindDatumTijd.ToString("dddd d MMMM") : item.beginDatumTijd.Hour == 0 && item.eindDatumTijd.Hour == 23 ? item.beginDatumTijd.ToString("dddd d MMMM") : item.beginDatumTijd.ToString("dddd d MMMM HH:mm") + " - " + item.eindDatumTijd.ToString("HH:mm"))</div>')
 </text>
+                     }
+                     catch (Exception e)
+                     {
+                         
+                         Console.WriteLine(User.FindFirstValue("email") + "triggered error: " + e.Message);
+<text>
+        .addText('<div><b>Error tijdens het ophalen van de afwezigheidsdata</b></div>')
+</text>
+                     }
+                }
             }
         }
         

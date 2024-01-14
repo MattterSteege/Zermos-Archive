@@ -28,7 +28,7 @@ namespace Zermos_Web.Controllers
             year ??= DateTime.Now.Year.ToString();
             week ??= DateTime.Now.GetWeekNumber().ToString();
             week = week.ToCharArray().Length == 1 ? "0" + week : week;
-
+            
             return compact ? PartialView("Rooster-week", await zermeloApi.GetRoosterAsync(ZermosUser, year, week)) : PartialView(await zermeloApi.GetRoosterAsync(ZermosUser, year, week));
         }
 

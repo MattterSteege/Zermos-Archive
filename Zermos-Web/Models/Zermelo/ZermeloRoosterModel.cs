@@ -27,6 +27,15 @@ namespace Zermos_Web.Models.zermelo
         public List<string> subjects { get; set; }
         public List<string> locations { get; set; }
         public List<string> teachers { get; set; }
+        public List<Action> actions { get; set; }
+        
+    }
+    
+    public class Action
+    {
+        public Appointment appointment { get; set; }
+        public bool allowed { get; set; }
+        public string post { get; set; }
     }
 
     public class Items

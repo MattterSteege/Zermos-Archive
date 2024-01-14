@@ -214,6 +214,14 @@
     opacity: 0.5;
 }
 
+.conflict {
+    border-left: 4px solid var(--deny-color);
+}
+
+.choice {
+    border-left: 4px solid #FFC107;
+}
+
 .swipebubbles {
     width: 100%;
     height: 100%;

@@ -98,6 +98,8 @@
                                     int timeDifferenceInSeconds = (int) timeDifference.TotalSeconds;
                 
                                     dayStartUnix -= timeDifferenceInSeconds;
+
+                                    int lastLessonStart = 0;
                                 }
                 
                                 @foreach (var appointment in appointmentList)
@@ -372,8 +374,18 @@ var lessonDetail = new ZermosModal()
         lessonDetail.addText("• les van " + json.teachers.join(", ") + ".");
     if (json.locations.length > 0) 
         lessonDetail.addText("• in lokaal " + json.locations.join(", ") + ".");
-    if (json.groups.length > 0) 
-        lessonDetail.addText("• met groep " + json.groups.join(", ") + ".");   
+    // if (json.groups.length > 0) 
+    //     lessonDetail.addText("• met groep " + json.groups.join(", ") + ".");   
+    
+    // Check if actions array exists
+    if (json.actions) {
+        lessonDetail.addText("Je hebt keuze uit de volgende vakken:");
+        // Loop through each action appointment
+        json.actions.forEach((action) => {
+            action = action.appointment;
+            lessonDetail.addText("• " + (action.subjects[0] ?? '?') + " van " + action.teachers.join(", ") + " in lokaal " + action.locations.join(", "));
+        });
+    }
     
     lessonDetail.addText("De les is van: " + new Date(json.start * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1] + " tot " + new Date(json.end * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1])
     
@@ -383,13 +395,13 @@ var lessonDetail = new ZermosModal()
         ReplacePage('/Somtoday/Huiswerk?les=' + json.start);
     });
        
-    for (var i = 0; i < json.status.length; i++) {
-        var status = json.status[i];
-
-        if (status['code'] === 2002) continue;
-        
-        lessonDetail.addText("• " + status.nl);
-    }
+    // for (var i = 0; i < json.status.length; i++) {
+    //     var status = json.status[i];
+    //
+    //     if (status['code'] === 2002) continue;
+    //    
+    //     lessonDetail.addText("• " + status.nl);
+    // }
     
     lessonDetail.open();
 }
@@ -436,7 +448,7 @@ addButtonToPage('fa-list', () => {
     .setSubmitButtonLabel("Oke")
     .addText("Je hebt vandaag de volgende vakken:")
     @{
-        foreach (Appointment les in zermeloTodayLessons)
+        foreach (Appointment les in zermeloTodayLessons.Distinct())
         {
             if(les.cancelled){ continue;}
 

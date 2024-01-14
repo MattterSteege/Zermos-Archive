@@ -47,13 +47,33 @@ namespace Zermos_Web.APIs
             var response = await _httpClient.GetAsync(baseUrl);
 
             if (!response.IsSuccessStatusCode)
-            {
                 return EmptyModel();
-            }
 
             var zermeloRoosterModel = JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync());
             zermeloRoosterModel.MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year);
             return zermeloRoosterModel;
+        }
+        
+        /// <summary>
+        /// Enrolls the specified user into a lesson asynchronously.
+        /// </summary>
+        /// <param name="user">The user to be enrolled.</param>
+        /// <param name="post">The URL endpoint for the lesson enrollment.</param>
+        /// <returns>
+        /// A <see cref="Task{TResult}"/> representing the asynchronous operation.
+        /// The task result is a boolean indicating whether the enrollment was successful.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown when either the user or post parameter is null or empty.</exception>
+        public async Task<bool> EnrollIntoLessonAsync(user user, string post)
+        {
+            if (user.zermelo_access_token.IsNullOrEmpty()) throw new ArgumentNullException(nameof(user));
+            if (post.IsNullOrEmpty()) throw new ArgumentNullException();
+
+            string baseUrl = "https://ccg.zportal.nl" + post + $"?access_token={user.zermelo_access_token}";
+
+            var response = await _httpClient.GetAsync(baseUrl);
+            
+            return response.IsSuccessStatusCode;
         }
 
         // Private method to create an empty ZermeloRoosterModel for error handling.

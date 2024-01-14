@@ -23,16 +23,6 @@ namespace Zermos_Web.Controllers
         public InfowijsController(Users user, Shares share, ILogger<BaseController> logger, GlobalVariables globalVariables) : base(user, share, logger, globalVariables) { }
         
         InfowijsApi infowijsApi = new(new HttpClient());
-        
-        private readonly HttpClient _httpClient = new()
-        {
-            DefaultRequestHeaders =
-            {
-                {"accept", "application/vnd.infowijs.v1+json"},
-                {"x-infowijs-client", "nl.infowijs.hoy.android/nl.infowijs.client.antonius"}
-            }
-        };
-        
 
         [HttpGet]
         [Authorize]
@@ -77,8 +67,8 @@ namespace Zermos_Web.Controllers
 
 
         [Authorize]
-        [InfowijsRequirement]
         [ZermosPage]
+        [InfowijsRequirement]
         public async Task<IActionResult> Schoolkalender()
         {
             if (GlobalVariables.SchoolJaarKalenderLastMod.AddDays(1) > DateTime.Now && GlobalVariables.SchoolJaarKalender != null)
