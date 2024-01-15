@@ -2,6 +2,9 @@
 
 Deze update is puur bugfixes enz. de code die op de achtergrond werkt is nu veel beter voor mij. Jullie zien niets anders dan een paar ms snellere laadtijden.
 
+- Algemeen
+    - elke keer als je de pagina refreshed of opnieuw laadt, worden je cookies geüpdate met de waarde van de database, om zo snel mogelijk alle data te hebben gesynchroniseerd.
+
 - Zermelo - Rooster
     - De API service is nu veel beter geschreven en kan miner snel falen.
     - Zermelo laat nu nieuwe kleuren zien: rood (en ondoorzichtig) voor als 2 lessen tegelijk zijn en geel als je de keuze hebt om naar een les te gaan.
@@ -11,6 +14,9 @@ Deze update is puur bugfixes enz. de code die op de achtergrond werkt is nu veel
     
 - Account
     - Als je nog nooit afwezig bent geweest (wow, hoe doe je dat?) dan laadt je account nu wel in, dit is een test die ik over het hoofd hebt gezien.
+    
+- Debug
+    - de pagina is iets netter, en uitgebrijder. Maar boeie, je komt hier toch nooit.
     
 - Somtoday - cijfers
     - Een probleem met de beschrijving van specifieke cijfers is nui opgelost.

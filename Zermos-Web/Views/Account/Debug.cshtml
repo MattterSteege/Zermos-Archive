@@ -1,4 +1,6 @@
-﻿@model Infrastructure.Entities.user
+﻿@using System.Security.Claims
+@using Zermos_Web.Utilities
+@model Infrastructure.Entities.user
 
 <link rel="stylesheet" href="/css/account.css">
 
@@ -7,6 +9,8 @@
         <h1>BELANGRIJK!</h1>
         <p>Deze pagina is bedoeld om dingen te testen en is voor de normale gebruiker niet bedoeld. Als je problemen ondervindt met Zermos en je is verteld om deze pagina te openen. Blijf dan lekker rondhangen :)</p>
     </div>
+    
+    <h4>refresh</h4>
     
     <div class="account-item" onclick="RefreshCSS()">
         <h1>CSS refreshen</h1>
@@ -18,13 +22,49 @@
         <p>Als Zermos niet helemaal lekker werkt, dan kan je hier de JS refreshen. Ik kan je ook aanraden om gelijk de CSS te refreshen, maar dat hoeft niet.</p>
     </div>
     
+    <h4>previews</h4>
+    
     <div class="account-item" onclick="TogglePreview('zermelo_enroll')">
         <h1>Zermelo enroll aan/uit</h1>
         <p>Zet hier de optie om de bèta versie van lessen plannen aan of uit.</p>
     </div>
+    
+    <h4>device info</h4>
+    
+    <div class="account-item">
+        <h1>Device info</h1>
+        <p>Deze informatie kan handig zijn als je problemen ondervindt met Zermos.</p>
+        <p>Device: @Context.Request.Headers["User-Agent"]</p>
+        <p>Account ID: @User.FindFirstValue("email").StringToBase64String()</p>
+        <p id="screen_size">Scrren Size: 000x000</p>
+        <p id="internet_connection">Internet Connection: 0mbps</p>
+    </div>
+    
+    <h4>LOGS</h4>
+    
+    <div class="account-item" id="logs">
+        <h1>Logs</h1>
+    </div>
 </div>
 
 <script>
+    Zermos.mainAfterLoad = () => {
+        document.getElementById("screen_size").innerText = "Screen Size: " + window.innerWidth + "x" + window.innerHeight;
+        var connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || navigator.msConnection;
+        if (connection !== undefined) {
+            document.getElementById("internet_connection").innerText = "Internet Connection: " + (connection.downlink / 8) + "MB per second";
+        }
+        
+        //loop over consoleArray and write to logs
+        var logs = document.getElementById("logs");
+        for (var i = 0; i < consoleArray.length; i++) {
+            var log = consoleArray[i][1] + " - " + consoleArray[i][0][0];
+            var logElement = document.createElement("p");
+            logElement.innerText = log;
+            logs.appendChild(logElement);
+        }
+    }
+
     function RefreshCSS() {
         var links = document.getElementsByTagName("link");
         for (var cl in links) {

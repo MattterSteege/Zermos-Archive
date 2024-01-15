@@ -337,10 +337,10 @@ Zermos.mainBeforeLoad = () => {
     var isDragging = false;
 
     addEventListenerToMain('mousedown', e => handleDragStart(e.clientX));
-    addEventListenerToMain('touchstart', e => handleDragStart(e.touches[0].clientX));
+    addEventListenerToMain('touchstart', e => handleDragStart(e.touches[0].clientX), {passive: true});
 
     addEventListenerToMain('mousemove', e => handleDragMove(e.clientX));
-    addEventListenerToMain('touchmove', e => handleDragMove(e.touches[0].clientX));
+    addEventListenerToMain('touchmove', e => handleDragMove(e.touches[0].clientX), {passive: true});
 
     addEventListenerToMain('mouseup', e => handleDragEnd(e.clientX));
     addEventListenerToMain('touchend', e => handleDragEnd(e.changedTouches[0].clientX));
@@ -409,9 +409,11 @@ addButtonToPage('fa-arrow-left', () => {
 }, VerticalAlignment.BL);
 
 function OpenLessonDetail(base64){
+    if (isFetching) return; // showing a lesson detail while fetching a week will cause a bug
+    
     const json = JSON.parse(atob(base64));
     
-var lessonDetail = new ZermosModal()
+    var lessonDetail = new ZermosModal()
     .setTitle((json.subjects[0] ?? '?') + " - " + new Date(json.start * 1000).toLocaleDateString("nl-NL", { weekday: 'long', month: 'short', day: 'numeric'}));
     
     lessonDetail.addText("Je hebt:");
@@ -423,7 +425,7 @@ var lessonDetail = new ZermosModal()
     //     lessonDetail.addText("• met groep " + json.groups.join(", ") + ".");   
     
     // Check if actions array exists
-    if (json.actions) {
+    if (json.actions && json.actions.length > 0) {
         lessonDetail.addText("Je hebt keuze uit de volgende vakken:");
         // Loop through each action appointment
         json.actions.forEach((action) => {
@@ -493,7 +495,9 @@ addButtonToPage('fa-list', () => {
     .setSubmitButtonLabel("Oke")
     .addText("Je hebt vandaag de volgende vakken:")
     @{
-        foreach (Appointment les in zermeloTodayLessons.Distinct())
+        //foreach (Appointment les in zermeloTodayLessons.Distinct())
+        //where zermeloTodayLessons[].subject is distinct
+        foreach (Appointment les in zermeloTodayLessons.GroupBy(x => x.subjects[0]).Select(x => x.First()))
         {
             if (les.cancelled)
             {

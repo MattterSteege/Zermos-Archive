@@ -14,8 +14,8 @@ namespace Zermos_Web.Controllers
         
         public IActionResult Index(string url = null)
         {
-            // if ((User.Identity == null || !User.Identity.IsAuthenticated) && url == null)
-            //     return PartialView("ZermosPromo");
+            var user = ZermosUser;
+            
             if (url != null)
                 ViewData["url"] = url;
             
@@ -25,12 +25,16 @@ namespace Zermos_Web.Controllers
                 Response.Cookies.Delete("this_session_last_page");
             }
             else
-                ViewData["url"] = Request.Cookies["default_page"] ?? "/Zermelo/Rooster";
+                ViewData["url"] = user.default_page ?? "/Zermelo/Rooster";
             
             if (ViewData["url"] != null && ViewData["url"].ToString().IsNullOrEmpty())
-                ViewData["url"] = Request.Cookies["default_page"] ?? "/Zermelo/Rooster";
+                ViewData["url"] = user.default_page ?? "/Zermelo/Rooster";
             else if (ViewData["url"] == null)
-                ViewData["url"] = Request.Cookies["default_page"] ?? "/Zermelo/Rooster";
+                ViewData["url"] = user.default_page ?? "/Zermelo/Rooster";
+            
+            Response.Cookies.Append("version_used", user.version_used);
+            Response.Cookies.Append("hand_side", user.hand_side);
+            Response.Cookies.Append("theme", user.theme);
             
             return View();
         }

@@ -288,7 +288,7 @@ function waitForObject(obj, callback, interval = 100) {
 // Make sure only one event listener is added for each type to the #main element
 let eventListeners = [];
 
-function addEventListenerToMain(type, listener) {
+function addEventListenerToMain(type, listener, options) {
     // Check if an event listener of the same type already exists for #main
     const existingListener = eventListeners.find(
         (eventListener) => eventListener.type === type && eventListener.listener === listener
@@ -300,7 +300,7 @@ function addEventListenerToMain(type, listener) {
             type: type,
             listener: listener,
         });
-        main.addEventListener(type, listener);
+        main.addEventListener(type, listener, options);
     }
 }
 
@@ -343,52 +343,39 @@ async function ZermosShareImage(title, text, blob) {
 }
 
 //==============================UPDATE SYSTEM==============================
-var alreadyChecked = false;
 Zermos.checkForUpdates = () => {
-    //if the user version is not the same as the current version, show a message
-
-    fetch("/Account/GetSetting?key=version_used", {
-        method: 'GET'
-    })
-    //returns a string like 0.4.1. or a 400
-    .then(response => {
-        // Check if the response status is in the range of 200 to 299
-        if (!response.ok) {
-            // Do not show the modal if a 400 status code is returned
-            return Promise.reject(response.text());
-        }
-        return response.text();
-    })
-    .then((response) => {
-        if (response !== Zermos.CurrentVersion && response !== "" && !alreadyChecked) {
-            //show modal
-            new ZermosModal()
-                .setTitle("Zermos is geupdate!")
-                .addText("Zermos is weer een versietje ouder 🥳. Er zijn natuurlijk weer nieuwe functies toegevoegd en bugs gefixt. Veel plezier met de nieuwe versie!")
-                .addText("Je gebruikt nu versie " + Zermos.CurrentVersion + ", de vorige keer dat je Zermos bezocht was dat versie " + response)
-                .addButton("Check wat er nieuw is", function() {
-                    window.open("https://zermos-docs.kronk.tech/WhatsNew.html", "_blank");
-                })
-                .setSubmitButtonLabel("Let's go, ik ben er klaar voor!")
-                .disableClose()
-                .onSubmit(function() {
-                    var url = "/Account/UpdateSetting?key=version_used&value=" + Zermos.CurrentVersion;
-                    fetch(url, {
-                        method: 'POST'
-                    });
-                })
-                .open();
-        }
-        else if (response === ""){
-            var url = "/Account/UpdateSetting?key=version_used&value=" + Zermos.CurrentVersion;
-            fetch(url, {
-                method: 'POST'
-            });
-        }
-
-        alreadyChecked = true;
-    })
-    .catch(_ => _);
+    var version_user = document.cookie.split('; ').find(row => row.startsWith('version_used')).split('=')[1];
+    if (version_user !== Zermos.CurrentVersion && version_user !== "") {
+        //show modal
+        new ZermosModal()
+            .setTitle("Zermos is geupdate!")
+            .addText("Zermos is weer een versietje ouder 🥳. Er zijn natuurlijk weer nieuwe functies toegevoegd en bugs gefixt. Veel plezier met de nieuwe versie!")
+            .addText("Je gebruikt nu versie " + Zermos.CurrentVersion + ", de vorige keer dat je Zermos bezocht was dat versie " + version_user)
+            .addButton("Check wat er nieuw is", function() {
+                window.open("https://zermos-docs.kronk.tech/WhatsNew.html", "_blank");
+            })
+            .setSubmitButtonLabel("Let's go, ik ben er klaar voor!")
+            .disableClose()
+            .onSubmit(function() {
+                var url = "/Account/UpdateSetting?key=version_used&value=" + Zermos.CurrentVersion;
+                fetch(url, {
+                    method: 'POST'
+                });
+                
+                //set cookie version_used
+                document.cookie = "version_used=" + Zermos.CurrentVersion + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+            })
+            .open();
+    }
+    else if (version_user === ""){
+        var url = "/Account/UpdateSetting?key=version_used&value=" + Zermos.CurrentVersion;
+        fetch(url, {
+            method: 'POST'
+        });
+        
+        //set cookie version_used
+        document.cookie = "version_used=" + Zermos.CurrentVersion + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+    }
 };
 
 Zermos.mainUnload.bind(() => {
@@ -420,3 +407,44 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, 5000);
 });
+//==============================LOGGING OVERWRITE==============================
+//overwrite console.log to log to the console and to an array
+var consoleLog = console.log;
+var consoleError = console.error;
+var consoleWarn = console.warn;
+var consoleInfo = console.info;
+var consoleDebug = console.debug;
+var consoleTrace = console.trace;
+
+var consoleArray = [];
+
+console.log = function() {
+    consoleLog.apply(console, arguments);
+    consoleArray.push([arguments, "log"]);
+}
+
+console.error = function() {
+    consoleError.apply(console, arguments);
+    consoleArray.push([arguments, "error"]);
+}
+
+console.warn = function() {
+    consoleWarn.apply(console, arguments);
+    consoleArray.push([arguments, "warn"]);
+}
+
+console.info = function() {
+    consoleInfo.apply(console, arguments);
+    consoleArray.push([arguments, "info"]);
+}
+
+console.debug = function() {
+    consoleDebug.apply(console, arguments);
+    consoleArray.push([arguments, "debug"]);
+}
+
+console.trace = function() {
+    consoleTrace.apply(console, arguments);
+    consoleArray.push([arguments, "trace"]);
+}
+
