@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using ChartJSCore.Helpers;
 using ChartJSCore.Models;
@@ -14,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Zermos_Web.APIs;
 using Zermos_Web.Models;
 using Zermos_Web.Models.Requirements;
 using Zermos_Web.Models.SomtodayAfwezigheidModel;
@@ -30,7 +30,8 @@ namespace Zermos_Web.Controllers
         public SomtodayController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
         
         private readonly HttpClient _httpClient = new();
-
+        SomtodayAPI somtodayApi = new(new HttpClient());
+        
         #region Cijfers
 
         [Authorize]
@@ -52,7 +53,7 @@ namespace Zermos_Web.Controllers
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
-                access_token = RefreshToken(user.somtoday_refresh_token);
+                access_token = await RefreshToken(user.somtoday_refresh_token);
             }
 
             var grades = await fetchGrades(access_token, user.somtoday_student_id);
@@ -65,42 +66,6 @@ namespace Zermos_Web.Controllers
             Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
 
             return PartialView(grades);
-        }
-
-        public string RefreshToken(string token = null)
-        {
-            if (token == null) return null;
-
-            _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-            _httpClient.DefaultRequestHeaders.Add("Origin", "https://somtoday.nl");
-
-            var form = new Dictionary<string, string>
-            {
-                {"grant_type", "refresh_token"},
-                {"refresh_token", token},
-                {"scope", "openid"},
-                {"client_id", "D50E0C06-32D1-4B41-A137-A9A850C892C2"}
-            };
-
-            var response = _httpClient
-                .PostAsync("https://inloggen.somtoday.nl/oauth2/token", new FormUrlEncodedContent(form)).Result;
-            
-            if (response.IsSuccessStatusCode == false)
-            {
-                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je Somtoday refresh token lijkt verlopen te zijn, als dit probleem zich voor blijft doen, koppel Somtoday dan opnieuw", NotificationCenter.NotificationType.ERROR);
-                return null;
-            }
-            
-            var somtodayAuthentication =
-                JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(response.Content.ReadAsStringAsync().Result);
-
-            ZermosUser = new user
-            {
-                somtoday_access_token = somtodayAuthentication.access_token,
-                somtoday_refresh_token = somtodayAuthentication.refresh_token
-            };
-            return somtodayAuthentication.access_token;
         }
 
         [ZermosPage]
@@ -121,7 +86,7 @@ namespace Zermos_Web.Controllers
             
                 if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
                 {
-                    access_token = RefreshToken(user.somtoday_refresh_token);
+                    access_token = await RefreshToken(user.somtoday_refresh_token);
                 }
 
                 grades = await fetchGrades(access_token, user.somtoday_student_id);
@@ -169,7 +134,7 @@ namespace Zermos_Web.Controllers
             
                 if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
                 {
-                    access_token = RefreshToken(user.somtoday_refresh_token);
+                    access_token = await RefreshToken(user.somtoday_refresh_token);
                 }
 
                 somtodayGradesModel = await fetchGrades(access_token, user.somtoday_student_id);
@@ -514,7 +479,7 @@ namespace Zermos_Web.Controllers
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
-                access_token = RefreshToken(user.somtoday_refresh_token);
+                access_token = await RefreshToken(user.somtoday_refresh_token);
             }
 
             var grades = await fetchGrades(access_token, user.somtoday_student_id);
@@ -618,7 +583,7 @@ namespace Zermos_Web.Controllers
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
-                access_token = RefreshToken(user.somtoday_refresh_token);
+                access_token = await RefreshToken(user.somtoday_refresh_token);
             }
 
             var _startDate = DateTime.Now.AddDays(-dagen).ToString("yyyy-MM-dd");
@@ -807,53 +772,46 @@ namespace Zermos_Web.Controllers
         [HttpGet("/Somtoday/Afwezigheid")]
         public async Task<IActionResult> Afwezigheid()
         {
-            if (Request.Cookies.ContainsKey("cached-somtoday-absence"))
-            {
-                return Ok("Data was not old enough to be refreshed");
-            }
-
-            SchooljaarUtils.Schooljaar currentSchoolyear = SchooljaarUtils.getCurrentSchooljaar();
-            
-            //https://api.somtoday.nl/rest/v1/waarnemingen?waarnemingSoort=Afwezig
+            // if (Request.Cookies.ContainsKey("cached-somtoday-absence"))
+            //     return NoContent();
             
             var user = ZermosUser;
             
-            var access_token = user.somtoday_access_token;
-            
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
-            {
-                access_token = RefreshToken(user.somtoday_refresh_token);
-            }
-            
-            var baseurl = $"https://api.somtoday.nl/rest/v1/absentiemeldingen?begindatumtijd={currentSchoolyear.vanafDatumDate:yyyy-MM-dd}&einddatumtijd={currentSchoolyear.totDatumDate:yyyy-MM-dd}";
-            
-            _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + access_token);
-            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-            
-            var response = await _httpClient.GetAsync(baseurl);
-            
-            if (response.IsSuccessStatusCode == false)
-            {
-                return Ok("Failed to fetch data");
-            }
-            
-            var somtodayAfwezigheid =
-                JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(
-                    await response.Content.ReadAsStringAsync());
-            
-            if (currentSchoolyear.vanafDatumDate < DateTime.Now && DateTime.Now < currentSchoolyear.totDatumDate)
-            {
-                ZermosUser = new user
-                {
-                    cached_somtoday_absence = JsonConvert.SerializeObject(somtodayAfwezigheid)
-                };
-                
-                Response.Cookies.Append("cached-somtoday-absence", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddHours(12)});
+                user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
 
-            }
+            var somtodayAfwezigheid = await somtodayApi.GetAfwezigheidAsync(user);
             
-            return Ok("Data was refreshed");
+            if (somtodayAfwezigheid == null) return NoContent();
+            
+            string json = JsonConvert.SerializeObject(somtodayAfwezigheid);
+            
+            ZermosUser = new user
+            {
+                cached_somtoday_absence = json
+            };
+            
+            Response.Cookies.Append("cached-somtoday-absence", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(15)});
+            
+            HttpContext.Response.ContentType = "application/json";
+            return Ok(json);
+        }
+        #endregion
+        
+        #region refresh token
+        public async Task<string> RefreshToken(string token = null)
+        {
+            if (token == null) return null;
+            
+            var somtoday = await somtodayApi.RefreshTokenAsync(token);
+            
+            ZermosUser = new user
+            {
+                somtoday_access_token = somtoday.access_token,
+                somtoday_refresh_token = somtoday.refresh_token
+            };
+            
+            return somtoday.access_token;
         }
         #endregion
     }

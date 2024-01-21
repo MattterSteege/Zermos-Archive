@@ -32,9 +32,9 @@ namespace Zermos_Web.Controllers
             else if (ViewData["url"] == null)
                 ViewData["url"] = user.default_page ?? "/Zermelo/Rooster";
             
-            Response.Cookies.Append("version_used", user.version_used);
-            Response.Cookies.Append("hand_side", user.hand_side);
-            Response.Cookies.Append("theme", user.theme);
+            Response.Cookies.Append("version_used", user.version_used ?? "0");
+            Response.Cookies.Append("hand_side", user.hand_side ?? "right");
+            Response.Cookies.Append("theme", user.theme ?? "light");
             
             return View();
         }
