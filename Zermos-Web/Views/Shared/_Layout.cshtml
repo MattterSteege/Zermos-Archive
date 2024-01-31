@@ -1,6 +1,7 @@
 @using Zermos_Web.Utilities
 @{
-    var version = Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") ?? TokenUtils.RandomString(10);
+    var version = Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION");
+    version = version == "DEV" ? TokenUtils.RandomString(10) : version;
 }
 <!DOCTYPE html>
 <html lang="nl" class="@(Context.Response.GetCookie("theme") ?? Context.Request.Cookies["theme"] ?? "light") @(Context.Response.GetCookie("hand_side") ?? Context.Request.Cookies["hand_side"] ?? "right")">

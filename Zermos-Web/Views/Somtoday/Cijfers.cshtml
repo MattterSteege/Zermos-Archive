@@ -26,75 +26,81 @@
 
 <link rel="stylesheet" href="~/css/somtoday.css" />
 
-<div class="grades">
-    <div class="grades-container">
-        
-        <!-- specific grades overview -->
-        @foreach (var vak in sortedGrades)
+<div class="grades-container">
+    
+    <!-- specific grades overview -->
+    @foreach (var vak in sortedGrades)
+    {
+        var sumOfWeightedGrades = 0.0f;
+        var sumOfWeights = 0;
+        var hasNonZeroWeight = false;
+        var gradesArray = new List<float>();
+        var gradesWeight = new List<int>();
+        var isAllExamGrades = vak.isAllExam;
+
+        foreach (var gradeItem in vak.grades)
         {
-            var sumOfWeightedGrades = 0.0f;
-            var sumOfWeights = 0;
-            var hasNonZeroWeight = false;
-            var gradesArray = new List<float>();
-            var gradesWeight = new List<int>();
+            var geldendResultaat = NumberUtils.ParseFloat(gradeItem.geldendResultaat);
+            
+            if (gradeItem.isExamendossierResultaat && !isAllExamGrades) continue;
+            
+            var weight = gradeItem.weging;
+            
+            if (weight == 0 && isAllExamGrades)
+                weight = gradeItem.examenWeging;
 
-            foreach (var gradeItem in vak.grades)
+            if (weight == 0 && sumOfWeights == 0)
             {
-                var geldendResultaat = NumberUtils.ParseFloat(gradeItem.geldendResultaat);
-                var weight = gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging;
-
-                if (weight == 0 && sumOfWeights == 0)
-                {
-                    sumOfWeightedGrades += geldendResultaat;
-                }
-                else
-                {
-                    sumOfWeightedGrades += geldendResultaat * weight;
-                    hasNonZeroWeight = true;
-                }
-
-                sumOfWeights += weight;
-
-                gradesArray.Add(geldendResultaat);
-                gradesWeight.Add(weight);
+                sumOfWeightedGrades += geldendResultaat;
+            }
+            else
+            {
+                sumOfWeightedGrades += geldendResultaat * weight;
+                hasNonZeroWeight = true;
             }
 
-            if (!hasNonZeroWeight)
-            {
-                sumOfWeights = vak.grades.Count;
-            }
+            sumOfWeights += weight;
 
-            var WeightedAverageSnapshots = NumberUtils.CalculateWeightedAverageSnapshots(gradesArray.ToArray(), gradesWeight.ToArray());
-            double gradeChange = 0;
-
-            try
-            {
-                gradeChange = Math.Round((double) ((WeightedAverageSnapshots[^1] - WeightedAverageSnapshots[^2]) / WeightedAverageSnapshots[^2] * 100), 2);
-            }
-            catch (Exception)
-            {
-                gradeChange = 100;
-            }
-
-            <div class="vak">
-                <a onclick="ReplacePage('@Url.Action("Cijfer", "Somtoday", new {vak = vak.vak.afkorting.Capitalize()})')">
-                    <div class="grade-container">
-                        @Html.Raw(GetNotificationClass(vak.grades[^1].datumInvoer))
-                        <div class="top-30">
-                            <p>@vak.vak.naam</p>
-                            <p>@(sumOfWeights)x</p>
-                            <p class="@(WeightedAverageSnapshots[^1] >= 5.5f ? "sufficient" : "insufficient ")">@(((double) WeightedAverageSnapshots[^1]).ToString("0.0", CultureInfo.InvariantCulture))</p>
-                        </div>
-                        <div class="bottom-70">
-                            <p style="flex-grow: 1; text-align: end;">Laatste cijfer:</p>
-                            <p style="flex-grow: 1; text-align: center;" class="@(NumberUtils.ParseFloat(vak.grades[^1].geldendResultaat) >= 5.5f ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</p>
-                            <p style="flex-grow: 1; text-align: start;" class="@(gradeChange > 0 ? "sufficient" : "insufficient ")">@($"{(gradeChange > 0 ? "+" : "")}{gradeChange}%")</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
+            gradesArray.Add(geldendResultaat);
+            gradesWeight.Add(weight);
         }
-    </div>
+
+        if (!hasNonZeroWeight)
+        {
+            sumOfWeights = gradesArray.Count;
+            gradesWeight = Enumerable.Repeat(1, sumOfWeights).ToList();
+        }
+
+        var WeightedAverageSnapshots = NumberUtils.CalculateWeightedAverageSnapshots(gradesArray.ToArray(), gradesWeight.ToArray());
+        double gradeChange = 0;
+
+        try
+        {
+            gradeChange = Math.Round((double) ((WeightedAverageSnapshots[^1] - WeightedAverageSnapshots[^2]) / WeightedAverageSnapshots[^2] * 100), 2);
+        }
+        catch (Exception)
+        {
+            gradeChange = 100;
+        }
+
+        <div class="vak">
+            <a onclick="ReplacePage('@Url.Action("Cijfer", "Somtoday", new {vak = vak.vak.afkorting.Capitalize()})')">
+                <div class="grade-container">
+                    @Html.Raw(GetNotificationClass(vak.grades[^1].datumInvoer))
+                    <div class="top-30">
+                        <p>@vak.vak.naam</p>
+                        <p>@(sumOfWeights)x</p>
+                        <p class="@(WeightedAverageSnapshots[^1] >= 5.5f ? "sufficient" : "insufficient ")">@(((double) WeightedAverageSnapshots[^1]).ToString("0.0", CultureInfo.InvariantCulture))</p>
+                    </div>
+                    <div class="bottom-70">
+                        <p style="flex-grow: 1; text-align: end;">Laatste cijfer:</p>
+                        <p style="flex-grow: 1; text-align: center;" class="@(NumberUtils.ParseFloat(vak.grades[^1].geldendResultaat) >= 5.5f ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</p>
+                        <p style="flex-grow: 1; text-align: start;" class="@(gradeChange > 0 ? "sufficient" : "insufficient ")">@($"{(gradeChange > 0 ? "+" : "")}{gradeChange}%")</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
 </div>
 
 <script>
@@ -149,4 +155,24 @@ addButtonToPage('fa-share-from-square', () => {
     .open();
     
 }, VerticalAlignment.TL, Background.Primary);
+
+addButtonToPage("fa-clock-rotate-left", () => {
+    
+   //show last 10 grades
+    new ZermosModal()
+    .setTitle("Laatste 10 cijfers")
+    .setSubmitButtonLabel("Sluiten")
+    .addText("Hieronder zie je de laatste 10 cijfers die je hebt gehaald.")
+@{
+    @foreach (var grade in Model.items.OrderByDescending(x => x.datumInvoer).Take(10))
+    {
+<text>
+    .addText('@grade.vak.naam - @(grade.weging == 0 ? grade.examenWeging : grade.weging)x - @grade.geldendResultaat')
+</text>
+    }
+}
+
+    .open();
+
+}, VerticalAlignment.BL, Background.Accent);
 </script>

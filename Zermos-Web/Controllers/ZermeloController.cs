@@ -44,11 +44,9 @@ namespace Zermos_Web.Controllers
             
             var zermeloRoosterModel = await zermeloApi.GetRoosterAsync(ZermosUser, year, week);
             
-            var token = TokenUtils.RandomString(20);
-            
             string url = (await AddShare(new share
             {
-                key = token,
+                key = TokenUtils.RandomString(20),
                 email = ZermosEmail,
                 value = zermeloRoosterModel.ObjectToBase64String(),
                 page = "/Zermelo/Rooster/Gedeeld",

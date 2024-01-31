@@ -29,7 +29,7 @@ namespace Zermos_Web.Models.SomtodayGradesModel
 
         public int examenWeging { get; set; }
 
-        //public bool isExamendossierResultaat { get; set; }
+        public bool isExamendossierResultaat { get; set; }
         //public bool isVoortgangsdossierResultaat { get; set; }
         public string type { get; set; }
         public string omschrijving { get; set; }
@@ -76,5 +76,8 @@ namespace Zermos_Web.Models.SomtodayGradesModel
     {
         public List<Item> grades;
         public Vak vak;
+        public bool isAllExam => grades.TrueForAll(x => x.isExamendossierResultaat);
+        public bool isPartialExam => grades.Exists(x => x.isExamendossierResultaat) && !isAllExam;
+        public bool isAllProgress => grades.TrueForAll(x => !x.isExamendossierResultaat);
     }
 }

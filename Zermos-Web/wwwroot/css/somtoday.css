@@ -1,8 +1,7 @@
 ﻿.grades {
     display: grid;
-    /*grid-template-columns: 3fr 1fr;
-    */
     grid-template-columns: 1fr;
+    /* grid-template-columns: 1fr; */
     grid-auto-flow: row;
     grid-gap: var(--padding);
 }
@@ -73,7 +72,7 @@
     border-radius: var(--border-radius);
     background: var(--overlay-color);
     width: 100%;
-    height: 244px;
+    height: 150px;
     box-shadow: var(--box-shadow);
     font-size: var(--font-size);
 }
@@ -625,10 +624,60 @@
     margin-bottom: var(--padding);
 }
 
+.grade-sidebar {
+    height: 100%;
+    width: calc(200px + var(--padding) * 2);
+    background: var(--overlay-color);
+    border-radius: var(--border-radius);
+    padding: var(--padding);
+    box-shadow: var(--box-shadow);
+    display: flex;
+    grid-gap: var(--padding);
+    overflow: hidden;
+    z-index: 1;
+    flex-direction: column;
+    padding-right: calc(var(--padding) * 2);
+}
+
+.grade-sidebar .header {
+    color: var(--text-color);
+    font-size: var(--font-size-heading);
+    font-weight: 700;
+}
+
+.grade-sidebar .latest {
+    display: flex;
+    grid-gap: var(--padding);
+    color: var(--text-color);
+    height: max-content;
+    width: 100%;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.grade-sidebar .latest p {
+    font-size: var(--font-size);
+    font-weight: 600;
+
+}
+
+.isAllExamGrades {
+    position: absolute;
+    right: 4px;
+    top: 2px;
+    transform: translate(50%, -50%) rotate(19deg);
+    font-size: 14px;
+}
+
 @media only screen and (max-width: 40cm) {
     .homework-search {
         left: calc(180px + var(--padding) * 4 + 96px);
         top: var(--padding);
+    }
+    
+    .vak {
+        height: 100px;
     }
 }
 
@@ -720,6 +769,10 @@
 
     .vak {
         height: 100px;
+    }
+
+    .grades {
+        grid-template-columns: 1fr;
     }
 }
 

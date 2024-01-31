@@ -516,13 +516,9 @@ namespace Zermos_Web.Controllers
                 gradesToShare.AddRange(vakWithGrades.grades);
             }
             
-            var token = TokenUtils.RandomString(20,
-                TokenUtils.RandomStringType.Numbers & TokenUtils.RandomStringType.LowerCase &
-                TokenUtils.RandomStringType.UpperCase);
-            
             share share = new share
             {
-                key = token,
+                key = TokenUtils.RandomString(20),
                 email = ZermosEmail,
                 value = (show_individual_grades ? 1 : 0) + gradesToShare.ObjectToBase64String(),
                 page = "/Somtoday/Cijfers/Gedeeld",

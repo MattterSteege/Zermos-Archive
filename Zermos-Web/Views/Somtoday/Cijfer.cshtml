@@ -23,6 +23,10 @@
         NumberUtils.TryParseFloat(grade.geldendResultaat, out geldendResultaat);
 
         <div class="vak">
+            @if (grade.isExamendossierResultaat)
+            {
+                <div class="isAllExamGrades"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></div>
+            }
             <a onclick="@(grade.links[0].id.StringToBase64String().Replace("=", ""))()">
                 <div class="top-30">
                     <p>@grade.vak.naam</p>
