@@ -3,6 +3,8 @@ TODO: When checking if user has cookie for cached data, check if the data is not
 TODO: make time use login, so the user get's logged out after the session is closed
 TODO: dagrooster
 
+TODO: SOMtoday grades moet echt netter gemaakt worden, dus alle info moet verborgen wor
+
 TODO: SOMToday API revamp
     Model: not
     API: not

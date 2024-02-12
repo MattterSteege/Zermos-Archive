@@ -3,3 +3,4 @@
 - Somtoday - cijfers
     - cijfers delen errort nu niet meer.
     - Als je je specifieke cijfers bekijkt, dan zijn de cijfers die meetellen voor je examen nu zichtbaar gemaakt met een examen-hoedje.
+    - SE cijfers zijn nu ook zichtbaar.
