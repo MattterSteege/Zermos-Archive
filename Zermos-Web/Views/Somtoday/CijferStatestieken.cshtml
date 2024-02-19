@@ -7,51 +7,66 @@
 }
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link rel="stylesheet" href="~/css/somtoday.css" />
+<link rel="stylesheet" href="~/css/somtoday.css"/>
 
 <div class="stats-container">
-    <div class="stats">
-        <p class="stats-vak">Vak: @Model.grades.vak.naam</p>
-        <p class="gemiddelde">Gemiddelde: @(((string) Model.stats["gemiddelde"]).TakeFirstLetters(4))</p>
-        <p class="hoogste-cijfer">Hoogste cijfer: @Model.stats["hoogste"]</p>
-        <p class="laagste-cijfer">Laagste cijfer: @Model.stats["laagste"]</p>
-    </div>
-    
-    <div class="stats">
-        <div class="horizontal-split" style="padding-right: var(--padding);">
-            <div>
-                <h1>@(Model.charts[0].Options.Plugins.Title?.Text?[0] ?? "")</h1>
-                <p class="gemiddelde">Percentage voldoendes: @Math.Round(NumberUtils.ParseFloat(Model.stats["voldoendes"]) / Model.grades.grades.Count * 100, 2)%</p>
-                <p class="gemiddelde">aantal cijfers: @Model.grades.grades.Count</p>
-                <p class="gemiddelde">voldoendes: @Model.stats["voldoendes"]</p>
-                <p class="gemiddelde">onvoldoendes: @Model.stats["onvoldoendes"]</p>
+    <div class="stack2">
+        <div class="stats">
+            <p class="stats-vak">Vak: @Model.grades.vak.naam</p>
+            <p class="gemiddelde">Gemiddelde: @(((string) Model.stats["gemiddelde"]).TakeFirstLetters(4))</p>
+            <p class="hoogste-cijfer">Hoogste cijfer: @Model.stats["hoogste"]</p>
+            <p class="laagste-cijfer">Laagste cijfer: @Model.stats["laagste"]</p>
+        </div>
+
+        <div class="stats">
+            <div class="horizontal-split" style="padding-right: var(--padding);">
+                <div>
+                    <h1>@(Model.charts[0].Options.Plugins.Title?.Text?[0] ?? "")</h1>
+                    <p class="gemiddelde">Percentage voldoendes: @Math.Round(NumberUtils.ParseFloat(Model.stats["voldoendes"]) / Model.grades.grades.Count * 100, 2)%</p>
+                    <p class="gemiddelde">aantal cijfers: @Model.grades.grades.Count</p>
+                    <p class="gemiddelde">voldoendes: @Model.stats["voldoendes"]</p>
+                    <p class="gemiddelde">onvoldoendes: @Model.stats["onvoldoendes"]</p>
+                </div>
+                <div class="canvas">
+                    <canvas display="block" box-sizing="border-box" height="max-content" width="max-content" id="@letters[0]" style="max-height: 300px; width: fit-content;"></canvas>
+                </div>
             </div>
-            <canvas display="block" box-sizing="border-box" height="100%" width="100%" id="@letters[0]" style="width: 100% !important; height: 100% !important;"></canvas>
         </div>
     </div>
-    
-    <div class="stats">
-        <h1>@(Model.charts[1].Options.Plugins.Title?.Text?[0] ?? "")</h1>
-        <canvas display="block" box-sizing="border-box" height="min-content" width="min-content" id="@letters[1]"></canvas>
+
+    <div class="stack2">
+
+        <div class="stats">
+            <h1>@(Model.charts[1].Options.Plugins.Title?.Text?[0] ?? "")</h1>
+            <div class="canvas">
+                <canvas display="block" box-sizing="border-box" height="max-content" width="max-content" id="@letters[1]"></canvas>
+            </div>
+        </div>
+
+        <div class="stats">
+            <h1>@(Model.charts[2].Options.Plugins.Title?.Text?[0] ?? "")</h1>
+            <div class="canvas">
+                <canvas display="block" box-sizing="border-box" height="max-content" width="max-content" id="@letters[2]"></canvas>
+            </div>
+        </div>
+
     </div>
-    
-    <div class="stats">
-        <h1>@(Model.charts[2].Options.Plugins.Title?.Text?[0] ?? "")</h1>
-        <canvas display="block" box-sizing="border-box" height="min-content" width="min-content" id="@letters[2]"></canvas>
-    </div>
-    
-    <div class="stats">
-        <h1>Wat moet ik halen?</h1>
-        <input type="number" id="grade_wmih" placeholder="Welk cijfer wil je staan?" min="0" value="5.5" step="0.1">
-        <input type="number" id="weight_wmih" placeholder="Hoe vaak telt de toets mee?" min="0" step="1">
-        <h1 style="display: none; text-align: center; margin: auto;" id="result_wmih"></h1>
-    </div>
-    
-    <div class="stats">
-        <h1>Wat ga ik staan?</h1>
-        <input type="number" id="grade_wgis" placeholder="Welk cijfer ga je halen?" min="0" value="5.5" step="0.1">
-        <input type="number" id="weight_wgis" placeholder="Hoe vaak telt de toets mee?" min="0" step="1">
-        <h1 style="display: none; text-align: center; margin: auto;" id="result_wgis"></h1>
+
+    <div class="stack2">
+
+        <div class="stats">
+            <h1>Wat moet ik halen?</h1>
+            <input type="number" id="grade_wmih" placeholder="Welk cijfer wil je staan?" min="0" value="5.5" step="0.1">
+            <input type="number" id="weight_wmih" placeholder="Hoe vaak telt de toets mee?" min="0" step="1">
+            <h1 style="display: none; text-align: center; margin: auto;" id="result_wmih"></h1>
+        </div>
+
+        <div class="stats">
+            <h1>Wat ga ik staan?</h1>
+            <input type="number" id="grade_wgis" placeholder="Welk cijfer ga je halen?" min="0" value="5.5" step="0.1">
+            <input type="number" id="weight_wgis" placeholder="Hoe vaak telt de toets mee?" min="0" step="1">
+            <h1 style="display: none; text-align: center; margin: auto;" id="result_wgis"></h1>
+        </div>
     </div>
 </div>
 

@@ -8,33 +8,40 @@
 
     <div class="vak" style="height: auto">
         <a onclick="ReplacePage('@Url.Action("CijferStatestieken", "Somtoday", new {vak = Model.vak.afkorting.Capitalize()})')" style="display: flex; align-content: center; justify-content: center; flex-wrap: wrap;">
-            <div class="top-30 fade-out" style="justify-content: center; align-items: center; margin-bottom: 0">
-                <p>Cijfer statestieken</p>
-            </div>
-            @* <div class="background"> *@
-            @*     <img class="image"/> *@
-            @* </div> *@
+            <table>
+                <tr>
+                    <td colspan="2">
+                        Cijfer statistieken
+                        <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                    </td>
+                </tr>
+            </table>
         </a>
     </div>
 
     @foreach (var grade in Model.grades)
     {
         float geldendResultaat;
-        NumberUtils.TryParseFloat(grade.geldendResultaat, out geldendResultaat);
-
+        NumberUtils.TryParseFloat(grade.geldendResultaat, out geldendResultaat); 
         <div class="vak">
             @if (grade.isExamendossierResultaat)
             {
                 <div class="isAllExamGrades"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></div>
             }
-            <a onclick="@(grade.links[0].id.StringToBase64String().Replace("=", ""))()">
-                <div class="top-30">
-                    <p>@grade.vak.naam</p>
-                    <p>@(grade.weging == 0 ? grade.examenWeging : grade.weging)x</p>
-                    <p class="@(NumberUtils.ParseFloat(grade.geldendResultaat) >= 5.5f ? "sufficient" : "insufficient ")">@(grade.resultaatLabelAfkorting == "V" ? "V" : geldendResultaat.ToString("0.0", CultureInfo.InvariantCulture))</p>
-                </div>
-                <div class="bottom-70">
-                    <p>@grade.omschrijving</p>
+            <a>
+                <div class="grade-container">
+                    <table class="grade-table">
+                        <tr class="grade-table-header">
+                            <td colspan="2">@grade.vak.naam</td>
+                            <td>@(grade.weging == 0 ? grade.examenWeging : grade.weging)x</td>
+                            <td class="@(geldendResultaat >= 5.5f ? "sufficient" : "insufficient ")">@((geldendResultaat == 0 ? grade.examenWeging : grade.weging).ToString("0.0", CultureInfo.InvariantCulture))</td>
+                        </tr>
+                        <tr class="grade-table-body">
+                            <td colspan="4">
+                                @grade.omschrijving
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </a>
         </div>

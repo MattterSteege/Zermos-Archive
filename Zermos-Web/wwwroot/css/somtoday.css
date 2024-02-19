@@ -209,9 +209,11 @@
     width: 100%;
 }
 
-.stats-container .stats canvas {
-    width: 100% !important;
-    height: 100% !important;
+.stats-container .canvas {
+    max-height: 300px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .stats-container .stats .stats-vak {
@@ -670,34 +672,11 @@
     font-size: 14px;
 }
 
-/*
-<table class="grade-table">
-                        <tr class="grade-table-header">
-                            <td>Vak</td>
-                            <td></td>
-                            <th>@vak.vak.naam</th>
-                        </tr>
-                        <tr class="grade-table-header">
-                            <td>Cijfer</td>
-                            <td></td>
-                            <td class="@(WeightedAverageSnapshots[^1] >= 5.5f ? "sufficient" : "insufficient ")">@(((double) WeightedAverageSnapshots[^1]).ToString("0.0", CultureInfo.InvariantCulture))</td>
-                        </tr>
-                        <tr class="grade-table-header">
-                            <td>Laatste cijfer</td>
-                            <td class="@(gradeChange > 0 ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</td>
-                            <td class="@(gradeChange > 0 ? "sufficient" : "insufficient ")">@($"{(gradeChange > 0 ? "+" : "")}{gradeChange}%")</td>
-                        </tr>
-                        
-                        @if (gradesArraySE.Count > 0)
-                        {
-                            <tr class="grade-table-header">
-                                <td>SE</td>
-                                <td class="@(WeightedAverageSnapshotsSE[^1] >= 5.5f ? "sufficient" : "insufficient ")">@(((double) WeightedAverageSnapshotsSE[^1]).ToString("0.0", CultureInfo.InvariantCulture))
-                            </tr>
-                        }
-                    
-                    </table>
-*/
+.stack2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(355px, 100% / 3)), 1fr));
+    grid-gap: var(--padding);
+}
 
 .grade-table {
     width: 100%;
@@ -720,7 +699,7 @@
 }
 
 .grade-table-header td:nth-child(2) {
-    width: 10%;
+    padding-right: 30px;
 }
 
 .grade-table-header td:nth-child(3) {

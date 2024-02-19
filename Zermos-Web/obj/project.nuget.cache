@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "vrTisutJKNSD6dZnLDvw9VoQKFGhZu/Eilxw/DZxkRNdOcEZnRUhv25uzoN0tCjvsx2kQePuk7k+WLZ8OMQI3Q==",
+  "dgSpecHash": "h19UsFxTOfZmIpacjubgIjejdawmPlN3TH2ycL6ffpa0EBbvuO6SQU0OHw3KX8JEdqTWs5rCrYo5EijbFpZ0QA==",
   "success": true,
   "projectFilePath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Zermos-Web\\Zermos-Web.csproj",
   "expectedPackageFiles": [
@@ -37,7 +37,6 @@
     "C:\\Users\\mattt\\.nuget\\packages\\microsoft.net.stringtools\\17.4.0\\microsoft.net.stringtools.17.4.0.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
-    "C:\\Users\\mattt\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\mysql.data\\8.2.0\\mysql.data.8.2.0.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\mysql.entityframeworkcore\\7.0.10\\mysql.entityframeworkcore.7.0.10.nupkg.sha512",
@@ -46,7 +45,7 @@
     "C:\\Users\\mattt\\.nuget\\packages\\system.codedom\\4.4.0\\system.codedom.4.4.0.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\system.configuration.configurationmanager\\4.4.1\\system.configuration.configurationmanager.4.4.1.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\system.diagnostics.diagnosticsource\\7.0.2\\system.diagnostics.diagnosticsource.7.0.2.nupkg.sha512",
-    "C:\\Users\\mattt\\.nuget\\packages\\system.drawing.common\\4.7.0\\system.drawing.common.4.7.0.nupkg.sha512",
+    "C:\\Users\\mattt\\.nuget\\packages\\system.drawing.common\\9.0.0-preview.1.24081.2\\system.drawing.common.9.0.0-preview.1.24081.2.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\system.io\\4.3.0\\system.io.4.3.0.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\system.io.pipelines\\6.0.3\\system.io.pipelines.6.0.3.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\system.memory\\4.5.5\\system.memory.4.5.5.nupkg.sha512",
