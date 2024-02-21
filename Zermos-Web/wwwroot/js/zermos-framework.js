@@ -448,3 +448,39 @@ console.trace = function() {
     consoleArray.push([arguments, "trace"]);
 }
 
+//==============================PREVIEW SYSTEM==============================
+//cookie preview=microsoft-somtoday-zermelo > TogglePreview("microsoft") > preview=somtoday-zermelo
+function TogglePreview(preview) {
+    var cookie = document.cookie;
+    var previewCookie = cookie.split(";").find((c) => c.trim().startsWith("preview="));
+    if (previewCookie === undefined) {
+        document.cookie = "preview=" + preview;
+    } else {
+        var previews = previewCookie.split("=")[1].split("-");
+        if (previews.includes(preview)) {
+            previews.splice(previews.indexOf(preview), 1);
+        } else {
+            previews.push(preview);
+        }
+        document.cookie = "preview=" + previews.join("-");
+    }
+    
+    var element = document.querySelector("[data-preview-id='" + preview + "']");
+    if (element !== null) {
+        if (HasPreview(preview)) {
+            element.classList.add("active");
+        } else {
+            element.classList.remove("active");
+        }
+    }
+}
+
+function HasPreview(preview) {
+    var cookie = document.cookie;
+    var previewCookie = cookie.split(";").find((c) => c.trim().startsWith("preview="));
+    if (previewCookie === undefined) {
+        return false;
+    } else {
+        return previewCookie.split("=")[1].split("-").includes(preview);
+    }
+}

@@ -26,18 +26,18 @@
         <div class="vak">
             @if (grade.isExamendossierResultaat)
             {
-                <div class="isAllExamGrades"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></div>
+                <div class="isAllExamGrades"><i class="fa-solid fa-graduation-cap" aria-hidden="true" onclick="happyCappy(this)" id="@grade.links[0].id.StringToBase64String().Replace("=", "")"></i></div>
             }
-            <a>
+            <a onclick="@(grade.links[0].id.StringToBase64String().Replace("=", "") + "()")" style="display: flex; align-content: center; justify-content: center; flex-wrap: wrap;">
                 <div class="grade-container">
                     <table class="grade-table">
                         <tr class="grade-table-header">
-                            <td colspan="2">@grade.vak.naam</td>
+                            <td colspan="2">@grade.vak.naam @(grade.isExamendossierResultaat ? "SE" : "")</td>
                             <td>@(grade.weging == 0 ? grade.examenWeging : grade.weging)x</td>
-                            <td class="@(geldendResultaat >= 5.5f ? "sufficient" : "insufficient ")">@((geldendResultaat == 0 ? grade.examenWeging : grade.weging).ToString("0.0", CultureInfo.InvariantCulture))</td>
+                            <td class="@(geldendResultaat >= 5.5f ? "sufficient" : "insufficient ")">@geldendResultaat</td>
                         </tr>
                         <tr class="grade-table-body">
-                            <td colspan="4">
+                            <td colspan="4" style="text-align: center">
                                 @grade.omschrijving
                             </td>
                         </tr>
@@ -49,11 +49,20 @@
 </div>
             
 <script>
+
+function happyCappy(element) {
+    element.classList.remove("animate");
+    element.classList.add("animate");
+    setTimeout(function() {
+        element.classList.remove("animate");
+    }, 1000);
+}
+
 @foreach(var vak in Model.grades)
 {
     string function = $"function {vak.links[0].id.StringToBase64String().Replace("=", "")}() {{\n" +
                       $"    new ZermosModal()\n" +
-                      $"    .setTitle('{vak.vak.naam}')\n" +
+                      $"    .setTitle('{vak.vak.naam + (vak.isExamendossierResultaat ? " SE" : "")}')\n" +
                       $"    .addText(`Omschrijving: {vak.omschrijving}`)\n" +
                       $"    .addText('Weging: {(vak.weging == 0 ? vak.examenWeging : vak.weging)}x')\n" +
                       $"    .addText('Geldend resultaat: {vak.geldendResultaat}')\n" +

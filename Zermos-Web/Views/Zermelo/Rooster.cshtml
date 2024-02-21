@@ -168,6 +168,9 @@
         </div>
         <div class="week" data-week="@Model.MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.MondayOfAppointmentsWeek.Year" data-unix="@Model.MondayOfAppointmentsWeek.ToUnixTime()"></div>
     </div>
+    <div class="notCurrentWeek" style="bottom: -50px;">
+        Dit is niet de huidige week!
+    </div>
 </div>
 
 <script>
@@ -178,7 +181,7 @@ var isFetching = false; // Flag to track whether a fetch operation is in progres
 function NextWeek(isInitial = false, noAnimation = false, timeout = 500) {
     //if (!isFetching || isInitial) {
         //isFetching = true;
-        //disableButtons();
+        disableButtons();
         
         if (!isInitial && !noAnimation) {
             ease('-33.3333', '-66.6666', 500, (value) => {
@@ -202,7 +205,7 @@ function NextWeek(isInitial = false, noAnimation = false, timeout = 500) {
 function PreviousWeek(isInitial = false, noAnimation = false, timeout = 500) {
     //if (!isFetching || isInitial) {
         //isFetching = true;
-        //disableButtons()
+        disableButtons()
         
         if (!isInitial && !noAnimation) {
             //ease to translateX(0) using code
@@ -293,13 +296,6 @@ async function fetchWeek(week, year, append, isInitial = false, timeout = 500) {
         var parser = new DOMParser();
         newWeek = parser.parseFromString(html, 'text/html').getElementsByClassName('week')[0];
         let time2 = performance.now();
-        if (haschanged === true){
-            console.warn("fetching took too long, showed loading screen");
-            console.log("fetching took " + (time2 - time1) + " milliseconds.");
-        }
-        else {
-            console.log("fetching took " + (time2 - time1) + " milliseconds.");
-        }
         isdone = true;
         clearTimeout(timeout2);
         
@@ -322,6 +318,13 @@ async function fetchWeek(week, year, append, isInitial = false, timeout = 500) {
                     weeks = document.getElementsByClassName('week');
                     
                     haschanged = true;
+                    
+                                if (weeks[1].dataset.week === getCurrentWeek().toString() && weeks[1].dataset.year === new Date().getFullYear().toString()) {
+                        HideNotCurrentWeek();
+                    }
+                    else {
+                        ShowNotCurrentWeek();
+                    }
                 }
                 else
                 {
@@ -345,6 +348,13 @@ async function fetchWeek(week, year, append, isInitial = false, timeout = 500) {
                     weeks = document.getElementsByClassName('week');
                     
                     haschanged = true;
+                    
+                                if (weeks[1].dataset.week === getCurrentWeek().toString() && weeks[1].dataset.year === new Date().getFullYear().toString()) {
+                        HideNotCurrentWeek();
+                    }
+                    else {
+                        ShowNotCurrentWeek();
+                    }
                 }
             }
         }, (timeout - (time2 - time1)) > 0 ? (timeout - (time2 - time1)) : 0);
@@ -374,10 +384,17 @@ async function fetchWeek(week, year, append, isInitial = false, timeout = 500) {
             weeks = document.getElementsByClassName('week');
             
             haschanged = true;
+            
+            if (weeks[1].dataset.week === getCurrentWeek().toString() && weeks[1].dataset.year === new Date().getFullYear().toString()) {
+                HideNotCurrentWeek();
+            }
+            else {
+                ShowNotCurrentWeek();
+            }
         }
-       //enableButtons();
         
     }, timeout);
+   enableButtons();
 }
 
 Zermos.mainAfterLoad = () => {
@@ -569,4 +586,51 @@ addButtonToPage('fa-list', () => {
     .open();
     
 }, VerticalAlignment.TL, Background.Primary);
+
+
+
+var notCurrentWeek = document.getElementsByClassName('notCurrentWeek')[0];
+var clicked = 5;
+
+notCurrentWeek.addEventListener('click', () => {
+    if (clicked <= 1) {
+        HideNotCurrentWeek()
+        new ZermosModal()
+        .setTitle("Dit is niet deze week!")
+        .addText("Je zit nu in week " + weeks[1].dataset.week + " van " + weeks[1].dataset.year + ".")
+        .addText("De huidige datum is " + new Date().toLocaleDateString("nl-NL", { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'}) + ".")
+        .addText("Handig om te weten, toch Teun?")
+        .setSubmitButtonLabel("Ja dat klopt...")
+        .onSubmit(() => {
+            ShowNotCurrentWeek();
+        })
+        .open();
+        
+        clicked = 5;
+    }
+    else 
+        clicked--;
+});
+
+function ShowNotCurrentWeek() {
+    if (!HasPreview('zermelo_not_current_week')) {
+        HideNotCurrentWeek();
+        return;
+    }
+    notCurrentWeek.style.bottom = "";
+}
+
+function HideNotCurrentWeek() {
+    if (!HasPreview('zermelo_not_current_week')) 
+        return;
+   
+    notCurrentWeek.style.bottom = "-50px";
+}
+
+function getCurrentWeek() {
+    var date = new Date();
+    var onejan = new Date(date.getFullYear(), 0, 1);
+    var week = Math.ceil((((date - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+    return week;
+}
 </script>

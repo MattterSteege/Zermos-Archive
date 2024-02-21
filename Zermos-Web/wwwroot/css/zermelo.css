@@ -275,6 +275,18 @@ ul:has(> li.empty) {
     align-items: center;
 }
 
+.notCurrentWeek {
+    position: absolute;
+    bottom: var(--padding);
+    padding: var(--padding);
+    text-align: center;
+    background: var(--overlay-color);
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    transition: bottom 0.5s cubic-bezier(0.5, -0.25, 0.5, 1.25);
+    font-weight: 600;
+}
+
 @media screen and (max-width: 600px) {
     
     .days-container ul {

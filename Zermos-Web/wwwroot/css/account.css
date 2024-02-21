@@ -53,7 +53,7 @@
     background: var(--deny-color);
 }
 
-.koppelen {
+.koppelen, .active {
     background: var(--confirm-color);
 }
 

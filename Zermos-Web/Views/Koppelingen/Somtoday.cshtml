@@ -48,6 +48,15 @@
                 }
             }
         };
+        
+        if (url.includes("ontkoppel")) {
+            button.innerHTML = "Log opnieuw in";
+            button.disabled = false;
+            console.warn("Crises averted");
+            
+            return;
+        }
+        
         xhr.send();
     });
 </script>

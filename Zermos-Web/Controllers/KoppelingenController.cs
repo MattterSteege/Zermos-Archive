@@ -75,6 +75,8 @@ namespace Zermos_Web.Controllers
         [HttpPost("ontkoppel/{app}")]
         public IActionResult Ontkoppel(string app)
         {
+            return BadRequest("Temporary disabled");
+            
             switch (app)
             {
                 case "infowijs":

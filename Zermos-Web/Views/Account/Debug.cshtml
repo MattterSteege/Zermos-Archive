@@ -24,9 +24,9 @@
     
     <h4>previews</h4>
     
-    <div class="account-item" onclick="TogglePreview('zermelo_enroll')">
-        <h1>Zermelo enroll aan/uit</h1>
-        <p>Zet hier de optie om de bèta versie van lessen plannen aan of uit.</p>
+    <div class="account-item" data-preview-id="zermelo_not_current_week" onclick="TogglePreview('zermelo_not_current_week')">
+        <h1>Zermelo 'niet deze week' notificatie</h1>
+        <p>Zet hier de optie om de notificatie te laten zien als je niet op de huidige week zit aan of uit.</p>
     </div>
     
     <h4>device info</h4>
@@ -87,21 +87,19 @@
         }
     }
     
-    //cookie preview=microsoft-somtoday-zermelo > TogglePreview("microsoft") > preview=somtoday-zermelo
-    function TogglePreview(preview) {
-        var cookie = document.cookie;
-        var previewCookie = cookie.split(";").find((c) => c.trim().startsWith("preview="));
-        if (previewCookie === undefined) {
-            document.cookie = "preview=" + preview;
-        } else {
-            var previews = previewCookie.split("=")[1].split("-");
-            if (previews.includes(preview)) {
-                previews.splice(previews.indexOf(preview), 1);
-            } else {
-                previews.push(preview);
+    CheckPreviews();
+    
+    function CheckPreviews() {
+        var previews = document.getElementsByClassName("account-item");
+        for (var i = 0; i < previews.length; i++) {
+            var preview = previews[i];
+            if (preview.dataset.previewId !== undefined) {
+                var previewId = preview.dataset.previewId;
+                var previewValue = HasPreview(previewId);
+                if (previewValue === true) {
+                    preview.classList.add("active");
+                }
             }
-            document.cookie = "preview=" + previews.join("-");
         }
-        location.reload();
     }
 </script>
