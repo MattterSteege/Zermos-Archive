@@ -287,6 +287,42 @@ ul:has(> li.empty) {
     font-weight: 600;
 }
 
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--background-color);
+    z-index: 100000000;
+    overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 2cm;
+    padding-bottom: 2cm;
+}
+
+.background-overlay div {
+    color: var(--text-color);
+    font-size: calc(var(--font-size-heading) * 1.5);
+    font-weight: 600;
+    border: 1px solid var(--text-color);
+    margin: 5px;
+    padding: 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    border-radius: var(--border-radius);
+}
+
+.background-overlay div p {
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: center;
+}
+
+
 @media screen and (max-width: 600px) {
     
     .days-container ul {
@@ -337,5 +373,11 @@ ul:has(> li.empty) {
 
     .days-container ul li .date {
         margin-bottom: auto;
+    }
+}
+
+@media screen and (max-width: 6cm) {
+    .main-container {
+        background-color: red;
     }
 }

@@ -31,6 +31,21 @@ namespace Zermos_Web.Controllers
             
             return compact ? PartialView("Rooster-week", await zermeloApi.GetRoosterAsync(ZermosUser, year, week)) : PartialView(await zermeloApi.GetRoosterAsync(ZermosUser, year, week));
         }
+        
+        [Authorize]
+        [ZermosPage]
+        [Route("/Zermelo/Smartwatch")]
+        [ZermeloRequirement]
+        public async Task<IActionResult> SmartwatchRooster()
+        {
+            var cur = new DateTime(2024, 2, 16);
+            
+            var week = cur.GetWeekNumber().ToString();
+            week = week.ToCharArray().Length == 1 ? "0" + week : week;
+            var year = cur.Year.ToString();
+            
+            return PartialView(await zermeloApi.GetRoosterAsync(ZermosUser, year, week));
+        }
 
         [Authorize]
         [ZermeloRequirement]

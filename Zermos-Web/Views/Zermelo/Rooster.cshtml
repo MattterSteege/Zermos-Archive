@@ -398,6 +398,11 @@ async function fetchWeek(week, year, append, isInitial = false, timeout = 500) {
 }
 
 Zermos.mainAfterLoad = () => {
+    
+    if (HasPreview('zermelo_smartwatch')) {
+        ReplacePage('/Zermelo/Smartwatch');
+    }
+    
     NextWeek(true);
     PreviousWeek(true);
 };

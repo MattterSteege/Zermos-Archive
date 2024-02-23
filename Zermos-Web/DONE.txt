@@ -5,3 +5,6 @@
     - Als je je specifieke cijfers bekijkt, dan zijn de cijfers die meetellen voor je examen nu zichtbaar gemaakt met een examen-hoedje.
     - SE cijfers zijn nu ook zichtbaar.
     - Stats zien er nu beter uit.
+    
+- algemeen
+    - Zermos heeft nu een nieuw klein broertje: Zermos Watch. deze website is gemaakt voor kleine schermen zoals Galaxy Watches en Apple Watches. (je moet op het internet kunnen om deze te gebruiken)
