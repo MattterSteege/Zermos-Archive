@@ -3,6 +3,26 @@ layout: default
 title: what's new
 nav_exclude: false
 ---
+# Release Notes - Versie 0.4.6.1 - 26-02-2024
+0.4.6.1 - foutjes van 0.4.6 opruimen
+- Zermelo
+    - Klein foutje met styling opgelost
+    
+- Somtoday
+    - Probleem met de cijfer percentages opgelost
+
+# Release Notes - Versie 0.4.6 - 25-02-2024
+0.4.6 - bugfixes
+
+- Somtoday - cijfers
+    - cijfers delen errort nu niet meer.
+    - Als je je specifieke cijfers bekijkt, dan zijn de cijfers die meetellen voor je examen nu zichtbaar gemaakt met een examen-hoedje.
+    - SE cijfers zijn nu ook zichtbaar.
+    - Stats zien er nu beter uit.
+    
+- algemeen
+    - Zermos heeft nu een nieuw klein broertje: Zermos Watch. deze website is gemaakt voor kleine schermen zoals Galaxy Watches en Apple Watches. (je moet op het internet kunnen om deze te gebruiken)
+
 # Release Notes - Versie 0.4.5 - 20-01-2024
 0.4.5 - Alles is voor Bassie
 
