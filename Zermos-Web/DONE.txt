@@ -1,10 +1,6 @@
-﻿0.4.6 - bugfixes
-
-- Somtoday - cijfers
-    - cijfers delen errort nu niet meer.
-    - Als je je specifieke cijfers bekijkt, dan zijn de cijfers die meetellen voor je examen nu zichtbaar gemaakt met een examen-hoedje.
-    - SE cijfers zijn nu ook zichtbaar.
-    - Stats zien er nu beter uit.
+﻿0.4.6.1 - foutjes van 0.4.6 opruimen
+- Zermelo
+    - Klein foutje met styling opgelost
     
-- algemeen
-    - Zermos heeft nu een nieuw klein broertje: Zermos Watch. deze website is gemaakt voor kleine schermen zoals Galaxy Watches en Apple Watches. (je moet op het internet kunnen om deze te gebruiken)
+- Somtoday
+    - Probleem met de cijfer percentages opgelost

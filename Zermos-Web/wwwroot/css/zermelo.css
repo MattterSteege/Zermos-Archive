@@ -276,7 +276,8 @@ ul:has(> li.empty) {
 }
 
 .notCurrentWeek {
-    position: absolute;
+    position: fixed;
+    color: var(--text-color);
     bottom: var(--padding);
     padding: var(--padding);
     text-align: center;

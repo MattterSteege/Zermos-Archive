@@ -454,7 +454,10 @@ function TogglePreview(preview) {
     var cookie = document.cookie;
     var previewCookie = cookie.split(";").find((c) => c.trim().startsWith("preview="));
     if (previewCookie === undefined) {
-        document.cookie = "preview=" + preview;
+        // Set cookie with expiration date 10 years from now
+        var expiresDate = new Date();
+        expiresDate.setFullYear(expiresDate.getFullYear() + 10);
+        document.cookie = "preview=" + preview + "; expires=" + expiresDate.toUTCString();
     } else {
         var previews = previewCookie.split("=")[1].split("-");
         if (previews.includes(preview)) {
@@ -462,9 +465,13 @@ function TogglePreview(preview) {
         } else {
             previews.push(preview);
         }
-        document.cookie = "preview=" + previews.join("-");
+
+        // Set cookie with expiration date 10 years from now
+        var expiresDate = new Date();
+        expiresDate.setFullYear(expiresDate.getFullYear() + 10);
+        document.cookie = "preview=" + previews.join("-") + "; expires=" + expiresDate.toUTCString();
     }
-    
+
     var element = document.querySelector("[data-preview-id='" + preview + "']");
     if (element !== null) {
         if (HasPreview(preview)) {

@@ -97,18 +97,15 @@
         double gradeChange = 0;
         
         var WeightedAverageSnapshotsSE = NumberUtils.CalculateWeightedAverageSnapshots(gradesArraySE.ToArray(), gradesWeightSE.ToArray());
-        double gradeChangeSE = 0;
 
         try
         {
             gradeChange = Math.Round((double) ((WeightedAverageSnapshots[^1] - WeightedAverageSnapshots[^2]) / WeightedAverageSnapshots[^2] * 100), 2);
-            gradeChangeSE = Math.Round((double) ((WeightedAverageSnapshotsSE[^1] - WeightedAverageSnapshotsSE[^2]) / WeightedAverageSnapshotsSE[^2] * 100), 2);
             
         }
         catch (Exception)
         {
             gradeChange = 100;
-            gradeChangeSE = 100;
         }
 
         <div class="vak">
@@ -119,12 +116,12 @@
                         <tr class="grade-table-header">
                             <td colspan="2">@vak.vak.naam</td>
                             <td>@(sumOfWeights)x</td>
-                            <td class="@(WeightedAverageSnapshots[^1] >= 5.5f ? "sufficient" : "insufficient ")">@(((double) WeightedAverageSnapshots[^1]).ToString("0.0", CultureInfo.InvariantCulture))</td>
+                            <td class="@(WeightedAverageSnapshots[^1] >= 5.5 ? "sufficient" : "insufficient ")">@(((double) WeightedAverageSnapshots[^1]).ToString("0.0", CultureInfo.InvariantCulture))</td>
                         </tr>
                         <tr class="grade-table-header">
                             <td colspan="2">Laatste cijfer</td>
-                            <td class="@(gradeChange > 0 ? "sufficient" : "insufficient ")">@($"{(gradeChange > 0 ? "+" : "")}{gradeChange}%")</td>
-                            <td class="@(gradeChange > 0 ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</td>
+                            <td class="@(gradeChange >= 0 ? "sufficient" : "insufficient ")">@($"{(gradeChange > 0 ? "+" : "")}{gradeChange}%")</td>
+                            <td class="@(NumberUtils.ParseFloat(vak.grades[^1].geldendResultaat) > 5.5 ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</td>
                         </tr>
                         
                         @if (gradesArraySE.Count > 0)

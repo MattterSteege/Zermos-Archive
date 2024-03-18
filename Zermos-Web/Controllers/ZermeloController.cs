@@ -38,11 +38,9 @@ namespace Zermos_Web.Controllers
         [ZermeloRequirement]
         public async Task<IActionResult> SmartwatchRooster()
         {
-            var cur = new DateTime(2024, 2, 16);
-            
-            var week = cur.GetWeekNumber().ToString();
+            var week = DateTime.Now.GetWeekNumber().ToString();
             week = week.ToCharArray().Length == 1 ? "0" + week : week;
-            var year = cur.Year.ToString();
+            var year = DateTime.Now.Year.ToString();
             
             return PartialView(await zermeloApi.GetRoosterAsync(ZermosUser, year, week));
         }

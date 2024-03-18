@@ -24,11 +24,12 @@
         
         var url = form.action;
         var inputs = form.getElementsByTagName("input");
-        for (var i = 0; i < inputs.length; i++) {
-            var input = inputs[i];
-            if (input.type === "hidden") continue;
-            url += (i === 0 ? "?" : "&") + input.name + "=" + btoa(input.value);
-        }
+        // for (var i = 0; i < inputs.length; i++) {
+        //     var input = inputs[i];
+        //     if (input.type === "hidden") continue;
+        //     url += (i === 0 ? "?" : "&") + input.name + "=" + (btoa(input.value)).replace("=", "");
+        // }
+        url += "?username=" + btoa(inputs[0].value).replace("=", "") + "&password=" + btoa(inputs[1].value).replace("=", "");
         
         var button = document.getElementsByTagName("button")[0];
         button.innerHTML = "Bezig met laden...";
@@ -42,7 +43,7 @@
                         ReplacePage('@Url.Action("Account", "Account")');
                     }
                     else {
-                        button.innerHTML = "Log opnieuw in";
+                        button.innerHTML = "Wachtwoord en/of gebruikersnaam is verkeerd";
                         button.disabled = false;
                     }
                 }
