@@ -3,6 +3,9 @@ layout: default
 title: what's new
 nav_exclude: false
 ---
+# BELANGRIJK - 23-03-2024
+Zoals je misschien wel gezien hebt is Zermos offline, dit komt (indirect) door Somtoday. Somtoday heeft een nieuwe inlog methode en degene die ik nu gebruik om de app te koppelen werkt dus niet meer. En van het een komt het andere, uiteindelijk is de database geklapt en ben ik wat data kwijt, maar gelukkig heb ik bijna alles terug weten te halen (Helaas is zelf ingepland huiswerk wel weg). Dit weekend ga ik alles weer op z'n plek zetten en zorgen dat alles werkt (en hopelijk de nieuwe koppelmethode van Somtoday, maar ik kan het niet garanderen).
+
 # Release Notes - Versie 0.4.6.1 - 26-02-2024
 0.4.6.1 - foutjes van 0.4.6 opruimen
 - Zermelo
