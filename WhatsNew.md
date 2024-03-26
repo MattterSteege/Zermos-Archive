@@ -3,6 +3,18 @@ layout: default
 title: what's new
 nav_exclude: false
 ---
+
+# Release Notes - Versie 0.4.7 - 26-03-2024
+Na een heel fiasco met de database, gekloot met Somtoday koppelingen en nog meer grijze haren kan je nu weer een koppeling leggen met Somtoday, nice.
+
+0.4.7 - Somtoday is een t$@#ng@&*er
+
+- Somtoday - koppelingen
+    - Je kan nu weer een koppeling maken met Somtoday, nadat de &*%#&*$ een nieuwe inlog methode hebben gemaakt waardoor de oude koppeling niet meer werkte.
+    
+- Account - Instellingen
+    - Nieuwe instellingen toegevoegd! Als je net zo blind bent als Joep, kan je nu de lettergrootte aanpassen (100, 125, 150, 175 en 200% normale grootte).
+
 # BELANGRIJK - 23-03-2024
 Zoals je misschien wel gezien hebt is Zermos offline, dit komt (indirect) door Somtoday. Somtoday heeft een nieuwe inlog methode en degene die ik nu gebruik om de app te koppelen werkt dus niet meer. En van het een komt het andere, uiteindelijk is de database geklapt en ben ik wat data kwijt, maar gelukkig heb ik bijna alles terug weten te halen (Helaas is zelf ingepland huiswerk wel weg). Dit weekend ga ik alles weer op z'n plek zetten en zorgen dat alles werkt (en hopelijk de nieuwe koppelmethode van Somtoday, maar ik kan het niet garanderen).
 
