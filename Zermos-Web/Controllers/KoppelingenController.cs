@@ -18,13 +18,23 @@ using Zermos_Web.Models;
 using Zermos_Web.Models.Requirements;
 using Zermos_Web.Models.zermeloUserModel;
 using Zermos_Web.Utilities;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Support.UI;
+using WebDriverManager;
+using WebDriverManager.DriverConfigs.Impl;
+using WebDriverManager.Helpers;
 
 namespace Zermos_Web.Controllers
 {
     [Authorize]
     public class KoppelingenController : BaseController
     {
-        public KoppelingenController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
+        public KoppelingenController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share,
+            logger)
+        {
+        }
 
         private readonly HttpClient _infowijsHttpClient = new()
         {
@@ -62,6 +72,7 @@ namespace Zermos_Web.Controllers
             };
 
         private readonly HttpClient _httpClientWithoutRedirect = new(new HttpClientHandler {AllowAutoRedirect = false});
+        private readonly HttpClient _normalHttpClient = new();
 
         [HttpGet]
         [ZermosPage]
@@ -76,37 +87,39 @@ namespace Zermos_Web.Controllers
         public IActionResult Ontkoppel(string app)
         {
             return BadRequest("Temporary disabled");
-            
-            switch (app)
-            {
-                case "infowijs":
-                    ZermosUser = new user {infowijs_access_token = string.Empty};
-                    return Redirect("/account");
 
-                case "somtoday":
-                    ZermosUser = new user
-                    {
-                        somtoday_access_token = string.Empty, 
-                        somtoday_refresh_token = string.Empty,
-                        somtoday_student_id = string.Empty
-                    };
-                    return Redirect("/account");
-
-                case "zermelo":
-                    ZermosUser = new user
-                    {
-                        zermelo_access_token = string.Empty, 
-                        zermelo_access_token_expires_at = DateTime.MinValue
-                    };
-                    return Redirect("/account");
-
-                default:
-                    return Redirect("/account");
-            }
+            // switch (app)
+            // {
+            //     case "infowijs":
+            //         ZermosUser = new user {infowijs_access_token = string.Empty};
+            //         return Redirect("/account");
+            //
+            //     case "somtoday":
+            //         ZermosUser = new user
+            //         {
+            //             somtoday_access_token = string.Empty,
+            //             somtoday_refresh_token = string.Empty,
+            //             somtoday_student_id = string.Empty
+            //         };
+            //         return Redirect("/account");
+            //
+            //     case "zermelo":
+            //         ZermosUser = new user
+            //         {
+            //             zermelo_access_token = string.Empty,
+            //             zermelo_access_token_expires_at = DateTime.MinValue
+            //         };
+            //         return Redirect("/account");
+            //
+            //     default:
+            //         return Redirect("/account");
+            // }
         }
+
         #endregion
 
         #region infowijs
+
         [HttpGet]
         [ZermosPage]
         [Route("/Koppelingen/Infowijs/Ongekoppeld")]
@@ -236,6 +249,7 @@ namespace Zermos_Web.Controllers
         #endregion
 
         #region Zermelo
+
         [HttpGet]
         [ZermosPage]
         [Route("/Koppelingen/Zermelo/Ongekoppeld")]
@@ -288,7 +302,7 @@ namespace Zermos_Web.Controllers
 
             var zermeloUser = await GetZermeloUser(zermeloAuthentication.access_token);
 
-            ZermosUser = new user 
+            ZermosUser = new user
             {
                 zermelo_access_token = zermeloAuthentication.access_token,
                 school_id = zermeloUser.response.data[0].code,
@@ -347,7 +361,7 @@ namespace Zermos_Web.Controllers
                        zermeloUser.response.data[0].lastName,
                 zermelo_access_token_expires_at = DateTime.Now.AddMonths(2)
             };
-            
+
 
             return Ok("success");
         }
@@ -364,6 +378,7 @@ namespace Zermos_Web.Controllers
         #endregion
 
         #region Somtoday
+
         [HttpGet]
         [ZermosPage]
         [Route("/Koppelingen/Somtoday/Ongekoppeld")]
@@ -383,9 +398,12 @@ namespace Zermos_Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Somtoday(string username, string password)
         {
-            username = Encoding.UTF8.GetString(Convert.FromBase64String(username));
-            password = Encoding.UTF8.GetString(Convert.FromBase64String(password));
+            string production_authenticator_stickiness = "";
+            string jsessionid = "";
             
+            username = stringUtils.DecodeBase64Url(username);
+            password = stringUtils.DecodeBase64Url(password);
+
             var tokens = GenerateTokens();
             //0 = code verifier
             //1 = code challenge
@@ -397,49 +415,87 @@ namespace Zermos_Web.Controllers
                 "https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling://oauth/callback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state={0}&scope=openid&tenant_uuid={1}&session=no_session&code_challenge={2}&code_challenge_method=S256",
                 TokenUtils.RandomString(8), "c23fbb99-be4b-4c11-bbf5-57e7fc4f4388",
                 tokens[1]);
-
+            
             var response = await _httpClientWithoutRedirect.GetAsync(baseurl);
             var authCode = response.Headers.Location.Query.Remove(0, 6);
+            //get the cookies (production-authenticator-stickiness)
+            foreach (var cookie in response.Headers.GetValues("Set-Cookie"))
+            {
+                if (cookie.Contains("production-authenticator-stickiness"))
+                {
+                    production_authenticator_stickiness = cookie.Split(";")[0];
+                    break;
+                }
+            }
+            
+            if (production_authenticator_stickiness == "")
+                return Ok("failed, no production-authenticator-stickiness cookie found");
+
+            
+            
+                //set the cookie to the _somtodayHttpClientWithoutRedirect
+            _somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("Cookie", production_authenticator_stickiness);
+            
+            //send http request to to location
+            baseurl = response.Headers.Location.ToString();
+            response = await _httpClientWithoutRedirect.GetAsync(baseurl);
+            //get (JSESSIONID) cookie
+            foreach (var cookie in response.Headers.GetValues("Set-Cookie"))
+            {
+                if (cookie.Contains("JSESSIONID"))
+                {
+                    jsessionid = cookie.Split(";")[0];
+                    break;
+                }
+            }
+            
+            if (jsessionid == "")
+                return Ok("failed, no JSESSIONID cookie found");
+            
+            
+            //set the cookie to the _somtodayHttpClientWithoutRedirect
+            _somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("Cookie", jsessionid);
 
 
             //_somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
-
-
-            baseurl = "https://inloggen.somtoday.nl/?-1.-panel-signInForm&auth=" + authCode;
-
+            
+            
+            baseurl = "https://inloggen.somtoday.nl/?0-1.-panel-signInForm&auth=" + authCode;
+            
             var Content = new FormUrlEncodedContent(new Dictionary<string, string>
             {
                 {"loginLink", "x"},
                 {"usernameFieldPanel:usernameFieldPanel_body:usernameField", username}
             });
-
+            
             await _somtodayHttpClientWithoutRedirect.PostAsync(baseurl, Content);
-
-            baseurl = "https://inloggen.somtoday.nl/login?1-1.-passwordForm&auth=" + authCode;
-
+            
+            baseurl = "https://inloggen.somtoday.nl/login?2-1.-passwordForm";
+            
             Content = new FormUrlEncodedContent(new Dictionary<string, string>
             {
                 {"passwordFieldPanel:passwordFieldPanel_body:passwordField", password},
                 {"loginLink", "x"}
             });
-
+            
             response = await _somtodayHttpClientWithoutRedirect.PostAsync(baseurl, Content);
-
+            
             var finalAuthCode = HTMLUtils.ParseQuery(response.Headers.Location.Query)["code"];
-
-
+            
+            if (finalAuthCode == null)
+                return Ok("failed, no finalAuthCode found");
+            
+            
             baseurl =
                 "https://inloggen.somtoday.nl/oauth2/token?grant_type=authorization_code&session=no_session&scope=openid&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&code=" +
                 finalAuthCode + "&code_verifier=" + tokens[0];
-
+            
             response = await _somtodayHttpClientWithoutRedirect.PostAsync(baseurl,
                 new FormUrlEncodedContent(new Dictionary<string, string> {{"", ""}}));
-
+            
             var somtodayAuthentication =
                 JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(response.Content.ReadAsStringAsync()
                     .Result);
-
-            if (somtodayAuthentication.access_token == null) return Ok("failed");
 
             var user = await GetSomtodayStudent(somtodayAuthentication.access_token);
             user.somtoday_access_token = somtodayAuthentication.access_token;

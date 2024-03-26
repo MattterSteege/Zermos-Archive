@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
 using Infrastructure.Utils;
@@ -57,7 +58,14 @@ namespace Zermos_Web.Controllers
             if (property == null) return BadRequest("Property not found");
             var attribute = property.GetCustomAttributes(typeof(SettingAttribute), false);
             if (attribute.Length == 0) return BadRequest("You may not alter this property");
-            property.SetValue(userToUpdate, value);
+            //try to set the value as the type of the property
+            try {
+                property.SetValue(userToUpdate, Convert.ChangeType(value, property.PropertyType));
+            }
+            catch {
+                return BadRequest("Invalid value type, expected " + property.PropertyType.Name + " got " + value.GetType().Name);
+            }
+
             ZermosUser = userToUpdate;
             return Ok("200");
         }

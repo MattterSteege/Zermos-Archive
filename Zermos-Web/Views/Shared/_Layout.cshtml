@@ -4,7 +4,7 @@
     version = version == "DEV" ? TokenUtils.RandomString(10) : version;
 }
 <!DOCTYPE html>
-<html lang="nl" class="@(Context.Response.GetCookie("theme") ?? Context.Request.Cookies["theme"] ?? "light") @(Context.Response.GetCookie("hand_side") ?? Context.Request.Cookies["hand_side"] ?? "right")">
+<html lang="nl" class="@(Context.Response.GetCookie("theme") ?? Context.Request.Cookies["theme"] ?? "light") @(Context.Response.GetCookie("hand_side") ?? Context.Request.Cookies["hand_side"] ?? "right") @(Context.Response.GetCookie("font_size") ?? Context.Request.Cookies["font_size"] ?? "font-scale-1")">
 <head>
     <meta charset="UTF-8">
     <title>Zermos</title>

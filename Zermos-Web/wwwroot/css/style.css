@@ -17,12 +17,14 @@
 
     --border-radius: 14px;
     --border-radius-small: 7px;
+
+    --font-size-multiplier: 1;
     
-    --font-size-heading: 16px;
-    --font-size-heading-small: 12px;
+    --font-size-heading: calc(16px * var(--font-size-multiplier));
+    --font-size-heading-small: calc(12px * var(--font-size-multiplier));
     
-    --font-size: 14px;
-    --font-size-small: 10px;
+    --font-size: calc(14px * var(--font-size-multiplier));
+    --font-size-small: calc(10px * var(--font-size-multiplier));
     
     --padding: 14px;
     --padding-small: 7px;
@@ -97,6 +99,22 @@
     --deny-color: #d63031;
     --sure-color: #000000;
     --white-color: #ffffff;
+}
+
+.font-scale-1 {
+    --font-size-multiplier: 1;
+}
+.font-scale-2 {
+    --font-size-multiplier: 1.25;
+}
+.font-scale-3 {
+    --font-size-multiplier: 1.5;
+}
+.font-scale-4 {
+    --font-size-multiplier: 1.75;
+}
+.font-scale-5 {
+    --font-size-multiplier: 2;
 }
 
 

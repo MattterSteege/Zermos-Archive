@@ -129,3 +129,59 @@
 .setting-item .settings-options .setting-button.selected {
     box-shadow: 0 0 var(--padding) var(--confirm-color);
 }
+
+/*
+    <div class="setting-item">
+        <h1>Lettergrootte</h1>
+        <p>Verander de lettergrootte van Zermos</p>
+        <div class="slider">
+            <input type="range" min="100" max="200" value="@(Model.font_size < 100 ? 100 : Model.font_size)" class="slider" id="font-size-slider" oninput="UpdateFontSize(this.value)">
+            <div class="slider-value">@(Model.font_size < 100 ? 100 : Model.font_size)%</div>
+        </div>
+    </div>
+    */
+
+.setting-item .slider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.setting-item .slider input {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background: var(--background-color);
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.setting-item .slider input:hover {
+    opacity: 1;
+}
+
+.setting-item .slider input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--confirm-color);
+    cursor: pointer;
+}
+
+.setting-item .slider input::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--confirm-color);
+    cursor: pointer;
+}
+
+.setting-item .slider-value {
+    font-size: var(--font-size);
+    margin-top: var(--padding-small);
+}

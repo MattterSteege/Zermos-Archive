@@ -38,6 +38,18 @@
         </div>
     </div>
     
+    <div class="setting-item">
+        <h1>Lettergrootte</h1>
+        <p>Hoe goed zijn je ogen?</p>
+        <div class="settings-options">
+            <div id="4_goed" onclick="UpdateFontSize('font-scale-1', this)" class="setting-button@(Model.font_size == "font-scale-1" ? " selected" : "")">Goed (100%)</div>
+            <div id="4_redelijk" onclick="UpdateFontSize('font-scale-2', this)" class="setting-button@(Model.font_size == "font-scale-2" ? " selected" : "")">Redelijk (125%)</div>
+            <div id="4_kan" onclick="UpdateFontSize('font-scale-3', this)" class="setting-button@(Model.font_size == "font-scale-3" ? " selected" : "")">Kan beter (150%)</div>
+            <div id="4_meh" onclick="UpdateFontSize('font-scale-4', this)" class="setting-button@(Model.font_size == "font-scale-4" ? " selected" : "")">Meh (175%)</div>
+            <div id="4_slecht" onclick="UpdateFontSize('font-scale-5', this)" class="setting-button@(Model.font_size == "font-scale-5" ? " selected" : "")">Slecht (200%)</div>
+        </div>
+    </div>
+    
     
 </div>
 
@@ -67,6 +79,17 @@ function UpdateHandSide(side, element) {
 function UpdateDefaultPage(page, element) {
     document.cookie = "default_page=" + page + ";path=/;max-age=5184000";
     UpdateSetting("default_page", page, element);
+}
+
+function UpdateFontSize(value, element) {
+    document.documentElement.classList.remove("font-scale-1");
+    document.documentElement.classList.remove("font-scale-2");
+    document.documentElement.classList.remove("font-scale-3");
+    document.documentElement.classList.remove("font-scale-4");
+    document.documentElement.classList.remove("font-scale-5");
+    document.documentElement.classList.add(value);
+    document.cookie = "font_size=" + value + ";path=/;max-age=5184000";
+    UpdateSetting("font_size", value, element);
 }
 
 function UpdateSetting(key, value, element) {   

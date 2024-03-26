@@ -193,9 +193,13 @@
               "target": "Package",
               "version": "[13.0.3, )"
             },
-            "System.Drawing.Common": {
+            "Selenium.WebDriver": {
               "target": "Package",
-              "version": "[9.0.0-preview.1.24081.2, )"
+              "version": "[4.18.1, )"
+            },
+            "WebDriverManager": {
+              "target": "Package",
+              "version": "[2.17.2, )"
             }
           },
           "imports": [

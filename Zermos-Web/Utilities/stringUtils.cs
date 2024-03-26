@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace Zermos_Web.Utilities
 {
@@ -115,6 +118,25 @@ namespace Zermos_Web.Utilities
 
             return result;
         }
+        
+        public static string DecodeBase64Url(string encodedString)
+        {
+            encodedString = encodedString.Replace('-', '+').Replace('_', '/');
 
+            int paddingNeeded = encodedString.Length % 4;
+            if (paddingNeeded > 0)
+            {
+                encodedString += new string('=', 4 - paddingNeeded);
+            }
+
+            byte[] data = Convert.FromBase64String(encodedString);
+
+            string decodedString = Encoding.UTF8.GetString(data);
+
+            //now url decode
+            decodedString = HttpUtility.UrlDecode(decodedString);
+            
+            return decodedString;
+        }
     }
 }

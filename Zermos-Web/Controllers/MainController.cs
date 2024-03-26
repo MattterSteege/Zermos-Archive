@@ -35,7 +35,8 @@ namespace Zermos_Web.Controllers
             Response.Cookies.Append("version_used", user.version_used ?? "0");
             Response.Cookies.Append("hand_side", user.hand_side ?? "right");
             Response.Cookies.Append("theme", user.theme ?? "light");
-            
+            Response.Cookies.Append("font_size", user.font_size ?? "1");
+
             return View();
         }
         

@@ -42,37 +42,44 @@ namespace Infrastructure.Entities
         [NotMapped, Setting] 
         public string theme
         {
-            get => GetSetting("theme");
+            get => GetSetting<string>("theme");
             set => SetSetting("theme", value);
         }
     
         [NotMapped, Setting] 
         public string default_page
         {
-            get => GetSetting("default_page");
+            get => GetSetting<string>("default_page");
             set => SetSetting("default_page", value);
         }
     
         [NotMapped, Setting] 
         public string hand_side
         {
-            get => GetSetting("hand_side");
+            get => GetSetting<string>("hand_side");
             set => SetSetting("hand_side", value);
         }
         
         [NotMapped, Setting, Requestable] 
         public string version_used
         {
-            get => GetSetting("version_used");
+            get => GetSetting<string>("version_used");
             set => SetSetting("version_used", value);
         }
+
+        [NotMapped, Setting] 
+        public string font_size
+        {
+            get => GetSetting<string>("font_size");
+            set => SetSetting("font_size", value);
+        }
         
-        // Helper method to get a setting value
-        private string GetSetting(string settingName)
+        // Helper method to get a setting value do with <int> or <string> etc.
+        private T GetSetting<T>(string settingName)
         {
             if (settings == null)
             {
-                return null;
+                return default;
             }
 
             var settingsArray = settings.Split(';');
@@ -81,15 +88,15 @@ namespace Infrastructure.Entities
                 var keyValue = setting.Split('=');
                 if (keyValue.Length == 2 && keyValue[0].Trim() == settingName)
                 {
-                    return keyValue[1].Trim();
+                    return (T) Convert.ChangeType(keyValue[1].Trim(), typeof(T));
                 }
             }
 
-            return null;
+            return default;
         }
 
         // Helper method to set a setting value
-        private void SetSetting(string settingName, string settingValue)
+        private void SetSetting(string settingName, object settingValue)
         {
             if (settings == null)
             {
