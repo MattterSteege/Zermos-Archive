@@ -1,6 +1,17 @@
-﻿@model Zermos_Web.Models.zermelo.ZermeloRoosterModel
+﻿@using Zermos_Web.Models.zermelo
+@model Zermos_Web.Models.zermelo.ZermeloRoosterModel
 @{
+    //where not cencelled
     var todaysLesson = Model.appointments.Where(x => x.start.ToDateTime().Date == DateTime.Now.Date).ToList();
+    
+    foreach (Appointment appointment in todaysLesson)
+    {
+        if (appointment.cancelled)
+            todaysLesson.Remove(appointment);
+        
+        appointment.start += 3600;
+        appointment.end += 3600;
+    }
 }
 
 <link rel="stylesheet" href="/css/zermelo.css"/>
@@ -19,11 +30,22 @@
             <p>@appointment.locations[0]</p>
         </div>
     }
+    
+    <div class="appointment" onclick='returnToNormal();' style="display: block;">
+        <p>Terug</p>
+    </div>
 </div>
 
 <script>
     Zermos.mainBeforeLoad = () => {
-        document.getElementsByClassName("sidebar")[0]?.remove();
+        document.getElementsByClassName("sidebar")[0]?.style.setProperty('display', 'none', 'important');
         document.getElementById("content").setAttribute('style', 'width:100% !important; opacity: 0');
+    }
+    
+    function returnToNormal() {
+        document.getElementsByClassName("sidebar")[0]?.style.removeProperty('display');
+        document.getElementById("content").removeAttribute('style');
+        TogglePreview("zermelo_smartwatch"); 
+        ReplacePage("/Zermelo/Rooster");
     }
 </script>

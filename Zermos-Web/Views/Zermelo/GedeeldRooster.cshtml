@@ -134,6 +134,13 @@
                                             @(appointment.actions[0].appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.locations[0] + "</p>") : "")
                                         </div>
                                     }
+                                    else if (appointment.appointmentType == "activity")
+                                    {
+                                        <div class="lesson-time-based @(appointment.actions[0].appointment.cancelled ? "canceled" : "") choice" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.actions[0].appointment.ObjectToBase64String())')">
+                                            @(appointment.actions[0].appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.subjects[0] + "</p>") : "")
+                                            @(appointment.actions[0].appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.locations[0] + "</p>") : "")
+                                        </div>
+                                    }
                                 }
                             </li>
                         }
