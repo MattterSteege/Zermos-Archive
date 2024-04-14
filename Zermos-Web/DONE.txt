@@ -1,4 +1,6 @@
 ﻿0.4.7.1 - Weer wat kleine updates
 
-- Zermelo - Smartwatch rooster (debug)
- Je kan nu, als je per ongeluk de functie heb aangezet, ook de functie weer uitzetten.
+- Zermelo
+    - Je rooster op je smartwatch kan nu, als je per ongeluk de functie heb aangezet, ook de functie weer uitzetten.
+    - Het rooster systeem heeft een update gehad, waardoor het rooster sneller laad, minder hapert én niet meer af en toe de verkeerde week toonde.
+    - De manier waarop de rooster-weken worden opgehaald is aangepast, en niet meer gerouleerd. Dit zou moeten zorgen voor een stabieler rooster.

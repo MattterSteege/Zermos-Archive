@@ -12,8 +12,7 @@
 <script src="/js/dom-to-image.js"></script>
 
 <div class="main-container">
-    <div class="week-carousel" id="week-carousel">
-        <div class="week" data-week="@Model.MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.MondayOfAppointmentsWeek.Year" data-unix="@Model.MondayOfAppointmentsWeek.ToUnixTime()"></div>
+    <div class="week-carousel" id="week-carousel" style="transform: translateX(-0%);">
         <div class="week" data-week="@Model.MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.MondayOfAppointmentsWeek.Year" data-unix="@Model.MondayOfAppointmentsWeek.ToUnixTime()">
             <div class="times-container">
                 <ul>
@@ -165,7 +164,6 @@
 
             </div>
         </div>
-        <div class="week" data-week="@Model.MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.MondayOfAppointmentsWeek.Year" data-unix="@Model.MondayOfAppointmentsWeek.ToUnixTime()"></div>
     </div>
     <div class="notCurrentWeek" style="bottom: -50px;">
         Dit is niet de huidige week!
@@ -175,54 +173,247 @@
 <script>
 var weeks = document.getElementsByClassName('week');
 var weekCarousel = document.getElementById('week-carousel');
-var isFetching = false; // Flag to track whether a fetch operation is in progress
+var weeksArray = [{week: Number(weeks[0].dataset.week), year: Number(weeks[0].dataset.year)}];
+var currentWeek = weeksArray[0].week;
 
-function NextWeek(isInitial = false, noAnimation = false, timeout = 500) {
-    //if (!isFetching || isInitial) {
-        //isFetching = true;
-        disableButtons();
-        
-        if (!isInitial && !noAnimation) {
-            ease('-33.3333', '-66.6666', 500, (value) => {
-                weekCarousel.style.transform = 'translateX(' + value + '%)';
-            });
-        }
-        
-        var weekToFetch = Number(weeks[2].dataset.week) + 1;
-        var yearToFetch = Number(weeks[2].dataset.year);
-        
-        if (weekToFetch === 53) {
-            weekToFetch = 1;
-            yearToFetch += 1;
-        }
-
-        fetchWeek(weekToFetch, yearToFetch, true, isInitial, timeout);
+function NextWeek() {
+    //fetch the next week (weeksArray[weeksArray.length - 1] + 1)
+    var weekToFetch = weeksArray[weeks.length - 1].week + 1;
+    var yearToFetch = weeksArray[weeks.length - 1].year;
+    
+    console.log(weekToFetch, currentWeek);
+    
+    if (weekToFetch === 53) {
+        weekToFetch = 1;
+        yearToFetch += 1;
+    }
+    
+    //check if current week is the same as the week to fetch
+    //if (weekToFetch === currentWeek + 1) {
+        fetchWeek(weekToFetch, yearToFetch, true);
     //}
 }
 
 
-function PreviousWeek(isInitial = false, noAnimation = false, timeout = 500) {
-    //if (!isFetching || isInitial) {
-        //isFetching = true;
-        disableButtons()
-        
-        if (!isInitial && !noAnimation) {
-            //ease to translateX(0) using code
-            ease('-33.3333', '0', 500, (value) => {
-                weekCarousel.style.transform = 'translateX(' + value + '%)';
-            });
-        }
-        
-        var weekToFetch = Number(weeks[0].dataset.week) - 1;
-        var yearToFetch = Number(weeks[0].dataset.year);
-        
-        if (weekToFetch === 0) {
-            weekToFetch = 52;
-            yearToFetch -= 1;
-        }
-        
-        fetchWeek(weekToFetch, yearToFetch, false, isInitial, timeout);
+function PreviousWeek() {
+    //fetch the previous week (weeksArray[0] - 1)
+    var weekToFetch = weeksArray[0].week - 1;
+    var yearToFetch = weeksArray[0].year;
+    
+    if (weekToFetch === 0) {
+        weekToFetch = 52;
+        yearToFetch -= 1;
+    }
+    
+    //check if current week is the same as the week to fetch
+    //if (weekToFetch === currentWeek - 1) {
+        fetchWeek(weekToFetch, yearToFetch, false);
     //}
+
+}
+
+async function fetchWeek(week, year, append) {        
+    
+    var newWeek = {week: week, year: year};
+    
+    //if append is true, add the new week to the end of the array and add it to the carousel
+    if (append) {
+        weeksArray.push(newWeek);
+        weekCarousel.append(getLoadingSpinner(week, year));
+    }
+    else { //if append is false, add the new week to the start of the array and add it to the start of the carousel
+        weeksArray.unshift(newWeek);
+        weekCarousel.insertBefore(getLoadingSpinner(week, year), weekCarousel.firstChild);
+        ScollToWeek(1);
+    }
+    
+    //don't scroll, as long as the user is dragging
+    
+    
+    fetch('/zermelo/rooster?week=' + newWeek.week + '&year=' + newWeek.year + '&compact=true&no-framework=true')
+    .then(response => response.text())
+    .then((html) => {
+        var weekElement = document.querySelector(`.week[data-week="${week}"]`);
+        weekElement.style.transition = '0.25s';
+        weekElement.style.opacity = 0;
+        setTimeout(() => {
+            weekElement.outerHTML = html;
+            //fade in the new week
+            weekElement = document.querySelector(`.week[data-week="${week}"]`);
+            weekElement.style.opacity = 0;
+            setTimeout(() => {
+                //fade in the new week
+                weekElement.style.transition = '0.25s';
+                weekElement.style.opacity = 1;
+            }, 100);
+        }, 100);
+    });
+}
+
+function getLoadingSpinner(week, year) {
+var html = `
+<div class="week" data-week="${week}" data-year="${year}">    
+    <div style="width: 100%;display: flex;flex-direction: column;justify-content: center;align-items: center;">
+        <div class="loader-text">Rooster inladen</div>
+        <div class="loading-dots-container">
+            <div class="loading-dots"></div>
+            <div class="loading-dots"></div>
+            <div class="loading-dots"></div>
+        </div>
+    </div>
+</div>
+`;
+
+return new DOMParser().parseFromString(html, 'text/html').body.firstChild;
+}
+
+Zermos.mainAfterLoad = () => {
+    
+    if (HasPreview('zermelo_smartwatch')) {
+        ReplacePage('/Zermelo/Smartwatch');
+    }
+    
+    let nextWeek = weeksArray[weeksArray.length - 1].week + 1;
+    let nextYear = weeksArray[weeksArray.length - 1].year;
+    if (nextWeek === 53) {
+        nextWeek = 1;
+        nextYear += 1;
+    }
+    
+    fetchWeek(nextWeek, nextYear, true);
+    
+    let previousWeek = weeksArray[0].week - 1;
+    let previousYear = weeksArray[0].year;
+    
+    if (previousWeek === 0) {
+        previousWeek = 52;
+        previousYear -= 1;
+    }
+    
+    fetchWeek(previousWeek, previousYear, false);
+};
+
+var animating = false;
+
+//when i click and drag, the carousel should move. When the threshold of 30% of the width of the carousel is reached and the user let's go, the carousel should move to the next week (or previous week)
+Zermos.mainBeforeLoad = () => {
+    let startXTransform, endXTransform = 0;
+    const minSwipePercentage = 30;
+        
+    var container = document.getElementsByClassName("week-carousel")[0];
+    var dragging = false;
+    var startX, scrollLeft;
+
+    
+    //MOUSE DOWN
+    container.addEventListener("touchstart", function(e) {e.pageX = e.touches[0].pageX; mouseDown(e);}, {passive: true});
+    container.addEventListener("mousedown", mouseDown);
+    function mouseDown(e) {
+        if (animating) return;
+        dragging = true;
+        startX = e.pageX || e.touches[0].pageX;
+        startXTransform = Math.round(Number(weekCarousel.style.transform.match(/-?\d+/g)[0]) / 100) * 100;
+        endXTransform = 0;
+    }
+
+    //MOUSE UP
+    container.addEventListener("touchend", mouseUp);
+    container.addEventListener("mouseup", mouseUp);
+    function mouseUp() {
+        if (!dragging) return;
+        
+        endXTransform = weekCarousel.style.transform.match(/-?\d+/g)[0];
+        
+        //startXTransform and endXTransform
+        var otherXDif = startXTransform - endXTransform;      
+        if (otherXDif > minSwipePercentage) {
+            var newX = startXTransform - 100;
+            animating = true;
+            ease(endXTransform, newX, 500, (value) => {
+                weekCarousel.style.transform = `translateX(${value}%)`;
+                
+                if (value === newX) {
+                    dragging = false;
+                    animating = false;
+                    
+                    if (newX === -100 * (weeksArray.length - 1)) {
+                        NextWeek();
+                    }
+                }
+            });
+            
+            return;
+        }
+        else if (otherXDif < -minSwipePercentage) {
+            var newX = startXTransform + 100;
+            animating = true;
+            ease(endXTransform, newX, 500, (value) => {
+                weekCarousel.style.transform = `translateX(${value}%)`;
+                
+                if (value === newX) {
+                    dragging = false;
+                    animating = false;
+                    
+                    if (newX === 0) {
+                        PreviousWeek();
+                    }
+                }
+            });
+
+            
+            return;
+        }
+        else
+        {
+            animating = true;
+            ease(endXTransform, startXTransform, 250, (value) => {
+                weekCarousel.style.transform = `translateX(${value}%)`;
+            });
+            
+            dragging = false;
+            animating = false;
+            
+            return;
+        }
+    }
+
+    //MOUSE MOVE
+    container.addEventListener("touchmove", function (e) {e.pageX = e.touches[0].pageX; mouseMove(e);}, {passive: true});
+    container.addEventListener("mousemove", mouseMove);
+    function mouseMove(e) {
+        if (!dragging) return;
+        var x = e.pageX || e.touches[0].pageX;
+        
+        //log xdiff
+        var xDiff = x - startX;
+        var xDiffPercentage = xDiff / container.offsetWidth * -100;
+        
+        var endXTransform = startXTransform - xDiffPercentage;
+        
+        if (endXTransform > 0) {
+            endXTransform = 0;
+        }
+        else if (endXTransform < -100 * (weeksArray.length - 1)) {
+            endXTransform = -100 * (weeksArray.length - 1);
+        }
+        
+        weekCarousel.style.transform = `translateX(${endXTransform}%)`;
+    }
+    
+    //when touch or mouse leaves the container, handle the mouseup event
+    container.addEventListener("touchleave", container.mouseup);
+    container.addEventListener("mouseleave", container.mouseup);
+};
+
+function ScollToWeek(amount) {
+    console.log(amount);
+    //0% is the first child, -100% second child, -200% third child, etc.
+    var current = weekCarousel.style.transform.match(/-?\d+/g);
+    var currentWeek = Math.round(current[0] / 1);
+    //this returns 0, -100, -200, -300, etc.
+    //when amount is 1, it should go subtract 100 from the currentWeek, when amount is -1, it should add 100 to the currentWeek
+    var newWeek = currentWeek - amount * 100;
+    weekCarousel.style.transform = `translateX(${newWeek}%)`;
 }
 
 function ease(start, end, time, callback) {
@@ -248,6 +439,50 @@ function ease(start, end, time, callback) {
     
     const interval = setInterval(update, 10); // Update approximately every 16 milliseconds
 }
+
+//next week button
+addButtonToPage('fa-arrow-right', () => {
+    
+    disableButtons();
+    NextWeek();
+    
+    //ease the carousel to the next week
+    var current = Number(weekCarousel.style.transform.match(/-?\d+/g)[0]);
+    var newWeek = current - 100;
+    newWeek = Math.round(newWeek / 100) * 100;
+    animating = true;
+    ease(current, newWeek, 500, (value) => {
+        weekCarousel.style.transform = `translateX(${value}%)`;
+                
+        if (value === newWeek) {
+            enableButtons();
+            animating = false;
+        }
+    });
+    
+}, VerticalAlignment.BL);
+
+//previous week button
+addButtonToPage('fa-arrow-left', () => {
+    
+    disableButtons();
+    PreviousWeek();
+    
+    //ease the carousel to the previous week
+    var current = Number(weekCarousel.style.transform.match(/-?\d+/g)[0]);
+    var newWeek = current + 100;
+    newWeek = Math.round(newWeek / 100) * 100;
+    animating = true;
+    ease(current, newWeek, 500, (value) => {
+        weekCarousel.style.transform = `translateX(${value}%)`;
+        
+        if (value === newWeek) {
+            enableButtons();
+            animating = false;
+        }
+    });
+    
+}, VerticalAlignment.BL);
 
 function disableButtons() {
     var rightButtons = document.querySelectorAll('.fa-arrow-right');
@@ -280,224 +515,7 @@ function enableButtons() {
     });
 }
 
-async function fetchWeek(week, year, append, isInitial = false, timeout = 500) {     
-    if (!HasPreview('old_zermelo_schedule')) {
-        await fetchNew(week, year, append, isInitial, timeout);
-    }
-    
-    //isFetching = true;
-    var isdone = false;
-    var haschanged = false;
-    
-    let time1 = performance.now();
-    
-    var newWeek = null;
-    fetch('/zermelo/rooster?week=' + week + '&year=' + year + '&compact=true&no-framework=true')
-    .then(response => response.text())
-    .then((html) => {
-        //turn the html string into an html element
-        var parser = new DOMParser();
-        newWeek = parser.parseFromString(html, 'text/html').getElementsByClassName('week')[0];
-        let time2 = performance.now();
-        isdone = true;
-        clearTimeout(timeout2);
-        
-        setTimeout(() => {
-            if (!haschanged) {
-                if (!isInitial) {
-                    //if append = true, add it after the last html item in the carousel, else add it before the first html item in the carousel
-                    if (append) {
-                        weeks[0].replaceWith(newWeek);
-                        
-                        weeks[2].after(weeks[0]);
-                    } else {
-                        weeks[2].replaceWith(newWeek);
-                        
-                        weeks[0].before(weeks[2]);
-                    }
-                    
-                    weekCarousel.style.transform = 'translateX(-33.3333%)';
-                   
-                    weeks = document.getElementsByClassName('week');
-                    
-                    haschanged = true;
-                    
-                                if (weeks[1].dataset.week === getCurrentWeek().toString() && weeks[1].dataset.year === new Date().getFullYear().toString()) {
-                        HideNotCurrentWeek();
-                    }
-                    else {
-                        ShowNotCurrentWeek();
-                    }
-                }
-                else
-                {
-                    if (append)
-                        weeks[2].replaceWith(newWeek);
-                    else
-                        weeks[0].replaceWith(newWeek);    
-                }
-            }
-            else
-            {
-                if (!isInitial) {
-                    //if append = true, add it after the last html item in the carousel, else add it before the first html item in the carousel
-                    if (append) 
-                        weeks[2].replaceWith(newWeek);
-                    else 
-                        weeks[0].replaceWith(newWeek);
-                    
-                    weekCarousel.style.transform = 'translateX(-33.3333%)';
-                   
-                    weeks = document.getElementsByClassName('week');
-                    
-                    haschanged = true;
-                    
-                                if (weeks[1].dataset.week === getCurrentWeek().toString() && weeks[1].dataset.year === new Date().getFullYear().toString()) {
-                        HideNotCurrentWeek();
-                    }
-                    else {
-                        ShowNotCurrentWeek();
-                    }
-                }
-            }
-        }, (timeout - (time2 - time1)) > 0 ? (timeout - (time2 - time1)) : 0);
-    });
-    
-    
-    var timeout2 = setTimeout(() => {
-        if (!isInitial) {
-            //if append = true, add it after the last html item in the carousel, else add it before the first html item in the carousel
-            if (append) {
-                weeks[0].innerHTML = 'HOI';
-                weeks[0].dataset.week = week;
-                weeks[0].dataset.year = year;
-                weeks[0].dataset.unix = new Date(year, 0, 1).getTime() / 1000 + (week - 1) * 7 * 24 * 60 * 60;
-                
-                weeks[2].after(weeks[0]);
-            } else {
-                weeks[2].innerHTML = 'HOI'
-                weeks[2].dataset.week = week;
-                weeks[2].dataset.year = year;
-                weeks[2].dataset.unix = new Date(year, 0, 1).getTime() / 1000 + (week - 1) * 7 * 24 * 60 * 60;
-                
-                weeks[0].before(weeks[2]);
-            }
-            weekCarousel.style.transform = 'translateX(-33.3333%)';
-            
-            weeks = document.getElementsByClassName('week');
-            
-            haschanged = true;
-            
-            if (weeks[1].dataset.week === getCurrentWeek().toString() && weeks[1].dataset.year === new Date().getFullYear().toString()) {
-                HideNotCurrentWeek();
-            }
-            else {
-                ShowNotCurrentWeek();
-            }
-        }
-        
-    }, timeout);
-   enableButtons();
-}
-
-async function fetchNew(week, year, append, isInitial = false, timeout = 500) {     
-    
-}
-
-Zermos.mainAfterLoad = () => {
-    
-    if (HasPreview('zermelo_smartwatch')) {
-        ReplacePage('/Zermelo/Smartwatch');
-    }
-    
-    NextWeek(true);
-    PreviousWeek(true);
-};
-
-
-//when i click and drag, the carousel should move. When the threshold of 30% of the width of the carousel is reached and the user let's go, the carousel should move to the next week (or previous week)
-Zermos.mainBeforeLoad = () => {
-    var touchstartX;
-    var touchmoveX;
-    var touchendX;
-    var threshold = weekCarousel.offsetWidth * 0.1;
-    var isDragging = false;
-
-    addEventListenerToMain('mousedown', e => handleDragStart(e.clientX));
-    addEventListenerToMain('touchstart', e => handleDragStart(e.touches[0].clientX), {passive: true});
-
-    addEventListenerToMain('mousemove', e => handleDragMove(e.clientX));
-    addEventListenerToMain('touchmove', e => handleDragMove(e.touches[0].clientX), {passive: true});
-
-    addEventListenerToMain('mouseup', e => handleDragEnd(e.clientX));
-    addEventListenerToMain('touchend', e => handleDragEnd(e.changedTouches[0].clientX));
-    
-    addEventListenerToMain('mouseleave', e => handleDragEnd(e.clientX));
-    addEventListenerToMain('touchcancel', e => handleDragEnd(e.changedTouches[0].clientX));
-
-    function handleDragStart(clientX) {
-        //if (isFetching) return; // Stop dragging if a fetch is in progress
-        isDragging = true;
-        touchstartX = clientX;
-        touchmoveX = clientX;
-    }
-
-    function handleDragMove(clientX) {
-        if (!isDragging) return; // Stop dragging if a fetch is in progress
-        
-        //log the current percentage of the main-container where the mosue is hovering (0% = left, 100% = right)
-        var mainContainer = document.getElementsByClassName('main-container')[0];
-        var percentageFromLeftStart = ((touchstartX - mainContainer.getBoundingClientRect().left) / mainContainer.offsetWidth * 100) / 3;
-        var percentageFromLeft = ((clientX - mainContainer.getBoundingClientRect().left) / mainContainer.offsetWidth * 100) /3;
-
-        weekCarousel.style.transform = 'translateX(' + -(33.3333 - (percentageFromLeft - percentageFromLeftStart)) + '%)';
-        touchmoveX = clientX;
-    }
-
-    function handleDragEnd(clientX) {
-        if (!isDragging) return; // Stop dragging if a fetch is in progress
-
-        isDragging = false;
-        
-        touchendX = clientX;
-        
-        var percentage = weekCarousel.style.transform;
-        percentage = percentage.replace("translateX(", "").replace("%)", "");
-        
-        if (touchendX < touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
-            ease(percentage, '-66.6666', 200, (value) => {
-                weekCarousel.style.transform = 'translateX(' + value + '%)';
-            });
-            NextWeek(false, true, 200);
-        } else if (touchendX > touchstartX && Math.abs(touchstartX - touchendX) > threshold) {
-            ease(percentage, '0', 200, (value) => {
-                weekCarousel.style.transform = 'translateX(' + value + '%)';
-            });
-            PreviousWeek(false, true, 200);
-        }
-        else {
-            ease(percentage, '-33.3333', 200, (value) => {
-                weekCarousel.style.transform = 'translateX(' + value + '%)';
-            });
-        }
-    }
-};
-
-//next week button
-addButtonToPage('fa-arrow-right', () => {
-    weekCarousel.style.transform = 'translateX(-66.6666%);'
-    NextWeek();
-}, VerticalAlignment.BL);
-
-//previous week button
-addButtonToPage('fa-arrow-left', () => {
-    weekCarousel.style.transform = 'translateX(0%);'
-    PreviousWeek();
-}, VerticalAlignment.BL);
-
-function OpenLessonDetail(base64){
-    if (isFetching) return; // showing a lesson detail while fetching a week will cause a bug
-    
+function OpenLessonDetail(base64){    
     const json = JSON.parse(atob(base64));
     
     var lessonDetail = new ZermosModal()

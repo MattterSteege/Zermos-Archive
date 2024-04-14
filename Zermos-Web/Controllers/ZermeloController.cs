@@ -30,7 +30,7 @@ namespace Zermos_Web.Controllers
             week = week.ToCharArray().Length == 1 ? "0" + week : week;
             
             //if request contains cookie old_zermelo_schedule, redirect to /smartwatch
-            if (Request.Cookies["preview"]!.Contains("zermelo_smartwatch"))
+            if (Request.Cookies["preview"] != null ? Request.Cookies["preview"].Contains("zermelo_smartwatch") : false)
                 return RedirectToAction("SmartwatchRooster");
 
             return compact ? PartialView("Rooster-week", await zermeloApi.GetRoosterAsync(ZermosUser, year, week)) : PartialView(await zermeloApi.GetRoosterAsync(ZermosUser, year, week));
