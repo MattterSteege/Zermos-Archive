@@ -7,7 +7,6 @@ using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Zermos_Web.APIs;
 using Zermos_Web.Models.Requirements;
 using Zermos_Web.Models.zermelo;
@@ -22,6 +21,7 @@ namespace Zermos_Web.Controllers
 
         [Authorize]
         [ZermosPage]
+        [CompressJavaScript]
         [ZermeloRequirement]
         public async Task<IActionResult> Rooster(string year, string week, bool compact = false)
         {
