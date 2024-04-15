@@ -46,6 +46,8 @@
 
         foreach (var gradeItem in vak.grades)
         {
+            if (gradeItem.type == "DeeltoetsKolom") continue;
+            
             var geldendResultaat = NumberUtils.ParseFloat(gradeItem.geldendResultaat);
 
             if (gradeItem.isExamendossierResultaat)
@@ -119,8 +121,8 @@
                         </tr>
                         <tr class="grade-table-header">
                             <td colspan="2">Laatste cijfer</td>
-                            <td class="@(gradeChange >= 0 ? "sufficient" : "insufficient ")">@($"{(gradeChange > 0 ? "+" : "")}{gradeChange}%")</td>
-                            <td class="@(NumberUtils.ParseFloat(vak.grades[^1].geldendResultaat) > 5.5 ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</td>
+                            <td class="@(gradeChange >= 0 ? "sufficient" : "insufficient ")">@($"{(gradeChange > 0 ? "+" : "")}{gradeChange.ToString("0.00", CultureInfo.InvariantCulture)}%")</td>
+                            <td class="@(NumberUtils.ParseFloat(vak.grades[^1].geldendResultaat) > 5.5 ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat.Replace(",", ".")</td>
                         </tr>
                         
                         @if (gradesArraySE.Count > 0)

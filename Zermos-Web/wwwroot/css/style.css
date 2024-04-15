@@ -117,26 +117,9 @@
     --font-size-multiplier: 2;
 }
 
-
-/* begin setting default values */
 ::-webkit-scrollbar {
     display: none;
 }
-
-/*::-webkit-scrollbar-track {*/
-/*    background: #f1f1f1;*/
-/*    border-radius: var(--border-radius);*/
-/*}*/
-
-/*::-webkit-scrollbar-thumb {*/
-/*    background: #888;*/
-/*    border-radius: var(--border-radius);*/
-/*}*/
-
-/*::-webkit-scrollbar-thumb:hover {*/
-/*    background: #555;*/
-/*    border-radius: var(--border-radius);*/
-/*}*/
 
 .disabled {
     filter: grayscale(1) !important;
@@ -154,6 +137,8 @@
 html, body, div, p, ul, li {
     margin: 0;
     padding: 0;
+    font-size: var(--font-size);
+    color: var(--text-color);
 }
 
 a {
@@ -161,6 +146,11 @@ a {
     color: blue;
     font-weight: 600;
 }
+
+/*p {*/
+/*    font-size: var(--font-size);*/
+/*    color: var(--text-color);*/
+/*}*/
 
 html {
     scroll-behavior: smooth;

@@ -21,7 +21,6 @@ namespace Zermos_Web.Controllers
 
         [Authorize]
         [ZermosPage]
-        [CompressJavaScript]
         [ZermeloRequirement]
         public async Task<IActionResult> Rooster(string year, string week, bool compact = false)
         {

@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Models.Requirements
 {
@@ -20,7 +21,7 @@ namespace Zermos_Web.Models.Requirements
                 return;
             }
             
-            if (string.IsNullOrEmpty(user?.somtoday_access_token) && string.IsNullOrEmpty(user?.somtoday_refresh_token))
+            if ((string.IsNullOrEmpty(user?.somtoday_access_token) && string.IsNullOrEmpty(user?.somtoday_refresh_token)) || TokenUtils.GetTokenExpiration(user.somtoday_refresh_token) < DateTime.Now)
             {
                 // User does not have the desired value, redirect to /a/login
                 context.Result = new RedirectResult("/Koppelingen/Somtoday/Ongekoppeld");

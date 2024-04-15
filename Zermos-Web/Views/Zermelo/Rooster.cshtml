@@ -12,157 +12,7 @@
 
 <div class="main-container">
     <div class="week-carousel" id="week-carousel" style="transform: translateX(-0%);">
-        <div class="week" data-week="@Model.MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.MondayOfAppointmentsWeek.Year" data-unix="@Model.MondayOfAppointmentsWeek.ToUnixTime()">
-            <div class="times-container">
-                <ul>
-                    <!--        20 horizontal lines-->
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                </ul>
-            </div>
-            <div class="days-container">
-                <ul>
-                    <li>@Model.MondayOfAppointmentsWeek.GetWeekNumber()</li>
-                    <li>
-                        Ma
-                        <div class="date">@Model.MondayOfAppointmentsWeek.ToString("dd MMM")</div>
-                    </li>
-                    <li>
-                        Di
-                        <div class="date">@Model.MondayOfAppointmentsWeek.AddDays(1).ToString("dd MMM")</div>
-                    </li>
-                    <li>
-                        Wo
-                        <div class="date">@Model.MondayOfAppointmentsWeek.AddDays(2).ToString("dd MMM")</div>
-                    </li>
-                    <li>
-                        Do
-                        <div class="date">@Model.MondayOfAppointmentsWeek.AddDays(3).ToString("dd MMM")</div>
-                    </li>
-                    <li>
-                        Vr
-                        <div class="date">@Model.MondayOfAppointmentsWeek.AddDays(4).ToString("dd MMM")</div>
-                    </li>
-                </ul>
-            </div>
-            <div class="hours-container">
-                <ul>
-                    <li></li>
-                    <li>08:20</li> <!-- 1st hour -->
-                    <li>09:10</li> <!-- 2nd hour -->
-                    <li>10:00</li> <!-- break -->
-                    <li>10:15</li> <!-- 3rd hour -->
-                    <li>11:05</li> <!-- 4th hour -->
-                    <li>11:55</li> <!-- break -->
-                    <li>12:25</li> <!-- 5th hour -->
-                    <li>13:15</li> <!-- 6th hour -->
-                    <li>14:05</li> <!-- 7th hour -->
-                    <li>14:55</li> <!-- break -->
-                    <li>15:10</li> <!-- 8th hour -->
-                    <li>16:00</li> <!-- 9th hour -->
-                    <li></li> <!-- end schoolday -->
-                </ul>
-            </div>
-            <div class="lessons-container">
-                <ul>
-                    @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
-                    {
-                        @if (Model.appointments.Count == 0)
-                        {
-                            <li class="empty">Wow, de hele week vrij!</li>
-                            break;
-                        }
-
-                        if (day != DayOfWeek.Saturday && day != DayOfWeek.Sunday)
-                        {
-                            <li class="lesdag">
-                                @{
-                                    IEnumerable<Appointment> appointmentList = Model.appointments.Where(a => a.start.ToDateTime().DayOfWeek == day).ToList();
-
-                                    if (!appointmentList.Any())
-                                        continue;
-
-                                    //100 means 100% of the height of the container
-                                    //510 means 510 minutes between 08:20 and 16:50
-                                    var minuteHeight = 100f / 510f;
-
-                                    //get the date of the day that the appointments are for
-                                    //8 * 60 + 20 = 500 minutes means 08:20
-                                    var dayStartUnix = appointmentList.First().start; // this is unix. make the unix time to be the same date but the time should be 08:20
-                                    dayStartUnix -= dayStartUnix % 86400; // remove the time from the unix time
-                                    dayStartUnix += 8 * 60 * 60 + 20 * 60; // add 8 hours and 20 min to the unix time (08:20)
-
-                                    // Define the time zones for UTC and the Dutch timezone
-                                    TimeZoneInfo dutchTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"); // This ID represents the Dutch timezone
-                                    DateTime utcDateTime = DateTimeOffset.FromUnixTimeSeconds(dayStartUnix).UtcDateTime;
-                                    DateTime dutchDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, dutchTimeZone);
-                                    TimeSpan timeDifference = dutchDateTime - utcDateTime;
-                                    int timeDifferenceInSeconds = (int) timeDifference.TotalSeconds;
-
-                                    dayStartUnix -= timeDifferenceInSeconds;
-                                }
-
-                                @foreach (var appointment in appointmentList)
-                                {
-                                    //percentage from top = (appointment start time - dayStartUnix) * minuteHeight *@
-                                    //appointment height = (appointment end time - appointment start time) * minuteHeight
-
-                                    var appointmentHeight = (appointment.end - appointment.start) / 60f * minuteHeight;
-                                    var lessonStart = appointment.start;
-                                    var appointmentTop = (lessonStart - dayStartUnix) / 60f * minuteHeight;
-
-                                    if (appointment.actions.Count == 0)
-                                    {
-                                        <div class="lesson-time-based @(appointment.cancelled ? "canceled" : "") @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.ObjectToBase64String())')">
-                                            @(appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.subjects[0] + "</p>") : "")
-                                            @(appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.locations[0] + "</p>") : "")
-                                        </div>
-                                    }
-                                    else if (appointment.appointmentType == "conflict")
-                                    {
-                                        <div class="lesson-time-based @(appointment.actions[0].appointment.cancelled ? "canceled" : "") conflict" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px); width: calc(50% - 4px);" onclick="OpenLessonDetail('@(appointment.actions[0].appointment.ObjectToBase64String())')">
-                                            @(appointment.actions[0].appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.subjects[0] + "</p>") : "")
-                                            @(appointment.actions[0].appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.locations[0] + "</p>") : "")
-                                        </div>
-                                        
-                                        <div class="lesson-time-based @(appointment.actions[1].appointment.cancelled ? "canceled" : "")" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px); width: calc(50% - 8px); left: 50%;" onclick="OpenLessonDetail('@(appointment.actions[1].appointment.ObjectToBase64String())')">
-                                            @(appointment.actions[1].appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.actions[1].appointment.subjects[0] + "</p>") : "")
-                                            @(appointment.actions[1].appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.actions[1].appointment.locations[0] + "</p>") : "")
-                                        </div>
-                                    }
-                                    else if (appointment.appointmentType == "choice" && appointment.actions.Count == 1)
-                                    {
-                                        <div class="lesson-time-based @(appointment.actions[0].appointment.cancelled ? "canceled" : "") choice" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.actions[0].appointment.ObjectToBase64String())')">
-                                            @(appointment.actions[0].appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.subjects[0] + "</p>") : "")
-                                            @(appointment.actions[0].appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.locations[0] + "</p>") : "")
-                                        </div>
-                                    }
-                                    else if (appointment.appointmentType == "activity")
-                                    {
-                                        <div class="lesson-time-based @(appointment.actions[0].appointment.cancelled ? "canceled" : "") choice" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.actions[0].appointment.ObjectToBase64String())')">
-                                            @(appointment.actions[0].appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.subjects[0] + "</p>") : "")
-                                            @(appointment.actions[0].appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.locations[0] + "</p>") : "")
-                                        </div>
-                                    }
-                                }
-                            </li>
-                        }
-                    }
-                </ul>
-
-            </div>
-        </div>
+        @(await Html.PartialAsync("Rooster-week", Model))
     </div>
     <div class="notCurrentWeek" style="bottom: -50px;">
         Dit is niet de huidige week!
@@ -244,6 +94,11 @@ async function fetchWeek(week, year, append) {
                 //fade in the new week
                 weekElement.style.transition = '0.25s';
                 weekElement.style.opacity = 1;
+                
+                setTimeout(() => {
+                    //remove style attribute
+                    weekElement.attributes.removeNamedItem('style');
+                }, 250);
             }, 100);
         }, 100);
     });
@@ -326,40 +181,44 @@ Zermos.mainBeforeLoad = () => {
         //startXTransform and endXTransform
         var otherXDif = startXTransform - endXTransform;      
         if (otherXDif > minSwipePercentage) {
-            var newX = startXTransform - 100;
-            animating = true;
-            ease(endXTransform, newX, 500, (value) => {
-                weekCarousel.style.transform = `translateX(${value}%)`;
-                
-                if (value === newX) {
-                    dragging = false;
-                    animating = false;
-                    
-                    if (newX === -100 * (weeksArray.length - 1)) {
-                        NextWeek();
-                    }
-                }
-            });
+            //var newX = startXTransform - 100;
+            //animating = true;
+            dragging = false;
+            // ease(endXTransform, newX, 500, (value) => {
+            //     weekCarousel.style.transform = `translateX(${value}%)`;
+            //    
+            //     if (value === newX) {
+            //         dragging = false;
+            //         animating = false;
+            //        
+            //         if (newX === -100 * (weeksArray.length - 1)) {
+            //             NextWeek();
+            //         }
+            //     }
+            // });
             
+            NextWeekAnim();           
             return;
         }
         else if (otherXDif < -minSwipePercentage) {
-            var newX = startXTransform + 100;
-            animating = true;
-            ease(endXTransform, newX, 500, (value) => {
-                weekCarousel.style.transform = `translateX(${value}%)`;
-                
-                if (value === newX) {
-                    dragging = false;
-                    animating = false;
-                    
-                    if (newX === 0) {
-                        PreviousWeek();
-                    }
-                }
-            });
-
+            //var newX = startXTransform + 100;
+            //animating = true;
+            dragging = false;
+            //animating = false;
+            // ease(endXTransform, newX, 500, (value) => {
+            //     weekCarousel.style.transform = `translateX(${value}%)`;
+            //    
+            //     if (value === newX) {
+            //         dragging = false;
+            //         animating = false;
+            //        
+            //         if (newX === 0) {
+            //             PreviousWeek();
+            //         }
+            //     }
+            // });
             
+            PrevWeekAnim();          
             return;
         }
         else
@@ -400,12 +259,11 @@ Zermos.mainBeforeLoad = () => {
     }
     
     //when touch or mouse leaves the container, handle the mouseup event
-    container.addEventListener("touchleave", container.mouseup);
-    container.addEventListener("mouseleave", container.mouseup);
+    container.addEventListener("touchleave", mouseUp);
+    container.addEventListener("mouseleave", mouseUp);
 };
 
 function ScollToWeek(amount) {
-    console.log(amount);
     //0% is the first child, -100% second child, -200% third child, etc.
     var current = weekCarousel.style.transform.match(/-?\d+/g);
     var currentWeek = Math.round(current[0] / 1);
@@ -415,7 +273,10 @@ function ScollToWeek(amount) {
     weekCarousel.style.transform = `translateX(${newWeek}%)`;
 }
 
+var isEasing = false;
+
 function ease(start, end, time, callback) {
+    isEasing = true;
     start = Number(start);
     end = Number(end);
     const startTime = Date.now();
@@ -428,10 +289,12 @@ function ease(start, end, time, callback) {
         if (elapsed >= duration) {
           clearInterval(interval);
           callback(end);
+          isEasing = false;
         } 
         else {
             const progress = elapsed / duration;
             const easedValue = start + (end - start) * (progress * (2 - progress));
+            if (!isEasing) return;
             callback(easedValue);
         }
     }
@@ -439,16 +302,19 @@ function ease(start, end, time, callback) {
     const interval = setInterval(update, 10); // Update approximately every 16 milliseconds
 }
 
-//next week button
-addButtonToPage('fa-arrow-right', () => {
-    
+addButtonToPage('fa-arrow-right', NextWeekAnim, VerticalAlignment.BL);
+addButtonToPage('fa-arrow-left', PrevWeekAnim, VerticalAlignment.BL);
+
+function NextWeekAnim() {
     disableButtons();
     NextWeek();
     
     //ease the carousel to the next week
     var current = Number(weekCarousel.style.transform.match(/-?\d+/g)[0]);
     var newWeek = current - 100;
-    newWeek = Math.round(newWeek / 100) * 100;
+    newWeek = Math.ceil(newWeek / 100) * 100;
+    
+    console.log(current, newWeek);
     animating = true;
     ease(current, newWeek, 500, (value) => {
         weekCarousel.style.transform = `translateX(${value}%)`;
@@ -458,19 +324,18 @@ addButtonToPage('fa-arrow-right', () => {
             animating = false;
         }
     });
-    
-}, VerticalAlignment.BL);
+}
 
-//previous week button
-addButtonToPage('fa-arrow-left', () => {
-    
+function PrevWeekAnim() {
     disableButtons();
     PreviousWeek();
     
     //ease the carousel to the previous week
     var current = Number(weekCarousel.style.transform.match(/-?\d+/g)[0]);
     var newWeek = current + 100;
-    newWeek = Math.round(newWeek / 100) * 100;
+    newWeek = Math.floor(newWeek / 100) * 100;
+    
+    console.log(current, newWeek);
     animating = true;
     ease(current, newWeek, 500, (value) => {
         weekCarousel.style.transform = `translateX(${value}%)`;
@@ -480,8 +345,8 @@ addButtonToPage('fa-arrow-left', () => {
             animating = false;
         }
     });
+}
     
-}, VerticalAlignment.BL);
 
 function disableButtons() {
     var rightButtons = document.querySelectorAll('.fa-arrow-right');

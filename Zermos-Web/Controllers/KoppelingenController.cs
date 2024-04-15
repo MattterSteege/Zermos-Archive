@@ -18,13 +18,6 @@ using Zermos_Web.Models;
 using Zermos_Web.Models.Requirements;
 using Zermos_Web.Models.zermeloUserModel;
 using Zermos_Web.Utilities;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.Support.UI;
-using WebDriverManager;
-using WebDriverManager.DriverConfigs.Impl;
-using WebDriverManager.Helpers;
 
 namespace Zermos_Web.Controllers
 {
@@ -86,34 +79,34 @@ namespace Zermos_Web.Controllers
         [HttpPost("ontkoppel/{app}")]
         public IActionResult Ontkoppel(string app)
         {
-            return BadRequest("Temporary disabled");
+            //return BadRequest("Temporary disabled");
 
-            // switch (app)
-            // {
-            //     case "infowijs":
-            //         ZermosUser = new user {infowijs_access_token = string.Empty};
-            //         return Redirect("/account");
-            //
-            //     case "somtoday":
-            //         ZermosUser = new user
-            //         {
-            //             somtoday_access_token = string.Empty,
-            //             somtoday_refresh_token = string.Empty,
-            //             somtoday_student_id = string.Empty
-            //         };
-            //         return Redirect("/account");
-            //
-            //     case "zermelo":
-            //         ZermosUser = new user
-            //         {
-            //             zermelo_access_token = string.Empty,
-            //             zermelo_access_token_expires_at = DateTime.MinValue
-            //         };
-            //         return Redirect("/account");
-            //
-            //     default:
-            //         return Redirect("/account");
-            // }
+            switch (app)
+            {
+                case "infowijs":
+                    ZermosUser = new user {infowijs_access_token = string.Empty};
+                    return Redirect("/account");
+            
+                case "somtoday":
+                    ZermosUser = new user
+                    {
+                        somtoday_access_token = string.Empty,
+                        somtoday_refresh_token = string.Empty,
+                        somtoday_student_id = string.Empty
+                    };
+                    return Redirect("/account");
+            
+                case "zermelo":
+                    ZermosUser = new user
+                    {
+                        zermelo_access_token = string.Empty,
+                        zermelo_access_token_expires_at = DateTime.MinValue
+                    };
+                    return Redirect("/account");
+            
+                default:
+                    return Redirect("/account");
+            }
         }
 
         #endregion

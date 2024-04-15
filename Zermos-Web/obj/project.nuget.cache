@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "mBedjFhlNNriiOFRqBFFOF/5SlhdEnoGjheGG2Bzp+u85hJQDf0iOqdja02oMVfb0MoZ2Mjxm/nbQL+kfw55pw==",
+  "dgSpecHash": "RP6choflG6I/H/KMvGj1mGjnVts/Q8pIWKAysbToqrnwQxW2RIa4tG5rEeLLhspI2Jl0J1fClhYYhXKU57xrdA==",
   "success": true,
   "projectFilePath": "C:\\Users\\mattt\\Documents\\GitHub\\Zermos\\Zermos-Web\\Zermos-Web.csproj",
   "expectedPackageFiles": [
@@ -19,6 +19,9 @@
     "C:\\Users\\mattt\\.nuget\\packages\\k4os.hash.xxhash\\1.0.8\\k4os.hash.xxhash.1.0.8.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\messagepack\\2.6.100-alpha\\messagepack.2.6.100-alpha.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\messagepack.annotations\\2.6.100-alpha\\messagepack.annotations.2.6.100-alpha.nupkg.sha512",
+    "C:\\Users\\mattt\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
+    "C:\\Users\\mattt\\.nuget\\packages\\microsoft.aspnetcore.razor\\2.2.0\\microsoft.aspnetcore.razor.2.2.0.nupkg.sha512",
+    "C:\\Users\\mattt\\.nuget\\packages\\microsoft.aspnetcore.razor.runtime\\2.2.0\\microsoft.aspnetcore.razor.runtime.2.2.0.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.15\\microsoft.entityframeworkcore.7.0.15.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.15\\microsoft.entityframeworkcore.abstractions.7.0.15.nupkg.sha512",
     "C:\\Users\\mattt\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.15\\microsoft.entityframeworkcore.analyzers.7.0.15.nupkg.sha512",

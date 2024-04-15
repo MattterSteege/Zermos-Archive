@@ -4,3 +4,14 @@
     - Je rooster op je smartwatch kan nu, als je per ongeluk de functie heb aangezet, ook de functie weer uitzetten.
     - Het rooster systeem heeft een update gehad, waardoor het rooster sneller laad, minder hapert én niet meer af en toe de verkeerde week toonde.
     - De manier waarop de rooster-weken worden opgehaald is aangepast, en niet meer gerouleerd. Dit zou moeten zorgen voor een stabieler rooster.
+    - De roosters zijn nu constant op elke manier waarop je ze kan bekijken (behalve smartwatch)
+    
+- Somtoday - cijfers
+    - Meer consistentie tussen de cijfers (op sommige plekken waren decimalen met een punt, op andere met een komma)
+    - Cijfers die bestaan uit meerdere deel-toetsen worden nu ook weergegeven in de app.
+    
+- Informatiebord
+    - Als er geen tekst bij de foto hoort, dan is de foto volledig zichtbaar.
+    
+- Infowijs
+    

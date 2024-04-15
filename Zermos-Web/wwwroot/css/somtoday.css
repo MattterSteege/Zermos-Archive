@@ -351,6 +351,22 @@
     animation-iteration-count: 1
 }
 
+.grade-table-deeltoets {
+    background: var(--background-color);
+    display: table-row;
+    margin: var(--padding);
+}
+
+.grade-table-deeltoets * {
+    padding: var(--padding);
+    border-color: var(--border-radius);
+    overflow: hidden;
+}
+
+/*get .vak where a child is .grade-table-deeltoets*/
+
+
+
 @keyframes blinker {
     0% {
         opacity: 100%;
@@ -677,6 +693,28 @@
     font-size: 14px;
 }
 
+.deeltoetsen {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: var(--padding);
+    color: var(--text-color);
+    height: auto;
+    width: 100%;
+    margin-top: calc(2 *var(--padding));
+}
+
+.deeltoetsen-child {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: var(--padding);
+    border-radius: var(--border-radius);
+    background: var(--background-color);
+    width: 100%;
+    padding: var(--padding);
+    font-size: var(--font-size);
+    text-align: center;
+}
+
 .stack2 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(355px, 100% / 3)), 1fr));
@@ -713,7 +751,7 @@
     text-align: end;
 }
 
-.fa-graduation-cap.animate {
+.fa-graduation-cap.animate, .fa-layer-group.animate {
     animation: happy-cappy 1s infinite;
 }
 

@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Models.Requirements
 {
@@ -19,7 +20,7 @@ namespace Zermos_Web.Models.Requirements
                 return;
             }
             
-            if (string.IsNullOrEmpty(user.infowijs_access_token)) 
+            if (string.IsNullOrEmpty(user.infowijs_access_token) || TokenUtils.GetTokenExpiration(user.infowijs_access_token) < DateTime.Now)
             {
                 // User does not have the desired value, redirect to /a/login
                 context.Result = new RedirectResult("/Koppelingen/Infowijs/Ongekoppeld");

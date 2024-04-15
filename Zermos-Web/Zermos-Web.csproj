@@ -39,6 +39,7 @@
         <PackageReference Include="ChartJS" Version="23.1.7" />
         <PackageReference Include="ChartJSCore" Version="3.10.1" />
         <PackageReference Include="MessagePack" Version="2.6.100-alpha" />
+        <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.2.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.15" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="7.0.15" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="7.0.15" />

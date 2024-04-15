@@ -413,7 +413,7 @@ namespace Zermos_Web.Controllers
 
             grades.items = grades.items
                 .Where(x => !(string.IsNullOrEmpty(x.omschrijving) && x.weging == 0))
-                .Where(x => x.type != "DeeltoetsKolom")
+                //.Where(x => (x.type != "DeeltoetsKolom" || x.type != "SamengesteldeToetsKolom"))
                 .Where(x => x.geldendResultaat != null)
                 .ToList();
 
@@ -423,7 +423,7 @@ namespace Zermos_Web.Controllers
         public async Task<SomtodayGradesModel> fetchGrades(string access_token, string somtoday_student_id)
         {
                         var baseUrl =
-                $"https://api.somtoday.nl/rest/v1/resultaten/huidigVoorLeerling/{somtoday_student_id}?additional=samengesteldeToetskolomId";
+                $"https://api.somtoday.nl/rest/v1/resultaten/huidigVoorLeerling/{somtoday_student_id}?additional=samengesteldeToetskolomId&additional=resultaatkolomId";
 
             _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + access_token);
             _httpClient.DefaultRequestHeaders.Add("Range", "items=0-99");

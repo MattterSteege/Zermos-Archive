@@ -12,7 +12,7 @@
                 <p class="text">@informatieBoordItem.Content</p>
             </div>
             <div class="image-overlay">
-                <img src="@informatieBoordItem.Image">
+                <img @Html.Raw(informatieBoordItem.Content.Length == 0 ? "style='object-fit: contain' " : "")src="@informatieBoordItem.Image">
                 <div class="overlay"></div>
             </div>
         </div>

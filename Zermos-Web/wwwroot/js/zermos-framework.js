@@ -277,6 +277,7 @@ function createButtonForBottomRight(icon, onclick, verticalAlignment, background
 
 function addButtonToPage(icon, onclick, verticalAlignment = VerticalAlignment.BT, background = Background.Accent) {
     var buttons = document.querySelectorAll(".menu-item-right");
+    var button = [];
     if (buttons.length === 0) {
         buttonCountHorizontalTopRight = 1;
         buttonCountVerticalTopRight = 1;
@@ -284,11 +285,19 @@ function addButtonToPage(icon, onclick, verticalAlignment = VerticalAlignment.BT
         buttonCountVerticalBottomRight = 0;
         bottomRightCornerOccupied = false;
     }
-    if (verticalAlignment === VerticalAlignment.BL || verticalAlignment === VerticalAlignment.BT)
-        document.querySelector(".bottom ul").appendChild(createButtonForSidebar(icon, onclick, background));
-    else
-        document.querySelector(".bottom ul .spacer").after(createButtonForSidebar(icon, onclick, background));
-    document.querySelector(".bottom ul").appendChild(createButtonForBottomRight(icon, onclick, verticalAlignment, background));
+    
+    button.push(createButtonForSidebar(icon, onclick, background));
+    
+    if (verticalAlignment === VerticalAlignment.BL || verticalAlignment === VerticalAlignment.BT) 
+        document.querySelector(".bottom ul").appendChild(button[0]);
+    else 
+        document.querySelector(".bottom ul .spacer").after(button[0]);
+    
+    button.push(createButtonForBottomRight(icon, onclick, verticalAlignment, background));
+    
+    document.querySelector(".bottom ul").appendChild(button[1]);
+    
+    return button;
 }
 
 //==============================UTILITY FUNCTIONS==============================

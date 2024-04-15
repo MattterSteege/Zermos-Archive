@@ -157,6 +157,10 @@
               "target": "Package",
               "version": "[2.6.100-alpha, )"
             },
+            "Microsoft.AspNetCore.Razor.Runtime": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[7.0.15, )"

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Zermos_Web.Models.SomtodayGradesModel
 {
@@ -13,7 +14,7 @@ namespace Zermos_Web.Models.SomtodayGradesModel
     {
         public List<Link> links { get; set; }
         //public List<Permission> permissions { get; set; }
-        //public AdditionalObjects additionalObjects { get; set; }
+        public AdditionalObjects additionalObjects { get; set; }
         //public string herkansingstype { get; set; }
         //public string resultaat { get; set; }
         public string geldendResultaat { get; set; }
@@ -30,10 +31,12 @@ namespace Zermos_Web.Models.SomtodayGradesModel
         public int examenWeging { get; set; }
 
         public bool isExamendossierResultaat { get; set; }
+        public string samengesteldeToetskolomId => additionalObjects.samengesteldeToetskolomId as string;
+        public string resultaatkolomId => additionalObjects.resultaatkolomId as string;
+
         //public bool isVoortgangsdossierResultaat { get; set; }
         public string type { get; set; }
         public string omschrijving { get; set; }
-
         public Vak vak { get; set; }
 
         //public Leerling leerling { get; set; }
@@ -41,6 +44,8 @@ namespace Zermos_Web.Models.SomtodayGradesModel
         //public bool vrijstelling { get; set; }
         //public string resultaatLabel { get; set; }
         public string resultaatLabelAfkorting { get; set; }
+
+        public List<Item> samengesteldeToetsen { get; set; }
     }
 
     // public class Leerling
@@ -54,6 +59,12 @@ namespace Zermos_Web.Models.SomtodayGradesModel
     //     public string voorvoegsel { get; set; }
     //     public string achternaam { get; set; }
     // }
+    
+    public class AdditionalObjects
+    {
+        public string samengesteldeToetskolomId { get; set; }
+        public string resultaatkolomId { get; set; }
+    }
 
     public class Link
     {
