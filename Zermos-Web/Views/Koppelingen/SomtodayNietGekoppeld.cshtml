@@ -388,7 +388,9 @@
     </div>
 </div>
 
-<script>
+<script minimize>
+@Context.Items["dmjs"]
+
 addEventListenerToMain( "scroll", function() {
 var max_scroll = this.scrollHeight - this.clientHeight - 100;
 var current_scroll = this.scrollTop;

@@ -73,6 +73,8 @@ namespace Zermos_Web
             
             app.UseRateLimiter();
             
+            //app.UseScriptPreprocessorMiddleware();
+            
             app.UseForwardedHeaders();
 
             app.UseStaticFiles();

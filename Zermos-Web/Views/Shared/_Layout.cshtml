@@ -161,7 +161,7 @@
     @RenderBody()
 </main>
 
-<script id="vital-script" defer="defer">
+<script id="vital-script" defer="defer" minimize>
 let main = document.getElementById("main");
 const content = document.getElementById("content");
 let isRunning = false;
@@ -236,6 +236,13 @@ function ReplacePage(url) {
     });
 
     //set loading-text to one of the following
+
+    if (HasPreview("Dont_minimize_js")) {
+        //add url parameter to disable js minimization
+        //check if the url already has a query string
+        url += url.includes("?") ? "&" : "?";
+        url += "dmjs";
+    }
 
     content.style.opacity = "1";
     // Make an AJAX request

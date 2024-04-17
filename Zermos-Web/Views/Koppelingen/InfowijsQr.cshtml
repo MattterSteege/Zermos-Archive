@@ -6,7 +6,7 @@
     <div class="login-explanation">
         <p>Vul hier je schoolmail in.</p>
         <p>Scan deze code met de QR code scanner in de antonius app (Antonius app > Meer > Hoy Scan) en je bent ingelogd!</p>
-        <img onload="imageLoaded()" src="https://chart.googleapis.com/chart?cht=qr&chl=@(ViewData["qr_text"])&chs=360x360&choe=UTF-8&chld=L|0" alt="qr code" class="img-thumbnail">
+        <img onload="imageLoaded()" src="https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=@(ViewData["qr_text"])" alt="qr code" class="img-thumbnail">
         <div class="loading-icon">
             <img src="/images/Loading-Icon-by-Kanggraphic-27-580x386-removebg-preview.png" >
         </div>
@@ -16,7 +16,9 @@
     </form>
 </div>
 
-<script>
+<script minimize>
+@Context.Items["dmjs"]
+
 function imageLoaded() {
     var loadingIcon = document.getElementsByClassName("loading-icon")[0];
     loadingIcon.style.display = "none";
@@ -25,6 +27,10 @@ function imageLoaded() {
 var checkingInterval = setInterval(function() {
     SendCheck();
 }, 1000);
+
+Zermos.mainUnload = function() {
+    clearInterval(checkingInterval);
+};
 
 //when user submits the form, use the function below to check if the user is logged in
 // document.getElementsByTagName("form")[0].addEventListener("submit", function(e) {

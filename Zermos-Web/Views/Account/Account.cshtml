@@ -126,7 +126,9 @@
     </div>
 </div>
 
-<script>
+<script minimize>
+@Context.Items["dmjs"]
+
     function AreYouSure(app) {
         document.getElementById(app + '-first').style.display = 'none';
         document.getElementById(app + '-second').style.display = 'block';

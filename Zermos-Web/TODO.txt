@@ -2,9 +2,6 @@
 TODO: make time use login, so the user get's logged out after the session is closed
 TODO: dagrooster
 TODO: een demo versie van Zermos om te laten zien aan nieuwe gebruikers
-TODO: fix ontkoppelen van apps (doe dit met een heen en weer sturen van een token ofzo)
-TODO: minimize the JS send to the client as script
-
 
 TODO: SOMToday API revamp
     Model: not

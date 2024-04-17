@@ -355,6 +355,7 @@ body {
     cursor: pointer;
     background: var(--accent-color);
     color: var(--white-color);
+    box-shadow: var(--box-shadow);
 }
 
 .menu-item-right .menu-icons.menu-icons-custom {
@@ -454,6 +455,7 @@ main.main {
     top: var(--padding);
     right: var(--padding);
     z-index: 100;
+    box-shadow: var(--box-shadow);
 }
 
 .top-right-profile-picture a {
@@ -497,6 +499,7 @@ main.main {
     justify-content: center;
     cursor: pointer;
     background: var(--overlay-color);
+    box-shadow: var(--box-shadow);
 }
 
 .forewardbutton {

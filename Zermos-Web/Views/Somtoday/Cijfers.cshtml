@@ -141,7 +141,8 @@
     }
 </div>
 
-<script>
+<script minimize>
+@Context.Items["dmjs"]
 
 //get all the sortedGrades.vak.naam and put them in an array with quotes around them 
 var vakken = ["@Html.Raw(string.Join("\",\"", sortedGrades.Select(x => x.vak.naam).Distinct()))"];

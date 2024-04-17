@@ -90,7 +90,8 @@
 
 @if (Model.show_individual_grades)
 {
-<script>
+<script minimize>
+@Context.Items["dmjs"]
 
 
 @foreach(var vak in sortedGrades)

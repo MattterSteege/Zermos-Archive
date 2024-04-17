@@ -15,7 +15,9 @@
     </form>
 </div>
 
-<script>
+<script minimize>
+@Context.Items["dmjs"]
+
     //when user submits the form, use the function below to check if the user is logged in
     document.getElementsByTagName("form")[0].addEventListener("submit", function (e) {
         e.preventDefault();

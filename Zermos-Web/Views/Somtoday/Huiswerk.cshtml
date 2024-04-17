@@ -93,7 +93,9 @@
 }
 
 
-<script>
+<script minimize>
+@Context.Items["dmjs"]
+
     //make an array of all the homework items, title, content, bijlagen, date, 
     var allSubjects = ["@Html.Raw(string.Join("\",\"", Model.items.Select(x => x.lesgroep?.vak.naam ?? "Onbekend").OrderBy(x => x).Distinct()))"];
     var allContent = ['huiswerk', 'toets', 'grote toets'];

@@ -34,9 +34,9 @@
         <p>Zet hier de optie om het rooster te laten zien in smartwatch modus aan of uit.</p>
     </div>
     
-    <div class="account-item" data-preview-id="old_zermelo_schedule" onclick="TogglePreview('old_zermelo_schedule')">
-        <h1>Old Zermelo schedule system</h1>
-        <p>Zet hier de optie om de oude 'roulerende' versie van het rooster te gerbuiken aan of uit.</p>
+    <div class="account-item" data-preview-id="Dont_minimize_js" onclick="TogglePreview('Dont_minimize_js')">
+        <h1>Zet de JS minizer uit</h1>
+        <p>Als je problemen ondervindt met de JS minimizer, zet deze Preview dan aan</p>
     </div>
     
     <h4>device info</h4>
@@ -57,59 +57,59 @@
     </div>
 </div>
 
-<script>
-    Zermos.mainAfterLoad = () => {
-        document.getElementById("screen_size").innerText = "Screen Size: " + window.innerWidth + "x" + window.innerHeight;
-        var connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || navigator.msConnection;
-        if (connection !== undefined) {
-            document.getElementById("internet_connection").innerText = "Internet Connection: " + (connection.downlink / 8) + "MB per second";
-        }
-        
-        //loop over consoleArray and write to logs
-        var logs = document.getElementById("logs");
-        for (var i = 0; i < consoleArray.length; i++) {
-            var log = consoleArray[i][1] + " - " + consoleArray[i][0][0];
-            var logElement = document.createElement("p");
-            logElement.innerText = log;
-            logs.appendChild(logElement);
-        }
+<script minimize>
+Zermos.mainAfterLoad = () => {
+    document.getElementById("screen_size").innerText = "Screen Size: " + window.innerWidth + "x" + window.innerHeight;
+    var connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection || navigator.msConnection;
+    if (connection !== undefined) {
+        document.getElementById("internet_connection").innerText = "Internet Connection: " + (connection.downlink / 8) + "MB per second";
     }
+    
+    //loop over consoleArray and write to logs
+    var logs = document.getElementById("logs");
+    for (var i = 0; i < consoleArray.length; i++) {
+        var log = consoleArray[i][1] + " - " + consoleArray[i][0][0];
+        var logElement = document.createElement("p");
+        logElement.innerText = log;
+        logs.appendChild(logElement);
+    }
+}
 
-    function RefreshCSS() {
-        var links = document.getElementsByTagName("link");
-        for (var cl in links) {
-            var link = links[cl];
-            if (link.rel === "stylesheet") {
-                //replace the ?v= with a random string of 10 long
-                link.href = link.href.replace(/\?v=.*$/, "?v=" + Math.random().toString(36).substring(2, 12));
+function RefreshCSS() {
+    var links = document.getElementsByTagName("link");
+    for (var cl in links) {
+        var link = links[cl];
+        if (link.rel === "stylesheet") {
+            //replace the ?v= with a random string of 10 long
+            link.href = link.href.replace(/\?v=.*$/, "?v=" + Math.random().toString(36).substring(2, 12));
+        }
+    }
+}
+
+function RefreshJS() {
+    var scripts = document.getElementsByTagName("script");
+    for (var cl in scripts) {
+        var script = scripts[cl];
+        if (script.src !== undefined) {
+            //replace the ?v= with a random string of 10 long
+            script.src = script.src.replace(/\?v=.*$/, "?v=" + Math.random().toString(36).substring(2, 12));
+        }
+    }
+}
+
+CheckPreviews();
+
+function CheckPreviews() {
+    var previews = document.getElementsByClassName("account-item");
+    for (var i = 0; i < previews.length; i++) {
+        var preview = previews[i];
+        if (preview.dataset.previewId !== undefined) {
+            var previewId = preview.dataset.previewId;
+            var previewValue = HasPreview(previewId);
+            if (previewValue === true) {
+                preview.classList.add("active");
             }
         }
     }
-    
-    function RefreshJS() {
-        var scripts = document.getElementsByTagName("script");
-        for (var cl in scripts) {
-            var script = scripts[cl];
-            if (script.src !== undefined) {
-                //replace the ?v= with a random string of 10 long
-                script.src = script.src.replace(/\?v=.*$/, "?v=" + Math.random().toString(36).substring(2, 12));
-            }
-        }
-    }
-    
-    CheckPreviews();
-    
-    function CheckPreviews() {
-        var previews = document.getElementsByClassName("account-item");
-        for (var i = 0; i < previews.length; i++) {
-            var preview = previews[i];
-            if (preview.dataset.previewId !== undefined) {
-                var previewId = preview.dataset.previewId;
-                var previewValue = HasPreview(previewId);
-                if (previewValue === true) {
-                    preview.classList.add("active");
-                }
-            }
-        }
-    }
+}
 </script>

@@ -1,5 +1,9 @@
-﻿0.4.7.1 - Weer wat kleine updates
+﻿0.4.8 - Weer wat kleine updates
 
+- Algemeen
+    - Tussen alle andere coole nieuwe features door, heb ik ook nog een heel nieuw systeem ingevoerd: Zermos-Minimzer; alle code die wordt meegestuurd als je een pagina opvraagt wordt met gemiddeld 40% verkleind. Dit zorget voor een snellere laadtijd van de pagina's.
+    - kleine inconsistenties in de app zijn opgelost.
+    
 - Zermelo
     - Je rooster op je smartwatch kan nu, als je per ongeluk de functie heb aangezet, ook de functie weer uitzetten.
     - Het rooster systeem heeft een update gehad, waardoor het rooster sneller laad, minder hapert én niet meer af en toe de verkeerde week toonde.
@@ -13,5 +17,5 @@
 - Informatiebord
     - Als er geen tekst bij de foto hoort, dan is de foto volledig zichtbaar.
     
-- Infowijs
-    
+- Koppelingen
+    - Er was een probleem waarbij op magische wijze apps ontkoppeld werden. Dit is nu opgelost.    
