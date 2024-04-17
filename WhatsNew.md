@@ -4,6 +4,29 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - Versie 0.4.8 - 17-04-2024
+0.4.8 - Weer wat kleine updates
+
+- Algemeen
+    - Tussen alle andere coole nieuwe features door, heb ik ook nog een heel nieuw systeem ingevoerd: Zermos-Minimzer; alle code die wordt meegestuurd als je een pagina opvraagt wordt met gemiddeld 40% verkleind. Dit zorget voor een snellere laadtijd van de pagina's.
+    - kleine inconsistenties in de app zijn opgelost.
+    
+- Zermelo
+    - Je rooster op je smartwatch kan nu, als je per ongeluk de functie heb aangezet, ook de functie weer uitzetten.
+    - Het rooster systeem heeft een update gehad, waardoor het rooster sneller laad, minder hapert én niet meer af en toe de verkeerde week toonde.
+    - De manier waarop de rooster-weken worden opgehaald is aangepast, en niet meer gerouleerd. Dit zou moeten zorgen voor een stabieler rooster.
+    - De roosters zijn nu constant op elke manier waarop je ze kan bekijken (behalve smartwatch)
+    
+- Somtoday - cijfers
+    - Meer consistentie tussen de cijfers (op sommige plekken waren decimalen met een punt, op andere met een komma)
+    - Cijfers die bestaan uit meerdere deel-toetsen worden nu ook weergegeven in de app.
+    
+- Informatiebord
+    - Als er geen tekst bij de foto hoort, dan is de foto volledig zichtbaar.
+    
+- Koppelingen
+    - Er was een probleem waarbij op magische wijze apps ontkoppeld werden. Dit is nu opgelost.    
+
 # Release Notes - Versie 0.4.7 - 26-03-2024
 Na een heel fiasco met de database, gekloot met Somtoday koppelingen en nog meer grijze haren kan je nu weer een koppeling leggen met Somtoday, nice.
 
