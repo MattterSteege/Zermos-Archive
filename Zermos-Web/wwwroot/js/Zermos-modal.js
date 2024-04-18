@@ -12,70 +12,70 @@
 
     //ADDERS
     
-    /*
-    * @param {string} text - The text to be displayed
-    */
+    //
+    // @param {string} text - The text to be displayed
+    //
     addText(text) {
         this.fields.push(["text",text]);
         return this;
     }
 
-    /*
-    * @param {string} input - The placeholder text for the input
-     */
+    //
+    // @param {string} input - The placeholder text for the input
+    //
     addInput(input) {
         this.fields.push(["text_input",input]);
         return this;
     }
     
-    /*
-    * @param {string} input - The placeholder text for the input
-     */
+    //
+    // @param {string} input - The placeholder text for the input
+    //
     addMultilineInput(input) {
         this.fields.push(["multiline_input", input]);
         return this;
     }
     
-    /*
-    * @param {string} input - The placeholder text for the input
-    * @param {array} options - The options for the select input
-     */
+    //
+    // @param {string} input - The placeholder text for the input
+    // @param {array} options - The options for the select input
+    //
     addSelectInput(input, options) {
         this.fields.push(["select_input", input, options]);
         return this;
     }
 
-    /*
-    * @param {string} input - The placeholder text for the input
-    * @param {Date} defaultDate - The default date for the input
-     */
+    //
+    // @param {string} input - The placeholder text for the input
+    // @param {Date} defaultDate - The default date for the input
+    //
     addDateInput(input, defaultDate) {
         this.fields.push(["date_input", input, defaultDate]);
         return this;
     }
 
-    /*
-    * @param {string} label - The label for the button
-    * @param {function} callback - The callback for the button
-     */
+    //
+    // @param {string} label - The label for the button
+    // @param {function} callback - The callback for the button
+    //
     addButton(label, callback) {
         this.fields.push(["button", label, callback]);
         return this;
     }
     
-    /*
-    * @param {string} label - The label for the toggle
-    * @param {boolean} toggled - Whether the toggle is toggled or not
-     */
+    //
+    // @param {string} label - The label for the toggle
+    // @param {boolean} toggled - Whether the toggle is toggled or not
+    //
     addToggle(label, toggled) {
         this.fields.push(["toggle", label, toggled]);
         return this;
     }
     
-    /*
-    * @param {array} toggles - The labels for the toggles
-    * @param {array} toggled - Whether the toggles are toggled or not
-     */
+    //
+    // @param {array} toggles - The labels for the toggles
+    // @param {array} toggled - Whether the toggles are toggled or not
+    //
     addMultiToggles(toggles, toggled) {
         //make a list of toggles which collectively return an array of true/false values
         //this array is then returned to the callback
@@ -85,41 +85,41 @@
     
     //SETTERS
     
-    /*
-    * @param {string} title - The title of the modal
-     */
+    //
+    // @param {string} title - The title of the modal
+    //
     setTitle(title) {
         this.title = title;
         return this;
     }
     
-    /*
-    * @param {number} duration - The duration of the fade in/out animation
-     */
+    //
+    // @param {number} duration - The duration of the fade in/out animation
+    //
     setFadeDuration(duration) {
         this.fadeDuration = duration;
         return this;
     }
     
-    /*
-    * @param {string} label - The label for the submit button
-     */
+    //
+    // @param {string} label - The label for the submit button
+    //
     setSubmitButtonLabel(label) {
         this.submitButtonLabel = label;
         return this;
     }
     
-    /*
-    * This disables the closing of the modal when clicking on the background
-     */
+    //
+    // This disables the closing of the modal when clicking on the background
+    //
     disableClose() {
         this.closingDisabled = true;
         return this;
     }
     
-    /*
-    * This hides the submit button
-     */
+    //
+    // This hides the submit button
+    //
     hideSubmitButton() {
         this.submitButtonLabel = null;
         return this;
@@ -127,19 +127,19 @@
 
     //CALLBACKS
     
-    /*
-    * The callback for when the submit button is clicked
-    * @param {function} callback - The callback for the submit button
-     */
+    //
+    // The callback for when the submit button is clicked
+    // @param {function} callback - The callback for the submit button
+    //
     onSubmit(callback) {
         this.onSubmitCallback = callback;
         return this;
     }
 
-    /*
-    * The callback for when the modal is closed
-    * @param {function}    
-    */
+    //
+    // The callback for when the modal is closed
+    // @param {function}    
+    //
     onClose(callback) {
         this.onCloseCallback = callback;
         return this;
@@ -147,17 +147,17 @@
     
     //HELPERS
     
-    /*
-    * Returns the values of the input fields
-     */
+    //
+    // Returns the values of the input fields
+    //
     getConstructorValues() {
         console.log(this);
         return this;
     }
 
-    /*
-    * Opens the modal
-     */
+    //
+    // Opens the modal
+    //
     open() {
         //remove any existing modal
         unloadModal();

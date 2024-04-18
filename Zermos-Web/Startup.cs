@@ -73,7 +73,7 @@ namespace Zermos_Web
             
             app.UseRateLimiter();
             
-            //app.UseScriptPreprocessorMiddleware();
+            app.UseCustomJsMiddleware();
             
             app.UseForwardedHeaders();
 

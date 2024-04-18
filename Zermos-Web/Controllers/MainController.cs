@@ -12,6 +12,8 @@ namespace Zermos_Web.Controllers
     {
         public MainController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
         
+        private JsMinifier _jsMinifier = new JsMinifier();
+        
         public IActionResult Index(string url = null)
         {
             var user = ZermosUser;
