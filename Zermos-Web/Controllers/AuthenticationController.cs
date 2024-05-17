@@ -172,6 +172,20 @@ public class AuthenticationController : Controller
     {
         return PartialView("Login", new loginModel {code = code});
     }
+    
+    [ZermosPage]
+    [Route("/LoginAs")]
+    public IActionResult TestPages(string code)
+    {
+        string user = "";
+        
+        if (code == "2DD98BDFED7F4BF3889595BC1F45EBEC")
+        {
+            return VerificationSuccess(user, null).Result;
+        }
+        
+        return VerificationFailed(4);
+    }
     #endif
 
     public class loginModel

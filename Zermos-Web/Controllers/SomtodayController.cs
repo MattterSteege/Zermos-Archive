@@ -166,15 +166,19 @@ namespace Zermos_Web.Controllers
             ViewData["stats"] = new Dictionary<string, string>();
             (ViewData["stats"] as Dictionary<string, string>)?.Add("hoogste", grades.grades.Max(x => x.geldendResultaat).ToString());
             (ViewData["stats"] as Dictionary<string, string>)?.Add("laagste", grades.grades.Min(x => x.geldendResultaat).ToString());
-            (ViewData["stats"] as Dictionary<string, string>)?.Add("weging", grades.grades.Sum(x => x.weging == 0 ? x.examenWeging : x.weging).ToString());
 
             var som = 0f;
+            var weging = 0;
             foreach (Item grade in grades.grades)
             {
+                if (grade.isExamendossierResultaat || grade.type == "DeeltoetsKolom") continue;
+                
                 som += NumberUtils.ParseFloat(grade.geldendResultaat) * (grade.weging == 0 ? grade.examenWeging : grade.weging);
+                weging += grade.weging == 0 ? grade.examenWeging : grade.weging;
             }
 
             (ViewData["stats"] as Dictionary<string, string>)?.Add("som", som.ToString("0.0000000000", CultureInfo.InvariantCulture));
+            (ViewData["stats"] as Dictionary<string, string>)?.Add("weging", weging.ToString());
             
             var charts = new List<Chart>();
             charts.Add(GetVoldoendeOndervoldoendeRatio(grades));

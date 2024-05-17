@@ -21,7 +21,7 @@ namespace Zermos_Web.Models.SomtodayGradesModel
 
         public DateTime datumInvoer { get; set; }
 
-        //public bool teltNietmee { get; set; }
+        public bool teltNietmee { get; set; }
         //public bool toetsNietGemaakt { get; set; }
         //public int leerjaar { get; set; }
 

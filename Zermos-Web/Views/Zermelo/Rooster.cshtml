@@ -32,8 +32,8 @@ function NextWeek() {
     var weekToFetch = weeksArray[weeks.length - 1].week + 1;
     var yearToFetch = weeksArray[weeks.length - 1].year;
     
-    console.log(weekToFetch, currentWeek);
-    
+    currentWeek++;
+
     if (weekToFetch === 53) {
         weekToFetch = 1;
         yearToFetch += 1;
@@ -50,6 +50,8 @@ function PreviousWeek() {
     //fetch the previous week (weeksArray[0] - 1)
     var weekToFetch = weeksArray[0].week - 1;
     var yearToFetch = weeksArray[0].year;
+    
+    currentWeek--;
     
     if (weekToFetch === 0) {
         weekToFetch = 52;
@@ -436,11 +438,11 @@ addButtonToPage('fa-share-from-square', () => {
         
         const date = document.getElementById('input1').value;
         const dateObject = new Date(date);
-        
+        const currentYear = new Date().getFullYear();
         var expires_at = Math.floor(dateObject.getTime() / 1000);
         
         //return's an plan string url
-        fetch('/zermelo/GenereerToken?year=' + weeks[1].dataset.year + '&week=' + weeks[1].dataset.week + '&expires_at=' + expires_at)
+        fetch('/zermelo/GenereerToken?year=' + currentYear+ '&week=' + currentWeek + '&expires_at=' + expires_at)
         .then(response => response.text())
         .then((url) => {
             new ZermosModal()
@@ -466,16 +468,21 @@ addButtonToPage('fa-list', () => {
     .setSubmitButtonLabel("Oke")
     .addText("Je hebt vandaag de volgende vakken:")
     @{
-        //foreach (Appointment les in zermeloTodayLessons.Distinct())
-        //where zermeloTodayLessons[].subject is distinct
-        foreach (Appointment les in zermeloTodayLessons.GroupBy(x => x.subjects[0]).Select(x => x.First()))
+        try
         {
-            if (les.cancelled)
+            foreach (Appointment les in zermeloTodayLessons.GroupBy(x => x.subjects[0]).Select(x => x.First()))
             {
-                continue;
-            }
+                if (les.cancelled)
+                {
+                    continue;
+                }
 
-            @Html.Raw("    .addText(\"" + (les.subjects.Count > 0 ? les.subjects[0] : "-") + " van " + (les.teachers.Count > 0 ? les.teachers[0] : "-") + "\")")
+                @Html.Raw("    .addText(\"" + (les.subjects.Count > 0 ? les.subjects[0] : "-") + " van " + (les.teachers.Count > 0 ? les.teachers[0] : "-") + "\")")
+            }
+        }
+        catch (Exception)
+        {
+            @Html.Raw("    .addText(\"Er is iets fout gegaan bij het ophalen van de vakken. Probeer het later opnieuw.\")")
         }
     }
     
