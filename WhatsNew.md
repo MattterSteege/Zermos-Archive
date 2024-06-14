@@ -4,6 +4,19 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - Versie 0.4.8.1 - 14-06-2024
+0.4.8.1 - lang geleden zeg...
+
+- algemeen
+    - Nog meer compression van bestanden, dus snellere laadtijden
+    
+- Somtoday - Cijfers
+    - Cijfers die een 5.5 zijn worden nu ook groen weergegeven (dus ook als ze afgerond een 5.5 zijn (> 5.45))
+    
+- Zermelo - Rooster
+    - Een klein foutje dat sommige lessen niet goed werden weergegeven is opgelost (oepsie)
+
+
 # Release Notes - Versie 0.4.8 - 17-04-2024
 0.4.8 - Weer wat kleine updates
 
