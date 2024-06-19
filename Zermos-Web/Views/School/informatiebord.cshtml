@@ -7,45 +7,44 @@
 </div>
 
 <script minimize>
-    
-    class InformatieBoordModel {
-        constructor(title, subTitle, image, content) {
-            this.Title = title;
-            this.SubTitle = subTitle;
-            this.Image = image;
-            this.Content = content;
-        }
+        
+    InformatieBoordModel = function (title, subTitle, image, content) {
+        this.Title = title;
+        this.SubTitle = subTitle;
+        this.Image = image;
+        this.Content = content;
     }
 
+
     function replaceHtmlEntities(text) {
-        const tempDiv = document.createElement('div');
+        var tempDiv = document.createElement('div');
         tempDiv.innerHTML = text;
         return tempDiv.textContent || tempDiv.innerText || "";
     }
 
     async function fetchInfoBordData() {
 
-        const model = [];
+        var model = [];
 
         try {
-            const baseUrl = "https://cors.mjtsgamer.workers.dev/https://www.carmelcollegegouda.nl/vestigingen/antoniuscollege-gouda/infoscherm";
-            const response = await fetch(baseUrl);
-            const responseData = await response.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(responseData, 'text/html');
-            const elements = doc.querySelectorAll(".swiper-slide");
+            var baseUrl = "https://cors.mjtsgamer.workers.dev/https://www.carmelcollegegouda.nl/vestigingen/antoniuscollege-gouda/infoscherm";
+            var response = await fetch(baseUrl);
+            var responseData = await response.text();
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(responseData, 'text/html');
+            var elements = doc.querySelectorAll(".swiper-slide");
 
             if (elements) {
                 elements.forEach(element => {
-                    const title = element.querySelector(".text-black h1")?.textContent || "";
+                    var title = element.querySelector("h1.text-black")?.textContent || "";
 
                     if (title === "Weerbericht Gouda") return;
 
-                    const subTitle = element.querySelector(".text-black h2")?.textContent || "";
+                    var subTitle = element.querySelector("h2.text-black")?.textContent || "";
                     let image = element.querySelector("img")?.getAttribute("src") || "";
 
                     let contentText = "";
-                    const contentNodes = element.querySelectorAll(".content .text-black");
+                    var contentNodes = element.querySelectorAll(".content.text-black");
                     contentNodes.forEach(contentNode => {
                         contentText += contentNode.textContent;
                     });
@@ -64,57 +63,94 @@
             console.error("Error fetching info board data:", error);
         }
 
-        return model;
+        return { items: model, save_time: new Date() };
     }
-
-    // Example usage
-    fetchInfoBordData().then(data => {
-        console.log(data);
+    
+    //check the local storage for the data
+    var infoBordData = localStorage.getItem("infoBordData");
+    if (infoBordData) {
+        infoBordData = JSON.parse(infoBordData);
+        console.log("Data loaded from local storage");
+        console.log(infoBordData);
+    } else {
+        console.log("Data loaded from fetch");
+        fetchInfoBordData().then(data => {
+            console.log(data);
+            localStorage.setItem("infoBordData", JSON.stringify(data));
+        });
+    }
+    
+    if (infoBordData && infoBordData.save_time) {
+        //check for the age of the data
+        var saveTime = new Date(infoBordData.save_time);
+        var currentTime = new Date();
+        var diff = currentTime - saveTime;
+        var diffInMinutes = diff / 1000 / 60;
+        console.log("Data is " + diffInMinutes + " minutes old");
         
+        if (diffInMinutes < 60) {
+            renderData(infoBordData.items);
+        }
+        else {
+            console.log("Data is older than 60 minutes, fetching new data");
+            fetchInfoBordData().then(data => {
+                renderData(data.items);
+                localStorage.setItem("infoBordData", JSON.stringify(data));
+            });
+        }
+    }
+    else {
+        // Example usage
+        fetchInfoBordData().then(data => {
+            renderData(data.items);
+            localStorage.setItem("infoBordData", JSON.stringify(data));
+        });
+    }
+    
+    function renderData(data) {
         var newHolder = document.getElementById("news-items-holder");
-        
+
         data.forEach(informatieBoordItem => {
             var newChild = document.createElement("div");
             newChild.classList.add("child");
-            
+
             var textHolder = document.createElement("div");
             textHolder.classList.add("text-holder");
-            
+
             var heading = document.createElement("h1");
             heading.classList.add("heading");
             heading.textContent = informatieBoordItem.Title;
-            
+
             var subTitle = document.createElement("h2");
             subTitle.classList.add("sub-heading");
             subTitle.textContent = informatieBoordItem.SubTitle;
-            
+
             var text = document.createElement("p");
             text.classList.add("text");
             text.textContent = informatieBoordItem.Content;
-            
+
             textHolder.appendChild(heading);
             textHolder.appendChild(subTitle);
             textHolder.appendChild(text);
-            
+
             var imageOverlay = document.createElement("div");
             imageOverlay.classList.add("image-overlay");
-            
+
             var image = document.createElement("img");
             image.src = informatieBoordItem.Image;
             image.style.objectFit = "contain";
-            
+
             var overlay = document.createElement("div");
             overlay.classList.add("overlay");
-            
+
             imageOverlay.appendChild(image);
             imageOverlay.appendChild(overlay);
-            
+
             newChild.appendChild(textHolder);
             newChild.appendChild(imageOverlay);
-            
+
             newHolder.appendChild(newChild);
         });
-    });
-    
+    }
 
 </script>

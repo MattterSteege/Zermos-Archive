@@ -69,4 +69,21 @@ public class SomtodayAPI
         
         return JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(await response.Content.ReadAsStringAsync());
     }
+    
+    public async Task<SomtodayAfwezigheidModel> GetStudiemateriaal(user user)
+    {
+        var baseurl = $"https://api.somtoday.nl/rest/v1/studiemateriaal/algemeen/{user.somtoday_student_id}";
+        
+        _httpClient.DefaultRequestHeaders.Clear();
+        _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
+        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        
+        var response = await _httpClient.GetAsync(baseurl);
+
+        if (response.IsSuccessStatusCode == false)
+            return null;
+        
+        
+        return JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(await response.Content.ReadAsStringAsync());
+    }
 }
