@@ -1,0 +1,90 @@
+﻿@model List<Infrastructure.Entities.user>
+
+<table style="border-collapse: collapse; width: 100%;">
+    <tr style="background: var(--overlay-color);">
+        <th style="border: 1px solid var(--overlay-overlay-color); padding: 8px;">Username</th>
+        <th style="border: 1px solid var(--overlay-overlay-color); padding: 8px;">Email</th>
+        <th style="border: 1px solid var(--overlay-overlay-color); padding: 8px;">Version</th>
+        <th style="border: 1px solid var(--overlay-overlay-color); padding: 8px;">Actions</th>
+    </tr>
+    @foreach (var user in Model)
+    {
+        <tr style="background: var(--overlay-color);">
+            <td style="border: 1px solid var(--overlay-overlay-color); padding: 8px;">@user.name</td>
+            <td style="border: 1px solid var(--overlay-overlay-color); padding: 8px;">@user.email</td>
+            <td style="border: 1px solid var(--overlay-overlay-color); padding: 8px;">@user.version_used</td>
+            <td style="border: 1px solid var(--overlay-overlay-color); padding: 8px; cursor: pointer;" onclick="loginAs('@user.email')">
+                <div style="color: #007BFF; text-decoration: none;">Login as</div>
+            </td>
+        </tr>
+    }
+</table>
+
+<script minimize>    
+        function loginAs(email) {
+            new ZermosModal()
+            .setTitle('Login as')
+            .addText('Are you sure you want to login as this user:')
+            .addText(email)
+            .onSubmit(function(){
+                TogglePreview('incognito');
+                ReplacePage('/LoginAs?user=' + email);
+            })
+            .setSubmitButtonLabel("YUP!")
+            .open();
+        }
+        
+        var UsernameSort = document.querySelector('th:nth-child(1)');
+        var EmailSort = document.querySelector('th:nth-child(2)');
+        var VersionSort = document.querySelector('th:nth-child(3)');
+        
+        UsernameSort.addEventListener('click', function () {
+            SortTable(0);
+        });
+        
+        EmailSort.addEventListener('click', function () {
+            SortTable(1);
+        });
+        
+        VersionSort.addEventListener('click', function () {
+            SortTable(2);
+        });
+        
+        function SortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.querySelector('table');
+            switching = true;
+            dir = 'asc';
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName('TD')[n];
+                    y = rows[i + 1].getElementsByTagName('TD')[n];
+                    if (dir == 'asc') {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == 'desc') {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount++;
+                } else {
+                    if (switchcount == 0 && dir == 'asc') {
+                        dir = 'desc';
+                        switching = true;
+                    }
+                }
+            }
+        }    
+
+</script>

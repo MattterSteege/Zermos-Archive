@@ -34,6 +34,7 @@ namespace Zermos_Web.Utilities
         public static float ParseFloat(string input)
         {
             if (TryParseFloat(input, out var result)) return result;
+            return 10f;
             throw new FormatException("Input string was not in a correct format.");
         }
 

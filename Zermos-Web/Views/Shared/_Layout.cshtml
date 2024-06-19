@@ -176,7 +176,7 @@ window.onload = () => {
         console.log(`Zermos-framework is geladen`);
         history.replaceState(null, null, "/");
         ReplacePage('@ViewData["url"]');
-        @Html.Raw(Context.User.Identity!.IsAuthenticated ? "Zermos.checkForUpdates();" : "")
+        @Html.Raw(Context.User.Identity!.IsAuthenticated && (Context.Request.Cookies["preview"] != null ? !Context.Request.Cookies["preview"].Contains("incognito") : true) ? "Zermos.checkForUpdates();" : "")
     }, 500);
 }
 

@@ -39,6 +39,18 @@
         <p>Als je problemen ondervindt met de JS minimizer, zet deze Preview dan aan</p>
     </div>
     
+    <div class="account-item" data-preview-id="incognito" onclick="TogglePreview('incognito')">
+        <h1>Incognito</h1>
+        <p>Is het een Ninja, is het een Hacker? Nee, ik zie het niet!</p>
+    </div>
+    
+@if(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") == "DEV") {
+    <div class="account-item" onclick="ReplacePage('@Url.Action("LoginAs", "Authentication")')">
+        <h1>Login als</h1>
+        <p>Ga naar de login als pagina</p>
+    </div>
+}
+    
     <h4>device info</h4>
     
     <div class="account-item">

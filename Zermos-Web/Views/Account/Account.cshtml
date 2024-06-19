@@ -15,7 +15,7 @@
 <div class="account-container">
     <div class="account-item" onclick="ReplacePage('@Url.Action("Debug", "Account")')" id="profile">
         <h1>Profiel</h1>
-        <p>@Model.user.email</p>
+        <p>@Model.user.email - @Model.user.name</p>
     </div>
     
     @if(Model.user.cached_somtoday_absence != null)

@@ -46,7 +46,8 @@
 
         foreach (var gradeItem in vak.grades)
         {
-            if (gradeItem.type == "DeeltoetsKolom") continue;
+            if (gradeItem.type == "DeeltoetsKolom" || gradeItem.geldendResultaat == "*") 
+                continue;
             
             var geldendResultaat = NumberUtils.ParseFloat(gradeItem.geldendResultaat);
 

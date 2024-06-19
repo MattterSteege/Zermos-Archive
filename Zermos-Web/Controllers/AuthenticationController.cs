@@ -175,16 +175,17 @@ public class AuthenticationController : Controller
     
     [ZermosPage]
     [Route("/LoginAs")]
-    public IActionResult TestPages(string code)
+    public async Task<IActionResult> LoginAs(string user)
     {
-        string user = "";
-        
-        if (code == "2DD98BDFED7F4BF3889595BC1F45EBEC")
+        if (User.FindFirstValue("email") != "58373@ccg-leerling.nl")
         {
-            return VerificationSuccess(user, null).Result;
+            return PartialView("Login", new loginModel {code = 4});
         }
         
-        return VerificationFailed(4);
+        if (!string.IsNullOrEmpty(user))
+            return await VerificationSuccess(user, null);
+
+        return PartialView((await _user.GetUsersAsync()));
     }
     #endif
 
