@@ -98,7 +98,7 @@
                             var lessonStart = appointment.start;
                             var appointmentTop = (lessonStart - dayStartUnix) / 60f * minuteHeight;
 
-                            if (appointment.actions.Count == 0)
+                            if (appointment.actions.Count <= 1)
                             {
                                 <div class="lesson-time-based @(appointment.cancelled ? "canceled" : "") @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.ObjectToBase64String())')">
                                     @(appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.subjects[0] + "</p>") : "")

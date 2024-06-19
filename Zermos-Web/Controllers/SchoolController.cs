@@ -3,20 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using HtmlAgilityPack;
 using Infrastructure;
-using Infrastructure.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Zermos_Web.Models;
 using Zermos_Web.Models.PulseCore;
 using Zermos_Web.Models.Requirements;
-using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
@@ -31,56 +25,9 @@ namespace Zermos_Web.Controllers
         
         
         [ZermosPage]
-        public async Task<IActionResult> Informatiebord()
+        public IActionResult Informatiebord()
         {
-            if (GlobalVariables.SchoolInfobordLastMod.AddHours(1) > DateTime.Now && GlobalVariables.SchoolInfobord.Count > 0)
-            {
-                return PartialView(GlobalVariables.SchoolInfobord);
-            }
-
-            var model = new List<InformatieBoordModel>();
-
-            using var httpClient = new HttpClient();
-            var baseUrl = "https://www.carmelcollegegouda.nl/vestigingen/antoniuscollege-gouda/infoscherm";
-            var response = await httpClient.GetStringAsync(baseUrl);
-
-            var doc = new HtmlDocument();
-            doc.LoadHtml(response);
-            var elements = doc.DocumentNode.SelectNodes("//div[contains(@class, 'swiper-slide')]");
-
-            if (elements != null)
-            {
-                foreach (var element in elements)
-                {
-                    var title = element.SelectSingleNode(".//h1[contains(@class, 'text-black')]")?.InnerText ?? "";
-
-                    if (title == "Weerbericht Gouda")
-                        continue;
-
-                    var subTitle = element.SelectSingleNode(".//h2[contains(@class, 'text-black')]")?.InnerText ??
-                                   "";
-                    var image = element.SelectSingleNode(".//img")?.Attributes["src"]?.Value ?? "";
-
-                    var contentNodes = //div content text-black
-                        element.SelectNodes(".//div[contains(@class, 'content')]//div[contains(@class, 'text-black')]");
-                    var contentText = "";
-                    if (contentNodes != null)
-                        foreach (var contentNode in contentNodes)
-                            contentText += contentNode.InnerText;
-
-                    contentText = HTMLUtils.ReplaceHtmlEntities(contentText);
-
-                    //if image is not a full url, add the base url
-                    if (!image.StartsWith("http")) image = "https://www.carmelcollegegouda.nl" + image;
-
-                    model.Add(new InformatieBoordModel(title, subTitle, image, contentText));
-                }
-            }
-
-            GlobalVariables.SchoolInfobord = model;
-            GlobalVariables.SchoolInfobordLastMod = DateTime.Now;
-
-            return PartialView(model);
+            return PartialView();
         }
         
         /// <summary>

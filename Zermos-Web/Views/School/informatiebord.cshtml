@@ -1,21 +1,120 @@
-﻿@model IEnumerable<InformatieBoordModel>
+﻿@model dynamic
 
 <link rel="stylesheet" href="~/css/school.css"/>
 
 <div class="news-items-holder" id="news-items-holder">
 
-    @foreach (var informatieBoordItem in Model)
-    {
-        <div class="child">
-            <div class="text-holder">
-                <h1 class="heading">@informatieBoordItem.Title</h1>
-                <p class="text">@informatieBoordItem.Content</p>
-            </div>
-            <div class="image-overlay">
-                <img @Html.Raw(informatieBoordItem.Content.Length == 0 ? "style='object-fit: contain' " : "")src="@informatieBoordItem.Image">
-                <div class="overlay"></div>
-            </div>
-        </div>
+</div>
+
+<script minimize>
+    
+    class InformatieBoordModel {
+        constructor(title, subTitle, image, content) {
+            this.Title = title;
+            this.SubTitle = subTitle;
+            this.Image = image;
+            this.Content = content;
+        }
     }
 
-</div>
+    function replaceHtmlEntities(text) {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = text;
+        return tempDiv.textContent || tempDiv.innerText || "";
+    }
+
+    async function fetchInfoBordData() {
+
+        const model = [];
+
+        try {
+            const baseUrl = "https://cors.mjtsgamer.workers.dev/https://www.carmelcollegegouda.nl/vestigingen/antoniuscollege-gouda/infoscherm";
+            const response = await fetch(baseUrl);
+            const responseData = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(responseData, 'text/html');
+            const elements = doc.querySelectorAll(".swiper-slide");
+
+            if (elements) {
+                elements.forEach(element => {
+                    const title = element.querySelector(".text-black h1")?.textContent || "";
+
+                    if (title === "Weerbericht Gouda") return;
+
+                    const subTitle = element.querySelector(".text-black h2")?.textContent || "";
+                    let image = element.querySelector("img")?.getAttribute("src") || "";
+
+                    let contentText = "";
+                    const contentNodes = element.querySelectorAll(".content .text-black");
+                    contentNodes.forEach(contentNode => {
+                        contentText += contentNode.textContent;
+                    });
+
+                    contentText = replaceHtmlEntities(contentText);
+
+                    if (!image.startsWith("http")) {
+                        image = "https://www.carmelcollegegouda.nl" + image;
+                    }
+
+                    model.push(new InformatieBoordModel(title, subTitle, image, contentText));
+                });
+            }
+
+        } catch (error) {
+            console.error("Error fetching info board data:", error);
+        }
+
+        return model;
+    }
+
+    // Example usage
+    fetchInfoBordData().then(data => {
+        console.log(data);
+        
+        var newHolder = document.getElementById("news-items-holder");
+        
+        data.forEach(informatieBoordItem => {
+            var newChild = document.createElement("div");
+            newChild.classList.add("child");
+            
+            var textHolder = document.createElement("div");
+            textHolder.classList.add("text-holder");
+            
+            var heading = document.createElement("h1");
+            heading.classList.add("heading");
+            heading.textContent = informatieBoordItem.Title;
+            
+            var subTitle = document.createElement("h2");
+            subTitle.classList.add("sub-heading");
+            subTitle.textContent = informatieBoordItem.SubTitle;
+            
+            var text = document.createElement("p");
+            text.classList.add("text");
+            text.textContent = informatieBoordItem.Content;
+            
+            textHolder.appendChild(heading);
+            textHolder.appendChild(subTitle);
+            textHolder.appendChild(text);
+            
+            var imageOverlay = document.createElement("div");
+            imageOverlay.classList.add("image-overlay");
+            
+            var image = document.createElement("img");
+            image.src = informatieBoordItem.Image;
+            image.style.objectFit = "contain";
+            
+            var overlay = document.createElement("div");
+            overlay.classList.add("overlay");
+            
+            imageOverlay.appendChild(image);
+            imageOverlay.appendChild(overlay);
+            
+            newChild.appendChild(textHolder);
+            newChild.appendChild(imageOverlay);
+            
+            newHolder.appendChild(newChild);
+        });
+    });
+    
+
+</script>

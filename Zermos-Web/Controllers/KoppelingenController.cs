@@ -473,8 +473,16 @@ namespace Zermos_Web.Controllers
             
             response = await _somtodayHttpClientWithoutRedirect.PostAsync(baseurl, Content);
             
-            var finalAuthCode = HTMLUtils.ParseQuery(response.Headers.Location.Query)["code"];
+            //redirectUri=https://inloggen.somtoday.nl/%3Fauth%3DeyJ4NXQjUzI1NiI6IkdpZ295b0kyZXcxQS00TDUweGoyWGlPdXIxdE9BMFo3M05mYmZuQXFkU3ciLCJraWQiOiJpcmlkaXVtaWRwLTE2NjgzMzc3ODYzMTA4ODY0NzQwNTkwOTk4NzcyNDAzMjI1MTM0NSIsInR5cCI6IkpXVCIsImFsZyI6IlJTMjU2In0.eyJyZW1lbWJlciI6ZmFsc2UsImFsbENsaWVudHMiOlsiRDUwRTBDMDYtMzJEMS00QjQxLUExMzctQTlBODUwQzg5MkMyIl0sInByb3QiOiJPQVVUSDIiLCJtZXRob2QiOiJwd2QiLCJub1Nlc3Npb24iOnRydWUsImNsaWVudCI6IkQ1MEUwQzA2LTMyRDEtNEI0MS1BMTM3LUE5QTg1MEM4OTJDMiIsImF1dGhUaW1lIjoiMjAyNC0wNi0wMVQxNzoxNDoxMS40NjM2MDMwNzRaIiwiZXhwIjoxNzE3MjY1NjUxLCJwYXJhbWV0ZXJzIjp7InRlbmFudF91dWlkIjpbImMyM2ZiYjk5LWJlNGItNGMxMS1iYmY1LTU3ZTdmYzRmNDM4OCJdLCJzZXNzaW9uIjpbIm5vX3Nlc3Npb24iXSwic2NvcGUiOlsib3BlbmlkIl0sInJlc3BvbnNlX3R5cGUiOlsiY29kZSJdLCJyZWRpcmVjdF91cmkiOlsic29tdG9kYXlsZWVybGluZzovL29hdXRoL2NhbGxiYWNrIl0sInN0YXRlIjpbIkprVXZ0bXI5Il0sImNvZGVfY2hhbGxlbmdlX21ldGhvZCI6WyJTMjU2Il0sIm9yaWdpbmFsX2p3dGlkIjpbIiJdLCJjbGllbnRfaWQiOlsiRDUwRTBDMDYtMzJEMS00QjQxLUExMzctQTlBODUwQzg5MkMyIl0sImNvZGVfY2hhbGxlbmdlIjpbImZ1WjlrWmNQYlZ6VlpHOW1nMkdtY0JMUENMSUhOZC1jNG8tVTlQaWJwLTAiXSwia25mX2VudHJlZV9ub3RpZmljYXRpb24iOiJrbmZfZW50cmVlX25vdGlmaWNhdGlvbiJ9fQ.rf9oI3KaNDdYTazxbFa3MimkSwaoEuP-CXrrrFLHCeSfDIRv1Mwrzx55Noh71kzz7qUevFAcRb68XVf5BmP2CgfRgBBYC0DKg_9nXnEld9wN_LoZgeXyijLkMzWf9_MtlrL4VMcfG86W-thKQv371eSn6cv810WbHcmaxO5rrDIjwXPC6ul7_OcfBT1D4hhuFq8pdykQ0nBCQAs-Gno9FUqkxZuTVQi_CComLToMFSaM9IGlMI-o3HC1t5ctkje6UoZe9IlT-MrK_KQcmQVaUGzvXlPug9-5JBNdza97uee1TflDi8ZscVnjB_QBWMX5UeZq2assxG7WUcZbVVmKbQ
+            //deze moet je vinden en urldecoden en dan de ?auth= eruit halen
+            //dan moet je https://inloggen.somtoday.nl/?0-1.-panel-signInForm&auth= invullen met data zoals hierboven
+            //dan moet je https://inloggen.somtoday.nl/login?2-1.-passwordForm invullen met data zoals hierboven
+            //dan krijg je de somtodayleerling://oauth/callback?code= en die moet je hieroner invullen
             
+            
+            //HIERONDER IS BROKEN!!
+            var finalAuthCode = HTMLUtils.ParseQuery(response.Headers.Location.Query)["code"];
+
             if (finalAuthCode == null)
                 return Ok("failed, no finalAuthCode found");
             

@@ -6,9 +6,6 @@ namespace Zermos_Web.Controllers;
 
 public class GlobalVariables
 {
-    public List<InformatieBoordModel> SchoolInfobord; // List of all the information for the school infobord page
-    public DateTime SchoolInfobordLastMod; // Last modified date of the school infobord page
-    
     public InfowijsEventsModel SchoolJaarKalender; // List of all the information for the school jaar kalender page
     public DateTime SchoolJaarKalenderLastMod; // Last modified date of the school jaar kalender page
 }

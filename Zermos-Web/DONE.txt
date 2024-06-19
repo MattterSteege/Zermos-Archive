@@ -1,4 +1,1 @@
-﻿0.4.8.1 - [update naam hier]
-
-- algemeen
-    - Nog meer compression van bestanden, dus snellere laadtijden
+﻿
