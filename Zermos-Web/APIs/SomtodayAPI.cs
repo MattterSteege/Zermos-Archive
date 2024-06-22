@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Infrastructure.Entities;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Asn1.Ocsp;
 using Zermos_Web.Models;
+using Zermos_Web.Models.SomtodayLeermiddelen;
 using Zermos_Web.Models.SomtodayAfwezigheidModel;
-using Zermos_Web.Models.somtodayHomeworkModel;
 using Zermos_Web.Utilities;
 
 namespace Zermos_Web.APIs;
@@ -66,11 +63,10 @@ public class SomtodayAPI
         if (response.IsSuccessStatusCode == false)
             return null;
         
-        
         return JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(await response.Content.ReadAsStringAsync());
     }
     
-    public async Task<SomtodayAfwezigheidModel> GetStudiemateriaal(user user)
+    public async Task<SomtodayLeermiddelenModel> GetStudiemateriaal(user user)
     {
         var baseurl = $"https://api.somtoday.nl/rest/v1/studiemateriaal/algemeen/{user.somtoday_student_id}";
         
@@ -83,7 +79,8 @@ public class SomtodayAPI
         if (response.IsSuccessStatusCode == false)
             return null;
         
+        var json = await response.Content.ReadAsStringAsync();
         
-        return JsonConvert.DeserializeObject<SomtodayAfwezigheidModel>(await response.Content.ReadAsStringAsync());
+        return JsonConvert.DeserializeObject<SomtodayLeermiddelenModel>(await response.Content.ReadAsStringAsync());
     }
 }

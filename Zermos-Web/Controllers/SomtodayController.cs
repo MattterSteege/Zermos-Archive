@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 using Zermos_Web.APIs;
 using Zermos_Web.Models;
 using Zermos_Web.Models.Requirements;
-using Zermos_Web.Models.SomtodayAfwezigheidModel;
+using Zermos_Web.Models.SomtodayLeermiddelen;
 using Zermos_Web.Models.SomtodayGradesModel;
 using Zermos_Web.Models.somtodayHomeworkModel;
 using Zermos_Web.Utilities;
@@ -772,29 +772,84 @@ namespace Zermos_Web.Controllers
         [HttpGet("/Somtoday/Afwezigheid")]
         public async Task<IActionResult> Afwezigheid()
         {
-            // if (Request.Cookies.ContainsKey("cached-somtoday-absence"))
-            //     return NoContent();
+            var user = ZermosUser;
+            
+            if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
+                user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
+            var somtodayAfwezigheid = await somtodayApi.GetAfwezigheidAsync(user);
+            if (somtodayAfwezigheid == null) return NoContent();
+            return Json(JsonConvert.SerializeObject(somtodayAfwezigheid));
+        }
+        #endregion
+        
+        #region leermiddelen]
+        [Authorize]
+        [ZermosPage]
+        [SomtodayRequirement]
+        [HttpGet("/Somtoday/Leermiddelen")]
+        public async Task<IActionResult> Leermiddelen()
+        {
+            if (Request.Cookies.ContainsKey("cached-somtoday-leermiddelen") && DateTime.TryParse(Request.Cookies["cached-somtoday-leermiddelen"], out var date) && date.AddDays(60) > DateTime.Now)
+            {
+                var _somtodayLeermiddelen = JsonConvert.DeserializeObject<SomtodayLeermiddelenModel>(ZermosUser.cached_somtoday_leermiddelen ?? "{\"items\": []}");
+                var _customLeermiddelen = JsonConvert.DeserializeObject<SomtodayLeermiddelenModel>(ZermosUser.custom_leermiddelen ?? "{\"items\": []}");
+                _somtodayLeermiddelen.items.AddRange(_customLeermiddelen.items);
+                return PartialView(_somtodayLeermiddelen);
+            }
             
             var user = ZermosUser;
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
                 user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
 
-            var somtodayAfwezigheid = await somtodayApi.GetAfwezigheidAsync(user);
+            var somtodayLeermiddelen = await somtodayApi.GetStudiemateriaal(user);
+            var customLeermiddelen = JsonConvert.DeserializeObject<SomtodayLeermiddelenModel>(user.custom_leermiddelen ?? "{\"items\": []}");
+            somtodayLeermiddelen.items.AddRange(customLeermiddelen.items);
             
-            if (somtodayAfwezigheid == null) return NoContent();
+            if (somtodayLeermiddelen.items.Count == 0)
+                return NoContent();
             
-            string json = JsonConvert.SerializeObject(somtodayAfwezigheid);
+            string json = JsonConvert.SerializeObject(somtodayLeermiddelen);
             
             ZermosUser = new user
             {
-                cached_somtoday_absence = json
+                cached_somtoday_leermiddelen = json
             };
             
-            Response.Cookies.Append("cached-somtoday-absence", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(15)});
+            Response.Cookies.Append("cached-somtoday-leermiddelen", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(15)});
             
-            HttpContext.Response.ContentType = "application/json";
-            return Ok(json);
+            return PartialView(somtodayLeermiddelen);
+        }
+        
+        [Authorize]
+        [SomtodayRequirement]
+        [HttpPost("/Somtoday/Leermiddelen")]
+        public IActionResult LeermiddelenPost(string url, string title, string methode, string uitgever)
+        {
+            var leermiddelen = JsonConvert.DeserializeObject<SomtodayLeermiddelenModel>(ZermosUser.custom_leermiddelen ?? "{\"items\": []}");
+            
+            leermiddelen.items.Add(new Models.SomtodayLeermiddelen.Item
+            {
+                product = new Product
+                {
+                    title = title,
+                    url = url,
+                    methodeInformatie = new MethodeInformatie
+                    {
+                        dashboardMethodeNaam = title,
+                        methode = methode,
+                        uitgever = uitgever
+                    }
+                },
+                isCustom = true
+            });
+            
+            ZermosUser = new user
+            {
+                custom_leermiddelen = JsonConvert.SerializeObject(leermiddelen)
+            };
+            
+            return Ok(leermiddelen);
         }
         #endregion
         

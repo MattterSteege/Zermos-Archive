@@ -1,0 +1,50 @@
+﻿@model Zermos_Web.Models.SomtodayLeermiddelen.SomtodayLeermiddelenModel
+
+<link rel="stylesheet" href="/css/somtoday.css">
+
+<div class="leermiddelen-container">
+    @foreach (var leermiddel in Model.items)
+    {
+        <div class="leermiddel" onclick="window.open('@leermiddel.URL')">
+            <i class="fa-solid fa-external-link"></i>
+            <h1>@leermiddel.Title</h1>
+            <p>@leermiddel.DashboardMethodeNaam • @leermiddel.Uitgever</p>
+        </div>
+    }
+</div>
+
+<script>
+    addButtonToPage('fa-plus', () => {
+        new ZermosModal()
+        .setTitle('Leermiddel toevoegen')
+        .addText('Voeg je eigen leermiddelen toe aan Zermos, vul de volgende gegevens in:')
+        .addInput('URL', 'URL van het leermiddel')
+        .addInput('Title', 'Titel van het leermiddel')
+        .addInput('uitgever', 'Uitgever van het leermiddel')
+        .setSubmitButtonLabel('Toevoegen')
+        .onSubmit((url, title, uitgever) => {
+        
+            const data = {
+                url: encodeURI(url),
+                title: encodeURI(title),
+                uitgever: encodeURI(uitgever)
+            }
+        
+            fetch('/Somtoday/Leermiddelen?title=' + data.title + '&url=' + data.url + '&uitgever=' + data.uitgever, {
+                method: 'POST'
+            })
+            .then(response => {
+                if (response.ok) {
+                    ReplacePage('/Somtoday/Leermiddelen')
+                } else {
+                    new ZermosModal()
+                    .setTitle('Fout')
+                    .addText(data.error)
+                    .addButton('Sluiten')
+                    .open()
+                }
+            })
+        })
+        .open()
+    })
+</script>

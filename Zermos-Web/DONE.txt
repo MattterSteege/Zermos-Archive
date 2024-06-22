@@ -2,3 +2,10 @@
 
 - School - informatiebord
     - Het informatiebord wordt nu client-side gerenderd, waardoor de server minder belast wordt en de pagina sneller laadt. Ook wordt de data lokaal gecached, zodat de pagina niet elke keer opnieuw hoeft te laden.
+    
+- Somtoday - leermiddelen!?!?!?
+    - Jaha, ik heb na diep graven een nieuwe, betrouwbare manier gevonden om de leermiddelen op te halen. Dit is nu uiteraard gelijk geïmplementeerd in de app.
+    - Je kan nu ook je eigen leermiddelen toevoegen, handig voor de boeken die níet in Somtoday staan.
+    
+- Koppelingen - Somtoday
+    - De koppeling met SOM werkt weer party emojie: ![PARTEYYYYY](https://cultofthepartyparrot.com/parrots/hd/parrot.gif)

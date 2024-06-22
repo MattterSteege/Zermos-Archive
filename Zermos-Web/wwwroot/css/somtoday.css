@@ -759,11 +759,11 @@
     0% {
         transform: scale(1);
     }
-    
+
     50% {
         transform: scale(1.5) rotate(10deg);
     }
-    
+
     100% {
         transform: scale(1);
     }
@@ -774,7 +774,7 @@
         left: calc(180px + var(--padding) * 4 + 96px);
         top: var(--padding);
     }
-    
+
     .vak {
         height: 100px;
     }
@@ -793,7 +793,7 @@
         border-radius: var(--border-radius);
         margin: unset;
     }
-    
+
     .left .bottom-right-add-button {
         bottom: 16px;
         left: 16px;
@@ -821,7 +821,7 @@
         font-size: unset;
         height: 100%;
     }
-    
+
     .homework-search .OpenSearchButton i:before, .bottom-right-add-button .OpenSearchButton i:before {
         color: var(--white-color);
         width: 16px;
@@ -845,17 +845,17 @@
         height: 32px;
         width: 32px;
     }
-    
+
     .homework-search .search-text {
         display: none;
     }
-    
+
     .homework-search .OpenSearchButton {
         padding-right: unset;
         width: 32px;
         transform: rotateZ(90deg);
     }
-    
+
     .homework-search .OpenSearchButton i {
         margin-left: unset;
     }
@@ -888,4 +888,58 @@
         opacity: 1;
     }
 
+}
+
+/*
+<div class="leermiddelen-container">
+    <div class="leermiddel" onclick="window.open('https://toegang.noordhoff.nl/9789001745431')">
+        <h1>Getal &amp; Ruimte</h1>
+        <p>Noordhoff</p>
+        <p>https://toegang.noordhoff.nl/9789001745431</p>
+    </div>
+</div>
+
+*/
+
+.leermiddelen-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(355px, 100% / 3)), 1fr));
+    grid-gap: var(--padding);
+}
+
+.leermiddel {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: var(--padding);
+    border-radius: var(--border-radius);
+    background: var(--overlay-color);
+    width: 100%;
+    padding: var(--padding);
+    box-shadow: var(--box-shadow);
+    font-size: var(--font-size);
+    cursor: pointer;
+    position: relative;
+}
+
+.leermiddel i {
+    font-size: calc(var(--font-size)* 1.5);
+    color: var(--text-color);
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: var(--padding);
+}
+
+.leermiddel h1 {
+    font-size: var(--font-size-heading);
+    font-weight: 700;
+}
+
+.leermiddel p {
+    font-size: var(--font-size);
+    font-weight: 600;
+}
+
+.leermiddel:hover {
+    background: var(--overlay-overlay-color);
 }

@@ -24,17 +24,14 @@ namespace Infrastructure.Entities
         public string somtoday_refresh_token { get; set; }
         public string somtoday_student_id { get; set; }
         public string infowijs_access_token { get; set; }
-        //public string teams_access_token { get; set; }
-        //public string teams_refresh_token { get; set; }
 
         //cache related
         public string cached_somtoday_grades { get; set; }
         public string cached_somtoday_homework { get; set; }
-        public string cached_somtoday_absence { get; set; }
-        //public string cached_infowijs_calendar { get; set; }
+        public string cached_somtoday_leermiddelen { get; set; }
+        public string custom_leermiddelen { get; set; }
         public string cached_infowijs_news { get; set; }
-        //public string cached_school_informationscreen { get; set; }
-        //public string cached_zermelo_schedule { get; set; }
+
         
         //Settings
         public string settings { get; set; }
