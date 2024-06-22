@@ -4,6 +4,30 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - Versie 0.5 - 22-06-2024
+0.5 Guess who's back, back again V2
+
+- algemeen
+    - Mocht er een error zijn tijdens het aanvragen van nieuwe pagina's dan wordt je URL aangepast naar de opgevraagde pagina zodat je, als je opnieuw probeert, je niet de vorige pagina weer ziet.
+    
+- Account - Debug
+    - Mocht je cache niet goed werken, dan kan je nu je cache legen via de debug pagina.
+
+- School - informatiebord
+    - Het informatiebord wordt nu client-side gerenderd, waardoor de server minder belast wordt en de pagina sneller laadt. Ook wordt de data lokaal gecached, zodat de pagina niet elke keer opnieuw hoeft te laden.
+    
+- Somtoday - leermiddelen!?!?!?
+    - Jaja, ik heb na diep graven een nieuwe, betrouwbare manier gevonden om de leermiddelen op te halen. Dit is nu uiteraard gelijk geïmplementeerd in de app.
+    - Je kan nu ook je eigen leermiddelen toevoegen, handig voor de boeken die níet in Somtoday staan.
+
+- Somtoday - afwezigheid
+    - Je afwezigheid loopt nu niet achter, maar wordt elke keer opnieuw opgehaald. Dit zorgt ervoor dat je altijd de meest recente afwezigheid ziet.
+
+- Koppelingen - Somtoday
+    - De koppeling met SOM werkt weer <img src="https://cultofthepartyparrot.com/parrots/hd/parrot.gif" alt="PARTEYYYYY" height="20"/>
+    
+
+
 # Release Notes - Versie 0.4.8.1 - 14-06-2024
 0.4.8.1 - lang geleden zeg...
 
