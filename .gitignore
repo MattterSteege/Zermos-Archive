@@ -1,10 +1,10 @@
 ﻿.idea
 .gitignore
 .dockerignore
-/bin
-/obj
-/Zermos-Web/bin
-/Zermos-Web/obj
-/Infrastructure/bin
-/Infrastructure/obj
-/Zermos-Web/Properties
+bin
+obj
+Zermos-Web/bin
+Zermos-Web/obj
+Infrastructure/bin
+Infrastructure/obj
+Zermos-Web/Properties

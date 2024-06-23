@@ -40,6 +40,12 @@
     margin-bottom: var(--padding);
 }
 
+.modal-background .modal .input-container hr {
+    margin: var(--padding) 0;
+    border: none;
+    border-top: 1px solid var(--text-color);
+}
+
 #submitBtn {
     margin-bottom: 0;
 }

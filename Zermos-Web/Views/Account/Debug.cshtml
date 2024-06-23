@@ -21,6 +21,11 @@
         <h1>JS refreshen</h1>
         <p>Als Zermos niet helemaal lekker werkt, dan kan je hier de JS refreshen. Ik kan je ook aanraden om gelijk de CSS te refreshen, maar dat hoeft niet.</p>
     </div>
+
+    <div class="account-item" onclick="RefreshCache()">
+        <h1>Cache refreshen</h1>
+        <p>Mocht je problemen ondervinden met de cache, dan kan je hier de cache (bijv. cijfers, huiswerk etc.) verwijderen, Zermos vraagt dan alles de eerstvolgende keer opnieuw aan.</p>
+    </div>
     
     <h4>previews</h4>
     
@@ -105,6 +110,17 @@ function RefreshJS() {
         if (script.src !== undefined) {
             //replace the ?v= with a random string of 10 long
             script.src = script.src.replace(/\?v=.*$/, "?v=" + Math.random().toString(36).substring(2, 12));
+        }
+    }
+}
+
+function RefreshCache() {
+    //verwijder alle cookies die 'cached' in de naam hebben
+    var cookies = document.cookie.split(";");
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        if (cookie.includes("cached")) {
+            document.cookie = cookie + "; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         }
     }
 }

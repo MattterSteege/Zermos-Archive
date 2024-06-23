@@ -49,8 +49,46 @@
     gap: var(--padding-small);
     width: 80%;
     max-height: min-content;
-    flex-direction: column;
+    flex-direction: row;
+    font-size: var(--font-size-heading);
+    font-weight: 700;
 }
+
+.login .form-control.login-explanation:hover {
+    cursor: pointer;
+    background: var(--overlay-overlay-color);
+}
+
+.login .form-control svg rect {
+    transition: transform 0.2s;
+}
+.login .form-control svg {
+    /* width: 100%; */
+    height: 20px;
+    object-fit: scale-down;
+    overflow: hidden;
+    z-index: 2;
+    transform: translate(0, 0);
+}
+.login .form-control.login-explanation svg {
+    width: calc(var(--font-size) * 1.5 + 2px);
+    height: calc(var(--font-size)* 1.5 + 2px);
+}
+
+.login .form-control.login-explanation:hover svg rect:nth-child(1) {
+    transform: translate(6px, 0);
+}
+.login .form-control.login-explanation:hover svg rect:nth-child(2) {
+    transform: translate(0, -6px);
+}
+.login .form-control.login-explanation:hover svg rect:nth-child(3) {
+    transform: translate(0, 6px);
+}
+.login .form-control.login-explanation:hover svg rect:nth-child(4) {
+    transform: translate(-6px, 0);
+}
+
+
 
 .login .form-control .input {
     height: var(--button-height);

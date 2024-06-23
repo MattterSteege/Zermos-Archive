@@ -778,7 +778,7 @@ namespace Zermos_Web.Controllers
                 user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
             var somtodayAfwezigheid = await somtodayApi.GetAfwezigheidAsync(user);
             if (somtodayAfwezigheid == null) return NoContent();
-            return Json(JsonConvert.SerializeObject(somtodayAfwezigheid));
+            return Json(somtodayAfwezigheid);
         }
         #endregion
         

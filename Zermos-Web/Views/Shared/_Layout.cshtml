@@ -70,14 +70,14 @@
                 </a>
             </li>
 
-            @* <li id="leermiddelen"> *@
-            @*     <a onclick="ReplacePage('@Url.Action("Leermiddelen", "Somtoday")')"> *@
-            @*         <div class="menu-item"> *@
-            @*             <i class="fa-solid fa-book menu-icons fa-fw"></i> *@
-            @*             <p>Leermiddelen</p> *@
-            @*         </div> *@
-            @*     </a> *@
-            @* </li> *@
+            <li id="leermiddelen">
+                <a onclick="ReplacePage('@Url.Action("Leermiddelen", "Somtoday")')">
+                    <div class="menu-item">
+                        <i class="fa-solid fa-book menu-icons fa-fw"></i>
+                        <p>Leermiddelen</p>
+                    </div>
+                </a>
+            </li>
 
             <h5 class="Heading">School</h5>
 
@@ -360,6 +360,7 @@ function ReplacePage(url) {
                     dot.style.animation = "unset";
                     dot.style.transform = "scale(1)";
                 });
+                window.location.hash = url;
                 isRunning = false;
             }
         },
