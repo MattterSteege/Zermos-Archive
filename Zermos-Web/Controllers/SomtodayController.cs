@@ -46,17 +46,15 @@ namespace Zermos_Web.Controllers
             {
                 return PartialView(JsonConvert.DeserializeObject<SomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? string.Empty));
             }
-
+            
             var user = ZermosUser;
-
-            var access_token = user.somtoday_access_token;
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
-                access_token = await RefreshToken(user.somtoday_refresh_token);
+                user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
             }
 
-            var grades = await fetchGrades(access_token, user.somtoday_student_id);
+            var grades = await somtodayApi.GetGrades(user);
             
             ZermosUser = new user
             {
@@ -81,15 +79,13 @@ namespace Zermos_Web.Controllers
             else
             {
                 var user = ZermosUser;
-
-                var access_token = user.somtoday_access_token;
             
                 if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
                 {
-                    access_token = await RefreshToken(user.somtoday_refresh_token);
+                    user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
                 }
 
-                grades = await fetchGrades(access_token, user.somtoday_student_id);
+                grades = await somtodayApi.GetGrades(user);
             
                 ZermosUser = new user
                 {
@@ -129,15 +125,13 @@ namespace Zermos_Web.Controllers
             else
             {
                 var user = ZermosUser;
-
-                var access_token = user.somtoday_access_token;
             
                 if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
                 {
-                    access_token = await RefreshToken(user.somtoday_refresh_token);
+                    user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
                 }
 
-                somtodayGradesModel = await fetchGrades(access_token, user.somtoday_student_id);
+                somtodayGradesModel = await somtodayApi.GetGrades(user);
 
                 ZermosUser = new user
                 {
@@ -401,74 +395,6 @@ namespace Zermos_Web.Controllers
             
             return chart;
         }
-        
-        public SomtodayGradesModel Sort(SomtodayGradesModel grades)
-        {
-            if (grades == null) return new SomtodayGradesModel() {items = new List<Item>()};
-            
-            grades.items = grades.items.OrderBy(x => x.datumInvoer).ToList();
-
-            foreach (var item in grades.items.Where(x => x.resultaatLabelAfkorting == "V"))
-                item.geldendResultaat = "7";
-            
-            foreach (var item in grades.items.Where(x => x.resultaatLabelAfkorting == "G"))
-                item.geldendResultaat = "8";
-
-
-            grades.items = grades.items
-                .Where(x => !(string.IsNullOrEmpty(x.omschrijving) && x.weging == 0))
-                //.Where(x => (x.type != "DeeltoetsKolom" || x.type != "SamengesteldeToetsKolom"))
-                .Where(x => x.geldendResultaat != null)
-                .ToList();
-
-            return grades;
-        }
-
-        public async Task<SomtodayGradesModel> fetchGrades(string access_token, string somtoday_student_id)
-        {
-                        var baseUrl =
-                $"https://api.somtoday.nl/rest/v1/resultaten/huidigVoorLeerling/{somtoday_student_id}?additional=samengesteldeToetskolomId&additional=resultaatkolomId";
-
-            _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + access_token);
-            _httpClient.DefaultRequestHeaders.Add("Range", "items=0-99");
-            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-
-            var response = await _httpClient.GetAsync(baseUrl);
-
-            var grades =
-                JsonConvert.DeserializeObject<SomtodayGradesModel>(await response.Content.ReadAsStringAsync());
-
-            if (response.IsSuccessStatusCode == false)
-            {
-                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je cijfers konden niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", NotificationCenter.NotificationType.ERROR);
-                return new SomtodayGradesModel {items = new List<Item>()};
-            }
-
-            if (int.TryParse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1],
-                    out var total))
-            {
-                
-                
-                var requests = total / 100 * 100;
-
-                for (var i = 100; i < requests; i += 100)
-                {
-                    _httpClient.DefaultRequestHeaders.Clear();
-                    _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + access_token);
-                    _httpClient.DefaultRequestHeaders.Add("Range", $"items={i}-{i + 99}");
-                    _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-
-                    response = await _httpClient.GetAsync(baseUrl);
-
-                    var _grades =
-                        JsonConvert.DeserializeObject<SomtodayGradesModel>(
-                            await response.Content.ReadAsStringAsync());
-                    grades.items.AddRange(_grades.items);
-                }
-            }
-
-            return Sort(grades);
-        }
 
         [Authorize]
         [HttpGet("/Somtoday/Cijfers/GenereerToken")]
@@ -478,15 +404,13 @@ namespace Zermos_Web.Controllers
             expires_at ??= DateTime.Now.AddDays(7);
             
             var user = ZermosUser;
-
-            var access_token = user.somtoday_access_token;
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
-                access_token = await RefreshToken(user.somtoday_refresh_token);
+               user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
             }
 
-            var grades = await fetchGrades(access_token, user.somtoday_student_id);
+            var grades = await somtodayApi.GetGrades(ZermosUser);
             
             ZermosUser = new user
             {
@@ -571,7 +495,7 @@ namespace Zermos_Web.Controllers
             
             if (Request.Cookies.ContainsKey("cached-somtoday-homework"))
             {
-                var cache = (ZermosUser).cached_somtoday_homework;
+                var cache = ZermosUser.cached_somtoday_homework;
                 var homework = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(cache);
                 homework.items.AddRange(GetRemappedCustomHuiswerk());
                 return PartialView(Sort(homework));
@@ -782,7 +706,7 @@ namespace Zermos_Web.Controllers
         }
         #endregion
         
-        #region leermiddelen]
+        #region leermiddelen
         [Authorize]
         [ZermosPage]
         [SomtodayRequirement]
