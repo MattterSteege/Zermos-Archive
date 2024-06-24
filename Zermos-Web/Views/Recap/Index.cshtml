@@ -1,2 +1,84 @@
-﻿@model dynamic
+﻿@model Zermos_Web.Controllers.RecapModel
 
+@{
+// //The following slides will be shown in the recap:
+// //cijfers
+//
+//
+// Dit jaar bleven ook je cijfers niet achter, en je bent uiteindelijke met een {gemiddeldCijfer} geeindigd...
+// ===========================================================
+// Je hebt in totaal {totalGrades} cijfers gehaald, waarvan {totalVoldoendes} voldoendes en {totalOnvoldoendes} onvoldoendes.
+// ===========================================================
+// Het hoogste cijfer dat je hebt gehaald was een {highestGrade} en het laagste cijfer was een {lowestGrade}.
+// ===========================================================
+// De meest voorkomende afgeronde cijfer was: {topGrade}
+// ===========================================================
+// De beste vakken waren: {topSubjects}
+// De slechtste vakken waren: {worstSubjects}
+// ===========================================================
+// Je hebt in totaal {totalPoints} punten gehaald, en dat is een gemiddelde van {averagePoints} punten per cijfer.
+// ===========================================================
+// En dan nu, 2 leugens en 1 waarheid:
+// 1. {lie1}
+// 2. {lie2}
+// 3. {truth}
+//
+//
+//
+//
+// //rooster
+//
+//
+// Dit schooljaar was weer wild!
+// ===========================================================
+// Je hebt {totalClasses} lessen gehad, waarvan er {canceledClasses} uitvielen.
+// Daardoor heb je een grande totaal van {hoursInClass} uur en {minutesInClass} minuten in de les gezeten.
+// ===========================================================
+// Je hebt {examClasses} examens gehad en {activityClasses} activiteiten.
+// Dan blijven er nog {normalClasses} normale lessen over.
+// ===========================================================
+// Er waren dit jaar {wierdLessonDurationClasses} lessen die niet 50 minuten duurden.
+// ===========================================================
+// Je hebt met al die lessen natuurlijk ook veel verschillende docenten gehad.
+// In totaal heb je {totalTeachers} verschillende docenten gehad.
+// En de meest voorkomende docenten waren: {topTeachers}
+// De meest voorkomende vakken waren: {topSubjects}
+// Het vak dat het meeste uitviel was: {mostCanceledSubject} met {totalCanceledClasses} uitgevallen lessen. Dat betekent een wel/niet ratio van {cancelRatio} / percentage van {cancelPercentage}%
+// ===========================================================
+// Ook de lokalen blijven niet achter.
+// In totaal heb je {totalClassrooms} verschillende lokalen gehad.
+// En de meest voorkomende lokalen waren: {topClassrooms}
+// Het lokaal dat het meeste gebruikt werd was: {mostUsedClassroom}, je hebt hier {mostUsedClassroomCount} lessen doorgebracht.
+}
+
+<link rel="stylesheet" href="/css/recap.css">
+<link rel="stylesheet" href="/css/recap-img.css">
+
+<div class="loading-overlay"></div>
+
+<div class="slide-container">
+    <div class="slide" style="background: #ff5b49">
+        <div class="slide-content">
+            <h1>Zermos Recap!</h1>
+            <p>Er is dit jaar weer veel gebeurt, maar nu gaat het om jouw. Hier is een recap van jouw schooljaar!</p>
+        </div>
+        <div class="background">
+            <div class="rainbow-flower"style="top: -10%;left: -20%;width: 75%;height: 75%;transform: rotateZ(316deg);"></div>
+            <div class="silver-wiggle"></div>
+            <div class="lavender-wiggle"></div>
+        </div>
+    </div>
+        
+</div>
+
+<script>
+    
+    //Zermos.mainAfterLoad = () => {
+        FullScreenMain();
+        //reverse the slide order so the first slide is shown first
+        const slides = document.querySelectorAll('.slide');
+        slides.forEach((slide, index) => {
+            slide.style.zIndex = slides.length - index;
+        });
+    //}
+</script>

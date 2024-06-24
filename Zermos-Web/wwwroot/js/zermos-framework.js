@@ -631,21 +631,15 @@ function HasPreview(preview) {
 }
 
 function FullScreenMain() {
-  document
-    .getElementsByClassName("sidebar")[0]
-    ?.style.setProperty("display", "none", "important");
-  document
-    .getElementById("content")
-    .setAttribute("style", "width:100% !important; opacity: 0");
-  document
-    .getElementById("main")
-    .setAttribute("style", "width: 100%; left: 0; to: 0; padding: 0;");
+  document.getElementsByClassName("sidebar")[0].setAttribute("style", "display: none");
+  document.getElementsByClassName("top-bar")[0]?.setAttribute("style", "display: none !important;");
+  document.getElementById("content").setAttribute("style", "width:100% !important; opacity: 0");
+  document.getElementById("main").setAttribute("style", "width: 100%; left: 0; to: 0; padding: 0;");
 }
 
 function UnFullScreenMain() {
-  document
-    .getElementsByClassName("sidebar")[0]
-    ?.style.removeProperty("display");
+  document.getElementsByClassName("sidebar")[0].removeAttribute("style");
+  document.getElementsByClassName("top-bar")[0].removeAttribute("style");
   document.getElementsByClassName("top-bar")[0].removeAttribute("style");
   document.getElementById("main").removeAttribute("style");
 }
