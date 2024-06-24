@@ -51,6 +51,13 @@ namespace Zermos_Web.Controllers
         [Authorize]
         public IActionResult UpdateSetting(string key, string value)
         {
+            #if DEBUG
+            if (key == "version_used")
+            {
+                return BadRequest("You may not alter this property when in debug mode");
+            }
+            #endif
+            
             //only if the property which is being updated is a marked with the 'SettingAttribute'
             var userToUpdate = ZermosUser;
             if (userToUpdate == null) return BadRequest("No account was found");

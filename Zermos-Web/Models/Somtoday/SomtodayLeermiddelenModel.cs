@@ -8,9 +8,9 @@ public class Item
     public Product product { get; set; }
     public string URL {get => product.url;}
     public string Title {get => product.title;}
-    public string Methode {get => product.methodeInformatie.methode;}
-    public string Uitgever {get => product.methodeInformatie.uitgever;}
-    public string DashboardMethodeNaam {get => product.methodeInformatie.dashboardMethodeNaam;}
+    public string Methode => product.methodeInformatie?.methode;
+    public string Uitgever => product.methodeInformatie?.uitgever;
+    public string DashboardMethodeNaam => product.methodeInformatie?.dashboardMethodeNaam;
     public bool isCustom { get; set; }
 }
 

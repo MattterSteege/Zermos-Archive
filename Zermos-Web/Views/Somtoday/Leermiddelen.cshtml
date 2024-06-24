@@ -8,7 +8,14 @@
         <div class="leermiddel" onclick="window.open('@leermiddel.URL')">
             <i class="fa-solid fa-external-link"></i>
             <h1>@leermiddel.Title</h1>
-            <p>@leermiddel.DashboardMethodeNaam • @leermiddel.Uitgever</p>
+            
+            @{
+                List<string> desc = new(){};
+                desc = leermiddel.Uitgever != null ? desc.Append(leermiddel.Uitgever).ToList() : desc;
+                desc = leermiddel.DashboardMethodeNaam != null ? desc.Append(leermiddel.DashboardMethodeNaam).ToList() : desc;
+            }
+            
+            <p>@string.Join(" • ", desc)</p>
         </div>
     }
 </div>
