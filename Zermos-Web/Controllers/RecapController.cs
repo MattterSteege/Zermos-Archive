@@ -30,6 +30,22 @@ public class RecapController : BaseController
     [Route("/Recap")]
     public async Task<IActionResult> Index()
     {
+        //if 28-06-2023 17:00:00 hasn't passed yet, show countdown
+        var now = DateTime.Now;
+        var releaseDate = new DateTime(2024, 6, 28, 17, 0, 0);
+        var offset = releaseDate - now;
+        if (offset.TotalSeconds > 0)
+        {
+            return PartialView("Countdown");
+        }
+
+        return await Builder();
+    }
+
+    [Authorize]
+    [ZermosPage]
+    public async Task<IActionResult> Builder()
+    {
         RecapModel model = new() { };
         
         var user = ZermosUser;
@@ -176,7 +192,7 @@ public class RecapController : BaseController
 
         #endregion
         
-        return PartialView(model);
+        return PartialView("Index", model);
     }
     
     [NonAction]

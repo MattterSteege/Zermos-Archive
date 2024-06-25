@@ -92,7 +92,9 @@
     width: 100%;
     margin: auto;
     overflow: hidden;
-    position: relative;
+    top: 0;
+    left: 0;
+    position: fixed;
     background: #191919;
     justify-items: center;
     align-items: center;
@@ -358,4 +360,23 @@
         left: 10px;
         bottom: 10px
     }
+}
+
+#countdown-desc {
+    font-size: 300%;
+    color: var(--text-color);
+    margin-bottom: 20px;
+    text-align: center;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+#countdown {
+    font-size: 400%;
+    color: var(--text-color);
+    margin-bottom: 20px;
+    text-align: center;
+    margin-left: 15%;
+    margin-right: 15%;
+    font-weight: 700;
 }

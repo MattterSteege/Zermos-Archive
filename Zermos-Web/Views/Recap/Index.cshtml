@@ -4,19 +4,12 @@
 
 <div class="loading-overlay user-select-none"></div>
 
-@* <div class="next" onclick="nextSlide()"> *@
-@*     <i class="fas fa-chevron-right"></i> *@
-@* </div> *@
-@* *@
-@* <div class="prev" style="display: none" onclick="previousSlide()"> *@
-@*     <i class="fas fa-chevron-left"></i> *@
-@* </div> *@
 
 <div class="slide-container">
     <div class="slide">
         <div class="slide-content">
             <h1>Zermos Recap!</h1>
-            <p>Er is dit jaar weer veel gebeurd, maar nu gaat het om jou. Hier is een recap van jouw schooljaar! (Swipe ->)</p>
+            <p>Er is dit jaar weer veel gebeurd, maar nu gaat het om jou. Hier is een recap van jouw schooljaar! (klik)</p>
         </div>
         <div class="background">
             <svg></svg>
@@ -286,8 +279,14 @@
     
     var colorPalvars = 4;
     
-    FullScreenMain();
-    main.requestFullscreen();
+    main.requestFullscreen()
+    .then(() => {
+        console.log('full screen');
+    })
+    .catch((e) => {
+        console.log(e);
+    });
+    
     //reverse the slide order so the first slide is shown first
     var slides = document.querySelectorAll('.slide');
     slides.forEach((slide, index) => {
@@ -302,16 +301,10 @@
     function nextSlide()
     {
         currentSlide++;
-        if(currentSlide >= document.querySelectorAll('.slide').length - 1)
+        if(currentSlide > document.querySelectorAll('.slide').length)
         {
-            currentSlide = document.querySelectorAll('.slide').length;
-            //document.querySelector('.next').style.display = 'none';
-        }
-        else
-        {
-            //document.querySelector('.next').style.display = '';
-            //document.querySelector('.prev').style.display = '';
-            
+            document.exitFullscreen();
+            ReplacePage("/Zermelo/Rooster");
         }
         showSlide(currentSlide);
     }
@@ -372,44 +365,10 @@
         }
     });
     
-    //if swipe to next slide
-    var touchstartX = 0;
-    var touchendX = 0;
-    var sliderC = document.querySelector('.slide-container');
-    sliderC.addEventListener('touchstart', (e) => {
-        touchstartX = e.changedTouches[0].screenX;
+    //if anywhere onm the page is touched/clicked/spacebar
+    addEventListenerToMain('click', () => {
+        nextSlide();
     });
-
-    sliderC.addEventListener('touchend', (e) => {
-        touchendX = e.changedTouches[0].screenX;
-        handleGesture();
-    });
-
-    sliderC.addEventListener('mousedown', (e) => {
-        touchstartX = e.screenX;
-    });
-    
-    sliderC.addEventListener('mouseup', (e) => {
-        touchendX = e.screenX;
-        handleGesture();
-    });
-    
-    function handleGesture() {
-        //if traveled more than 100px
-        if (touchendX < touchstartX) {
-            if(touchstartX - touchendX > 100)
-            {
-                nextSlide();
-            }
-        }
-        if (touchendX > touchstartX) {
-            if(touchendX - touchstartX > 100)
-            {
-                previousSlide();
-            }
-        }
-        
-    }
     
     //get all the .background elements
     var backgrounds = document.querySelectorAll('.background');
