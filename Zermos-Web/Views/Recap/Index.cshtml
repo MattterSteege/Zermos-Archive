@@ -25,7 +25,11 @@
         </div>
     </div>
 
-    @if (Model.Cijfers.averageGrade < 5.5f)
+@if (Model.Cijfers != null)
+{
+    
+
+@if (Model.Cijfers.averageGrade < 5.5f)
     {
     <div class="slide">
         <div class="slide-content">
@@ -136,8 +140,12 @@
             </div>
         </div>
     </div>
+}
 
-    <div class="slide">
+@if (Model.Rooster != null)
+{
+
+<div class="slide">
         <div class="slide-content">
             <p>We gaan ook nog even naar je rooster kijken, want daar zijn ook leuke dingen gebeurd.</p>
         </div>
@@ -224,6 +232,7 @@
             <svg></svg>
         </div>
     </div>
+}
 
     <div class="slide">
         <div class="slide-content">
@@ -236,7 +245,6 @@
             <svg></svg>
         </div>
     </div>
-    
     
 </div>
 
