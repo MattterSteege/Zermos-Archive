@@ -16,7 +16,8 @@
 .next {
     position: absolute;
     top: 50%;
-    right: 0;
+    right: 50px;
+    z-index: 100000000;
     transform: translateY(-50%);
     width: 50px;
     height: 50px;
@@ -38,7 +39,7 @@
 .prev {
     position: absolute;
     top: 50%;
-    left: 0;
+    left: 50px;
     transform: translateY(-50%);
     width: 50px;
     height: 50px;
@@ -57,6 +58,22 @@
     font-size: 20px;
 }
 
+/* make a backbutton wiht the given colorpalette */
+.back {
+    width: 50%;
+    height: 50px;
+    background: var(--color-1);
+    color: var(--color-5);
+    font-weight: 800;
+    font-size: 200%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 100;
+}
+
 @keyframes fadeOut {
     0% {
         opacity: 1;
@@ -68,14 +85,18 @@
 }
 
 .slide-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
     height: 100%;
     width: 100%;
+    margin: auto;
     overflow: hidden;
     position: relative;
     background: #191919;
+    justify-items: center;
+    align-items: center;
+    z-index: -1;
 }
 
 .slide-container .color-1 {
@@ -120,11 +141,14 @@
     height: min(90vh, 95vw);
     width: calc(min(90vh, 95vw) * 0.5625);
     position: relative;
-    display: flex;
+    display: grid;
     overflow: hidden;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(100, 100, 100, 1);
     background: var(--color-4);
+    grid-row: 1 / 2;
+    grid-column: 1 / 2;
+    transition: opacity 0.5s;
 }
 
 .slide-content {
@@ -137,6 +161,8 @@
     height: 100%;
     position: relative;
     z-index: 2;
+    grid-row: 1 / 2;
+    grid-column: 1 / 2;
 }
 
 .slide-content h1 {
@@ -231,9 +257,10 @@
     text-align: center;
     justify-content: center;
     height: 100%;
-    position: relative;
-    top: -100%;
+    width: 100%;
     z-index: -1;
+    grid-row: 1 / 2;
+    grid-column: 1 / 2;
 }
 
 .background .layer-3 {

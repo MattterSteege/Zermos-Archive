@@ -18,227 +18,173 @@ namespace Zermos_Web.Controllers;
 public class RecapController : BaseController
 {
     public RecapController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
-    
+
     SomtodayAPI somtodayApi = new(new HttpClient());
     ZermeloApi zermeloApi = new(new HttpClient());
     InfowijsApi infowijsApi = new(new HttpClient());
-    
+
     // GET
     [Authorize]
     [ZermosPage]
     [Route("/Recap")]
     public async Task<IActionResult> Index()
     {
-//         user user = ZermosUser;
-//         var SomtodayGrades = await somtodayApi.GetGrades(user);
-//         
-//         DateTime dateTime2023Week34 = new DateTime(2023, 8, 21, 0, 0, 0);
-//         DateTime dateTime2024Week29 = new DateTime(2024, 7, 15, 0, 0, 0);
-//         
-//         var ZermeloRooster = await zermeloApi.getRoosterFromStartAndEnd(user, dateTime2023Week34, dateTime2024Week29);
-//
-//         //The following slides will be shown in the recap:
-//         //cijfers
-//         /*
-//          
-//          Dit jaar bleven ook je cijfers niet achter, en je bent uiteindelijke met een {gemiddeldCijfer} geeindigd...
-//             ===========================================================
-//             Je hebt in totaal {totalGrades} cijfers gehaald, waarvan {totalVoldoendes} voldoendes en {totalOnvoldoendes} onvoldoendes.
-//             ===========================================================
-//             Het hoogste cijfer dat je hebt gehaald was een {highestGrade} en het laagste cijfer was een {lowestGrade}.
-//             ===========================================================
-//             De meest voorkomende afgeronde cijfer was: {topGrade}
-//             ===========================================================
-//             De beste vakken waren: {topSubjects}
-//             De slechtste vakken waren: {worstSubjects}
-//             ===========================================================
-//             Je hebt in totaal {totalPoints} punten gehaald, en dat is een gemiddelde van {averagePoints} punten per cijfer.
-//             ===========================================================
-//             En dan nu, 2 leugens en 1 waarheid:
-//             1. {lie1}
-//             2. {lie2}
-//             3. {truth}
-//             
-//          
-//          */
-//         
-//         //rooster
-//         /*
-//          
-//              Dit schooljaar was weer wild!
-//             ===========================================================
-//             Je hebt {totalClasses} lessen gehad, waarvan er {canceledClasses} uitvielen.
-//             Daardoor heb je een grande totaal van {hoursInClass} uur en {minutesInClass} minuten in de les gezeten.
-//             ===========================================================
-//             Je hebt {examClasses} examens gehad en {activityClasses} activiteiten.
-//             Dan blijven er nog {normalClasses} normale lessen over.
-//             ===========================================================
-//             Er waren dit jaar {wierdLessonDurationClasses} lessen die niet 50 minuten duurden.
-//             ===========================================================
-//             Je hebt met al die lessen natuurlijk ook veel verschillende docenten gehad.
-//             In totaal heb je {totalTeachers} verschillende docenten gehad.
-//             En de meest voorkomende docenten waren: {topTeachers}
-//             De meest voorkomende vakken waren: {topSubjects}
-//             Het vak dat het meeste uitviel was: {mostCanceledSubject} met {totalCanceledClasses} uitgevallen lessen. Dat betekent een wel/niet ratio van {cancelRatio} / percentage van {cancelPercentage}%
-//             ===========================================================
-//             Ook de lokalen blijven niet achter.
-//             In totaal heb je {totalClassrooms} verschillende lokalen gehad.
-//             En de meest voorkomende lokalen waren: {topClassrooms}
-//             Het lokaal dat het meeste gebruikt werd was: {mostUsedClassroom}, je hebt hier {mostUsedClassroomCount} lessen doorgebracht.
-//
-//          
-//          */
-//
-//         #region roosterRecap
-//         // Calculate total number of classes
-//         int totalClasses = int.Parse(ZermeloRooster.response.totalRows);
-//
-//         // Types of classes
-//         var groupedData = ZermeloRooster.response.data.GroupBy(x => x.type).ToList();
-//         int canceledClasses = groupedData.FirstOrDefault(g => g.Key == "lesson")?.Count(x => x.cancelled) ?? 0;
-//         int examClasses = groupedData.FirstOrDefault(g => g.Key == "exam")?.Count() ?? 0;
-//         int activityClasses = groupedData.FirstOrDefault(g => g.Key == "activity")?.Count() ?? 0;
-//         int normalClasses = groupedData.FirstOrDefault(g => g.Key == "lesson")?.Count(x => !x.cancelled) ?? 0;
-//
-//         // Wierd lesson duration classes
-//         int wierdLessonDurationClasses = groupedData.FirstOrDefault(g => g.Key == "lesson")?.Count(x => x.end - x.start != 50 * 60) ?? 0;
-//
-//         // Time in class
-//         int timeInClass = groupedData.FirstOrDefault(g => g.Key == "lesson")?.Sum(x => x.end - x.start - (x.type == "exam" ? 60 * 60 : x.type == "activity" ? 50 * 60 : 0)) ?? 0;
-//         int hoursInClass = timeInClass / 3600;
-//         int minutesInClass = (timeInClass / 60) % 60;
-//
-//         // Most canceled class
-//         var canceledSubjects = ZermeloRooster.response.data.Where(x => x.cancelled).SelectMany(x => x.subjects).GroupBy(x => x).OrderByDescending(g => g.Count()).ToList();
-//         var mostCanceledSubject = canceledSubjects.FirstOrDefault()?.Key;
-//         var totalCanceledClasses = canceledSubjects.FirstOrDefault()?.Count();
-//
-//         //most used classroom
-//         var classrooms = ZermeloRooster.response.data.SelectMany(x => x.locations).GroupBy(x => x).OrderByDescending(g => g.Count()).ToList();
-//         var mostUsedClassroom = classrooms.FirstOrDefault()?.Key;
-//         var mostUsedClassroomCount = classrooms.FirstOrDefault()?.Count();
-//         
-//         //most used teacher
-//         var teachers = ZermeloRooster.response.data.SelectMany(x => x.teachers).GroupBy(x => x).OrderByDescending(g => g.Count()).ToList();
-//         var topTeacher = teachers.FirstOrDefault()?.Key;
-//         var totalTeachers = teachers.FirstOrDefault()?.Count();
-//         var topTeacherUsed = teachers.Count(x => x.key == topTeacher);
-//         
-//         //most used subject
-//         var subjects = ZermeloRooster.response.data.SelectMany(x => x.subjects).GroupBy(x => x).OrderByDescending(g => g.Count()).ToList();
-//         var topSubject = subjects.FirstOrDefault()?.Key;
-//         var totalSubjects = subjects.FirstOrDefault()?.Count();
-//         var topSubjectUsed = subjects.Count(x => x.key == topSubject);
-//         
-//         //cancel ratio
-//         var cancelRatio = canceledClasses / (double) totalClasses;
-//         #endregion
-//
-//         #region CijfersRecap
-//         // Calculate total number of grades
-//         int totalGrades = SomtodayGrades.items.Count;
-//         
-//         // Calculate total number of voldoendes
-//         int totalVoldoendes = SomtodayGrades.items.Count(x => NumberUtils.ParseFloat(x.geldendResultaat) >= 5.5);
-//         int totalOnvoldoendes = totalGrades - totalVoldoendes;
-//         
-//         // Calculate highest grade
-//         var topGrade = SomtodayGrades.items.MaxBy(x => Math.Round(NumberUtils.ParseFloat(x.geldendResultaat)));
-//         var topSubjectsGrade = topGrade.geldendResultaat;
-//         var topSubjectSubject = topGrade.vak.naam;
-//
-//         // calculate lowest grade
-//         var worstGrade = SomtodayGrades.items.MinBy(x => Math.Round(NumberUtils.ParseFloat(x.geldendResultaat)));
-//         var worstSubjectsGrade = worstGrade.geldendResultaat;
-//         var worstSubjectSubject = worstGrade.vak.naam;
-//         
-//         // calculate most common rounded grade (7, 8, etc)
-//         var mostCommonGrade = SomtodayGrades.items.GroupBy(x => Math.Round(NumberUtils.ParseFloat(x.geldendResultaat))).OrderByDescending(g => g.Count()).FirstOrDefault();
-//         var mostCommonGradeGrade = mostCommonGrade.Key;
-//         var mostCommonGradeCount = mostCommonGrade.Count();
-//         
-//         // Calculate total points
-//         var totalPoints = SomtodayGrades.items.Sum(x => (NumberUtils.ParseFloat(x.geldendResultaat) * (x.weging == 0 ? x.examenWeging : x.weging)));
-//         #endregion
-//         
-//         dynamic model = new
-//         {
-//             Cijfers = new
-//             {
-//                 totalGrades,
-//                 totalVoldoendes,
-//                 totalOnvoldoendes,
-//                 topSubjectsGrade,
-//                 topSubjectSubject,
-//                 worstSubjectsGrade,
-//                 worstSubjectSubject,
-//                 mostCommonGradeGrade,
-//                 mostCommonGradeCount,
-//                 totalPoints
-//             },
-//             Rooster = new
-//             {
-//                 totalClasses,
-//                 canceledClasses,
-//                 examClasses,
-//                 activityClasses,
-//                 normalClasses,
-//                 wierdLessonDurationClasses,
-//                 hoursInClass,
-//                 minutesInClass,
-//                 mostCanceledSubject,
-//                 totalCanceledClasses,
-//                 mostUsedClassroom,
-//                 mostUsedClassroomCount,
-//                 topTeacher,
-//                 totalTeachers,
-//                 topSubject,
-//                 totalSubjects,
-//                 cancelRatio
-//             }
-//         };
-//         
-//         string json = JsonConvert.SerializeObject(model);
+        var user = ZermosUser;
 
-        RecapModel myDeserializedClass = JsonConvert.DeserializeObject<RecapModel>(@"
+        if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
         {
-          ""Cijfers"": {
-            ""totalGrades"": 72,
-            ""totalVoldoendes"": 58,
-            ""totalOnvoldoendes"": 14,
-            ""topSubjectsGrade"": ""9,0"",
-            ""topSubjectSubject"": ""maatschappijleer"",
-            ""worstSubjectsGrade"": ""3,2"",
-            ""worstSubjectSubject"": ""Duitse tali"",
-            ""mostCommonGradeGrade"": 6.0,
-            ""mostCommonGradeCount"": 20,
-            ""totalPoints"": 2696.1,
-            ""averageGrade"": 6.1
-          },
-          ""Rooster"": {
-            ""totalClasses"": 1431,
-            ""canceledClasses"": 102,
-            ""examClasses"": 27,
-            ""activityClasses"": 113,
-            ""normalClasses"": 1189,
-            ""wierdLessonDurationClasses"": 166,
-            ""hoursInClass"": 1048,
-            ""minutesInClass"": 10,
-            ""mostCanceledSubject"": ""lo"",
-            ""totalCanceledClasses"": 20,
-            ""mostUsedClassroom"": ""mhp3"",
-            ""mostUsedClassroomCount"": 102,
-            ""topTeacher"": ""mdv"",
-            ""topTeacherUsed"": 102,
-            ""totalTeachers"": 171,
-            ""topSubject"": ""oo"",
-            ""topSubjectUsed"": 102,
-            ""totalSubjects"": 200,
-            ""cancelRatio"": 0.07127882599580712
-          }
-        }");
-        
-        return PartialView(myDeserializedClass);
+            user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
+        }
+
+        var SomtodayGrades = await somtodayApi.GetGrades(user);
+        var SomtodayAverage = (await somtodayApi.Getvakgemiddelden(user, -1)).voortgangsdossierGemiddelde;
+
+        DateTime dateTime2023Week34 = new DateTime(2023, 8, 21, 0, 0, 0);
+        DateTime dateTime2024Week29 = new DateTime(2024, 7, 15, 0, 0, 0);
+
+        var ZermeloRooster = await zermeloApi.getRoosterFromStartAndEnd(user, dateTime2023Week34, dateTime2024Week29);
+
+        #region roosterRecap
+
+        // Calculate total number of classes
+        int totalClasses = int.Parse(ZermeloRooster.response.totalRows);
+
+        // Types of classes
+        var groupedData = ZermeloRooster.response.data.GroupBy(x => x.type).ToList();
+        int canceledClasses = groupedData.FirstOrDefault(g => g.Key == "lesson")?.Count(x => x.cancelled) ?? 0;
+        int examClasses = groupedData.FirstOrDefault(g => g.Key == "exam")?.Count() ?? 0;
+        int activityClasses = groupedData.FirstOrDefault(g => g.Key == "activity")?.Count() ?? 0;
+        int normalClasses = groupedData.FirstOrDefault(g => g.Key == "lesson")?.Count(x => !x.cancelled) ?? 0;
+
+        // Wierd lesson duration classes
+        int wierdLessonDurationClasses =
+            groupedData.FirstOrDefault(g => g.Key == "lesson")?.Count(x => x.end - x.start != 50 * 60) ?? 0;
+
+        // Time in class
+        int timeInClass = groupedData.FirstOrDefault(g => g.Key == "lesson")?.Sum(x =>
+            x.end - x.start - (x.type == "exam" ? 60 * 60 : x.type == "activity" ? 50 * 60 : 0)) ?? 0;
+        int hoursInClass = timeInClass / 3600;
+        int minutesInClass = (timeInClass / 60) % 60;
+
+        // Most canceled class
+        var canceledSubjects = ZermeloRooster.response.data.Where(x => x.cancelled).SelectMany(x => x.subjects)
+            .GroupBy(x => x).OrderByDescending(g => g.Count()).ToList();
+        var mostCanceledSubject = canceledSubjects.FirstOrDefault()?.Key;
+        var totalCanceledClasses = canceledSubjects.FirstOrDefault()?.Count();
+
+        //most used classroom
+        var classrooms = ZermeloRooster.response.data.FindAll(x => !x.cancelled).SelectMany(x => x.locations)
+            .GroupBy(x => x).OrderByDescending(g => g.Count()).ToList();
+        var mostUsedClassroom = classrooms.FirstOrDefault()?.Key;
+        var mostUsedClassroomCount = classrooms.FirstOrDefault()?.Count();
+
+        //most used teacher
+        var teachers = ZermeloRooster.response.data.FindAll(x => !x.cancelled).SelectMany(x => x.teachers)
+            .GroupBy(x => x).OrderByDescending(g => g.Count()).ToList();
+        var topTeacher = teachers.FirstOrDefault()?.Key;
+        var topTeacherUsed =
+            ZermeloRooster.response.data.Count(x => x.teachers.Contains(topTeacher) && x.cancelled == false);
+
+        //most used subject
+        var subjects = ZermeloRooster.response.data.FindAll(x => !x.cancelled).SelectMany(x => x.subjects)
+            .GroupBy(x => x).OrderByDescending(g => g.Count()).ToList();
+        var topSubject = subjects.FirstOrDefault()?.Key;
+        var topSubjectUsed =
+            ZermeloRooster.response.data.Count(x => x.subjects.Contains(topSubject) && x.cancelled == false);
+
+        //cancel ratio
+        var cancelRatio = canceledClasses / (double) totalClasses;
+
+        #endregion
+
+        #region CijfersRecap
+
+        // Calculate total number of grades
+        int totalGrades = SomtodayGrades.items.Count;
+
+        // Calculate total number of voldoendes
+        int totalVoldoendes = SomtodayGrades.items.Count(x => NumberUtils.ParseFloat(x.geldendResultaat) >= 5.5);
+        int totalOnvoldoendes = totalGrades - totalVoldoendes;
+
+        // Calculate highest grade
+        var topGrade = SomtodayGrades.items.MaxBy(x => Math.Round(NumberUtils.ParseFloat(x.geldendResultaat)));
+        var topSubjectsGrade = topGrade.geldendResultaat;
+        var topSubjectSubject = topGrade.vak.naam;
+
+        // calculate lowest grade
+        var worstGrade = SomtodayGrades.items.MinBy(x => Math.Round(NumberUtils.ParseFloat(x.geldendResultaat)));
+        var worstSubjectsGrade = worstGrade.geldendResultaat;
+        var worstSubjectSubject = worstGrade.vak.naam;
+
+        // calculate most common rounded grade (7, 8, etc)
+        var mostCommonGrade = SomtodayGrades.items.GroupBy(x => Math.Round(NumberUtils.ParseFloat(x.geldendResultaat))).MaxBy(g => g.Count());
+        var mostCommonGradeGrade = mostCommonGrade.Key;
+        var mostCommonGradeCount = mostCommonGrade.Count();
+
+        // Calculate total points
+        var totalPoints = SomtodayGrades.items.Sum(x =>
+            (NumberUtils.ParseFloat(x.geldendResultaat) * (x.weging == 0 ? x.examenWeging : x.weging)));
+
+        #endregion
+
+        RecapModel model = new()
+        {
+            Cijfers = new Cijfers
+            {
+                totalGrades = totalGrades,
+                totalVoldoendes = totalVoldoendes,
+                totalOnvoldoendes = totalOnvoldoendes,
+                topSubjectsGrade = topSubjectsGrade,
+                topSubjectSubject = topSubjectSubject,
+                worstSubjectsGrade = worstSubjectsGrade,
+                worstSubjectSubject = worstSubjectSubject,
+                mostCommonGradeGrade = mostCommonGradeGrade,
+                mostCommonGradeCount = mostCommonGradeCount,
+                totalPoints = totalPoints,
+                averageGrade = SomtodayAverage
+            },
+            Rooster = new Rooster
+            {
+                totalClasses = totalClasses,
+                canceledClasses = canceledClasses,
+                examClasses = examClasses,
+                activityClasses = activityClasses,
+                normalClasses = normalClasses,
+                wierdLessonDurationClasses = wierdLessonDurationClasses,
+                hoursInClass = hoursInClass,
+                minutesInClass = minutesInClass,
+                mostCanceledSubject = mostCanceledSubject,
+                totalCanceledClasses = totalCanceledClasses ?? 0,
+                mostUsedClassroom = mostUsedClassroom,
+                mostUsedClassroomCount = mostUsedClassroomCount ?? 0,
+                topTeacher = topTeacher,
+                topTeacherUsed = topTeacherUsed,
+                totalTeachers = teachers.Count,
+                topSubject = topSubject,
+                topSubjectUsed = topSubjectUsed,
+                totalSubjects = subjects.Count,
+                cancelRatio = cancelRatio
+            }
+        };
+
+
+        return PartialView(model);
+    }
+    
+    [NonAction]
+    public async Task<string> RefreshToken(string token = null)
+    {
+        if (token == null) return null;
+            
+        var somtoday = await somtodayApi.RefreshTokenAsync(token);
+            
+        ZermosUser = new user
+        {
+            somtoday_access_token = somtoday.access_token,
+            somtoday_refresh_token = somtoday.refresh_token
+        };
+            
+        return somtoday.access_token;
     }
 }
 
@@ -285,4 +231,3 @@ public class RecapModel
     public Cijfers Cijfers { get; set; }
     public Rooster Rooster { get; set; }
 }
-

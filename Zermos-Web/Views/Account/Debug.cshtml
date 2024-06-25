@@ -48,8 +48,13 @@
         <h1>Incognito</h1>
         <p>Is het een Ninja, is het een Hacker? Nee, ik zie het niet!</p>
     </div>
+
+    <div class="account-item" onclick="ReplacePage('/Recap')">
+        <h1>Recap</h1>
+        <p>Proef test voor de Zermos recap. Klik hier om te bekijken.</p>
+    </div>
     
-@if(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") == "DEV") {
+    @if(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") == "DEV") {
     <div class="account-item" onclick="ReplacePage('@Url.Action("LoginAs", "Authentication")')">
         <h1>Login als</h1>
         <p>Ga naar de login als pagina</p>

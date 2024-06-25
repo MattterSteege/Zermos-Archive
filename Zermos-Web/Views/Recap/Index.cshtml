@@ -1,58 +1,6 @@
 ﻿@model Zermos_Web.Controllers.RecapModel
 
-@{
-// //The following slides will be shown in the recap:
-// //cijfers
-//
-//
-// Dit jaar bleven ook je cijfers niet achter, en je bent uiteindelijke met een {gemiddeldCijfer} geeindigd... X
-// ===========================================================
-// Je hebt in totaal {totalGrades} cijfers gehaald, waarvan {totalVoldoendes} voldoendes en {totalOnvoldoendes} onvoldoendes. X
-// ===========================================================
-// Het hoogste cijfer dat je hebt gehaald was een {highestGrade} en het laagste cijfer was een {lowestGrade}.
-// ===========================================================
-// De meest voorkomende afgeronde cijfer was: {topGrade}
-// ===========================================================
-// De beste vakken waren: {topSubjects}
-// De slechtste vakken waren: {worstSubjects}
-// ===========================================================
-// Je hebt in totaal {totalPoints} punten gehaald, en dat is een gemiddelde van {averagePoints} punten per cijfer.
-// ===========================================================
-// En dan nu, 2 leugens en 1 waarheid:
-// 1. {lie1}
-// 2. {lie2}
-// 3. {truth}
-//
-//
-//
-//
-// //rooster
-//
-//
-// Dit schooljaar was weer wild!
-// ===========================================================
-// Je hebt {totalClasses} lessen gehad, waarvan er {canceledClasses} uitvielen.
-// Daardoor heb je een grande totaal van {hoursInClass} uur en {minutesInClass} minuten in de les gezeten.
-// ===========================================================
-// Je hebt {examClasses} examens gehad en {activityClasses} activiteiten.
-// Dan blijven er nog {normalClasses} normale lessen over.
-// ===========================================================
-// Er waren dit jaar {wierdLessonDurationClasses} lessen die niet 50 minuten duurden.
-// ===========================================================
-// Je hebt met al die lessen natuurlijk ook veel verschillende docenten gehad.
-// In totaal heb je {totalTeachers} verschillende docenten gehad.
-// En de meest voorkomende docenten waren: {topTeachers}
-// De meest voorkomende vakken waren: {topSubjects}
-// Het vak dat het meeste uitviel was: {mostCanceledSubject} met {totalCanceledClasses} uitgevallen lessen. Dat betekent een wel/niet ratio van {cancelRatio} / percentage van {cancelPercentage}%
-// ===========================================================
-// Ook de lokalen blijven niet achter.
-// In totaal heb je {totalClassrooms} verschillende lokalen gehad.
-// En de meest voorkomende lokalen waren: {topClassrooms}
-// Het lokaal dat het meeste gebruikt werd was: {mostUsedClassroom}, je hebt hier {mostUsedClassroomCount} lessen doorgebracht.
-}
-
 <link rel="stylesheet" href="/css/recap.css">
-<link rel="stylesheet" href="/css/recap-img.css">
 
 <div class="loading-overlay user-select-none"></div>
 
@@ -60,7 +8,7 @@
     <i class="fas fa-chevron-right"></i>
 </div>
 
-<div class="prev" onclick="previousSlide()">
+<div class="prev" style="display: none" onclick="previousSlide()">
     <i class="fas fa-chevron-left"></i>
 </div>
 
@@ -68,7 +16,7 @@
     <div class="slide">
         <div class="slide-content">
             <h1>Zermos Recap!</h1>
-            <p>Er is dit jaar weer veel gebeurt, maar nu gaat het om jouw. Hier is een recap van jouw schooljaar!</p>
+            <p>Er is dit jaar weer veel gebeurd, maar nu gaat het om jou. Hier is een recap van jouw schooljaar!</p>
         </div>
         <div class="background">
             <svg></svg>
@@ -76,61 +24,58 @@
             <svg></svg>
         </div>
     </div>
-    
-    
-    
+
     @if (Model.Cijfers.averageGrade < 5.5f)
     {
-        <div class="slide">
-            <div class="slide-content">
-                <p>Dit jaar bleven je cijfers een beetje achter, je bent uiteindelijke met een @Model.Cijfers.averageGrade geeindigd...</p>
-            </div>
-            <div class="background">
-                <svg></svg>
-                <svg></svg>
-                <svg></svg>
-            </div>
+    <div class="slide">
+        <div class="slide-content">
+            <p>Dit jaar bleven je cijfers een beetje achter, je bent uiteindelijk met een @Model.Cijfers.averageGrade geëindigd...</p>
         </div>
+        <div class="background">
+            <svg></svg>
+            <svg></svg>
+            <svg></svg>
+        </div>
+    </div>
     }
     else if (Model.Cijfers.averageGrade < 7f)
     {
-        <div class="slide">
-            <div class="slide-content">
-                <p>Dit jaar bleven je cijfers niet achter, en je bent uiteindelijke met netjes geeindigd! Namelijk:</p>
-            </div>
-            <div class="background">
-                <svg></svg>
-                <svg></svg>
-                <svg></svg>
-            </div>
+    <div class="slide">
+        <div class="slide-content">
+            <p>Dit jaar bleven je cijfers niet achter, en je bent uiteindelijk netjes geëindigd! Namelijk:</p>
         </div>
-    
-    
-        <div class="slide">
-            <div class="slide-content">
-                <h1>MET EEN @Model.Cijfers.averageGrade!</h1>
-            </div>
-            <div class="background">
-                <svg></svg>
-                <svg></svg>
-                <svg></svg>
-            </div>
+        <div class="background">
+            <svg></svg>
+            <svg></svg>
+            <svg></svg>
         </div>
+    </div>
+
+    <div class="slide">
+        <div class="slide-content">
+            <h1>MET EEN @(Model.Cijfers.averageGrade.ToString("0.0"))!</h1>
+        </div>
+        <div class="background">
+            <svg></svg>
+            <svg></svg>
+            <svg></svg>
+        </div>
+    </div>
     }
     else
     {
-        <div class="slide">
-            <div class="slide-content">
-                <h1>Dit jaar ging heel erg lekker voor jouw, je bent uiteindelijke met een @Model.Cijfers.averageGrade geeindigd!</h1>
-            </div>
-            <div class="background">
-                <svg></svg>
-                <svg></svg>
-                <svg></svg>
-            </div>
+    <div class="slide">
+        <div class="slide-content">
+            <p>Dit jaar ging heel erg lekker voor jou, je bent uiteindelijk met een @Model.Cijfers.averageGrade geëindigd!</p>
         </div>
+        <div class="background">
+            <svg></svg>
+            <svg></svg>
+            <svg></svg>
+        </div>
+    </div>
     }
-    
+
     <div class="slide">
         <div class="slide-content">
             <p>Je hebt in totaal @Model.Cijfers.totalGrades cijfers gehaald, waarvan @Model.Cijfers.totalVoldoendes voldoendes en @Model.Cijfers.totalOnvoldoendes onvoldoendes.</p>
@@ -141,7 +86,7 @@
             <svg></svg>
         </div>
     </div>
-    
+
     <div class="slide">
         <div class="slide-content">
             <p>Je hoogste cijfer was een @Model.Cijfers.topSubjectsGrade voor @Model.Cijfers.topSubjectSubject.</p>
@@ -152,7 +97,7 @@
             <svg></svg>
         </div>
     </div>
-    
+
     <div class="slide">
         <div class="slide-content">
             <p>Je laagste cijfer was een @Model.Cijfers.worstSubjectsGrade voor @Model.Cijfers.worstSubjectSubject.</p>
@@ -163,10 +108,10 @@
             <svg></svg>
         </div>
     </div>
-    
+
     <div class="slide">
         <div class="slide-content">
-            <p>Het meest voorkomende afgeronde cijfer was een @Model.Cijfers.mostCommonGradeGrade, namelijk @Model.Cijfers.mostCommonGradeCount keer</p>
+            <p>Het meest voorkomende afgeronde cijfer was een @Model.Cijfers.mostCommonGradeGrade, namelijk @Model.Cijfers.mostCommonGradeCount keer.</p>
         </div>
         <div class="background">
             <svg></svg>
@@ -174,7 +119,7 @@
             <svg></svg>
         </div>
     </div>
-    
+
     <div class="slide">
         <div class="slide-content">
             <div class="stack">
@@ -183,19 +128,18 @@
 
                     @for (int i = 0; i < 10; i++)
                     {
-                        <li>@Convert.ToInt32(Model.Cijfers.totalPoints)</li>
+                    <li>@Convert.ToInt32(Model.Cijfers.totalPoints)</li>
                     }
 
-                    <li>som van cijfer × weging</li>
-
+                    <li>Som van cijfer × weging</li>
                 </ul>
             </div>
         </div>
-    </div>  
-    
+    </div>
+
     <div class="slide">
         <div class="slide-content">
-            <p>We gaan ook nog even naar je rooster kijken, want daar zijn ook leuke dingen gebeurt</p>
+            <p>We gaan ook nog even naar je rooster kijken, want daar zijn ook leuke dingen gebeurd.</p>
         </div>
         <div class="background">
             <svg></svg>
@@ -203,21 +147,10 @@
             <svg></svg>
         </div>
     </div>
-    
+
     <div class="slide">
         <div class="slide-content">
-            <p>Je hebt in totaal @Model.Rooster.totalClasses lessen gehad, waarvan er @Model.Rooster.canceledClasses uitvielen.</p>
-        </div>
-        <div class="background">
-            <svg></svg>
-            <svg></svg>
-            <svg></svg>
-        </div>
-    </div>
-    
-    <div class="slide">
-        <div class="slide-content">
-            <p>Daardoor heb je een grande totaal van @Model.Rooster.hoursInClass uur en @Model.Rooster.minutesInClass minuten in de les gezeten verspreid over @Model.Rooster.normalClasses lessen.</p>
+            <p>Je hebt in totaal @Model.Rooster.totalClasses lessen gehad, waarvan er @Model.Rooster.canceledClasses uitvielen, dat is @((Model.Rooster.cancelRatio*100).ToString("0.0"))% van alle ingeplande lessen.</p>
         </div>
         <div class="background">
             <svg></svg>
@@ -236,7 +169,7 @@
             <svg></svg>
         </div>
     </div>
-    
+
     <div class="slide">
         <div class="slide-content">
             <p>Je hebt met al die lessen natuurlijk ook veel verschillende docenten gehad. In totaal heb je @Model.Rooster.totalTeachers verschillende docenten gehad.</p>
@@ -247,10 +180,10 @@
             <svg></svg>
         </div>
     </div>
-    
+
     <div class="slide">
         <div class="slide-content">
-            <p>En de meest voorkomende docent was: @Model.Rooster.topTeacher met @Model.Rooster.topTeacherUsed</p>
+            <p>En de meest voorkomende docent was: @Model.Rooster.topTeacher.ToUpper() met @Model.Rooster.topTeacherUsed lessen.</p>
         </div>
         <div class="background">
             <svg></svg>
@@ -258,10 +191,10 @@
             <svg></svg>
         </div>
     </div>
-    
+
     <div class="slide">
         <div class="slide-content">
-            <p>De meest voorkomende vakken waren: @Model.Rooster.topSubject met @Model.Rooster.topSubjectUsed</p>
+            <p>Het meest voorkomende vak was: @Model.Rooster.topSubject.ToUpper() met @Model.Rooster.topSubjectUsed lessen.</p>
         </div>
         <div class="background">
             <svg></svg>
@@ -269,10 +202,10 @@
             <svg></svg>
         </div>
     </div>
-    
+
     <div class="slide">
         <div class="slide-content">
-            <p>Het vak dat het meeste uitviel was: @Model.Rooster.mostCanceledSubject met @Model.Rooster.totalCanceledClasses uitgevallen lessen. Dat @(Model.Rooster.cancelRatio*100)% van de lessen zijn uitgevallen</p>
+            <p>Het vak dat het meeste uitviel was: @Model.Rooster.mostCanceledSubject.ToUpper() met @Model.Rooster.totalCanceledClasses uitgevallen lessen.</p>
         </div>
         <div class="background">
             <svg></svg>
@@ -280,29 +213,33 @@
             <svg></svg>
         </div>
     </div>
-    
+
     <div class="slide">
         <div class="slide-content">
-            <p>Ook de lokalen blijven niet achter. In totaal heb je @Model.Rooster.mostUsedClassroom met @Model.Rooster.mostUsedClassroomCount lessen doorgebracht.</p>
-            <div class="background">
-                <svg></svg>
-                <svg></svg>
-                <svg></svg>
-            </div>
+            <p>Ook de lokalen blijven niet achter. In totaal heb je in @Model.Rooster.mostUsedClassroom.ToUpper() @Model.Rooster.mostUsedClassroomCount lessen uitgezeten.</p>
+        </div>
+        <div class="background">
+            <svg></svg>
+            <svg></svg>
+            <svg></svg>
         </div>
     </div>
 
     <div class="slide">
         <div class="slide-content">
             <p>Dit was Zermos Recap weer voor dit jaar, fijne vakantie en tot volgend jaar!</p>
-            <div class="background">
-                <svg></svg>
-                <svg></svg>
-                <svg></svg>
-            </div>-
+            <div class="back" onclick="window.location='/Zermelo/Rooster'">Doei!</div>
+        </div>
+        <div class="background">
+            <svg></svg>
+            <svg></svg>
+            <svg></svg>
         </div>
     </div>
+    
+    
 </div>
+
 
 
 <script>
@@ -341,54 +278,70 @@
     
     const colorPallets = 4;
     
-    //Zermos.mainAfterLoad = () => {
-        FullScreenMain();
-        main.requestFullscreen();
-        //reverse the slide order so the first slide is shown first
-        const slides = document.querySelectorAll('.slide');
-        slides.forEach((slide, index) => {
-            slide.style.zIndex = slides.length - index;
-            slide.classList.add(`color-${Math.floor(Math.random() * colorPallets) + 1}`);
-        });
-    //}
+    FullScreenMain();
+    main.requestFullscreen();
+    //reverse the slide order so the first slide is shown first
+    const slides = document.querySelectorAll('.slide');
+    slides.forEach((slide, index) => {
+        slide.style.zIndex = index;
+        slide.style.opacity = 0;
+        slide.classList.add(`color-${Math.floor(Math.random() * colorPallets) + 1}`);
+    });
+
+    window.location.hash = '#/Recap';
     
-    var currentSlide = 0;    
+    var currentSlide = 1;    
     function nextSlide()
     {
         currentSlide++;
-        if(currentSlide >= document.querySelectorAll('.slide').length)
+        if(currentSlide >= document.querySelectorAll('.slide').length - 1)
         {
-            currentSlide = 0;
+            currentSlide = document.querySelectorAll('.slide').length;
+            document.querySelector('.next').style.display = 'none';
+        }
+        else
+        {
+            document.querySelector('.next').style.display = '';
+            document.querySelector('.prev').style.display = '';
+            
         }
         showSlide(currentSlide);
     }
     
     function previousSlide()
     {
+    
         currentSlide--;
-        if(currentSlide < 0)
+        if(currentSlide <= 0)
         {
-            currentSlide = document.querySelectorAll('.slide').length - 1;
+            currentSlide = 0;
+            document.querySelector('.prev').style.display = 'none';
         }
-        showSlide(currentSlide);
+        else
+        {
+            document.querySelector('.prev').style.display = '';
+            document.querySelector('.next').style.display = '';
+        }
+        showSlide(currentSlide - 1);
     }
     
     function showSlide(index)
     {
         const slides = document.querySelectorAll('.slide');
         slides.forEach((slide, i) => {
-            if(i == index)
+            //dont display block/none only z-index
+            if(i === index - 1)
             {
-                slide.style.display = 'block';
+                slide.style.opacity = 1;
             }
             else
             {
-                slide.style.display = 'none';
+                slide.style.opacity = 0;
             }
         });
     }
     
-    showSlide(currentSlide);
+    showSlide(1);
     
     document.addEventListener('keydown', (e) => {
         if(e.key == 'ArrowRight')
@@ -400,6 +353,36 @@
             previousSlide();
         }
     });
+    
+    //if swipe to next slide
+    let touchstartX = 0;
+    let touchendX = 0;
+    const sliderC = document.querySelector('.slide-container');
+    sliderC.addEventListener('touchstart', (e) => {
+        touchstartX = e.changedTouches[0].screenX;
+    });
+
+    sliderC.addEventListener('touchend', (e) => {
+        touchendX = e.changedTouches[0].screenX;
+        handleGesture();
+    });
+    
+    function handleGesture() {
+        //if traveled more than 100px
+        if (touchendX < touchstartX) {
+            if(touchstartX - touchendX > 100)
+            {
+                nextSlide();
+            }
+        }
+        if (touchendX > touchstartX) {
+            if(touchendX - touchstartX > 100)
+            {
+                previousSlide();
+            }
+        }
+        
+    }
     
     //get all the .background elements
     const backgrounds = document.querySelectorAll('.background');

@@ -3,3 +3,5 @@
 - Somtoday - leermiddelen
     - Sommige konden de leermiddelen pagina niet openen, maar dat is nu opgelost.
 
+- Zermos
+    - Zermos recap komt er aan, maar hou dat nog even tussen ons...

@@ -10,6 +10,8 @@ using Zermos_Web.Models;
 using Zermos_Web.Models.SomtodayLeermiddelen;
 using Zermos_Web.Models.SomtodayAfwezigheidModel;
 using Zermos_Web.Models.SomtodayGradesModel;
+using Zermos_Web.Models.SomtodayPlaatsingen;
+using Zermos_Web.Models.SomtodayVakgemiddeldenModel;
 using Zermos_Web.Utilities;
 using Item = Zermos_Web.Models.somtodayHomeworkModel.Item;
 
@@ -148,5 +150,48 @@ public class SomtodayAPI
             .ToList();
 
         return grades;
+    }
+
+    public async Task<SomtodayPlaatsingenModel> GetPlaatsingen(user user)
+    {
+        //https://api.somtoday.nl/rest/v1/plaatsingen?leerling=1409824200
+        
+        var baseurl = $"https://api.somtoday.nl/rest/v1/plaatsingen?leerling={user.somtoday_student_id}";
+        
+        _httpClient.DefaultRequestHeaders.Clear();
+        _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
+        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        
+        var response = await _httpClient.GetAsync(baseurl);
+        
+        if (response.IsSuccessStatusCode == false)
+            return null;
+        
+        return JsonConvert.DeserializeObject<SomtodayPlaatsingenModel>(await response.Content.ReadAsStringAsync());
+    }
+    
+    /// <param name="year">-1 for current, 1 for 1ste year, 2e for 2e etc.</param>
+    public async Task<SomtodayVakgemiddeldenModel> Getvakgemiddelden(user user, int year)
+    {
+        //https://api.somtoday.nl/rest/v1/vakkeuzes/plaatsing/d3ff5175-162b-493a-80c9-febb405665bc/vakgemiddelden
+        var years = await GetPlaatsingen(user);
+        var yearId = "";
+        if (year == -1)
+            yearId = years.items.FirstOrDefault(x => x.huidig)?.UUID;
+        else
+            yearId = years.items[year - 1].UUID;
+        
+        var baseurl = $"https://api.somtoday.nl/rest/v1/vakkeuzes/plaatsing/{yearId}/vakgemiddelden";
+        
+        _httpClient.DefaultRequestHeaders.Clear();
+        _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
+        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        
+        var response = await _httpClient.GetAsync(baseurl);
+        
+        if (response.IsSuccessStatusCode == false)
+            return null;
+        
+        return JsonConvert.DeserializeObject<SomtodayVakgemiddeldenModel>(await response.Content.ReadAsStringAsync());
     }
 }
