@@ -122,11 +122,13 @@ public class RecapController : BaseController
 //         var teachers = ZermeloRooster.response.data.SelectMany(x => x.teachers).GroupBy(x => x).OrderByDescending(g => g.Count()).ToList();
 //         var topTeacher = teachers.FirstOrDefault()?.Key;
 //         var totalTeachers = teachers.FirstOrDefault()?.Count();
+//         var topTeacherUsed = teachers.Count(x => x.key == topTeacher);
 //         
 //         //most used subject
 //         var subjects = ZermeloRooster.response.data.SelectMany(x => x.subjects).GroupBy(x => x).OrderByDescending(g => g.Count()).ToList();
 //         var topSubject = subjects.FirstOrDefault()?.Key;
 //         var totalSubjects = subjects.FirstOrDefault()?.Count();
+//         var topSubjectUsed = subjects.Count(x => x.key == topSubject);
 //         
 //         //cancel ratio
 //         var cancelRatio = canceledClasses / (double) totalClasses;
@@ -227,8 +229,10 @@ public class RecapController : BaseController
             ""mostUsedClassroom"": ""mhp3"",
             ""mostUsedClassroomCount"": 102,
             ""topTeacher"": ""mdv"",
+            ""topTeacherUsed"": 102,
             ""totalTeachers"": 171,
             ""topSubject"": ""oo"",
+            ""topSubjectUsed"": 102,
             ""totalSubjects"": 200,
             ""cancelRatio"": 0.07127882599580712
           }
@@ -268,8 +272,10 @@ public class Rooster
     public string mostUsedClassroom { get; set; }
     public int mostUsedClassroomCount { get; set; }
     public string topTeacher { get; set; }
+    public int topTeacherUsed { get; set; }
     public int totalTeachers { get; set; }
     public string topSubject { get; set; }
+    public int topSubjectUsed { get; set; }
     public int totalSubjects { get; set; }
     public double cancelRatio { get; set; }
 }

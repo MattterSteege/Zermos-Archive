@@ -694,6 +694,7 @@ main.main::-webkit-scrollbar-track {
 .user-select-none {
     -webkit-user-select: none;
     user-select: none;
+    pointer-events: none;
 }
 
 /*If screen width is 700px*/

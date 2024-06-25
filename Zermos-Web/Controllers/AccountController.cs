@@ -52,7 +52,7 @@ namespace Zermos_Web.Controllers
         public IActionResult UpdateSetting(string key, string value)
         {
             #if DEBUG
-            if (key == "version_used")
+            if (key == "version_used" && ZermosEmail != "58373@ccg-leerling.nl")
             {
                 return BadRequest("You may not alter this property when in debug mode");
             }
