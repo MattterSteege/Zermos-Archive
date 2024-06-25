@@ -1,7 +1,13 @@
 ﻿0.5.1 bugfixes
 
+- Debug
+    - Added a eruda debug instance to Zermos, but only when specifically enabled by the user. This will help me debug issues that are hard to reproduce.
+
 - Somtoday - leermiddelen
     - Sommige konden de leermiddelen pagina niet openen, maar dat is nu opgelost.
+
+- Somtoday - cijfers
+    - Voor Zermos recap moest ik cijfers opvragen en moest ik dus de grond leggen voor cijfers uit andere jaarlagen. Ik wil geen beloftes maken, maar het zou kunnen dat ik binnenkort cijfers uit andere jaarlagen kan laten zien.
 
 - Zermos
     - Zermos recap komt er aan, maar hou dat nog even tussen ons...

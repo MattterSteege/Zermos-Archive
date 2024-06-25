@@ -4,19 +4,19 @@
 
 <div class="loading-overlay user-select-none"></div>
 
-<div class="next" onclick="nextSlide()">
-    <i class="fas fa-chevron-right"></i>
-</div>
-
-<div class="prev" style="display: none" onclick="previousSlide()">
-    <i class="fas fa-chevron-left"></i>
-</div>
+@* <div class="next" onclick="nextSlide()"> *@
+@*     <i class="fas fa-chevron-right"></i> *@
+@* </div> *@
+@* *@
+@* <div class="prev" style="display: none" onclick="previousSlide()"> *@
+@*     <i class="fas fa-chevron-left"></i> *@
+@* </div> *@
 
 <div class="slide-container">
     <div class="slide">
         <div class="slide-content">
             <h1>Zermos Recap!</h1>
-            <p>Er is dit jaar weer veel gebeurd, maar nu gaat het om jou. Hier is een recap van jouw schooljaar!</p>
+            <p>Er is dit jaar weer veel gebeurd, maar nu gaat het om jou. Hier is een recap van jouw schooljaar! (Swipe ->)</p>
         </div>
         <div class="background">
             <svg></svg>
@@ -251,7 +251,7 @@
 
 
 <script>
-    const backgroundItems = {
+    var backgroundItems = {
         Layer1: [
             '<svg width="1080" height="1080" viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg"> <g clip-path = "url(#clip0_1_9)" ><path fill-rule = "evenodd"clip-rule = "evenodd"d = "M359.999 179.334C359.64 80.2292 279.189 0 180 0C80.5887 0 0 80.5887 0 180C0 279.189 80.2292 359.64 179.334 359.999L179.333 360.001C80.2285 360.361 0 440.811 0 540C0 639.189 80.2285 719.639 179.333 719.999L179.334 720.001C80.2292 720.36 0 800.811 0 900C0 999.411 80.5887 1080 180 1080C279.189 1080 359.64 999.771 359.999 900.666L360.001 900.667C360.361 999.771 440.811 1080 540 1080C639.189 1080 719.639 999.771 719.999 900.667C720 900.667 720 900.666 720.001 900.666C720.36 999.771 800.811 1080 900 1080C999.411 1080 1080 999.411 1080 900C1080 800.811 999.771 720.36 900.666 720.001C900.666 720 900.667 720 900.667 719.999C999.771 719.639 1080 639.189 1080 540C1080 440.811 999.771 360.361 900.667 360.001L900.666 359.999C999.771 359.64 1080 279.189 1080 180C1080 80.5887 999.411 0 900 0C800.811 0 720.36 80.2292 720.001 179.334L719.999 179.333C719.639 80.2285 639.189 0 540 0C440.811 0 360.361 80.2285 360.001 179.333L359.999 179.334Z"/></g> <defs ><clipPath id = "clip0_1_9" ><rect width = "1080"height = "1080"fill = "white"/></clipPath> </defs> </svg>',
             '<svg width="1080" height="1080" viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg"> <g clip-path = "url(#clip0_1_8)" ><path fill-rule = "evenodd"clip-rule = "evenodd"d = "M270 540C120.883 540 0 419.117 0 270C0 120.883 120.883 0 270 0C419.117 0 540 120.883 540 270C540 120.883 660.883 0 810 0C959.117 0 1080 120.883 1080 270C1080 419.117 959.117 540 810 540C959.117 540 1080 660.883 1080 810C1080 959.117 959.117 1080 810 1080C660.883 1080 540 959.117 540 810C540 959.117 419.117 1080 270 1080C120.883 1080 0 959.117 0 810C0 660.883 120.883 540 270 540Z"/></g> <defs ><clipPath id = "clip0_1_8" ><rect width = "1080"height = "1080"fill = "white"/></clipPath> </defs> </svg>',
@@ -284,16 +284,16 @@
         ]
     };
     
-    const colorPallets = 4;
+    var colorPalvars = 4;
     
     FullScreenMain();
     main.requestFullscreen();
     //reverse the slide order so the first slide is shown first
-    const slides = document.querySelectorAll('.slide');
+    var slides = document.querySelectorAll('.slide');
     slides.forEach((slide, index) => {
         slide.style.zIndex = index;
         slide.style.opacity = 0;
-        slide.classList.add(`color-${Math.floor(Math.random() * colorPallets) + 1}`);
+        slide.classList.add(`color-${Math.floor(Math.random() * colorPalvars) + 1}`);
     });
 
     window.location.hash = '#/Recap';
@@ -305,12 +305,12 @@
         if(currentSlide >= document.querySelectorAll('.slide').length - 1)
         {
             currentSlide = document.querySelectorAll('.slide').length;
-            document.querySelector('.next').style.display = 'none';
+            //document.querySelector('.next').style.display = 'none';
         }
         else
         {
-            document.querySelector('.next').style.display = '';
-            document.querySelector('.prev').style.display = '';
+            //document.querySelector('.next').style.display = '';
+            //document.querySelector('.prev').style.display = '';
             
         }
         showSlide(currentSlide);
@@ -319,23 +319,25 @@
     function previousSlide()
     {
     
+        return;
+    
         currentSlide--;
         if(currentSlide <= 0)
         {
-            currentSlide = 0;
-            document.querySelector('.prev').style.display = 'none';
+            currentSlide = 1;
+            //document.querySelector('.prev').style.display = 'none';
         }
         else
         {
-            document.querySelector('.prev').style.display = '';
-            document.querySelector('.next').style.display = '';
+            //document.querySelector('.prev').style.display = '';
+           // document.querySelector('.next').style.display = '';
         }
         showSlide(currentSlide - 1);
     }
     
     function showSlide(index)
     {
-        const slides = document.querySelectorAll('.slide');
+        var slides = document.querySelectorAll('.slide');
         slides.forEach((slide, i) => {
             //dont display block/none only z-index
             if(i === index - 1)
@@ -362,16 +364,33 @@
         }
     });
     
+    //on unfullscreen
+    document.addEventListener('fullscreenchange', (e) => {
+        if(!document.fullscreenElement)
+        {
+            UnFullScreenMain();
+        }
+    });
+    
     //if swipe to next slide
-    let touchstartX = 0;
-    let touchendX = 0;
-    const sliderC = document.querySelector('.slide-container');
+    var touchstartX = 0;
+    var touchendX = 0;
+    var sliderC = document.querySelector('.slide-container');
     sliderC.addEventListener('touchstart', (e) => {
         touchstartX = e.changedTouches[0].screenX;
     });
 
     sliderC.addEventListener('touchend', (e) => {
         touchendX = e.changedTouches[0].screenX;
+        handleGesture();
+    });
+
+    sliderC.addEventListener('mousedown', (e) => {
+        touchstartX = e.screenX;
+    });
+    
+    sliderC.addEventListener('mouseup', (e) => {
+        touchendX = e.screenX;
         handleGesture();
     });
     
@@ -393,19 +412,19 @@
     }
     
     //get all the .background elements
-    const backgrounds = document.querySelectorAll('.background');
+    var backgrounds = document.querySelectorAll('.background');
     //loop through the backgrounds
     backgrounds.forEach((background) => {
         //for the first svg pick one from the first layer
-        const layer1 = backgroundItems.Layer1[Math.floor(Math.random() * backgroundItems.Layer1.length)];
+        var layer1 = backgroundItems.Layer1[Math.floor(Math.random() * backgroundItems.Layer1.length)];
         //for the second svg pick one from the second layer that is not the same as the first
-        let layer2 = backgroundItems.Layer2[Math.floor(Math.random() * backgroundItems.Layer2.length)];
+        var layer2 = backgroundItems.Layer2[Math.floor(Math.random() * backgroundItems.Layer2.length)];
         while(layer2 === layer1)
         {
             layer2 = backgroundItems.Layer2[Math.floor(Math.random() * backgroundItems.Layer2.length)];
         }
         //for the third svg pick one from the third layer that is not the same as the first or second
-        let layer3 = backgroundItems.Layer3[Math.floor(Math.random() * backgroundItems.Layer3.length)];
+        var layer3 = backgroundItems.Layer3[Math.floor(Math.random() * backgroundItems.Layer3.length)];
         while(layer3 === layer1 || layer3 === layer2)
         {
             layer3 = backgroundItems.Layer3[Math.floor(Math.random() * backgroundItems.Layer3.length)];
