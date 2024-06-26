@@ -14,3 +14,8 @@ Oke top, nu heb je een account, maar hoe koppel je alle apps? Dat laat ik je [hi
 Als je nog een paar vragen hebt, misschien heb ik ze [hier](FAQ) wel alvast beantwoord.
 
 En tot slot, als je wilt zien wat er nieuw is in de laatste versie van Zermos, dan kun je dat [hier](WhatsNew) bekijken.
+
+
+#### *privacy policy* [hier](privacybeleid) te vinden.
+#### *algemene voorwaarden* [hier](Servicevoorwaarden) te vinden.
+#### *contact* Matt ter Steege: 58373@ccg-leerling.nl

@@ -43,7 +43,7 @@ Een Progressive Web App (PWA) is een type applicatiesoftware dat via het web wor
 2. Tik op het menu met drie stippen in de rechteronderhoek.
 3. Selecteer **Installeren**.
 
-### Opera (GX) voor Android
+#### Opera (GX) voor Android
 1. Open de PWA-website in Opera (GX) voor Android.
 2. Tik op het menu met drie stippen in de rechteronderhoek.
 3. Selecteer **Toevoegen aan startscherm**.

@@ -5,8 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c3582447-ff79-4dd3-9c47-b4613b8d0576" name="Changes" comment="updated docs">
-      <change afterPath="$PROJECT_DIR$/PWA installeren" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Servicevoorwaarden.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/privacybeleid.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PWA installeren.md" beforeDir="false" afterPath="$PROJECT_DIR$/PWA installeren.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Privacy Policy.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Terms&amp;Conditions.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/index.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +88,7 @@
       <workItem from="1703845385802" duration="1217000" />
       <workItem from="1703867038508" duration="5000" />
       <workItem from="1703867665961" duration="21000" />
-      <workItem from="1719417418362" duration="86000" />
+      <workItem from="1719417418362" duration="4505000" />
     </task>
     <task id="LOCAL-00001" summary="added a test feature, redirect">
       <created>1675857654150</created>
