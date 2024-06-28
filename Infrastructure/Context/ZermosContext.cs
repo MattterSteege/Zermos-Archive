@@ -14,7 +14,6 @@ namespace Infrastructure.Context
 
         public virtual DbSet<user> users { get; set; }
         public virtual DbSet<share> shares { get; set; }
-        
 
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         // {

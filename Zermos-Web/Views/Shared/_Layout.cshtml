@@ -1,3 +1,5 @@
+@using System.Security.Claims
+@using Zermos_Web.TagHelpers
 @using Zermos_Web.Utilities
 @{
     var version = Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION");
@@ -98,8 +100,7 @@
                     </div>
                 </a>
             </li>
-
-
+            
             <h5 class="Heading">De Antonius app</h5>
 
             <li id="schoolnieuws">
@@ -138,17 +139,6 @@
                     </div>
                 </a>
             </li>
-
-            @* <h5 class="Heading">ZERMOS RECAP!</h5> *@
-            @* *@
-            @* <li id="recap"> *@
-            @*     <a onclick="ReplacePage('@Url.Action("Index", "Recap")')"> *@
-            @*         <div class="menu-item"> *@
-            @*             <i class="fa-solid fa-trophy menu-icons menu-icons-custom fa-fw" aria-hidden="true"></i> *@
-            @*             <p>Zermos Recap</p> *@
-            @*         </div> *@
-            @*     </a> *@
-            @* </li> *@
 
             <div class="spacer"></div>
         </ul>
@@ -206,8 +196,15 @@ window.onload = () => {
         console.log(`Zermos-web versie: ${Zermos.CurrentVersion}`);
         console.log(`Zermos-framework is geladen`);
         history.replaceState(null, null, "/");
-        ReplacePage('@ViewData["url"]');
-        @Html.Raw(Context.User.Identity!.IsAuthenticated && (Context.Request.Cookies["preview"] != null ? !Context.Request.Cookies["preview"].Contains("incognito") : true) ? "Zermos.checkForUpdates();" : "")
+        
+        if (isSmartWatch()) {
+            ReplacePage("/Zermelo/Rooster?smartwatch=true");
+        }
+        else
+        {       
+            ReplacePage('@ViewData["url"]');
+            @Html.Raw(Context.User.Identity!.IsAuthenticated && (Context.Request.Cookies["preview"] != null ? !Context.Request.Cookies["preview"].Contains("incognito") : true) ? "Zermos.checkForUpdates();" : "")
+        }
     }, 500);
 }
 

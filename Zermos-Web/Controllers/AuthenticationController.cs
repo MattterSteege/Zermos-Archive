@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -28,6 +29,8 @@ public class AuthenticationController : Controller
         _logger = logger;
     }
     
+#region Microsoft Login
+    
 #if RELEASE
     const string redirectUrl = "https://zermos.kronk.tech/Login/Callback";
 #else
@@ -38,17 +41,18 @@ public class AuthenticationController : Controller
 
     [ZermosPage]
     [Route("/Login")]
-    public IActionResult Teams()
+    public async Task<IActionResult> Login()
     {
         string redirect = "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=" +
                           clientId + "&response_type=code&redirect_uri=" + redirectUrl +
                           "&response_mode=query&scope=User.Read&state=" + TokenUtils.RandomString();
+
          return PartialView("Login", new loginModel {email = redirect, code = 0});
     }
 
     [ZermosPage]
     [Route("/Login/Callback")]
-    public async Task<IActionResult> TeamsCallback(string code, string state, string session_state)
+    public async Task<IActionResult> LoginCallback(string code, string state, string session_state)
     {
         var client = new HttpClient();
         var request = new HttpRequestMessage(HttpMethod.Post,
@@ -89,6 +93,7 @@ public class AuthenticationController : Controller
         
         return await VerificationSuccess(teamsUser.mail, null);
     }
+    #endregion
 
     [NonAction]
     private async Task<IActionResult> VerificationSuccess(string email, string ReturnUrl, bool OneSessionLogin = false)
@@ -164,6 +169,26 @@ public class AuthenticationController : Controller
         _logger.Log(LogLevel.Information, $"User {User.FindFirstValue("email")} logged out");
         return PartialView("Login", new loginModel {code = 3});
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     #if DEBUG
     [ZermosPage]

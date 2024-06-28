@@ -22,14 +22,14 @@ namespace Zermos_Web.Controllers
         [Authorize]
         [ZermosPage]
         [ZermeloRequirement]
-        public async Task<IActionResult> Rooster(string year, string week, bool compact = false)
+        public async Task<IActionResult> Rooster(string year, string week, bool compact = false, bool smartwatch = false)
         {
             year ??= DateTime.Now.Year.ToString();
             week ??= DateTime.Now.GetWeekNumber().ToString();
             week = week.ToCharArray().Length == 1 ? "0" + week : week;
             
             //if request contains cookie old_zermelo_schedule, redirect to /smartwatch
-            if (Request.Cookies["preview"] != null ? Request.Cookies["preview"].Contains("zermelo_smartwatch") : false)
+            if ((Request.Cookies["preview"] != null ? Request.Cookies["preview"].Contains("zermelo_smartwatch") : false) || smartwatch)
                 return RedirectToAction("SmartwatchRooster");
 
             return compact ? PartialView("Rooster-week", await zermeloApi.GetRoosterAsync(ZermosUser, year, week)) : PartialView(await zermeloApi.GetRoosterAsync(ZermosUser, year, week));

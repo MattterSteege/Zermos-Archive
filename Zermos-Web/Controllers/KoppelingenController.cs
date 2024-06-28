@@ -260,7 +260,7 @@ namespace Zermos_Web.Controllers
 
         [HttpPost]
         [Route("/Koppelingen/Zermelo/Wachtwoord")]
-        public async Task<IActionResult> ZermeloWithPassword(string username, string password)
+        public async Task<IActionResult> ZermeloWithPassword(string username, string password, string portal = "ccg")
         {
             var form = new Dictionary<string, string>();
             form.Add("username", username);
@@ -272,7 +272,7 @@ namespace Zermos_Web.Controllers
             form.Add("response_type", "code");
             form.Add("tenant", "ccg");
 
-            var response = await _zermeloHttpClient.PostAsync("https://ccg.zportal.nl/api/v3/oauth",
+            var response = await _zermeloHttpClient.PostAsync($"https://{portal}.zportal.nl/api/v3/oauth",
                 new FormUrlEncodedContent(form));
             var responseString = await response.Content.ReadAsStringAsync();
 
@@ -285,7 +285,7 @@ namespace Zermos_Web.Controllers
             form.Add("grant_type", "authorization_code");
             form.Add("rememberMe", "true");
 
-            response = await _zermeloHttpClient.PostAsync("https://ccg.zportal.nl/api/v3/oauth/token",
+            response = await _zermeloHttpClient.PostAsync($"https://{portal}.zportal.nl/api/v3/oauth/token",
                 new FormUrlEncodedContent(form));
             responseString = await response.Content.ReadAsStringAsync();
 

@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promotion Page</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Insert the provided CSS here */
+        :root, .light {
+            /* light mode */
+            --background-color: #f8f9fa;
+            --overlay-color: #ffffff;
+            --overlay-overlay-color: #f3f6f4;
+            --text-color: #344767;
+            --accent-color: linear-gradient(335deg, rgb(121, 40, 202), rgb(255, 0, 128));
+            --active-color: linear-gradient(335deg, rgb(121, 40, 202), rgb(255, 0, 128));
+            --dark-gradient: linear-gradient(335deg, rgba(20, 23, 39, 0.8), rgba(58, 65, 111, 0.6));
+            --inactive-color: #e8e8e8;
+            --tint-color: #01befe;
+            --confirm-color: #00b894;
+            --deny-color: #d63031;
+            --sure-color: #000000;
+            --white-color: #ffffff;
+
+            --border-radius: 14px;
+            --border-radius-small: 7px;
+
+            --font-size-multiplier: 1;
+
+            --font-size-heading: calc(16px * var(--font-size-multiplier));
+            --font-size-heading-small: calc(12px * var(--font-size-multiplier));
+
+            --font-size: calc(14px * var(--font-size-multiplier));
+            --font-size-small: calc(10px * var(--font-size-multiplier));
+
+            --padding: 14px;
+            --padding-small: 7px;
+
+            --button-height: 32px;
+            --button-height-small: 24px;
+
+            --box-shadow: 0 0 var(--padding) rgba(0, 0, 0, 0.1);
+        }
+
+        .dark {
+            --background-color: #1a1a1a;
+            --overlay-color: #2d2d2d;
+            --overlay-overlay-color: #414141;
+            --text-color: #b9b9b9;
+            --accent-color: linear-gradient(335deg, rgb(121, 40, 202), rgb(255, 0, 128));
+            --active-color: linear-gradient(335deg, rgb(121, 40, 202), rgb(255, 0, 128));
+            --dark-gradient: linear-gradient(335deg, rgba(20, 23, 39, 0.8), rgba(58, 65, 111, 0.6));
+            --inactive-color: #555555;
+            --tint-color: #01befe;
+            --confirm-color: #00b894;
+            --deny-color: #d63031;
+            --sure-color: #ffffff;
+            --white-color: #ffffff;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-size: var(--font-size);
+        }
+
+        header, section, footer {
+            background-color: var(--overlay-color);
+            padding: var(--padding);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: var(--padding);
+        }
+
+        .hero {
+            background: var(--accent-color);
+            color: var(--white-color);
+            text-align: center;
+            padding: var(--padding) var(--padding-small);
+        }
+
+        .primary-btn, .signup-btn, .cta-button a {
+            background: var(--active-color);
+            color: var(--white-color);
+            padding: var(--padding-small) var(--padding);
+            border-radius: var(--border-radius-small);
+            text-decoration: none;
+            display: inline-block;
+            margin-top: var(--padding-small);
+        }
+
+        .logo img {
+            max-height: var(--button-height);
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: var(--padding-small);
+        }
+
+        nav ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        footer .quick-links a, footer .social-media a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin-right: var(--padding-small);
+        }
+    </style>
+</head>
+<body class="light">
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Company Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#benefits">Benefits</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+            </ul>
+        </nav>
+        <div class="cta-button">
+            <a href="#cta">Get Started</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Promotional Headline</h1>
+            <p>Subheadline that supports the main headline</p>
+            <a href="#cta" class="primary-btn">Primary Call-to-Action</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features">
+        <h2>Features</h2>
+        <div class="feature">
+            <img src="feature1.png" alt="Feature 1">
+            <h3>Feature 1</h3>
+            <p>Feature 1 description</p>
+        </div>
+        <div class="feature">
+            <img src="feature2.png" alt="Feature 2">
+            <h3>Feature 2</h3>
+            <p>Feature 2 description</p>
+        </div>
+        <div class="feature">
+            <img src="feature3.png" alt="Feature 3">
+            <h3>Feature 3</h3>
+            <p>Feature 3 description</p>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about">
+        <h2>About Us</h2>
+        <p>Company history and mission statement</p>
+        <div class="team">
+            <img src="team1.jpg" alt="Team Member 1">
+            <img src="team2.jpg" alt="Team Member 2">
+            <img src="team3.jpg" alt="Team Member 3">
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="benefits">
+        <h2>Benefits</h2>
+        <ul>
+            <li>Benefit 1</li>
+            <li>Benefit 2</li>
+            <li>Benefit 3</li>
+            <li>Benefit 4</li>
+        </ul>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing">
+        <h2>Pricing</h2>
+        <div class="pricing-tier">
+            <h3>Basic</h3>
+            <p>$9.99/month</p>
+            <p>Feature 1, Feature 2, Feature 3</p>
+            <a href="#cta" class="signup-btn">Sign Up</a>
+        </div>
+        <div class="pricing-tier">
+            <h3>Standard</h3>
+            <p>$19.99/month</p>
+            <p>Feature 1, Feature 2, Feature 3, Feature 4</p>
+            <a href="#cta" class="signup-btn">Sign Up</a>
+        </div>
+        <div class="pricing-tier">
+            <h3>Premium</h3>
+            <p>$29.99/month</p>
+            <p>All features included</p>
+            <a href="#cta" class="signup-btn">Sign Up</a>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="quick-links">
+            <a href="#features">Features</a>
+            <a href="#about">About Us</a>
+            <a href="#benefits">Benefits</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#contact">Contact Us</a>
+        </div>
+        <div class="social-media">
+            <a href="#"><img src="facebook.png" alt="Facebook"></a>
+            <a href="#"><img src="twitter.png" alt="Twitter"></a>
+            <a href="#"><img src="instagram.png" alt="Instagram"></a>
+        </div>
+        <p>&copy; 2024 Company Name. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -344,6 +344,10 @@ let isMobile = () =>
     navigator.userAgent.match(/Windows Phone/i)
   );
 
+let isSmartWatch = () =>
+//check if screen is smaller than 600px
+    window.matchMedia("(max-width: 600px)").matches;
+
 function copyToClipboard(text) {
   //first with the new api
   if (navigator.clipboard) {

@@ -31,7 +31,6 @@ namespace Infrastructure.Entities
         public string cached_somtoday_leermiddelen { get; set; }
         public string custom_leermiddelen { get; set; }
         public string cached_infowijs_news { get; set; }
-
         
         //Settings
         public string settings { get; set; }
@@ -125,6 +124,12 @@ namespace Infrastructure.Entities
             }
 
             settings = string.Join(";", newSettings);
+        }
+        
+        //set the ! operator for user to check if the user.email is null
+        public static bool operator !(user user)
+        {
+            return user.email == null;
         }
     }
 }
