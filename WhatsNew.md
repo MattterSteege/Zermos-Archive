@@ -8,21 +8,21 @@ nav_exclude: false
 0.5.1 bugfixes
 
 - Debug
- - Added an Eruda debug instance to Zermos, but only when specifically enabled by the user. This will help me debug issues that are hard to reproduce.
+    - Added an Eruda debug instance to Zermos, but only when specifically enabled by the user. This will help me debug issues that are hard to reproduce.
 
 - Zermelo - Rooster
- - Als je een smartwatch gebruikt, dan wordt je nu automatisch naar je rooster, je kan geen andere pagina's openen.
+    - Als je een smartwatch gebruikt, dan wordt je nu automatisch naar je rooster, je kan geen andere pagina's openen.
 
 - Somtoday - leermiddelen
- - Sommige konden de leermiddelen pagina niet openen, maar dat is nu opgelost.
+    - Sommige konden de leermiddelen pagina niet openen, maar dat is nu opgelost.
 
 - Somtoday - cijfers
- - Voor Zermos recap moest ik cijfers opvragen en moest ik dus de grond leggen voor cijfers uit andere jaarlagen. Ik wil geen beloftes maken, maar het zou kunnen dat ik binnenkort cijfers uit andere jaarlagen kan laten zien.
+    - Voor Zermos recap moest ik cijfers opvragen en moest ik dus de grond leggen voor cijfers uit andere jaarlagen. Ik wil geen beloftes maken, maar het zou kunnen dat ik binnenkort cijfers uit andere jaarlagen kan laten zien.
 
 - Zermos
- - Zermos recap komt er aan, maar hou dat nog even tussen ons...
- - Op de eerste keer pagina is de leermiddelen knop ook uitgelegd en is er een spelfout verbeterd.
- - Een installeer Zermos knop is toegevoegd aan de account pagina.
+    - Zermos recap komt er aan, maar hou dat nog even tussen ons...
+    - Op de eerste keer pagina is de leermiddelen knop ook uitgelegd en is er een spelfout verbeterd.
+    - Een installeer Zermos knop is toegevoegd aan de account pagina.
 
 # Release Notes - Versie 0.5 - 22-06-2024
 0.5 Guess who's back, back again V2
