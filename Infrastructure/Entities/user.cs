@@ -20,6 +20,8 @@ namespace Infrastructure.Entities
         //Token Related
         public string zermelo_access_token { get; set; }
         public DateTime? zermelo_access_token_expires_at { get; set; }
+        public string zermelo_school_abbr { get; set; }
+        
         public string somtoday_access_token { get; set; }
         public string somtoday_refresh_token { get; set; }
         public string somtoday_student_id { get; set; }

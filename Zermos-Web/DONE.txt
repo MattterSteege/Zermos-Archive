@@ -1,18 +1,10 @@
-﻿0.5.1 bugfixes
+﻿0.5.2 Breaking news, Zermos takes over the Netherlands
 
-- Debug
- - Added an Eruda debug instance to Zermos, but only when specifically enabled by the user. This will help me debug issues that are hard to reproduce.
+- infowijs
+    - het maakt niet uit welke versie (of van welke school) je bent, als je toegang hebt tot de Hoy app of een variatie daarvan, dan kan je nu op Zermos koppelen*
 
-- Zermelo - Rooster
- - Als je een smartwatch gebruikt, dan wordt je nu automatisch naar je rooster, je kan geen andere pagina's openen.
-
-- Somtoday - leermiddelen
- - Sommige konden de leermiddelen pagina niet openen, maar dat is nu opgelost.
-
-- Somtoday - cijfers
- - Voor Zermos recap moest ik cijfers opvragen en moest ik dus de grond leggen voor cijfers uit andere jaarlagen. Ik wil geen beloftes maken, maar het zou kunnen dat ik binnenkort cijfers uit andere jaarlagen kan laten zien.
-
-- Zermos
- - Zermos recap komt er aan, maar hou dat nog even tussen ons...
- - Op de eerste keer pagina is de leermiddelen knop ook uitgelegd en is er een spelfout verbeterd.
- - Een installeer Zermos knop is toegevoegd aan de account pagina.
+- Account
+    - Je kan nu inloggen met een school of een persoonlijk Microsoft account
+    
+- Koppelen
+    - Zermelo vereist nu een schoolcode om te koppelen, dit zodat Zermos langzamerhand public kan gaan

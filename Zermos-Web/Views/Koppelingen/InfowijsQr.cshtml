@@ -24,12 +24,12 @@ function imageLoaded() {
     loadingIcon.style.display = "none";
 }
 
-var checkingInterval = setInterval(function() {
-    SendCheck();
-}, 1000);
+var CheckingTimeout = null;
+
+SendCheck();
 
 Zermos.mainUnload = function() {
-    clearInterval(checkingInterval);
+    clearTimeout(CheckingTimeout);
 };
 
 //when user submits the form, use the function below to check if the user is logged in
@@ -49,12 +49,18 @@ function SendCheck() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 if (xhr.responseText === "success") {
-                    clearInterval(checkingInterval);
+                    clearInterval(CheckingTimeout);
                     ReplacePage('@Url.Action("Account", "Account")');
                 } else {
-                    //button.innerHTML = "Check opnieuw of je ingelogd bent";
-                    //button.disabled = false;
+                    CheckingTimeout = setTimeout(function() {
+                        SendCheck();
+                    }, 1000);
                 }
+            }
+            else {
+                CheckingTimeout = setTimeout(function() {
+                    SendCheck();
+                }, 1000);
             }
         }
     };

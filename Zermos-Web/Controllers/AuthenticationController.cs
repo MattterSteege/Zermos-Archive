@@ -34,7 +34,7 @@ public class AuthenticationController : Controller
 #if RELEASE
     const string redirectUrl = "https://zermos.kronk.tech/Login/Callback";
 #else
-    const string redirectUrl = "https://192.168.178.22:5001/Login/Callback";
+    const string redirectUrl = "https://localhost:5001/Login/Callback";
 #endif
     const string clientId = "REDACTED_MS_CLIENT_ID";
     const string clientSecret = "lcV8Q~GbQjBv45fivMgN3ARP~UHPNSuV259gQcU7";
@@ -43,7 +43,7 @@ public class AuthenticationController : Controller
     [Route("/Login")]
     public async Task<IActionResult> Login()
     {
-        string redirect = "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=" +
+        string redirect = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=" +
                           clientId + "&response_type=code&redirect_uri=" + redirectUrl +
                           "&response_mode=query&scope=User.Read&state=" + TokenUtils.RandomString();
 
@@ -56,7 +56,7 @@ public class AuthenticationController : Controller
     {
         var client = new HttpClient();
         var request = new HttpRequestMessage(HttpMethod.Post,
-            "https://login.microsoftonline.com/organizations/oauth2/v2.0/token");
+            "https://login.microsoftonline.com/common/oauth2/v2.0/token");
         var collection = new List<KeyValuePair<string, string>>();
         collection.Add(new("client_id", clientId));
         collection.Add(new("scope", "User.Read"));

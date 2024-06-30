@@ -98,6 +98,11 @@ namespace Zermos_Web.Utilities
             return System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(str));
         }
         
+        public static string Base64StringToString(this string base64)
+        {
+            return System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(base64));
+        }
+        
         public static string TakeFirstLetters(this string str, int count)
         {
             if (string.IsNullOrEmpty(str))

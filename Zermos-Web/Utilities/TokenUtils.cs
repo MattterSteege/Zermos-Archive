@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace Zermos_Web.Utilities
 {
@@ -181,6 +182,32 @@ namespace Zermos_Web.Utilities
             {
                 return false;
             }
+        }
+        
+        /// <summary>
+        /// Decode a JWT token into its header, payload, and signature parts (dynamic objects)
+        /// </summary>
+        /// <param name="token">The JWT token to decode</param>
+        /// <returns>Returns a dynamic object with the header, payload, and signature parts of the JWT token</returns>
+        public static dynamic DecodeJwt(string token)
+        {
+            var parts = token.Split('.');
+            if (parts.Length != 3)
+                return null;
+
+            var header = Encoding.UTF8.GetString(Base64UrlDecode(parts[0]));
+            var payload = Encoding.UTF8.GetString(Base64UrlDecode(parts[1]));
+            
+            //dynamic decode as json object
+            dynamic headerJson = JObject.Parse(header);
+            dynamic payloadJson = JObject.Parse(payload);
+            
+            return new
+            {
+                header = headerJson,
+                payload = payloadJson,
+                signature = parts[2]
+            };
         }
     }
 }

@@ -34,7 +34,8 @@ namespace Zermos_Web.Controllers
             DefaultRequestHeaders =
             {
                 {"accept", "application/vnd.infowijs.v1+json"},
-                {"x-infowijs-client", "nl.infowijs.hoy.android/nl.infowijs.client.antonius"}
+                {"x-infowijs-client", "nl.infowijs.hoy.android"}
+                // {"x-infowijs-client", "nl.infowijs.hoy.android/nl.infowijs.client.antonius"}
             }
         };
 
@@ -325,23 +326,22 @@ namespace Zermos_Web.Controllers
 
         [HttpPost]
         [Route("/Koppelingen/Zermelo/Code")]
-        public async Task<IActionResult> ZermeloWithCode(string code)
+        public async Task<IActionResult> ZermeloWithCode(string code, string institution)
         {
             //POST /oauth/token?grant_type=authorization_code&code=
+            
+            if (code.IsNullOrEmpty() || institution.IsNullOrEmpty())
+                return Ok("failed");
+            
+            
             var url =
-                $"https://ccg.zportal.nl/api/v3/oauth/token?grant_type=authorization_code&code={code.Replace(" ", "")}";
+                $"https://{institution}.zportal.nl/api/v3/oauth/token?grant_type=authorization_code&code={code.Replace(" ", "")}";
             var response = await _zermeloHttpClient.PostAsync(url, null);
             var responseString = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
-            {
-                HttpContext.AddNotification("Niet geldig",
-                    "Deze code is mogelijk niet geldig, refresh zermelo en probeer het opnieuw",
-                    NotificationCenter.NotificationType.ERROR);
-
                 return Ok("failed");
-            }
-
+            
             var zermeloAuthentication = JsonConvert.DeserializeObject<ZermeloAuthenticatieModel>(responseString);
 
             var zermeloUser = await GetZermeloUser(zermeloAuthentication.access_token);
@@ -350,6 +350,7 @@ namespace Zermos_Web.Controllers
             {
                 zermelo_access_token = zermeloAuthentication.access_token,
                 school_id = zermeloUser.response.data[0].code,
+                zermelo_school_abbr = institution,
                 name = zermeloUser.response.data[0].firstName + " " + zermeloUser.response.data[0].prefix + " " +
                        zermeloUser.response.data[0].lastName,
                 zermelo_access_token_expires_at = DateTime.Now.AddMonths(2)

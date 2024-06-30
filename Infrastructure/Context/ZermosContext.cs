@@ -46,7 +46,11 @@ namespace Infrastructure.Context
             string connection = "server=REDACTED_IP_ADRESS;user=root;password=REDACTED_DATABASE_PASSWORD;database=REDACTED_DATABASE_NAME;port=3306;Connect Timeout=5;";
             //if (IsDatabaseConnectionValid(connection))
             //{
-                optionsBuilder.UseMySQL(connection, b => b.MigrationsAssembly("Infrastructure"));
+                //optionsBuilder.UseMySQL(connection, b => b.MigrationsAssembly("Infrastructure"));
+                //if the database doesn't match up with the model, just match what you can
+                optionsBuilder.UseMySQL(connection, b => 
+                    b.MigrationsAssembly("Infrastructure")
+                    );
             //}
         }
 

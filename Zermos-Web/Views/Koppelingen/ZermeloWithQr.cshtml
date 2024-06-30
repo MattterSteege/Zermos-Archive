@@ -38,13 +38,14 @@ Html5Qrcode.getCameras().then(devices => {
 
         // if you scanned, it will be send to the internal api
         const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-            code = JSON.parse(decodedText).code;
+            var code = JSON.parse(decodedText).code;
+            var institution = JSON.parse(decodedText).institution
             document.getElementById('result').innerText = 'Inlog code: ' + code.substring(0, 3) + ' ' + code.substring(3, 6) + ' ' + code.substring(6, 9) + ' ' + code.substring(9, 12);
             document.getElementById('result').style.display = 'block';
             html5QrCode.stop();
             
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", '/Koppelingen/Zermelo/Code?code=' + code, true);
+            xhr.open("POST", '/Koppelingen/Zermelo/Code?code=' + code + "&institution=" + institution, true);
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {

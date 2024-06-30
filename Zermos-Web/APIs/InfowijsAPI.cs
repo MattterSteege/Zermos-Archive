@@ -17,7 +17,7 @@ namespace Zermos_Web.APIs
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _httpClient.DefaultRequestHeaders.Add("accept", "application/vnd.infowijs.v1+json");
-            _httpClient.DefaultRequestHeaders.Add("x-infowijs-client", "nl.infowijs.hoy.android/nl.infowijs.client.antonius");
+            _httpClient.DefaultRequestHeaders.Add("x-infowijs-client", "nl.infowijs.hoy.android");
         }
         
         public async Task<string> GetSessionTokenAsync(user user)
@@ -32,8 +32,10 @@ namespace Zermos_Web.APIs
         
         public async Task<InfowijsMessagesModel> GetSchoolNieuwsAsync(user user)
         {
+            var json = TokenUtils.DecodeJwt(user.infowijs_access_token);
+            var client = json.payload.customerProduct.name;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetSessionTokenAsync(user));
-            var response = await _httpClient.GetAsync("https://antonius.hoyapp.nl/hoy/v3/messages?include_archived=0&since=4500000");
+            var response = await _httpClient.GetAsync($"https://{client}.hoyapp.nl/hoy/v3/messages?include_archived=0&since=4500000");
             return JsonConvert.DeserializeObject<InfowijsMessagesModel>(await response.Content.ReadAsStringAsync(), Converter.Settings);
             
             /*
@@ -50,8 +52,10 @@ namespace Zermos_Web.APIs
         
         public async Task<InfowijsEventsModel> GetSchoolKalenderAsync(user user)
         {
+            var json = TokenUtils.DecodeJwt(user.infowijs_access_token);
+            var client = json.payload.customerProduct.name;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetSessionTokenAsync(user));
-            var response = await _httpClient.GetAsync("https://antonius.hoyapp.nl/hoy/v1/events");
+            var response = await _httpClient.GetAsync($"https://{client}.hoyapp.nl/hoy/v1/events");
             return JsonConvert.DeserializeObject<InfowijsEventsModel>(await response.Content.ReadAsStringAsync(), Converter.Settings);
         }
         

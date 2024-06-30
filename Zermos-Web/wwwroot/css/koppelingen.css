@@ -49,7 +49,7 @@
     gap: var(--padding-small);
     width: 80%;
     max-height: min-content;
-    flex-direction: row;
+    flex-direction: column;
     font-size: var(--font-size-heading);
     font-weight: 700;
 }

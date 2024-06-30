@@ -22,9 +22,9 @@
     <div class="login">
         <div class="login-explanation">
             <h1>Zermos gebruikt Microsoft om in te loggen!</h1>
-            <p>Om in te loggen bij Zermos moet je je microsoft account gebruiken. Je wordt, nadat je op de knop hieronder klikt, doorgestuurd naar de microsoft login pagina. Je volgd de aangegeven stappen en daarna wordt je weer terug gestuurd en ben je ingelogd.</p>
+            <p>Om in te loggen bij Zermos moet je je microsoft account gebruiken. Je wordt, nadat je op de knop hieronder klikt, doorgestuurd naar de microsoft login pagina. Je volgt de aangegeven stappen en daarna word je weer terug gestuurd en ben je ingelogd.</p>
         </div>
-        <a href=@Model.email class="form-control login-explanation"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11 11"><rect x="0" y="0" width="5" height="5" fill="#f25022"></rect><rect x="0" y="6" width="5" height="5" fill="#00a4ef"></rect><rect x="6" y="0" width="5" height="5" fill="#7fba00"></rect><rect x="6" y="6" width="5" height="5" fill="#ffb900"></rect></svg>Sign in with Microsoft</a>
+        <a style="flex-direction: row" href=@Model.email class="form-control login-explanation"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11 11"><rect x="0" y="0" width="5" height="5" fill="#f25022"></rect><rect x="0" y="6" width="5" height="5" fill="#00a4ef"></rect><rect x="6" y="0" width="5" height="5" fill="#7fba00"></rect><rect x="6" y="6" width="5" height="5" fill="#ffb900"></rect></svg>Sign in with Microsoft</a>
     </div>
 }
 else if (Model.code == 11)
@@ -50,7 +50,7 @@ else if (Model.code == 13)
     <div class="login">
         <div class="login-explanation">
             <h1>Succes!</h1>
-            <p>Je bent succesvol ingelogd op je account. Welkom terug, <b>@(Model.email ?? "[email]")</b>! Je hebt nu volledige toegang tot alle functies en mogelijkheden, mits je ze gekoppeld heb.</p>
+            <p>Je bent succesvol ingelogd op je account. Welkom terug, <b>@(Model.email ?? "[email]")</b>! Je hebt nu volledige toegang tot alle functies en mogelijkheden, als je ze gekoppeld heb.</p>
         </div>
     </div>
 }
@@ -99,7 +99,7 @@ else
 {
     <div class="login">
         <div class="login-explanation">
-            <h1 style="color: #EB3628">Er is een onbekende fout opgetreden? Vaak help opnieuw proberen.</h1>
+            <h1 style="color: #EB3628">Er is een onbekende fout opgetreden? Vaak helpt opnieuw proberen.</h1>
         </div>
     </div>
 }

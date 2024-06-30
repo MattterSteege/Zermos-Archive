@@ -196,15 +196,8 @@ window.onload = () => {
         console.log(`Zermos-web versie: ${Zermos.CurrentVersion}`);
         console.log(`Zermos-framework is geladen`);
         history.replaceState(null, null, "/");
-        
-        if (isSmartWatch()) {
-            ReplacePage("/Zermelo/Rooster?smartwatch=true");
-        }
-        else
-        {       
-            ReplacePage('@ViewData["url"]');
-            @Html.Raw(Context.User.Identity!.IsAuthenticated && (Context.Request.Cookies["preview"] != null ? !Context.Request.Cookies["preview"].Contains("incognito") : true) ? "Zermos.checkForUpdates();" : "")
-        }
+        ReplacePage('@ViewData["url"]');
+        @Html.Raw(Context.User.Identity!.IsAuthenticated && (Context.Request.Cookies["preview"] != null ? !Context.Request.Cookies["preview"].Contains("incognito") : true) ? "Zermos.checkForUpdates();" : "")
     }, 500);
 }
 
@@ -221,9 +214,12 @@ function ReplacePage(url) {
         return;
     }
 
-    Zermos.mainUnload();
-    unloadModal();
-    Zermos.mainUnload = () => {};
+    try{
+        Zermos.mainUnload();
+    } catch (e) {}
+        unloadModal();
+        Zermos.mainUnload = () => {};
+    
 
     // Define a function to append a script to either the head or body
     function appendScript(element, scriptToWorkWith, isSrc) {
@@ -351,7 +347,9 @@ function ReplacePage(url) {
 
                 window.location.hash = url;
 
-                Zermos.mainBeforeLoad();
+                try{
+                    Zermos.mainBeforeLoad();
+                } catch (e) {}
                 Zermos.mainBeforeLoad = () => {};
 
                 content.style.opacity = "0";
@@ -359,7 +357,9 @@ function ReplacePage(url) {
                 
                 setTimeout(function() {
                     //log the time it took to load the page
-                    Zermos.mainAfterLoad();
+                    try{
+                        Zermos.mainAfterLoad();
+                    } catch (e) {}
                     Zermos.mainAfterLoad = () => {};
                     const timerEnd = performance.now();
                     console.log(`Page load took ${timerEnd - timerStart}ms`);

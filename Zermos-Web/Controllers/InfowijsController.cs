@@ -71,13 +71,13 @@ namespace Zermos_Web.Controllers
         [InfowijsRequirement]
         public async Task<IActionResult> Schoolkalender()
         {
-            if (GlobalVariables.SchoolJaarKalenderLastMod.AddDays(1) > DateTime.Now && GlobalVariables.SchoolJaarKalender != null)
-                return PartialView(GlobalVariables.SchoolJaarKalender.data);
+            //if (GlobalVariables.SchoolJaarKalenderLastMod.AddDays(1) > DateTime.Now && GlobalVariables.SchoolJaarKalender != null)
+            //    return PartialView(GlobalVariables.SchoolJaarKalender.data);
             
             InfowijsEventsModel infowijsEventsModel = await infowijsApi.GetSchoolKalenderAsync(ZermosUser);
 
-            GlobalVariables.SchoolJaarKalenderLastMod = DateTime.Now;
-            GlobalVariables.SchoolJaarKalender = infowijsEventsModel;
+            //GlobalVariables.SchoolJaarKalenderLastMod = DateTime.Now;
+            //GlobalVariables.SchoolJaarKalender = infowijsEventsModel;
 
             return PartialView(infowijsEventsModel.data);
         }
