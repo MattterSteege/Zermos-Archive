@@ -23,7 +23,7 @@ Ook wordt er automatisch een koppeling met school gelegd, dat vind je hier:
 - [Hoe kan ik een account aanmaken?](Account#Aanmaken)
 
 ## Is Zermos veilig?
-De veiligheid van jouw data is natuurlijk het belangrijkst, daarom ga ik daar zorgvuldig mee om. Om Zermos goed te kunnen laten functioneren (of überhaupt te kunnen laten functioneren), moet je wel een koppeling leggen met Somtoday, Zermelo en/of Infowijs, Daarbij krijg Zermos toegang tot bepaalde informatie en soms moet er iets worden opgeslagen, [bekijk de benodigde data hier](#wat-wordt-er-opgeslagen). De data wordt opgeslagen in een database die alleen berijkbaar is via Zermos, hierbij kan de gewone gebruiker geen data zien van andere gebruikers en is het bijna niet mogelijk om buiten Zermos om daar bij te komen.  
+De veiligheid van jouw data is natuurlijk het belangrijkst, daarom ga ik daar zorgvuldig mee om. Om Zermos goed te kunnen laten functioneren (of überhaupt te kunnen laten functioneren), moet je wel een koppeling leggen met Somtoday, Zermelo en/of Infowijs, Daarbij krijg Zermos toegang tot bepaalde informatie en soms moet er iets worden opgeslagen, [bekijk de benodigde data hier](#wat-wordt-er-opgeslagen). De data wordt opgeslagen in een database die alleen bereikbaar is via Zermos, hierbij kan de gewone gebruiker geen data zien van andere gebruikers en is het bijna niet mogelijk om buiten Zermos om daar bij te komen.  
 
 ## Wat wordt er opgeslagen?
 
