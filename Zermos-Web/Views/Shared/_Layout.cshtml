@@ -81,6 +81,8 @@
                 </a>
             </li>
 
+        @if ((User.FindFirstValue("email") ?? "").Contains("ccg-leerling.nl"))
+        {
             <h5 class="Heading">School</h5>
 
             <li id="informatiebord">
@@ -100,8 +102,9 @@
                     </div>
                 </a>
             </li>
+        }
             
-            <h5 class="Heading">De Antonius app</h5>
+            <h5 class="Heading">Infowijs</h5>
 
             <li id="schoolnieuws">
                 <a onclick="ReplacePage('@Url.Action("Schoolnieuws", "Infowijs")')">

@@ -89,6 +89,8 @@ public class SomtodayAPI
         
         return JsonConvert.DeserializeObject<SomtodayLeermiddelenModel>(await response.Content.ReadAsStringAsync());
     }
+
+    private int gradesPerFetch = 100;
     
     public async Task<SomtodayGradesModel> GetGrades(user user)
     {
@@ -96,7 +98,7 @@ public class SomtodayAPI
             $"https://api.somtoday.nl/rest/v1/resultaten/huidigVoorLeerling/{user.somtoday_student_id}?additional=samengesteldeToetskolomId&additional=resultaatkolomId";
 
         _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
-        _httpClient.DefaultRequestHeaders.Add("Range", "items=0-99");
+        _httpClient.DefaultRequestHeaders.Add("Range", $"items=0-{gradesPerFetch-1}");
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
         var response = await _httpClient.GetAsync(baseUrl);
@@ -112,15 +114,27 @@ public class SomtodayAPI
         if (int.TryParse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1],
                 out var total))
         {
-            
-            
-            var requests = total / 100 * 100;
 
-            for (var i = 100; i < requests; i += 100)
+
+            /*
+            x: Het eerste cijfer dat je hebt teruggekregen.
+
+            y: Het laatste cijfer dat je hebt teruggekregen (inclusief).
+
+            z:
+
+            Als nog niet alle cijfers opgevraagd zijn, dan is z gelijk aan x + 2*(y - x + 1) (zelfs als dat getal groter is dan het daadwerkelijke aantal cijfers).
+            Als alle cijfers zijn opgevraagd, dan is z gelijk aan de index (één-gebaseerde nummering) van het laatste cijfer. Dus z = y + 1.
+             
+             */
+            //var requests 0-(gradesPerFetch - 1) -> 0 requests, (gradesPerFetch)-(2 * gradesPerFetch - 1) -> 1 request, (2 * gradesPerFetch)-(3 * gradesPerFetch - 1) -> 2 requests
+            var requests = (total / gradesPerFetch) + 1;
+
+            for (var i = 1; i < requests; i += 1)
             {
                 _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
-                _httpClient.DefaultRequestHeaders.Add("Range", $"items={i}-{i + 99}");
+                _httpClient.DefaultRequestHeaders.Add("Range", $"items={i * gradesPerFetch}-{(i * gradesPerFetch) + (gradesPerFetch - 1)}");
                 _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
                 response = await _httpClient.GetAsync(baseUrl);

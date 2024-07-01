@@ -42,7 +42,7 @@ namespace Zermos_Web.APIs
             if (user.zermelo_access_token.IsNullOrEmpty() || user.school_id.IsNullOrEmpty()) throw new ArgumentNullException(nameof(user));
             if (year.IsNullOrEmpty() || week.IsNullOrEmpty()) throw new ArgumentNullException();
 
-            var baseUrl = $"https://ccg.zportal.nl/api/v3/liveschedule" +
+            var baseUrl = $"https://{user.zermelo_school_abbr}.zportal.nl/api/v3/liveschedule" +
                           $"?access_token={user.zermelo_access_token}" +
                           $"&student={user.school_id}" +
                           $"&week={year}{week}";
@@ -52,8 +52,17 @@ namespace Zermos_Web.APIs
             if (!response.IsSuccessStatusCode)
                 return EmptyModel();
 
+            var timestamps = user.zermelo_timestamps ?? "08:00-17:00";
+            var start = timestamps.Split('-')[0].Split(':');
+            var end = timestamps.Split('-')[1].Split(':');
+            var secondsStart = int.Parse(start[0]) * 3600 + int.Parse(start[1]) * 60;
+            var secondsEnd = int.Parse(end[0]) * 3600 + int.Parse(end[1]) * 60;
+            
+            //"[28800, 61200]"
+
             var zermeloRoosterModel = JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync());
             zermeloRoosterModel.MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year);
+            zermeloRoosterModel.timeStamps = new List<int> {secondsStart, secondsEnd};
             return zermeloRoosterModel;
         }
         
@@ -72,7 +81,7 @@ namespace Zermos_Web.APIs
             if (user.zermelo_access_token.IsNullOrEmpty()) throw new ArgumentNullException(nameof(user));
             if (post.IsNullOrEmpty()) throw new ArgumentNullException();
 
-            string baseUrl = "https://ccg.zportal.nl" + post + $"?access_token={user.zermelo_access_token}";
+            string baseUrl = $"https://{user.zermelo_school_abbr}.zportal.nl" + post + $"?access_token={user.zermelo_access_token}";
 
             var response = await _httpClient.GetAsync(baseUrl);
             
@@ -81,7 +90,7 @@ namespace Zermos_Web.APIs
 
         public async Task<SimpleZermeloRoosterModel> getRoosterFromStartAndEnd(user user, DateTime startUnix, DateTime endUnix)
         {
-            var baseUrl = $"https://ccg.zportal.nl/api/v3/appointments" +
+            var baseUrl = $"https://{user.zermelo_school_abbr}.zportal.nl/api/v3/appointments" +
                           $"?user={user.school_id}" +
                           $"&access_token={user.zermelo_access_token}" +
                           $"&start={startUnix.ToUnixTime()}" +

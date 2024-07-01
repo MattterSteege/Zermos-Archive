@@ -3,25 +3,14 @@
 @using System.Globalization
 @model Zermos_Web.Models.zermelo.ZermeloRoosterModel
 
+@{
+    var times = new List<int>();
+    var timesString = new List<string>(); //hh:mm
+    var timesAlreadySet = false;
+    var minuteHeight = 0f;
+}
+
 <div class="week" data-week="@Model.MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.MondayOfAppointmentsWeek.Year" data-unix="@Model.MondayOfAppointmentsWeek.ToUnixTime()">
-    <div class="times-container">
-        <ul>
-            <!--        20 horizontal lines-->
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-        </ul>
-    </div>
     <div class="days-container">
         <ul>
             <li>@Model.MondayOfAppointmentsWeek.GetWeekNumber()</li>
@@ -32,28 +21,11 @@
             <li>Vr<div class="date">@Model.MondayOfAppointmentsWeek.AddDays(4).ToString("dd MMM")</div></li>
         </ul>
     </div>
-    <div class="hours-container">
-        <ul>
-            <li></li>
-            <li>08:20</li> <!-- 1st hour -->
-            <li>09:10</li> <!-- 2nd hour -->
-            <li>10:00</li> <!-- break -->
-            <li>10:15</li> <!-- 3rd hour -->
-            <li>11:05</li> <!-- 4th hour -->
-            <li>11:55</li> <!-- break -->
-            <li>12:25</li> <!-- 5th hour -->
-            <li>13:15</li> <!-- 6th hour -->
-            <li>14:05</li> <!-- 7th hour -->
-            <li>14:55</li> <!-- break -->
-            <li>15:10</li> <!-- 8th hour -->
-            <li>16:00</li> <!-- 9th hour -->
-            <li></li> <!-- end schoolday -->
-        </ul>
-    </div>
     <div class="lessons-container">
         <ul>
             @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
             {
+                
                 @if (Model.appointments.Count == 0)
                 {
                     <li class="empty">Wow, de hele week vrij!</li>
@@ -70,14 +42,14 @@
                                 continue;
 
                             //100 means 100% of the height of the container
-                            //510 means 510 minutes between 08:20 and 16:50
-                            var minuteHeight = 100f / 510f;
+                            //540 means 540 minutes between 08:00 and 17:00
+                            minuteHeight = 100f / (Model.timeStamps[1] - Model.timeStamps[0]) * 60; // 60 minutes in an hour
 
                             //get the date of the day that the appointments are for
                             //8 * 60 + 20 = 500 minutes means 08:20
                             var dayStartUnix = appointmentList.First().start; // this is unix. make the unix time to be the same date but the time should be 08:20
                             dayStartUnix -= dayStartUnix % 86400; // remove the time from the unix time
-                            dayStartUnix += 8 * 60 * 60 + 20 * 60; // add 8 hours and 20 min to the unix time (08:20)
+                            dayStartUnix += Model.timeStamps[0]; // add the start time of the day to the unix time
 
                             // Define the time zones for UTC and the Dutch timezone
                             TimeZoneInfo dutchTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"); // This ID represents the Dutch timezone
@@ -87,10 +59,25 @@
                             int timeDifferenceInSeconds = (int) timeDifference.TotalSeconds;
 
                             dayStartUnix -= timeDifferenceInSeconds;
+                            
+                            if (times.Count != 0)
+                            {
+                                times.Add(0);
+                                times = times.Distinct().OrderBy(t => t).ToList();
+                                timesString = times.Select(t => DateTimeOffset.FromUnixTimeSeconds(dayStartUnix + timeDifferenceInSeconds + t * 60).ToString("HH:mm")).ToList();
+                                if (times[^1] == (Model.timeStamps[1] / 60 - Model.timeStamps[0] / 60))
+                                {
+                                    timesString.RemoveAt(timesString.Count - 1);
+                                }
+                            }
                         }
 
                         @foreach (var appointment in appointmentList)
                         {
+                            //add the amount of minutes from the start of the day to the start of the appointment and the start of the day to the end of the appointment
+                            times.Add((appointment.start - dayStartUnix + timeDifference.Seconds) / 60);
+                            times.Add((appointment.end - dayStartUnix + timeDifference.Seconds) / 60);
+                            
                             //percentage from top = (appointment start time - dayStartUnix) * minuteHeight *@
                             //appointment height = (appointment end time - appointment start time) * minuteHeight
 
@@ -137,5 +124,65 @@
             }
         </ul>
 
+    </div>
+    @{
+        times = times.Distinct().OrderBy(t => t).ToList();
+        timesString = timesString.Distinct().ToList();
+        var calcTime = new List<string>();
+        string gridTemplateRows = "40px ";
+        
+        var minutesLeft = ((Model.timeStamps?[1] - Model.timeStamps?[0]) / 60) ?? 540;
+        
+        //calculate the diffrence between times[n] and times[n+1] for each n
+        for (var i = 0; i < times.Count; i++)
+        {
+            if (i == times.Count - 1)
+            {
+                calcTime.Add((((Model.timeStamps[1] - Model.timeStamps[0]) / 60) - times[i]).ToString());
+            }
+            else
+            {
+                if (i >= 1)
+                {
+                    var diffPrev = times[i] - times[i - 1];
+                    if (diffPrev <= 5)
+                    {
+                        timesString[i] = null;
+                    }
+                }
+                
+                calcTime.Add((times[i + 1] - times[i]).ToString());
+                minutesLeft -= times[i + 1] - times[i];
+            }
+        }
+        
+        gridTemplateRows += string.Join("fr ", calcTime) + "fr";
+    }
+    <div class="times-container">
+        <ul style="grid-template-rows: @gridTemplateRows">
+            <li></li>
+            @for (var i = 0; i < timesString.Count; i++)
+            {
+                <li></li>
+            }
+            <li></li>
+        </ul>
+    </div>
+    <div class="hours-container">
+        <ul style="grid-template-rows: @gridTemplateRows">
+            <li></li>
+            @foreach (var time in timesString)
+            {
+                if (time == null)
+                {
+                    <li></li>
+                }
+                else
+                {
+                    <li><p>@time</p></li>
+                }
+            }   
+            <li></li> <!-- end schoolday -->
+        </ul>
     </div>
 </div>

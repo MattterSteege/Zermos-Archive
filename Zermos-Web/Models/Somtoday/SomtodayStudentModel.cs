@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Zermos_Web.Models
 {
@@ -29,7 +30,7 @@ namespace Zermos_Web.Models
 
     public class Link
     {
-        public int id { get; set; }
+        public Int64 id { get; set; }
         public string rel { get; set; }
         public string type { get; set; }
         public string href { get; set; }

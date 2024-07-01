@@ -9,7 +9,7 @@
         <p>Zermelo koppelen met een koppelcode? Om Zermelo aan je account te koppelen moet je een code invoeren. Deze code kun je vinden in Zermelo, <a target="_blank" href="https://ccg.zportal.nl/app/">hier</a> om precies te zijn. Als je op de website van Zermelo bent, klik dan op 'instellingen' en daarna op 'koppel externe applicatie'. Voer de 3-letterige code in het bovenste veld in en de 12-cijferige code in het onderste veld.</p>
     </div>
     <form method="post" asp-controller="Koppelingen" asp-action="ZermeloWithCode" class="form-control">
-        <input class="input" type="text" name="institution" maxlength="3" placeholder="abc">
+        <input class="input" type="text" name="institution" maxlength="5" placeholder="abc">
         <input class="input" type="text" name="code" placeholder="123 456 789 012">
         <button class="input submit" type="submit">Inloggen</button>
     </form>
@@ -25,40 +25,40 @@
     
     //when a user is typing the code add a space after every 3 characters
     //when there are a total of 12 non-space characters, enable the submit button
-    inputfield.on('input', function () {
-        var value = inputfield.val();
-        var length = value.length;
-        var spaceCount = (value.match(/ /g) || []).length;
-        if (length === 3 || length === 7 || length === 11) {
-            if (spaceCount < 3) {
-                inputfield.val(value + " ");
-            }
-        }
-        if (((length === 15 && spaceCount === 3) || (length === 12 && spaceCount === 0)) && institutionfield.val().length === 3) {
-            submitbutton.click();
-        }
-    });
+//inputfield.on('input', function () {
+        //    var value = inputfield.val();
+        //    var length = value.length;
+        //    var spaceCount = (value.match(/ /g) || []).length;
+        //    if (length === 3 || length === 7 || length === 11) {
+            //        if (spaceCount < 3) {
+                //            inputfield.val(value + " ");
+                //         }
+            //     }
+        //     if (((length === 15 && spaceCount === 3) || (length === 12 && spaceCount === 0)) && institutionfield.val().length === 3) {
+            //submitbutton.click();
+            //    }
+    //});
     
     //when the user presses enter, submit the form
-    inputfield.keypress(function (e) {
-        if (e.which === 13) {
-            submitbutton.click();
-        }
-    });
+//inputfield.keypress(function (e) {
+        //    if (e.which === 13) {
+            //        submitbutton.click();
+            //    }
+        //});
     
     //when a user pastes a code, remove all spaces, place a space after every 3 characters and submit the form
-    inputfield.on('paste', async function () {
-        
-        //replace all spaces with nothing
-        var value = inputfield.val().replace(/ /g, "");
-        var length = value.length;
-        
-        await new Promise(res => setTimeout(res, 1000));
-        
-        if (length === 12 && institutionfield.val().length === 3) {
-            submitbutton.click();
-        }
-    });
+//inputfield.on('paste', async function () {
+//     
+//     //replace all spaces with nothing
+//     var value = inputfield.val().replace(/ /g, "");
+//     var length = value.length;
+//    
+//    await new Promise(res => setTimeout(res, 1000));
+//    
+//    if (length === 12 && institutionfield.val().length === 3) {
+//        submitbutton.click();
+//  //  }
+// });
 
     //when user submits the form, use the function below to check if the user is logged in
     document.getElementsByTagName("form")[0].addEventListener("submit", function (e) {

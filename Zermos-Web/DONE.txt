@@ -6,5 +6,12 @@
 - Account
     - Je kan nu inloggen met een school of een persoonlijk Microsoft account
     
+- school (mijn school)
+    - als je email niet eindig op @ccg-leerling.nl dan wordt printen en informatiebord verborgen
+    
+- Zermelo 
+    - Je kan nu je schooltijden aanpassen in de instellingen, deze worden dan gebruikt voor je rooster
+    
 - Koppelen
     - Zermelo vereist nu een schoolcode om te koppelen, dit zodat Zermos langzamerhand public kan gaan
+    - Somtoday kan nu gekoppeld worden door leerlingen van elke school die geen externe provider gebruikt

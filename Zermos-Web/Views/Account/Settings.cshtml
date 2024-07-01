@@ -48,8 +48,16 @@
             <div id="4_slecht" onclick="UpdateFontSize('font-scale-5', this)" class="setting-button@(Model.font_size == "font-scale-5" ? " selected" : "")">Slecht (200%)</div>
         </div>
     </div>
-    
-    
+
+    <div class="setting-item">
+        <h1>Rooster</h1>
+        <p>Wat zijn jouw schooltijden</p>
+        <div class="settings-options">
+            <input type="time" id="5_start_time" name="start_time" min="08:00" max="18:00" value="@Model.zermelo_timestamps.Split("-")[0]"/>
+            <input type="time" id="5_end_time" name="end_time" min="08:00" max="18:00" value="@Model.zermelo_timestamps.Split("-")[1]"/>
+            <div id="5_save" onclick="UpdateSchooltijen(this)">Opslaan</div>
+        </div>
+    </div>
 </div>
 
 <script minimize>
@@ -91,6 +99,12 @@ function UpdateFontSize(value, element) {
     document.documentElement.classList.add(value);
     document.cookie = "font_size=" + value + ";path=/;max-age=5184000";
     UpdateSetting("font_size", value, element);
+}
+
+function UpdateSchooltijen(element) {
+    var start_time = document.getElementById("5_start_time").value;
+    var end_time = document.getElementById("5_end_time").value;
+    UpdateSetting("zermelo_timestamps", start_time + "-" + end_time, element);
 }
 
 function UpdateSetting(key, value, element) {   

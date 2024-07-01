@@ -6,6 +6,7 @@ namespace Zermos_Web.Models.zermeloUserModel
 
     public class Datum
     {
+        public string displayName;
         public string code { get; set; }
         public List<object> roles { get; set; }
         public string firstName { get; set; }

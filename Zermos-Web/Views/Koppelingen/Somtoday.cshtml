@@ -6,9 +6,11 @@
 <div class="login">
     <div class="login-explanation">
         <h1>Koppel Somtoday aan je account!</h1>
-        <p>Helaas is er geen betere manier om Somtoday te koppelen anders dan je gebruikersnaam en wachtwoord in te voeren. Wees gerust, je wachtwoord wordt niet opgeslagen. Als je meer vragen hebt, dan staat dat <a href="https://zermos-docs.kronk.tech/Somtoday#waarom-kan-ik-alleen-inloggen-met-mijn-wachtwoord">hier</a> uitgelegd</p>
+        <p>Helaas is er geen betere manier om Somtoday te koppelen anders dan je gebruikersnaam en wachtwoord in te voeren. Wees gerust, je wachtwoord wordt niet opgeslagen. Als je meer vragen hebt, dan staat dat <a href="https://zermos-docs.kronk.tech/Somtoday#waarom-kan-ik-alleen-inloggen-met-mijn-wachtwoord">hier</a> uitgelegd<br><br>*Let op! deze koppeling werkt alleen als je in 1 of 2 stappen moet inloggen bij Somtoday (gebruiksnaam en wachtwoord tegelijkertijd óf gebruikersnaam en daarna wachtwoord), als je bij Somtoday inlogt met een externe provider zoals Microsoft, dan kan je helaas niet inloggen!</p>
     </div>
     <form asp-controller="koppelingen" asp-action="somtoday" method="post" class="form-control">
+        <datalist id="suggestions"></datalist>
+        <input class="input" autoComplete="on" list="suggestions" name="school" placeholder="schoolnaam"/>
         <input class="input" type="text" name="username" placeholder="gebruikersnaam">
         <input class="input" type="password" name="password" placeholder="wachtwoord">
         <button class="input submit" type="submit">Inloggen</button>
@@ -26,13 +28,8 @@
         
         var url = form.action;
         var inputs = form.getElementsByTagName("input");
-        // for (var i = 0; i < inputs.length; i++) {
-        //     var input = inputs[i];
-        //     if (input.type === "hidden") continue;
-        //     url += (i === 0 ? "?" : "&") + input.name + "=" + (btoa(input.value)).replace("=", "");
-        // }
-        //url += "?username=" + btoa(inputs[0].value).replace("=", "") + "&password=" + btoa(inputs[1].value).replace("=", "");
-        url += "?username=" + btoa(encodeURIComponent(inputs[0].value)).replace("=", "") + "&password=" + btoa(encodeURIComponent(inputs[1].value)).replace("=", "");
+        //school is equel to the uuid of the selected school name
+        url += "?username=" + btoa(encodeURIComponent(inputs[1].value)).replace("=", "") + "&password=" + btoa(encodeURIComponent(inputs[2].value)).replace("=", "") + "&school=" + schools.find(school => school[0] === inputs[0].value)[1];
         console.log(url)
         
         var button = document.getElementsByTagName("button")[0];
@@ -63,5 +60,23 @@
         }
         
         xhr.send();
+    });
+
+    var schools = [];
+    var suggestions = document.getElementById("suggestions");
+    //https://servers.somtoday.nl/organisaties.json where oidcurls are [] and do not contain data
+    fetch("https://cors.mjtsgamer.workers.dev/https://servers.somtoday.nl/organisaties.json")
+    .then(response => response.json())
+    .then(data => {
+        data[0].instellingen.forEach(school => {
+            //if (school.oidcurls.length === 0) {
+            //    school.loginMethod = "email+password"
+                //schools.push(); {school.naam, school.uuid}
+                schools.push([school.naam, school.uuid]);
+                var option = document.createElement("option");
+                option.value = school.naam;
+                suggestions.appendChild(option);
+            //}
+        });
     });
 </script>

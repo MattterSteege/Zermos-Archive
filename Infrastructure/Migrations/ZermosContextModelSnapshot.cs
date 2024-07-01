@@ -97,6 +97,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("zermelo_school_abbr")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("zermelo_timestamps")
+                        .HasColumnType("longtext");
+
                     b.HasKey("email");
 
                     b.ToTable("users");

@@ -81,6 +81,7 @@ var loadingTexts = [
   "Geen paniek... AHHHHH!",
   "Zorgen dat kabouters nog steeds kort zijn.",
   "IJs bakken...",
+  "laadbericht aan het laden...", //dankje Micha
 ];
 
 //==============================SCROLLING SYSTEM TOP==============================

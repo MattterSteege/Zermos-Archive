@@ -109,6 +109,12 @@
         {
             gradeChange = 100;
         }
+        
+        if (WeightedAverageSnapshots.Count == 0)
+            WeightedAverageSnapshots.Add(0);
+        
+        if (WeightedAverageSnapshotsSE.Count == 0)
+            WeightedAverageSnapshotsSE.Add(0);
 
         <div class="vak">
             <a onclick="ReplacePage('@Url.Action("Cijfer", "Somtoday", new {vak = vak.vak.afkorting.Capitalize()})')">

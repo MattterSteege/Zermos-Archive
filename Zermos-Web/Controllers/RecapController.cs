@@ -147,12 +147,12 @@ public class RecapController : BaseController
             int totalOnvoldoendes = totalGrades - totalVoldoendes;
 
             // Calculate highest grade
-            var topGrade = SomtodayGrades.items.MaxBy(x => Math.Round(NumberUtils.ParseFloat(x.geldendResultaat)));
+            var topGrade = SomtodayGrades.items.MaxBy(x => NumberUtils.ParseFloat(x.geldendResultaat));
             var topSubjectsGrade = topGrade.geldendResultaat;
             var topSubjectSubject = topGrade.vak.naam;
 
             // calculate lowest grade
-            var worstGrade = SomtodayGrades.items.MinBy(x => Math.Round(NumberUtils.ParseFloat(x.geldendResultaat)));
+            var worstGrade = SomtodayGrades.items.MinBy(x => NumberUtils.ParseFloat(x.geldendResultaat));
             var worstSubjectsGrade = worstGrade.geldendResultaat;
             var worstSubjectSubject = worstGrade.vak.naam;
 

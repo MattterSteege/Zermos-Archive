@@ -185,3 +185,39 @@
     font-size: var(--font-size);
     margin-top: var(--padding-small);
 }
+
+/*
+
+<div class="settings-options">
+            <input type="time" id="5_start_time" name="start_time" min="08:00" max="18:00">
+            <input type="time" id="5_end_time" name="end_time" min="08:00" max="18:00">
+            <div id="5_save" onclick="UpdateSchooltijen(this.parent)">Opslaan</div>
+        </div>
+*/
+
+.setting-item .settings-options input[type="time"] {
+    width: 100%;
+    padding: var(--padding-small);
+    font-size: var(--font-size);
+    border-radius: var(--border-radius-small);
+    background: var(--overlay-overlay-color);
+    border: none;
+}
+
+div#\35 _save {
+    background: var(--confirm-color);
+    padding: var(--padding-small);
+    border-radius: var(--border-radius-small);
+    color: var(--white-color);
+    font-size: var(--font-size);
+    cursor: pointer;
+    text-align: center;
+}
+
+div#\35 _save:hover {
+    box-shadow: unset;
+}
+
+div#\35 _save.selected {
+    box-shadow: 0 0 var(--padding) var(--confirm-color) !important;
+}

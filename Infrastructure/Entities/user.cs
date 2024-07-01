@@ -17,20 +17,27 @@ namespace Infrastructure.Entities
         //Zermos related
         public string custom_huiswerk { get; set; }
         
-        //Token Related
+        //Zermelo Related
         public string zermelo_access_token { get; set; }
         public DateTime? zermelo_access_token_expires_at { get; set; }
         public string zermelo_school_abbr { get; set; }
+        [NotMapped, Setting] 
+        public string zermelo_timestamps 
+        {
+            get => GetSetting<string>("zermelo_timestamps");
+            set => SetSetting("zermelo_timestamps", value);
+        }
         
+        //Somtoday Related
         public string somtoday_access_token { get; set; }
         public string somtoday_refresh_token { get; set; }
         public string somtoday_student_id { get; set; }
-        public string infowijs_access_token { get; set; }
-
-        //cache related
         public string cached_somtoday_grades { get; set; }
         public string cached_somtoday_homework { get; set; }
         public string cached_somtoday_leermiddelen { get; set; }
+        
+        //Infowijs Related
+        public string infowijs_access_token { get; set; }
         public string custom_leermiddelen { get; set; }
         public string cached_infowijs_news { get; set; }
         

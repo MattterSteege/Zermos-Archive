@@ -32,9 +32,10 @@ public class AuthenticationController : Controller
 #region Microsoft Login
     
 #if RELEASE
-    const string redirectUrl = "https://zermos.kronk.tech/Login/Callback";
+    //if env var beta = true use beta login
+    string redirectUrl = "https://zermos.kronk.tech/Login/Callback";
 #else
-    const string redirectUrl = "https://localhost:5001/Login/Callback";
+    string redirectUrl = "https://localhost:5001/Login/Callback";
 #endif
     const string clientId = "REDACTED_MS_CLIENT_ID";
     const string clientSecret = "lcV8Q~GbQjBv45fivMgN3ARP~UHPNSuV259gQcU7";
@@ -43,6 +44,11 @@ public class AuthenticationController : Controller
     [Route("/Login")]
     public async Task<IActionResult> Login()
     {
+        if (Environment.GetEnvironmentVariable("beta") == "true")
+        {
+            redirectUrl = "https://zermos-beta.kronk.tech/Login/Callback";
+        }
+        
         string redirect = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=" +
                           clientId + "&response_type=code&redirect_uri=" + redirectUrl +
                           "&response_mode=query&scope=User.Read&state=" + TokenUtils.RandomString();

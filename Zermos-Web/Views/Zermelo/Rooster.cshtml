@@ -65,7 +65,7 @@ function PreviousWeek() {
 
 }
 
-async function fetchWeek(week, year, append) {        
+async function fetchWeek(week, year, append, retry = false) {        
     
     var newWeek = {week: week, year: year};
     
@@ -84,8 +84,15 @@ async function fetchWeek(week, year, append) {
     
     
     fetch('/zermelo/rooster?week=' + newWeek.week + '&year=' + newWeek.year + '&compact=true&no-framework=true')
-    .then(response => response.text())
-    .then((html) => {
+    .then(response => {
+    
+        if (!response.ok && !retry){
+            fetchWeek(week, year, append, true);
+        }
+        
+        return response.text();
+    })
+    .then((html) => {    
         var weekElement = document.querySelector(`.week[data-week="${week}"]`);
         weekElement.style.transition = '0.25s';
         weekElement.style.opacity = 0;
