@@ -46,7 +46,7 @@ Onze website maakt gebruik van cookies om uw ervaring te verbeteren. Een cookie 
 We gebruiken functionele cookies om uw voorkeuren op onze site te onthouden. Deze cookies gebruiken geen persoonsgegevens.
 
 ### Aanpassingen aan dit privacybeleid
-Zermos heeft ten alle tijden het recht om dit privacybeleid aan te passen. Het meest actuele privacybeleid vindt u op cijferroyale.nl en in de Zermos app. Als er een nieuw privacybeleid is krijgt u een bericht te zien in de meest recente versie van onze app.
+Zermos heeft ten alle tijden het recht om dit privacybeleid aan te passen. Het meest actuele privacybeleid vindt u op https://zermos-docs.kronk.tech. Als er een nieuw privacybeleid is krijgt u een bericht te zien in de meest recente versie van onze app.
 
 ### Contact
 Heeft u vragen of klachten over dit privacybeleid? Neem contact op met 58373@ccg-leerling.nl.
