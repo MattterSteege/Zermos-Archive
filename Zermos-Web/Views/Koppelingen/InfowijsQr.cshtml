@@ -50,6 +50,7 @@ function SendCheck() {
             if (xhr.status === 200) {
                 if (xhr.responseText === "success") {
                     clearInterval(CheckingTimeout);
+                    newSidebar();
                     ReplacePage('@Url.Action("Account", "Account")');
                 } else {
                     CheckingTimeout = setTimeout(function() {

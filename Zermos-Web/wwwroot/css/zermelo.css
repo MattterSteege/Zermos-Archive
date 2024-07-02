@@ -120,6 +120,7 @@
     grid-template-rows: 30px 10fr 10fr 3fr 10fr 10fr 6fr 10fr 10fr 10fr 3fr 10fr 9fr;
     margin: 0px 5px;
     text-align: center;
+    background: var(--background-color);
 }
 
 .hours-container ul li {

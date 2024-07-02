@@ -163,7 +163,7 @@ body {
 }
 
 /* End setting default values */
-.sidebar {
+#sidebar {
     display: flex;
     background: var(--overlay-color);
     width: 250px;
@@ -191,7 +191,7 @@ body {
     margin-bottom: var(--padding);
 }
 
-.sidebar .docs {
+#sidebar .docs {
     position: absolute;
     bottom: var(--padding);
     width: calc(100% - calc(var(--padding) * 2));
@@ -216,7 +216,7 @@ body {
     background-size: 130%;
 }
 
-.sidebar .docs h4 {
+#sidebar .docs h4 {
     position: absolute;
     top: var(--padding);
     left: var(--padding);
@@ -225,7 +225,7 @@ body {
     font-size: var(--font-size-heading);
 }
 
-.sidebar .docs p {
+#sidebar .docs p {
     position: absolute;
     top: 48px;
     left: var(--padding);
@@ -234,7 +234,7 @@ body {
     font-size: var(--font-size);
 }
 
-.sidebar .docs a {
+#sidebar .docs a {
     position: absolute;
     bottom: var(--padding);
     left: var(--padding);
@@ -252,11 +252,11 @@ body {
     display: grid;
 }
 
-.sidebar .docs button:hover {
+#sidebar .docs button:hover {
     background: var(--background-color);
 }
 
-.sidebar .top {
+#sidebar .top {
     height: calc(48px + var(--padding));
     top: 0;
     display: flex;
@@ -271,7 +271,7 @@ body {
     border-top-left-radius: 14px;
 }
 
-.sidebar .top .svgText {
+#sidebar .top .svgText {
     fill: var(--text-color);
     font-size: 42px;
     dominant-baseline: middle;
@@ -280,7 +280,7 @@ body {
 }
 
 /*Begin of the animation*/
-.sidebar .top .svgText {
+#sidebar .top .svgText {
     position: relative;
     display: inline-block;
     text-shadow: none;
@@ -289,12 +289,12 @@ body {
     cursor: default;
 }
 
-.sidebar .top .svgText.animating {
+#sidebar .top .svgText.animating {
     transform: translateY(-10px);
 }
 
 /*End of the animation*/
-.sidebar .bottom {
+#sidebar .bottom {
     height: auto;
     top: calc(48px + var(--padding) * 2);
     bottom: 176px;
@@ -313,7 +313,7 @@ body {
     width: 100%;
 }
 
-.sidebar .bottom ul {
+#sidebar .bottom ul {
     list-style: none;
     display: flex;
     flex-direction: column;
@@ -364,12 +364,12 @@ body {
     margin-right: unset;
 }
 
-.sidebar .bottom ul li {
+#sidebar .bottom ul li {
     height: 49px;
     width: auto;
 }
 
-.sidebar .bottom ul li p {
+#sidebar .bottom ul li p {
     color: var(--text-color);
     text-decoration: none;
     font-size: var(--font-size);
@@ -720,7 +720,7 @@ main.main::-webkit-scrollbar-track {
         /*zoom: 70%;*/
     }
 
-    .sidebar {
+    #sidebar {
         width: 180px;
     }
 
@@ -778,7 +778,7 @@ main.main::-webkit-scrollbar-track {
         left: unset !important;
     }
 
-    .sidebar {
+    #sidebar {
         width: 64px;
         height: 100%;
         top: 0;
@@ -789,12 +789,12 @@ main.main::-webkit-scrollbar-track {
         border-radius: 0;
     }
 
-    .left .sidebar {
+    .left #sidebar {
         right: unset;
         left: 0;
     }
 
-    .sidebar .top {
+    #sidebar .top {
         width: 100%;
         display: flex;
         align-items: center;
@@ -805,20 +805,20 @@ main.main::-webkit-scrollbar-track {
         border-radius: 0;
     }
 
-    /*.sidebar .top .svgText from second to last child*/
-    .sidebar .top .svgText:nth-child(n+2) {
+    /*#sidebar .top .svgText from second to last child*/
+    #sidebar .top .svgText:nth-child(n+2) {
         display: none;
     }
 
-    .sidebar .top .svgText:first-child {
+    #sidebar .top .svgText:first-child {
         transform: unset;
     }
 
-    .sidebar .top .svgText:first-child {
+    #sidebar .top .svgText:first-child {
         transform: scale(4) translate(-10px, -75px)
     }
 
-    .sidebar .bottom {
+    #sidebar .bottom {
         bottom: 0;
     }
 
@@ -885,7 +885,7 @@ main.main::-webkit-scrollbar-track {
         display: none;
     }
 
-    .sidebar .bottom {
+    #sidebar .bottom {
         bottom: 0;
     }
 }

@@ -634,3 +634,58 @@ function HasPreview(preview) {
     return previewCookie.split("=")[1].split("-").includes(preview);
   }
 }
+
+//==============================================================
+var sidebarLoadSpeed = 250;
+function newSidebar() {
+  fetch("/data/sidebar?no-framework")
+    .then(response => response.text())
+    .then(data => {
+      var sidebar = document.querySelector("#sidebar")
+      
+      //if the data is the same, don't reload the sidebar
+        if(sidebar.innerHTML === data) return;
+      
+      var children = Array.from(sidebar.children);
+      ease(1, 0, sidebarLoadSpeed * (0.8), (value) => {
+        children.forEach((child) => {
+            child.style.opacity = value;
+        });
+      });
+      setTimeout(() => {
+        sidebar.innerHTML = data;
+        var children = Array.from(sidebar.children);
+        children.forEach((child) => {
+          child.style.opacity = 0;
+        });
+        ease(0, 1, sidebarLoadSpeed * (0.8), (value) => {
+          children.forEach((child) => {
+            child.style.opacity = value;
+          });
+        });
+      }, sidebarLoadSpeed);
+    });
+}
+
+function ease(start, end, time, callback) {
+  start = Number(start);
+  end = Number(end);
+  const startTime = Date.now();
+  const duration = time;
+
+  function update() {
+    const currentTime = Date.now();
+    const elapsed = currentTime - startTime;
+
+    if (elapsed >= duration) {
+      clearInterval(interval);
+      callback(end);
+    } else {
+      const progress = elapsed / duration;
+      const easedValue = start + (end - start) * (progress * (2 - progress));
+      callback(easedValue);
+    }
+  }
+
+  const interval = setInterval(update, 10); // Update approximately every 16 milliseconds
+}

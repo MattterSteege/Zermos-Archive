@@ -50,6 +50,7 @@ Html5Qrcode.getCameras().then(devices => {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                         if (xhr.responseText === "success") {
+                            newSidebar();
                             ReplacePage('@Url.Action("Account", "Account")');
                         }
                         else {

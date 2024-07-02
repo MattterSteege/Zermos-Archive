@@ -56,6 +56,7 @@ function send(e) {
         if (xhr.readyState === 4) {            
             if (xhr.status === 200) {
                 if (xhr.responseText === "success") {
+                    newSidebar();
                     ReplacePage('@Url.Action("Account", "Account")');
                 }
                 else if (xhr.responseText.startsWith("?"))

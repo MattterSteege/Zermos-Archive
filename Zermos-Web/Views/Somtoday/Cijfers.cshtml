@@ -221,4 +221,9 @@ addButtonToPage("fa-clock-rotate-left", () => {
     .open();
 
 }, VerticalAlignment.BL, Background.Accent);
+
+addButtonToPage("fa-refresh", () => {
+    document.cookie = "cached-somtoday-grades=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    ReplacePage('/Somtoday/Cijfers');
+}, VerticalAlignment.TL, Background.Primary);
 </script>

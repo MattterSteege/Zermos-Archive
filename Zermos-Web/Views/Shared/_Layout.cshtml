@@ -4,6 +4,9 @@
 @{
     var version = Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION");
     version = version == "DEV" ? TokenUtils.RandomString(10) : version;
+    bool isZermeloGekoppeld = (bool) ViewData["isZermeloGekoppeld"];
+    bool isInfowijsGekoppeld = (bool) ViewData["isInfowijsGekoppeld"];
+    bool isSomtodayGekoppeld = (bool) ViewData["isSomtodayGekoppeld"];
 }
 <!DOCTYPE html>
 <html lang="nl" class="@(Context.Response.GetCookie("theme") ?? Context.Request.Cookies["theme"] ?? "light") @(Context.Response.GetCookie("hand_side") ?? Context.Request.Cookies["hand_side"] ?? "right") @(Context.Response.GetCookie("font_size") ?? Context.Request.Cookies["font_size"] ?? "font-scale-1")">
@@ -22,136 +25,10 @@
     <link rel="stylesheet" href="/css/modal.css?v=@version">
 </head>
 <body>
-<div class="sidebar">
-    <div class="top">
-        <!--        6 SVG's with the letters Z,E,R,M,O & S width should be 1/6 of 100%-->
-        <svg viewBox="0 0 700 200">
-            <text class="svgText" x="100" y="100">Z</text>
-            <text class="svgText" x="200" y="100">E</text>
-            <text class="svgText" x="300" y="100">R</text>
-            <text class="svgText" x="400" y="100">M</text>
-            <text class="svgText" x="500" y="100">O</text>
-            <text class="svgText" x="600" y="100">S</text>
-        </svg>
-    </div>
 
-    <div class="divider"></div>
-
-    <div class="bottom">
-        <ul>
-
-            <h5 class="Heading">Zermelo</h5>
-
-            <li id="rooster">
-                <a onclick="ReplacePage('@Url.Action("Rooster", "Zermelo")')">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-calendar-day menu-icons fa-fw"></i>
-                        <p>Rooster</p>
-                    </div>
-                </a>
-            </li>
-
-
-            <h5 class="Heading">SOMtoday</h5>
-
-            <li id="huiswerk">
-                <a onclick="ReplacePage('@Url.Action("Huiswerk", "Somtoday")')">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-pen-to-square menu-icons fa-fw"></i>
-                        <p>Huiswerk</p>
-                    </div>
-                </a>
-            </li>
-
-            <li id="cijfers">
-                <a onclick="ReplacePage('@Url.Action("Cijfers", "Somtoday")')">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-line-chart menu-icons fa-fw"></i>
-                        <p>Cijfers</p>
-                    </div>
-                </a>
-            </li>
-
-            <li id="leermiddelen">
-                <a onclick="ReplacePage('@Url.Action("Leermiddelen", "Somtoday")')">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-book menu-icons fa-fw"></i>
-                        <p>Leermiddelen</p>
-                    </div>
-                </a>
-            </li>
-
-        @if ((User.FindFirstValue("email") ?? "").Contains("ccg-leerling.nl"))
-        {
-            <h5 class="Heading">School</h5>
-
-            <li id="informatiebord">
-                <a onclick="ReplacePage('@Url.Action("informatiebord", "School")')">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-info-circle menu-icons fa-fw"></i>
-                        <p>Informatiebord</p>
-                    </div>
-                </a>
-            </li>
-            
-            <li id="printen">
-                <a onclick="ReplacePage('@Url.Action("Printen", "School")')">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-print menu-icons fa-fw"></i>
-                        <p>Printen</p>
-                    </div>
-                </a>
-            </li>
-        }
-            
-            <h5 class="Heading">Infowijs</h5>
-
-            <li id="schoolnieuws">
-                <a onclick="ReplacePage('@Url.Action("Schoolnieuws", "Infowijs")')">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-newspaper menu-icons fa-fw"></i>
-                        <p>Schoolnieuws</p>
-                    </div>
-                </a>
-            </li>
-
-            <li id="schoolkalender">
-                <a onclick="ReplacePage('@Url.Action("Schoolkalender", "Infowijs")')">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-calendar-days menu-icons fa-fw"></i>
-                        <p>Schoolkalender</p>
-                    </div>
-                </a>
-            </li>
-
-            <li style="display: none" class="hidden-account" id="account-2">
-                <a onclick="ReplacePage('@Url.Action("Account", "Account")')">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-user menu-icons fa-fw"></i>
-                    </div>
-                </a>
-            </li>
-
-            <h5 class="Heading">ZERMOS RECAP!</h5>
-            
-            <li id="recap">
-                <a onclick="ReplacePage('@Url.Action("Index", "Recap")')">
-                    <div class="menu-item">
-                        <i class="fa-solid fa-trophy menu-icons menu-icons-custom fa-fw" aria-hidden="true"></i>
-                        <p>Zermos Recap</p>
-                    </div>
-                </a>
-            </li>
-
-            <div class="spacer"></div>
-        </ul>
-    </div>
-    <div class="docs">
-        <img class="docs-image background-tint"/>
-        <h4>Hulp nodig?</h4>
-        <p>Check hoe je Zermos kunt gebruiken</p>
-        <a href="https://zermos-docs.kronk.tech">Bekijk de documentatie</a>
-    </div>
+<!-- get data from sidebar.cshtml -->
+<div id="sidebar">
+    @await Html.PartialAsync("sidebar", ViewData)
 </div>
 
 <div class="top-bar">

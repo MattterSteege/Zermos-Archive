@@ -53,6 +53,10 @@ else if (Model.code == 13)
             <p>Je bent succesvol ingelogd op je account. Welkom terug, <b>@(Model.email ?? "[email]")</b>! Je hebt nu volledige toegang tot alle functies en mogelijkheden, als je ze gekoppeld heb.</p>
         </div>
     </div>
+    
+    <script>
+        newSidebar();
+    </script>
 }
 else if (Model.code == 21)
 {
@@ -60,6 +64,7 @@ else if (Model.code == 21)
         <div class="login-explanation">
             <h1>Deze gebruiker is niet gevonden.</h1>
         </div>
+        <a onclick="ReplacePage('/Login')" class="form-control login-explanation">Opnieuw inloggen</a>
     </div>
 }
 else if (Model.code == 22)
@@ -68,6 +73,7 @@ else if (Model.code == 22)
         <div class="login-explanation">
             <h1>Deze verificatie code is verlopen.</h1>
         </div>
+        <a onclick="ReplacePage('/Login')" class="form-control login-explanation">Opnieuw inloggen</a>
     </div>
 }
 else if (Model.code == 23)
@@ -76,6 +82,7 @@ else if (Model.code == 23)
         <div class="login-explanation">
             <h1>Deze verificatie code is niet geldig.</h1>
         </div>
+        <a onclick="ReplacePage('/Login')" class="form-control login-explanation">Opnieuw inloggen</a>
     </div>
 }
 else if (Model.code == 24)
@@ -84,6 +91,7 @@ else if (Model.code == 24)
         <div class="login-explanation">
             <h1>Deze gebruiker is al geverifieerd.</h1>
         </div>
+        <a onclick="ReplacePage('/Login')" class="form-control login-explanation">Opnieuw inloggen</a>
     </div>
 }
 else if (Model.code == 3)
@@ -93,7 +101,12 @@ else if (Model.code == 3)
             <h1>Uitgelogd!</h1>
             <p>Je bent succesvol uitgelogd van je account. Je kan nu niet meer bij je gegevens, en je moet opnieuw inloggen om ze weer te kunnen zien.</p>
         </div>
+        <a onclick="ReplacePage('/Login')" class="form-control login-explanation">Opnieuw inloggen</a>
     </div>
+    
+<script>
+    newSidebar();
+</script>
 }
 else
 {
@@ -101,5 +114,6 @@ else
         <div class="login-explanation">
             <h1 style="color: #EB3628">Er is een onbekende fout opgetreden? Vaak helpt opnieuw proberen.</h1>
         </div>
+        <a onclick="ReplacePage('/Login')" class="form-control login-explanation">Opnieuw inloggen</a>
     </div>
 }

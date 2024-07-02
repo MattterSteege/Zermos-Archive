@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -38,8 +39,21 @@ namespace Zermos_Web.Controllers
             Response.Cookies.Append("hand_side", user.hand_side ?? "right");
             Response.Cookies.Append("theme", user.theme ?? "light");
             Response.Cookies.Append("font_size", user.font_size ?? "1");
+            ViewData["isZermeloGekoppeld"] = user.zermelo_access_token_expires_at > DateTime.Now;
+            ViewData["isInfowijsGekoppeld"] = TokenUtils.CheckToken(user.infowijs_access_token);
+            ViewData["isSomtodayGekoppeld"] = TokenUtils.CheckToken(user.somtoday_refresh_token);
 
             return View();
+        }
+
+        [Route("/data/sidebar")]
+        public IActionResult Sidebar()
+        {
+            var user = ZermosUser;
+            ViewData["isZermeloGekoppeld"] = user.zermelo_access_token_expires_at > DateTime.Now;
+            ViewData["isInfowijsGekoppeld"] = TokenUtils.CheckToken(user.infowijs_access_token);
+            ViewData["isSomtodayGekoppeld"] = TokenUtils.CheckToken(user.somtoday_refresh_token);
+            return PartialView();
         }
         
         //to send the correct deeplink format do this: location.href = 'web+zermos://' + url;
