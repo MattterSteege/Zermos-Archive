@@ -4,6 +4,32 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - Versie 0.5.2 / Versie 0.5.3 - 02-07-2024
+0.5.3 Breaking news, Zermos takes over the Netherlands
+
+- infowijs
+    - het maakt niet uit welke versie (of van welke school) je bent, als je toegang hebt tot de Hoy app of een variatie daarvan, dan kan je nu op Zermos koppelen*
+
+- Account
+    - Je kan nu inloggen met een school of een persoonlijk Microsoft account
+    - als je in of uitlogt dan wordt de sidebar geupdate met de beschikbare functies (uitgelogd: inloggen knop, ingelogd: alle gekoppelde functies)
+    
+- school (mijn school)
+    - als je email niet eindig op @ccg-leerling.nl dan wordt printen en informatiebord verborgen
+    
+- Somtoday
+    - Je kunt nu je cijfers verversen door op de refresh knop te drukken 
+    
+- Zermelo 
+    - Je kan nu je schooltijden aanpassen in de instellingen, deze worden dan gebruikt voor je rooster
+    
+- Koppelen
+    - Zermelo vereist nu een schoolcode om te koppelen, dit zodat Zermos langzamerhand public kan gaan
+    - Somtoday kan nu gekoppeld worden door leerlingen van elke school die geen externe provider gebruikt 
+    - Als je een app koppelt dan wordt de sidebar geupdate met de nieuwe beschikbare functies
+    
+    
+
 # Release Notes - Versie 0.5.1 - 28-06-2024
 0.5.1 bugfixes
 
