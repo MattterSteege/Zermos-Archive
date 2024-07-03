@@ -22,6 +22,8 @@
 <script minimize>
 @Context.Items["dmjs"]
 
+var todayLine = document.getElementById('today');
+var lineInterval = undefined;
 var weeks = document.getElementsByClassName('week');
 var weekCarousel = document.getElementById('week-carousel');
 var weeksArray = [{week: Number(weeks[0].dataset.week), year: Number(weeks[0].dataset.year)}];
@@ -272,7 +274,25 @@ Zermos.mainBeforeLoad = () => {
     //when touch or mouse leaves the container, handle the mouseup event
     container.addEventListener("touchleave", mouseUp);
     container.addEventListener("mouseleave", mouseUp);
+    
+    
+    //Current Time Line
+    var now = new Date();
+    var seconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+    var percentage = (seconds - todayLine.dataset.start) / (todayLine.dataset.end - todayLine.dataset.start) * 100;
+    todayLine.style.top = percentage + "%";
+    
+    lineInterval = setInterval(() => {
+        var now = new Date();
+        var seconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+        var percentage = (seconds - todayLine.dataset.start) / (todayLine.dataset.end - todayLine.dataset.start) * 100;
+        todayLine.style.top = percentage + "%";
+    }, 15000);
 };
+
+Zermos.mainUnload(() => {
+    clearInterval(lineInterval);
+});
 
 function ScollToWeek(amount) {
     //0% is the first child, -100% second child, -200% third child, etc.

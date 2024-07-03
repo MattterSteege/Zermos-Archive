@@ -36,6 +36,11 @@
                 {
                     <li class="lesdag">
                         @{
+                            if (Model.MondayOfAppointmentsWeek.GetWeekNumber() == DateTime.Now.GetWeekNumber() && day == DateTime.Now.DayOfWeek)
+                            {
+                                <div id="today" data-start="@Model.timeStamps[0]" data-end="@Model.timeStamps[1]"></div>
+                            }
+                            
                             IEnumerable<Appointment> appointmentList = Model.appointments.Where(a => a.start.ToDateTime().DayOfWeek == day).ToList();
 
                             if (!appointmentList.Any())
