@@ -14,7 +14,7 @@
     <meta charset="UTF-8">
     <title>Zermos</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" crossorigin="anonymous" rel="stylesheet"/>
-    <script src="https://kit.fontawesome.com/052f5fa8f8.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fa.kronk.tech">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="manifest" href="/manifest.webmanifest"/>
@@ -148,6 +148,11 @@ function ReplacePage(url) {
         //check if the url already has a query string
         url += url.includes("?") ? "&" : "?";
         url += "dmjs";
+    }
+    
+    if (url.startsWith("./")) {
+        // get current hash and append the url to it
+        url = window.location.hash.replace("#", "") + url.replace(".", "");
     }
 
     content.style.opacity = "1";

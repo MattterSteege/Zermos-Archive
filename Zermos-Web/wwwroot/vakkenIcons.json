@@ -1,162 +1,138 @@
 ﻿[
     {
-      "keywords": ["a", "b", "c", "d"],
-      "icon": "overig1"
-    },
-    {
-      "keywords": ["e", "f", "g", "h"],
-      "icon": "overig2"
-    },
-    {
-      "keywords": ["i", "j", "k", "l"],
-      "icon": "overig3"
-    },
-    {
-      "keywords": ["m", "n", "o", "p"],
-      "icon": "overig4"
-    },
-    {
-      "keywords": ["q", "r", "s", "t", "u"],
-      "icon": "overig5"
-    },
-    {
-      "keywords": ["v", "w", "x", "y", "z"],
-      "icon": "overig6"
-    },
-    {
       "keywords": ["aardrijkskunde", "ak"],
-      "icon": "aardrijkskunde"
+      "icon": "<i class=\"fa-solid fa-earth-europe\"></i>"
     },
     {
       "keywords": ["biologie", "bi", "bio"],
-      "icon": "biologie"
+      "icon": "<i class=\"fa-solid fa-worm\"></i>"
     },
     {
       "keywords": ["bedrijfseconomie", "beco"],
-      "icon": "bedrijfseconomie"
+      "icon": "<i class=\"fa-solid fa-chart-line-up\"></i>"
     },
     {
       "keywords": ["culturele en kunstzinnige vorming", "cultureel kunstzinnige vorming", "ckv"],
-      "icon": "schilderspalet"
+      "icon": "<i class=\"fa-solid fa-paintbrush\"></i>"
     },
     {
       "keywords": ["klassieke culturele vorming", "kcv"],
-      "icon": "schilderspalet"
+      "icon": "<i class=\"fa-solid fa-paintbrush\"></i>"
     },
     {
       "keywords": ["beeldende vorming", "bv, bte, kubv"],
-      "icon": "schilderspalet"
+      "icon": "<i class=\"fa-solid fa-paintbrush\"></i>"
     },
     {
       "keywords": ["chinese taal en letterkunde", "chinees", "ch, chtl"],
-      "icon": "chinees"
+      "icon": "<i class=\"fa-solid fa-language\"></i>"
     },
     {
       "keywords": ["duitse taal en literatuur", "duitse taal", "du", "dui", "dutl"],
-      "icon": "duits"
+      "icon": "<i class=\"fa-solid fa-beer-mug\"></i>"
     },
     {
       "keywords": ["drama", "theater", "kudr", "dr"],
-      "icon": "drama"
+      "icon": "<i class=\"fa-solid fa-masks-theater\"></i>"
     },
     {
       "keywords": ["economie", "eco", "eo", "econ", "ee"],
-      "icon": "economie"
+      "icon": "<i class=\"fa-solid fa-chart-line-up\"></i>"
     },
     {
       "keywords": ["engelse taal en literatuur", "engelse taal", "engels", "en", "entl"],
-      "icon": "engels"
+      "icon": "<i class=\"fa-solid fa-mug-tea\"></i>"
     },
     {
       "keywords": ["franse taal en literatuur", "franse taal", "frans", "fa", "fatl"],
-      "icon": "frans"
+      "icon": "<i class=\"fa-solid fa-baguette\"></i>"
     },
     {
       "keywords": ["geschiedenis", "gs", "ges"],
-      "icon": "geschiedenis"
+      "icon": "<i class=\"fa-solid fa-scroll\"></i>"
     },
     {
       "keywords": ["godsdienst", "gd", "gds"],
-      "icon": "godsdienst"
+      "icon": "<i class=\"fa-solid fa-dove\"></i>"
     },
     {
       "keywords": ["griekse taal", "grieks", "gr", "gtc"],
-      "icon": "grieks"
+      "icon": "<i class=\"fa-solid fa-wreath-laurel\"></i>"
     },
     {
       "keywords": ["tekenen", "te"],
-      "icon": "tekenen"
+      "icon": "<i class=\"fa-solid fa-paintbrush\"></i>"
     },
     {
       "keywords": ["informatica", "in"],
-      "icon": "informatica"
+      "icon": "<i class=\"fa-solid fa-code\"></i>"
     },
     {
       "keywords": ["lichamelijke opvoeding", "lo"],
-      "icon": "lichamelijkeopvoeding"
+      "icon": "<i class=\"fa-solid fa-court-sport\"></i>"
     },
     {
       "keywords": ["latijn", "la", "ltc"],
-      "icon": "latijn"
+      "icon": "<i class=\"fa-solid fa-l\"></i>"
     },
     {
-      "keywords": ["filosofie", "fi"],
-      "icon": "filosofie"
+      "keywords": ["filosofie", "fi", "lef", "levensbeschouwing ethiek filosofie"],
+      "icon": "<i class=\"fa-solid fa-dove\"></i>"
     },
     {
       "keywords": ["management & organisatie", "mo"],
-      "icon": "managementorganisatie"
+      "icon": "<i class=\"fa-solid fa-list-check\"></i>"
     },
     {
       "keywords": ["muziek", "mu", "kmu", "kumu"],
-      "icon": "muziek"
+      "icon": "<i class=\"fa-solid fa-music\"></i>"
     },
     {
       "keywords": ["maatschappijleer", "ma", "mask", "maat", "mm"],
-      "icon": "maatschappijleerburgerschap"
+      "icon": "<i class=\"fa-solid fa-city\"></i>"
     },
     {
       "keywords": ["burgerschap", "bur"],
-      "icon": "maatschappijleerburgerschap"
+      "icon": "<i class=\"fa-solid fa-city\"></i>"
     },
     {
       "keywords": ["nederlandse taal en literatuur", "nederlandse taal", "nederlands", "ne", "netl"],
-      "icon": "nederlands"
+      "icon": "<i class=\"fa-solid fa-flower-tulip\"></i>"
     },
     {
       "keywords": ["natuurkunde", "nat"],
-      "icon": "natuurkunde"
+      "icon": "<i class=\"fa-solid fa-atom\"></i>"
     },
     {
       "keywords": ["natuur- en scheikunde", "nask", "nsk", "nso"],
-      "icon": "natuurkunde"
+      "icon": "<i class=\"fa-solid fa-atom\"></i>"
     },
     {
       "keywords": ["kunstgeschiedenis", "ku", "kua"],
-      "icon": "schilderspalet"
+      "icon": "<i class=\"fa-solid fa-paintbrush\"></i>"
     },
     {
       "keywords": ["scheikunde", "schk", "sk"],
-      "icon": "scheikunde"
+      "icon": "<i class=\"fa-solid fa-flask\"></i>"
     },
     {
       "keywords": ["spaanse taal en literatuur", "spaanse taal", "spaans", "sp", "sptl"],
-      "icon": "spaans"
+      "icon": "<i class=\"fa-solid fa-language\"></i>"
     },
     {
-      "keywords": ["techniek", "tn"],
-      "icon": "techniek"
+      "keywords": ["techniek", "tn", "onderzoek en ontwerpen", "oeo", "oo"],
+      "icon": "<i class=\"fa-solid fa-microchip\"></i>"
     },
     {
       "keywords": ["verzorging", "vz", "zw"],
-      "icon": "verzorging"
+      "icon": "<i class=\"fa-solid fa-user-nurse\"></i>"
     },
     {
       "keywords": ["wiskunde a", "wiskunde b", "wiskunde c", "wiskunde d", "wiskunde", "wi", "ws"],
-      "icon": "wiskunderekenen"
+      "icon": "<i class=\"fa-solid fa-calculator\"></i>"
     },
     {
       "keywords": ["rekenen", "re"],
-      "icon": "wiskunderekenen"
+      "icon": "<i class=\"fa-solid fa-calculator\"></i>"
     }
 ]

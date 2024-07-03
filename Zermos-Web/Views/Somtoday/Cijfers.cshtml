@@ -1,146 +1,71 @@
 ﻿@using Zermos_Web.Models.SomtodayGradesModel
 @using System.Globalization
+@using Zermos_Web.Models.SomtodayVakgemiddeldenModel
 @using Zermos_Web.Utilities
-@model Zermos_Web.Models.SomtodayGradesModel.SomtodayGradesModel
+@model Zermos_Web.Models.SomtodayVakgemiddeldenModel.SomtodayVakgemiddeldenModel
 
 @{
-    var sortedGrades = Model.items
-        .GroupBy(grade => grade.vak.naam)
-        .Select(group => new sortedGrades
-        {
-            vak = group.First().vak,
-            grades = group.ToList()
-        })
-        .OrderBy(vak => vak.vak.naam, StringComparer.OrdinalIgnoreCase)
-        .ToList();
+    //combining of the grades,
+    
+    //so i have a list of grades, and it has 2 parts, grades that are for the voortgangsdossier and grades that are for the examendossier, if they have the same vakkeuze, set the voortgangsdossierResultaat and examendossierResultaat to the same object, so i can use them in the same foreach loop
+    var voortgangDossierGrades = Model.gemiddelden.Where(x => x.isVoorVoortgangsdossier).ToList();
+    var examenDossierGrades = Model.gemiddelden.Where(x => x.isVoorExamendossier).ToList();
+    //var noneDossierGrades = Model.gemiddelden.Where(x => !x.isVoorVoortgangsdossier && !x.isVoorExamendossier).ToList(); 1*
 
-    var lastUpdated = Context.Request.Cookies["last-seen-somtoday-grades"] == null
-        ? DateTime.MinValue
-        : DateTime.Parse(Context.Request.Cookies["last-seen-somtoday-grades"]);
-
-    string GetNotificationClass(DateTime lastGradeDate)
+    foreach (Gemiddelden gemiddelden in examenDossierGrades.ToList())
     {
-        return lastUpdated < lastGradeDate ? "<div class=\"grade-notification\"></div>" : "";
+        //if there is a examendossier grade for the same vakkeuze, set the examendossierResultaat to the same object
+        if (voortgangDossierGrades.Any(x => x.vakkeuze == gemiddelden.vakkeuze))
+        {
+            voortgangDossierGrades.First(x => x.vakkeuze == gemiddelden.vakkeuze).examendossierResultaat = gemiddelden.examendossierResultaat;
+            //remove the examendossier grade from the list
+            examenDossierGrades.Remove(gemiddelden);
+        }
     }
+
+    voortgangDossierGrades.AddRange(examenDossierGrades);
+    //voortgangDossierGrades.AddRange(noneDossierGrades); 1*
+    
+    //1* uncomment if you want to see ALL grades, even the ones without a dossier
+
+    voortgangDossierGrades = voortgangDossierGrades.OrderBy(x => x.vakkeuze.vak.afkorting).ToList();
 }
 
 <link rel="stylesheet" href="~/css/somtoday.css" />
 
 <div class="grades-container">
+
+    <div class="vak">
+        <a>
+            <div class="grade-container">
+                @* @Html.Raw(GetNotificationClass(vak.grades[^1].datumInvoer)) *@
+                <table class="grade-table">
+                    <tr class="grade-table-header">
+                        <td colspan="2">Vaknaam</td>
+                        <td>SE cijfer</td>
+                        <td>cijfer</td>
+                    </tr>
+                </table>
+            </div>
+        </a>
+    </div>
     
     <!-- specific grades overview -->
-    @foreach (var vak in sortedGrades)
+    @foreach (var vak in voortgangDossierGrades)
     {
-        //Normal
-        var sumOfWeightedGrades = 0.0f;
-        var sumOfWeights = 0;
-        var hasNonZeroWeight = false;
-        var gradesArray = new List<float>();
-        var gradesWeight = new List<int>();
-        
-        //SE
-        var sumOfWeightedGradesSE = 0.0f;
-        var sumOfWeightsSE = 0;
-        var gradesArraySE = new List<float>();
-        var gradesWeightSE = new List<int>();
-
-        foreach (var gradeItem in vak.grades)
-        {
-            if (gradeItem.type == "DeeltoetsKolom" || gradeItem.geldendResultaat == "*") 
-                continue;
-            
-            var geldendResultaat = NumberUtils.ParseFloat(gradeItem.geldendResultaat);
-
-            if (gradeItem.isExamendossierResultaat)
-            {
-                var weightSE = gradeItem.examenWeging;
-                if (weightSE == 0) continue;
-                
-                if (weightSE == 0 && sumOfWeightsSE == 0)
-                    sumOfWeightedGradesSE += geldendResultaat;
-                else
-                    sumOfWeightedGradesSE += geldendResultaat * weightSE;
-                
-                
-                sumOfWeightsSE += weightSE;
-                
-                gradesArraySE.Add(geldendResultaat);
-                gradesWeightSE.Add(weightSE);
-            }
-            
-            var weight = gradeItem.weging;
-            
-            // if (weight == 0 && isAllExamGrades)
-            //     weight = gradeItem.examenWeging;
-
-            if (weight == 0 && sumOfWeights == 0)
-            {
-                sumOfWeightedGrades += geldendResultaat;
-            }
-            else
-            {
-                sumOfWeightedGrades += geldendResultaat * weight;
-                hasNonZeroWeight = true;
-            }
-
-            sumOfWeights += weight;
-
-            gradesArray.Add(geldendResultaat);
-            gradesWeight.Add(weight);
-        }
-
-        if (!hasNonZeroWeight)
-        {
-            sumOfWeights = gradesArray.Count;
-            gradesWeight = Enumerable.Repeat(1, sumOfWeights).ToList();
-        }
-
-        var WeightedAverageSnapshots = NumberUtils.CalculateWeightedAverageSnapshots(gradesArray.ToArray(), gradesWeight.ToArray());
-        double gradeChange = 0;
-        
-        var WeightedAverageSnapshotsSE = NumberUtils.CalculateWeightedAverageSnapshots(gradesArraySE.ToArray(), gradesWeightSE.ToArray());
-
-        try
-        {
-            gradeChange = Math.Round((double) ((WeightedAverageSnapshots[^1] - WeightedAverageSnapshots[^2]) / WeightedAverageSnapshots[^2] * 100), 2);
-            
-        }
-        catch (Exception)
-        {
-            gradeChange = 100;
-        }
-        
-        if (WeightedAverageSnapshots.Count == 0)
-            WeightedAverageSnapshots.Add(0);
-        
-        if (WeightedAverageSnapshotsSE.Count == 0)
-            WeightedAverageSnapshotsSE.Add(0);
-
+        <!-- Voortgangsdossier -->
         <div class="vak">
-            <a onclick="ReplacePage('@Url.Action("Cijfer", "Somtoday", new {vak = vak.vak.afkorting.Capitalize()})')">
+            <a onclick="ReplacePage('./@vak.vakkeuze.vak.afkorting.Capitalize()')">
                 <div class="grade-container">
-                    @Html.Raw(GetNotificationClass(vak.grades[^1].datumInvoer))
+                    @* @Html.Raw(GetNotificationClass(vak.grades[^1].datumInvoer)) *@
                     <table class="grade-table">
                         <tr class="grade-table-header">
-                            <td colspan="2">@vak.vak.naam</td>
-                            <td>@(sumOfWeights)x</td>
-                            <td class="@(WeightedAverageSnapshots[^1] >= 5.45f ? "sufficient" : "insufficient ")">@(((double) WeightedAverageSnapshots[^1]).ToString("0.0", CultureInfo.InvariantCulture))</td>
+                            <td><i data-name="@vak.vakNaam" data-name-short="@vak.vakkeuze.vak.afkorting"></i></td>
+                            <td colspan="2">@vak.vakNaam</td>
+                            <td class="@(vak.isVoorExamendossier ? (vak.examendossierResultaat.cijfer >= 5.5f ? "sufficient" : "insufficient ") : "")">@(vak.isVoorExamendossier ? (vak.examendossierResultaat.formattedResultaat.Replace(",", ".")) : "")</td>
+                            <td class="@(vak.isVoorVoortgangsdossier ? (vak.voortgangsdossierResultaat.cijfer >= 5.5f ? "sufficient" : "insufficient ") : "")">@(vak.isVoorVoortgangsdossier ? (vak.voortgangsdossierResultaat.formattedResultaat.Replace(",", ".")) : "")</td>
+                            
                         </tr>
-                        <tr class="grade-table-header">
-                            <td colspan="2">Laatste cijfer</td>
-                            <td class="@(gradeChange >= 0 ? "sufficient" : "insufficient ")">@($"{(gradeChange > 0 ? "+" : "")}{gradeChange.ToString("0.00", CultureInfo.InvariantCulture)}%")</td>
-                            <td class="@(NumberUtils.ParseFloat(vak.grades[^1].geldendResultaat) >= 5.45f ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat.Replace(",", ".")</td>
-                        </tr>
-                        
-                        @if (gradesArraySE.Count > 0)
-                        {
-                            <tr class="grade-table-header">
-                                <td colspan="2">SE</td>
-                                <td></td>
-                                <td class="@(WeightedAverageSnapshotsSE[^1] >= 5.45f ? "sufficient" : "insufficient ")">@(((double) WeightedAverageSnapshotsSE[^1]).ToString("0.0", CultureInfo.InvariantCulture))
-                            </tr>
-                        }
-                    
                     </table>
                 </div>
             </a>
@@ -148,82 +73,103 @@
     }
 </div>
 
-<script minimize>
-@Context.Items["dmjs"]
-
-//get all the sortedGrades.vak.naam and put them in an array with quotes around them 
-var vakken = ["@Html.Raw(string.Join("\",\"", sortedGrades.Select(x => x.vak.naam).Distinct()))"];
-var short = ["@Html.Raw(string.Join("\",\"", sortedGrades.Select(x => x.vak.afkorting).Distinct()))"];
-
-// share button
-addButtonToPage('fa-share-from-square', () => {
-   
-    new ZermosModal()
-    .setTitle("Deel je cijfers")
-    .addText("Deel je cijfers met je vrienden! Kies hieronder een datum tot wanneer je cijfers gedeeld mogen worden, welke cijfers zichtbaar zijn én of ze alleen je gemiddelde mogen zien of ook de individuele cijfers. Pas wel op, nieuwe cijfers blijven niet automatisch gedeeld worden, je moet dus een nieuwe link genereren als je nieuwe cijfers wilt delen.")
-    .addDateInput("Wat is de verval datum?", new Date(Date.now() + 604800000))
-    .addToggle("Laat individuele cijfers zien", false)
-    .addMultiToggles(vakken, vakken, vakken.map(vak => true))
-    .setSubmitButtonLabel("Deel")
-    .onSubmit((date, indivd, allowed) => {
-        
-        //make date to a dd-mm-yyyy format
-        var expires_at = date.split('-');
-        expires_at = expires_at[1] + '-' + expires_at[0] + '-' + expires_at[2];
-        
-        
-        
-        var vakken = [];
-        for (var i = 0; i < allowed.length; i++) {
-            if (allowed[i]) {
-                vakken.push(short[i]);
-            }
-        }
-        
-        console.log(vakken, allowed);
-        
-        //return's an plan string url
-        fetch('/Somtoday/Cijfers/GenereerToken?expires_at=' + expires_at + '&vakken=' + vakken.join(',') + '&show_individual_grades=' + document.getElementById('input2').checked)
-        .then(response => response.text())
-        .then((url) => {
-            new ZermosModal()
-            .setTitle("Deel je cijfers")
-            .addText("Deel je cijfers met je vrienden, zij hoeven geen account hiervoor te hebben.")
-            .addText("De link is: " + url)
-            .hideSubmitButton()
-            .addButton("Kopieer link", () => {
-                copyToClipboard(url);
-            })
-            .open();
+<script>
+    //get all the icons at /vakkenIcons.json
+    fetch('/vakkenIcons.json')
+    .then(response => response.json())
+    .then((icons) => {
+        //get all the icons and put them in a map
+        var iconMap = new Map();
+        icons.forEach(icon => {
+            icon.keywords.forEach(keyword => {
+                iconMap.set(keyword, icon.icon);
+            });
         });
-
-    })
-    .open();
+        
+        //check if the name-short or name is in the iconMap, if it is, set the icon to the iconMap value, if not, set it to the default icon
+        document.querySelectorAll('.grade-table-header i').forEach((icon) => {
+            icon.outerHTML = iconMap.get(icon.dataset.name.toLowerCase()) ?? iconMap.get(icon.dataset.nameShort.toLowerCase()) ?? "<i class=\"fa-solid fa-book\"></i>";
+        });
+    });
     
-}, VerticalAlignment.TL, Background.Primary);
-
-addButtonToPage("fa-clock-rotate-left", () => {
-    
-   //show last 10 grades
-    new ZermosModal()
-    .setTitle("Laatste 10 cijfers")
-    .setSubmitButtonLabel("Sluiten")
-    .addText("Hieronder zie je de laatste 10 cijfers die je hebt gehaald.")
-@{
-    @foreach (var grade in Model.items.OrderByDescending(x => x.datumInvoer).Take(10))
-    {
-<text>
-    .addText('@grade.vak.naam - @(grade.weging == 0 ? grade.examenWeging : grade.weging)x - @grade.geldendResultaat - @(grade.omschrijving ?? "")')
-</text>
-    }
-}
-
-    .open();
-
-}, VerticalAlignment.BL, Background.Accent);
-
-addButtonToPage("fa-refresh", () => {
-    document.cookie = "cached-somtoday-grades=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    ReplacePage('/Somtoday/Cijfers');
-}, VerticalAlignment.TL, Background.Primary);
 </script>
+
+@* <script minimize> *@
+@* @Context.Items["dmjs"] *@
+@* *@
+@* //get all the sortedGrades.vak.naam and put them in an array with quotes around them *@
+@* var vakken = ["@Html.Raw(string.Join("\",\"", sortedGrades.Select(x => x.vak.naam).Distinct()))"]; *@
+@* var short = ["@Html.Raw(string.Join("\",\"", sortedGrades.Select(x => x.vak.afkorting).Distinct()))"]; *@
+@* *@
+@* // share button *@
+@* addButtonToPage('fa-share-from-square', () => { *@
+@* *@
+@*     new ZermosModal() *@
+@*     .setTitle("Deel je cijfers") *@
+@*     .addText("Deel je cijfers met je vrienden! Kies hieronder een datum tot wanneer je cijfers gedeeld mogen worden, welke cijfers zichtbaar zijn én of ze alleen je gemiddelde mogen zien of ook de individuele cijfers. Pas wel op, nieuwe cijfers blijven niet automatisch gedeeld worden, je moet dus een nieuwe link genereren als je nieuwe cijfers wilt delen.") *@
+@*     .addDateInput("Wat is de verval datum?", new Date(Date.now() + 604800000)) *@
+@*     .addToggle("Laat individuele cijfers zien", false) *@
+@*     .addMultiToggles(vakken, vakken, vakken.map(vak => true)) *@
+@*     .setSubmitButtonLabel("Deel") *@
+@*     .onSubmit((date, indivd, allowed) => { *@
+@* *@
+@*         //make date to a dd-mm-yyyy format *@
+@*         var expires_at = date.split('-'); *@
+@*         expires_at = expires_at[1] + '-' + expires_at[0] + '-' + expires_at[2]; *@
+@* *@
+@* *@
+@* *@
+@*         var vakken = []; *@
+@*         for (var i = 0; i < allowed.length; i++) { *@
+@*             if (allowed[i]) { *@
+@*                 vakken.push(short[i]); *@
+@*             } *@
+@*         } *@
+@* *@
+@*         console.log(vakken, allowed); *@
+@* *@
+@*         //return's an plan string url *@
+@*         fetch('/Somtoday/Cijfers/GenereerToken?expires_at=' + expires_at + '&vakken=' + vakken.join(',') + '&show_individual_grades=' + document.getElementById('input2').checked) *@
+@*         .then(response => response.text()) *@
+@*         .then((url) => { *@
+@*             new ZermosModal() *@
+@*             .setTitle("Deel je cijfers") *@
+@*             .addText("Deel je cijfers met je vrienden, zij hoeven geen account hiervoor te hebben.") *@
+@*             .addText("De link is: " + url) *@
+@*             .hideSubmitButton() *@
+@*             .addButton("Kopieer link", () => { *@
+@*                 copyToClipboard(url); *@
+@*             }) *@
+@*             .open(); *@
+@*         }); *@
+@* *@
+@*     }) *@
+@*     .open(); *@
+@* *@
+@* }, VerticalAlignment.TL, Background.Primary); *@
+@* *@
+@* addButtonToPage("fa-clock-rotate-left", () => { *@
+@* *@
+@*    //show last 10 grades *@
+@*     new ZermosModal() *@
+@*     .setTitle("Laatste 10 cijfers") *@
+@*     .setSubmitButtonLabel("Sluiten") *@
+@*     .addText("Hieronder zie je de laatste 10 cijfers die je hebt gehaald.") *@
+@* @{ *@
+@*     @foreach (var grade in Model.items.OrderByDescending(x => x.datumInvoer).Take(10)) *@
+@*     { *@
+@* <text> *@
+@*     .addText('@grade.vak.naam - @(grade.weging == 0 ? grade.examenWeging : grade.weging)x - @grade.geldendResultaat - @(grade.omschrijving ?? "")') *@
+@* </text> *@
+@*     } *@
+@* } *@
+@* *@
+@*     .open(); *@
+@* *@
+@* }, VerticalAlignment.BL, Background.Accent); *@
+@* *@
+@* addButtonToPage("fa-refresh", () => { *@
+@*     document.cookie = "cached-somtoday-grades=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; *@
+@*     ReplacePage('/Somtoday/Cijfers'); *@
+@* }, VerticalAlignment.TL, Background.Primary); *@
+@* </script> *@

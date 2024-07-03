@@ -156,6 +156,7 @@ public class SomtodayAPI
             .ToList();
 
         return grades;
+        return null;
     }
 
     public async Task<SomtodayPlaatsingenModel> GetPlaatsingen(user user)
@@ -183,7 +184,7 @@ public class SomtodayAPI
         var years = await GetPlaatsingen(user);
         var yearId = "";
         if (year == -1)
-            yearId = years.items.FirstOrDefault(x => x.huidig)?.UUID;
+            yearId = years.items[^1].UUID;
         else
             yearId = years.items[year - 1].UUID;
         

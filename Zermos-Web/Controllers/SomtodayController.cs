@@ -33,19 +33,18 @@ namespace Zermos_Web.Controllers
         SomtodayAPI somtodayApi = new(new HttpClient());
         
         #region Cijfers
-
         [Authorize]
-        [SomtodayRequirement]
         [ZermosPage]
+        [SomtodayRequirement]
         [HttpGet("Somtoday/Cijfers")]
-        public async Task<IActionResult> Cijfers()
+        public async Task<IActionResult> Cijfers(int leerjaar)
         {
-            Response.Cookies.Append("last-seen-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddYears(1)});
-            
-            if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
-            {
-                return PartialView(JsonConvert.DeserializeObject<SomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? string.Empty));
-            }
+            // Response.Cookies.Append("last-seen-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddYears(1)});
+            //
+            // if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
+            // {
+            //     return PartialView(JsonConvert.DeserializeObject<SomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? string.Empty));
+            // }
             
             var user = ZermosUser;
             
@@ -54,21 +53,21 @@ namespace Zermos_Web.Controllers
                 user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
             }
 
-            var grades = await somtodayApi.GetGrades(user);
+            var grades = await somtodayApi.Getvakgemiddelden(user, leerjaar == 0 ? -1 : leerjaar);
             
-            ZermosUser = new user
-            {
-                cached_somtoday_grades = JsonConvert.SerializeObject(grades)
-            };
+            //ZermosUser = new user
+            //{
+            //    cached_somtoday_grades = JsonConvert.SerializeObject(grades)
+            //};
             
-            Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
+            //Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
 
             return PartialView(grades);
         }
 
         [ZermosPage]
-        [HttpGet("Somtoday/Cijfers/{vak}")]
-        public async Task<IActionResult> Cijfer(string vak)
+        [HttpGet("Somtoday/Cijfers/{leerjaar}/{vak}")]
+        public async Task<IActionResult> Cijfer(int leerjaar, string vak)
         {
             SomtodayGradesModel grades;
             

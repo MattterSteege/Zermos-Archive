@@ -645,6 +645,7 @@
 .grade-container {
     width: 100%;
     height: 100%;
+    display: flex;
 }
 
 .grade-sidebar {
@@ -727,6 +728,17 @@
     color: var(--text-color);
 }
 
+/*
+
+<tr class="grade-table-header">
+    <td><i class="fa-solid fa-chart-line-up"></i></td>
+    <td colspan="2">bedrijfseconomie</td>
+    <td class="sufficient">6.5</td>
+    <td class="sufficient">7.3</td>
+</tr>
+                        
+*/
+
 .grade-table-header {
     width: 100%;
     color: var(--text-color);
@@ -737,16 +749,29 @@
     font-weight: 700;
 }
 
+.grade-table-header td i {
+    font-size: calc(var(--font-size-heading) * 4);
+    color: var(--text-color);
+    background: var(--overlay-color);
+    border-radius: var(--border-radius);
+    padding: var(--padding);
+}
+
 .grade-table-header td:nth-child(1) {
-    width: 80%;
+    width: 10%;
+    text-align: center;
 }
 
 .grade-table-header td:nth-child(2) {
+    width: 80%;
+}
+
+.grade-table-header td:nth-child(3) {
     padding-right: 30px;
     padding-left: 30px;
 }
 
-.grade-table-header td:nth-child(3) {
+.grade-table-header td:nth-child(4) {
     width: 10%;
     text-align: end;
 }
@@ -877,7 +902,7 @@
 
 @media only screen and (max-width: 700px) {
     .vak {
-        height: 75px;
+        height: 50px;
     }
 
     .background img {
