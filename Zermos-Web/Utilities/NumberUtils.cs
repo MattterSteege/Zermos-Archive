@@ -88,7 +88,7 @@ namespace Zermos_Web.Utilities
             return snapshots;
         }
 
-        public static double RoundApproximate(double dbl, int digits, double margin, MidpointRounding mode)
+        public static double RoundApproximate(float dbl, int digits, double margin, MidpointRounding mode)
         {
             var fraction = dbl * Math.Pow(10, digits);
             var value = Math.Truncate(fraction);
@@ -111,6 +111,11 @@ namespace Zermos_Web.Utilities
             if (fraction > .5)
                 return (value + 1) / Math.Pow(10, digits);
             return value / Math.Pow(10, digits);
+        }
+        
+        public static double RoundApproximate(this float dbl, int digits)
+        {
+            return RoundApproximate(dbl, digits, 0.0001, MidpointRounding.AwayFromZero);
         }
     }
 }

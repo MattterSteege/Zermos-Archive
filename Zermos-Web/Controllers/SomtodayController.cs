@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ChartJSCore.Helpers;
 using ChartJSCore.Models;
@@ -19,6 +21,9 @@ using Zermos_Web.Models.Requirements;
 using Zermos_Web.Models.SomtodayLeermiddelen;
 using Zermos_Web.Models.SomtodayGradesModel;
 using Zermos_Web.Models.somtodayHomeworkModel;
+using Zermos_Web.Models.SomtodayPlaatsingen;
+using Zermos_Web.Models.SomtodayVakgemiddeldenModel;
+using Zermos_Web.Models.SortedSomtodayGradesModel;
 using Zermos_Web.Utilities;
 using Data = ChartJSCore.Models.Data;
 using Item = Zermos_Web.Models.SomtodayGradesModel.Item;
@@ -39,12 +44,12 @@ namespace Zermos_Web.Controllers
         [HttpGet("Somtoday/Cijfers")]
         public async Task<IActionResult> Cijfers(int leerjaar)
         {
-            // Response.Cookies.Append("last-seen-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddYears(1)});
-            //
-            // if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
-            // {
-            //     return PartialView(JsonConvert.DeserializeObject<SomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? string.Empty));
-            // }
+            Response.Cookies.Append("last-seen-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddYears(1)});
+            
+            if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
+            {
+                return PartialView(JsonConvert.DeserializeObject<SomtodayVakgemiddeldenModel>(ZermosUser.cached_somtoday_grades ?? string.Empty));
+            }
             
             var user = ZermosUser;
             
@@ -52,15 +57,19 @@ namespace Zermos_Web.Controllers
             {
                 user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
             }
-
-            var grades = await somtodayApi.Getvakgemiddelden(user, leerjaar == 0 ? -1 : leerjaar);
             
-            //ZermosUser = new user
-            //{
-            //    cached_somtoday_grades = JsonConvert.SerializeObject(grades)
-            //};
+            SomtodayPlaatsingenModel plaatsingen = (user.cached_somtoday_plaatsingen == null) ? await somtodayApi.GetPlaatsingen(user) : JsonConvert.DeserializeObject<SomtodayPlaatsingenModel>(user.cached_somtoday_plaatsingen);
             
-            //Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
+            
+            var grades = await somtodayApi.Getvakgemiddelden(user, plaatsingen, leerjaar == 0 ? -1 : leerjaar);
+            
+            ZermosUser = new user
+            {
+                cached_somtoday_grades = JsonConvert.SerializeObject(grades),
+                cached_somtoday_plaatsingen = JsonConvert.SerializeObject(plaatsingen)
+            };
+            
+            Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
 
             return PartialView(grades);
         }
@@ -69,49 +78,17 @@ namespace Zermos_Web.Controllers
         [HttpGet("Somtoday/Cijfers/{leerjaar}/{vak}")]
         public async Task<IActionResult> Cijfer(int leerjaar, string vak)
         {
-            var grades = await somtodayApi.GetCurrentGrades(ZermosUser);
-            var gradesBySubject = grades.items.GroupBy(x => x.additionalObjects.vaknaam).ToList();
-            var lastGrades = grades.items.Take(5);
-            
-            /* 
-                     namespace Zermos_Web.Models.SortedSomtodayGradesModel
-                    {
-                        public class Item
-                        {
-                            public Models.SomtodayGradesModel.Item lastGrade { get; set; }
-                            public int weging { get; set; }
-                            public double cijfer { get; set; }
-                            public string vaknaam { get; set; }
-                            public string vakuuid { get; set; }
-                        }
+            var user = ZermosUser;
 
-                        public class SomtodayGradesModel
-                        {
-                            public List<Item> items { get; set; }
-                        }
-                    }
-             */
-            
-            var sortedGrades = new Models.SortedSomtodayGradesModel.SortedSomtodayGradesModel();
-            sortedGrades.lastGrades = lastGrades.ToList();
-            sortedGrades.items = new List<Models.SortedSomtodayGradesModel.Item>();
-
-            foreach (IGrouping<string,Item> items in gradesBySubject)
+            if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
-                var sortedGrade = new Models.SortedSomtodayGradesModel.Item();
-                sortedGrade.vaknaam = items.Key;
-                sortedGrade.vakuuid = items.First().additionalObjects.vakuuid;
-                sortedGrade.lastGrade = items.Last();
-                sortedGrade.weging = items.Sum(x => x.weging);
-                sortedGrade.cijfer = items.Sum(x => x.cijfer * x.weging) / sortedGrade.weging ;
-                sortedGrades.items.Add(sortedGrade);
+                user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
             }
+
+            var sortedGrades = await somtodayApi.GetCurrentGrades(user, true);
             
-            // DIFF between SE and voortgang
             
-            //resposne type is json
-            Response.Headers.Add("Content-Type", "application/json");
-            return Ok(JsonConvert.SerializeObject(sortedGrades));
+            return Json(sortedGrades);
         }
 
         // [ZermosPage]

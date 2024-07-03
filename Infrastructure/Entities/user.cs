@@ -21,12 +21,6 @@ namespace Infrastructure.Entities
         public string zermelo_access_token { get; set; }
         public DateTime? zermelo_access_token_expires_at { get; set; }
         public string zermelo_school_abbr { get; set; }
-        [NotMapped, Setting] 
-        public string zermelo_timestamps 
-        {
-            get => GetSetting<string>("zermelo_timestamps");
-            set => SetSetting("zermelo_timestamps", value);
-        }
         
         //Somtoday Related
         public string somtoday_access_token { get; set; }
@@ -35,6 +29,7 @@ namespace Infrastructure.Entities
         public string cached_somtoday_grades { get; set; }
         public string cached_somtoday_homework { get; set; }
         public string cached_somtoday_leermiddelen { get; set; }
+        [NotMapped] public string cached_somtoday_plaatsingen { get; set; }
         
         //Infowijs Related
         public string infowijs_access_token { get; set; }
@@ -77,6 +72,24 @@ namespace Infrastructure.Entities
         {
             get => GetSetting<string>("font_size");
             set => SetSetting("font_size", value);
+        }
+        
+        
+        //ZERMELO SETTINGS
+        [NotMapped, Setting] 
+        public string zermelo_timestamps 
+        {
+            get => GetSetting<string>("zermelo_timestamps");
+            set => SetSetting("zermelo_timestamps", value);
+        }
+        
+        
+        //SOMTODAY SETTINGS
+        [NotMapped, Setting] 
+        public string somtoday_grade_rounding
+        {
+            get => GetSetting<string>("somtoday_grade_rounding");
+            set => SetSetting("somtoday_grade_rounding", value);
         }
         
         // Helper method to get a setting value do with <int> or <string> etc.
