@@ -3,10 +3,13 @@ TODO: make time use login, so the user get's logged out after the session is clo
 TODO: dagrooster
 TODO: een demo versie van Zermos om te laten zien aan nieuwe gebruikers
 TODO: QR koppelen voor smartwatch, dan weet je ook gelijk dat de gebruiker een smartwatch is en kan je dat in de cookies opslaan en de gebruiker niet meer vragen of hij een smartwatch op dat moment gebruikt
+TODO: maak ontkoppelen van de apps smoother. (dus zonder de window.reload() te gebruiken)
 
 TODO: alle cijfers ophalen van nieuwe API endpoint
     - Als mensen de cijfergemiddeldes willen zien, dan roep ik de https://api.somtoday.nl/rest/v1/plaatsingen?leerling=... en dan de https://api.somtoday.nl/rest/v1/vakkeuzes/plaatsing/[uuid]/vakgemiddelden aan 
     dan kan ik ook functionaliteit toevoegen dat je je cijfers van andere jaren kan zien. 
     - Als mensen de cijfers van een vak willen zien, dan roep ik de https://api.somtoday.nl/rest/v1/geldendvoortgangsdossierresultaten/vakresultaten/[lln]]/vak/[uuid_1]/lichting/[uuid_2]?additional=vaknaam&additional=resultaatkolom&additional=naamalternatiefniveau&additional=naamstandaardniveau&type=Toetskolom&type=SamengesteldeToetsKolom&type=Werkstukcijferkolom&type=Advieskolom&type=RapportToetskolom&type=SEGemiddeldeKolom&type=ToetssoortGemiddeldeKolom&sort=desc-geldendResultaatCijferInvoer en https://api.somtoday.nl/rest/v1/geldendexamendossierresultaten/vakresultaten/1409824200/vak/deb5f122-1c35-4b7e-a497-9677687d5b04/lichting/98d1b8ef-858a-48f1-880e-5d4f431cbb3b?additional=vaknaam&additional=resultaatkolom&additional=naamalternatiefniveau&additional=naamstandaardniveau&type=Toetskolom&type=SamengesteldeToetsKolom&type=Werkstukcijferkolom&type=Advieskolom&type=RapportToetskolom&type=SEGemiddeldeKolom&type=ToetssoortGemiddeldeKolom&sort=desc-geldendResultaatCijferInvoer aan
+
+TODO: als mensen nieuw zijn gooi ze dan gelijk door de instellingen heen, zodat ze gelijk kunnen instellen hoe hun cijfer berekend moet worden en hoe hun roostertijden eruit zien (etc.)
     
 TODO: jaarbijlagen bij leermiddelen

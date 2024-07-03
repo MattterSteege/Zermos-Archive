@@ -33,6 +33,32 @@
         <_ContentIncludedByDefault Remove="wwwroot\js\Zermos-Notes\zermos-mindmap.js" />
         <_ContentIncludedByDefault Remove="Views\Microsoft\Onderive.cshtml" />
         <_ContentIncludedByDefault Remove="Views\Microsoft\OnedriveFolder.cshtml" />
+        <_ContentIncludedByDefault Remove="Views\Recap\Countdown.cshtml" />
+        <_ContentIncludedByDefault Remove="Views\Recap\Index.cshtml" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\1.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\10.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\11.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\12.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\13.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\14.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\15.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\16.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\17.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\18.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\19.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\2.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\20.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\21.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\22.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\23.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\24.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\3.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\4.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\5.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\6.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\7.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\8.svg" />
+        <_ContentIncludedByDefault Remove="wwwroot\images\Recap\9.svg" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,119 +1,119 @@
-﻿@using Zermos_Web.Models.SomtodayGradesModel
-@using System.Globalization
-@using Zermos_Web.Utilities
-@using Item = Zermos_Web.Models.SomtodayGradesModel.Item
-@model dynamic
-
-@{
-    var sortedGrades = ((List<Item>) Model.grades)
-        .GroupBy(grade => grade.vak.naam)
-        .Select(group => new sortedGrades
-        {
-            vak = group.First().vak,
-            grades = group.ToList()
-        })
-        .OrderBy(vak => vak.vak.naam, StringComparer.OrdinalIgnoreCase)
-        .ToList();
-}
-
-<link rel="stylesheet" href="~/css/somtoday.css" />
-
-<div class="grades">
-    <div class="grades-container">
-        
-        <!-- specific grades overview -->
-        @foreach (var vak in sortedGrades)
-        {
-            var sumOfWeightedGrades = 0.0f;
-            var sumOfWeights = 0;
-            var hasNonZeroWeight = false;
-            var gradesArray = new List<float>();
-            var gradesWeight = new List<int>();
-
-            foreach (var gradeItem in vak.grades)
-            {
-                var geldendResultaat = NumberUtils.ParseFloat(gradeItem.geldendResultaat);
-                var weight = gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging;
-
-                if (weight == 0 && sumOfWeights == 0)
-                {
-                    sumOfWeightedGrades += geldendResultaat;
-                }
-                else
-                {
-                    sumOfWeightedGrades += geldendResultaat * weight;
-                    hasNonZeroWeight = true;
-                }
-
-                sumOfWeights += weight;
-
-                gradesArray.Add(geldendResultaat);
-                gradesWeight.Add(weight);
-            }
-
-            if (!hasNonZeroWeight)
-            {
-                sumOfWeights = vak.grades.Count;
-            }
-
-            var WeightedAverageSnapshots = NumberUtils.CalculateWeightedAverageSnapshots(gradesArray.ToArray(), gradesWeight.ToArray());
-            double gradeChange = 0;
-
-            try
-            {
-                gradeChange = Math.Round((double) ((WeightedAverageSnapshots[^1] - WeightedAverageSnapshots[^2]) / WeightedAverageSnapshots[^2] * 100), 2);
-            }
-            catch (Exception)
-            {
-                gradeChange = 100;
-            }
-
-            <div class="vak">
-                <a onclick="@(vak.vak.afkorting)()">
-                    <div class="grade-container">
-                        <div class="top-30">
-                            <p>@vak.vak.naam</p>
-                            <p>@(sumOfWeights)x</p>
-                            <p class="@(WeightedAverageSnapshots[^1] >= 5.5f ? "sufficient" : "insufficient ")">@(((double) WeightedAverageSnapshots[^1]).ToString("0.0", CultureInfo.InvariantCulture))</p>
-                        </div>
-                        <div class="bottom-70">
-                            <p style="flex-grow: 1; text-align: end;">Laatste cijfer:</p>
-                            <p style="margin-left: 16px; flex-grow: 1;" class="@(NumberUtils.ParseFloat(vak.grades[^1].geldendResultaat) >= 5.5f ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</p>
-                            <p style="margin-left: 16px; flex-grow: 1;" class="@(gradeChange > 0 ? "sufficient" : "insufficient ")">@($"{(gradeChange > 0 ? "+" : "")}{gradeChange}%")</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        }
-    </div>
-</div>
-
-@if (Model.show_individual_grades)
-{
-<script minimize>
-@Context.Items["dmjs"]
-
-
-@foreach(var vak in sortedGrades)
-{
-    string function = $"function {vak.vak.afkorting}() {{\n" +
-                      $"    new ZermosModal()\n" +
-                      $"    .setTitle('{vak.vak.naam}')\n" +
-                      $"    .addText('Voor dit vak heeft de leerling die dit gedeeld heeft de volgende cijfers behaald:')\n";
-    
-    @foreach (var grade in vak.grades)
-    {
-          function += $"    .addText(`{grade.omschrijving}: {grade.geldendResultaat.Replace(",",".")} die {(grade.weging == 0 ? grade.examenWeging : grade.weging)}x meetelt`)\n";
-    }
-    
-          function += $"    .setSubmitButtonLabel('Sluiten')\n" +
-                      $"    .open();\n" +
-                      $"}}";
-        
-    <text>
-@Html.Raw(function)
-    </text>
-    
-}
-</script>
-}
+﻿@* @using Zermos_Web.Models.SomtodayGradesModel *@
+@* @using System.Globalization *@
+@* @using Zermos_Web.Utilities *@
+@* @using Item = Zermos_Web.Models.SomtodayGradesModel.Item *@
+@* @model dynamic *@
+@* *@
+@* @{ *@
+@*     var sortedGrades = ((List<Item>) Model.grades) *@
+@*         .GroupBy(grade => grade.vak.naam) *@
+@*         .Select(group => new sortedGrades *@
+@*         { *@
+@*             vak = group.First().vak, *@
+@*             grades = group.ToList() *@
+@*         }) *@
+@*         .OrderBy(vak => vak.vak.naam, StringComparer.OrdinalIgnoreCase) *@
+@*         .ToList(); *@
+@* } *@
+@* *@
+@* <link rel="stylesheet" href="~/css/somtoday.css" /> *@
+@* *@
+@* <div class="grades"> *@
+@*     <div class="grades-container"> *@
+@*          *@
+@*         <!-- specific grades overview --> *@
+@*         @foreach (var vak in sortedGrades) *@
+@*         { *@
+@*             var sumOfWeightedGrades = 0.0f; *@
+@*             var sumOfWeights = 0; *@
+@*             var hasNonZeroWeight = false; *@
+@*             var gradesArray = new List<float>(); *@
+@*             var gradesWeight = new List<int>(); *@
+@* *@
+@*             foreach (var gradeItem in vak.grades) *@
+@*             { *@
+@*                 var geldendResultaat = NumberUtils.ParseFloat(gradeItem.geldendResultaat); *@
+@*                 var weight = gradeItem.weging == 0 ? gradeItem.examenWeging : gradeItem.weging; *@
+@* *@
+@*                 if (weight == 0 && sumOfWeights == 0) *@
+@*                 { *@
+@*                     sumOfWeightedGrades += geldendResultaat; *@
+@*                 } *@
+@*                 else *@
+@*                 { *@
+@*                     sumOfWeightedGrades += geldendResultaat * weight; *@
+@*                     hasNonZeroWeight = true; *@
+@*                 } *@
+@* *@
+@*                 sumOfWeights += weight; *@
+@* *@
+@*                 gradesArray.Add(geldendResultaat); *@
+@*                 gradesWeight.Add(weight); *@
+@*             } *@
+@* *@
+@*             if (!hasNonZeroWeight) *@
+@*             { *@
+@*                 sumOfWeights = vak.grades.Count; *@
+@*             } *@
+@* *@
+@*             var WeightedAverageSnapshots = NumberUtils.CalculateWeightedAverageSnapshots(gradesArray.ToArray(), gradesWeight.ToArray()); *@
+@*             double gradeChange = 0; *@
+@* *@
+@*             try *@
+@*             { *@
+@*                 gradeChange = Math.Round((double) ((WeightedAverageSnapshots[^1] - WeightedAverageSnapshots[^2]) / WeightedAverageSnapshots[^2] * 100), 2); *@
+@*             } *@
+@*             catch (Exception) *@
+@*             { *@
+@*                 gradeChange = 100; *@
+@*             } *@
+@* *@
+@*             <div class="vak"> *@
+@*                 <a onclick="@(vak.vak.afkorting)()"> *@
+@*                     <div class="grade-container"> *@
+@*                         <div class="top-30"> *@
+@*                             <p>@vak.vak.naam</p> *@
+@*                             <p>@(sumOfWeights)x</p> *@
+@*                             <p class="@(WeightedAverageSnapshots[^1] >= 5.5f ? "sufficient" : "insufficient ")">@(((double) WeightedAverageSnapshots[^1]).ToString("0.0", CultureInfo.InvariantCulture))</p> *@
+@*                         </div> *@
+@*                         <div class="bottom-70"> *@
+@*                             <p style="flex-grow: 1; text-align: end;">Laatste cijfer:</p> *@
+@*                             <p style="margin-left: 16px; flex-grow: 1;" class="@(NumberUtils.ParseFloat(vak.grades[^1].geldendResultaat) >= 5.5f ? "sufficient" : "insufficient ")">@vak.grades[^1].geldendResultaat</p> *@
+@*                             <p style="margin-left: 16px; flex-grow: 1;" class="@(gradeChange > 0 ? "sufficient" : "insufficient ")">@($"{(gradeChange > 0 ? "+" : "")}{gradeChange}%")</p> *@
+@*                         </div> *@
+@*                     </div> *@
+@*                 </a> *@
+@*             </div> *@
+@*         } *@
+@*     </div> *@
+@* </div> *@
+@* *@
+@* @if (Model.show_individual_grades) *@
+@* { *@
+@* <script minimize> *@
+@* @Context.Items["dmjs"] *@
+@* *@
+@* *@
+@* @foreach(var vak in sortedGrades) *@
+@* { *@
+@*     string function = $"function {vak.vak.afkorting}() {{\n" + *@
+@*                       $"    new ZermosModal()\n" + *@
+@*                       $"    .setTitle('{vak.vak.naam}')\n" + *@
+@*                       $"    .addText('Voor dit vak heeft de leerling die dit gedeeld heeft de volgende cijfers behaald:')\n"; *@
+@*      *@
+@*     @foreach (var grade in vak.grades) *@
+@*     { *@
+@*           function += $"    .addText(`{grade.omschrijving}: {grade.geldendResultaat.Replace(",",".")} die {(grade.weging == 0 ? grade.examenWeging : grade.weging)}x meetelt`)\n"; *@
+@*     } *@
+@*      *@
+@*           function += $"    .setSubmitButtonLabel('Sluiten')\n" + *@
+@*                       $"    .open();\n" + *@
+@*                       $"}}"; *@
+@*          *@
+@*     <text> *@
+@* @Html.Raw(function) *@
+@*     </text> *@
+@*      *@
+@* } *@
+@* </script> *@
+@* } *@

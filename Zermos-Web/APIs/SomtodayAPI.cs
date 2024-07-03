@@ -95,68 +95,43 @@ public class SomtodayAPI
         
         return JsonConvert.DeserializeObject<SomtodayLeermiddelenModel>(await response.Content.ReadAsStringAsync());
     }
-
-    private int gradesPerFetch = 100;
     
-    public async Task<SomtodayGradesModel> GetGrades(user user)
+    /// <summary>
+    /// Fetches all the grades from think current year
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="subjectUUID"></param>
+    /// <returns></returns>
+    public async Task<SomtodayGradesModel> GetCurrentGrades(user user)
     {
-                    var baseUrl =
-            $"https://api.somtoday.nl/rest/v1/resultaten/huidigVoorLeerling/{user.somtoday_student_id}?additional=samengesteldeToetskolomId&additional=resultaatkolomId";
+        // Fetch both at the same time and wait for both to finish
+        var baseurl = $"https://api.somtoday.nl/rest/v1/geldendvoortgangsdossierresultaten/leerling/{user.somtoday_student_id}?type=Toetskolom&type=DeeltoetsKolom&type=Werkstukcijferkolom&type=Advieskolom&additional=vaknaam&additional=resultaatkolom&additional=vakuuid&additional=lichtinguuid&sort=desc-geldendResultaatCijferInvoer";
+        var baseurl2 = $"https://api.somtoday.nl/rest/v1/geldendexamendossierresultaten/leerling/{user.somtoday_student_id}?type=Toetskolom&type=DeeltoetsKolom&type=Werkstukcijferkolom&type=Advieskolom&additional=vaknaam&additional=resultaatkolom&&additional=vakuuid&additional=lichtinguuid&sort=desc-geldendResultaatCijferInvoer";
 
-        _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
-        _httpClient.DefaultRequestHeaders.Add("Range", $"items=0-{gradesPerFetch-1}");
+        _httpClient.DefaultRequestHeaders.Clear();
+        _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
-        var response = await _httpClient.GetAsync(baseUrl);
+        var task1 = _httpClient.GetAsync(baseurl);
+        var task2 = _httpClient.GetAsync(baseurl2);
 
-        var grades =
-            JsonConvert.DeserializeObject<SomtodayGradesModel>(await response.Content.ReadAsStringAsync());
+        await Task.WhenAll(task1, task2);
 
-        if (response.IsSuccessStatusCode == false)
-        {
-            return new SomtodayGradesModel {items = new List<Models.SomtodayGradesModel.Item>()};
-        }
+        var response = task1.Result;
+        var response2 = task2.Result;
 
-        if (int.TryParse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1],
-                out var total))
-        {
-            var requests = (total / gradesPerFetch) + 1;
+        if (response.IsSuccessStatusCode == false || response2.IsSuccessStatusCode == false)
+            return null;
 
-            for (var i = 1; i < requests; i += 1)
-            {
-                _httpClient.DefaultRequestHeaders.Clear();
-                _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
-                _httpClient.DefaultRequestHeaders.Add("Range", $"items={i * gradesPerFetch}-{(i * gradesPerFetch) + (gradesPerFetch - 1)}");
-                _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        var json = await response.Content.ReadAsStringAsync();
+        var json2 = await response2.Content.ReadAsStringAsync();
 
-                response = await _httpClient.GetAsync(baseUrl);
+        var grades = JsonConvert.DeserializeObject<SomtodayGradesModel>(json);
+        var grades2 = JsonConvert.DeserializeObject<SomtodayGradesModel>(json2);
 
-                var _grades =
-                    JsonConvert.DeserializeObject<SomtodayGradesModel>(
-                        await response.Content.ReadAsStringAsync());
-                grades.items.AddRange(_grades.items);
-            }
-        }
-        
-        if (grades == null) return new SomtodayGradesModel() {items = new List<Models.SomtodayGradesModel.Item>()};
-    
-        grades.items = grades.items.OrderBy(x => x.datumInvoer).ToList();
-
-        foreach (var item in grades.items.Where(x => x.resultaatLabelAfkorting == "V"))
-            item.geldendResultaat = "7";
-    
-        foreach (var item in grades.items.Where(x => x.resultaatLabelAfkorting == "G"))
-            item.geldendResultaat = "8";
-
-
-        grades.items = grades.items
-            .Where(x => !(string.IsNullOrEmpty(x.omschrijving) && x.weging == 0))
-            //.Where(x => (x.type != "DeeltoetsKolom" || x.type != "SamengesteldeToetsKolom"))
-            .Where(x => x.geldendResultaat != null)
-            .ToList();
+        grades.items.AddRange(grades2.items);
 
         return grades;
-        return null;
     }
 
     public async Task<SomtodayPlaatsingenModel> GetPlaatsingen(user user)

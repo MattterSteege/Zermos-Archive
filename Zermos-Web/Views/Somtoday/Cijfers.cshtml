@@ -33,44 +33,48 @@
 
 <link rel="stylesheet" href="~/css/somtoday.css" />
 
-<div class="grades-container">
-
-    <div class="vak">
-        <a>
-            <div class="grade-container">
-                @* @Html.Raw(GetNotificationClass(vak.grades[^1].datumInvoer)) *@
-                <table class="grade-table">
-                    <tr class="grade-table-header">
-                        <td colspan="2">Vaknaam</td>
-                        <td>SE cijfer</td>
-                        <td>cijfer</td>
-                    </tr>
-                </table>
-            </div>
-        </a>
-    </div>
-    
-    <!-- specific grades overview -->
-    @foreach (var vak in voortgangDossierGrades)
-    {
-        <!-- Voortgangsdossier -->
+<div class="grade-split">
+    <div class="grades-container">
         <div class="vak">
-            <a onclick="ReplacePage('./@vak.vakkeuze.vak.afkorting.Capitalize()')">
+            <a>
                 <div class="grade-container">
                     @* @Html.Raw(GetNotificationClass(vak.grades[^1].datumInvoer)) *@
                     <table class="grade-table">
                         <tr class="grade-table-header">
-                            <td><i data-name="@vak.vakNaam" data-name-short="@vak.vakkeuze.vak.afkorting"></i></td>
-                            <td colspan="2">@vak.vakNaam</td>
-                            <td class="@(vak.isVoorExamendossier ? (vak.examendossierResultaat.cijfer >= 5.5f ? "sufficient" : "insufficient ") : "")">@(vak.isVoorExamendossier ? (vak.examendossierResultaat.formattedResultaat.Replace(",", ".")) : "")</td>
-                            <td class="@(vak.isVoorVoortgangsdossier ? (vak.voortgangsdossierResultaat.cijfer >= 5.5f ? "sufficient" : "insufficient ") : "")">@(vak.isVoorVoortgangsdossier ? (vak.voortgangsdossierResultaat.formattedResultaat.Replace(",", ".")) : "")</td>
-                            
+                            <td colspan="2">Vaknaam</td>
+                            <td>SE cijfer</td>
+                            <td>cijfer</td>
                         </tr>
                     </table>
                 </div>
             </a>
         </div>
-    }
+        
+        <!-- specific grades overview -->
+        @foreach (var vak in voortgangDossierGrades)
+        {
+            <!-- Voortgangsdossier -->
+            <div class="vak">
+                <a onclick="ReplacePage('./@vak.vakkeuze.vak.afkorting.Capitalize()')">
+                    <div class="grade-container">
+                        @* @Html.Raw(GetNotificationClass(vak.grades[^1].datumInvoer)) *@
+                        <table class="grade-table">
+                            <tr class="grade-table-header">
+                                <td><i data-name="@vak.vakNaam" data-name-short="@vak.vakkeuze.vak.afkorting"></i></td>
+                                <td colspan="2">@vak.vakNaam</td>
+                                <td class="@(vak.isVoorExamendossier ? (vak.examendossierResultaat.cijfer >= 5.5f ? "sufficient" : "insufficient ") : "")">@(vak.isVoorExamendossier ? (vak.examendossierResultaat.formattedResultaat.Replace(",", ".")) : "")</td>
+                                <td class="@(vak.isVoorVoortgangsdossier ? (vak.voortgangsdossierResultaat.cijfer >= 5.5f ? "sufficient" : "insufficient ") : "")">@(vak.isVoorVoortgangsdossier ? (vak.voortgangsdossierResultaat.formattedResultaat.Replace(",", ".")) : "")</td>
+                                
+                            </tr>
+                        </table>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+    
+    <div class="last-grades-container">
+    </div>
 </div>
 
 <script>

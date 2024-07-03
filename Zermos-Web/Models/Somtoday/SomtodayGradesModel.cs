@@ -1,94 +1,65 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Zermos_Web.Models.SomtodayGradesModel
 {
-    public class SomtodayGradesModel
+    public class AdditionalObjects
     {
-        //public int laatsteWijziging { get; set; }
-        public List<Item> items { get; set; }
+        public string resultaatkolom { get; set; }
+        public string vaknaam { get; set; }
+        public string lichtinguuid { get; set; }
+        public string vakuuid { get; set; }
+        //public string? naamalternatiefniveau { get; set; } //voortgang only
     }
 
     public class Item
     {
-        public List<Link> links { get; set; }
-        //public List<Permission> permissions { get; set; }
-        public AdditionalObjects additionalObjects { get; set; }
-        //public string herkansingstype { get; set; }
-        //public string resultaat { get; set; }
-        public string geldendResultaat { get; set; }
-
-        public DateTime datumInvoer { get; set; }
-
-        public bool teltNietmee { get; set; }
-        //public bool toetsNietGemaakt { get; set; }
-        //public int leerjaar { get; set; }
-
-        //public long periode { get; set; }
-        public int weging { get; set; }
-
-        public int examenWeging { get; set; }
-
-        public bool isExamendossierResultaat { get; set; }
-        public string samengesteldeToetskolomId => additionalObjects.samengesteldeToetskolomId as string;
-        public string resultaatkolomId => additionalObjects.resultaatkolomId as string;
-
-        //public bool isVoortgangsdossierResultaat { get; set; }
-        public string type { get; set; }
-        public string omschrijving { get; set; }
-        public Vak vak { get; set; }
-
-        //public Leerling leerling { get; set; }
-        //public int volgnummer { get; set; }
-        //public bool vrijstelling { get; set; }
-        //public string resultaatLabel { get; set; }
-        public string resultaatLabelAfkorting { get; set; }
-
-        public List<Item> samengesteldeToetsen { get; set; }
-    }
-
-    // public class Leerling
-    // {
-    //     public List<Link> links { get; set; }
-    //     public List<Permission> permissions { get; set; }
-    //     public AdditionalObjects additionalObjects { get; set; }
-    //     public string UUID { get; set; }
-    //     public int leerlingnummer { get; set; }
-    //     public string roepnaam { get; set; }
-    //     public string voorvoegsel { get; set; }
-    //     public string achternaam { get; set; }
-    // }
-    
-    public class AdditionalObjects
-    {
-        public string samengesteldeToetskolomId { get; set; }
-        public string resultaatkolomId { get; set; }
-    }
-
-    public class Link
-    {
-        public string id { get; set; }
-        //     public string rel { get; set; }
-        //     public string type { get; set; }
-        //     public string href { get; set; }
-    }
-
-    public class Vak
-    {
         //public List<Link> links { get; set; }
         //public List<Permission> permissions { get; set; }
-        //public AdditionalObjects additionalObjects { get; set; }
-        public string afkorting { get; set; }
-        public string naam { get; set; }
+        public AdditionalObjects additionalObjects { get; set; }
+        public double cijfer { get; set; }
+        public bool isVoldoende { get; set; }
+        //public bool isVoldoendeEerstePoging { get; set; }
+        public int periode { get; set; }
+        public string formattedResultaat { get; set; }
+        //public string formattedEerstePoging { get; set; }
+        //public int volgnummer { get; set; }
+        public string type { get; set; }
+        public string toetscode { get; set; }
+        public string omschrijving { get; set; }
+        public int weging { get; set; }
+        public DateTime datumInvoerEerstePoging { get; set; }
+        //public bool isLabel { get; set; }
+        public bool isCijfer { get; set; }
+        public string herkansing { get; set; }
+        public string toetssoort { get; set; }
+        //public string? label { get; set; } //voortgang only
+        //public string? labelAfkorting { get; set; } //voortgang only
+        public string? opmerkingen { get; set; } //voortgang only
+        //public string? opmerkingenEerstePoging { get; set; } //voortgang only
     }
 
-    public class sortedGrades
+    public class SomtodayGradesModel
     {
-        public List<Item> grades;
-        public Vak vak;
-        public bool isAllExam => grades.TrueForAll(x => x.isExamendossierResultaat);
-        public bool isPartialExam => grades.Exists(x => x.isExamendossierResultaat) && !isAllExam;
-        public bool isAllProgress => grades.TrueForAll(x => !x.isExamendossierResultaat);
+        public List<Item> items { get; set; }
+    }
+}
+
+namespace Zermos_Web.Models.SortedSomtodayGradesModel
+{
+    public class Item
+    {
+        public Models.SomtodayGradesModel.Item lastGrade { get; set; }
+        public int weging { get; set; }
+        public double cijfer { get; set; }
+        public string vaknaam { get; set; }
+        public string vakuuid { get; set; }
+    }
+
+    public class SortedSomtodayGradesModel
+    {
+        public List<Item> items { get; set; }
+        public List<SomtodayGradesModel.Item> lastGrades { get; set; }
     }
 }
