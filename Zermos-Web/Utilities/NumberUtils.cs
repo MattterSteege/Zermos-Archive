@@ -117,5 +117,10 @@ namespace Zermos_Web.Utilities
         {
             return RoundApproximate(dbl, digits, 0.0001, MidpointRounding.AwayFromZero);
         }
+        
+        public static float ToFloat(this string input)
+        {
+            return ParseFloat(input);
+        }
     }
 }

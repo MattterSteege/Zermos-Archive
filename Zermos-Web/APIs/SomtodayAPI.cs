@@ -186,7 +186,7 @@ public class SomtodayAPI
                 cijfersSE = grade.gradesSE,
                 wegingSE = grade.gradesSE.Sum(x => x.weging),
                 cijferSE = gemiddelden?.isVoorExamendossier == true ? gemiddelden.examendossierResultaat.formattedResultaat : "-",
-                vaknaam = grade.subject,
+                vakNaam = grade.subject,
                 vakAfkorting = gemiddelden?.vakAfkorting,
                 vakuuid = (grade.grades.FirstOrDefault()?.additionalObjects.vakuuid ?? grade.gradesSE.FirstOrDefault()?.additionalObjects.vakuuid)
             };
@@ -200,15 +200,15 @@ public class SomtodayAPI
             {
                 cijfer = gemiddelden.isVoorVoortgangsdossier ? gemiddelden.voortgangsdossierResultaat.formattedResultaat : "-",
                 cijferSE = gemiddelden.isVoorExamendossier ? gemiddelden.examendossierResultaat.formattedResultaat : "-",
-                vaknaam = gemiddelden.vakNaam,
+                vakNaam = gemiddelden.vakNaam,
                 vakAfkorting = gemiddelden.vakAfkorting,
                 vakuuid = gemiddelden.vakUUID
             };
 
             sortedGrades.items.Add(item);
         }
-        
-        sortedGrades.items.Sort((x, y) => string.Compare(x.vaknaam, y.vaknaam, StringComparison.Ordinal));
+
+        sortedGrades.items = sortedGrades.items.OrderBy(x => x.vakNaam).ToList();
 
         if (gradeType.HasFlag(GradeType.History))
         {

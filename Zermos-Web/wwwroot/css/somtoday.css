@@ -8,7 +8,7 @@
 
 .grades-container {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(355px, 100% / 5)), 1fr));
     grid-auto-flow: row;
     grid-gap: var(--padding);
     color: var(--text-color);
@@ -728,17 +728,6 @@
     color: var(--text-color);
 }
 
-/*
-
-<tr class="grade-table-header">
-    <td><i class="fa-solid fa-chart-line-up"></i></td>
-    <td colspan="2">bedrijfseconomie</td>
-    <td class="sufficient">6.5</td>
-    <td class="sufficient">7.3</td>
-</tr>
-                        
-*/
-
 .grade-table-header {
     width: 100%;
     color: var(--text-color);
@@ -749,29 +738,16 @@
     font-weight: 700;
 }
 
-.grade-table-header td i {
-    font-size: calc(var(--font-size-heading) * 4);
-    color: var(--text-color);
-    background: var(--overlay-color);
-    border-radius: var(--border-radius);
-    padding: var(--padding);
-}
-
 .grade-table-header td:nth-child(1) {
-    width: 10%;
-    text-align: center;
-}
-
-.grade-table-header td:nth-child(2) {
     width: 80%;
 }
 
-.grade-table-header td:nth-child(3) {
+.grade-table-header td:nth-child(2) {
     padding-right: 30px;
     padding-left: 30px;
 }
 
-.grade-table-header td:nth-child(4) {
+.grade-table-header td:nth-child(3) {
     width: 10%;
     text-align: end;
 }
@@ -902,7 +878,7 @@
 
 @media only screen and (max-width: 700px) {
     .vak {
-        height: 50px;
+        height: 75px;
     }
 
     .background img {
@@ -969,25 +945,8 @@
     background: var(--overlay-overlay-color);
 }
 
-.grade-split {
-    display: grid;
-    grid-template-columns: 1fr 400px;
-    grid-gap: var(--padding);
-    color: var(--text-color);
-    height: auto;
-    width: 100%;
-}
-
-@media only screen and (max-width: 1200px) {
-    .grade-split {
-        grid-template-columns: 1fr 300px;
-    }
-}
-
-@media only screen and (max-width: 700px) {
-    .grade-split {
-        grid-template-columns: 1fr;
-    }
+.leermiddel:hover i {
+    color: var(--background-color);
 }
 
 .add-leermiddel {

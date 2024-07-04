@@ -46,7 +46,7 @@ namespace Zermos_Web.Controllers
         {
             if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
             {
-                return Json(JsonConvert.DeserializeObject<SortedSomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? "{}"));
+                return PartialView(JsonConvert.DeserializeObject<SortedSomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? "{}"));
             }
             
             var user = ZermosUser;

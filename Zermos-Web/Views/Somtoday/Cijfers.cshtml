@@ -4,68 +4,54 @@
 @using Zermos_Web.Utilities
 @model Zermos_Web.Models.SortedSomtodayGradesModel.SortedSomtodayGradesModel
 
-@{
-    //combining of the grades,
-    
-    //so i have a list of grades, and it has 2 parts, grades that are for the voortgangsdossier and grades that are for the examendossier, if they have the same vakkeuze, set the voortgangsdossierResultaat and examendossierResultaat to the same object, so i can use them in the same foreach loop
-    var voortgangDossierGrades = Model.gemiddelden.Where(x => x.isVoorVoortgangsdossier).ToList();
-    var examenDossierGrades = Model.gemiddelden.Where(x => x.isVoorExamendossier).ToList();
-    //var noneDossierGrades = Model.gemiddelden.Where(x => !x.isVoorVoortgangsdossier && !x.isVoorExamendossier).ToList(); 1*
-
-    foreach (Gemiddelden gemiddelden in examenDossierGrades.ToList())
-    {
-        //if there is a examendossier grade for the same vakkeuze, set the examendossierResultaat to the same object
-        if (voortgangDossierGrades.Any(x => x.vakkeuze == gemiddelden.vakkeuze))
-        {
-            voortgangDossierGrades.First(x => x.vakkeuze == gemiddelden.vakkeuze).examendossierResultaat = gemiddelden.examendossierResultaat;
-            //remove the examendossier grade from the list
-            examenDossierGrades.Remove(gemiddelden);
-        }
-    }
-
-    voortgangDossierGrades.AddRange(examenDossierGrades);
-    //voortgangDossierGrades.AddRange(noneDossierGrades); 1*
-    
-    //1* uncomment if you want to see ALL grades, even the ones without a dossier
-
-    voortgangDossierGrades = voortgangDossierGrades.OrderBy(x => x.vakkeuze.vak.afkorting).ToList();
-}
 
 <link rel="stylesheet" href="~/css/somtoday.css" />
 
 <div class="grade-split">
     <div class="grades-container">
-        <div class="vak">
-            <a>
-                <div class="grade-container">
-                    @* @Html.Raw(GetNotificationClass(vak.grades[^1].datumInvoer)) *@
-                    <table class="grade-table">
-                        <tr class="grade-table-header">
-                            <td colspan="2">Vaknaam</td>
-                            <td>SE cijfer</td>
-                            <td>cijfer</td>
-                        </tr>
-                    </table>
-                </div>
-            </a>
-        </div>
-        
         <!-- specific grades overview -->
-        @foreach (var vak in voortgangDossierGrades)
+        @foreach (var vak in Model.items)
         {
-            <!-- Voortgangsdossier -->
             <div class="vak">
-                <a onclick="ReplacePage('./@vak.vakkeuze.vak.afkorting.Capitalize()')">
+                <a onclick="ReplacePage('@Url.Action("Cijfer", "Somtoday", new {vak = vak.vakAfkorting.Capitalize()})')">
                     <div class="grade-container">
-                        @* @Html.Raw(GetNotificationClass(vak.grades[^1].datumInvoer)) *@
+                        @* @Html.Raw(GetNotificationClass(vak.)) *@
                         <table class="grade-table">
+
+                        @if (vak.cijfer == "-")
+                        {
                             <tr class="grade-table-header">
-                                <td><i data-name="@vak.vakNaam" data-name-short="@vak.vakkeuze.vak.afkorting"></i></td>
                                 <td colspan="2">@vak.vakNaam</td>
-                                <td class="@(vak.isVoorExamendossier ? (vak.examendossierResultaat.cijfer >= 5.5f ? "sufficient" : "insufficient ") : "")">@(vak.isVoorExamendossier ? (vak.examendossierResultaat.formattedResultaat.Replace(",", ".")) : "")</td>
-                                <td class="@(vak.isVoorVoortgangsdossier ? (vak.voortgangsdossierResultaat.cijfer >= 5.5f ? "sufficient" : "insufficient ") : "")">@(vak.isVoorVoortgangsdossier ? (vak.voortgangsdossierResultaat.formattedResultaat.Replace(",", ".")) : "")</td>
-                                
+                                <td></td>
+                                <td>-</td>
                             </tr>
+                        }
+                        else
+                        {
+                            <tr class="grade-table-header">
+                                <td colspan="2">@vak.vakNaam</td>
+                                <td>@(vak.weging)x</td>
+                                <td class="@(vak.cijfer.ToFloat() >= 5.45f ? "sufficient" : "insufficient ")">@(vak.cijfer.Replace(",", "."))</td>
+                            </tr>
+                        }
+
+                        @if (vak.cijfers?.Count > 0)
+                        {
+                            <tr class="grade-table-header">
+                                <td colspan="2">Laatste cijfer</td>
+                                <td></td>
+                                <td class="@(vak.cijfers[^1].cijfer >= 5.5 ? "sufficient" : "insufficient ")">@vak.cijfers[^1].cijfer</td>
+                            </tr>
+                        }
+
+                        @if (vak.cijferSE != "-")
+                        {
+                            <tr class="grade-table-header">
+                                <td colspan="2">SE</td>
+                                <td>@(vak.wegingSE)x</td>
+                                <td class="@(vak.cijferSE.ToFloat() >= 5.45f ? "sufficient" : "insufficient ")">@vak.cijferSE</td>
+                            </tr>
+                        }
                         </table>
                     </div>
                 </a>

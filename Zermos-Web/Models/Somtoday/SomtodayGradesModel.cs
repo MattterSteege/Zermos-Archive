@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Zermos_Web.Models.SomtodayGradesModel
 {
@@ -57,7 +58,7 @@ namespace Zermos_Web.Models.SortedSomtodayGradesModel
         public int wegingSE { get; set; }
         public string cijferSE { get; set; }
         public List<SomtodayGradesModel.Item> cijfersSE { get; set; }
-        public string vaknaam { get; set; }
+        public string vakNaam { get; set; }
         public string vakuuid { get; set; }
     }
 
