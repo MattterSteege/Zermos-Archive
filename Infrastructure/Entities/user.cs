@@ -29,7 +29,7 @@ namespace Infrastructure.Entities
         public string cached_somtoday_grades { get; set; }
         public string cached_somtoday_homework { get; set; }
         public string cached_somtoday_leermiddelen { get; set; }
-        [NotMapped] public string cached_somtoday_plaatsingen { get; set; }
+        public string cached_somtoday_plaatsingen { get; set; }
         
         //Infowijs Related
         public string infowijs_access_token { get; set; }

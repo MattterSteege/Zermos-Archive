@@ -50,6 +50,7 @@ namespace Zermos_Web.Models.SortedSomtodayGradesModel
 {
     public class Item
     {
+        public string vakAfkorting { get; set; }
         public int weging { get; set; }
         public string cijfer { get; set; }
         public List<SomtodayGradesModel.Item> cijfers { get; set; }
@@ -64,5 +65,6 @@ namespace Zermos_Web.Models.SortedSomtodayGradesModel
     {
         public List<Item> items { get; set; }
         public List<SomtodayGradesModel.Item> lastGrades { get; set; }
+        public double voortGangsdossierGemiddelde { get; set; }
     }
 }

@@ -78,17 +78,32 @@ namespace Zermos_Web.Controllers
         [HttpGet("Somtoday/Cijfers/{leerjaar}/{vak}")]
         public async Task<IActionResult> Cijfer(int leerjaar, string vak)
         {
+            if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
+            {
+                return Json(JsonConvert.DeserializeObject<SortedSomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? "{}"));
+            }
+            
             var user = ZermosUser;
-
+            
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
                 user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
             }
+            
+            SomtodayPlaatsingenModel plaatsingen = (user.cached_somtoday_plaatsingen == null) ? await somtodayApi.GetPlaatsingen(user) : JsonConvert.DeserializeObject<SomtodayPlaatsingenModel>(user.cached_somtoday_plaatsingen);
+              
+            
+            var grades = await somtodayApi.GetCurrentGradesAndvakgemiddelden(user, plaatsingen, leerjaar, true);
+            
+            ZermosUser = new user
+            {
+                cached_somtoday_grades = JsonConvert.SerializeObject(grades),
+                cached_somtoday_plaatsingen = JsonConvert.SerializeObject(plaatsingen)
+            };
+            
+            Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
 
-            var sortedGrades = await somtodayApi.GetCurrentGrades(user, true);
-            
-            
-            return Json(sortedGrades);
+            return Json(grades);
         }
 
         // [ZermosPage]
