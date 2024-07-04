@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Http;
@@ -97,126 +99,58 @@ public class SomtodayAPI
         
         return JsonConvert.DeserializeObject<SomtodayLeermiddelenModel>(await response.Content.ReadAsStringAsync());
     }
+    
+    [Flags]
+    public enum GradeType
+    {
+        Voortgang = 1,
+        Exam = 2,
+        Average = 4,
+        History = 8,
+    }
 
-    #region REFACTOR
-    /*
-     
-     Refactor using an enum for the type of grades you want:
-     voortgang, exam, average, history
-     
-     */
     /// <summary>
     /// Fetches all the grades from think current year
     /// </summary>
     /// <param name="user"></param>
+    /// <param name="plaatsingen"></param>
     /// <param name="appendGradeHistory"></param>
+    /// <param name="gradeType"></param>
     /// <returns></returns>
-    public async Task<SortedSomtodayGradesModel> GetCurrentGrades(user user, bool appendGradeHistory)
+    public async Task<SortedSomtodayGradesModel> GetCurrentGradesAndVakgemiddelden(user user, SomtodayPlaatsingenModel plaatsingen, 
+        GradeType gradeType = GradeType.Voortgang | GradeType.Exam | GradeType.Average | GradeType.History)
     {
-        // Fetch both at the same time and wait for both to finish
-        var baseurl =
-            $"https://api.somtoday.nl/rest/v1/geldendvoortgangsdossierresultaten/leerling/{user.somtoday_student_id}?type=Toetskolom&type=DeeltoetsKolom&type=Werkstukcijferkolom&type=Advieskolom&additional=vaknaam&additional=resultaatkolom&additional=vakuuid&additional=lichtinguuid&sort=desc-geldendResultaatCijferInvoer";
-        var baseurl2 =
-            $"https://api.somtoday.nl/rest/v1/geldendexamendossierresultaten/leerling/{user.somtoday_student_id}?type=Toetskolom&type=DeeltoetsKolom&type=Werkstukcijferkolom&type=Advieskolom&additional=vaknaam&additional=resultaatkolom&&additional=vakuuid&additional=lichtinguuid&sort=desc-geldendResultaatCijferInvoer";
+        #if DEBUG
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        #endif
+        
+        var urls = new[]
+        {
+            gradeType.HasFlag(GradeType.Voortgang) ? $"https://api.somtoday.nl/rest/v1/geldendvoortgangsdossierresultaten/leerling/{user.somtoday_student_id}?type=Toetskolom&type=DeeltoetsKolom&type=Werkstukcijferkolom&type=Advieskolom&additional=vaknaam&additional=resultaatkolom&additional=vakuuid&additional=lichtinguuid&sort=desc-geldendResultaatCijferInvoer" : null,
+            gradeType.HasFlag(GradeType.Exam) ? $"https://api.somtoday.nl/rest/v1/geldendexamendossierresultaten/leerling/{user.somtoday_student_id}?type=Toetskolom&type=DeeltoetsKolom&type=Werkstukcijferkolom&type=Advieskolom&additional=vaknaam&additional=resultaatkolom&additional=vakuuid&additional=lichtinguuid&sort=desc-geldendResultaatCijferInvoer" : null,
+            gradeType.HasFlag(GradeType.Average) ? $"https://api.somtoday.nl/rest/v1/vakkeuzes/plaatsing/{plaatsingen.items[^1].UUID}/vakgemiddelden" : null
+        };
 
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
-        var task1 = _httpClient.GetAsync(baseurl);
-        var task2 = _httpClient.GetAsync(baseurl2);
+        var tasks = urls.Select(url => url != null ? _httpClient.GetAsync(url) : Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.OK))).ToArray();
 
-        await Task.WhenAll(task1, task2);
+        await Task.WhenAll(tasks);
 
-        var response = task1.Result;
-        var response2 = task2.Result;
-
-        if (response.IsSuccessStatusCode == false || response2.IsSuccessStatusCode == false)
+        if (tasks.Any(t => !t.Result.IsSuccessStatusCode))
             return null;
 
-        var json = await response.Content.ReadAsStringAsync();
-        var json2 = await response2.Content.ReadAsStringAsync();
+        var jsonTasks = tasks.Select(t => t.Result.Content.ReadAsStringAsync()).ToArray();
+        await Task.WhenAll(jsonTasks);
 
-        var grades = JsonConvert.DeserializeObject<SomtodayGradesModel>(json);
-        var gradesSE = JsonConvert.DeserializeObject<SomtodayGradesModel>(json2);
-        
-        return SortGrades(grades, gradesSE, null, appendGradeHistory);
-    }
-    
-    /// <param name="year">-1 for current, 1 for 1ste year, 2e for 2e etc.</param>
-    public async Task<SomtodayVakgemiddeldenModel> Getvakgemiddelden(user user, SomtodayPlaatsingenModel plaatsingen, int year)
-    {
-        string yearId;
-        if (year == -1)
-            yearId = plaatsingen.items[^1].UUID;
-        else
-            yearId = plaatsingen.items[year - 1].UUID;
-        
-        var baseurl = $"https://api.somtoday.nl/rest/v1/vakkeuzes/plaatsing/{yearId}/vakgemiddelden";
-        
-        _httpClient.DefaultRequestHeaders.Clear();
-        _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
-        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-        
-        var response = await _httpClient.GetAsync(baseurl);
-        
-        if (response.IsSuccessStatusCode == false)
-            return null;
-        
-        return JsonConvert.DeserializeObject<SomtodayVakgemiddeldenModel>(await response.Content.ReadAsStringAsync());
-    }
-    
-        /// <summary>
-    /// Fetches all the grades from think current year
-    /// </summary>
-    /// <param name="user"></param>
-    /// <param name="appendGradeHistory"></param>
-    /// <returns></returns>
-    public async Task<SortedSomtodayGradesModel> GetCurrentGradesAndvakgemiddelden(user user, SomtodayPlaatsingenModel plaatsingen, int year, bool appendGradeHistory)
-    {
-        // Fetch all at the same time and wait for both to finish
-        string yearId;
-        if (year == -1)
-            yearId = plaatsingen.items[^1].UUID;
-        else
-            yearId = plaatsingen.items[year - 1].UUID;
-        
-        var baseurl = $"https://api.somtoday.nl/rest/v1/geldendvoortgangsdossierresultaten/leerling/{user.somtoday_student_id}?type=Toetskolom&type=DeeltoetsKolom&type=Werkstukcijferkolom&type=Advieskolom&additional=vaknaam&additional=resultaatkolom&additional=vakuuid&additional=lichtinguuid&sort=desc-geldendResultaatCijferInvoer";
-        var baseurl2 = $"https://api.somtoday.nl/rest/v1/geldendexamendossierresultaten/leerling/{user.somtoday_student_id}?type=Toetskolom&type=DeeltoetsKolom&type=Werkstukcijferkolom&type=Advieskolom&additional=vaknaam&additional=resultaatkolom&&additional=vakuuid&additional=lichtinguuid&sort=desc-geldendResultaatCijferInvoer";
-        var baseurl3 = $"https://api.somtoday.nl/rest/v1/vakkeuzes/plaatsing/{yearId}/vakgemiddelden";
+        var grades = gradeType.HasFlag(GradeType.Voortgang) ? JsonConvert.DeserializeObject<SomtodayGradesModel>(jsonTasks[0].Result) : null;
+        var gradesSE = gradeType.HasFlag(GradeType.Exam) ? JsonConvert.DeserializeObject<SomtodayGradesModel>(jsonTasks[1].Result) : null;
+        var vakgemiddelden = gradeType.HasFlag(GradeType.Average) ? JsonConvert.DeserializeObject<SomtodayVakgemiddeldenModel>(jsonTasks[2].Result) : null;
 
-        _httpClient.DefaultRequestHeaders.Clear();
-        _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
-        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-
-        var task1 = _httpClient.GetAsync(baseurl);
-        var task2 = _httpClient.GetAsync(baseurl2);
-        var task3 = _httpClient.GetAsync(baseurl3);
-
-        await Task.WhenAll(task1, task2, task3);
-
-        var response = task1.Result;
-        var response2 = task2.Result;
-        var response3 = task3.Result;
-
-        if (response.IsSuccessStatusCode == false || response2.IsSuccessStatusCode == false || response3.IsSuccessStatusCode == false)
-            return null;
-
-        var json = await response.Content.ReadAsStringAsync();
-        var json2 = await response2.Content.ReadAsStringAsync();
-        var json3 = await response3.Content.ReadAsStringAsync();
-
-        var grades = JsonConvert.DeserializeObject<SomtodayGradesModel>(json);
-        var gradesSE = JsonConvert.DeserializeObject<SomtodayGradesModel>(json2);
-        var vakgemiddelden = JsonConvert.DeserializeObject<SomtodayVakgemiddeldenModel>(json3);
-        
-        return SortGrades(grades, gradesSE, vakgemiddelden, appendGradeHistory);
-    }
-    
-    public SortedSomtodayGradesModel SortGrades(SomtodayGradesModel grades, SomtodayGradesModel gradesSE, SomtodayVakgemiddeldenModel vakgemiddelden, bool appendGradeHistory)
-    {
-    var gradesBySubject = grades.items.GroupBy(x => x.additionalObjects.vaknaam).ToDictionary(g => g.Key, g => g.ToList());
-        var gradesBySubjectSE = gradesSE.items.GroupBy(x => x.additionalObjects.vaknaam).ToDictionary(g => g.Key, g => g.ToList());
+        var gradesBySubject = grades?.items.GroupBy(x => x.additionalObjects.vaknaam).ToDictionary(g => g.Key, g => g.ToList()) ?? new Dictionary<string, List<Models.SomtodayGradesModel.Item>>();
+        var gradesBySubjectSE = gradesSE?.items.GroupBy(x => x.additionalObjects.vaknaam).ToDictionary(g => g.Key, g => g.ToList()) ?? new Dictionary<string, List<Models.SomtodayGradesModel.Item>>();
 
         var distinctSubjects = gradesBySubject.Keys.Union(gradesBySubjectSE.Keys);
 
@@ -231,50 +165,64 @@ public class SomtodayAPI
                 gradesSE = gradeSE ?? new List<Models.SomtodayGradesModel.Item>()
             };
         }).ToList();
-        
-        
+
         var sortedGrades = new SortedSomtodayGradesModel
         {
             items = new List<Models.SortedSomtodayGradesModel.Item>(),
             lastGrades = new List<Models.SomtodayGradesModel.Item>(),
-            voortGangsdossierGemiddelde = vakgemiddelden.voortgangsdossierGemiddelde
+            voortGangsdossierGemiddelde = vakgemiddelden?.voortgangsdossierGemiddelde
         };
-        
+
         foreach (var grade in gradesBySubjectGrouped)
         {
-            var gemiddelden = vakgemiddelden.gemiddelden.FirstOrDefault(x => x.vakNaam == grade.subject);
+            var gemiddelden = vakgemiddelden?.gemiddelden.FirstOrDefault(x => x.vakNaam == grade.subject);
+            vakgemiddelden?.gemiddelden.Remove(gemiddelden);
             
-            var item = new Models.SortedSomtodayGradesModel.Item();
-            
-            item.cijfers = grade.grades;
-            item.weging = item.cijfers.Sum(x => x.weging);
-            item.cijfer = gemiddelden.isVoorVoortgangsdossier ? gemiddelden.voortgangsdossierResultaat.cijfer.ToString("0.0000", CultureInfo.InvariantCulture) : "-";
-            
-            item.cijfersSE = grade.gradesSE;
-            item.wegingSE = item.cijfersSE.Sum(x => x.weging);
-            item.cijferSE = gemiddelden.isVoorExamendossier ? gemiddelden.examendossierResultaat.cijfer.ToString("0.0000", CultureInfo.InvariantCulture) : "-";
-            
-            item.vaknaam = grade.subject;
-            item.vakAfkorting = gemiddelden.vakAfkorting;
-            item.vakuuid = (item.cijfers.Count > 0 ? item.cijfers[0].additionalObjects.vakuuid : item.cijfersSE[0].additionalObjects.vakuuid);
+            var item = new Models.SortedSomtodayGradesModel.Item
+            {
+                cijfers = grade.grades,
+                weging = grade.grades.Sum(x => x.weging),
+                cijfer = gemiddelden?.isVoorVoortgangsdossier == true ? gemiddelden.voortgangsdossierResultaat.formattedResultaat : "-",
+                cijfersSE = grade.gradesSE,
+                wegingSE = grade.gradesSE.Sum(x => x.weging),
+                cijferSE = gemiddelden?.isVoorExamendossier == true ? gemiddelden.examendossierResultaat.formattedResultaat : "-",
+                vaknaam = grade.subject,
+                vakAfkorting = gemiddelden?.vakAfkorting,
+                vakuuid = (grade.grades.FirstOrDefault()?.additionalObjects.vakuuid ?? grade.gradesSE.FirstOrDefault()?.additionalObjects.vakuuid)
+            };
+
+            sortedGrades.items.Add(item);
+        }
+
+        foreach (Gemiddelden gemiddelden in vakgemiddelden?.gemiddelden)
+        {
+            var item = new Models.SortedSomtodayGradesModel.Item
+            {
+                cijfer = gemiddelden.isVoorVoortgangsdossier ? gemiddelden.voortgangsdossierResultaat.formattedResultaat : "-",
+                cijferSE = gemiddelden.isVoorExamendossier ? gemiddelden.examendossierResultaat.formattedResultaat : "-",
+                vaknaam = gemiddelden.vakNaam,
+                vakAfkorting = gemiddelden.vakAfkorting,
+                vakuuid = gemiddelden.vakUUID
+            };
 
             sortedGrades.items.Add(item);
         }
         
-        if (appendGradeHistory)
+        sortedGrades.items.Sort((x, y) => string.Compare(x.vaknaam, y.vaknaam, StringComparison.Ordinal));
+
+        if (gradeType.HasFlag(GradeType.History))
         {
-            var lastGrades = new List<Models.SomtodayGradesModel.Item>();
-            foreach (var grade in gradesBySubjectGrouped)
-            {
-                lastGrades.AddRange(grade.grades);
-                lastGrades.AddRange(grade.gradesSE);
-            }
-            sortedGrades.lastGrades = lastGrades.OrderByDescending(x => x.datumInvoerEerstePoging).ToList();
+            var lastGrades = gradesBySubjectGrouped.SelectMany(g => g.grades.Concat(g.gradesSE)).OrderByDescending(x => x.datumInvoerEerstePoging).ToList();
+            sortedGrades.lastGrades = lastGrades;
         }
+        
+        #if DEBUG
+        watch.Stop();
+        Console.WriteLine(watch.ElapsedMilliseconds + "ms");
+        #endif
         
         return sortedGrades;
     }
-    #endregion
 
     public async Task<SomtodayPlaatsingenModel> GetPlaatsingen(user user)
     {

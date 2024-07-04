@@ -11,5 +11,12 @@ TODO: alle cijfers ophalen van nieuwe API endpoint
     - Als mensen de cijfers van een vak willen zien, dan roep ik de https://api.somtoday.nl/rest/v1/geldendvoortgangsdossierresultaten/vakresultaten/[lln]]/vak/[uuid_1]/lichting/[uuid_2]?additional=vaknaam&additional=resultaatkolom&additional=naamalternatiefniveau&additional=naamstandaardniveau&type=Toetskolom&type=SamengesteldeToetsKolom&type=Werkstukcijferkolom&type=Advieskolom&type=RapportToetskolom&type=SEGemiddeldeKolom&type=ToetssoortGemiddeldeKolom&sort=desc-geldendResultaatCijferInvoer en https://api.somtoday.nl/rest/v1/geldendexamendossierresultaten/vakresultaten/1409824200/vak/deb5f122-1c35-4b7e-a497-9677687d5b04/lichting/98d1b8ef-858a-48f1-880e-5d4f431cbb3b?additional=vaknaam&additional=resultaatkolom&additional=naamalternatiefniveau&additional=naamstandaardniveau&type=Toetskolom&type=SamengesteldeToetsKolom&type=Werkstukcijferkolom&type=Advieskolom&type=RapportToetskolom&type=SEGemiddeldeKolom&type=ToetssoortGemiddeldeKolom&sort=desc-geldendResultaatCijferInvoer aan
 
 TODO: als mensen nieuw zijn gooi ze dan gelijk door de instellingen heen, zodat ze gelijk kunnen instellen hoe hun cijfer berekend moet worden en hoe hun roostertijden eruit zien (etc.)
+
+TODO: make the Somtoday API client so that you can do code like this and it is concurently requested:
+
+await SomtodayAPI.getPlaatsingen().getVakkeuzes().getVakGemiddelden();
+and it will call the code to check if the refresh token is still valid and if not, it will refresh the token and then call the code again.
+then it will concurently request the data from the Somtoday API and then return the data to the user.
+so that it is as fast as possible and the user doesn't have to wait for the data to be requested.
     
 TODO: jaarbijlagen bij leermiddelen
