@@ -4,6 +4,17 @@
 @using Zermos_Web.Utilities
 @model Zermos_Web.Models.SortedSomtodayGradesModel.SortedSomtodayGradesModel
 
+@{
+
+    var lastUpdated = Context.Request.Cookies["last-seen-somtoday-grades"] == null
+        ? DateTime.MinValue
+        : DateTime.Parse(Context.Request.Cookies["last-seen-somtoday-grades"]);
+    
+    string GetNotificationClass(DateTime lastGradeDate)
+    {
+        return lastUpdated < lastGradeDate ? "notify-me" : "";
+    }
+}
 
 <link rel="stylesheet" href="~/css/somtoday.css"/>
 
@@ -11,120 +22,143 @@
 <!- When the screen is less then 100px wide, the all the panels should be combined into one panel, with 3 options at the slider at the top    -->
 
 
-<style>
-    .container {
-        display: flex;
-        height: calc(100% - 40px);
-    }
-    .panel {
-        flex: 1;
-        padding: 20px;
-        display: none;
-    }
-    #panel1 { background-color: #f0f0f0; }
-    #panel2 { background-color: #e0e0e0; }
-    #panel3 { background-color: #d0d0d0; }
-    .controls {
-        z-index: 100;
-        height: 40px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    button {
-        margin-right: 5px;
-        height: 30px;
-    }
-    @@media (min-width: 1201px) {
-    #panel3 {
-        display: block;
-    }
-    #togglePanel3 {
-        display: none;
-    }
-    }
-    @@media (max-width: 1200px) {
-    .container {
-        flex-direction: column;
-    }
-    .panel {
-        height: 100%;
-    }
-    }
-</style>
-
-<div class="controls">
-    <button id="togglePanel1">Panel 1</button>
-    <button id="togglePanel2">Panel 2</button>
-    <button id="togglePanel3">Panel 3</button>
+<div class="grade-controls">
+    <div id="togglePanel1" onclick="selectLine(1)">Rapport</div>
+    <div id="togglePanel2" onclick="selectLine(2)">Examen</div>
+    <div id="togglePanel3" onclick="selectLine(3)">Geschiedenis</div>
+    <div id="underline"></div>
 </div>
-<div class="container">
-    <div id="panel1" class="panel">
-        <h2>Panel 1</h2>
-        <p>This is the content of Panel 1.</p>
+<div class="grades-container">
+    <div id="panel1" class="panel"> <!-- Voortgangsdossier -->
+        <h1 class="grades-title">Voortgangsdossier</h1>
+        @foreach (var grade in Model.items)
+        {
+            if (grade.cijfer == "-") { continue; }
+
+            <table class="grade-table" @Html.Raw(GetNotificationClass(grade.cijfers.FirstOrDefault()!.datumInvoerEerstePoging))>
+                <tr class="grade-table-header">
+                    <td colspan="2">@grade.vakNaam</td>
+                    <td>@(grade.weging)x</td>
+                    <td class="@(grade.cijfer.ToFloat() >= 5.45f ? "sufficient" : "insufficient ")">@grade.cijfer.Replace(",", ".")</td>
+                </tr>
+                <tr class="grade-table-header">
+                    <td colspan="2">Laatste cijfer</td>
+                    <td></td>
+                    <td class="@(grade.cijfers.FirstOrDefault()!.cijfer >= 5.45 ? "sufficient" : "insufficient ")">@grade.cijfers.Last().formattedResultaat</td>
+                </tr>
+            </table>
+        }
+
+        @* <div class="grade"> *@
+        @*     <div class="grade-title">Totaalgemiddelde</div> *@
+        @*     <div class="grade-cijfer">~ @Model.voortGangsdossierGemiddelde</div> *@
+        @* </div> *@
+        
+        <table class="grade-table">
+            <tr class="grade-table-header">
+                <td colspan="2">Totaalgemiddelde</td>
+                <td></td>
+                <td class="@(Model.voortGangsdossierGemiddelde >= 5.45 ? "sufficient" : "insufficient ")">~ @(Model.voortGangsdossierGemiddelde.ToString().Replace(",", "."))</td>
+            </tr>
+        </table>
     </div>
-    <div id="panel2" class="panel">
-        <h2>Panel 2</h2>
-        <p>This is the content of Panel 2.</p>
+    <div id="panel2" class="panel"> <!-- Schoolexamen cijfers -->
+        <h1 class="grades-title">Schoolexamen cijfers</h1>
+        @foreach (var grade in Model.items)
+        {
+            if (grade.cijferSE == "-") { continue; }
+            
+            <div class="grade">
+                <div class="grade-title">@grade.vakNaam</div>
+                <div class="grade-cijfer">@(grade.wegingSE)x @grade.cijferSE</div>
+            </div>
+        }
     </div>
-    <div id="panel3" class="panel">
-        <h2>Panel 3</h2>
-        <p>This is the content of Panel 3.</p>
+    <div id="panel3" class="panel"> <!-- Geschiedenis -->
+        <h1 class="grades-title">Geschiedenis</h1>
+        @foreach (var grade in Model.lastGrades)
+        {
+            <div class="grade">
+                <div class="grade-title">@grade.additionalObjects.vaknaam</div>
+                <div class="grade-desc">@grade.omschrijving</div>
+                <div class="grade-cijfer">@(grade.weging)x @grade.cijfer</div>
+            </div>
+        }
     </div>
 </div>
 <script>
-    const panel1 = document.getElementById('panel1');
-    const panel2 = document.getElementById('panel2');
-    const panel3 = document.getElementById('panel3');
-    const togglePanel1 = document.getElementById('togglePanel1');
-    const togglePanel2 = document.getElementById('togglePanel2');
-    const togglePanel3 = document.getElementById('togglePanel3');
+    var panel1 = document.getElementById('panel1');
+    var panel2 = document.getElementById('panel2');
+    var panel3 = document.getElementById('panel3');
+    var togglePanel1 = document.getElementById('togglePanel1');
+    var togglePanel2 = document.getElementById('togglePanel2');
+    var togglePanel3 = document.getElementById('togglePanel3');
 
     function updatePanels() {
         const isWideScreen = window.innerWidth > 1000;
         if (isWideScreen) {
-            panel3.style.display = 'block';
+            panel3.style.display = 'flex';
             togglePanel3.style.display = 'none';
-            if (panel2.style.display === 'block') {
+            if (panel2.style.display === 'flex') {
                 panel1.style.display = 'none';
             } else {
-                panel1.style.display = 'block';
+                panel1.style.display = 'flex';
             }
         } else {
-            togglePanel3.style.display = 'inline-block';
-            if (panel3.style.display === 'block') {
+            togglePanel3.style.display = 'flex';
+            if (panel3.style.display === 'flex') {
                 panel1.style.display = 'none';
                 panel2.style.display = 'none';
-            } else if (panel2.style.display === 'block') {
+            } else if (panel2.style.display === 'flex') {
                 panel1.style.display = 'none';
                 panel3.style.display = 'none';
             } else {
-                panel1.style.display = 'block';
+                panel1.style.display = 'flex';
                 panel2.style.display = 'none';
                 panel3.style.display = 'none';
             }
         }
     }
 
-    togglePanel1.addEventListener('click', () => {
-        panel1.style.display = 'block';
-        panel2.style.display = 'none';
-        updatePanels();
-    });
-
-    togglePanel2.addEventListener('click', () => {
+    togglePanel1.addEventListener('click', () => ShowPanel(panel1));
+    togglePanel2.addEventListener('click', () => ShowPanel(panel2));
+    togglePanel3.addEventListener('click', () => ShowPanel(panel3));
+    window.addEventListener('resize', () => {updatePanels(); selectLine(currentSelectedPanel);});
+        
+    function ShowPanel(panel) {
         panel1.style.display = 'none';
-        panel2.style.display = 'block';
+        panel2.style.display = 'none';
+        panel3.style.display = 'none';
+        panel.style.display = 'flex';
         updatePanels();
-    });
+    }
 
-    togglePanel3.addEventListener('click', () => {
-        panel3.style.display = 'block';
-        updatePanels();
-    });
-
-    window.addEventListener('resize', updatePanels);
     updatePanels();
+    
+    var currentSelectedPanel = 1;
+    var underline = document.getElementById('underline');
+    var buttons = document.querySelectorAll('.grade-controls div');
+
+    function selectLine(buttonNumber) {
+        
+        currentSelectedPanel = buttonNumber;
+
+        const selectedButton = buttons[buttonNumber - 1];
+        if (selectedButton) {
+            const buttonRect = selectedButton.getBoundingClientRect();
+            const containerRect = selectedButton.parentElement.getBoundingClientRect();
+
+            underline.style.width = `${buttonRect.width}px`;
+            underline.style.left = `${buttonRect.left - containerRect.left}px`;
+        }
+    }
+    
+    selectLine(1);
+    
+    document.querySelectorAll('.grade-table[notify-me]').forEach((table) => {
+        table.innerHTML = "<div class=\"grade-notification\"></div>" + table.innerHTML;
+    });
+
 </script>
 
 @* <script minimize> *@
