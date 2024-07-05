@@ -1,1 +1,4 @@
 ﻿0.5.4 
+
+- Koppelingen - Zermelo
+    - je kan nu ook met langere schoolnamen inloggen (sorry voor de mensen die hier last van hadden)

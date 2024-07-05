@@ -9,7 +9,7 @@
         <p>Zermelo koppelen met een koppelcode? Om Zermelo aan je account te koppelen moet je een code invoeren. Deze code kun je vinden in Zermelo, <a target="_blank" href="https://ccg.zportal.nl/app/">hier</a> om precies te zijn. Als je op de website van Zermelo bent, klik dan op 'instellingen' en daarna op 'koppel externe applicatie'. Voer de 3-letterige code in het bovenste veld in en de 12-cijferige code in het onderste veld.</p>
     </div>
     <form method="post" asp-controller="Koppelingen" asp-action="ZermeloWithCode" class="form-control">
-        <input class="input" type="text" name="institution" maxlength="5" placeholder="abc">
+        <input class="input" type="text" name="institution" placeholder="abc">
         <input class="input" type="text" name="code" placeholder="123 456 789 012">
         <button class="input submit" type="submit">Inloggen</button>
     </form>
