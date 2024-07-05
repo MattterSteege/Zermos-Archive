@@ -180,10 +180,10 @@ public class SomtodayAPI
             
             var item = new Models.SortedSomtodayGradesModel.Item
             {
-                cijfers = grade.grades,
+                cijfers = grade.grades ?? new List<Models.SomtodayGradesModel.Item>(),
                 weging = grade.grades.Sum(x => x.weging),
                 cijfer = gemiddelden?.isVoorVoortgangsdossier == true ? gemiddelden.voortgangsdossierResultaat.formattedResultaat : "-",
-                cijfersSE = grade.gradesSE,
+                cijfersSE = grade.gradesSE ?? new List<Models.SomtodayGradesModel.Item>(),
                 wegingSE = grade.gradesSE.Sum(x => x.weging),
                 cijferSE = gemiddelden?.isVoorExamendossier == true ? gemiddelden.examendossierResultaat.formattedResultaat : "-",
                 vakNaam = grade.subject,
