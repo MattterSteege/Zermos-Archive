@@ -53,8 +53,8 @@
         <h1>Rooster</h1>
         <p>Wat zijn jouw schooltijden</p>
         <div class="settings-options">
-            <input type="time" id="5_start_time" name="start_time" min="08:00" max="18:00" value="@Model.zermelo_timestamps.Split("-")[0]"/>
-            <input type="time" id="5_end_time" name="end_time" min="08:00" max="18:00" value="@Model.zermelo_timestamps.Split("-")[1]"/>
+            <input type="time" id="5_start_time" name="start_time" min="08:00" max="18:00" value="@Model.zermelo_timestamps?.Split("-")[0]"/>
+            <input type="time" id="5_end_time" name="end_time" min="08:00" max="18:00" value="@Model.zermelo_timestamps?.Split("-")[1]"/>
             <div id="5_save" onclick="UpdateSchooltijen(this)">Opslaan</div>
         </div>
     </div>

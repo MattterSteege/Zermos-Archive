@@ -2,3 +2,6 @@
 
 - Koppelingen - Zermelo
     - je kan nu ook met langere schoolnamen inloggen (sorry voor de mensen die hier last van hadden)
+    
+- Account
+    - Je kan nu weer de account pagina openen als je nog geen schooltijden hebt ingesteld

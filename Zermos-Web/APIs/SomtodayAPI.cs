@@ -33,7 +33,7 @@ public class SomtodayAPI
         _httpClient.DefaultRequestHeaders.Add("Origin", "https://somtoday.nl");
     }
 
-    public async Task<SomtodayAuthenticatieModel> RefreshTokenAsync(string token)
+    public async Task<SomtodayAuthenticatieModel> RefreshTokenAsync(string token, string clientId = "D50E0C06-32D1-4B41-A137-A9A850C892C2")
     {
         if (token == null) throw new ArgumentNullException(nameof(token));
 
@@ -42,7 +42,7 @@ public class SomtodayAPI
             {"grant_type", "refresh_token"},
             {"refresh_token", token},
             {"scope", "openid"},
-            {"client_id", "D50E0C06-32D1-4B41-A137-A9A850C892C2"}
+            {"client_id", clientId}
         };
 
         var response = await _httpClient.PostAsync("https://inloggen.somtoday.nl/oauth2/token", new FormUrlEncodedContent(form));

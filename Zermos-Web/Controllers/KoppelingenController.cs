@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Zermos_Web.APIs;
 using Zermos_Web.Models;
 using Zermos_Web.Models.Requirements;
 using Zermos_Web.Models.zermeloUserModel;
@@ -24,10 +25,9 @@ namespace Zermos_Web.Controllers
     [Authorize]
     public class KoppelingenController : BaseController
     {
-        public KoppelingenController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share,
-            logger)
-        {
-        }
+        public KoppelingenController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
+        
+        SomtodayAPI somtodayApi = new(new HttpClient());
 
         private readonly HttpClient _infowijsHttpClient = new()
         {
@@ -386,7 +386,55 @@ namespace Zermos_Web.Controllers
         {
             return PartialView();
         }
+        
+        [HttpGet]
+        [ZermosPage]
+        [Route("/Koppelingen/Somtoday/HackerMan")]
+        public IActionResult SomtodayHackerman()
+        {
+            /*
+             
+            //FOR PRODUCTION
+             
+            b=JSON.parse;c=localStorage;location.href=`https://zermos.kronk.tech/Koppelingen/Somtoday/Callback?${b(c[`CapacitorStorage.${b(c['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']).currentAuthenticationRecord}`]).refresh_token}`
+              
+              
+            //FOR DEVELOPMENT
+                
+            b=JSON.parse;c=localStorage;location.href=`https://localhost:5001/Koppelingen/Somtoday/Callback?${b(c[`CapacitorStorage.${b(c['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']).currentAuthenticationRecord}`]).refresh_token}`
+             */
+            
+            return PartialView();
+        }
+        
+        [HttpGet]
+        //support route /Koppelingen/Somtoday/Callback?[REFERSH_TOKEN]
+        [Route("/Koppelingen/Somtoday/Callback")]
+        public async Task<IActionResult> SomtodayCallback()
+        {
+            //get the code behind the ? in the url
+            if (Request.QueryString.Value != null)
+            {
+                var refresh_token = Request.QueryString.Value.Remove(0, 1);
+                
+                var somtoday = await somtodayApi.RefreshTokenAsync(refresh_token, "somtoday-leerling-web");
+            
+                if (somtoday != null)
+                {
+                    var user = await GetSomtodayStudent(somtoday.access_token);
+                    
+                    ZermosUser = new user
+                    {
+                        somtoday_access_token = somtoday.access_token,
+                        somtoday_refresh_token = somtoday.refresh_token,
+                        somtoday_student_id = user.somtoday_student_id,
+                    };
+                    return Ok("success");
+                }
+            }
 
+            return Ok("failed");
+        }
 
         [HttpPost]
         public async Task<IActionResult> Somtoday(string username, string password, string school)
