@@ -393,20 +393,32 @@ namespace Zermos_Web.Controllers
         [Route("/Koppelingen/Somtoday/HackerMan")]
         public IActionResult SomtodayHackerman()
         {
+            /*
+             
+            //FOR PRODUCTION
+             
+            b=JSON.parse;c=localStorage;location.href=`https://zermos.kronk.tech/Koppelingen/Somtoday/Callback?${b(c[`CapacitorStorage.${b(c['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']).currentAuthenticationRecord}`]).refresh_token}`
+              
+              
+            //FOR DEVELOPMENT
+                
+            b=JSON.parse;c=localStorage;location.href=`https://localhost:5001/Koppelingen/Somtoday/Callback?${b(c[`CapacitorStorage.${b(c['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']).currentAuthenticationRecord}`]).refresh_token}`
+             */
+            
             return PartialView();
         }
         
         [HttpGet]
-        [ZermosPage]
+        //support route /Koppelingen/Somtoday/Callback?[REFERSH_TOKEN]
         [Route("/Koppelingen/Somtoday/Callback")]
         public async Task<IActionResult> SomtodayCallback()
         {
             //get the code behind the ? in the url
             if (Request.QueryString.Value != null)
             {
-                var refresh_token = Request.QueryString.Value.Remove(0, 1).Split("&")[0];
+                var refresh_token = Request.QueryString.Value.Remove(0, 1);
                 
-                var somtoday = await somtodayApi.RefreshTokenAsync(refresh_token);
+                var somtoday = await somtodayApi.RefreshTokenAsync(refresh_token, "somtoday-leerling-web");
             
                 if (somtoday != null)
                 {
@@ -418,11 +430,11 @@ namespace Zermos_Web.Controllers
                         somtoday_refresh_token = somtoday.refresh_token,
                         somtoday_student_id = user.somtoday_student_id,
                     };
-                    return PartialView(model: "success");
+                    return Ok("success");
                 }
             }
 
-            return PartialView(model: "failed");
+            return Ok("failed");
         }
 
         [HttpGet]

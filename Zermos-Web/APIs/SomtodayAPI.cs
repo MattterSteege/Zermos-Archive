@@ -38,7 +38,7 @@ public class SomtodayAPI
         _httpClient.DefaultRequestHeaders.Add("Origin", "https://somtoday.nl");
     }
 
-    public async Task<SomtodayAuthenticatieModel> RefreshTokenAsync(string token)
+    public async Task<SomtodayAuthenticatieModel> RefreshTokenAsync(string token, string clientId = "D50E0C06-32D1-4B41-A137-A9A850C892C2")
     {
         if (token == null) throw new ArgumentNullException(nameof(token));
 
