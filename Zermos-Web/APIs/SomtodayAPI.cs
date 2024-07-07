@@ -38,7 +38,7 @@ public class SomtodayAPI
         _httpClient.DefaultRequestHeaders.Add("Origin", "https://somtoday.nl");
     }
 
-    public async Task<SomtodayAuthenticatieModel> RefreshTokenAsync(string token, string clientId = "D50E0C06-32D1-4B41-A137-A9A850C892C2")
+    public async Task<SomtodayAuthenticatieModel> RefreshTokenAsync(string token)
     {
         if (token == null) throw new ArgumentNullException(nameof(token));
 
@@ -198,6 +198,14 @@ public class SomtodayAPI
 
         foreach (Gemiddelden gemiddelden in vakgemiddelden?.gemiddelden)
         {
+            var requests = (total / gradesPerFetch) + 1;
+
+            for (var i = 1; i < requests; i += 1)
+            {
+                _httpClient.DefaultRequestHeaders.Clear();
+                _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
+                _httpClient.DefaultRequestHeaders.Add("Range", $"items={i * gradesPerFetch}-{(i * gradesPerFetch) + (gradesPerFetch - 1)}");
+                _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
             var item = new Models.SortedSomtodayGradesModel.Item
             {
                 cijfer = gemiddelden.isVoorVoortgangsdossier ? gemiddelden.voortgangsdossierResultaat.formattedResultaat : "-",

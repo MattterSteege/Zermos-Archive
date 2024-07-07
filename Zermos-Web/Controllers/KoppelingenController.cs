@@ -393,18 +393,6 @@ namespace Zermos_Web.Controllers
         [Route("/Koppelingen/Somtoday/HackerMan")]
         public IActionResult SomtodayHackerman()
         {
-            /*
-             
-            //FOR PRODUCTION
-             
-            b=JSON.parse;c=localStorage;location.href=`https://zermos.kronk.tech/Koppelingen/Somtoday/Callback?${b(c[`CapacitorStorage.${b(c['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']).currentAuthenticationRecord}`]).refresh_token}`
-              
-              
-            //FOR DEVELOPMENT
-                
-            b=JSON.parse;c=localStorage;location.href=`https://localhost:5001/Koppelingen/Somtoday/Callback?${b(c[`CapacitorStorage.${b(c['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']).currentAuthenticationRecord}`]).refresh_token}`
-             */
-            
             return PartialView();
         }
         
@@ -418,7 +406,7 @@ namespace Zermos_Web.Controllers
             {
                 var refresh_token = Request.QueryString.Value.Remove(0, 1);
                 
-                var somtoday = await somtodayApi.RefreshTokenAsync(refresh_token, "somtoday-leerling-web");
+                var somtoday = await somtodayApi.RefreshTokenAsync(refresh_token);
             
                 if (somtoday != null)
                 {
