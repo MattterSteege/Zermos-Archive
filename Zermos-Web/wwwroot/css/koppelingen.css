@@ -25,7 +25,6 @@
     font-size: var(--font-size);
     font-weight: 600;
     cursor: default;
-    max-height: 80%;
 }
 
 .login-explanation h1 {
@@ -250,6 +249,7 @@
     display: flex;
     flex-direction: column;
     position: relative;
+    width: 100%;
 }
 
 .login-explanation .code-child .codeblock .codeblock-header {
@@ -284,6 +284,10 @@
     align-items: center;
 }
 
+.login-explanation .code-child .codeblock .codeblock-header .copy-button:hover {
+    cursor: pointer;
+}
+
 .login-explanation .code-child .codeblock .codeblock-content {
     display: flex;
     flex-direction: column;
@@ -303,4 +307,18 @@
     font-weight: 700;
     color: var(--white-color);
     font-family: monospace;
+    width: 100%;
+    word-wrap: break-word;
+}
+
+.login-explanation ol {
+    padding: 0;
+    margin: calc(2 * var(--padding)) var(--padding) var(--padding) calc(2 * var(--padding));
+}
+
+.login-explanation ol li {
+    font-size: var(--font-size);
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: calc(0.5 * var(--padding));
 }

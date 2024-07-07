@@ -82,6 +82,19 @@ var loadingTexts = [
   "Zorgen dat kabouters nog steeds kort zijn.",
   "IJs bakken...",
   "laadbericht aan het laden...", //dankje Micha
+    //Nieuwe toevoegingen:
+  "Ruikt het naar wortels? - Een sneeuwpop",
+    "Een beetje zout toevoegen",
+    "De kat uit de boom kijken",
+    "Het is duidelijk GIF",
+    "Don't worry, be happy.",
+    "we zijn moeilijke dingen aan het berekenen",
+    "kiek 'm goan",
+    "BIEM!",
+    "Dammen bouwen",
+    "Kroketten bakken",
+    "Kokosnoten zijn geen specerijen",
+    
 ];
 
 //==============================SCROLLING SYSTEM TOP==============================

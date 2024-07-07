@@ -1,83 +1,20 @@
-﻿@model object
+﻿<link rel="stylesheet" href="~/css/koppelingen.css" />
 
-
-<link rel="stylesheet" href="~/css/koppelingen.css" />
-
-<div class="login">
-    <div class="login-explanation">
-        <h1>Koppel Somtoday aan je account!</h1>
-        <p>Helaas is er geen betere manier om Somtoday te koppelen anders dan je gebruikersnaam en wachtwoord in te voeren. Wees gerust, je wachtwoord wordt niet opgeslagen. Als je meer vragen hebt, dan staat dat <a href="https://zermos-docs.kronk.tech/Somtoday#waarom-kan-ik-alleen-inloggen-met-mijn-wachtwoord">hier</a> uitgelegd<br><br>*Let op! deze koppeling werkt alleen als je in 1 of 2 stappen moet inloggen bij Somtoday (gebruiksnaam en wachtwoord tegelijkertijd óf gebruikersnaam en daarna wachtwoord), als je bij Somtoday inlogt met een externe provider zoals Microsoft, dan kan je helaas niet inloggen!</p>
+<div class="koppelingen-container">
+    <div class="zermelo">
+        <h1>Somtoday met inloggegevens</h1>
+        <p>Om Somtoday te koppelen aan je account, moet je je schoolmail, Somtoday wachtwoord en de naam van je school invullen.</p>
+        <div class="spacer" style="padding: 0; margin-top: 8px"></div>
+        <div class="methods">
+            <a onclick="ReplacePage('@Url.Action("SomtodayWithCreds", "Koppelingen")')">Koppel Somtoday met je inloggegevens</a>
+        </div>
     </div>
-    <form asp-controller="koppelingen" asp-action="somtoday" method="post" class="form-control">
-        <datalist id="suggestions"></datalist>
-        <input class="input" autoComplete="on" list="suggestions" name="school" placeholder="schoolnaam"/>
-        <input class="input" type="text" name="username" placeholder="gebruikersnaam">
-        <input class="input" type="password" name="password" placeholder="wachtwoord">
-        <button class="input submit" type="submit">Inloggen</button>
-    </form>
+    <div class="zermelo">
+        <h1>Somtoday hackerman methode</h1>
+        <p>Deze methode wint geen schoonheidswedstrijd, maar het werkt wel. Met deze methode moet je een stukje code kopieren en in de chrome inspector plakken. Geen zorgen, alles is uitgelegd.</p>
+        <div class="spacer" style="padding: 0; margin-top: 8px"></div>
+        <div class="methods">
+            <a onclick="ReplacePage('@Url.Action("SomtodayHackerman", "Koppelingen")')">Koppel Somtoday als een echte hackerman</a>
+        </div>
+    </div>
 </div>
-
-<script minimize>
-@Context.Items["dmjs"]
-
-    //when user submits the form, use the function below to check if the user is logged in
-    document.getElementsByTagName("form")[0].addEventListener("submit", function (e) {
-        e.preventDefault();
-        
-        var form = document.getElementsByTagName("form")[0];
-        
-        var url = form.action;
-        var inputs = form.getElementsByTagName("input");
-        //school is equel to the uuid of the selected school name
-        url += "?username=" + btoa(encodeURIComponent(inputs[1].value)).replace("=", "") + "&password=" + btoa(encodeURIComponent(inputs[2].value)).replace("=", "") + "&school=" + schools.find(school => school[0] === inputs[0].value)[1];
-        console.log(url)
-        
-        var button = document.getElementsByTagName("button")[0];
-        button.innerHTML = "Bezig met laden...";
-        button.disabled = true;
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", url);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    if (xhr.responseText === "success") {
-                        newSidebar();
-                        ReplacePage('@Url.Action("Account", "Account")');
-                    }
-                    else {
-                        button.innerHTML = "Wachtwoord en/of gebruikersnaam is verkeerd";
-                        button.disabled = false;
-                    }
-                }
-            }
-        };
-        
-        if (url.includes("ontkoppel")) {
-            button.innerHTML = "Log opnieuw in";
-            button.disabled = false;
-            console.warn("Crises averted");
-            
-            return;
-        }
-        
-        xhr.send();
-    });
-
-    var schools = [];
-    var suggestions = document.getElementById("suggestions");
-    //https://servers.somtoday.nl/organisaties.json where oidcurls are [] and do not contain data
-    fetch("https://cors.mjtsgamer.workers.dev/https://servers.somtoday.nl/organisaties.json")
-    .then(response => response.json())
-    .then(data => {
-        data[0].instellingen.forEach(school => {
-            //if (school.oidcurls.length === 0) {
-            //    school.loginMethod = "email+password"
-                //schools.push(); {school.naam, school.uuid}
-                schools.push([school.naam, school.uuid]);
-                var option = document.createElement("option");
-                option.value = school.naam;
-                suggestions.appendChild(option);
-            //}
-        });
-    });
-</script>

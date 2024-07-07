@@ -1,0 +1,53 @@
+﻿<link rel="stylesheet" href="~/css/koppelingen.css" />
+
+@{
+
+#if DEBUG
+    string code = "b=JSON.parse;c=localStorage;location.href='https://localhost:5001/Koppelingen/Somtoday/Callback?'+b(c['CapacitorStorage.'+b(c['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']).currentAuthenticationRecord]).refresh_token";
+
+#else
+    string code = "b=JSON.parse;c=localStorage;location.href='https://zermos.kronk.tech/Koppelingen/Somtoday/Callback?'+b(c['CapacitorStorage.'+b(c['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']).currentAuthenticationRecord]).refresh_token";
+#endif
+    
+string code2 = "// Stap 1: We maken twee hulpmiddelen\nconst ontcijferGeheimschrift = JSON.parse;\nconst geheugen = localStorage;\n\n// Stap 2: We bouwen een speciale webadres en gaan er naartoe\nlocation.href = 'https://zermos.kronk.tech/Koppelingen/Somtoday/Callback?' + \n    // Stap 3: We halen een geheime sleutel op\n    ontcijferGeheimschrift(\n        // Stap 4: We zoeken naar de juiste doos met gegevens\n        geheugen[\n            'CapacitorStorage.' + \n            // Stap 5: We vinden de naam van de huidige inloggegevens\n            ontcijferGeheimschrift(\n                // Stap 6: We halen de lijst met alle inloggegevens op\n                geheugen['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']\n            ).currentAuthenticationRecord\n        ]\n    ).refresh_token;";
+}
+
+<div class="login">
+    <div class="login-explanation">
+        <h1>Koppel Somtoday aan je account!</h1>
+
+        <p>Ben jij die hackerman met een Somtoday account waarbij je een externe login provider gebruikt, dan is deze methode voor jouw. Als je deze stappen goed volgt, dan komt alles goed:</p>
+        <ol>
+            <li>Open de website van Somtoday (met de knop hieronder) en log in totdat je bijv. je rooster of cijfers ziet.</li>
+            <li>Open de console (Ctrl + Shift + J Of Cmd + Option + J)</li>
+            <li>Plak de code in de console en klik op enter</li>
+            <li>Wacht totdat de koppeling gelukt is</li>
+            <p>*Mocht het mis gaan dan is het een goed idee om op de website van Somtoday uit te loggen en via de knop hieronder opnieuw in te loggen.</p>
+        </ol>
+        <p>Als je op 'kopieer' klikt, dan kopieer je een versie van de code die korter is geschreven. De code die je straks in je browsers gaat uitvoeren staat hieronder beschreven, mocht je het niet vertrouwen vraag dan aan iemand met computerkennis of deze code veilig is!</p>
+        
+        <div class="code-child">
+            <div class="codeblock">
+                <div class="codeblock-header">
+                    <h3>Code blok</h3>
+                    <button class="copy-button" onclick="copyToClipboard(`@(code)`)">Kopieer</button>
+                </div>
+                <div class="codeblock-content">
+                    <code style="white-space: pre-wrap;">@(code2)</code>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="form-control">
+        <button class="input submit">Open Somtoday</button>
+    </div>
+</div>
+
+<script minimize>
+@Context.Items["dmjs"]
+
+    document.querySelector('button.submit').addEventListener('click',function(){
+        window.open('https://leerling.somtoday.nl/','_blank');
+    });
+</script>

@@ -33,10 +33,12 @@ public class SomtodayAPI
         _httpClient.DefaultRequestHeaders.Add("Origin", "https://somtoday.nl");
     }
 
-    public async Task<SomtodayAuthenticatieModel> RefreshTokenAsync(string token, string clientId = "D50E0C06-32D1-4B41-A137-A9A850C892C2")
+    public async Task<SomtodayAuthenticatieModel> RefreshTokenAsync(string token)
     {
         if (token == null) throw new ArgumentNullException(nameof(token));
 
+        string clientId = (string) TokenUtils.DecodeJwt(token).payload.client_id;
+        
         var form = new Dictionary<string, string>
         {
             {"grant_type", "refresh_token"},
@@ -46,8 +48,12 @@ public class SomtodayAPI
         };
 
         var response = await _httpClient.PostAsync("https://inloggen.somtoday.nl/oauth2/token", new FormUrlEncodedContent(form));
-            
-        if (response.IsSuccessStatusCode == false) return null;
+
+        if (response.IsSuccessStatusCode == false)
+        {
+            Console.WriteLine(response.Content.ReadAsStringAsync().Result);
+            return null;
+        }
             
         return JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(await response.Content.ReadAsStringAsync());
     }
@@ -114,20 +120,6 @@ public class SomtodayAPI
         if (int.TryParse(response.Content.Headers.GetValues("Content-Range").First().Split('/')[1],
                 out var total))
         {
-
-
-            /*
-            x: Het eerste cijfer dat je hebt teruggekregen.
-
-            y: Het laatste cijfer dat je hebt teruggekregen (inclusief).
-
-            z:
-
-            Als nog niet alle cijfers opgevraagd zijn, dan is z gelijk aan x + 2*(y - x + 1) (zelfs als dat getal groter is dan het daadwerkelijke aantal cijfers).
-            Als alle cijfers zijn opgevraagd, dan is z gelijk aan de index (één-gebaseerde nummering) van het laatste cijfer. Dus z = y + 1.
-             
-             */
-            //var requests 0-(gradesPerFetch - 1) -> 0 requests, (gradesPerFetch)-(2 * gradesPerFetch - 1) -> 1 request, (2 * gradesPerFetch)-(3 * gradesPerFetch - 1) -> 2 requests
             var requests = (total / gradesPerFetch) + 1;
 
             for (var i = 1; i < requests; i += 1)

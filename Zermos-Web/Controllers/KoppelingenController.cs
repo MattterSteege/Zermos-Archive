@@ -382,6 +382,7 @@ namespace Zermos_Web.Controllers
 
         [HttpGet]
         [ZermosPage]
+        [Route("/Koppelingen/Somtoday/")]
         public IActionResult Somtoday()
         {
             return PartialView();
@@ -392,18 +393,6 @@ namespace Zermos_Web.Controllers
         [Route("/Koppelingen/Somtoday/HackerMan")]
         public IActionResult SomtodayHackerman()
         {
-            /*
-             
-            //FOR PRODUCTION
-             
-            b=JSON.parse;c=localStorage;location.href=`https://zermos.kronk.tech/Koppelingen/Somtoday/Callback?${b(c[`CapacitorStorage.${b(c['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']).currentAuthenticationRecord}`]).refresh_token}`
-              
-              
-            //FOR DEVELOPMENT
-                
-            b=JSON.parse;c=localStorage;location.href=`https://localhost:5001/Koppelingen/Somtoday/Callback?${b(c[`CapacitorStorage.${b(c['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']).currentAuthenticationRecord}`]).refresh_token}`
-             */
-            
             return PartialView();
         }
         
@@ -417,7 +406,7 @@ namespace Zermos_Web.Controllers
             {
                 var refresh_token = Request.QueryString.Value.Remove(0, 1);
                 
-                var somtoday = await somtodayApi.RefreshTokenAsync(refresh_token, "somtoday-leerling-web");
+                var somtoday = await somtodayApi.RefreshTokenAsync(refresh_token);
             
                 if (somtoday != null)
                 {
@@ -436,7 +425,16 @@ namespace Zermos_Web.Controllers
             return Ok("failed");
         }
 
+        [HttpGet]
+        [ZermosPage]
+        [Route("/Koppelingen/Somtoday/Inloggegevens")]
+        public IActionResult SomtodayWithCreds()
+        {
+            return PartialView();
+        }
+        
         [HttpPost]
+        [Route("/Koppelingen/Somtoday/Inloggegevens")]
         public async Task<IActionResult> Somtoday(string username, string password, string school)
         {
             string production_authenticator_stickiness = "";
@@ -456,7 +454,7 @@ namespace Zermos_Web.Controllers
             //code verifier: 16BBJMtEJe8blIJY848ROvvO02F5V205l5A10x_DqFE
 
             var baseurl = string.Format(
-                "https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling://oauth/callback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state={0}&scope=openid&tenant_uuid={1}&session=no_session&code_challenge={2}&code_challenge_method=S256&knf_entree_notification",
+                "https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=https://leerling.somtoday.nl/oauth/callback&client_id=somtoday-leerling-web&response_type=code&state={0}&scope=openid&tenant_uuid={1}&session=no_session&code_challenge={2}&code_challenge_method=S256&knf_entree_notification",
                 TokenUtils.RandomString(8), school,
                 tokens[1]);
             
@@ -517,7 +515,7 @@ namespace Zermos_Web.Controllers
             
             
             baseurl =
-                "https://inloggen.somtoday.nl/oauth2/token?grant_type=authorization_code&session=no_session&scope=openid&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&code=" +
+                "https://inloggen.somtoday.nl/oauth2/token?grant_type=authorization_code&session=no_session&scope=openid&client_id=somtoday-leerling-web&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&code=" +
                 finalAuthCode + "&code_verifier=" + tokens[0];
             
             response = await _somtodayHttpClientWithoutRedirect.PostAsync(baseurl,
