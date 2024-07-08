@@ -1,4 +1,4 @@
-﻿0.5.4 
+﻿0.5.4 - The more the better
 
 - koppelingen
     - je kan nu ook met langere schoolnamen inloggen bij de koppeling met Zermelo (sorry voor de mensen die hier last van hadden)
