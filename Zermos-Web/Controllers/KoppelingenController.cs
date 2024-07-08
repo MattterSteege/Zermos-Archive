@@ -77,7 +77,7 @@ namespace Zermos_Web.Controllers
 
         #region ontkoppelen
 
-        [HttpPost("ontkoppel/{app}")]
+        [HttpPost("/Koppelingen/Ontkoppel/{app}")]
         public IActionResult Ontkoppel(string app)
         {
             //return BadRequest("Temporary disabled");
@@ -86,7 +86,7 @@ namespace Zermos_Web.Controllers
             {
                 case "infowijs":
                     ZermosUser = new user {infowijs_access_token = string.Empty};
-                    return Redirect("/account");
+                    return Ok("success");
             
                 case "somtoday":
                     ZermosUser = new user
@@ -95,7 +95,7 @@ namespace Zermos_Web.Controllers
                         somtoday_refresh_token = string.Empty,
                         somtoday_student_id = string.Empty
                     };
-                    return Redirect("/account");
+                    return Ok("success");
             
                 case "zermelo":
                     ZermosUser = new user
@@ -103,10 +103,10 @@ namespace Zermos_Web.Controllers
                         zermelo_access_token = string.Empty,
                         zermelo_access_token_expires_at = DateTime.MinValue
                     };
-                    return Redirect("/account");
+                    return Ok("success");
             
                 default:
-                    return Redirect("/account");
+                    return Ok("failed");
             }
         }
 

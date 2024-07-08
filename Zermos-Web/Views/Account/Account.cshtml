@@ -67,10 +67,7 @@
                 {
                     <p><b>Infowijs</b>, geldig tot: @(TokenUtils.GetTokenExpiration(((user) Model.user).infowijs_access_token).ToString("d/M/yyyy"))</p>
                     <button id="infowijs-first" onclick="AreYouSure('infowijs')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
-
-                    <form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="infowijs">
-                        <button id="infowijs-second" class="koppel-knop zeker" style="display: none">Zeker?</button>
-                    </form>
+                    <button id="infowijs-second" onclick="Ontkoppel('infowijs')" class="koppel-knop zeker" style="display: none">Zeker?</button>
                 }
                 else
                 {
@@ -83,10 +80,7 @@
                 {
                     <p><b>Zermelo</b>, geldig tot: @(((user) Model.user).zermelo_access_token_expires_at?.ToString("d/M/yyyy"))</p>
                     <button id="zermelo-first" onclick="AreYouSure('zermelo')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
-
-                    <form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="zermelo">
-                        <button id="zermelo-second" class="koppel-knop zeker" style="display: none">Zeker?</button>
-                    </form>
+                    <button id="zermelo-second" onclick="Ontkoppel('zermelo')" class="koppel-knop zeker" style="display: none">Zeker?</button>
                 }
                 else
                 {
@@ -100,10 +94,7 @@
                 {
                     <p><b>Somtoday</b>, geldig tot: @(TokenUtils.GetTokenExpiration(((user) Model.user).somtoday_refresh_token).ToString("d/M/yyyy"))</p>
                     <button id="somtoday-first" onclick="AreYouSure('somtoday')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
-
-                    <form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="somtoday">
-                        <button id="somtoday-second" class="koppel-knop zeker" style="display: none">Zeker?</button>
-                    </form>
+                    <button id="omtoday-second" onclick="Ontkoppel('somtoday')" class="koppel-knop zeker" style="display: none">Zeker?</button>
                 }
                 else
                 {
@@ -122,7 +113,7 @@
 </div>
 
 <script minimize>
-@Context.Items["dmjs"]
+    @Context.Items["dmjs"]
 
     function AreYouSure(app) {
         document.getElementById(app + '-first').style.display = 'none';
@@ -131,6 +122,23 @@
          new Promise(res => setTimeout(res, 3000)).then(() => {
             document.getElementById(app + '-first').style.display = 'block';
             document.getElementById(app + '-second').style.display = 'none';
+        });
+    }
+
+    function Ontkoppel(app) {
+        //<form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="{app}">
+        //   <button id="somtoday-second" class="koppel-knop zeker" style="display: none">Zeker?</button>
+        //</form>
+        
+        fetch('/Koppelingen/ontkoppel/' + app, { method: 'POST' })
+        .then(response => {
+            if (response.ok) { 
+                newSidebar();
+                
+                var element = document.querySelector('.' + app);
+                element.innerHTML = '<p><b>' + app.charAt(0).toUpperCase() + app.slice(1) + '</b> is niet gekoppeld</p>';
+                element.innerHTML += '<button onclick="ReplacePage(\'/Koppelingen/' + app.charAt(0).toUpperCase() + app.slice(1) + '\')" class="koppel-knop koppelen">Koppelen</button>';
+            }
         });
     }
     
@@ -170,5 +178,6 @@
         .open();
 
     }
+
 
 </script>
