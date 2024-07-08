@@ -4,6 +4,22 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - Versie 0.5.4 - 06-07-2024
+0.5.4 - The more the better
+
+- koppelingen
+    - je kan nu ook met langere schoolnamen inloggen bij de koppeling met Zermelo (sorry voor de mensen die hier last van hadden)
+    - Er is nog een koppelmethode voor Somtoday toegevoegd, dit is niet de mooiste methode, maar het werkt met (waarschijnlijk) alle scholen, ook als ze een externe inlogprovider hebben
+    - Als je apps nu ontkoppelt, dan wordt de pagina niet meer opnieuw geladen, maar wordt alleen de sidebar geupdate. Dit is een stuk smoother.
+    
+- Account
+    - Je kan nu weer de account pagina openen als je nog geen schooltijden hebt ingesteld
+    
+- Somtoday - leermiddelen
+    - Als je geen leermiddelen hebt, dan opent de pagina nu wel met een 'voeg leermiddelen toe' knop
+    
+    
+
 # Release Notes - Versie 0.5.2 / Versie 0.5.3 - 02-07-2024
 0.5.3 Breaking news, Zermos takes over the Netherlands
 
