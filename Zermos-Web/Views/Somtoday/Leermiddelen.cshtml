@@ -18,40 +18,50 @@
             <p>@string.Join(" • ", desc)</p>
         </div>
     }
+    
+    @if (Model.items.Count == 0)
+    {
+        <div class="add-leermiddel" onclick="openAddingModal()">
+            <i class="fa-solid fa-plus"></i>
+            <h1>Voeg een leermiddel toe</h1>
+        </div>
+    }
 </div>
 
 <script>
-    addButtonToPage('fa-plus', () => {
+    addButtonToPage('fa-plus', openAddingModal)
+    
+    function openAddingModal() {
         new ZermosModal()
-        .setTitle('Leermiddel toevoegen')
-        .addText('Voeg je eigen leermiddelen toe aan Zermos, vul de volgende gegevens in:')
-        .addInput('URL', 'URL van het leermiddel')
-        .addInput('Title', 'Titel van het leermiddel')
-        .addInput('uitgever', 'Uitgever van het leermiddel')
-        .setSubmitButtonLabel('Toevoegen')
-        .onSubmit((url, title, uitgever) => {
-        
-            const data = {
-                url: encodeURI(url),
-                title: encodeURI(title),
-                uitgever: encodeURI(uitgever)
-            }
-        
-            fetch('/Somtoday/Leermiddelen?title=' + data.title + '&url=' + data.url + '&uitgever=' + data.uitgever, {
-                method: 'POST'
-            })
-            .then(response => {
-                if (response.ok) {
-                    ReplacePage('/Somtoday/Leermiddelen')
-                } else {
-                    new ZermosModal()
-                    .setTitle('Fout')
-                    .addText(data.error)
-                    .addButton('Sluiten')
-                    .open()
+            .setTitle('Leermiddel toevoegen')
+            .addText('Voeg je eigen leermiddelen toe aan Zermos, vul de volgende gegevens in:')
+            .addInput('URL', 'URL van het leermiddel')
+            .addInput('Title', 'Titel van het leermiddel')
+            .addInput('uitgever', 'Uitgever van het leermiddel')
+            .setSubmitButtonLabel('Toevoegen')
+            .onSubmit((url, title, uitgever) => {
+
+                const data = {
+                    url: encodeURI(url),
+                    title: encodeURI(title),
+                    uitgever: encodeURI(uitgever)
                 }
+
+                fetch('/Somtoday/Leermiddelen?title=' + data.title + '&url=' + data.url + '&uitgever=' + data.uitgever, {
+                    method: 'POST'
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            ReplacePage('/Somtoday/Leermiddelen')
+                        } else {
+                            new ZermosModal()
+                                .setTitle('Fout')
+                                .addText(data.error)
+                                .addButton('Sluiten')
+                                .open()
+                        }
+                    })
             })
-        })
-        .open()
-    })
+            .open()
+    }
 </script>

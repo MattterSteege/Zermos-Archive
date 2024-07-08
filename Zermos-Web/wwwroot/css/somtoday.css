@@ -943,3 +943,24 @@
 .leermiddel:hover {
     background: var(--overlay-overlay-color);
 }
+
+.add-leermiddel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    background: var(--accent-color);
+    padding: calc(var(--padding) * 2);
+    color: var(--white-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    gap: var(--padding);
+}
+
+.add-leermiddel i {
+    font-size: var(--font-size-heading);
+}

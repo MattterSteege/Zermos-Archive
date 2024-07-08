@@ -8,3 +8,6 @@
     
 - Account
     - Je kan nu weer de account pagina openen als je nog geen schooltijden hebt ingesteld
+    
+- Somtoday - leermiddelen
+    - Als je geen leermiddelen hebt, dan opent de pagina nu wel met een 'voeg leermiddelen toe' knop
