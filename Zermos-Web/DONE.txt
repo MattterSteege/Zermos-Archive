@@ -11,6 +11,8 @@
     
 - Somtoday - leermiddelen
     - Als je geen leermiddelen hebt, dan opent de pagina nu wel met een 'voeg leermiddelen toe' knop
+    
+    
 - algemeen
     - swapped Font awesome with a custom hosted version
 

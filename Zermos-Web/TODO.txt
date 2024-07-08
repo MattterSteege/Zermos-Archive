@@ -3,7 +3,6 @@ TODO: make time use login, so the user get's logged out after the session is clo
 TODO: dagrooster
 TODO: een demo versie van Zermos om te laten zien aan nieuwe gebruikers
 TODO: QR koppelen voor smartwatch, dan weet je ook gelijk dat de gebruiker een smartwatch is en kan je dat in de cookies opslaan en de gebruiker niet meer vragen of hij een smartwatch op dat moment gebruikt
-TODO: maak ontkoppelen van de apps smoother. (dus zonder de window.reload() te gebruiken)
 
 TODO: alle cijfers ophalen van nieuwe API endpoint
     - Als mensen de cijfergemiddeldes willen zien, dan roep ik de https://api.somtoday.nl/rest/v1/plaatsingen?leerling=... en dan de https://api.somtoday.nl/rest/v1/vakkeuzes/plaatsing/[uuid]/vakgemiddelden aan 

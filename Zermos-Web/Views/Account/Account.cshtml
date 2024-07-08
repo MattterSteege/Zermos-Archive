@@ -80,7 +80,10 @@
                 {
                     <p><b>Zermelo</b>, geldig tot: @(((user) Model.user).zermelo_access_token_expires_at?.ToString("d/M/yyyy"))</p>
                     <button id="zermelo-first" onclick="AreYouSure('zermelo')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
-                    <button id="zermelo-second" onclick="Ontkoppel('zermelo')" class="koppel-knop zeker" style="display: none">Zeker?</button>
+
+                    <form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="zermelo">
+                        <button id="zermelo-second" class="koppel-knop zeker" style="display: none">Zeker?</button>
+                    </form>
                 }
                 else
                 {
@@ -113,7 +116,7 @@
 </div>
 
 <script minimize>
-    @Context.Items["dmjs"]
+@Context.Items["dmjs"]
 
     function AreYouSure(app) {
         document.getElementById(app + '-first').style.display = 'none';
