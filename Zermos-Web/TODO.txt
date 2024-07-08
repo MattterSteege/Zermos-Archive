@@ -8,6 +8,8 @@ TODO: alle cijfers ophalen van nieuwe API endpoint
     - Als mensen de cijfergemiddeldes willen zien, dan roep ik de https://api.somtoday.nl/rest/v1/plaatsingen?leerling=... en dan de https://api.somtoday.nl/rest/v1/vakkeuzes/plaatsing/[uuid]/vakgemiddelden aan 
     dan kan ik ook functionaliteit toevoegen dat je je cijfers van andere jaren kan zien. 
     - Als mensen de cijfers van een vak willen zien, dan roep ik de https://api.somtoday.nl/rest/v1/geldendvoortgangsdossierresultaten/vakresultaten/[lln]]/vak/[uuid_1]/lichting/[uuid_2]?additional=vaknaam&additional=resultaatkolom&additional=naamalternatiefniveau&additional=naamstandaardniveau&type=Toetskolom&type=SamengesteldeToetsKolom&type=Werkstukcijferkolom&type=Advieskolom&type=RapportToetskolom&type=SEGemiddeldeKolom&type=ToetssoortGemiddeldeKolom&sort=desc-geldendResultaatCijferInvoer en https://api.somtoday.nl/rest/v1/geldendexamendossierresultaten/vakresultaten/1409824200/vak/deb5f122-1c35-4b7e-a497-9677687d5b04/lichting/98d1b8ef-858a-48f1-880e-5d4f431cbb3b?additional=vaknaam&additional=resultaatkolom&additional=naamalternatiefniveau&additional=naamstandaardniveau&type=Toetskolom&type=SamengesteldeToetsKolom&type=Werkstukcijferkolom&type=Advieskolom&type=RapportToetskolom&type=SEGemiddeldeKolom&type=ToetssoortGemiddeldeKolom&sort=desc-geldendResultaatCijferInvoer aan
+    
+TODO: jaarbijlagen bij leermiddelen
 
 TODO: error handling als je geen leermiddelen hebt
 TODO: als mensen nieuw zijn gooi ze dan gelijk door de instellingen heen, zodat ze gelijk kunnen instellen hoe hun cijfer berekend moet worden en hoe hun roostertijden eruit zien (etc.)
