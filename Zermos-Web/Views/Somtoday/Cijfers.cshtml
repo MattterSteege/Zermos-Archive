@@ -10,8 +10,9 @@
         ? DateTime.MinValue
         : DateTime.Parse(Context.Request.Cookies["last-seen-somtoday-grades"]);
     
-    string GetNotificationClass(DateTime lastGradeDate)
+    string GetNotificationClass(DateTime? lastGradeDate)
     {
+        if (lastGradeDate == null) return "";
         return lastUpdated < lastGradeDate ? "notify-me" : "";
     }
 }
@@ -35,14 +36,16 @@
         {
             if (grade.cijfer == "-") { continue; }
 
-            <table class="grade-table" @Html.Raw(GetNotificationClass(grade.cijfers.FirstOrDefault()!.datumInvoerEerstePoging))>
+            <table class="grade-table" @Html.Raw(GetNotificationClass(grade.cijfers.FirstOrDefault()!.datumInvoerEerstePoging)) onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()')">
                 <tr class="grade-table-header">
-                    <td colspan="2">@grade.vakNaam</td>
+                    <td rowspan="2"><i class="fa-solid fa-book" data-name="@grade.vakNaam.ToLower()" data-name-short="@grade.vakAfkorting.ToLower()"></i></td>
+                    <td>@grade.vakNaam</td>
                     <td>@(grade.weging)x</td>
                     <td class="@(grade.cijfer.ToFloat() >= 5.45f ? "sufficient" : "insufficient ")">@grade.cijfer.Replace(",", ".")</td>
                 </tr>
                 <tr class="grade-table-header">
-                    <td colspan="2">Laatste cijfer</td>
+                    <td style="display: none"></td>
+                    <td>Laatste cijfer</td>
                     <td></td>
                     <td class="@(grade.cijfers.FirstOrDefault()!.cijfer >= 5.45 ? "sufficient" : "insufficient ")">@grade.cijfers.Last().formattedResultaat</td>
                 </tr>
@@ -68,25 +71,62 @@
         {
             if (grade.cijferSE == "-") { continue; }
             
-            <div class="grade">
-                <div class="grade-title">@grade.vakNaam</div>
-                <div class="grade-cijfer">@(grade.wegingSE)x @grade.cijferSE</div>
-            </div>
+            @* <table class="grade-table" @Html.Raw(GetNotificationClass((grade.cijfersSE != null && grade.cijfersSE.Count > 0) ? grade.cijfersSE.FirstOrDefault()!.datumInvoerEerstePoging : DateTime.MinValue))> *@
+            @*     <tr class="grade-table-header"> *@
+            @*         <td colspan="2">@grade.vakNaam</td> *@
+            @*         <td>@(grade.wegingSE)x</td> *@
+            @*         <td class="@(grade.cijferSE.ToFloat() >= 5.45f ? "sufficient" : "insufficient ")">@grade.cijferSE.Replace(",", ".")</td> *@
+            @*     </tr> *@
+            @*     <tr class="grade-table-header"> *@
+            @*         @if (grade.cijfersSE != null && grade.cijfersSE.Count > 0) *@
+            @*         { *@
+            @*             <td colspan="2">Laatste cijfer</td> *@
+            @*             <td></td> *@
+            @*             <td class="@(grade.cijfersSE.FirstOrDefault()!.cijfer >= 5.45 ? "sufficient" : "insufficient ")">@grade.cijfersSE.FirstOrDefault()!.formattedResultaat</td> *@
+            @*         } *@
+            @*         else *@
+            @*         { *@
+            @*             <td colspan="2">&ZeroWidthSpace;</td> *@
+            @*             <td>&ZeroWidthSpace;</td> *@
+            @*             <td>&ZeroWidthSpace;</td> *@
+            @*         } *@
+            @*     </tr> *@
+            @* </table> *@
+            
+            //Combine the data from cijferSE with the structure of cijfer
+            <table class="grade-table" @Html.Raw(GetNotificationClass((grade.cijfersSE != null && grade.cijfersSE.Count > 0) ? grade.cijfersSE.FirstOrDefault()!.datumInvoerEerstePoging : DateTime.MinValue)) onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()')">
+                <tr class="grade-table-header">
+                    <td rowspan="2"><i class="fa-solid fa-book" data-name="@grade.vakNaam.ToLower()" data-name-short="@grade.vakAfkorting.ToLower()"></i></td>
+                    <td>@grade.vakNaam</td>
+                    <td>@(grade.wegingSE)x</td>
+                    <td class="@(grade.cijferSE.ToFloat() >= 5.45f ? "sufficient" : "insufficient ")">@grade.cijferSE.Replace(",", ".")</td>
+                </tr>
+                <tr class="grade-table-header">
+                    <td style="display: none"></td>
+                    <td>Laatste cijfer</td>
+                    <td></td>
+                    <td class="@(grade.cijfersSE != null && grade.cijfersSE.Count > 0 && grade.cijfersSE.FirstOrDefault()!.cijfer >= 5.45 ? "sufficient" : "insufficient ")">@grade.cijfersSE?.FirstOrDefault()?.formattedResultaat</td>
+                </tr>
+            </table>
         }
     </div>
     <div id="panel3" class="panel"> <!-- Geschiedenis -->
         <h1 class="grades-title">Geschiedenis</h1>
         @foreach (var grade in Model.lastGrades)
         {
-            <div class="grade">
-                <div class="grade-title">@grade.additionalObjects.vaknaam</div>
-                <div class="grade-desc">@grade.omschrijving</div>
-                <div class="grade-cijfer">@(grade.weging)x @grade.cijfer</div>
-            </div>
+            <table class="grade-table">
+                <tr class="grade-table-header">
+                    <td>@grade.additionalObjects.vaknaam</td>
+                    <td style="text-align: end;">@grade.datumInvoerEerstePoging.ToString("dd MMMM HH:mm")</td>
+                    <td>@(grade.weging)x</td>
+                    <td class="@(grade.cijfer >= 5.45f ? "sufficient" : "insufficient ")">@grade.cijfer.ToString(CultureInfo.InvariantCulture)</td>
+                </tr>
+            </table>
         }
     </div>
 </div>
-<script>
+<script minimize>
+@Context.Items["dmjs"]
     var panel1 = document.getElementById('panel1');
     var panel2 = document.getElementById('panel2');
     var panel3 = document.getElementById('panel3');
@@ -95,28 +135,17 @@
     var togglePanel3 = document.getElementById('togglePanel3');
 
     function updatePanels() {
-        const isWideScreen = window.innerWidth > 1000;
-        if (isWideScreen) {
-            panel3.style.display = 'flex';
-            togglePanel3.style.display = 'none';
-            if (panel2.style.display === 'flex') {
-                panel1.style.display = 'none';
-            } else {
-                panel1.style.display = 'flex';
-            }
+        togglePanel3.style.display = 'flex';
+        if (panel3.style.display === 'flex') {
+            panel1.style.display = 'none';
+            panel2.style.display = 'none';
+        } else if (panel2.style.display === 'flex') {
+            panel1.style.display = 'none';
+            panel3.style.display = 'none';
         } else {
-            togglePanel3.style.display = 'flex';
-            if (panel3.style.display === 'flex') {
-                panel1.style.display = 'none';
-                panel2.style.display = 'none';
-            } else if (panel2.style.display === 'flex') {
-                panel1.style.display = 'none';
-                panel3.style.display = 'none';
-            } else {
-                panel1.style.display = 'flex';
-                panel2.style.display = 'none';
-                panel3.style.display = 'none';
-            }
+            panel1.style.display = 'flex';
+            panel2.style.display = 'none';
+            panel3.style.display = 'none';
         }
     }
 
@@ -152,12 +181,44 @@
             underline.style.left = `${buttonRect.left - containerRect.left}px`;
         }
     }
-    
-    selectLine(1);
+
+    Zermos.mainAfterLoad = () => {
+        console.log('test');
+        currentSelectedPanel = 1;
+
+        const selectedButton = buttons[0];
+        if (selectedButton) {
+            const buttonRect = selectedButton.getBoundingClientRect();
+            const containerRect = selectedButton.parentElement.getBoundingClientRect();
+
+            underline.style.width = `${buttonRect.width}px`;
+            underline.style.left = `${buttonRect.left - containerRect.left}px`;
+        }
+    };
     
     document.querySelectorAll('.grade-table[notify-me]').forEach((table) => {
         table.innerHTML = "<div class=\"grade-notification\"></div>" + table.innerHTML;
     });
+
+
+    //get all the icons at /vakkenIcons.json
+    fetch('/vakkenIcons.json')
+        .then(response => response.json())
+        .then((icons) => {
+            //get all the icons and put them in a map
+            var iconMap = new Map();
+            icons.forEach(icon => {
+                icon.keywords.forEach(keyword => {
+                    iconMap.set(keyword, icon.icon);
+                });
+            });
+
+            //check if the name-short or name is in the iconMap, if it is, set the icon to the iconMap value, if not, set it to the default icon
+            document.querySelectorAll('.grade-table-header i').forEach((icon) => {
+                icon.outerHTML = iconMap.get(icon.dataset.name.toLowerCase()) ?? iconMap.get(icon.dataset.nameShort.toLowerCase()) ?? "<i class=\"fa-solid fa-book\"></i>";
+            });
+        });
+
 
 </script>
 

@@ -72,7 +72,7 @@ namespace Zermos_Web.Controllers
         }
 
         //[ZermosPage]
-        [HttpGet("Somtoday/Cijfers/{leerjaar}/{vak}")]
+        [HttpGet("Somtoday/Cijfers/{vak}")]
         public async Task<IActionResult> Cijfer(int leerjaar, string vak)
         {
             if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
