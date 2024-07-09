@@ -120,7 +120,31 @@ namespace Zermos_Web.Utilities
         
         public static float ToFloat(this string input)
         {
+            if (input == "O") return 5;
+            if (input == "V") return 7;
+            if (input == "G") return 8;
+            
             return ParseFloat(input);
+        }
+
+        /// <summary>
+        /// Rounds the grade using the setting of the user
+        /// </summary>
+        /// <param name="grade">The grade to round</param>
+        /// <a href="https://www.onlineslagen.nl/hoe-moeten-cijfers-worden-afgerond">Online berekening uitleg</a>
+        public static float ExamenAfronding(this float grade)
+        {
+            if (grade < 0 || grade > 10)
+            {
+                throw new ArgumentOutOfRangeException(nameof(grade), "Grade must be between 0 and 10");
+            }
+
+            if (grade >= 9.5f)
+            {
+                return 10f;
+            }
+
+            return (float)Math.Floor(grade + 0.5f);
         }
     }
 }

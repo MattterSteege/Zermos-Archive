@@ -168,6 +168,12 @@ function ReplacePage(url) {
                 isRunning = false;
                 return;
             }
+            
+            if (xhr.getResponseHeader("Content-Type") === "application/json; charset=utf-8") {
+                isRunning = false;
+                ReplacePage("/Error");
+                return;
+            }
 
             if (data.startsWith('<!DOCTYPE html>')) {
                 isRunning = false;

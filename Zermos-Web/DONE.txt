@@ -1,6 +1,15 @@
 0.5.4 - The more the better
 
-swapped Font awesome with a custom hosted version
+- algemeen
+    - swapped Font awesome with a custom hosted version
+
+- Somtoday - cijfers
+    - Er is een heel nieuw systeem gemaakt voor je cijfers
+    - Je kan nu je cijfers van alle jaren zien
+    - voortgangsdossier en examendossier cijfers zijn nu gescheiden
+    - Swipe heel makkelijk tussen je voortgang, examen en laatste cijfers
+    - Pas instellingen aan per type cijfer (is tijdelijk opgeslagen en wordt vergeten als je de pagina verlaat/ververst)
+
 - koppelingen
     - je kan nu ook met langere schoolnamen inloggen bij de koppeling met Zermelo (sorry voor de mensen die hier last van hadden)
     - Er is nog een koppelmethode voor Somtoday toegevoegd, dit is niet de mooiste methode, maar het werkt met (waarschijnlijk) alle scholen, ook als ze een externe inlogprovider hebben

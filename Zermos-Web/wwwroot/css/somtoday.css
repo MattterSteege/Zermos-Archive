@@ -207,6 +207,24 @@
     margin: 0;
 }
 
+.grades-title {
+    background: var(--overlay-color);
+    box-shadow: var(--box-shadow);
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-heading);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.icon-container {
+    margin-left: auto;
+    display: flex;
+    gap: var(--padding);
+    font-size: calc(1.4 *var(--font-size-heading));
+}
+
 .grade-table {
     width: 100%;
     height: auto;
@@ -232,7 +250,7 @@
 
 .grade-table-header td:nth-child(2) {/* width: 50%; */}
 
-.grade-table-header td:nth-child(3), .grade-table-header td:nth-child(4) {
+.grade-table-header td:nth-child(3), .grade-table-header td:nth-child(4), .grade-table-header td:nth-child(5) {
     width: 10%;
     text-align: end;
 }
