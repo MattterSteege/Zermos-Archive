@@ -69,6 +69,10 @@
     font-size: var(--font-size);
 }
 
+.koppel-knop.zeker {
+    color: var(--text-color);
+}
+
 .overlay-account-info-grid {
     display: flex;
     justify-content: space-between;

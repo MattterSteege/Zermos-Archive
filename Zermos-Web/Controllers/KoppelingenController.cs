@@ -382,7 +382,7 @@ namespace Zermos_Web.Controllers
 
         [HttpGet]
         [ZermosPage]
-        [Route("/Koppelingen/Somtoday/")]
+        [Route("/Koppelingen/Somtoday")]
         public IActionResult Somtoday()
         {
             return PartialView();
@@ -397,14 +397,14 @@ namespace Zermos_Web.Controllers
         }
         
         [HttpGet]
-        //support route /Koppelingen/Somtoday/Callback?[REFERSH_TOKEN]
+        [ZermosPage]
         [Route("/Koppelingen/Somtoday/Callback")]
         public async Task<IActionResult> SomtodayCallback()
         {
             //get the code behind the ? in the url
             if (Request.QueryString.Value != null)
             {
-                var refresh_token = Request.QueryString.Value.Remove(0, 1);
+                var refresh_token = Request.QueryString.Value.Remove(0, 1).Split("&")[0];
                 
                 var somtoday = await somtodayApi.RefreshTokenAsync(refresh_token);
             
@@ -418,11 +418,11 @@ namespace Zermos_Web.Controllers
                         somtoday_refresh_token = somtoday.refresh_token,
                         somtoday_student_id = user.somtoday_student_id,
                     };
-                    return Ok("success");
+                    return PartialView(model: "success");
                 }
             }
 
-            return Ok("failed");
+            return PartialView(model: "failed");
         }
 
         [HttpGet]
@@ -435,7 +435,7 @@ namespace Zermos_Web.Controllers
         
         [HttpPost]
         [Route("/Koppelingen/Somtoday/Inloggegevens")]
-        public async Task<IActionResult> Somtoday(string username, string password, string school)
+        public async Task<IActionResult> SomtodayCreds(string username, string password, string school)
         {
             string production_authenticator_stickiness = "";
             string jsessionid = "";

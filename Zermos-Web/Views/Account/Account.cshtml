@@ -72,7 +72,7 @@
                 else
                 {
                     <p><b>Infowijs</b> is niet gekoppeld</p>
-                    <button onclick="ReplacePage('@Url.Action("Infowijs", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
+                    <button style="color: var(--text-color);" onclick="ReplacePage('@Url.Action("Infowijs", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
                 }
             </div>
             <div class="zermelo">
@@ -85,7 +85,7 @@
                 else
                 {
                     <p><b>Zermelo</b> is niet gekoppeld</p>
-                    <button onclick="ReplacePage('@Url.Action("Zermelo", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
+                    <button style="color: var(--text-color);" onclick="ReplacePage('@Url.Action("Zermelo", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
                 }
             </div>
 
@@ -94,12 +94,12 @@
                 {
                     <p><b>Somtoday</b>, geldig tot: @(TokenUtils.GetTokenExpiration(((user) Model.user).somtoday_refresh_token).ToString("d/M/yyyy"))</p>
                     <button id="somtoday-first" onclick="AreYouSure('somtoday')" class="koppel-knop ontkoppelen">Ontkoppelen</button>
-                    <button id="omtoday-second" onclick="Ontkoppel('somtoday')" class="koppel-knop zeker" style="display: none">Zeker?</button>
+                    <button id="somtoday-second" onclick="Ontkoppel('somtoday')" class="koppel-knop zeker" style="display: none">Zeker?</button>
                 }
                 else
                 {
                     <p><b>Somtoday</b> is niet gekoppeld</p>
-                    <button onclick="ReplacePage('@Url.Action("Somtoday", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
+                    <button style="color: var(--text-color);" onclick="ReplacePage('@Url.Action("Somtoday", "Koppelingen")')" class="koppel-knop koppelen">Koppelen</button>
                 }
             </div>
             
