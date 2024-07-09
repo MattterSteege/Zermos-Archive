@@ -53,6 +53,7 @@ namespace Zermos_Web.APIs
                 return EmptyModel();
 
             var timestamps = user.zermelo_timestamps ?? "08:00-17:00";
+            timestamps = (timestamps == "-" ? "08:00-17:00" : timestamps);
             var start = timestamps.Split('-')[0].Split(':');
             var end = timestamps.Split('-')[1].Split(':');
             var secondsStart = int.Parse(start[0]) * 3600 + int.Parse(start[1]) * 60;
