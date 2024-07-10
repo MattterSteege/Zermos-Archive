@@ -12,6 +12,8 @@ TODO: alle cijfers ophalen van nieuwe API endpoint
 
 TODO: als mensen nieuw zijn gooi ze dan gelijk door de instellingen heen, zodat ze gelijk kunnen instellen hoe hun cijfer berekend moet worden en hoe hun roostertijden eruit zien (etc.)
 
+TODO: als je een pagina opvraagd zoals /somtoday/cijfers/beco, do dan ?jaarlage=UUID erachter zodat je die niet extra hoeft op te vragen als je de cijfers van een vak wilt zien
+
 TODO: make the Somtoday API client so that you can do code like this and it is concurently requested:
 
 await SomtodayAPI.getPlaatsingen().getVakkeuzes().getVakGemiddelden();

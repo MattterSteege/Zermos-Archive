@@ -170,7 +170,8 @@ public class SomtodayAPI
         {
             items = new List<Models.SortedSomtodayGradesModel.Item>(),
             lastGrades = new List<Models.SomtodayGradesModel.Item>(),
-            voortGangsdossierGemiddelde = vakgemiddelden?.voortgangsdossierGemiddelde
+            voortGangsdossierGemiddelde = vakgemiddelden?.voortgangsdossierGemiddelde,
+            leerjaarUUID = plaatsingen.items[^1].UUID
         };
 
         foreach (var grade in gradesBySubjectGrouped)

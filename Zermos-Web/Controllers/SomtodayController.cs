@@ -73,11 +73,15 @@ namespace Zermos_Web.Controllers
 
         //[ZermosPage]
         [HttpGet("Somtoday/Cijfers/{vak}")]
-        public async Task<IActionResult> Cijfer(int leerjaar, string vak)
+        public async Task<IActionResult> CijferVoorVak(string leerjaar, string vak)
         {
             if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
             {
-                return Json(JsonConvert.DeserializeObject<SortedSomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? "{}"));
+                var _grades = JsonConvert.DeserializeObject<SortedSomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? "{}");
+                _grades.items = _grades.items.FindAll(x => x.vakAfkorting == vak);
+                _grades.lastGrades = null;
+                _grades.voortGangsdossierGemiddelde = null;
+                return PartialView(_grades);
             }
             
             var user = ZermosUser;
@@ -99,7 +103,11 @@ namespace Zermos_Web.Controllers
             
             Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
 
-            return Json(grades);
+            grades.items = grades.items.FindAll(x => x.vakAfkorting == vak);
+            grades.lastGrades = null;
+            grades.voortGangsdossierGemiddelde = null;
+            
+            return PartialView(grades);
         }
 
         // [ZermosPage]

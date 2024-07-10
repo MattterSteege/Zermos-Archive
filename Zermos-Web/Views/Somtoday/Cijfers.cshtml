@@ -42,7 +42,7 @@
         {
             if (grade.cijfer == "-") { continue; }
 
-            <table class="grade-table" @Html.Raw(GetNotificationClass(grade.cijfers.FirstOrDefault()!.datumInvoerEerstePoging)) onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()')">
+            <table class="grade-table" @Html.Raw(GetNotificationClass(grade.cijfers.FirstOrDefault()!.datumInvoerEerstePoging)) onclick="ReplacePage('@Url.Action("CijferVoorVak", "Somtoday", new { vak = grade.vakAfkorting, leerjaar = Model.leerjaarUUID })')">
                 <tr class="grade-table-header">
                     <td rowspan="2"><i class="fa-solid fa-book" data-name="@grade.vakNaam.ToLower()" data-name-short="@grade.vakAfkorting.ToLower()"></i></td>
                     <td>@grade.vakNaam</td>

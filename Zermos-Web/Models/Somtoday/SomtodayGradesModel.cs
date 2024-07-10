@@ -67,5 +67,6 @@ namespace Zermos_Web.Models.SortedSomtodayGradesModel
         public List<Item> items { get; set; }
         public List<SomtodayGradesModel.Item> lastGrades { get; set; }
         public double? voortGangsdossierGemiddelde { get; set; }
+        public string leerjaarUUID { get; set; }
     }
 }
