@@ -1,4 +1,5 @@
-﻿using System;
+﻿//#define BETA
+
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Claims;
@@ -6,13 +7,13 @@ using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zermos_Web.Models;
 using Zermos_Web.Models.Requirements;
 using Zermos_Web.Utilities;
+
 
 namespace Zermos_Web.Controllers;
 
@@ -30,10 +31,11 @@ public class AuthenticationController : Controller
     }
     
 #region Microsoft Login
-    
-#if RELEASE
-    //if env var beta = true use beta login
+
+#if (RELEASE && !BETA)
     string redirectUrl = "https://zermos.kronk.tech/Login/Callback";
+#elif (RELEASE && BETA)
+    string redirectUrl = "https://zermos-beta.kronk.tech/Login/Callback";
 #else
     string redirectUrl = "https://localhost:5001/Login/Callback";
 #endif
@@ -44,13 +46,9 @@ public class AuthenticationController : Controller
     [Route("/Login")]
     public async Task<IActionResult> Login()
     {
-        if (Environment.GetEnvironmentVariable("beta") == "true")
-        {
-            redirectUrl = "https://zermos-beta.kronk.tech/Login/Callback";
-        }
         
         string redirect = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=" +
-                          clientId + "&response_type=code&redirect_uri=" + redirectUrl +
+                          clientId + "&response_type=code&prompt=select_account&redirect_uri=" + redirectUrl +
                           "&response_mode=query&scope=User.Read&state=" + TokenUtils.RandomString();
 
          return PartialView("Login", new loginModel {email = redirect, code = 0});
@@ -76,7 +74,7 @@ public class AuthenticationController : Controller
 
         if (!response.IsSuccessStatusCode)
         {
-            _logger.Log(LogLevel.Error, response.StatusCode.ToString() + " " + response.ReasonPhrase);
+            _logger.Log(LogLevel.Error, response.StatusCode + " " + response.ReasonPhrase + " " + await response.Content.ReadAsStringAsync());
             return VerificationFailed(4);
         }
 
