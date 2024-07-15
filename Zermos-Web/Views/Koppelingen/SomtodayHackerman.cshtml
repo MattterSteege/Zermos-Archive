@@ -3,13 +3,13 @@
 @{
 
 #if DEBUG
-    string code = "b=JSON.parse;c=localStorage;location.href='https://localhost:5001/Koppelingen/Somtoday/Callback?'+b(c['CapacitorStorage.'+b(c['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']).currentAuthenticationRecord]).refresh_token";
+    string code = "b=JSON.parse;c=localStorage;location.href='https://localhost:5001/Koppelingen/Somtoday/Callback?'+b(c['CapacitorStorage.'+b(c['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']).currentSessionIdentifier.UUID]).refresh_token";
 
 #else
-    string code = "b=JSON.parse;c=localStorage;location.href='https://zermos.kronk.tech/Koppelingen/Somtoday/Callback?'+b(c['CapacitorStorage.'+b(c['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']).currentAuthenticationRecord]).refresh_token";
+    string code = "b=JSON.parse;c=localStorage;location.href='https://zermos.kronk.tech/Koppelingen/Somtoday/Callback?'+b(c['CapacitorStorage.'+b(c['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']).currentSessionIdentifier.UUID]).refresh_token";
 #endif
     
-string code2 = "// Stap 1: We maken twee hulpmiddelen\nconst ontcijferGeheimschrift = JSON.parse;\nconst geheugen = localStorage;\n\n// Stap 2: We bouwen een speciale webadres en gaan er naartoe\nlocation.href = 'https://zermos.kronk.tech/Koppelingen/Somtoday/Callback?' + \n    // Stap 3: We halen een geheime sleutel op\n    ontcijferGeheimschrift(\n        // Stap 4: We zoeken naar de juiste doos met gegevens\n        geheugen[\n            'CapacitorStorage.' + \n            // Stap 5: We vinden de naam van de huidige inloggegevens\n            ontcijferGeheimschrift(\n                // Stap 6: We halen de lijst met alle inloggegevens op\n                geheugen['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']\n            ).currentAuthenticationRecord\n        ]\n    ).refresh_token;";
+string code2 = "// Stap 1: We maken twee hulpmiddelen\nconst ontcijferGeheimschrift = JSON.parse;\nconst geheugen = localStorage;\n\n// Stap 2: We bouwen een speciale webadres en gaan er naartoe\nlocation.href = 'https://zermos.kronk.tech/Koppelingen/Somtoday/Callback?' + \n    // Stap 3: We halen een geheime sleutel op\n    ontcijferGeheimschrift(\n        // Stap 4: We zoeken naar de juiste doos met gegevens\n        geheugen[\n            'CapacitorStorage.' + \n            // Stap 5: We vinden de naam van de huidige inloggegevens\n            ontcijferGeheimschrift(\n                // Stap 6: We halen de lijst met alle inloggegevens op\n                geheugen['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']\n            ).currentSessionIdentifier.UUID\n        ]\n    ).refresh_token;";
 }
 
 <div class="login">
