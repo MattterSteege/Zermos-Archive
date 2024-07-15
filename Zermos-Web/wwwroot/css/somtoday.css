@@ -218,6 +218,17 @@
     align-items: center;
 }
 
+.grades-period {
+    display: flex;
+    gap: var(--padding);
+    margin-top: var(--padding);
+}
+
+.grades-period h1 {
+    font-size: var(--font-size-heading);
+    font-weight: 700;
+}
+
 .icon-container {
     margin-left: auto;
     display: flex;
@@ -248,11 +259,46 @@
 
 .grade-table-header td[rowspan="2"] {width: 40px;height: 40px;font-size: calc(1.5 * var(--font-size-heading));text-align: center;}
 
-.grade-table-header td:nth-child(2) {/* width: 50%; */}
-
 .grade-table-header td:nth-child(3), .grade-table-header td:nth-child(4), .grade-table-header td:nth-child(5) {
     width: 10%;
     text-align: end;
+}
+
+i.fa-solid.fa-graduation-cap {
+    position: relative;
+    width: 0;
+    height: 0;
+    right: 0;
+    top: calc(-2* var(--padding));
+    font-size: var(--font-size-heading);
+    color: var(--text-color);
+    cursor: pointer;
+    transform: rotate(19deg);
+}
+
+.fa-graduation-cap:before {
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    position: absolute;
+}
+
+.fa-graduation-cap.animate, .fa-layer-group.animate {
+    animation: happy-cappy 1s infinite;
+}
+
+@keyframes happy-cappy {
+    0% {
+        transform: scale(1) rotate(19deg);
+    }
+
+    50% {
+        transform: scale(1.5) rotate(29deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(19deg);
+    }
 }
 
 .sufficient {

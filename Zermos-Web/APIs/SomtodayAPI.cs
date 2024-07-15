@@ -114,7 +114,6 @@ public class SomtodayAPI
     /// </summary>
     /// <param name="user"></param>
     /// <param name="plaatsingen"></param>
-    /// <param name="appendGradeHistory"></param>
     /// <param name="gradeType"></param>
     /// <returns></returns>
     public async Task<SortedSomtodayGradesModel> GetCurrentGradesAndVakgemiddelden(user user, SomtodayPlaatsingenModel plaatsingen, 

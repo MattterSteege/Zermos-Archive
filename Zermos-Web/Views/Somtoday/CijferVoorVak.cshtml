@@ -4,7 +4,9 @@
 
 @{
     //for all the grades, set item.samengesteldeToetsen to all the grades where item.resultaatkolomId is the same as item.samengesteldeToetskolomId 
-    var grades = Model.items[0].cijfersSE.Concat(Model.items[0].cijfers).ToList().OrderByDescending(x => x.datumInvoerEerstePoging).ToList();
+    var grades = Model.items[0].cijfersSE.Concat(Model.items[0].cijfers).ToList().OrderByDescending(x => x.periode).ThenByDescending(x => x.datumInvoerEerstePoging).ToList();
+    
+    
 }
 
 <link rel="stylesheet" href="~/css/somtoday.css"/>
@@ -26,15 +28,37 @@
             </tr>
         </table>
         
+        @{
+            int currentPeriod = 0;
+        }
+        
         @foreach (var grade in grades)
         {
+            //if next grade is in a different period, add a new panel or if it is the last grade
+            if (currentPeriod != grade.periode)
+            {
+                <div class="grades-period">
+                    <h1>periode @grade.periode</h1>
+                </div>
+                currentPeriod = grade.periode;
+            }
+            
             if (grade.type == "DeeltoetsKolom") continue;
 
             <table class="grade-table" onclick="@(grade.additionalObjects.resultaatkolom.StringToBase64String().Replace("=", "") + "()")">
                 <tr class="grade-table-header">
-                    <td colspan="2">@grade.additionalObjects.vaknaam @(grade.type == "Schoolexamen" ? "SE" : "")</td>
+                    <td colspan="2">
+                        @grade.additionalObjects.vaknaam @(grade.toetssoort == "Schoolexamen" ? "SE" : "")
+                    </td>
+                    <td></td>
                     <td>@(grade.weging)x</td>
-                    <td class="@(grade.cijfer >= 5.5f ? "sufficient" : "insufficient ")">@grade.formattedResultaat</td>
+                    <td class="@(grade.cijfer >= 5.5f ? "sufficient" : "insufficient ")">
+                        @grade.formattedResultaat
+                        @if (grade.toetssoort == "Schoolexamen")
+                        {
+                            <i class="fa-solid fa-graduation-cap" aria-hidden="true" onclick="happyCappy(this)"></i>
+                        }
+                    </td>
                 </tr>
                 <tr class="grade-table-body">
                     <td>
@@ -45,117 +69,17 @@
         }
 
     </div>
-    
-    @* *@
-    @* @foreach (var grade in grades) *@
-    @* { *@
-    @*     if (grade.type == "DeeltoetsKolom") continue; *@
-    @* *@
-    @*     <div class="vak"@(grade.type != "SamengesteldeToetsKolom" ? Html.Raw("style=\"height:auto;\"") : "")> *@
-    @*         @if (grade.type == "Schoolexamen") *@
-    @*         { *@
-    @*             <div class="isAllExamGrades"> *@
-    @*                 <i class="fa-solid fa-graduation-cap" aria-hidden="true" onclick="happyCappy(this)"></i> *@
-    @*             </div> *@
-    @*         } *@
-    @*         @if (grade.type == "SamengesteldeToetsKolom") *@
-    @*         { *@
-    @*             <div class="isAllExamGrades"> *@
-    @*                 <i class="fa-solid fa-layer-group" aria-hidden="true" onclick="happyCappy(this)"></i> *@
-    @*             </div> *@
-    @*         } *@
-    @*         <a onclick="@(grade.additionalObjects.resultaatkolom.StringToBase64String().Replace("=", "") + "()")" style="display: flex; align-content: center; justify-content: center; flex-wrap: wrap;"> *@
-    @*             <div class="grade-container"> *@
-    @*                 <table class="grade-table"> *@
-    @*                     <tr class="grade-table-header"> *@
-    @*                         <td colspan="2">@grade.additionalObjects.vaknaam @(grade.type == "Schoolexamen" ? "SE" : "")</td> *@
-    @*                         <td>@(grade.weging)x</td> *@
-    @*                         <td class="@(grade.cijfer >= 5.5f ? "sufficient" : "insufficient ")">@grade.formattedResultaat</td> *@
-    @*                     </tr> *@
-    @*                     <tr class="grade-table-body"> *@
-    @*                         <td colspan="4" style="text-align: center"> *@
-    @*                             @grade.omschrijving *@
-    @*                         </td> *@
-    @*                     </tr> *@
-    @*                 </table> *@
-    @* *@
-    @*                 $1$ @if (grade.samengesteldeToetsen != null) #1# *@
-    @*                 $1$ { #1# *@
-    @*                 $1$     <div class="deeltoetsen"> #1# *@
-    @*                 $1$         @foreach (var deeltoets in grade.samengesteldeToetsen) #1# *@
-    @*                 $1$         { #1# *@
-    @*                 $1$             float deeltoetsGeldendResultaat; #1# *@
-    @*                 $1$             NumberUtils.TryParseFloat(deeltoets.geldendResultaat, out deeltoetsGeldendResultaat); #1# *@
-    @*                 $1$             <div class="deeltoetsen-child"> #1# *@
-    @*                 $1$                 <p colspan="2">@deeltoets.omschrijving</p> #1# *@
-    @*                 $1$                 <p>@(deeltoets.weging == 0 ? deeltoets.examenWeging : deeltoets.weging)x</p> #1# *@
-    @*                 $1$                 <p class="@(deeltoetsGeldendResultaat >= 5.5f ? "sufficient" : "insufficient ")">@deeltoetsGeldendResultaat</p> #1# *@
-    @*                 $1$             </div> #1# *@
-    @*                 $1$         } #1# *@
-    @*                 $1$     </div> #1# *@
-    @*                 $1$ } #1# *@
-    @*             </div> *@
-    @*         </a> *@
-    @*     </div> *@
-    @* } *@
+
 </div>
 
-@* <script minimize>  *@
-@*  @Context.Items["dmjs"]  *@
-@*   *@
-@*  function happyCappy(element) {  *@
-@*      element.classList.remove("animate");  *@
-@*      element.classList.add("animate");  *@
-@*      setTimeout(function() {  *@
-@*          element.classList.remove("animate");  *@
-@*      }, 1000);  *@
-@*  }  *@
-@*   *@
-@*  @foreach (var vak in Model.grades) *@
-@*  { *@
-@*      if (vak.type == "DeeltoetsKolom") continue; *@
-@* *@
-@*      string function = ""; *@
-@* *@
-@*      if (vak.samengesteldeToetsen != null) *@
-@*      { *@
-@*          function = $"function {vak.links[0].id.StringToBase64String().Replace("=", "")}() {{\n" + *@
-@*                     $"    new ZermosModal()\n" + *@
-@*                     $"    .setTitle('{vak.vak.naam + (vak.isExamendossierResultaat ? " SE" : "")}')\n" + *@
-@*                     $"    .addText(`Omschrijving: {vak.omschrijving}`)\n" + *@
-@*                     $"    .addText('Weging: {(vak.weging == 0 ? vak.examenWeging : vak.weging)}x')\n" + *@
-@*                     $"    .addText('Geldend resultaat: {vak.geldendResultaat}')\n" + *@
-@*                     $"    .addText('Invoerdatum: {vak.datumInvoer.ToString("dd MMMM yyyy HH:mm:ss")}')\n"; *@
-@* *@
-@*          foreach (var deeltoets in vak.samengesteldeToetsen) *@
-@*          { *@
-@*              function += $"    .addText(`&ZeroWidthSpace;`)\n" + *@
-@*                          $"    .addText(`Omschrijving: {deeltoets.omschrijving}`)\n" + *@
-@*                          $"    .addText('Weging: {(deeltoets.weging == 0 ? deeltoets.examenWeging : deeltoets.weging)}x')\n" + *@
-@*                          $"    .addText('Geldend resultaat: {deeltoets.geldendResultaat}')\n" + *@
-@*                          $"    .addText('Invoerdatum: {deeltoets.datumInvoer.ToString("dd MMMM yyyy HH:mm:ss")}')\n"; *@
-@*          } *@
-@* *@
-@*          function += $"    .setSubmitButtonLabel('Sluiten')\n" + *@
-@*                      $"    .open();\n" + *@
-@*                      $"}}"; *@
-@*      } *@
-@*      else *@
-@*      { *@
-@*          function = $"function {vak.links[0].id.StringToBase64String().Replace("=", "")}() {{\n" + *@
-@*                     $"    new ZermosModal()\n" + *@
-@*                     $"    .setTitle('{vak.vak.naam + (vak.isExamendossierResultaat ? " SE" : "")}')\n" + *@
-@*                     $"    .addText(`Omschrijving: {vak.omschrijving}`)\n" + *@
-@*                     $"    .addText('Weging: {(vak.weging == 0 ? vak.examenWeging : vak.weging)}x')\n" + *@
-@*                     $"    .addText('Geldend resultaat: {vak.geldendResultaat}')\n" + *@
-@*                     $"    .addText('Invoerdatum: {vak.datumInvoer.ToString("dd MMMM yyyy HH:mm:ss")}')\n" + *@
-@*                     $"    .setSubmitButtonLabel('Sluiten')\n" + *@
-@*                     $"    .open();\n" + *@
-@*                     $"}}"; *@
-@*      } *@
-@* *@
-@*      <text>  *@
-@*  @Html.Raw(function)  *@
-@*      </text> *@
- @* }  *@
- @* </script> *@
+<script minimize>
+@Context.Items["dmjs"]
+
+    function happyCappy(element) {
+     element.classList.remove("animate");
+     element.classList.add("animate");
+     setTimeout(function() {
+         element.classList.remove("animate");
+     }, 1000);
+    }
+</script>
