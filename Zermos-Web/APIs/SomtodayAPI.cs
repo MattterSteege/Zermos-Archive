@@ -125,8 +125,8 @@ public class SomtodayAPI
         
         var urls = new[]
         {
-            gradeType.HasFlag(GradeType.Voortgang) ? $"https://api.somtoday.nl/rest/v1/geldendvoortgangsdossierresultaten/leerling/{user.somtoday_student_id}?type=Toetskolom&type=DeeltoetsKolom&type=Werkstukcijferkolom&type=Advieskolom&additional=vaknaam&additional=resultaatkolom&additional=vakuuid&additional=lichtinguuid&sort=desc-geldendResultaatCijferInvoer" : null,
-            gradeType.HasFlag(GradeType.Exam) ? $"https://api.somtoday.nl/rest/v1/geldendexamendossierresultaten/leerling/{user.somtoday_student_id}?type=Toetskolom&type=DeeltoetsKolom&type=Werkstukcijferkolom&type=Advieskolom&additional=vaknaam&additional=resultaatkolom&additional=vakuuid&additional=lichtinguuid&sort=desc-geldendResultaatCijferInvoer" : null,
+            gradeType.HasFlag(GradeType.Voortgang) ? $"https://api.somtoday.nl/rest/v1/geldendvoortgangsdossierresultaten/leerling/{user.somtoday_student_id}?type=Toetskolom&type=SamengesteldeToetsKolom&type=DeeltoetsKolom&type=Werkstukcijferkolom&type=Advieskolom&additional=vaknaam&additional=resultaatkolom&additional=vakuuid&additional=lichtinguuid&sort=desc-geldendResultaatCijferInvoer" : null,
+            gradeType.HasFlag(GradeType.Exam) ? $"https://api.somtoday.nl/rest/v1/geldendexamendossierresultaten/leerling/{user.somtoday_student_id}?type=Toetskolom&type=SamengesteldeToetsKolom&type=DeeltoetsKolom&type=Werkstukcijferkolom&type=Advieskolom&additional=vaknaam&additional=resultaatkolom&additional=vakuuid&additional=lichtinguuid&sort=desc-geldendResultaatCijferInvoer" : null,
             gradeType.HasFlag(GradeType.Average) ? $"https://api.somtoday.nl/rest/v1/vakkeuzes/plaatsing/{plaatsingen.items[^1].UUID}/vakgemiddelden" : null
         };
 

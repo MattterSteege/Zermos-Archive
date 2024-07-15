@@ -264,7 +264,7 @@
     text-align: end;
 }
 
-i.fa-solid.fa-graduation-cap {
+i.fa-solid.fa-graduation-cap, i.fa-solid.fa-layer-group {
     position: relative;
     width: 0;
     height: 0;
@@ -276,7 +276,7 @@ i.fa-solid.fa-graduation-cap {
     transform: rotate(19deg);
 }
 
-.fa-graduation-cap:before {
+.fa-graduation-cap:before, .fa-layer-group:before {
     transform: translate(-50%, -50%);
     top: 50%;
     left: 50%;

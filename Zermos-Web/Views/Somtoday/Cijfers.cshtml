@@ -45,7 +45,7 @@
             <table class="grade-table" @Html.Raw(GetNotificationClass(grade.cijfers.FirstOrDefault()!.datumInvoerEerstePoging)) onclick="ReplacePage('@Url.Action("CijferVoorVak", "Somtoday", new { vak = grade.vakAfkorting, leerjaar = Model.leerjaarUUID })')">
                 <tr class="grade-table-header">
                     <td rowspan="2"><i class="fa-solid fa-book" data-name="@grade.vakNaam.ToLower()" data-name-short="@grade.vakAfkorting.ToLower()"></i></td>
-                    <td>@grade.vakNaam</td>
+                    <td>@grade.vakNaam.Capitalize()</td>
                     <td>@(grade.weging)x</td>
                     <td class="@(grade.cijfer.ToFloat() >= 5.45f ? "sufficient" : "insufficient ")">@grade.cijfer.Replace(",", ".")</td>
                     <td style="display: none" class="@(grade.cijfer.ToFloat() >= 5.45f ? "sufficient" : "insufficient ")">@grade.cijfer.ToFloat().ExamenAfronding()</td>
@@ -226,6 +226,15 @@
             }
         }
         
+        function toggleSuffAndInsuff(panel, hideColor){
+            //set the color of the grades that are sufficient or insufficient to var(--text-color)
+            var gradePairs = panel.querySelectorAll('.sufficient, .insufficient');
+            for (var i = 0; i < gradePairs.length; i++) {
+                //if hideColor is true, set the style color to var(--text-color), else remove the style color
+                gradePairs[i].style.color = hideColor ? 'var(--text-color)' : '';
+            }
+        }
+        
         Zermos.mainBeforeLoad = () => {
             //when user swipes left or right, change the panel
             var touchstartX = 0;
@@ -249,49 +258,87 @@
                     selectLine(nextPanel);
                 }
             }
+            
+            //set Settings
+            var settings = getSettings();
+            panel1.dataset.settings = settings[0] ?? '';
+            toggleSEGradeRounding(panel1, settings[0] ? settings[0].split(';').find(x => x.startsWith('afronden')).split('=')[1] === 'true' : false);
+            toggleSuffAndInsuff(panel1, settings[0] ? settings[0].split(';').find(x => x.startsWith('hideColor')).split('=')[1] === 'true' : false);
+
+            panel2.dataset.settings = settings[1] ?? '';
+            toggleSEGradeRounding(panel2, settings[1] ? settings[1].split(';').find(x => x.startsWith('afronden')).split('=')[1] === 'true' : false);
+            toggleSuffAndInsuff(panel2, settings[1] ? settings[1].split(';').find(x => x.startsWith('hideColor')).split('=')[1] === 'true' : false);
+        }
+        
+        function saveSettings(rapport, exam)
+        {
+        
+            var save = getSettings();
+            if (rapport)
+                save[0] = rapport.dataset.settings;
+                
+            if (exam)
+                save[1] = exam.dataset.settings;
+                
+            localStorage.setItem('gradeSettings', JSON.stringify(save));
+        }
+        
+        function getSettings()
+        {
+            return localStorage.getItem('gradeSettings') ? JSON.parse(localStorage.getItem('gradeSettings')) : [null, null];
         }
 
 
         function showSettings(panel) {
             if (panel === 'voortgang') {
                 var parentPanel = document.getElementById('panel1');
-                var currentSettings = parentPanel.dataset.settings; //setting=value;setting=value;...
+                var currentSettings = getSettings()[0]; //setting=value;setting=value;...
                 var settings = currentSettings.split(';');
                 
                 var afronden = settings.find(x => x.startsWith('afronden')) ? settings.find(x => x.startsWith('afronden')).split('=')[1] === 'true' : false;
+                var hideColor = settings.find(x => x.startsWith('hideColor')) ? settings.find(x => x.startsWith('hideColor')).split('=')[1] === 'true' : false;
             
                 new ZermosModal()
                 .setTitle("Voortgangsdossier")
                 .addText("Pas de instellingen aan van het voortgangsdossier. Je kan het volgende aanpassen:")
                 .addToggle("Afronden op een heel getal", afronden)
+                .addToggle("Geen kleur geven aan je cijfer", hideColor)
                 .setSubmitButtonLabel("oke")
-                .onSubmit((afronden) => {
-                    var newSettings = `afronden=${afronden};`;
+                .onSubmit((afronden, hideColor) => {
+                    var newSettings = `afronden=${afronden};hideColor=${hideColor};`;
                     parentPanel.dataset.settings = newSettings;
                     
                     //update the grades
                     toggleSEGradeRounding(parentPanel, afronden);
+                    toggleSuffAndInsuff(parentPanel, hideColor);
+                    
+                    saveSettings(parentPanel, null);
                 })
                 .open();
             }
             else if (panel === 'examen') {
                 var parentPanel = document.getElementById('panel2');
-                var currentSettings = parentPanel.dataset.settings; //setting=value;setting=value;...
+                var currentSettings = getSettings()[1]; //setting=value;setting=value;...
                 var settings = currentSettings.split(';');
                 
                 var afronden = settings.find(x => x.startsWith('afronden')) ? settings.find(x => x.startsWith('afronden')).split('=')[1] === 'true' : false;
+                var hideColor = settings.find(x => x.startsWith('hideColor')) ? settings.find(x => x.startsWith('hideColor')).split('=')[1] === 'true' : false;
             
                 new ZermosModal()
                 .setTitle("Schoolexamen cijfers")
                 .addText("Pas de instellingen aan van de schoolexamen cijfers. Je kan het volgende aanpassen:")
                 .addToggle("Afronden op een heel getal", afronden)
+                .addToggle("Geen kleur geven aan je cijfer", hideColor)
                 .setSubmitButtonLabel("oke")
-                .onSubmit((afronden) => {
-                    var newSettings = `afronden=${afronden};`;
+                .onSubmit((afronden, hideColor) => {
+                    var newSettings = `afronden=${afronden};hideColor=${hideColor};`;
                     parentPanel.dataset.settings = newSettings;
                     
                     //update the grades
                     toggleSEGradeRounding(parentPanel, afronden);
+                    toggleSuffAndInsuff(parentPanel, hideColor);
+                    
+                    saveSettings(null, parentPanel);
                 })
                 .open();
             }

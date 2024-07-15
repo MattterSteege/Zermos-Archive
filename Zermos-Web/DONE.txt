@@ -9,6 +9,7 @@
     - voortgangsdossier en examendossier cijfers zijn nu gescheiden
     - Swipe heel makkelijk tussen je voortgang, examen en laatste cijfers
     - Pas instellingen aan per type cijfer (is tijdelijk opgeslagen en wordt vergeten als je de pagina verlaat/ververst)
+- De instellingen worden opgeslagen in de localstorage van je browser, dus het wordt niet opgeslagen op de server en dus niet tussen verschillende apparaten gesynchroniseerd
 
 - koppelingen
     - je kan nu ook met langere schoolnamen inloggen bij de koppeling met Zermelo (sorry voor de mensen die hier last van hadden)
@@ -22,3 +23,4 @@
     - Als je geen leermiddelen hebt, dan opent de pagina nu wel met een 'voeg leermiddelen toe' knop
     
     
+  
