@@ -65,14 +65,16 @@ namespace Zermos_Web.Controllers
             else
                 grades = await somtodayApi.GetGradesAndVakgemiddelden(user, plaatsingen, leerjaar: leerjaar);
             
-            
-            ZermosUser = new user
+            if (leerjaar != -1)
             {
-                cached_somtoday_grades = JsonConvert.SerializeObject(grades),
-                cached_somtoday_plaatsingen = JsonConvert.SerializeObject(plaatsingen)
-            };
-            
-            Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
+                ZermosUser = new user
+                {
+                    cached_somtoday_grades = JsonConvert.SerializeObject(grades),
+                    cached_somtoday_plaatsingen = JsonConvert.SerializeObject(plaatsingen)
+                };
+                
+                Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
+            }
 
             return PartialView(grades);
         }
@@ -84,7 +86,7 @@ namespace Zermos_Web.Controllers
             if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
             {
                 var _grades = JsonConvert.DeserializeObject<SortedSomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? "{}");
-                _grades.items = _grades.items.FindAll(x => x.vakAfkorting == vak);
+                _grades.items = _grades.items.FindAll(x => x.vakAfkorting == vak.ToLower());
                 _grades.lastGrades = null;
                 _grades.voortGangsdossierGemiddelde = null;
                 return PartialView(_grades);
@@ -109,7 +111,7 @@ namespace Zermos_Web.Controllers
             
             Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
 
-            grades.items = grades.items.FindAll(x => x.vakAfkorting == vak);
+            grades.items = grades.items.FindAll(x => x.vakAfkorting == vak.ToLower());
             grades.lastGrades = null;
             grades.voortGangsdossierGemiddelde = null;
             
