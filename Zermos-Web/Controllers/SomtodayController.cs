@@ -42,9 +42,9 @@ namespace Zermos_Web.Controllers
         [ZermosPage]
         [SomtodayRequirement]
         [HttpGet("Somtoday/Cijfers")]
-        public async Task<IActionResult> Cijfers(int leerjaar)
+        public async Task<IActionResult> Cijfers(int leerjaar = -1)
         {
-            if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
+            if (Request.Cookies.ContainsKey("cached-somtoday-grades") && leerjaar == -1)
             {
                 return PartialView(JsonConvert.DeserializeObject<SortedSomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? "{}"));
             }
@@ -57,8 +57,14 @@ namespace Zermos_Web.Controllers
             }
             
             SomtodayPlaatsingenModel plaatsingen = (user.cached_somtoday_plaatsingen == null) ? await somtodayApi.GetPlaatsingen(user) : JsonConvert.DeserializeObject<SomtodayPlaatsingenModel>(user.cached_somtoday_plaatsingen);
+
+            SortedSomtodayGradesModel grades = new();
             
-            var grades = await somtodayApi.GetCurrentGradesAndVakgemiddelden(user, plaatsingen);
+            if (leerjaar == -1)
+                grades = await somtodayApi.GetCurrentGradesAndVakgemiddelden(user, plaatsingen);
+            else
+                grades = await somtodayApi.GetGradesAndVakgemiddelden(user, plaatsingen, leerjaar: leerjaar);
+            
             
             ZermosUser = new user
             {
@@ -73,7 +79,7 @@ namespace Zermos_Web.Controllers
 
         //[ZermosPage]
         [HttpGet("Somtoday/Cijfers/{vak}")]
-        public async Task<IActionResult> CijferVoorVak(string leerjaar, string vak)
+        public async Task<IActionResult> CijferVoorVak(string vak)
         {
             if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
             {

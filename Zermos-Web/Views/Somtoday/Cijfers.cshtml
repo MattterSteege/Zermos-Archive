@@ -31,8 +31,11 @@
 
 <div class="grade-controls">
     <div id="togglePanel1" onclick="selectLine(1)">Rapport</div>
-    <div id="togglePanel2" onclick="selectLine(2)">Examen</div>
-    <div id="togglePanel3" onclick="selectLine(3)">Geschiedenis</div>
+    @if (!Model.onlyVoorVoortgang)
+    {
+        <div id="togglePanel2" onclick="selectLine(2)">Examen</div>
+        <div id="togglePanel3" onclick="selectLine(3)">Geschiedenis</div>
+    }
     <div id="underline" style="left: -100px; width: 0"></div>
 </div>
 <div class="grades-container">
@@ -42,7 +45,7 @@
         {
             if (grade.cijfer == "-") { continue; }
 
-            <table class="grade-table" @Html.Raw(GetNotificationClass(grade.cijfers.FirstOrDefault()!.datumInvoerEerstePoging)) onclick="ReplacePage('@Url.Action("CijferVoorVak", "Somtoday", new { vak = grade.vakAfkorting, leerjaar = Model.leerjaarUUID })')">
+            <table class="grade-table" @Html.Raw(GetNotificationClass(grade.cijfers?[0]?.datumInvoerEerstePoging ?? DateTime.MaxValue)) onclick="ReplacePage('@Url.Action("CijferVoorVak", "Somtoday", new { vak = grade.vakAfkorting, leerjaar = Model.leerjaarUUID })')">
                 <tr class="grade-table-header">
                     <td rowspan="2"><i class="fa-solid fa-book" data-name="@grade.vakNaam.ToLower()" data-name-short="@grade.vakAfkorting.ToLower()"></i></td>
                     <td>@grade.vakNaam.Capitalize()</td>
@@ -50,19 +53,26 @@
                     <td class="@(grade.cijfer.ToFloat() >= 5.45f ? "sufficient" : "insufficient ")">@grade.cijfer.Replace(",", ".")</td>
                     <td style="display: none" class="@(grade.cijfer.ToFloat() >= 5.45f ? "sufficient" : "insufficient ")">@grade.cijfer.ToFloat().ExamenAfronding()</td>
                 </tr>
-                <tr class="grade-table-header">
-                    <td style="display: none"></td>
-                    <td>Laatste cijfer</td>
-                    <td></td>
-                    <td class="@(grade.cijfers[0].cijfer >= 5.45 ? "sufficient" : "insufficient ")">@grade.cijfers[0].formattedResultaat</td>
-                </tr>
+                @if (grade.cijfers != null && grade.cijfers.Count > 0)
+                {
+                    <tr class="grade-table-header">
+                        <td style="display: none"></td>
+                        <td>Laatste cijfer</td>
+                        <td></td>
+                        <td class="@(grade.cijfers[0].cijfer >= 5.45 ? "sufficient" : "insufficient ")">@grade.cijfers[0].formattedResultaat</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr class="grade-table-header">
+                        <td style="display: none"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                }
             </table>
         }
-
-        @* <div class="grade"> *@
-        @*     <div class="grade-title">Totaalgemiddelde</div> *@
-        @*     <div class="grade-cijfer">~ @Model.voortGangsdossierGemiddelde</div> *@
-        @* </div> *@
         
         <table class="grade-table">
             <tr class="grade-table-header">
@@ -72,7 +82,10 @@
             </tr>
         </table>
     </div>
-    <div id="panel2" class="panel" data-settings=""> <!-- Examen -->
+    
+@if (!Model.onlyVoorVoortgang)
+{
+    <div id="panel2" class="panel" data-settings="" @(Model.onlyVoorVoortgang ? "style=\"display: flex\"" : "")> <!-- Examen -->
         <h1 class="grades-title">Schoolexamen cijfers <span class="icon-container"><i class="fa-solid fa-list-dropdown" onclick="showSettings('examen')"></i><i class="fa-solid fa-info-circle" onclick="showInfo('examen')"></i></span></h1>
         @foreach (var grade in Model.items)
         {
@@ -107,6 +120,7 @@
             </tr>
         </table>
     </div>
+    
     <div id="panel3" class="panel"> <!-- Geschiedenis -->
         <h1 class="grades-title">Geschiedenis</h1>
         @foreach (var grade in Model.lastGrades)
@@ -121,6 +135,7 @@
             </table>
         }
     </div>
+}
 </div>
 <script minimize>
 @Context.Items["dmjs"]
@@ -132,41 +147,41 @@
     var togglePanel3 = document.getElementById('togglePanel3');
 
     function updatePanels() {
-        togglePanel3.style.display = 'flex';
-        if (panel3.style.display === 'flex') {
+        if (panel3) togglePanel3.style.display = 'flex';
+        if (panel3 && panel3.style.display === 'flex') {
             panel1.style.display = 'none';
-            panel2.style.display = 'none';
-        } else if (panel2.style.display === 'flex') {
+            if (panel2) panel2.style.display = 'none';
+        } else if (panel2 && panel2.style.display === 'flex') {
             panel1.style.display = 'none';
-            panel3.style.display = 'none';
+            if (panel3) panel3.style.display = 'none';
         } else {
             panel1.style.display = 'flex';
-            panel2.style.display = 'none';
-            panel3.style.display = 'none';
+            if (panel2) panel2.style.display = 'none';
+            if (panel3) panel3.style.display = 'none';
         }
     }
 
     togglePanel1.addEventListener('click', () => ShowPanel(panel1));
-    togglePanel2.addEventListener('click', () => ShowPanel(panel2));
-    togglePanel3.addEventListener('click', () => ShowPanel(panel3));
+    if (togglePanel2) togglePanel2.addEventListener('click', () => ShowPanel(panel2));
+    if (togglePanel3) togglePanel3.addEventListener('click', () => ShowPanel(panel3));
     window.addEventListener('resize', () => {updatePanels(); selectLine(currentSelectedPanel);});
-        
+
     function ShowPanel(panel) {
         panel1.style.display = 'none';
-        panel2.style.display = 'none';
-        panel3.style.display = 'none';
+        if (panel2) panel2.style.display = 'none';
+        if (panel3) panel3.style.display = 'none';
         panel.style.display = 'flex';
         updatePanels();
     }
 
     updatePanels();
-    
+
     var currentSelectedPanel = 1;
     var underline = document.getElementById('underline');
     var buttons = document.querySelectorAll('.grade-controls div');
 
     function selectLine(buttonNumber) {
-        
+
         currentSelectedPanel = buttonNumber;
 
         const selectedButton = buttons[buttonNumber - 1];

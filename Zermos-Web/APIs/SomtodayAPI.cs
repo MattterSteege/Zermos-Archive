@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Infrastructure;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -110,7 +111,7 @@ public class SomtodayAPI
     }
 
     /// <summary>
-    /// Fetches all the grades from think current year
+    /// Fetches all the grades from think current year. This is for the general grades page.
     /// </summary>
     /// <param name="user"></param>
     /// <param name="plaatsingen"></param>
@@ -120,7 +121,7 @@ public class SomtodayAPI
         GradeType gradeType = GradeType.Voortgang | GradeType.Exam | GradeType.Average | GradeType.History)
     {
         #if DEBUG
-        var watch = System.Diagnostics.Stopwatch.StartNew();
+        var watch = Stopwatch.StartNew();
         #endif
         
         var urls = new[]
@@ -170,6 +171,7 @@ public class SomtodayAPI
             items = new List<Models.SortedSomtodayGradesModel.Item>(),
             lastGrades = new List<Models.SomtodayGradesModel.Item>(),
             voortGangsdossierGemiddelde = vakgemiddelden?.voortgangsdossierGemiddelde,
+            relevanteCijferLichtingUUID = vakgemiddelden?.gemiddelden.FirstOrDefault()?.relevanteCijferLichtingUUID,
             leerjaarUUID = plaatsingen.items[^1].UUID
         };
 
@@ -223,7 +225,63 @@ public class SomtodayAPI
         
         return sortedGrades;
     }
+    
+    /// <summary>
+    /// Fetches all the grades from think current year. This is for the general grades page.
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="plaatsingen"></param>
+    /// <param name="gradeType"></param>
+    /// <returns></returns>
+    public async Task<SortedSomtodayGradesModel> GetGradesAndVakgemiddelden(user user, SomtodayPlaatsingenModel plaatsingen, int leerjaar = -1)
+    {
+        #if DEBUG
+        var watch = Stopwatch.StartNew();
+        #endif
+        
+        string plaatsingUUID = leerjaar == -1 ? plaatsingen.items[^1].UUID : plaatsingen.items.FirstOrDefault(x => x.leerjaar == leerjaar)?.UUID;
+        
+        _httpClient.DefaultRequestHeaders.Clear();
+        _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
+        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
+        var response = await _httpClient.GetAsync($"https://api.somtoday.nl/rest/v1/vakkeuzes/plaatsing/{plaatsingUUID}/vakgemiddelden");
+        
+        var vakgemiddelden = JsonConvert.DeserializeObject<SomtodayVakgemiddeldenModel>(await response.Content.ReadAsStringAsync());
+        
+        var sortedGrades = new SortedSomtodayGradesModel
+        {
+            items = new List<Models.SortedSomtodayGradesModel.Item>(),
+            lastGrades = new List<Models.SomtodayGradesModel.Item>(),
+            voortGangsdossierGemiddelde = vakgemiddelden?.voortgangsdossierGemiddelde,
+            relevanteCijferLichtingUUID = vakgemiddelden?.gemiddelden.FirstOrDefault()?.relevanteCijferLichtingUUID,
+            leerjaarUUID = plaatsingen.items[^1].UUID,
+            onlyVoorVoortgang = true
+        };
+
+        foreach (var grade in vakgemiddelden.gemiddelden)
+        {
+            var item = new Models.SortedSomtodayGradesModel.Item
+            {
+                cijfer = grade.voortgangsdossierResultaat?.formattedResultaat ?? grade.examendossierResultaat?.formattedResultaat ?? "-",
+                cijferSE = "-",
+                vakNaam = grade.vakNaam,
+                vakAfkorting = grade.vakAfkorting,
+                vakuuid = grade.vakUUID
+            };
+
+            sortedGrades.items.Add(item);
+        }
+        
+        sortedGrades.items = sortedGrades.items.OrderBy(x => x.vakNaam).ToList();
+        
+        #if DEBUG
+        watch.Stop();
+        Console.WriteLine(watch.ElapsedMilliseconds + "ms");
+        #endif
+        
+        return sortedGrades;
+    }
     public async Task<SomtodayPlaatsingenModel> GetPlaatsingen(user user)
     {
         //https://api.somtoday.nl/rest/v1/plaatsingen?leerling=1409824200
