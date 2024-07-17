@@ -324,6 +324,38 @@ i.fa-solid.fa-graduation-cap, i.fa-solid.fa-layer-group {
     color: var(--background-color);
 }
 
+.chart {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+
+/*CIJFER STATISTIEKEN*/
+.arc {
+    --a: 0deg; /* control the progression */
+
+    width: 200px;
+    aspect-ratio: 1;
+    padding: 40px; /* the boder thickness */
+    box-sizing: border-box;
+    border-radius: 50%;
+    background: var(--confirm-color);
+    mask: linear-gradient(#0000 0 0) content-box intersect, conic-gradient(#000 var(--a),#0000 0);
+    position: absolute;
+}
+
+/* HTML: <div class="arc"></div> */
+.arc.back {
+    --a: 360deg;
+    width: 198px;
+    padding: 38px;
+    background: var(--deny-color);
+    z-index: -1;
+    top: 1px;
+    left: 1px;
+}
+
 /*LEERMIDDELEN*/
 
 .leermiddelen-container {

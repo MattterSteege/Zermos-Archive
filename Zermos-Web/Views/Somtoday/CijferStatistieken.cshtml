@@ -35,7 +35,10 @@
                     <p class="gemiddelde">onvoldoendes: @Model.onvoldoendes</p>
                 </div>
                 <div class="canvas">
-                    <canvas display="block" box-sizing="border-box" height="max-content" width="max-content" id="@letters[0]" style="max-height: 300px; width: fit-content;"></canvas>
+                    <div class="chart" id="@letters[0]">
+                        <div class="arc"></div>
+                        <div class="arc back"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -79,88 +82,133 @@
 
 <script minimize>
 @Context.Items["dmjs"]
+//Zermos.mainAfterLoad = () => load();
 
-    //Zermos.mainAfterLoad = () => load();
+//@*Html.Raw($"function load() {{{string.Join("", ((List<ChartJSCore.Models.Chart>) Model.charts).Select((m, i) => m.CreateChartCode(letters[i].ToString())))}}}");*@
 
-    //@*Html.Raw($"function load() {{{string.Join("", ((List<ChartJSCore.Models.Chart>) Model.charts).Select((m, i) => m.CreateChartCode(letters[i].ToString())))}}}");*@
-    
-    //WAT MOET IK HALEN
-    var grade_wmih = document.getElementById("grade_wmih");
-    var weight_wmih = document.getElementById("weight_wmih");
-    var result_wmih = document.getElementById("result_wmih");
-    
-    //when grade value changes
-    grade_wmih.addEventListener("change", function () { wmih(); });
-    
-    //when weight value changes
-    weight_wmih.addEventListener("change", function () { wmih(); });
-    
-    //calculation function
-    function wmih() {       
-        
-        console.log(grade_wmih.value, weight_wmih.value);
-        
-        const totaleWeging = @Model.weging + parseInt(weight_wmih.value);
-        const alBehaaldePunten = @Model.som.ToString("0.00").Replace(",", ".");
-        const nogTeBehalen = parseFloat(grade_wmih.value) * totaleWeging - alBehaaldePunten;
-        const nogTeBehalenPunten = nogTeBehalen / parseInt(weight_wmih.value);
-        
-        if (isNaN(nogTeBehalenPunten)){       
-            return;
-        }
-        
-        
-        result_wmih.innerHTML = "Je moet een " + (nogTeBehalen / parseInt(weight_wmih.value)).toFixed(2) + " halen om een " + grade_wmih.value + " te staan.";
-        
-        result_wmih.style.display = "block";
+//WAT MOET IK HALEN
+var grade_wmih = document.getElementById("grade_wmih");
+var weight_wmih = document.getElementById("weight_wmih");
+var result_wmih = document.getElementById("result_wmih");
+
+//when grade value changes
+grade_wmih.addEventListener("change", function() {
+    wmih();
+});
+
+//when weight value changes
+weight_wmih.addEventListener("change", function() {
+    wmih();
+});
+
+//calculation function
+function wmih() {
+
+    console.log(grade_wmih.value, weight_wmih.value);
+
+    const totaleWeging = @Model.weging + parseInt(weight_wmih.value);
+    const alBehaaldePunten = @Model.som.ToString("0.00").Replace(",", ".");
+    const nogTeBehalen = parseFloat(grade_wmih.value) * totaleWeging - alBehaaldePunten;
+    const nogTeBehalenPunten = nogTeBehalen / parseInt(weight_wmih.value);
+
+    if (isNaN(nogTeBehalenPunten)) {
+        return;
     }
-    
-    
-    
-    
-    
-    //WAT GA IK STAAN
-    var grade_wgis = document.getElementById("grade_wgis");
-    var weight_wgis = document.getElementById("weight_wgis");
-    var result_wgis = document.getElementById("result_wgis");
-    
-    //when grade value changes
-    grade_wgis.addEventListener("change", function () { wgis(); });
-    
-    //when weight value changes
-    weight_wgis.addEventListener("change", function () { wgis(); });
-    
-    //calculation function
-    function wgis() {
-        const totaleWeging = @Model.weging + parseInt(weight_wgis.value);
-        const alBehaaldePunten = @Model.som.ToString("0.00").Replace(",", ".") + parseFloat(grade_wgis.value) * parseInt(weight_wgis.value);
-        const nogTeBehalenPunten = alBehaaldePunten / totaleWeging;
-        
-        if (isNaN(nogTeBehalenPunten)){       
-            return;
-        }
-        
-        result_wgis.innerHTML = "Je komt een " + (alBehaaldePunten / totaleWeging).toFixed(2) + " te staan.";
-        
-        result_wgis.style.display = "block";
+
+
+    result_wmih.innerHTML = "Je moet een " + (nogTeBehalen / parseInt(weight_wmih.value)).toFixed(2) + " halen om een " + grade_wmih.value + " te staan.";
+
+    result_wmih.style.display = "block";
+}
+
+
+
+
+//WAT GA IK STAAN
+var grade_wgis = document.getElementById("grade_wgis");
+var weight_wgis = document.getElementById("weight_wgis");
+var result_wgis = document.getElementById("result_wgis");
+
+//when grade value changes
+grade_wgis.addEventListener("change", function() {
+    wgis();
+});
+
+//when weight value changes
+weight_wgis.addEventListener("change", function() {
+    wgis();
+});
+
+//calculation function
+function wgis() {
+    const totaleWeging = @Model.weging + parseInt(weight_wgis.value);
+    const alBehaaldePunten = @Model.som.ToString("0.00").Replace(",", ".") + parseFloat(grade_wgis.value) * parseInt(weight_wgis.value);
+    const nogTeBehalenPunten = alBehaaldePunten / totaleWeging;
+
+    if (isNaN(nogTeBehalenPunten)) {
+        return;
     }
-    
-    
-    
-    
-    
-    //Prevent the input of invalid characters
-    var inputElements = document.querySelectorAll('input[type="text"]');
-    
-    inputElements.forEach(function(inputElement) {
-      inputElement.addEventListener('keypress', function(event) {
+
+    result_wgis.innerHTML = "Je komt een " + (alBehaaldePunten / totaleWeging).toFixed(2) + " te staan.";
+
+    result_wgis.style.display = "block";
+}
+
+
+
+
+//Prevent the input of invalid characters
+var inputElements = document.querySelectorAll('input[type="text"]');
+
+inputElements.forEach(function(inputElement) {
+    inputElement.addEventListener('keypress', function(event) {
         const allowedCharacters = /[0-9.,]/; // Define the allowed characters using a regular expression
-        
+
         const inputCharacter = String.fromCharCode(event.charCode);
-        
+
         if (!allowedCharacters.test(inputCharacter)) {
-          event.preventDefault(); // Prevent the input of invalid characters
+            event.preventDefault(); // Prevent the input of invalid characters
         }
-      });
     });
+});
+
+
+setBarGraph(@Model.voldoendes, @Model.onvoldoendes);
+
+
+function setBarGraph(optionA, optionB) {
+    var total = optionA + optionB;
+    var percentA = (optionA / total) * 100;
+
+    //get .arc element
+    var arc = document.querySelector('#@letters[0] .arc');
+    var currentA = arc.style.getPropertyValue('--a').replace('deg', '');
+
+    ease(currentA, percentA * 3.6, 1000, function(value) {
+        arc.style.setProperty('--a', value + 'deg');
+    });
+}
+
+function ease(start, end, time, callback) {
+    start = Number(start);
+    end = Number(end);
+    const startTime = Date.now();
+    const duration = time;
+
+    function update() {
+        const currentTime = Date.now();
+        const elapsed = currentTime - startTime;
+
+        if (elapsed >= duration) {
+            clearInterval(interval);
+            callback(end);
+        } else {
+            const progress = elapsed / duration;
+            const easedValue = start + (end - start) * (progress * (2 - progress));
+            callback(easedValue);
+        }
+    }
+
+    const interval = setInterval(update, 10); // Update approximately every 16 milliseconds
+}
 </script>

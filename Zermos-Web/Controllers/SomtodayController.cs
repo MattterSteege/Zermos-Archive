@@ -196,13 +196,13 @@ namespace Zermos_Web.Controllers
             }
             
             double highest = 0;
-            double lowest = 0;
-            foreach (var grade in grades)
+            double lowest = 10;
+            foreach (var grade in allgrades)
             {
-                if (grade > highest)
-                    highest = grade;
-                if (grade < lowest)
-                    lowest = grade;
+                if (grade.cijfer > highest)
+                    highest = grade.cijfer;
+                if (grade.cijfer < lowest)
+                    lowest = grade.cijfer;
             }
             
             //line chart: grades over time
