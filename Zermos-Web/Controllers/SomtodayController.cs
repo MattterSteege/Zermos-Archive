@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using Zermos_Web.APIs;
 using Zermos_Web.Models;
 using Zermos_Web.Models.Requirements;
+using Zermos_Web.Models.Somtoday;
 using Zermos_Web.Models.SomtodayLeermiddelen;
 using Zermos_Web.Models.SomtodayGradesModel;
 using Zermos_Web.Models.somtodayHomeworkModel;
@@ -118,82 +119,113 @@ namespace Zermos_Web.Controllers
             return PartialView(grades);
         }
 
-        // [ZermosPage]
-        // [HttpGet("Somtoday/Cijfers/{vak}/Statestieken")]
-        // public async Task<IActionResult> CijferStatestieken(string vak, bool asPFD = false)
-        // {
-        //     SomtodayGradesModel somtodayGradesModel;
-        //     
-        //     if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
-        //     {
-        //         somtodayGradesModel = JsonConvert.DeserializeObject<SomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? string.Empty);
-        //     }
-        //     else
-        //     {
-        //         var user = ZermosUser;
-        //     
-        //         if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
-        //         {
-        //             user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
-        //         }
-        //
-        //         somtodayGradesModel = await somtodayApi.GetGrades(user);
-        //
-        //         ZermosUser = new user
-        //         {
-        //             cached_somtoday_grades = JsonConvert.SerializeObject(somtodayGradesModel)
-        //         };
-        //     
-        //         Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
-        //     }
-        //     
-        //     var sortedGrades = new List<sortedGrades>();
-        //     foreach (var grade in somtodayGradesModel.items)
-        //     {
-        //         var vakWithGrades = sortedGrades.Find(x => x.vak.naam == grade.vak.naam);
-        //         if (vakWithGrades == null)
-        //         {
-        //             vakWithGrades = new sortedGrades();
-        //             vakWithGrades.vak = grade.vak;
-        //             vakWithGrades.grades = new List<Item>();
-        //             sortedGrades.Add(vakWithGrades);
-        //         }
-        //         vakWithGrades.grades.Add(grade);
-        //     }
-        //
-        //     var grades = sortedGrades.Find(x => string.Equals(x.vak.afkorting, vak, StringComparison.CurrentCultureIgnoreCase));
-        //
-        //     ViewData["stats"] = new Dictionary<string, string>();
-        //     (ViewData["stats"] as Dictionary<string, string>)?.Add("hoogste", grades.grades.Max(x => x.geldendResultaat).ToString());
-        //     (ViewData["stats"] as Dictionary<string, string>)?.Add("laagste", grades.grades.Min(x => x.geldendResultaat).ToString());
-        //
-        //     var som = 0f;
-        //     var weging = 0;
-        //     foreach (Item grade in grades.grades)
-        //     {
-        //         if (grade.isExamendossierResultaat || grade.type == "DeeltoetsKolom") continue;
-        //         
-        //         som += NumberUtils.ParseFloat(grade.geldendResultaat) * (grade.weging == 0 ? grade.examenWeging : grade.weging);
-        //         weging += grade.weging == 0 ? grade.examenWeging : grade.weging;
-        //     }
-        //
-        //     (ViewData["stats"] as Dictionary<string, string>)?.Add("som", som.ToString("0.0000000000", CultureInfo.InvariantCulture));
-        //     (ViewData["stats"] as Dictionary<string, string>)?.Add("weging", weging.ToString());
-        //     
-        //     var charts = new List<Chart>();
-        //     charts.Add(GetVoldoendeOndervoldoendeRatio(grades));
-        //     charts.Add(GenerateGradeOverTimeAndGradeAverage(grades));
-        //     charts.Add(GetMostCommonGrade(grades));
-        //
-        //     dynamic model = new
-        //     {
-        //         charts = charts,
-        //         stats = ViewData["stats"] as Dictionary<string, string>,
-        //         grades = grades
-        //     };
-        //     
-        //     return PartialView(model);
-        // }
+        [ZermosPage]
+        [HttpGet("Somtoday/Cijfers/{vak}/Statistieken")]
+        public async Task<IActionResult> CijferStatistieken(string vak, bool asPFD = false)
+        {
+            SortedSomtodayGradesModel somtodayGradesModel;
+            
+            if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
+            {
+                somtodayGradesModel = JsonConvert.DeserializeObject<SortedSomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? "{}");
+                somtodayGradesModel.items = somtodayGradesModel.items.FindAll(x => x.vakAfkorting == vak.ToLower());
+                somtodayGradesModel.lastGrades = null;
+                somtodayGradesModel.voortGangsdossierGemiddelde = somtodayGradesModel.items[0].cijfer.ToFloat();
+            }
+            else
+            {
+                var user = ZermosUser;
+            
+                if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
+                {
+                    user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
+                }
+            
+                SomtodayPlaatsingenModel plaatsingen = (user.cached_somtoday_plaatsingen == null) ? await somtodayApi.GetPlaatsingen(user) : JsonConvert.DeserializeObject<SomtodayPlaatsingenModel>(user.cached_somtoday_plaatsingen);
+            
+                somtodayGradesModel = await somtodayApi.GetCurrentGradesAndVakgemiddelden(user, plaatsingen);
+            
+                ZermosUser = new user
+                {
+                    cached_somtoday_grades = JsonConvert.SerializeObject(somtodayGradesModel),
+                    cached_somtoday_plaatsingen = JsonConvert.SerializeObject(plaatsingen)
+                };
+            
+                Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
+
+                somtodayGradesModel.items = somtodayGradesModel.items.FindAll(x => x.vakAfkorting == vak.ToLower());
+                somtodayGradesModel.lastGrades = null;
+                somtodayGradesModel.voortGangsdossierGemiddelde = null;
+            }
+            
+            //calc the stats:
+            //circle chart: voldoendes/onvoldoendes
+            var allgrades = somtodayGradesModel.items[0].cijfers; allgrades.AddRange(somtodayGradesModel.items[0].cijfersSE);
+            
+            int voldoendes = 0;
+            int onvoldoendes = 0;
+            int weging = 0;
+            double som = 0;
+            int wegingSE = 0;
+            double somSE = 0;
+            foreach (var item in allgrades)
+            {
+                if (item.cijfer >= 5.45)
+                    voldoendes++;
+                else
+                    onvoldoendes++;
+                
+                if (item.isVoortgang)
+                {
+                    weging += item.weging;
+                    som += item.cijfer * item.weging;
+                }
+                else
+                {
+                    wegingSE += item.weging;
+                    somSE += item.cijfer * item.weging;
+                }
+            }
+            
+            //bar chart: most common grade
+            var grades = new List<int> {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            foreach (var item in somtodayGradesModel.items)
+            {
+                var grade = (int) Math.Round(NumberUtils.ParseFloat(item.cijfer), 0, MidpointRounding.AwayFromZero) - 1;
+                grades[grade]++;
+            }
+            
+            double highest = 0;
+            double lowest = 0;
+            foreach (var grade in grades)
+            {
+                if (grade > highest)
+                    highest = grade;
+                if (grade < lowest)
+                    lowest = grade;
+            }
+            
+            //line chart: grades over time
+            
+            SomtodayStatistiekenModel model = new()
+            {
+                item = somtodayGradesModel.items[0],
+                voldoendes = voldoendes,
+                onvoldoendes = onvoldoendes,
+                mostCommonGrade = grades,
+                highest = highest,
+                lowest = lowest,
+                weging = weging,
+                som = som,
+                wegingSE = wegingSE,
+                somSE = somSE,
+                containsSE = somtodayGradesModel.items[0].cijfersSE.Count > 0,
+                containsVoortgang = somtodayGradesModel.items[0].cijfers.Count > 0
+            };
+            
+            
+            return PartialView(model);
+        }
         //
         // private Chart CreateChart(string title, bool showHeight = true)
         // {

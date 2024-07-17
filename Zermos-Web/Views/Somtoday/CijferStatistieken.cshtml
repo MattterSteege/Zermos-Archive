@@ -1,31 +1,38 @@
-﻿@using Zermos_Web.Utilities
-@model dynamic
+﻿@using Zermos_Web.TagHelpers
+@using Zermos_Web.Utilities
+@model Zermos_Web.Models.Somtoday.SomtodayStatistiekenModel
 
 @{
     ViewData["Title"] = "Home Page";
     var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 }
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link rel="stylesheet" href="~/css/somtoday.css"/>
 
 <div class="stats-container">
     <div class="stack2">
         <div class="stats">
-            <p class="stats-vak">Vak: @Model.grades.vak.naam</p>
-            <p class="gemiddelde">Gemiddelde: @(((string) Model.stats["gemiddelde"]).TakeFirstLetters(4))</p>
-            <p class="hoogste-cijfer">Hoogste cijfer: @Model.stats["hoogste"]</p>
-            <p class="laagste-cijfer">Laagste cijfer: @Model.stats["laagste"]</p>
+            <p class="stats-vak">Vak: @Model.item.vakNaam</p>
+            @if (Model.containsVoortgang)
+            {
+                <p class="gemiddelde">Gemiddelde: @((Model.som / Model.weging).ToString("0.00").Replace(",", "."))</p>
+            }
+            @if (Model.containsSE)
+            {
+            <p class="gemiddelde">Gemiddelde (SE): @((Model.somSE / Model.wegingSE).ToString("0.00").Replace(",", "."))</p>
+            }
+            <p class="hoogste-cijfer">Hoogste cijfer: @Model.highest</p>
+            <p class="laagste-cijfer">Laagste cijfer: @Model.lowest</p>
         </div>
 
         <div class="stats">
             <div class="horizontal-split" style="padding-right: var(--padding);">
                 <div>
-                    <h1>@(Model.charts[0].Options.Plugins.Title?.Text?[0] ?? "")</h1>
-                    <p class="gemiddelde">Percentage voldoendes: @Math.Round(NumberUtils.ParseFloat(Model.stats["voldoendes"]) / Model.grades.grades.Count * 100, 2)%</p>
-                    <p class="gemiddelde">aantal cijfers: @Model.grades.grades.Count</p>
-                    <p class="gemiddelde">voldoendes: @Model.stats["voldoendes"]</p>
-                    <p class="gemiddelde">onvoldoendes: @Model.stats["onvoldoendes"]</p>
+                    <h1>percentage voldoende</h1>
+                    <p class="gemiddelde">Percentage voldoendes: @(((double) Model.voldoendes / Model.item.cijfers.Count * 100).ToString("0.00").Replace(",", "."))%</p>
+                    <p class="gemiddelde">aantal cijfers: @Model.item.cijfers.Count</p>
+                    <p class="gemiddelde">voldoendes: @Model.voldoendes</p>
+                    <p class="gemiddelde">onvoldoendes: @Model.onvoldoendes</p>
                 </div>
                 <div class="canvas">
                     <canvas display="block" box-sizing="border-box" height="max-content" width="max-content" id="@letters[0]" style="max-height: 300px; width: fit-content;"></canvas>
@@ -34,23 +41,23 @@
         </div>
     </div>
 
-    <div class="stack2">
-
-        <div class="stats">
-            <h1>@(Model.charts[1].Options.Plugins.Title?.Text?[0] ?? "")</h1>
-            <div class="canvas">
-                <canvas display="block" box-sizing="border-box" height="max-content" width="max-content" id="@letters[1]"></canvas>
-            </div>
-        </div>
-
-        <div class="stats">
-            <h1>@(Model.charts[2].Options.Plugins.Title?.Text?[0] ?? "")</h1>
-            <div class="canvas">
-                <canvas display="block" box-sizing="border-box" height="max-content" width="max-content" id="@letters[2]"></canvas>
-            </div>
-        </div>
-
-    </div>
+    @* <div class="stack2"> *@
+    @* *@
+    @*     <div class="stats"> *@
+    @*         <h1>@(Model.charts[1].Options.Plugins.Title?.Text?[0] ?? "")</h1> *@
+    @*         <div class="canvas"> *@
+    @*             <canvas display="block" box-sizing="border-box" height="max-content" width="max-content" id="@letters[1]"></canvas> *@
+    @*         </div> *@
+    @*     </div> *@
+    @* *@
+    @*     <div class="stats"> *@
+    @*         <h1>@(Model.charts[2].Options.Plugins.Title?.Text?[0] ?? "")</h1> *@
+    @*         <div class="canvas"> *@
+    @*             <canvas display="block" box-sizing="border-box" height="max-content" width="max-content" id="@letters[2]"></canvas> *@
+    @*         </div> *@
+    @*     </div> *@
+    @* *@
+    @* </div> *@
 
     <div class="stack2">
 
@@ -73,9 +80,9 @@
 <script minimize>
 @Context.Items["dmjs"]
 
-    Zermos.mainAfterLoad = () => load();
+    //Zermos.mainAfterLoad = () => load();
 
-    @Html.Raw($"function load() {{{string.Join("", ((List<ChartJSCore.Models.Chart>) Model.charts).Select((m, i) => m.CreateChartCode(letters[i].ToString())))}}}");
+    //@*Html.Raw($"function load() {{{string.Join("", ((List<ChartJSCore.Models.Chart>) Model.charts).Select((m, i) => m.CreateChartCode(letters[i].ToString())))}}}");*@
     
     //WAT MOET IK HALEN
     var grade_wmih = document.getElementById("grade_wmih");
@@ -93,8 +100,8 @@
         
         console.log(grade_wmih.value, weight_wmih.value);
         
-        const totaleWeging = @Model.stats["weging"] + parseInt(weight_wmih.value);
-        const alBehaaldePunten = @Model.stats["som"];
+        const totaleWeging = @Model.weging + parseInt(weight_wmih.value);
+        const alBehaaldePunten = @Model.som.ToString("0.00").Replace(",", ".");
         const nogTeBehalen = parseFloat(grade_wmih.value) * totaleWeging - alBehaaldePunten;
         const nogTeBehalenPunten = nogTeBehalen / parseInt(weight_wmih.value);
         
@@ -125,8 +132,8 @@
     
     //calculation function
     function wgis() {
-        const totaleWeging = @Model.stats["weging"] + parseInt(weight_wgis.value);
-        const alBehaaldePunten = @Model.stats["som"] + parseFloat(grade_wgis.value) * parseInt(weight_wgis.value);
+        const totaleWeging = @Model.weging + parseInt(weight_wgis.value);
+        const alBehaaldePunten = @Model.som.ToString("0.00").Replace(",", ".") + parseFloat(grade_wgis.value) * parseInt(weight_wgis.value);
         const nogTeBehalenPunten = alBehaaldePunten / totaleWeging;
         
         if (isNaN(nogTeBehalenPunten)){       

@@ -19,7 +19,7 @@
         
         <h1 class="grades-title">@Model.items[0].vakNaam</h1>
 
-        <table class="grade-table" onclick="ReplacePage('')">
+        <table class="grade-table" onclick="ReplacePage('@Url.Action("CijferStatistieken", "Somtoday", new { vak = Model.items[0].vakAfkorting.Capitalize() })')">
             <tr class="grade-table-header">
                 <td>
                      Cijfer statistieken

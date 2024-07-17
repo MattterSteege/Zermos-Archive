@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Zermos_Web.Models.SomtodayGradesModel
 {
@@ -16,7 +17,10 @@ namespace Zermos_Web.Models.SomtodayGradesModel
 
     public class Item
     {
-        //public List<Link> links { get; set; }
+        public string resultaatType => links[0].type?.Replace("resultaten.RGeldend", "").Replace("Resultaat", "") ?? "onbekend";
+        public bool isVoortgang => resultaatType?.Contains("Voortgang") ?? false;
+        public bool isSE => resultaatType?.Contains("Examen") ?? false;
+        public List<Link> links { get; set; }
         //public List<Permission> permissions { get; set; }
         public AdditionalObjects additionalObjects { get; set; }
         public double cijfer { get; set; }
@@ -44,6 +48,11 @@ namespace Zermos_Web.Models.SomtodayGradesModel
     public class SomtodayGradesModel
     {
         public List<Item> items { get; set; }
+    }
+    
+    public class Link
+    {
+        public string type { get; set; }
     }
 }
 
