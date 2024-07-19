@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Zermos_Web.Models.SomtodayGradesModel;
 
 namespace Zermos_Web.Utilities
 {
@@ -64,7 +65,31 @@ namespace Zermos_Web.Utilities
             return snapshots;
         }
         
-        
+        public static List<double> CalculateWeightedAverageSnapshots(double[] cijfers, int[] weights)
+        {
+            if (cijfers.Length != weights.Length)
+                throw new ArgumentException("The number of grades must match the number of weights.");
+
+            List<double> snapshots = new List<double>();
+
+            double sum = 0;
+            double weightSum = 0;
+            
+            for (var i = 0; i < cijfers.Length; i++)
+            {
+                if (weights[i] == 0)
+                    continue;
+                
+                sum += cijfers[i] * weights[i];
+                weightSum += weights[i];
+
+                var currentAverage = sum / weightSum;
+                snapshots.Add(currentAverage);
+            }
+            
+            return snapshots;
+        }
+            
 
         public static IList<double?> CalculateStandardDeviationSnapshots(float[] grades, int[] weights)
         {

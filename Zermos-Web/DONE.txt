@@ -1,4 +1,4 @@
-0.5.4 - The more the better
+0.5.4 
 
 - algemeen
     - swapped Font awesome with a custom hosted version
@@ -9,6 +9,11 @@
     - voortgangsdossier en examendossier cijfers zijn nu gescheiden
     - Swipe heel makkelijk tussen je voortgang, examen en laatste cijfers
     - Pas instellingen aan per type cijfer (is tijdelijk opgeslagen en wordt vergeten als je de pagina verlaat/ververst)
+    - De instellingen worden opgeslagen in de localstorage van je browser, dus het wordt niet opgeslagen op de server en dus niet tussen verschillende apparaten gesynchroniseerd
+    - De statistiekenpagina is opnieuw gemaakt en is nu een stuk sneller
+    
+- Zermos recap
+    - De recap is weer afgelopen, bedankt voor het meedoen en tot de volgende recap!
 - De instellingen worden opgeslagen in de localstorage van je browser, dus het wordt niet opgeslagen op de server en dus niet tussen verschillende apparaten gesynchroniseerd
 
 - koppelingen

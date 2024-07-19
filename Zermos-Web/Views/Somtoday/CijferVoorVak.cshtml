@@ -48,7 +48,7 @@
             <table class="grade-table" onclick="@(grade.additionalObjects.resultaatkolom.StringToBase64String().Replace("=", "") + "()")">
                 <tr class="grade-table-header">
                     <td colspan="2">
-                        @grade.additionalObjects.vaknaam.Capitalize() @(grade.toetssoort == "Schoolexamen" ? "SE" : "")
+                        @grade.additionalObjects.vaknaam.Capitalize() @(grade.isSE ? "SE" : "")
                     </td>
                     <td></td>
                     <td>@(grade.weging)x</td>

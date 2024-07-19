@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net.Http;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using ChartJSCore.Helpers;
-using ChartJSCore.Models;
 using Infrastructure;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -20,14 +15,11 @@ using Zermos_Web.Models;
 using Zermos_Web.Models.Requirements;
 using Zermos_Web.Models.Somtoday;
 using Zermos_Web.Models.SomtodayLeermiddelen;
-using Zermos_Web.Models.SomtodayGradesModel;
 using Zermos_Web.Models.somtodayHomeworkModel;
 using Zermos_Web.Models.SomtodayPlaatsingen;
-using Zermos_Web.Models.SomtodayVakgemiddeldenModel;
 using Zermos_Web.Models.SortedSomtodayGradesModel;
 using Zermos_Web.Utilities;
-using Data = ChartJSCore.Models.Data;
-using Item = Zermos_Web.Models.SomtodayGradesModel.Item;
+using Item = Zermos_Web.Models.SomtodayLeermiddelen.Item;
 
 namespace Zermos_Web.Controllers
 {
@@ -80,7 +72,7 @@ namespace Zermos_Web.Controllers
             return PartialView(grades);
         }
 
-        //[ZermosPage]
+        [ZermosPage]
         [HttpGet("Somtoday/Cijfers/{vak}")]
         public async Task<IActionResult> CijferVoorVak(string vak)
         {
@@ -189,9 +181,9 @@ namespace Zermos_Web.Controllers
             
             //bar chart: most common grade
             var grades = new List<int> {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-            foreach (var item in somtodayGradesModel.items)
+            foreach (var item in allgrades)
             {
-                var grade = (int) Math.Round(NumberUtils.ParseFloat(item.cijfer), 0, MidpointRounding.AwayFromZero) - 1;
+                var grade = (int) Math.Round(item.cijfer, 0, MidpointRounding.AwayFromZero) - 1;
                 grades[grade]++;
             }
             
@@ -220,7 +212,7 @@ namespace Zermos_Web.Controllers
                 wegingSE = wegingSE,
                 somSE = somSE,
                 containsSE = somtodayGradesModel.items[0].cijfersSE.Count > 0,
-                containsVoortgang = somtodayGradesModel.items[0].cijfers.Count > 0
+                containsVoortgang = somtodayGradesModel.items[0].cijfers.Count > 0,
             };
             
             

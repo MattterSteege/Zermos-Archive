@@ -12,7 +12,7 @@
 <div class="stats-container">
     <div class="stack2">
         <div class="stats">
-            <p class="stats-vak">Vak: @Model.item.vakNaam</p>
+            <h1>Vak: @Model.item.vakNaam</h1>
             @if (Model.containsVoortgang)
             {
                 <p class="gemiddelde">Gemiddelde: @((Model.som / Model.weging).ToString("0.00").Replace(",", "."))</p>
@@ -21,8 +21,8 @@
             {
             <p class="gemiddelde">Gemiddelde (SE): @((Model.somSE / Model.wegingSE).ToString("0.00").Replace(",", "."))</p>
             }
-            <p class="hoogste-cijfer">Hoogste cijfer: @Model.highest</p>
-            <p class="laagste-cijfer">Laagste cijfer: @Model.lowest</p>
+            <p class="hoogste-cijfer">Hoogste cijfer: @Model.highest.ToString("0.0").Replace(",", ".")</p>
+            <p class="laagste-cijfer">Laagste cijfer: @Model.lowest.ToString("0.0").Replace(",", ".")</p>
         </div>
 
         <div class="stats">
@@ -44,23 +44,159 @@
         </div>
     </div>
 
-    @* <div class="stack2"> *@
-    @* *@
-    @*     <div class="stats"> *@
-    @*         <h1>@(Model.charts[1].Options.Plugins.Title?.Text?[0] ?? "")</h1> *@
-    @*         <div class="canvas"> *@
-    @*             <canvas display="block" box-sizing="border-box" height="max-content" width="max-content" id="@letters[1]"></canvas> *@
-    @*         </div> *@
-    @*     </div> *@
-    @* *@
-    @*     <div class="stats"> *@
-    @*         <h1>@(Model.charts[2].Options.Plugins.Title?.Text?[0] ?? "")</h1> *@
-    @*         <div class="canvas"> *@
-    @*             <canvas display="block" box-sizing="border-box" height="max-content" width="max-content" id="@letters[2]"></canvas> *@
-    @*         </div> *@
-    @*     </div> *@
-    @* *@
-    @* </div> *@
+    <div class="stack2">
+
+        <div class="stats">
+            <h1>Meest voorkomende cijfer</h1>
+            <div class="canvas">
+                <div class="chart" id="@letters[1]">
+                    @{
+                    //Model.mostCommonGrade is an list of 10 elements, where the higher a certain index, the more common the grade is (index + 1 is the grade)
+                    int highest = Model.mostCommonGrade.Max();
+                    }
+
+                    @for (var index = 0; index < Model.mostCommonGrade.Count; index++)
+                    {
+                    var AfgerondCijfer = Model.mostCommonGrade[index];
+                    if (AfgerondCijfer == 0)
+                    {
+                    continue;
+                    }
+
+                    <div class="grade" style="height: @(((float) AfgerondCijfer / highest * 100).ToString("0.00").Replace(",", "."))%;">@(index + 1)</div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <h1>Cijfers over tijd</h1>
+            @{
+                List<double> grades = Model.item.cijfers.Where(c => c.isVoortgang).Select(c => c.cijfer).Reverse().ToList(); //List<double>
+            }
+            <div class="canvas">
+                <div class="chart" id="@letters[2]">
+                    <div class="horizontal-line">
+                        @foreach (var grade in grades)
+                        {
+                            <div class="grade">@grade.ToString("0.0").Replace(",", ".")</div>
+                        }
+                    </div>
+                    <div class="vertical-line">
+                        @for (var i = 0; i < 11; i++)
+                        {
+                            <div class="grade">@i</div>
+                        }
+                    </div>
+                    <div class="read-line">
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                    </div>
+                    <div class="read-line" style="justify-content: space-around; flex-direction: row;">
+                        @for (var i = 0; i < grades.Count; i++)
+                        {
+                            <div class="read-line-child" style="height: 100%; width: 1px;"></div>
+                        }
+                    </div>
+                    <div class="line">
+                        @{
+                            //the height of the line chart -> 100%, so the height of a bullet is grade * 10%
+                        }
+                        @for (var i = 0; i < grades.Count; i++)
+                        {
+                            var grade = grades[i];
+                            var height = grade * 10;
+                            <div class="point" style="bottom: @((height).ToString("0.000").Replace(",", "."))%"></div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="stack2">
+
+        @* a html css (JS) only line chart*@
+        <div class="stats">
+            <h1>Gemiddelde over tijd</h1>
+            <div class="canvas">
+                <div class="chart" id="@letters[2]">
+                    <div class="horizontal-line">
+                        @{
+                            List<int> wegingen = Model.item.cijfers.Where(c => c.isVoortgang).Select(c => c.weging).Reverse().ToList(); //List<int>
+                            double average = 0;
+                            int weging = 0;
+                            List<double> snapshots = new List<double>();
+                        }
+
+                        @for (var i = 0; i < grades.Count; i++)
+                        {
+                            average += grades[i] * wegingen[i];
+                            weging += wegingen[i];
+                            snapshots.Add(average / weging);
+
+                            <div class="grade">@((average / weging).ToString("0.0").Replace(",", "."))</div>
+                        }
+                    </div>
+                    <div class="vertical-line">
+                        <div class="grade">0</div>
+                        <div class="grade">1</div>
+                        <div class="grade">2</div>
+                        <div class="grade">3</div>
+                        <div class="grade">4</div>
+                        <div class="grade">5</div>
+                        <div class="grade">6</div>
+                        <div class="grade">7</div>
+                        <div class="grade">8</div>
+                        <div class="grade">9</div>
+                        <div class="grade">10</div>
+                    </div>
+                    <div class="read-line">
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                        <div class="read-line-child" style="height: 1px; width: 100%;"></div>
+                    </div>
+                    <div class="read-line" style="justify-content: space-around; flex-direction: row;">
+                        @for (var i = 0; i < grades.Count; i++)
+                        {
+                            <div class="read-line-child" style="height: 100%; width: 1px;"></div>
+                        }
+                    </div>
+                    <div class="line">
+                        @{
+                            //the height of the line chart -> 100%, so the height of a bullet is grade * 10%
+                        }
+                        @for (var i = 0; i < grades.Count; i++)
+                        {
+                            var grade = snapshots[i];
+                            <div class="point" style="bottom: @((grade * 10).ToString("0.000").Replace(",", "."))%"></div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        
+    </div>
 
     <div class="stack2">
 
@@ -68,14 +204,14 @@
             <h1>Wat moet ik halen?</h1>
             <input type="number" id="grade_wmih" placeholder="Welk cijfer wil je staan?" min="0" value="5.5" step="0.1">
             <input type="number" id="weight_wmih" placeholder="Hoe vaak telt de toets mee?" min="0" step="1">
-            <h1 style="display: none; text-align: center; margin: auto;" id="result_wmih"></h1>
+            <h1 style="display: block;text-align: center;font-size: var(--font-size-heading);margin: var(--padding) 0;" id="result_wmih"></h1>
         </div>
 
         <div class="stats">
             <h1>Wat ga ik staan?</h1>
             <input type="number" id="grade_wgis" placeholder="Welk cijfer ga je halen?" min="0" value="5.5" step="0.1">
             <input type="number" id="weight_wgis" placeholder="Hoe vaak telt de toets mee?" min="0" step="1">
-            <h1 style="display: none; text-align: center; margin: auto;" id="result_wgis"></h1>
+            <h1 style="display: block;text-align: center;font-size: var(--font-size-heading);margin: var(--padding) 0;" id="result_wgis"></h1>
         </div>
     </div>
 </div>
@@ -104,7 +240,10 @@ weight_wmih.addEventListener("change", function() {
 //calculation function
 function wmih() {
 
-    console.log(grade_wmih.value, weight_wmih.value);
+    if (parseInt(weight_wmih.value) === 0) {
+        result_wmih.style.display = "none";
+        return;
+    }
 
     const totaleWeging = @Model.weging + parseInt(weight_wmih.value);
     const alBehaaldePunten = @Model.som.ToString("0.00").Replace(",", ".");
@@ -141,6 +280,12 @@ weight_wgis.addEventListener("change", function() {
 
 //calculation function
 function wgis() {
+
+    if (parseInt(weight_wgis.value) === 0) {
+        result_wgis.style.display = "none";
+        return;
+    }
+
     const totaleWeging = @Model.weging + parseInt(weight_wgis.value);
     const alBehaaldePunten = @Model.som.ToString("0.00").Replace(",", ".") + parseFloat(grade_wgis.value) * parseInt(weight_wgis.value);
     const nogTeBehalenPunten = alBehaaldePunten / totaleWeging;
