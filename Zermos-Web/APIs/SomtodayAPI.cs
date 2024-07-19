@@ -42,17 +42,23 @@ public class SomtodayAPI
     {
         if (token == null) throw new ArgumentNullException(nameof(token));
 
+        string clientId = (string) TokenUtils.DecodeJwt(token).payload.client_id;
+        
         var form = new Dictionary<string, string>
         {
             {"grant_type", "refresh_token"},
             {"refresh_token", token},
             {"scope", "openid"},
-            {"client_id", "D50E0C06-32D1-4B41-A137-A9A850C892C2"}
+            {"client_id", clientId}
         };
 
         var response = await _httpClient.PostAsync("https://inloggen.somtoday.nl/oauth2/token", new FormUrlEncodedContent(form));
-            
-        if (response.IsSuccessStatusCode == false) return null;
+
+        if (response.IsSuccessStatusCode == false)
+        {
+            Console.WriteLine(response.Content.ReadAsStringAsync().Result);
+            return null;
+        }
             
         return JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(await response.Content.ReadAsStringAsync());
     }

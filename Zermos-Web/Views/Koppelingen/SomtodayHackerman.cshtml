@@ -47,7 +47,15 @@ string code2 = "// Stap 1: We maken twee hulpmiddelen\nconst ontcijferGeheimschr
 <script minimize>
 @Context.Items["dmjs"]
 
+    document.querySelector('.copy-button').addEventListener('click', function() {
+        document.querySelector('.copy-button').innerHTML = 'Gelukt!';
+        setTimeout(() => {
+            document.querySelector('.copy-button').innerHTML = 'Kopieer';
+        }, 3000);
+    });
+
     document.querySelector('button.submit').addEventListener('click',function(){
         window.open('https://leerling.somtoday.nl/','_blank');
     });
+    
 </script>

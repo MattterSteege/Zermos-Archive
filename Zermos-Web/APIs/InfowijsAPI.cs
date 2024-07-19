@@ -35,7 +35,7 @@ namespace Zermos_Web.APIs
             var json = TokenUtils.DecodeJwt(user.infowijs_access_token);
             var client = json.payload.customerProduct.name;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetSessionTokenAsync(user));
-            var response = await _httpClient.GetAsync($"https://{client}.hoyapp.nl/hoy/v3/messages?include_archived=0&since=4500000");
+            var response = await _httpClient.GetAsync($"https://{client}.hoyapp.nl/hoy/v3/messages?include_archived=0&since=5500000");
             return JsonConvert.DeserializeObject<InfowijsMessagesModel>(await response.Content.ReadAsStringAsync(), Converter.Settings);
             
             /*

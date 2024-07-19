@@ -125,12 +125,24 @@
         <h1 class="grades-title">Geschiedenis</h1>
         @foreach (var grade in Model.lastGrades)
         {
-            <table class="grade-table">
+            <table class="grade-table" @Html.Raw(GetNotificationClass(grade.datumInvoerEerstePoging))>
                 <tr class="grade-table-header">
-                    <td>@(grade.isSE ? "(SE) " : "")@grade.additionalObjects.vaknaam - @grade.omschrijving</td>
-                    <td style="text-align: end;">@grade.datumInvoerEerstePoging.ToString("dd MMMM HH:mm")</td>
-                    <td>@(grade.weging)x</td>
-                    <td class="@(grade.cijfer >= 5.45f ? "sufficient" : "insufficient ")">@grade.cijfer.ToString(CultureInfo.InvariantCulture)</td>
+                    <td>@(grade.isSE ? "(SE) " : "")@grade.additionalObjects.vaknaam</td>
+                    <td style="width: 10%; text-align: end;">@(grade.weging)x</td>
+                    <td style="width: 10%; text-align: end;" class="@(grade.cijfer >= 5.45f ? "sufficient" : "insufficient ")">@grade.cijfer.ToString(CultureInfo.InvariantCulture)
+                    @if (grade.isSE)
+                    {
+                        <i class="fa-solid fa-graduation-cap" aria-hidden="true" onclick="happyCappy(this)"></i>
+                    }
+                    @if (grade.type == "SamengesteldeToetsKolom")
+                    {
+                        <i class="fa-solid fa-layer-group" aria-hidden="true" onclick="happyCappy(this)"></i>
+                    }
+                    </td>
+                </tr>
+                <tr>
+                    <td>@grade.omschrijving</td>
+                    <td style="width: 10%; text-align: end;">@grade.datumInvoerEerstePoging.ToString("dd MMMM", new CultureInfo("nl-NL"))</td>
                 </tr>
             </table>
         }
