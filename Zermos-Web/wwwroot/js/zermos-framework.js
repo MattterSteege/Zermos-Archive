@@ -650,8 +650,8 @@ function HasPreview(preview) {
 
 //==============================================================
 var sidebarLoadSpeed = 250;
-function newSidebar() {
-  fetch("/data/sidebar?no-framework")
+function newSidebar(forceShow = false) {
+  fetch("/data/sidebar?no-framework&forceShow=" + forceShow)
     .then(response => response.text())
     .then(data => {
       var sidebar = document.querySelector("#sidebar")

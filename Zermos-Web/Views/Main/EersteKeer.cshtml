@@ -19,6 +19,7 @@ function startingAnimation() {
     document.getElementById("start").classList.add("animate");
     document.getElementById("zermos").classList.add("animate");
     setTimeout(() => {
+        newSidebar();
         ReplacePage('/koppelingen');
     }, 3000);
 }
@@ -72,30 +73,12 @@ Zermos.mainAfterLoad = () => {
                 slot: 'Hier zijn de leermiddelen te vinden die je nodig hebt voor je vakken. (online (werk)boeken, etc.)'
             },
             {
-                el: '#informatiebord',
-                options: {
-                    layerEvent: tour.next.bind(tour),
-                    slotPosition: 'right'
-                },
-                slot: 'Hier vind je het nieuws dat op het TV scherm bij de kluisjes staat.'
-            },
-        
-            {
-                el: '#printen',
-                options: {
-                    layerEvent: tour.next.bind(tour),
-                    slotPosition: 'right'
-                },
-                slot: 'Door hier te klikken wordt je automatisch doorgelinkt naar de website om te printen, mits je ingelogd bent bij Microsoft, anders moet je dat nog even doen.'
-            },
-        
-            {
                 el: '#schoolnieuws',
                 options: {
                     layerEvent: tour.next.bind(tour),
                     slotPosition: 'right'
                 },
-                slot: 'Hier staan de nieuwsberichten uit de Antonius app.'
+                slot: 'Hier staan de nieuwsberichten uit de Hoy app.'
             },
             {
                 el: '#schoolkalender',
@@ -176,28 +159,12 @@ Zermos.mainAfterLoad = () => {
                     slot: 'Hier zijn de leermiddelen te vinden die je nodig hebt voor je vakken. (online (werk)boeken, etc.)'
                 },
                 {
-                    el: '#informatiebord',
-                    options: {
-                        layerEvent: tour.next.bind(tour),
-                        slotPosition: 'left'
-                    },
-                    slot: 'Hier vind je het nieuws dat op het TV scherm bij de kluisjes staat.'
-                },
-                {
-                    el: '#printen',
-                    options: {
-                        layerEvent: tour.next.bind(tour),
-                        slotPosition: 'left'
-                    },
-                    slot: 'Door hier te klikken wordt je automatisch doorgelinkt naar de website om te printen, mits je ingelogd bent bij Microsoft, anders moet je dat nog even doen.'
-                },
-                {
                     el: '#schoolnieuws',
                     options: {
                         layerEvent: tour.next.bind(tour),
                         slotPosition: 'left'
                     },
-                    slot: 'Hier staan de nieuwsberichten uit de Antonius app.'
+                    slot: 'Hier staan de nieuwsberichten uit de Hoy app.'
                 },
                 {
                     el: '#schoolkalender',
@@ -260,28 +227,12 @@ Zermos.mainAfterLoad = () => {
                     slot: 'Hier vind je je cijfers en cijferstatistieken.'
                 },
                 {
-                    el: '#informatiebord',
-                    options: {
-                        layerEvent: tour.next.bind(tour),
-                        slotPosition: 'right'
-                    },
-                    slot: 'Hier vind je het nieuws dat op het TV scherm bij de kluisjes staat.'
-                },
-                {
-                    el: '#printen',
-                    options: {
-                        layerEvent: tour.next.bind(tour),
-                        slotPosition: 'right'
-                    },
-                    slot: 'Door hier te klikken wordt je automatisch doorgelinkt naar de website om te printen, mits je ingelogd bent bij Microsoft, anders moet je dat nog even doen.'
-                },
-                {
                     el: '#schoolnieuws',
                     options: {
                         layerEvent: tour.next.bind(tour),
                         slotPosition: 'right'
                     },
-                    slot: 'Hier staan de nieuwsberichten uit de Antonius app.'
+                    slot: 'Hier staan de nieuwsberichten uit de Hoy app.'
                 },
                 {
                     el: '#schoolkalender',
@@ -311,4 +262,7 @@ Zermos.mainAfterLoad = () => {
         }
     }
 }
+
+newSidebar(true);
+
 </script>

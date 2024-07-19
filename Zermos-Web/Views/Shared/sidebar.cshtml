@@ -3,6 +3,7 @@
     bool isZermeloGekoppeld = (bool) ViewData["isZermeloGekoppeld"];
     bool isInfowijsGekoppeld = (bool) ViewData["isInfowijsGekoppeld"];
     bool isSomtodayGekoppeld = (bool) ViewData["isSomtodayGekoppeld"];
+    bool forceShow = (bool) (ViewData["forceShow"] ?? "false");
 }
 
 
@@ -46,7 +47,7 @@
             </li>
         }
 
-        @if (isZermeloGekoppeld)
+        @if (isZermeloGekoppeld || forceShow)
         {
         <h5 class="Heading">Zermelo</h5>
 
@@ -60,7 +61,7 @@
         </li>
         }
 
-        @if (isSomtodayGekoppeld)
+        @if (isSomtodayGekoppeld || forceShow)
         {
         <h5 class="Heading">SOMtoday</h5>
 
@@ -115,7 +116,7 @@
         </li>
         }
 
-        @if (isInfowijsGekoppeld)
+        @if (isInfowijsGekoppeld || forceShow)
         {
         <h5 class="Heading">Infowijs</h5>
 
