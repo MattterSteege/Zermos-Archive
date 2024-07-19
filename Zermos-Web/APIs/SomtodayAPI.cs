@@ -42,23 +42,17 @@ public class SomtodayAPI
     {
         if (token == null) throw new ArgumentNullException(nameof(token));
 
-        string clientId = (string) TokenUtils.DecodeJwt(token).payload.client_id;
-        
         var form = new Dictionary<string, string>
         {
             {"grant_type", "refresh_token"},
             {"refresh_token", token},
             {"scope", "openid"},
-            {"client_id", clientId}
+            {"client_id", "D50E0C06-32D1-4B41-A137-A9A850C892C2"}
         };
 
         var response = await _httpClient.PostAsync("https://inloggen.somtoday.nl/oauth2/token", new FormUrlEncodedContent(form));
-
-        if (response.IsSuccessStatusCode == false)
-        {
-            Console.WriteLine(response.Content.ReadAsStringAsync().Result);
-            return null;
-        }
+            
+        if (response.IsSuccessStatusCode == false) return null;
             
         return JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(await response.Content.ReadAsStringAsync());
     }
@@ -198,14 +192,6 @@ public class SomtodayAPI
 
         foreach (Gemiddelden gemiddelden in vakgemiddelden?.gemiddelden)
         {
-            var requests = (total / gradesPerFetch) + 1;
-
-            for (var i = 1; i < requests; i += 1)
-            {
-                _httpClient.DefaultRequestHeaders.Clear();
-                _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.somtoday_access_token);
-                _httpClient.DefaultRequestHeaders.Add("Range", $"items={i * gradesPerFetch}-{(i * gradesPerFetch) + (gradesPerFetch - 1)}");
-                _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
             var item = new Models.SortedSomtodayGradesModel.Item
             {
                 cijfer = gemiddelden.isVoorVoortgangsdossier ? gemiddelden.voortgangsdossierResultaat.formattedResultaat : "-",

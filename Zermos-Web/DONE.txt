@@ -1,46 +1,31 @@
-0.5.4 
+Version 0.5.4
 
 - Koppelingen - Zermelo
-    - je kan nu ook met langere schoolnamen inloggen (sorry voor de mensen die hier last van hadden)
-    
+    - Je kunt nu ook inloggen met langere schoolnamen (sorry voor degenen die hier last van hadden).
+
 - Koppelingen - Somtoday
-    - Er is nog een koppelmethode toegevoegd, dit is niet de mooiste methode, maar het werkt met (waarschijnlijk) alle scholen, ook als ze een externe inlogprovider hebben
-    
-- Account
-    - Je kan nu weer de account pagina openen als je nog geen schooltijden hebt ingesteld
-    
-- Somtoday - leermiddelen
-    - Als je geen leermiddelen hebt, dan opent de pagina nu wel met een 'voeg leermiddelen toe' knop
-    
-    
-- algemeen
-    - swapped Font awesome with a custom hosted version
+    - Er is een extra koppelmethode toegevoegd. Hoewel dit niet de mooiste methode is, werkt het waarschijnlijk met alle scholen, ook als ze een externe inlogprovider hebben.
+    - Als je apps nu ontkoppelt, wordt de pagina niet meer opnieuw geladen, maar wordt alleen de sidebar bijgewerkt. Dit is veel smoother.
 
-- Somtoday - cijfers
-    - Er is een heel nieuw systeem gemaakt voor je cijfers
-    - Je kan nu je cijfers van alle jaren zien
-    - voortgangsdossier en examendossier cijfers zijn nu gescheiden
-    - Swipe heel makkelijk tussen je voortgang, examen en laatste cijfers
-    - Pas instellingen aan per type cijfer (is tijdelijk opgeslagen en wordt vergeten als je de pagina verlaat/ververst)
-    - De instellingen worden opgeslagen in de localstorage van je browser, dus het wordt niet opgeslagen op de server en dus niet tussen verschillende apparaten gesynchroniseerd
-    - De statistiekenpagina is opnieuw gemaakt en is nu een stuk sneller
-    - Statestieken worden nu 'in house' berekend, dus er is geen externe code die ingeladen hoeft te worden, dus dat betekend weer snellere laadtijden
-    - De statistiekenpagina is nu ook meer responsive (eerst moest ik met canvas elementen werken en dat was een licht ~~geku...~~ gedoe)
-    
-- Zermos recap
-    - De recap is weer afgelopen, bedankt voor het meedoen en tot de volgende recap!
-- De instellingen worden opgeslagen in de localstorage van je browser, dus het wordt niet opgeslagen op de server en dus niet tussen verschillende apparaten gesynchroniseerd
-
-- koppelingen
-    - je kan nu ook met langere schoolnamen inloggen bij de koppeling met Zermelo (sorry voor de mensen die hier last van hadden)
-    - Er is nog een koppelmethode voor Somtoday toegevoegd, dit is niet de mooiste methode, maar het werkt met (waarschijnlijk) alle scholen, ook als ze een externe inlogprovider hebben
-    - Als je apps nu ontkoppelt, dan wordt de pagina niet meer opnieuw geladen, maar wordt alleen de sidebar geupdate. Dit is een stuk smoother.
-    
 - Account
-    - Je kan nu weer de account pagina openen als je nog geen schooltijden hebt ingesteld
-    
-- Somtoday - leermiddelen
-    - Als je geen leermiddelen hebt, dan opent de pagina nu wel met een 'voeg leermiddelen toe' knop
-    
-    
-  
+    - Je kunt nu weer de accountpagina openen als je nog geen schooltijden hebt ingesteld.
+
+- Somtoday - Leermiddelen
+    - Als je geen leermiddelen hebt, opent de pagina nu met een 'voeg leermiddelen toe' knop.
+
+- Algemeen
+    - Font Awesome is vervangen door een lokaal gehoste versie.
+
+- Somtoday - Cijfers
+    - Er is een geheel nieuw systeem gemaakt voor het bekijken van cijfers.
+    - Je kunt nu je cijfers van alle jaren zien.
+    - Voortgangsdossier en examendossier cijfers zijn nu gescheiden.
+    - Swipe eenvoudig tussen je voortgang, examen en laatste cijfers.
+    - Pas instellingen aan per type cijfer (deze worden tijdelijk opgeslagen en vergeten als je de pagina verlaat of ververst).
+    - De instellingen worden opgeslagen in de local storage van je browser. Dit betekent dat ze niet op de server worden opgeslagen en niet tussen verschillende apparaten worden gesynchroniseerd.
+    - De statistiekenpagina is opnieuw gemaakt en is nu veel sneller.
+    - Statistieken worden nu 'in-house' berekend, wat leidt tot snellere laadtijden omdat er geen externe code hoeft te worden ingeladen.
+    - De statistiekenpagina is nu ook meer responsive. Voorheen moest ik met canvas-elementen werken en dat was een gedoe.
+
+- Zermelo Recap
+    - De recap is weer afgelopen. Bedankt voor het meedoen en tot de volgende recap!
