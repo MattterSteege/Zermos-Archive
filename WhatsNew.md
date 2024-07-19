@@ -4,6 +4,42 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - Versie 0.6 - 19-07-2024
+0.6 - en jij krijgt een cijfer, en jij krijgt een cijfer. Iedereen krijgt een cijfer!
+
+*momenteel in Bèta, je kan je beta Versie vinden op [zermos-beta.kronk.tech](https://zermos-beta.kronk.trech)
+
+- Koppelingen - Zermelo
+    - Je kunt nu ook inloggen met langere schoolnamen (sorry voor degenen die hier last van hadden).
+
+- Koppelingen - Somtoday
+    - Er is een extra koppelmethode toegevoegd. Hoewel dit niet de mooiste methode is, werkt het waarschijnlijk met alle scholen, ook als ze een externe inlogprovider hebben.
+    - Als je apps nu ontkoppelt, wordt de pagina niet meer opnieuw geladen, maar wordt alleen de sidebar bijgewerkt. Dit is veel smoother.
+
+- Account
+    - Je kunt nu weer de accountpagina openen als je nog geen schooltijden hebt ingesteld.
+
+- Somtoday - Leermiddelen
+    - Als je geen leermiddelen hebt, opent de pagina nu met een 'voeg leermiddelen toe' knop.
+
+- Algemeen
+    - Font Awesome is vervangen door een lokaal gehoste versie.
+
+- Somtoday - Cijfers
+    - Er is een geheel nieuw systeem gemaakt voor het bekijken van cijfers.
+    - Je kunt nu je cijfers van alle jaren zien.
+    - Voortgangsdossier en examendossier cijfers zijn nu gescheiden.
+    - Swipe eenvoudig tussen je voortgang, examen en laatste cijfers.
+    - Pas instellingen aan per type cijfer (deze worden tijdelijk opgeslagen en vergeten als je de pagina verlaat of ververst).
+    - De instellingen worden opgeslagen in de local storage van je browser. Dit betekent dat ze niet op de server worden opgeslagen en niet tussen verschillende apparaten worden gesynchroniseerd.
+    - De statistiekenpagina is opnieuw gemaakt en is nu veel sneller.
+    - Statistieken worden nu 'in-house' berekend, wat leidt tot snellere laadtijden omdat er geen externe code hoeft te worden ingeladen.
+    - De statistiekenpagina is nu ook meer responsive. Voorheen moest ik met canvas-elementen werken en dat was een gedoe.
+
+- Zermelo Recap
+    - De recap is weer afgelopen. Bedankt voor het meedoen en tot de volgende recap!
+
+
 # Release Notes - Versie 0.5.4 - 06-07-2024
 0.5.4 - The more the better
 
