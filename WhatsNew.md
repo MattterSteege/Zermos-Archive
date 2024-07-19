@@ -7,7 +7,7 @@ nav_exclude: false
 # Release Notes - Versie 0.6 - 19-07-2024
 0.6 - en jij krijgt een cijfer, en jij krijgt een cijfer. Iedereen krijgt een cijfer!
 
-*momenteel in Bèta, je kan je beta Versie vinden op [zermos-beta.kronk.tech](https://zermos-beta.kronk.trech)
+*momenteel in Bèta, je kan je beta Versie vinden op [zermos-beta.kronk.tech](https://zermos-beta.kronk.tech)
 
 - Koppelingen - Zermelo
     - Je kunt nu ook inloggen met langere schoolnamen (sorry voor degenen die hier last van hadden).
