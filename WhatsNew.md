@@ -27,10 +27,9 @@ nav_exclude: false
 
 - Somtoday - Cijfers
     - Er is een geheel nieuw systeem gemaakt voor het bekijken van cijfers.
-    - Je kunt nu je cijfers van alle jaren zien.
     - Voortgangsdossier en examendossier cijfers zijn nu gescheiden.
     - Swipe eenvoudig tussen je voortgang, examen en laatste cijfers.
-    - Pas instellingen aan per type cijfer (deze worden tijdelijk opgeslagen en vergeten als je de pagina verlaat of ververst).
+    - Pas instellingen aan per type cijfer 
     - De instellingen worden opgeslagen in de local storage van je browser. Dit betekent dat ze niet op de server worden opgeslagen en niet tussen verschillende apparaten worden gesynchroniseerd.
     - De statistiekenpagina is opnieuw gemaakt en is nu veel sneller.
     - Statistieken worden nu 'in-house' berekend, wat leidt tot snellere laadtijden omdat er geen externe code hoeft te worden ingeladen.
