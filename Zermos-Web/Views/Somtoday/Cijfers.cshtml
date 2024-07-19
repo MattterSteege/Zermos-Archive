@@ -95,7 +95,7 @@
             cijferSECount++;
             
             //Combine the data from cijferSE with the structure of cijfer
-            <table class="grade-table" @Html.Raw(GetNotificationClass((grade.cijfersSE != null && grade.cijfersSE.Count > 0) ? grade.cijfersSE.FirstOrDefault()!.datumInvoerEerstePoging : DateTime.MinValue)) onclick="ReplacePage('@Url.Action("CijferVoorVak", "Somtoday", new { vak = grade.vakAfkorting.Capitalize() })')">
+            <table class="grade-table" @Html.Raw(GetNotificationClass((grade.cijfersSE != null && grade.cijfersSE.Count > 0) ? grade.cijfersSE.FirstOrDefault()!.datumInvoerEerstePoging : DateTime.MinValue))> @*onclick="ReplacePage('@Url.Action("CijferVoorVak", "Somtoday", new { vak = grade.vakAfkorting.Capitalize() })')"*@
                 <tr class="grade-table-header">
                     <td rowspan="2"><i class="fa-solid fa-book" data-name="@grade.vakNaam.ToLower()" data-name-short="@grade.vakAfkorting.ToLower()"></i></td>
                     <td>@grade.vakNaam</td>
@@ -127,7 +127,7 @@
         {
             <table class="grade-table">
                 <tr class="grade-table-header">
-                    <td>@(grade.toetssoort == "Schoolexamen" ? "(SE) " : "")@grade.additionalObjects.vaknaam - @grade.omschrijving</td>
+                    <td>@(grade.isSE ? "(SE) " : "")@grade.additionalObjects.vaknaam - @grade.omschrijving</td>
                     <td style="text-align: end;">@grade.datumInvoerEerstePoging.ToString("dd MMMM HH:mm")</td>
                     <td>@(grade.weging)x</td>
                     <td class="@(grade.cijfer >= 5.45f ? "sufficient" : "insufficient ")">@grade.cijfer.ToString(CultureInfo.InvariantCulture)</td>
@@ -300,7 +300,7 @@
         
         function getSettings()
         {
-            return localStorage.getItem('gradeSettings') ? JSON.parse(localStorage.getItem('gradeSettings')) : [null, null];
+            return localStorage.getItem('gradeSettings') ? JSON.parse(localStorage.getItem('gradeSettings')) : ["",""];
         }
 
 
@@ -370,7 +370,7 @@
             else if (panel === 'examen') {
                 new ZermosModal()
                 .setTitle("Schoolexamen cijfers")
-                .addText("De schoolexamen cijfers zijn cijfers die je hebt gehaald voor toetsen die meetellen voor je schoolexamen. Dit zijn cijfers die uiteindelijk meetellen voor je centraal examen.")
+                .addText("De schoolexamen cijfers zijn cijfers die je hebt gehaald voor toetsen die meetellen voor je schoolexamen. Dit zijn cijfers die uiteindelijk meetellen voor je centraal examen. <br><br>Helaas hebben deze cijfers geen pagina waar je alle cijfers kan zien die je hebt gehaald, dit komt omdat de cijfers (vaak) over verschillende leerjaren worden gegeven en ik dat niet in een keer kan opvragen. Hopelijk komt dit in de toekomst nog, maar dat is momenteel niet mijn grootste prioriteit. Als je SE cijfers hebt voor vakken waar je dat jaar ook voorgangsdossier cijfers voor hebt gekregen kun je ze wel bekijken, ga dan naar 'Rapport' en klik op het desbetreffende vak.")
                 .setSubmitButtonLabel("Hmm, oké")
                 .open();
             }

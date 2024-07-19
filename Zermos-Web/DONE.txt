@@ -11,6 +11,8 @@
     - Pas instellingen aan per type cijfer (is tijdelijk opgeslagen en wordt vergeten als je de pagina verlaat/ververst)
     - De instellingen worden opgeslagen in de localstorage van je browser, dus het wordt niet opgeslagen op de server en dus niet tussen verschillende apparaten gesynchroniseerd
     - De statistiekenpagina is opnieuw gemaakt en is nu een stuk sneller
+    - Statestieken worden nu 'in house' berekend, dus er is geen externe code die ingeladen hoeft te worden, dus dat betekend weer snellere laadtijden
+    - De statistiekenpagina is nu ook meer responsive (eerst moest ik met canvas elementen werken en dat was een licht ~~geku...~~ gedoe)
     
 - Zermos recap
     - De recap is weer afgelopen, bedankt voor het meedoen en tot de volgende recap!

@@ -54,7 +54,7 @@
                     <td>@(grade.weging)x</td>
                     <td class="@(grade.cijfer >= 5.5f ? "sufficient" : "insufficient ")">
                         @grade.formattedResultaat
-                        @if (grade.toetssoort == "Schoolexamen")
+                        @if (grade.isSE)
                         {
                             <i class="fa-solid fa-graduation-cap" aria-hidden="true" onclick="happyCappy(this)"></i>
                         }                        
