@@ -58,7 +58,7 @@ namespace Zermos_Web.Controllers
             else
                 grades = await somtodayApi.GetGradesAndVakgemiddelden(user, plaatsingen, leerjaar: leerjaar);
             
-            if (leerjaar != -1)
+            if (leerjaar == -1)
             {
                 ZermosUser = new user
                 {
@@ -79,7 +79,7 @@ namespace Zermos_Web.Controllers
             if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
             {
                 var _grades = JsonConvert.DeserializeObject<SortedSomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? "{}");
-                _grades.items = _grades.items.FindAll(x => x.vakAfkorting == vak.ToLower());
+                _grades.items = _grades.items.FindAll(x => x.vakAfkorting.ToLower() == vak.ToLower());
                 _grades.lastGrades = null;
                 _grades.voortGangsdossierGemiddelde = null;
                 return PartialView(_grades);
@@ -104,7 +104,7 @@ namespace Zermos_Web.Controllers
             
             Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
 
-            grades.items = grades.items.FindAll(x => x.vakAfkorting == vak.ToLower());
+            grades.items = grades.items.FindAll(x => x.vakAfkorting.ToLower() == vak.ToLower());
             grades.lastGrades = null;
             grades.voortGangsdossierGemiddelde = null;
             

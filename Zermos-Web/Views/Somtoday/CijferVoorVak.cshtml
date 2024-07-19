@@ -1,12 +1,11 @@
 ﻿@using Zermos_Web.Models.SortedSomtodayGradesModel
 @using Zermos_Web.Utilities
+@using Item = Zermos_Web.Models.SomtodayGradesModel.Item
 @model Zermos_Web.Models.SortedSomtodayGradesModel.SortedSomtodayGradesModel 
 
 @{
     //for all the grades, set item.samengesteldeToetsen to all the grades where item.resultaatkolomId is the same as item.samengesteldeToetskolomId 
-    var grades = Model.items[0].cijfersSE.Concat(Model.items[0].cijfers).ToList().OrderByDescending(x => x.periode).ThenByDescending(x => x.datumInvoerEerstePoging).ToList();
-    
-    
+    var grades = Model.items.Count > 0 ? Model.items[0].cijfersSE.Concat(Model.items[0].cijfers).ToList().OrderByDescending(x => x.periode).ThenByDescending(x => x.datumInvoerEerstePoging).ToList() : new List<Item>();
 }
 
 <link rel="stylesheet" href="~/css/somtoday.css"/>
