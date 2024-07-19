@@ -20,11 +20,11 @@
       "icon": "<i class=\"fa-solid fa-paintbrush\"></i>"
     },
     {
-      "keywords": ["beeldende vorming", "bv, bte, kubv"],
+      "keywords": ["beeldende vorming", "bv", "bte", "kubv"],
       "icon": "<i class=\"fa-solid fa-paintbrush\"></i>"
     },
     {
-      "keywords": ["chinese taal en letterkunde", "chinees", "ch, chtl"],
+      "keywords": ["chinese taal en letterkunde", "chinees", "ch", "chtl"],
       "icon": "<i class=\"fa-solid fa-language\"></i>"
     },
     {
@@ -104,7 +104,7 @@
       "icon": "<i class=\"fa-solid fa-atom\"></i>"
     },
     {
-      "keywords": ["natuur- en scheikunde", "nask", "nsk", "nso"],
+      "keywords": ["natuur- en scheikunde", "nask", "nsk", "nso", "wetenschap", "wetenschaporiëntatie"],
       "icon": "<i class=\"fa-solid fa-atom\"></i>"
     },
     {

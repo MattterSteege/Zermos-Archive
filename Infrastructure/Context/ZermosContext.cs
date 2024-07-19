@@ -43,21 +43,8 @@ namespace Infrastructure.Context
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-#if RELEASE
-            string connection = "";
+            string connection = "server=REDACTED_IP_ADRESS;user=root;password=REDACTED_DATABASE_PASSWORD;database=REDACTED_DATABASE_NAME;port=3306;Connect Timeout=5;";
 
-            if(Environment.GetEnvironmentVariable("beta") == "true") 
-                connection = "server=REDACTED_IP_ADRESS;user=root;password=REDACTED_DATABASE_PASSWORD;database=zermos-beta-database;port=3306;Connect Timeout=5;";
-            else 
-                connection = "server=REDACTED_IP_ADRESS;user=root;password=REDACTED_DATABASE_PASSWORD;database=REDACTED_DATABASE_NAME;port=3306;Connect Timeout=5;";
-#else
-            string connection = "";
-
-            if(Environment.GetEnvironmentVariable("beta") == "true") 
-                connection = "server=REDACTED_IP_ADRESS;user=root;password=REDACTED_DATABASE_PASSWORD;database=zermos-beta-database;port=3306;Connect Timeout=5;";
-            else 
-                connection = "server=REDACTED_IP_ADRESS;user=root;password=REDACTED_DATABASE_PASSWORD;database=REDACTED_DATABASE_NAME;port=3306;Connect Timeout=5;";
-#endif    
             //if (IsDatabaseConnectionValid(connection))
             //{
                 //optionsBuilder.UseMySQL(connection, b => b.MigrationsAssembly("Infrastructure"));
