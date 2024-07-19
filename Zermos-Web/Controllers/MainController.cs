@@ -17,24 +17,31 @@ namespace Zermos_Web.Controllers
         
         public IActionResult Index(string url = null)
         {
-            var user = ZermosUser;
-            
+            var user = ZermosUser ?? new Infrastructure.Entities.user();
+
             if (url != null)
+            {
                 ViewData["url"] = url;
-            
+            }
             else if (Request.Cookies["this_session_last_page"] != null)
             {
                 ViewData["url"] = Request.Cookies["this_session_last_page"];
                 Response.Cookies.Delete("this_session_last_page");
             }
             else
+            {
                 ViewData["url"] = user.default_page ?? "/Zermelo/Rooster";
-            
-            if (ViewData["url"] != null && ViewData["url"].ToString().IsNullOrEmpty())
+            }
+
+            if (ViewData["url"] != null && string.IsNullOrEmpty(ViewData["url"].ToString()))
+            {
                 ViewData["url"] = user.default_page ?? "/Zermelo/Rooster";
+            }
             else if (ViewData["url"] == null)
+            {
                 ViewData["url"] = user.default_page ?? "/Zermelo/Rooster";
-            
+            }
+
             Response.Cookies.Append("version_used", user.version_used ?? "0");
             Response.Cookies.Append("hand_side", user.hand_side ?? "right");
             Response.Cookies.Append("theme", user.theme ?? "light");
