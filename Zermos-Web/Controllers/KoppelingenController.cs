@@ -351,7 +351,8 @@ namespace Zermos_Web.Controllers
                 zermelo_access_token = zermeloAuthentication.access_token,
                 school_id = zermeloUser.response.data[0].code,
                 zermelo_school_abbr = institution,
-                name = zermeloUser.response.data[0].displayName,
+                name = zermeloUser.response.data[0].displayName ?? zermeloUser.response.data[0].firstName + " " + zermeloUser.response.data[0].prefix + " " +
+                       zermeloUser.response.data[0].lastName,
                 zermelo_access_token_expires_at = DateTime.Now.AddMonths(2)
             };
 
@@ -454,7 +455,7 @@ namespace Zermos_Web.Controllers
             //code verifier: 16BBJMtEJe8blIJY848ROvvO02F5V205l5A10x_DqFE
 
             var baseurl = string.Format(
-                "https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=https://leerling.somtoday.nl/oauth/callback&client_id=somtoday-leerling-web&response_type=code&state={0}&scope=openid&tenant_uuid={1}&session=no_session&code_challenge={2}&code_challenge_method=S256&knf_entree_notification",
+                "https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtodayleerling://oauth/callback&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&response_type=code&state={0}&scope=openid&tenant_uuid={1}&session=no_session&code_challenge={2}&code_challenge_method=S256&knf_entree_notification",
                 TokenUtils.RandomString(8), school,
                 tokens[1]);
             
@@ -515,7 +516,7 @@ namespace Zermos_Web.Controllers
             
             
             baseurl =
-                "https://inloggen.somtoday.nl/oauth2/token?grant_type=authorization_code&session=no_session&scope=openid&client_id=somtoday-leerling-web&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&code=" +
+                "https://inloggen.somtoday.nl/oauth2/token?grant_type=authorization_code&session=no_session&scope=openid&client_id=D50E0C06-32D1-4B41-A137-A9A850C892C2&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&code=" +
                 finalAuthCode + "&code_verifier=" + tokens[0];
             
             response = await _somtodayHttpClientWithoutRedirect.PostAsync(baseurl,

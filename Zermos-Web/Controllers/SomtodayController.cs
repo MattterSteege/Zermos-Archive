@@ -120,7 +120,7 @@ namespace Zermos_Web.Controllers
             if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
             {
                 somtodayGradesModel = JsonConvert.DeserializeObject<SortedSomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? "{}");
-                somtodayGradesModel.items = somtodayGradesModel.items.FindAll(x => x.vakAfkorting == vak.ToLower());
+                somtodayGradesModel.items = somtodayGradesModel.items.FindAll(x => x.vakAfkorting.ToLower() == vak.ToLower());
                 somtodayGradesModel.lastGrades = null;
                 somtodayGradesModel.voortGangsdossierGemiddelde = somtodayGradesModel.items[0].cijfer.ToFloat();
             }
