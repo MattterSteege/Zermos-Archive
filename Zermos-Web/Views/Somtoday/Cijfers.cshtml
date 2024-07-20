@@ -129,7 +129,7 @@
                 <tr class="grade-table-header">
                     <td>@(grade.isSE ? "(SE) " : "")@grade.additionalObjects.vaknaam</td>
                     <td style="width: 10%; text-align: end;">@(grade.weging)x</td>
-                    <td style="width: 10%; text-align: end;" class="@(grade.cijfer >= 5.45f ? "sufficient" : "insufficient ")">@grade.cijfer.ToString(CultureInfo.InvariantCulture)
+                    <td style="width: 10%; text-align: end;" class="@(grade.cijfer >= 5.45f || grade.formattedResultaat == "V" || grade.formattedResultaat == "G"  ? "sufficient" : "insufficient ")">@grade.formattedResultaat
                     @if (grade.isSE)
                     {
                         <i class="fa-solid fa-graduation-cap" aria-hidden="true" onclick="happyCappy(this)"></i>

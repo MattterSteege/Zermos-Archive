@@ -51,7 +51,7 @@
                     </td>
                     <td></td>
                     <td>@(grade.weging)x</td>
-                    <td class="@(grade.cijfer >= 5.5f ? "sufficient" : "insufficient ")">
+                    <td class="@(grade.cijfer >= 5.45f || grade.formattedResultaat == "V" || grade.formattedResultaat == "G" ? "sufficient" : "insufficient ")">
                         @grade.formattedResultaat
                         @if (grade.isSE)
                         {

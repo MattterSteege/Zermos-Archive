@@ -184,6 +184,10 @@ namespace Zermos_Web.Controllers
             foreach (var item in allgrades)
             {
                 var grade = (int) Math.Round(item.cijfer, 0, MidpointRounding.AwayFromZero) - 1;
+                if (grade < 0)
+                    grade = 0;
+                if (grade > 9)
+                    grade = 9;
                 grades[grade]++;
             }
             
