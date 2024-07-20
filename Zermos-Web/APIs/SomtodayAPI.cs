@@ -190,7 +190,7 @@ public class SomtodayAPI
                 cijferSE = gemiddelden?.isVoorExamendossier == true ? gemiddelden.examendossierResultaat.formattedResultaat : "-",
                 vakNaam = grade.subject,
                 vakAfkorting = gemiddelden?.vakAfkorting,
-                vakuuid = (grade.grades.FirstOrDefault()?.additionalObjects.vakuuid ?? grade.gradesSE.FirstOrDefault()?.additionalObjects.vakuuid)
+                vakuuid = (grade.grades.FirstOrDefault()?.additionalObjects.vakuuid ?? grade.gradesSE.FirstOrDefault()?.additionalObjects.vakuuid),
             };
 
             sortedGrades.items.Add(item);

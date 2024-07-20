@@ -107,7 +107,7 @@
                     <td style="display: none"></td>
                     <td>Laatste cijfer</td>
                     <td></td>
-                    <td class="@(grade.cijfersSE != null && grade.cijfersSE.Count > 0 && grade.cijfersSE.FirstOrDefault()!.cijfer >= 5.45 ? "sufficient" : "insufficient ")">@grade.cijfersSE?.FirstOrDefault()?.formattedResultaat</td>
+                    <td class="@(grade.cijfersSE != null && grade.cijfersSE.Count > 0 && (grade.cijfersSE.FirstOrDefault()!.cijfer >= 5.45 || grade.cijfersSE.FirstOrDefault()!.isLabel) ? "sufficient" : "insufficient ")">@grade.cijfersSE?.FirstOrDefault()?.formattedResultaat</td>
                 </tr>
             </table>
         }
@@ -129,7 +129,7 @@
                 <tr class="grade-table-header">
                     <td>@(grade.isSE ? "(SE) " : "")@grade.additionalObjects.vaknaam</td>
                     <td style="width: 10%; text-align: end;">@(grade.weging)x</td>
-                    <td style="width: 10%; text-align: end;" class="@(grade.cijfer >= 5.45f || grade.formattedResultaat == "V" || grade.formattedResultaat == "G"  ? "sufficient" : "insufficient ")">@grade.formattedResultaat
+                    <td style="width: 10%; text-align: end;" class="@(grade.cijfer >= 5.45f || grade.isLabel  ? "sufficient" : "insufficient ")">@grade.formattedResultaat
                     @if (grade.isSE)
                     {
                         <i class="fa-solid fa-graduation-cap" aria-hidden="true" onclick="happyCappy(this)"></i>

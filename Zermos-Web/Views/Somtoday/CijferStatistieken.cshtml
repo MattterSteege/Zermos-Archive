@@ -29,7 +29,7 @@
             <div class="horizontal-split" style="padding-right: var(--padding);">
                 <div>
                     <h1>percentage voldoende</h1>
-                    <p class="gemiddelde">Percentage voldoendes: @(((double) Model.voldoendes / Model.item.cijfers.Count * 100).ToString("0.00").Replace(",", "."))%</p>
+                    <p class="gemiddelde">Percentage voldoendes: @(((double) Model.voldoendes / (Model.item.cijfers.Count + Model.item.cijfersSE.Count) * 100).ToString("0.00").Replace(",", "."))%</p>
                     <p class="gemiddelde">aantal cijfers: @Model.item.cijfers.Count</p>
                     <p class="gemiddelde">voldoendes: @Model.voldoendes</p>
                     <p class="gemiddelde">onvoldoendes: @Model.onvoldoendes</p>

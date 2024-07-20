@@ -152,7 +152,9 @@ namespace Zermos_Web.Controllers
             
             //calc the stats:
             //circle chart: voldoendes/onvoldoendes
-            var allgrades = somtodayGradesModel.items[0].cijfers; allgrades.AddRange(somtodayGradesModel.items[0].cijfersSE);
+            var allgrades = somtodayGradesModel.items[0].cijfers;
+            allgrades.AddRange(somtodayGradesModel.items[0].cijfersSE);
+            allgrades = allgrades.FindAll(x => x.isCijfer);
             
             int voldoendes = 0;
             int onvoldoendes = 0;
@@ -162,6 +164,8 @@ namespace Zermos_Web.Controllers
             double somSE = 0;
             foreach (var item in allgrades)
             {
+                if (item.isLabel) continue;
+                
                 if (item.cijfer >= 5.45)
                     voldoendes++;
                 else
@@ -183,6 +187,8 @@ namespace Zermos_Web.Controllers
             var grades = new List<int> {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
             foreach (var item in allgrades)
             {
+                if (item.isLabel) continue;
+                
                 var grade = (int) Math.Round(item.cijfer, 0, MidpointRounding.AwayFromZero) - 1;
                 if (grade < 0)
                     grade = 0;
@@ -195,6 +201,8 @@ namespace Zermos_Web.Controllers
             double lowest = 10;
             foreach (var grade in allgrades)
             {
+                if (grade.isLabel) continue;
+                
                 if (grade.cijfer > highest)
                     highest = grade.cijfer;
                 if (grade.cijfer < lowest)
@@ -202,6 +210,9 @@ namespace Zermos_Web.Controllers
             }
             
             //line chart: grades over time
+            
+            somtodayGradesModel.items[0].cijfers = somtodayGradesModel.items[0].cijfers.FindAll(x => x.isVoortgang && x.isCijfer);
+            somtodayGradesModel.items[0].cijfersSE = somtodayGradesModel.items[0].cijfersSE.FindAll(x => x.isVoortgang && x.isCijfer);
             
             SomtodayStatistiekenModel model = new()
             {
@@ -222,300 +233,6 @@ namespace Zermos_Web.Controllers
             
             return PartialView(model);
         }
-        //
-        // private Chart CreateChart(string title, bool showHeight = true)
-        // {
-        //     var chart = new Chart
-        //     {
-        //         Options = new Options
-        //         {
-        //             Scales = new Dictionary<string, Scale>
-        //             {
-        //                 {
-        //                     "y",
-        //                     new CartesianLinearScale
-        //                     {
-        //                         BeginAtZero = true, Ticks = new CartesianLinearTick {StepSize = 1}, Display = showHeight
-        //                     }
-        //                 },
-        //                 {"x", new Scale {Grid = new Grid {Offset = true}, Display = showHeight}}
-        //             },
-        //             Plugins = new Plugins
-        //             {
-        //                 Legend = new Legend {Display = false}
-        //             }
-        //         }
-        //     };
-        //
-        //     chart.Options.Layout = new Layout
-        //     {
-        //         Padding = new Padding
-        //         {
-        //             PaddingObject = new PaddingObject
-        //             {
-        //                 Left = 10,
-        //                 Right = 12
-        //             }
-        //         }
-        //     };
-        //
-        //     chart.Options.Plugins.Title = new ChartJSCore.Models.Title {Text = new List<string> {title}, Display = false};
-        //
-        //     return chart;
-        // }
-        //
-        // private Chart GetMostCommonGrade(sortedGrades grades)
-        // {
-        //     var chart = CreateChart("Meest voorkomende cijfer");
-        //     chart.Type = Enums.ChartType.Bar;
-        //
-        //     var data = new Data();
-        //     data.Labels = new List<string>();
-        //
-        //     var dataset = new BarDataset
-        //     {
-        //         Data = new List<double?>(),
-        //         BackgroundColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
-        //         BorderColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
-        //         BorderWidth = new List<int> {1},
-        //         BarPercentage = 0.5,
-        //         BarThickness = 6,
-        //         MaxBarThickness = 8,
-        //         MinBarLength = 2
-        //     };
-        //
-        //     data.Datasets = new List<Dataset> {dataset};
-        //     chart.Data = data;
-        //
-        //     var doubleList = new List<double?> {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        //     var stringList = new List<string> {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
-        //
-        //     foreach (var grade in grades.grades)
-        //     {
-        //         var index = (int) Math.Round(NumberUtils.ParseFloat(grade.geldendResultaat), 0,
-        //             MidpointRounding.AwayFromZero) - 1;
-        //
-        //         if (doubleList[index] == null)
-        //             doubleList[index] = 1;
-        //         else
-        //             doubleList[index]++;
-        //     }
-        //
-        //     for (var i = 0; i < doubleList.Count; i++)
-        //         if (doubleList[i] == 0)
-        //         {
-        //             doubleList.RemoveAt(i);
-        //             stringList.RemoveAt(i);
-        //             i--;
-        //         }
-        //
-        //     dataset.Data = doubleList;
-        //     data.Labels = stringList;
-        //
-        //     return chart;
-        // }
-        //
-        // private Chart GetVoldoendeOndervoldoendeRatio(sortedGrades grades)
-        // {
-        //     var chart = CreateChart("Percentage voldoende", false);
-        //     chart.Type = Enums.ChartType.Pie;
-        //
-        //     var data = new Data();
-        //     data.Labels = new List<string> {"Voldoende", "Onvoldoende"};
-        //
-        //     var dataset = new PieDataset
-        //     {
-        //         BackgroundColor = new List<ChartColor>
-        //             {ChartColor.FromHexString("#00ff00"), ChartColor.FromHexString("#ff0000")},
-        //         HoverBackgroundColor = new List<ChartColor>
-        //             {ChartColor.FromHexString("#00ff00"), ChartColor.FromHexString("#ff0000")},
-        //         Data = new List<double?>()
-        //     };
-        //
-        //     var voldoende = 0;
-        //     var onvoldoende = 0;
-        //
-        //     foreach (var grade in grades.grades)
-        //         if (NumberUtils.ParseFloat(grade.geldendResultaat) >= 5.5)
-        //             voldoende++;
-        //         else
-        //             onvoldoende++;
-        //
-        //     dataset.Data.Add(voldoende);
-        //     dataset.Data.Add(onvoldoende);
-        //
-        //     data.Datasets = new List<Dataset> {dataset};
-        //     chart.Data = data;
-        //
-        //     (ViewData["stats"] as Dictionary<string, string>)?.Add("voldoendes", voldoende.ToString());
-        //     (ViewData["stats"] as Dictionary<string, string>)?.Add("onvoldoendes", onvoldoende.ToString());
-        //     
-        //     return chart;
-        // }
-        //
-        // private Chart GenerateGradeOverTimeAndGradeAverage(sortedGrades grades)
-        // {
-        //     var chart = CreateChart("cijfers en gemiddelde over tijd");
-        //     chart.Type = Enums.ChartType.Line;
-        //     chart.Options.Scales["y"] = new Scale {Min = 0, Max = 10};
-        //
-        //     var dataset = new LineDataset
-        //     {
-        //         Fill = "false",
-        //         Data = new List<double?>(),
-        //         Tension = 0.2,
-        //         BackgroundColor = new List<ChartColor> {ChartColor.FromRgba(75, 192, 192, 0.4)},
-        //         BorderColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
-        //         BorderCapStyle = "butt",
-        //         BorderDash = new List<int>(),
-        //         BorderDashOffset = 0.0,
-        //         BorderJoinStyle = "miter",
-        //         PointBorderColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
-        //         PointBackgroundColor = new List<ChartColor> {ChartColor.FromHexString("#ffffff")},
-        //         PointBorderWidth = new List<int> {1},
-        //         PointHoverRadius = new List<int> {5},
-        //         PointHoverBackgroundColor = new List<ChartColor> {ChartColor.FromRgb(75, 192, 192)},
-        //         PointHoverBorderColor = new List<ChartColor> {ChartColor.FromRgb(220, 220, 220)},
-        //         PointHoverBorderWidth = new List<int> {2},
-        //         PointRadius = new List<int> {1},
-        //         PointHitRadius = new List<int> {10},
-        //         SpanGaps = false
-        //     };
-        //
-        //     var data = new Data
-        //     {
-        //         Labels = new List<string>()
-        //     };
-        //
-        //     data.Datasets = new List<Dataset> {dataset};
-        //     chart.Data = data;
-        //
-        //     var gradesArray = new float[grades.grades.Count];
-        //     var gradesWeight = new int[grades.grades.Count];
-        //
-        //     foreach (var grade in grades.grades)
-        //     {
-        //         chart.Data.Datasets[0].Data.Add(NumberUtils.ParseFloat(grade.geldendResultaat));
-        //         data.Labels.Add(grade.datumInvoer.ToString("dd-MM"));
-        //         gradesArray[grades.grades.IndexOf(grade)] = NumberUtils.ParseFloat(grade.geldendResultaat);
-        //         gradesWeight[grades.grades.IndexOf(grade)] = grade.weging == 0 ? grade.examenWeging : grade.weging;
-        //     }
-        //     
-        //     chart.Data.Datasets.Add(new LineDataset
-        //     {
-        //         Fill = "false",
-        //         Data = NumberUtils.CalculateStandardDeviationSnapshots(gradesArray, gradesWeight),
-        //         Tension = 0.2,
-        //         BackgroundColor = new List<ChartColor> {ChartColor.FromHexString("#F2542D")},
-        //         BorderColor = new List<ChartColor> {ChartColor.FromHexString("#F2542D")},
-        //         BorderCapStyle = "butt",
-        //         BorderDash = new List<int>(),
-        //         BorderDashOffset = 0.0,
-        //         BorderJoinStyle = "miter",
-        //         PointBorderColor = new List<ChartColor> {ChartColor.FromHexString("#F2542D")},
-        //         PointBackgroundColor = new List<ChartColor> {ChartColor.FromHexString("#ffffff")},
-        //         PointBorderWidth = new List<int> {1},
-        //         PointHoverRadius = new List<int> {5},
-        //         PointHoverBackgroundColor = new List<ChartColor> {ChartColor.FromHexString("#F2542D")},
-        //         PointHoverBorderColor = new List<ChartColor> {ChartColor.FromRgb(220, 220, 220)},
-        //         PointHoverBorderWidth = new List<int> {2},
-        //         PointRadius = new List<int> {1},
-        //         PointHitRadius = new List<int> {10},
-        //         SpanGaps = false
-        //     });
-        //     
-        //     (ViewData["stats"] as Dictionary<string, string>)?.Add("gemiddelde", chart.Data.Datasets[1].Data[^1]?.ToString("0.0000000000", CultureInfo.InvariantCulture));
-        //
-        //     
-        //     return chart;
-        // }
-        //
-        // [Authorize]
-        // [HttpGet("/Somtoday/Cijfers/GenereerToken")]
-        // [SomtodayRequirement]
-        // public async Task<IActionResult> GenereerToken(string vakken, bool show_individual_grades, DateTime? expires_at, int max_uses = int.MaxValue)
-        // {
-        //     expires_at ??= DateTime.Now.AddDays(7);
-        //     
-        //     var user = ZermosUser;
-        //     
-        //     if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
-        //     {
-        //        user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
-        //     }
-        //
-        //     var grades = await somtodayApi.GetGrades(ZermosUser);
-        //     
-        //     ZermosUser = new user
-        //     {
-        //         cached_somtoday_grades = JsonConvert.SerializeObject(grades)
-        //     };
-        //     
-        //     Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
-        //
-        //     string[] vakkenArray = vakken.Split(',');
-        //     
-        //     var sortedGrades = new List<sortedGrades>();
-        //     
-        //     foreach (var grade in grades.items)
-        //     {
-        //         var vakWithGrades = sortedGrades.Find(x => x.vak.naam == grade.vak.naam);
-        //         if (vakWithGrades == null)
-        //         {
-        //             vakWithGrades = new sortedGrades();
-        //             vakWithGrades.vak = grade.vak;
-        //             vakWithGrades.grades = new List<Item>();
-        //             sortedGrades.Add(vakWithGrades);
-        //         }
-        //         vakWithGrades.grades.Add(grade);
-        //     }
-        //     
-        //     var gradesToShare = new List<Item>();
-        //     foreach (var vak in vakkenArray)
-        //     {
-        //         var vakWithGrades = sortedGrades.Find(x => string.Equals(x.vak.afkorting, vak, StringComparison.CurrentCultureIgnoreCase));
-        //         if (vakWithGrades == null) continue;
-        //         gradesToShare.AddRange(vakWithGrades.grades);
-        //     }
-        //     
-        //     share share = new share
-        //     {
-        //         key = TokenUtils.RandomString(20),
-        //         email = ZermosEmail,
-        //         value = (show_individual_grades ? 1 : 0) + gradesToShare.ObjectToBase64String(),
-        //         page = "/Somtoday/Cijfers/Gedeeld",
-        //         expires_at = (DateTime) expires_at,
-        //         max_uses = max_uses
-        //     };
-        //     
-        //     await AddShare(share);
-        //     
-        //     return Ok(share.url);
-        // }
-        //
-        // [ZermosPage]
-        // [HttpGet("/Somtoday/Cijfers/Gedeeld")]
-        // public async Task<IActionResult> GedeeldeCijfers(string token)
-        // {
-        //     var grades = await GetShare(token);
-        //     
-        //     if (grades == null)
-        //         return NotFound();
-        //     
-        //     if (grades.expires_at < DateTime.Now)
-        //     {
-        //         await DeleteShare(token);
-        //         return NotFound();
-        //     }
-        //     
-        //     dynamic model = new
-        //     {
-        //         grades = grades.value.Substring(1).Base64StringToObject<List<Item>>(),
-        //         show_individual_grades = grades.value[0] == '1'
-        //     };
-        //     
-        //     return PartialView(model);
-        // }
         #endregion
 
         #region huiswerk

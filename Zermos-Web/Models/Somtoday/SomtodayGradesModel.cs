@@ -35,7 +35,7 @@ namespace Zermos_Web.Models.SomtodayGradesModel
         public string omschrijving { get; set; }
         public int weging { get; set; }
         public DateTime datumInvoerEerstePoging { get; set; }
-        //public bool isLabel { get; set; }
+        public bool isLabel { get; set; }
         public bool isCijfer { get; set; }
         public string herkansing { get; set; }
         public string toetssoort { get; set; }
@@ -69,6 +69,7 @@ namespace Zermos_Web.Models.SortedSomtodayGradesModel
         public List<SomtodayGradesModel.Item> cijfersSE { get; set; }
         public string vakNaam { get; set; }
         public string vakuuid { get; set; }
+        public bool isLabel { get; set; }
     }
 
     public class SortedSomtodayGradesModel
