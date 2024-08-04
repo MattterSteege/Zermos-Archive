@@ -14,6 +14,7 @@ using Zermos_Web.Models;
 using Zermos_Web.Models.SomtodayLeermiddelen;
 using Zermos_Web.Models.SomtodayAfwezigheidModel;
 using Zermos_Web.Models.SomtodayGradesModel;
+using Zermos_Web.Models.somtodayHomeworkModel;
 using Zermos_Web.Models.SomtodayPlaatsingen;
 using Zermos_Web.Models.SomtodayVakgemiddeldenModel;
 using Zermos_Web.Models.SortedSomtodayGradesModel;
@@ -282,6 +283,7 @@ public class SomtodayAPI
         
         return sortedGrades;
     }
+    
     public async Task<SomtodayPlaatsingenModel> GetPlaatsingen(user user)
     {
         //https://api.somtoday.nl/rest/v1/plaatsingen?leerling=1409824200
@@ -298,5 +300,53 @@ public class SomtodayAPI
             return null;
         
         return JsonConvert.DeserializeObject<SomtodayPlaatsingenModel>(await response.Content.ReadAsStringAsync());
+    }
+    
+    public async Task<SomtodayHomeworkModel> GetHomeworkAsync(user user, int dagen)
+    {
+        //$"https://api.somtoday.nl/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
+        //$"https://api.somtoday.nl/rest/v1/studiewijzeritemdagtoekenningen?schooljaar=&begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
+        //$"https://api.somtoday.nl/rest/v1/studiewijzeritemweektoekenningen?schooljaar=&begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
+        
+        #if DEBUG
+        var watch = Stopwatch.StartNew();
+        #endif
+        
+        var urls = new[]
+        {
+            $"https://api.somtoday.nl/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={DateTime.Now.AddDays(-dagen):yyyy-MM-dd}&additional=swigemaaktVinkjes",
+            $"https://api.somtoday.nl/rest/v1/studiewijzeritemdagtoekenningen?schooljaar=&begintNaOfOp={DateTime.Now.AddDays(-dagen):yyyy-MM-dd}&additional=swigemaaktVinkjes",
+            $"https://api.somtoday.nl/rest/v1/studiewijzeritemweektoekenningen?schooljaar=&begintNaOfOp={DateTime.Now.AddDays(-dagen):yyyy-MM-dd}&additional=swigemaaktVinkjes"
+        };
+
+        _httpClient.DefaultRequestHeaders.Clear();
+        _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
+        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+
+        var tasks = urls.Select(url => url != null ? _httpClient.GetAsync(url) : Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.OK))).ToArray();
+
+        await Task.WhenAll(tasks);
+
+        if (tasks.Any(t => !t.Result.IsSuccessStatusCode))
+            return null;
+
+        var jsonTasks = tasks.Select(t => t.Result.Content.ReadAsStringAsync()).ToArray();
+        await Task.WhenAll(jsonTasks);
+
+        var homework = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(jsonTasks[0].Result);
+        var homeworkDay = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(jsonTasks[1].Result);
+        var homeworkWeek = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(jsonTasks[2].Result);
+        
+        homework.items.AddRange(homeworkDay.items);
+        homework.items.AddRange(homeworkWeek.items);
+        
+        homework.items = homework.items.OrderBy(x => x.datumTijd).ToList();
+        
+        #if DEBUG
+        watch.Stop();
+        Console.WriteLine(watch.ElapsedMilliseconds + "ms");
+        #endif
+        
+        return homework;
     }
 }

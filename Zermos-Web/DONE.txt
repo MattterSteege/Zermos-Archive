@@ -1,31 +1,12 @@
-Version 0.5.4
+Version 0.6.1
 
-- Koppelingen - Zermelo
-    - Je kunt nu ook inloggen met langere schoolnamen (sorry voor degenen die hier last van hadden).
-
-- Koppelingen - Somtoday
-    - Er is een extra koppelmethode toegevoegd. Hoewel dit niet de mooiste methode is, werkt het waarschijnlijk met alle scholen, ook als ze een externe inlogprovider hebben.
-    - Als je apps nu ontkoppelt, wordt de pagina niet meer opnieuw geladen, maar wordt alleen de sidebar bijgewerkt. Dit is veel smoother.
-
-- Account
-    - Je kunt nu weer de accountpagina openen als je nog geen schooltijden hebt ingesteld.
-
-- Somtoday - Leermiddelen
-    - Als je geen leermiddelen hebt, opent de pagina nu met een 'voeg leermiddelen toe' knop.
-
-- Algemeen
-    - Font Awesome is vervangen door een lokaal gehoste versie.
-
-- Somtoday - Cijfers
-    - Er is een geheel nieuw systeem gemaakt voor het bekijken van cijfers.
-    - Je kunt nu je cijfers van alle jaren zien.
-    - Voortgangsdossier en examendossier cijfers zijn nu gescheiden.
-    - Swipe eenvoudig tussen je voortgang, examen en laatste cijfers.
-    - Pas instellingen aan per type cijfer (deze worden tijdelijk opgeslagen en vergeten als je de pagina verlaat of ververst).
-    - De instellingen worden opgeslagen in de local storage van je browser. Dit betekent dat ze niet op de server worden opgeslagen en niet tussen verschillende apparaten worden gesynchroniseerd.
-    - De statistiekenpagina is opnieuw gemaakt en is nu veel sneller.
-    - Statistieken worden nu 'in-house' berekend, wat leidt tot snellere laadtijden omdat er geen externe code hoeft te worden ingeladen.
-    - De statistiekenpagina is nu ook meer responsive. Voorheen moest ik met canvas-elementen werken en dat was een gedoe.
-
-- Zermelo Recap
-    - De recap is weer afgelopen. Bedankt voor het meedoen en tot de volgende recap!
+- koppelingen - somtoday
+    - De hackerman koppeling methode stuurt je nu naar leerling.somtoday.ml/login?splash=true, zodat je altijd ingelogd bent als je de methode uitvoerd.
+    
+- somtoday - huiswerk
+    - Alle huiswerkvormen (toekenning, dag & week) worden nu tergelijkertijd opgehaald i.p.v 1 voor 1, dat de laadtijd van de huiswerkpagina aanzienlijk verkort met ongv. 400-600ms.
+    
+- algemeen
+    - Het systeem dat de URL (bijv. /huiswerk) veranderd is aangepast, het nieuwe URL systeem laat nu /Somtoday/Huiswerk zien i.p.v /#/Somtoday/Huiswerk. De hash (#) is verwijderd. (basically gewoon voor aesthetics)
+    - Probeer je je 4G een beetje te sparen? De app slaat je pagina's nu op in je browser cache, zodat als je offline bent, je nog steeds je pagina's kan bekijken (werkt alleen als het framework al ingeladen is, vooral handig bij de geïnstalleerde versie!).
+    - ik heb wat oude code verwijderd... (niet meer gebruikt sinds Aug 20, 2023, dus kon wel een keertje weg)

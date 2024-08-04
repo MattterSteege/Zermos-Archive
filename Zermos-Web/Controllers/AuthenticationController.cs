@@ -40,7 +40,7 @@ public class AuthenticationController : Controller
     string redirectUrl = "https://localhost:5001/Login/Callback";
 #endif
     const string clientId = "REDACTED_MS_CLIENT_ID";
-    const string clientSecret = "lcV8Q~GbQjBv45fivMgN3ARP~UHPNSuV259gQcU7";
+    const string clientSecret = "REDACTED_MS_CLIENT_SECRET";
 
     [ZermosPage]
     [Route("/Login")]

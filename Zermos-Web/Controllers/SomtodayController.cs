@@ -236,6 +236,7 @@ namespace Zermos_Web.Controllers
         #endregion
 
         #region huiswerk
+
         [Authorize]
         [SomtodayRequirement]
         [ZermosPage]
@@ -243,7 +244,7 @@ namespace Zermos_Web.Controllers
         public async Task<IActionResult> Huiswerk(int dagen = 21)
         {
             ViewData["add_css"] = "somtoday";
-            
+
             if (Request.Cookies.ContainsKey("cached-somtoday-homework"))
             {
                 var cache = ZermosUser.cached_somtoday_homework;
@@ -253,91 +254,29 @@ namespace Zermos_Web.Controllers
             }
 
             var user = ZermosUser;
-
-            var access_token = user.somtoday_access_token;
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
-                access_token = await RefreshToken(user.somtoday_refresh_token);
+                user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
             }
 
-            var _startDate = DateTime.Now.AddDays(-dagen).ToString("yyyy-MM-dd");
-            var baseurl =
-                $"https://api.somtoday.nl/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
-
-            var rangemin = 0;
-            var rangemax = 99;
-
-
-            _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + access_token);
-            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-            _httpClient.DefaultRequestHeaders.Add("Range", $"items={rangemin}-{rangemax}");
-
-            var response = await _httpClient.GetAsync(baseurl);
+            var somtodayHomework = await somtodayApi.GetHomeworkAsync(user, dagen);
             
-            if (response.IsSuccessStatusCode == false)
-            {
-                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je Huiswerk op Somtoday kon niet worden opgehaald, mogelijk is je Somtoday token verlopen, als dit probleem zich blijft voordoen koppel dan je Somtoday account opnieuw", NotificationCenter.NotificationType.ERROR);
-                return PartialView(Sort(new SomtodayHomeworkModel() {items = GetRemappedCustomHuiswerk()}));
-            }
-
-            var somtodayHuiswerk =
-                JsonConvert.DeserializeObject<SomtodayHomeworkModel>(
-                    await response.Content.ReadAsStringAsync());
+            if (somtodayHomework == null)
+                return PartialView(new SomtodayHomeworkModel {items = new List<Models.somtodayHomeworkModel.Item>()});
             
-            somtodayHuiswerk.items.AddRange(await GetWeekAndDayHomework(access_token, dagen));
-
             ZermosUser = new user
             {
-                cached_somtoday_homework = JsonConvert.SerializeObject(somtodayHuiswerk)
+                cached_somtoday_homework = JsonConvert.SerializeObject(somtodayHomework)
             };
             
-            somtodayHuiswerk.items.AddRange(GetRemappedCustomHuiswerk());
-
-            somtodayHuiswerk = Sort(somtodayHuiswerk);
+            somtodayHomework.items.AddRange(GetRemappedCustomHuiswerk());
             
-            Response.Cookies.Append("cached-somtoday-homework", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddHours(1)});
+            Response.Cookies.Append("cached-somtoday-homework", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(15)});
             
-            return PartialView(somtodayHuiswerk);
+            return PartialView(Sort(somtodayHomework));
         }
-
-        private async Task<List<Models.somtodayHomeworkModel.Item>> GetWeekAndDayHomework(string access_token, int dagen)
-        {
-            
-            var _startDate = DateTime.Now.AddDays(-dagen).ToString("yyyy-MM-dd");
-            var baseurl = $"https://api.somtoday.nl/rest/v1/studiewijzeritemdagtoekenningen?schooljaar=&begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
-
-            _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + access_token);
-            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-            _httpClient.DefaultRequestHeaders.Add("Range", $"items=0-99");
-            
-            var response = await _httpClient.GetAsync(baseurl);
-            
-            if (response.IsSuccessStatusCode == false)
-            {
-                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je \"dag huiswerk\" op somtoday kon niet opgevraagd worden", NotificationCenter.NotificationType.WARNING);
-                return new List<Models.somtodayHomeworkModel.Item>();
-            }
-            
-            var somtodayHuiswerk = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(await response.Content.ReadAsStringAsync());
-
-            baseurl = $"https://api.somtoday.nl/rest/v1/studiewijzeritemweektoekenningen?schooljaar=&begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
-            
-            response = await _httpClient.GetAsync(baseurl);
-            
-            if (response.IsSuccessStatusCode == false)
-            {
-                HttpContext.AddNotification("Oops, er is iets fout gegaan", "Je \"week huiswerk\" op somtoday kon niet opgevraagd worden, je \"dag huiswerk\" is wel opgevraagd", NotificationCenter.NotificationType.WARNING);
-                return somtodayHuiswerk.items;
-            }
-            
-            somtodayHuiswerk.items.AddRange(JsonConvert.DeserializeObject<SomtodayHomeworkModel>(await response.Content.ReadAsStringAsync()).items);
-            
-            return somtodayHuiswerk.items;
-        }
-
+        
         [NonAction]
         private List<Models.somtodayHomeworkModel.Item> GetRemappedCustomHuiswerk()
         {
@@ -383,7 +322,7 @@ namespace Zermos_Web.Controllers
 
             return remapedHomework;
         }
-        
+
         [Authorize]
         [SomtodayRequirement]
         [HttpPost("Somtoday/Huiswerk/Nieuw")]

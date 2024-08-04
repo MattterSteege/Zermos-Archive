@@ -702,3 +702,81 @@ function ease(start, end, time, callback) {
 
   const interval = setInterval(update, 10); // Update approximately every 16 milliseconds
 }
+
+//CACHING
+var cacheVersion = 'zermos-cache-' + Zermos.CurrentVersion;
+
+function cachePage(url, data) {
+  //if (data.startsWith('<!DOCTYPE html>')) {
+  //  return;
+  //}
+  const cache = localStorage.getItem(cacheVersion);
+  const cacheObject = cache ? JSON.parse(cache) : {};
+  cacheObject[url] = data;
+  localStorage.setItem(cacheVersion, JSON.stringify(cacheObject));
+}
+
+function getCache(url) {
+  const cache = localStorage.getItem(cacheVersion);
+  const cacheObject = cache ? JSON.parse(cache) : {};
+  return cacheObject[url];
+}
+
+//offline detection:
+const status = document.querySelector(".status");
+let isUserOnline = window.navigator.onLine;
+window.addEventListener("load", () => {
+  const handleNetworkChange = () => {
+    if (navigator.onLine) {
+      document.body.classList.remove("offline");
+    } else {
+      document.body.classList.add("offline");
+    }
+    isUserOnline = navigator.onLine;
+  };
+
+  window.addEventListener("online", handleNetworkChange);
+  window.addEventListener("offline", handleNetworkChange);
+});
+
+function fetchAndCacheCSS(url) {
+  fetch(url)
+      .then(response => response.text())
+      .then(css => {
+        
+        const cache = localStorage.getItem(cacheVersion);
+        const cacheObject = cache ? JSON.parse(cache) : {};
+        cacheObject[url] = css;
+        localStorage.setItem(cacheVersion, JSON.stringify(cacheObject));
+        
+        applyCSS(css);
+      })
+      .catch(error => {
+        console.error('Failed to fetch CSS:', error);
+      });
+}
+
+function applyCSS(css) {
+  const style = document.createElement('style');
+  style.textContent = css;
+  style.id = 'added-by-fetch';
+  document.head.appendChild(style);
+}
+
+function loadCSS(url, localStorageKey) {
+  //only get the path from the url (remove the domain if it's there)
+  if (url.includes("http")) {
+    url = "/" + url.split("/").slice(3).join("/");
+  }
+  
+  if (navigator.onLine) {
+    fetchAndCacheCSS(url, localStorageKey);
+  } else {
+    const cachedCSS = getCache(url);
+    if (cachedCSS) {
+      applyCSS(cachedCSS);
+    } else {
+      console.warn('No cached CSS found and user is offline (URL:', url, ')');
+    }
+  }
+}

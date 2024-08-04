@@ -4,6 +4,7 @@ using Infrastructure.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -77,7 +78,19 @@ namespace Zermos_Web
             
             app.UseForwardedHeaders();
 
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = context =>
+                {
+                    var cachePeriod = "604800"; //cache for 7 days
+                    if (!context.File.Name.EndsWith(".js") && 
+                        !context.File.Name.EndsWith(".css") && 
+                        !context.File.Name.EndsWith(".woff")) 
+                        return;
+                
+                    context.Context.Response.Headers.Append("Cache-Control", $"max-age={cachePeriod}");
+                }
+            });
 
             app.UseRouting();
 

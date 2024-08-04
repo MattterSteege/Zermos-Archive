@@ -18,7 +18,7 @@ namespace Zermos_Web.Controllers
         public IActionResult Index(string url = null)
         {
             var user = ZermosUser ?? new Infrastructure.Entities.user();
-
+            
             if (url != null)
             {
                 ViewData["url"] = url;
