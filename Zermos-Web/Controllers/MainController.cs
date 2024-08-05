@@ -23,7 +23,7 @@ namespace Zermos_Web.Controllers
             {
                 ViewData["url"] = url;
             }
-            else if (Request.Cookies["this_session_last_page"] != null)
+            else if (Request.Cookies["this_session_last_page"] != null && Request.Cookies["this_session_last_page"] != "/")
             {
                 ViewData["url"] = Request.Cookies["this_session_last_page"];
                 Response.Cookies.Delete("this_session_last_page");
@@ -87,9 +87,14 @@ namespace Zermos_Web.Controllers
         }
         
         [Route("/serviceworker.js")]
-        public IActionResult ServiceWorker()
+        public IActionResult ServiceWorker(bool minify = true)
         {
-            return File("~/js/serviceworker.js", "text/javascript");
+            string content = System.IO.File.ReadAllText("wwwroot/js/serviceworker.js");
+            
+            if (!minify)
+                return Content(content.Replace("${ZERMOSVERSION}", CurrentZermosVersion), "text/javascript");
+            
+            return Content(_jsMinifier.Minify(content).Replace("${ZERMOSVERSION}", CurrentZermosVersion), "text/javascript");
         }
         
         [Route(".well-known/microsoft-identity-association.json")]

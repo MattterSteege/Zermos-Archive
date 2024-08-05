@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Infrastructure;
@@ -31,6 +32,8 @@ namespace Zermos_Web.Controllers
             get => _user.GetUserAsync(ZermosEmail).Result;
             set => _user.UpdateUserAsync(ZermosEmail, value).Wait();
         }
+        
+        protected string CurrentZermosVersion => Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION");
         
         // LOGGING METHODS
         protected void Log(LogLevel logLevel, string message)

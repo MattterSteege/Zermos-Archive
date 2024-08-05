@@ -23,7 +23,7 @@
     int cijferSECount = 0;
 }
 
-<link rel="stylesheet" href="~/css/somtoday.css"/>
+<link rel="stylesheet" href="/css/somtoday.css" preload/>
 
 <!--  Create 2 equal sized panels, left should be grades and SE grades both with a slider at the top to select which one, the right the last x grades ->
 <!- When the screen is less then 100px wide, the all the panels should be combined into one panel, with 3 options at the slider at the top    -->
@@ -422,7 +422,7 @@
 @*             } *@
 @*         } *@
 @* *@
-@*         console.log(vakken, allowed); *@
+@*         Zermos.log(vakken, allowed); *@
 @* *@
 @*         //return's an plan string url *@
 @*         fetch('/Somtoday/Cijfers/GenereerToken?expires_at=' + expires_at + '&vakken=' + vakken.join(',') + '&show_individual_grades=' + document.getElementById('input2').checked) *@

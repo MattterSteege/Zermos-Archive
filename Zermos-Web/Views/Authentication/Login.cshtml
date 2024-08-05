@@ -15,7 +15,7 @@
     //when model is 3, say that the user is logged out
 }
 
-<link rel="stylesheet" href="/css/koppelingen.css">
+<link rel="stylesheet" href="/css/koppelingen.css" preload>
 
 @if (Model == null || Model.code == 0)
 {
@@ -104,8 +104,18 @@ else if (Model.code == 3)
         <a onclick="ReplacePage('/Login')" class="form-control login-explanation">Opnieuw inloggen</a>
     </div>
     
-<script>
+    <script>
     newSidebar();
+    localStorage.clear();
+    //remoove all cookies
+    var cookies = document.cookie.split(";");
+    for (var i = 0; i < cookies.length; i++)
+    {
+        var cookie = cookies[i];
+        var eqPos = cookie.indexOf("=");
+        var name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
 </script>
 }
 else

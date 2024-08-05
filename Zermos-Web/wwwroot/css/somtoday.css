@@ -128,35 +128,6 @@
 
 }
 
-/*ABSENTIE*/
-
-.absentie-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    height: auto;
-    width: 100%;
-    grid-gap: var(--padding);
-    color: var(--text-color);
-}
-
-.absentie {
-    border-radius: var(--border-radius);
-    padding: var(--padding);
-    background: var(--overlay-color);
-    box-shadow: var(--box-shadow);
-}
-
-.absentie h1 {
-    font-size: var(--font-size-heading);
-    font-weight: 600;
-    margin-bottom: var(--padding);
-}
-
-.absentie p {
-    font-size: var(--font-size);
-    font-weight: 600;
-    margin-bottom: var(--padding);
-}
 
 /*GRADES*/
 .grades-container {

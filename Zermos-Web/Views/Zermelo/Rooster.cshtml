@@ -8,7 +8,7 @@
     var zermeloTodayLessons = Model.appointments.Where(x => x.start.ToDateTime().Date == DateTime.Now.Date).ToList();
 }
 
-<link rel="stylesheet" href="/css/zermelo.css"/>
+<link rel="stylesheet" href="/css/zermelo.css" preload/>
 
 <div class="main-container">
     <div class="week-carousel" id="week-carousel" style="transform: translateX(-0%);">
@@ -344,8 +344,8 @@ function NextWeekAnim() {
     var current = Number(weekCarousel.style.transform.match(/-?\d+/g)[0]);
     var newWeek = current - 100;
     newWeek = Math.ceil(newWeek / 100) * 100;
-    
-    console.log(current, newWeek);
+
+    Zermos.log(current, newWeek);
     animating = true;
     ease(current, newWeek, 500, (value) => {
         weekCarousel.style.transform = `translateX(${value}%)`;
@@ -365,8 +365,8 @@ function PrevWeekAnim() {
     var current = Number(weekCarousel.style.transform.match(/-?\d+/g)[0]);
     var newWeek = current + 100;
     newWeek = Math.floor(newWeek / 100) * 100;
-    
-    console.log(current, newWeek);
+
+    Zermos.log(current, newWeek);
     animating = true;
     ease(current, newWeek, 500, (value) => {
         weekCarousel.style.transform = `translateX(${value}%)`;

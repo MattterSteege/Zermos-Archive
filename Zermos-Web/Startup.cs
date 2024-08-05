@@ -75,22 +75,11 @@ namespace Zermos_Web
             app.UseRateLimiter();
             
             app.UseCustomJsMiddleware();
+            app.UseCustomCssMiddleware();
             
             app.UseForwardedHeaders();
 
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                OnPrepareResponse = context =>
-                {
-                    var cachePeriod = "604800"; //cache for 7 days
-                    if (!context.File.Name.EndsWith(".js") && 
-                        !context.File.Name.EndsWith(".css") && 
-                        !context.File.Name.EndsWith(".woff")) 
-                        return;
-                
-                    context.Context.Response.Headers.Append("Cache-Control", $"max-age={cachePeriod}");
-                }
-            });
+            app.UseStaticFiles();
 
             app.UseRouting();
 

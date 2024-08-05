@@ -1,6 +1,6 @@
 ﻿@model Infrastructure.Entities.user
 
-<link rel="stylesheet" href="/css/account.css">
+<link rel="stylesheet" href="/css/account.css" preload>
 
 <div class="settings-container">
     <div class="setting-item">
@@ -128,7 +128,7 @@ function UpdateSetting(key, value, element) {
             element.classList.add("selected");
             
         } else {
-            console.error("Error: " + response);
+            Zermos.error("Error: " + response);
         }
     });
 }

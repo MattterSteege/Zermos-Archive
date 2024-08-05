@@ -3,7 +3,7 @@
 @model dynamic
 
 
-<link rel="stylesheet" href="/css/account.css">
+<link rel="stylesheet" href="/css/account.css" preload>
 
 <div class="account-container">
     <div class="account-item" onclick="ReplacePage('@Url.Action("Debug", "Account")')" id="profile">
@@ -158,34 +158,37 @@
         });
     };
 
-    var abscence = null;
+    if (isUserOnline) {
+        var abscence = null;
 
-    //fetch /Refresh the absence data
-    fetch('/Somtoday/Afwezigheid')
-    .then(response => response.text())
-    .then(data => {
-        abscence = JSON.parse(data);
-        document.getElementById('absence').innerHTML = '<h1>Afwezigheid</h1><p>Je bent dit jaar <b>' + abscence.items.length + '</b> keer afwezig geweest.</p>';
-    });
-
-    function ShowAbscence() {
-        var abscenceModal = new ZermosModal()
-        
-        abscence.items.forEach(absence => {
-            abscenceModal
-            .addText("<hr>")
-            .addText(absence.absentieReden.omschrijving)
-            .addText(absence.opmerkingen);
-            var dateStart = new Date(absence.beginDatumTijd);
-            var dateEnd = new Date(absence.eindDatumTijd);
-            abscenceModal.addText(dateStart.toLocaleDateString() + ' ' + dateStart.toLocaleTimeString() + ' - ' + dateEnd.toLocaleTimeString() + ' ' + dateEnd.toLocaleDateString());
+        //fetch /Refresh the absence data
+        fetch('/Somtoday/Afwezigheid')
+        .then(response => response.text())
+        .then(data => {
+            abscence = JSON.parse(data);
+            document.getElementById('absence').innerHTML = '<h1>Afwezigheid</h1><p>Je bent dit jaar <b>' + abscence.items.length + '</b> keer afwezig geweest.</p>';
         });
 
-        abscenceModal.setTitle('Afwezigheid')
-        .setSubmitButtonLabel('Sluiten')
-        .open();
+        function ShowAbscence() {
+            var abscenceModal = new ZermosModal()
+            
+            abscence.items.forEach(absence => {
+                abscenceModal
+                .addText("<hr>")
+                .addText(absence.absentieReden.omschrijving)
+                .addText(absence.opmerkingen);
+                var dateStart = new Date(absence.beginDatumTijd);
+                var dateEnd = new Date(absence.eindDatumTijd);
+                abscenceModal.addText(dateStart.toLocaleDateString() + ' ' + dateStart.toLocaleTimeString() + ' - ' + dateEnd.toLocaleTimeString() + ' ' + dateEnd.toLocaleDateString());
+            });
 
+            abscenceModal.setTitle('Afwezigheid')
+            .setSubmitButtonLabel('Sluiten')
+            .open();
+
+        }
     }
-
-
+    else {
+        document.getElementById('absence').innerHTML = '<h1>Afwezigheid</h1><p>Om je afwezigheid te kunnen zien moet je online zijn.</p>';
+    }
 </script>

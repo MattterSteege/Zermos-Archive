@@ -82,19 +82,59 @@ var loadingTexts = [
   "Zorgen dat kabouters nog steeds kort zijn.",
   "IJs bakken...",
   "laadbericht aan het laden...", //dankje Micha
-    //Nieuwe toevoegingen:
   "Ruikt het naar wortels? - Een sneeuwpop",
-    "Een beetje zout toevoegen",
-    "De kat uit de boom kijken",
-    "Het is duidelijk GIF",
-    "Don't worry, be happy.",
-    "we zijn moeilijke dingen aan het berekenen",
-    "kiek 'm goan",
-    "BIEM!",
-    "Dammen bouwen",
-    "Kroketten bakken",
-    "Kokosnoten zijn geen specerijen",
-    
+  "Een beetje zout toevoegen",
+  "De kat uit de boom kijken",
+  "Het is duidelijk GIF",
+  "Don't worry, be happy.",
+  "we zijn moeilijke dingen aan het berekenen",
+  "kiek 'm goan",
+  "BIEM!",
+  "Dammen bouwen",
+  "Kroketten bakken",
+  "Kokosnoten zijn geen specerijen",
+
+  // nog meer laadberichten!!!!
+  "Even een Frikandel Speciaal halen",
+  "De VOC-mentaliteit aan het oppoetsen",
+  "Stamppot aan het prakken",
+  "Wacht even, we zijn nog aan het polderen",
+  "De dijken aan het verhogen",
+  "Zoeken naar de juiste toon op de triangel",
+  "Gezellig, hè?",
+  "Ik heb pech, ik sta in de file",
+  "Nog even en je kunt weer lekker niksen",
+  "Fiets aan het parkeren",
+  "Ja, dág!",
+  "Haring happen",
+  "Tulpen planten",
+  "Frikandelbroodjes aan het opwarmen",
+  "Naar Flappie zoeken",
+  "Worstenbroodjes bakken",
+  "De waterstand meten",
+  "De dropvoorraad aanvullen",
+  "De stroopwafel perfect op je kopje plaatsen",
+  "Fietsbanden oppompen",
+  "De HEMA-worst snijden",
+  "Hagelslag strooien",
+  "Bitterballen uit het vet halen",
+  "De kaasschaaf slijpen",
+  "Op zoek naar de goedkoopste benzine",
+  "Het gras maaien",
+  "De Albert Heijn Bonuskaart scannen",
+  "In de aanbieding!",
+  "De XXL-winkelwagen van de Jumbo manoeuvreren",
+  "Slootje springen",
+  "Gourmetten voorbereiden",
+  "Sinterklaasgedicht schrijven",
+  "De kliko's buiten zetten",
+  "Hutspot opwarmen",
+  "Spruitjes wassen",
+  "De buienradar checken",
+  "Zoeken naar die ene stroopwafel onderin de pak",
+  "De kerstboom uit de schuur halen (ja, nu al)",
+  "Mokken verzamelen bij de Gamma",
+  "De IKEA-handleiding ontcijferen",
 ];
 
 //==============================SCROLLING SYSTEM TOP==============================
@@ -377,7 +417,7 @@ function copyToClipboard(text) {
     try {
       document.execCommand("copy");
     } catch (err) {
-      console.error("Fallback: Oops, unable to copy", err);
+      Zermos.error("Fallback: Oops, unable to copy", err);
     }
 
     document.body.removeChild(textArea);
@@ -392,6 +432,49 @@ function waitForObject(obj, callback, interval = 100) {
       waitForObject(obj, callback, interval);
     }, interval);
   }
+}
+
+// Define a function to append a script to either the head or body
+function appendScript(element, scriptToWorkWith, isSrc) {
+  const script = document.createElement("script");
+  if (isSrc) {
+    script.src = scriptToWorkWith.src;
+    if (script.integrity)
+      script.integrity = scriptToWorkWith.integrity;
+    if (script.crossOrigin)
+      script.crossOrigin = scriptToWorkWith.crossOrigin;
+    if (script.referrerPolicy)
+      script.referrerPolicy = scriptToWorkWith.referrerPolicy;
+  } else {
+    script.innerHTML = scriptToWorkWith.innerHTML;
+  }
+
+  if (scriptToWorkWith.defer) {
+    script.defer = true;
+  }
+
+  script.id = "added-by-fetch";
+  element.appendChild(script);
+}
+
+// Define a function to append a stylesheet link to the head
+function appendStylesheet(data) {
+  const link = document.createElement("style");
+  link.id = "added-by-fetch";
+  link.innerHTML = data;
+  document.head.appendChild(link);
+  return link;
+}
+
+function stripTag(tag, data) {
+  const div = document.createElement('div');
+  div.innerHTML = data;
+  const scripts = div.getElementsByTagName(tag);
+  let i = scripts.length;
+  while (i--) {
+    scripts[i].parentNode.removeChild(scripts[i]);
+  }
+  return div.innerHTML;
 }
 //==============================EVENT SYSTEM==============================
 // Make sure only one event listener is added for each type to the #main element
@@ -495,6 +578,8 @@ Zermos.checkForUpdates = () => {
           "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
       })
       .open();
+    
+      localStorage.clear();
   } else if (version_user === "") {
     var url =
       "/Account/UpdateSetting?key=version_used&value=" + Zermos.CurrentVersion;
@@ -511,13 +596,13 @@ Zermos.checkForUpdates = () => {
 };
 
 Zermos.mainUnload.bind(() => {
-  console.log("unloading");
+  Zermos.log("unloading");
 });
 
 //==============================TITLE TEXT==============================
 document.addEventListener("DOMContentLoaded", function () {
   const elements = document.querySelectorAll(".svgText");
-  // console.log(elements);
+  // Zermos.log(elements);
 
   elements.forEach(function (element) {
     element.addEventListener("mouseover", function () {
@@ -539,61 +624,38 @@ document.addEventListener("DOMContentLoaded", function () {
   }, 5000);
 });
 //==============================LOGGING OVERWRITE==============================
-//overwrite console.log to log to the console and to an array
-var consoleLog = console.log;
-var consoleError = console.error;
-var consoleWarn = console.warn;
-var consoleInfo = console.info;
-var consoleDebug = console.debug;
-var consoleTrace = console.trace;
-
+// Overwrite console.log to log to the console and to an array
 var consoleArray = [];
 
-console.log = function () {
-  //consoleLog.apply(console, arguments);
-  ZermosLog(...arguments);
-  consoleArray.push([arguments, "log"]);
+Zermos.log = function (...args) {
+  consoleArray.push([...args, "log"]);
+  Zermos.trace(`%c[Log]%c`, "font-weight:700;color:royalblue;", "", ...args);
 };
 
-console.error = function () {
-  //consoleError.apply(console, arguments);
-  ZermosError(...arguments);
-  consoleArray.push([arguments, "error"]);
+Zermos.error = function (...args) {
+  consoleArray.push([...args, "error"]);
+  Zermos.trace(`%c[Error]%c`, "font-weight:700;color:red;", "", ...args);
 };
 
-console.warn = function () {
-  //consoleWarn.apply(console, arguments);
-  ZermosDebug(...arguments);
-  consoleArray.push([arguments, "warn"]);
+Zermos.warn = function (...args) {
+  consoleArray.push([...args, "warn"]);
+  Zermos.trace(`%c[Warn]%c`, "font-weight:700;color:gold;", "", ...args);
 };
 
-console.info = function () {
-  //consoleInfo.apply(console, arguments);
-  ZermosLog(...arguments);
-  consoleArray.push([arguments, "info"]);
+Zermos.info = function (...args) {
+  consoleArray.push([...args, "info"]);
+  Zermos.trace(`%c[Info]%c`, "font-weight:700;color:blue;", "", ...args);
 };
 
-console.debug = function () {
-  //consoleDebug.apply(console, arguments);
-  ZermosDebug(...arguments);
-  consoleArray.push([arguments, "debug"]);
+Zermos.debug = function (...args) {
+  consoleArray.push([...args, "debug"]);
+  Zermos.trace(`%c[Debug]%c`, "font-weight:700;color:orange;", "", ...args);
 };
 
-console.trace = function () {
-  //consoleTrace.apply(console, arguments);
-  ZermosError(...arguments);
-  consoleArray.push([arguments, "trace"]);
+Zermos.trace = function (...args) {
+  consoleArray[consoleArray.length - 1].push(new Error().stack);
+  console.trace(...args);
 };
-
-// const ZermosLog = (...args) => console.log(`%c[Log]%c`, 'font-weight:700;color:royalblue;', '', ...args);
-// const ZermosDebug = (...args) => console.log(`%c[Debug]%c`, 'font-weight:700;color:orange;', '', ...args);
-// const ZermosError = (...args) => console.log(`%c[Error]%c`, 'font-weight:700;color:red;', '', ...args);
-const ZermosLog = (...args) =>
-  consoleLog(`%c[Log]%c`, "font-weight:700;color:royalblue;", "", ...args);
-const ZermosDebug = (...args) =>
-  consoleLog(`%c[Debug]%c`, "font-weight:700;color:orange;", "", ...args);
-const ZermosError = (...args) =>
-  consoleLog(`%c[Error]%c`, "font-weight:700;color:red;", "", ...args);
 
 //==============================PREVIEW SYSTEM==============================
 //cookie preview=microsoft-somtoday-zermelo > TogglePreview("microsoft") > preview=somtoday-zermelo
@@ -700,29 +762,10 @@ function ease(start, end, time, callback) {
     }
   }
 
-  const interval = setInterval(update, 10); // Update approximately every 16 milliseconds
+  const interval = setInterval(update, 10); // Update approximately every 10ms
 }
 
-//CACHING
-var cacheVersion = 'zermos-cache-' + Zermos.CurrentVersion;
-
-function cachePage(url, data) {
-  //if (data.startsWith('<!DOCTYPE html>')) {
-  //  return;
-  //}
-  const cache = localStorage.getItem(cacheVersion);
-  const cacheObject = cache ? JSON.parse(cache) : {};
-  cacheObject[url] = data;
-  localStorage.setItem(cacheVersion, JSON.stringify(cacheObject));
-}
-
-function getCache(url) {
-  const cache = localStorage.getItem(cacheVersion);
-  const cacheObject = cache ? JSON.parse(cache) : {};
-  return cacheObject[url];
-}
-
-//offline detection:
+//==============================OFFLINE DETECTION==============================
 const status = document.querySelector(".status");
 let isUserOnline = window.navigator.onLine;
 window.addEventListener("load", () => {
@@ -733,50 +776,61 @@ window.addEventListener("load", () => {
       document.body.classList.add("offline");
     }
     isUserOnline = navigator.onLine;
+    console.log(`User connection status changed is is now ${isUserOnline ? "online" : "offline"}`);
   };
 
   window.addEventListener("online", handleNetworkChange);
   window.addEventListener("offline", handleNetworkChange);
 });
 
-function fetchAndCacheCSS(url) {
-  fetch(url)
-      .then(response => response.text())
-      .then(css => {
-        
-        const cache = localStorage.getItem(cacheVersion);
-        const cacheObject = cache ? JSON.parse(cache) : {};
-        cacheObject[url] = css;
-        localStorage.setItem(cacheVersion, JSON.stringify(cacheObject));
-        
-        applyCSS(css);
-      })
-      .catch(error => {
-        console.error('Failed to fetch CSS:', error);
-      });
-}
-
-function applyCSS(css) {
-  const style = document.createElement('style');
-  style.textContent = css;
-  style.id = 'added-by-fetch';
-  document.head.appendChild(style);
-}
-
-function loadCSS(url, localStorageKey) {
-  //only get the path from the url (remove the domain if it's there)
-  if (url.includes("http")) {
-    url = "/" + url.split("/").slice(3).join("/");
+//==============================CACHING SYSTEM==============================
+function cachePage(data, url) {
+  var lowerUrl = url.toLowerCase();
+  if (lowerUrl.includes("login") || lowerUrl.includes("logout") || lowerUrl.includes("callback")) {
+    return;
   }
-  
-  if (navigator.onLine) {
-    fetchAndCacheCSS(url, localStorageKey);
-  } else {
-    const cachedCSS = getCache(url);
-    if (cachedCSS) {
-      applyCSS(cachedCSS);
-    } else {
-      console.warn('No cached CSS found and user is offline (URL:', url, ')');
+
+  //save the current page data in localstorage
+  localStorage.setItem(url, data);
+}
+
+function getCachePage(url) {
+  //get the current page data from localstorage
+  var data = localStorage.getItem(url);
+
+  if (data) {
+    doPageReplace(data, url);
+    return;
+  }
+
+  document.getElementsByClassName("loader-text")[0].innerHTML = "De pagina kon niet worden opgevraagd.";
+  document.querySelectorAll(".loading-dots").forEach(function(dot) {
+    dot.style.background = "var(--deny-color)";
+    dot.style.animation = "unset";
+    dot.style.transform = "scale(1)";
+  });
+  history.replaceState(null, " Zermos", url);
+}
+
+//cache css
+function cacheCSS(url, data) {
+  return new Promise((resolve, reject) => {
+    if (url.includes("fontawesome") || url.includes("zermos")) {
+      resolve(data);
+      return;
     }
+
+    //save the current page data in localstorage
+    localStorage.setItem(url, data);
+    resolve(data);
+  });
+}
+
+function getCacheCSS(url) {
+  //get the current page data from localstorage
+  var data = localStorage.getItem(url);
+
+  if (data) {
+    appendStylesheet(data);
   }
 }

@@ -10,3 +10,46 @@ Version 0.6.1
     - Het systeem dat de URL (bijv. /huiswerk) veranderd is aangepast, het nieuwe URL systeem laat nu /Somtoday/Huiswerk zien i.p.v /#/Somtoday/Huiswerk. De hash (#) is verwijderd. (basically gewoon voor aesthetics)
     - Probeer je je 4G een beetje te sparen? De app slaat je pagina's nu op in je browser cache, zodat als je offline bent, je nog steeds je pagina's kan bekijken (werkt alleen als het framework al ingeladen is, vooral handig bij de geïnstalleerde versie!).
     - ik heb wat oude code verwijderd... (niet meer gebruikt sinds Aug 20, 2023, dus kon wel een keertje weg)
+    - Nog meer laadberichten? jazeker wel! Dit zijn de 40 nieuwe laadberichten op een rijtje:
+            - Even een Frikandel Speciaal halen
+            - De VOC-mentaliteit aan het oppoetsen
+            - Stamppot aan het prakken
+            - Wacht even, we zijn nog aan het polderen
+            - De dijken aan het verhogen
+            - Zoeken naar de juiste toon op de triangel
+            - Gezellig, hè?
+            - In de file staan
+            - Nog even en je kunt weer lekker niksen
+            - Fiets aan het parkeren
+            - Ja, dág!
+            - Haring happen
+            - Tulpen planten
+            - Frikandelbroodjes aan het opwarmen
+            - Naar Flappie zoeken
+            - Worstenbroodjes bakken
+            - De waterstand meten
+            - De dropvoorraad aanvullen
+            - De stroopwafel perfect op je kopje plaatsen
+            - Fietsbanden oppompen
+            - De HEMA-worst snijden
+            - Hagelslag strooien
+            - Bitterballen uit het vet halen
+            - De kaasschaaf slijpen
+            - Op zoek naar de goedkoopste benzine
+            - Het gras maaien
+            - De Albert Heijn Bonuskaart scannen
+            - In de aanbieding!
+            - De XXL-winkelwagen van de Jumbo manoeuvreren
+            - Slootje springen
+            - Gourmetten voorbereiden
+            - Sinterklaasgedicht schrijven
+            - De kliko's buiten zetten
+            - Hutspot opwarmen
+            - Spruitjes wassen
+            - De buienradar checken
+            - Zoeken naar die ene stroopwafel onderin de pak
+            - De kerstboom uit de schuur halen (ja, nu al)
+            - Mokken verzamelen bij de Gamma
+            - De IKEA-handleiding ontcijferen
+    - Er is nu een nieuwe CSS minifier, dit zorgt dat elk css bestand dat je opvraagt (zolang het eindingd op .min.css) verkleind wordt, waardoor de laadtijd van de pagina's nog sneller wordt. Als je de normale bestanden (onverkleind) wilt zien, dan kan je ze zien door de URL te veranderen van .min.css naar .css . 
+    - Er is nu een nieuw debug systeem dat mij achter de schermen kan helpen als je problemen ondervindt met Zermos :+1:

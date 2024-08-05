@@ -2,7 +2,7 @@
 @using Zermos_Web.Utilities
 @model Infrastructure.Entities.user
 
-<link rel="stylesheet" href="/css/account.css">
+<link rel="stylesheet" href="/css/account.css" preload>
 
 <div class="account-container">
     <div class="account-item">
@@ -95,9 +95,9 @@ Zermos.mainAfterLoad = () => {
     //loop over consoleArray and write to logs
     var logs = document.getElementById("logs");
     for (var i = 0; i < consoleArray.length; i++) {
-        var log = consoleArray[i][1] + " - " + consoleArray[i][0][0];
+        var log = consoleArray[i][1] + " - " + consoleArray[i][0] + consoleArray[i][2].substring(5).replaceAll("    ", "<br>&nbsp;&nbsp;&nbsp;↳&nbsp;&nbsp;&nbsp;&nbsp;");
         var logElement = document.createElement("p");
-        logElement.innerText = log;
+        logElement.innerHTML = log + "<br>&nbsp;";
         logs.appendChild(logElement);
     }
 }
@@ -133,6 +133,8 @@ function RefreshCache() {
             document.cookie = cookie + "; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         }
     }
+    
+    localStorage.clear();
 }
 
 CheckPreviews();

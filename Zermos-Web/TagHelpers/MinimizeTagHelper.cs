@@ -30,7 +30,7 @@ namespace Zermos_Web.TagHelpers
             contentString = "\n" + _jsMinifier.Minify(contentString) + "\n";
             
 #if DEBUG
-            contentString += "//" + (1 - contentString.Length / (float) length) * 100 + "% space saved\n";
+            contentString += "//" + (1 - contentString.Length / (float) length) * 100 + "% space saved or " + (length - contentString.Length) + " bytes saved";
 #endif
             //set the content
             output.Content.SetHtmlContent(contentString);

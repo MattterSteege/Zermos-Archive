@@ -60,7 +60,6 @@
 <main class="main" id="main">
     @RenderBody()
 </main>
-
 <script id="vital-script" defer="defer" minimize>
 //@Context.Items["dmjs"]
 
@@ -70,26 +69,27 @@ let isRunning = false;
 let timerStart;
 
 window.onload = () => {
+
     waitForObject(Zermos, function () {
         Zermos.CurrentVersion = "@Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION")";
-        console.log(`Zermos-web versie: ${Zermos.CurrentVersion}`);
-        console.log(`Zermos-framework is geladen`);
+        Zermos.log(`Zermos-web versie: ${Zermos.CurrentVersion}`);
+        Zermos.log(`Zermos-framework is geladen`);
         history.replaceState(null, null, "/");
         ReplacePage('@ViewData["url"]');
         @Html.Raw(Context.User.Identity!.IsAuthenticated && (Context.Request.Cookies["preview"] != null ? !Context.Request.Cookies["preview"].Contains("incognito") : true) ? "Zermos.checkForUpdates();" : "")
     }, 500);
 }
 
-function ReplacePage(url) {
-    if (isRunning) {
+function ReplacePage(url, force) {
+    if (isRunning && !force) {
         return;
     }
-    
+
     //start timer
-    timerStart = performance.now();   
+    timerStart = performance.now();
 
     //check if the url is the same as the current url
-    if (url === window.location.pathname) {
+    if (url === window.location.pathname && !force) {
         return;
     }
 
@@ -98,7 +98,7 @@ function ReplacePage(url) {
     } catch (e) {}
         unloadModal();
         Zermos.mainUnload = () => {};
-    
+
 
     document.getElementsByClassName("loader-text")[0].innerHTML = loadingTexts[Math.floor(Math.random() * loadingTexts.length)];
     document.querySelectorAll(".loading-dots").forEach(function(dot) {
@@ -115,7 +115,7 @@ function ReplacePage(url) {
         url += url.includes("?") ? "&" : "?";
         url += "dmjs";
     }
-    
+
     if (url.startsWith("./")) {
         // get current path and add the url to it
         url = window.location.pathname + url.substring(1);
@@ -126,11 +126,9 @@ function ReplacePage(url) {
     isRunning = true;
     
     if (!isUserOnline) {
-        const cache = getCache(url);
-        if (cache) {
-            doPageLoad(url, cache, true);
-            return;
-        }
+        getCachePage(url);
+        isRunning = false;
+        return;
     }
 
     fetch(url, { cache: "no-cache", method: "GET", headers: {'X-Requested-With': 'XMLHttpRequest'}, })
@@ -156,8 +154,8 @@ function ReplacePage(url) {
             ReplacePage("/Zermelo/Rooster");
             return;
         }
-        
-        doPageLoad(url, data);
+
+        doPageReplace(data, url);
     })
     .catch(xhr => {
         //if it is a 401, replace /login
@@ -177,51 +175,7 @@ function ReplacePage(url) {
     });
 }
 
-// Define a function to append a script to either the head or body
-function appendScript(element, scriptToWorkWith, isSrc) {
-    const script = document.createElement("script");
-    if (isSrc) {
-        script.src = scriptToWorkWith.src;
-        if (script.integrity)
-            script.integrity = scriptToWorkWith.integrity;
-        if (script.crossOrigin)
-            script.crossOrigin = scriptToWorkWith.crossOrigin;
-        if (script.referrerPolicy)
-            script.referrerPolicy = scriptToWorkWith.referrerPolicy;
-    } else {
-        script.innerHTML = scriptToWorkWith.innerHTML;
-    }
-
-    if (scriptToWorkWith.defer) {
-        script.defer = true;
-    }
-
-    script.id = "added-by-fetch";
-    element.appendChild(script);
-}
-
-// Define a function to append a stylesheet link to the head
-function appendStylesheet(href) {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = href + '?v=@version';
-    link.id = "added-by-fetch";
-    document.head.appendChild(link);
-    return link;
-}
-
-function stripTag(tag, data) {
-    const div = document.createElement('div');
-    div.innerHTML = data;
-    const scripts = div.getElementsByTagName(tag);
-    let i = scripts.length;
-    while (i--) {
-        scripts[i].parentNode.removeChild(scripts[i]);
-    }
-    return div.innerHTML;
-}
-
-function doPageLoad(url, data, troughCache = false) {
+function doPageReplace(data, url){
     setTimeout(async function() {
 
         let i;
@@ -248,17 +202,32 @@ function doPageLoad(url, data, troughCache = false) {
                 appendScript(document.body, scripts[i], false);
             }
         }
-
-        const links = html.getElementsByTagName("link");
-        for (i = 0; i < links.length; i++) {
-            if (links[i].rel === "stylesheet") {
-                loadCSS(links[i].href);
+        
+        const hrefs = Array.from(html.getElementsByTagName("link")).map(link => link.href.replace(window.location.origin, ""));
+        let amountOfStylesheets = hrefs.length;
+        for (i = 0; i < amountOfStylesheets; i++) {
+        
+            if (!isUserOnline) {
+                getCacheCSS(hrefs[i]);
+                amountOfStylesheets--;
+                continue;
             }
+        
+            cacheCSS(hrefs[i], await fetch(hrefs[i] + "?v=@version").then(response => response.text()))
+            .then(data => {
+                amountOfStylesheets--;
+                appendStylesheet(data);
+            });
+        }
+
+        while (amountOfStylesheets > 0) {
+            await new Promise(res => setTimeout(res, 50));
         }
 
         html.remove();
 
-        history.replaceState(null, " Zermos", url);
+        //history.replaceState(null, " Zermos", url);
+        history.pushState(null, " Zermos", url);
 
         try {
             Zermos.mainBeforeLoad();
@@ -275,13 +244,9 @@ function doPageLoad(url, data, troughCache = false) {
             } catch (e) {}
             Zermos.mainAfterLoad = () => {};
             const timerEnd = performance.now();
-            console.log(`Page load took ${timerEnd - timerStart}ms`);
+            Zermos.log(`Page load took ${timerEnd - timerStart}ms`);
             
-            console.log("Page loaded, cachig", url);
-            
-            if (!troughCache) {
-                cachePage(url, data);
-            }
+            cachePage(data, url);
 
             return true;
         }, 250);
@@ -293,13 +258,10 @@ window.onbeforeunload = function() {
     document.cookie = "this_session_last_page=" + window.location.pathname + "; path=/";
 }
 
-window.onpopstate = function() {
-    //if the path is empty, don't replace the page
-    if (window.location.pathname === "/") {
-        return;
-    }
-    ReplacePage(window.location.pathname);
-}
+window.addEventListener("popstate", function(e) {
+    ReplacePage(e.target.location.pathname, true);
+});
+
 </script>
 </body>
 </html>

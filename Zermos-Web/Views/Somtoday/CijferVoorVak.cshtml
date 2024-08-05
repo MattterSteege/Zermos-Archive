@@ -8,7 +8,7 @@
     var grades = Model.items.Count > 0 ? Model.items[0].cijfersSE.Concat(Model.items[0].cijfers).ToList().OrderByDescending(x => x.periode).ThenByDescending(x => x.datumInvoerEerstePoging).ToList() : new List<Item>();
 }
 
-<link rel="stylesheet" href="~/css/somtoday.css"/>
+<link rel="stylesheet" href="/css/somtoday.css" preload/>
 
 
 

@@ -1,7 +1,7 @@
 ﻿@model object
 
 
-<link rel="stylesheet" href="~/css/koppelingen.css" />
+<link rel="stylesheet" href="/css/koppelingen.css" preload/>
 
 <div class="login">
     <div class="login-explanation">
@@ -30,7 +30,7 @@
         var inputs = form.getElementsByTagName("input");
         //school is equel to the uuid of the selected school name
         url += "?username=" + btoa(encodeURIComponent(inputs[1].value)).replace("=", "") + "&password=" + btoa(encodeURIComponent(inputs[2].value)).replace("=", "") + "&school=" + schools.find(school => school[0] === inputs[0].value)[1];
-        console.log(url)
+        Zermos.log(url)
         
         var button = document.getElementsByTagName("button")[0];
         button.innerHTML = "Bezig met laden...";
@@ -55,7 +55,7 @@
         if (url.includes("ontkoppel")) {
             button.innerHTML = "Log opnieuw in";
             button.disabled = false;
-            console.warn("Crises averted");
+            Zermos.warn("Crises averted");
             
             return;
         }

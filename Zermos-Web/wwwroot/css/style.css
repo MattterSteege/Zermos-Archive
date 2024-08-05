@@ -704,7 +704,7 @@ main.main::-webkit-scrollbar-track {
     height: 15px;
     background: var(--deny-color);
     display: none;
-    z-index: 101;
+    z-index: 99999999999999999999;
     text-align: center;
     color: var(--white-color);
     bottom: 0;
@@ -777,12 +777,12 @@ main.main::-webkit-scrollbar-track {
         width: calc(100% - 64px);
         padding: var(--padding); !important;
     }
-    
+
     .offline main.main {
         height: calc(100% - 15px);
         top: 0;
     }
-    
+
     .status {
         left: 0;
         width: calc(100% - 64px);
