@@ -24,7 +24,7 @@ TODO: replace the current MODAL system with the new one!
     - _Layout.cshtml
 
     - informatiebord.cshtml
-    
+
     - PromotionPage.cshtml
     - Index.cshtml
     - EersteKeer.cshtml
