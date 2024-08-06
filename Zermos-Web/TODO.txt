@@ -28,7 +28,7 @@ TODO: replace the current MODAL system with the new one!
     - PromotionPage.cshtml
     - Index.cshtml
     - EersteKeer.cshtml
-    
+
     - ZermeloWithQr.cshtml
     - ZermeloWithCode.cshtml
     - ZermeloNietGekoppeld.cshtml
