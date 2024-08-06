@@ -42,7 +42,7 @@ TODO: replace the current MODAL system with the new one!
     - InfowijsQr.cshtml
     - InfowijsNietGekoppeld.cshtml
     - Infowijs.cshtml
-    
+
     - Schoolnieuws.cshtml
     - Schoolkalender.cshtml
     
