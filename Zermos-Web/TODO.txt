@@ -16,9 +16,6 @@ TODO: als somtoday wel gekoppeld is en Zermelo niet, laat dan het rooster uit SO
 TODO: replace the current MODAL system with the new one!
     - Huiswerk.cshtml
     - GedeeldeCijfers.cshtml
-    - CijferVoorVak.cshtml
-    - CijferStatistieken.cshtml
-    - Cijfers.cshtml
     
     - sidebar.cshtml
     - _Layout.cshtml

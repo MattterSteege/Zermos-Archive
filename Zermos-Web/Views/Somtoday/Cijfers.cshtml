@@ -352,13 +352,14 @@
                 var hideColor = settings.find(x => x.startsWith('hideColor')) ? settings.find(x => x.startsWith('hideColor')).split('=')[1] === 'true' : false;
             
                 new ZermosModal()
-                .setTitle("Schoolexamen cijfers")
+                .addHeading("Schoolexamen cijfers")
                 .addText("Pas de instellingen aan van de schoolexamen cijfers. Je kan het volgende aanpassen:")
                 .addToggle("Afronden op een heel getal", afronden)
                 .addToggle("Geen kleur geven aan je cijfer", hideColor)
-                .setSubmitButtonLabel("oke")
-                .onSubmit((afronden, hideColor) => {
-                    var newSettings = `afronden=${afronden};hideColor=${hideColor};`;
+                .addButton("oke", (ctx) => {
+                    var values = ctx.getComponentsValue();
+                
+                    var newSettings = `afronden=${values.values[0].value};hideColor=${values.values[1].value};`;
                     parentPanel.dataset.settings = newSettings;
                     
                     //update the grades
@@ -366,6 +367,7 @@
                     toggleSuffAndInsuff(parentPanel, hideColor);
                     
                     saveSettings(null, parentPanel);
+                    ctx.close();
                 })
                 .open();
             }
@@ -374,16 +376,16 @@
         function showInfo(panel) {
             if (panel === 'voortgang') {
                 new ZermosModal()
-                .setTitle("Voortgangsdossier")
+                .addHeading("Voortgangsdossier")
                 .addText("Het voortgangsdossier is een overzicht van alle cijfers die je hebt gehaald die meetellen voor je voortgangsdossier. Dit zijn cijfers van toetsen, opdrachten en andere beoordelingen.")
-                .setSubmitButtonLabel("aight")
+                .addButton("aight", (ctx) => { ctx.close(); })
                 .open();
             }
             else if (panel === 'examen') {
                 new ZermosModal()
-                .setTitle("Schoolexamen cijfers")
+                .addHeading("Schoolexamen cijfers")
                 .addText("De schoolexamen cijfers zijn cijfers die je hebt gehaald voor toetsen die meetellen voor je schoolexamen. Dit zijn cijfers die uiteindelijk meetellen voor je centraal examen. <br><br>Helaas hebben deze cijfers geen pagina waar je alle cijfers kan zien die je hebt gehaald, dit komt omdat de cijfers (vaak) over verschillende leerjaren worden gegeven en ik dat niet in een keer kan opvragen. Hopelijk komt dit in de toekomst nog, maar dat is momenteel niet mijn grootste prioriteit. Als je SE cijfers hebt voor vakken waar je dat jaar ook voorgangsdossier cijfers voor hebt gekregen kun je ze wel bekijken, ga dan naar 'Rapport' en klik op het desbetreffende vak.")
-                .setSubmitButtonLabel("Hmm, oké")
+                .addButton("Hmm, oké", (ctx) => { ctx.close(); })
                 .open();
             }
         }
