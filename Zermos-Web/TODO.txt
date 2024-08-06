@@ -22,7 +22,7 @@ TODO: replace the current MODAL system with the new one!
     
     - sidebar.cshtml
     - _Layout.cshtml
-    
+
     - informatiebord.cshtml
     
     - PromotionPage.cshtml
