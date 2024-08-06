@@ -19,13 +19,13 @@ TODO: replace the current MODAL system with the new one!
     
     - sidebar.cshtml
     - _Layout.cshtml
-    
+
     - informatiebord.cshtml
-    
+
     - PromotionPage.cshtml
     - Index.cshtml
     - EersteKeer.cshtml
-    
+
     - ZermeloWithQr.cshtml
     - ZermeloWithCode.cshtml
     - ZermeloNietGekoppeld.cshtml
@@ -39,7 +39,7 @@ TODO: replace the current MODAL system with the new one!
     - InfowijsQr.cshtml
     - InfowijsNietGekoppeld.cshtml
     - Infowijs.cshtml
-    
+
     - Schoolnieuws.cshtml
     - Schoolkalender.cshtml
     
