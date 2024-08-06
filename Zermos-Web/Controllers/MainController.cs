@@ -19,6 +19,15 @@ namespace Zermos_Web.Controllers
         {
             var user = ZermosUser ?? new Infrastructure.Entities.user();
             
+            if ((User.Identity == null || !User.Identity.IsAuthenticated) && Request.Cookies["version_used"] == null)
+            {
+                url = "/Intro";
+                Response.Cookies.Append("seen_intro", "true", new Microsoft.AspNetCore.Http.CookieOptions
+                {
+                    Expires = DateTime.Now.AddYears(1)
+                });
+            }
+            
             if (url != null)
             {
                 ViewData["url"] = url;
@@ -115,6 +124,13 @@ namespace Zermos_Web.Controllers
         [ZermosPage]
         [Route("/EersteKeer")]
         public IActionResult EersteKeer()
+        {
+            return PartialView();
+        }
+        
+        [ZermosPage]
+        [Route("/Intro")]
+        public IActionResult Intro()
         {
             return PartialView();
         }

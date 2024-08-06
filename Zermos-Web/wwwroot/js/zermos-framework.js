@@ -564,7 +564,7 @@ Zermos.checkForUpdates = () => {
         .addButton("Check wat er nieuw is", function() {
           window.open("https://zermos-docs.kronk.tech/WhatsNew.html", "_blank");
         })
-        .addButton("let's go, ik ben er klaar voor!", function() {
+        .addButton("let's go, ik ben er klaar voor!", (ctx) => {
           var url =
               "/Account/UpdateSetting?key=version_used&value=" +
               Zermos.CurrentVersion;
@@ -577,6 +577,8 @@ Zermos.checkForUpdates = () => {
               "version_used=" +
               Zermos.CurrentVersion +
               "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+          
+            ctx.close();
         })
         .open();
 

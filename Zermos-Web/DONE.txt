@@ -53,3 +53,4 @@ Version 0.6.1
             - De IKEA-handleiding ontcijferen
     - Er is nu een nieuwe CSS minifier, dit zorgt dat elk css bestand dat je opvraagt (zolang het eindingd op .min.css) verkleind wordt, waardoor de laadtijd van de pagina's nog sneller wordt. Als je de normale bestanden (onverkleind) wilt zien, dan kan je ze zien door de URL te veranderen van .min.css naar .css . 
     - Er is nu een nieuw debug systeem dat mij achter de schermen kan helpen als je problemen ondervindt met Zermos :+1:
+    - Er is nu een nieuwe knop naar de Zermos discord server, bekijk hier nieuwe én opkomende features, krijg meldingen bij nieuwe updates.
