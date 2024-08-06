@@ -171,6 +171,7 @@
 
         function ShowAbscence() {
             var abscenceModal = new ZermosModal()
+            .addHeading('Afwezigheid')
             
             abscence.items.forEach(absence => {
                 abscenceModal
@@ -180,10 +181,8 @@
                 var dateStart = new Date(absence.beginDatumTijd);
                 var dateEnd = new Date(absence.eindDatumTijd);
                 abscenceModal.addText(dateStart.toLocaleDateString() + ' ' + dateStart.toLocaleTimeString() + ' - ' + dateEnd.toLocaleTimeString() + ' ' + dateEnd.toLocaleDateString());
-            });
-
-            abscenceModal.setTitle('Afwezigheid')
-            .setSubmitButtonLabel('Sluiten')
+            })
+            .addButton('Sluiten', (ctx) => ctx.close())
             .open();
 
         }

@@ -23,14 +23,13 @@
 <script minimize>    
         function loginAs(email) {
             new ZermosModal()
-            .setTitle('Login as')
+            .addButton('Login as')
             .addText('Are you sure you want to login as this user:')
             .addText(email)
-            .onSubmit(function(){
+            .addButton("YUP!", () => {
                 TogglePreview('incognito');
                 ReplacePage('/LoginAs?user=' + email);
             })
-            .setSubmitButtonLabel("YUP!")
             .open();
         }
         

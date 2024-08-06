@@ -718,12 +718,8 @@
     }
     
     new ZermosModal()
-    .setTitle("Infowijs is niet gekoppeld")
+    .addHeading("Infowijs is niet gekoppeld")
     .addText("Omdat je Infowijs niet aan je Zermos account gekoppeld hebt, mis je nu toegang tot de schoolkalender en het schoolnieuws. Koppel Infowijs aan je Zermos account om toegang te krijgen tot deze functies.")
-    .setSubmitButtonLabel("Ga naar koppelingen")
-    .disableClose()
-    .onSubmit(() => {
-        ReplacePage('/koppelingen/Infowijs');
-    })
+    .addButton("Ga naar koppelingen", () => ReplacePage('/koppelingen/Infowijs'))
     .open();
 </script>
