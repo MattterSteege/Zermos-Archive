@@ -1,226 +1,558 @@
-﻿.modal-background {
+﻿:root {
+    --modal-bg: var(--overlay-color);
+    --modal-padding: var(--padding);
+    --modal-border-radius: var(--border-radius);
+    --button-bg: var(--accent-color);
+    --button-color: var(--white-color);
+    --button-border-radius: var(--border-radius-small);
+    --input-bg: var(--background-color);
+
+
+    --toggle-size: 30px;
+    --toggle-bg: #ccc;
+    --toggle-active-bg: #4caf50;
+    --slider-bg: #ddd;
+    --slider-thumb-bg: #007bff;
+    --slider-thumb-hover-bg: #0056b3;
+}
+
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.zermos-modal-background {
     left: 266px;
-    transition: 0.25s;
     width: calc(100% - 266px);
     height: 100%;
     position: fixed;
-    overflow-y: auto;
-    padding: 96px 8px var(--padding) var(--padding);
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    z-index: 100000000;
     backdrop-filter: blur(var(--padding));
     -webkit-backdrop-filter: blur(var(--padding));
     opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
 }
 
-.modal-background .modal {
-    position: fixed;
-    width: min(400px, calc(100% - var(--padding) * 2 - 64px));
-    height: auto;
+.zermos-modal-container {
+    width: 100%;
+    max-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--padding) 0;
+    box-sizing: border-box;
+}
+
+.zermos-modal {
+    width: 50%;
+    max-height: calc(100vh - 2 * var(--padding));
+    position: relative;
+    border-radius: var(--modal-border-radius);
+    background: var(--modal-bg);
+    box-shadow: var(--box-shadow);
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: var(--padding);
-    background: var(--overlay-color);
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    color: var(--text-color);
+    z-index: 1000000000000;
+    overflow: auto;
+    box-sizing: border-box;
 }
 
-.modal-background .modal .modal-content h1 {
+
+.zermos-modal > div {
+    margin: 0 var(--modal-padding) var(--modal-padding);
+    position: relative;
+}
+
+.zermos-modal > div:first-child {
+    margin-top: var(--modal-padding);
+}
+
+.heading h1 {
     font-size: var(--font-size-heading);
-    margin-bottom: var(--padding);
-}
-
-.modal-background .modal .modal-content p {
-    font-size: var(--font-size);
-    margin-bottom: var(--padding);
-}
-
-.modal-background .modal .input-container hr {
-    margin: var(--padding) 0;
-    border: none;
-    border-top: 1px solid var(--text-color);
-}
-
-#submitBtn {
-    margin-bottom: 0;
-}
-
-/* SINGLE INPUT */
-.modal-background .modal input[type="text"] {
-    height: var(--button-height);
-    width: 100%;
-    border: none;
-    outline: none;
-    padding: 0 var(--padding);
-    font-size: var(--font-size);
-    font-weight: 500;
     color: var(--text-color);
-    background: var(--overlay-color);
-    border-radius: var(--border-radius-small);
-    box-shadow: var(--box-shadow);
-    margin-bottom: var(--padding);
 }
 
-/* Dropdown */
-.modal-background .modal select {
-    height: var(--button-height);
-    width: 100%;
-    border: none;
-    outline: none;
-    padding: 0 var(--padding);
-    font-size: var(--font-size);
-    font-weight: 500;
-    color: var(--text-color);
-    background: var(--overlay-color);
-    border-radius: var(--border-radius-small);
-    box-shadow: var(--box-shadow);
-    margin-bottom: var(--padding);
+.toggle, .url-section, .toggleInput {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--padding);
+    flex-direction: row-reverse;
 }
-.modal-background .modal select:hover {
+
+.zermos-modal > div.submenu {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.button div, .doubleButton div, .tripleButton div {
+    padding: var(--modal-padding);
+    background: var(--button-bg);
+    color: var(--button-color);
+    border-radius: var(--button-border-radius);
+    cursor: pointer;
+    width: 100%;
+    font-weight: 900;
+    height: calc(1.5* var(--button-height));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.doubleButton, .tripleButton {
+    display: flex;
+    gap: 20px;
+}
+
+.doubleButton div:hover, .tripleButton div:hover, .button:hover {
+    opacity: 0.8;
+}
+
+.submenu .zermos-modal {
+    box-shadow: none;
+    border-radius: unset;
+    border-left: 0;
+    border-right: 0;
+    width: 100%;
+    position: initial;
+    translate: 0 0;
+}
+
+.toggle-switch {
+    width: 60px;
+    height: var(--toggle-size);
+    background: var(--toggle-bg);
+    border-radius: var(--modal-border-radius);
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.toggle-switch.as-checkbox {
+    width: var(--toggle-size);
+    border-radius: var(--button-border-radius);
+}
+
+.toggle-switch .switch {
+    width: 28px;
+    height: 28px;
+    background: var(--background-color);;
+    border-radius: 50%;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    transition: left 0.3s;
+}
+
+.toggle-switch.active {
+    background: var(--toggle-active-bg);
+}
+
+.toggle-switch.active .switch {
+    left: 31px;
+}
+
+.toggle-switch.as-checkbox .switch {
+    left: 0;
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+}
+
+.url-field, .dropdown-button, .datepicker-parent, .text-element-input .display,
+.textarea-element-input .display, .password-element-input .display {
+    flex-grow: 1;
+    padding: var(--modal-padding);
+    border-radius: var(--button-border-radius);
+    background: var(--input-bg);
+    font-size: var(--font-size);
+    color: var(--text-color);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+
+.url-field {
+    margin-right: var(--modal-padding);
+}
+
+.button.copy {
+    padding: var(--modal-padding);
+    background: var(--accent-color);
+    color: var(--text-color);
+    border-radius: var(--button-border-radius);
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.3s;
+    color: var(--white-color);
+}
+
+.separator > div:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    border-top: 1px solid #ccc;
+    background: #ccc;
+    width: 100%;
+    transform: translateY(-50%);
+}
+
+.separator > div {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.separator p {
+    z-index: 100;
+    background: var(--modal-bg);
+    width: fit-content;
+    position: relative;
+    padding: 0 var(--modal-padding);
+    text-align: center;
+}
+
+.image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--button-border-radius);
+    display: block;
+    margin: 0 auto;
+}
+
+.datepicker-parent {
+    position: relative;
+    width: 100%;
+    height: calc(1.5 * var(--button-height));
+}
+
+.calendar {
+    background: var(--background-color);
+    /* display: none; */
+    border-radius: var(--border-radius-small);
+    overflow: hidden;
+    opacity: 0;
+    padding: 0;
+    margin-top: 0;
+    max-height: 0;
+    transition: all 0.25s ease;
+    /* max-width: 500px; */
+}
+
+.calendar.show {
+    max-height: 500px;
+    opacity: 1;
+    margin-top: 10px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--modal-padding);
+    background: #f0f0f0;
+}
+
+.calendar-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: var(--padding);
+    padding: var(--modal-padding);
+}
+
+.calendar-body div {
+    text-align: center;
+    padding: var(--padding);
+    cursor: pointer;
+    border-radius: var(--border-radius-small);
+}
+
+.calendar-body .day {
+    background: #e0e0e0;
+}
+
+.calendar-body .selected {
+    background: var(--accent-color);
+    color: var(--white-color);
+}
+
+.next-month, .prev-month, .month-year {
+    font-size: var(--font-size-heading);
+    font-weight: 900;
+    min-width: 40px;
+    text-align: center;
+}
+
+.dropdown-option::before {
+    content: '- ';
+}
+
+.dropdown-menu {
+    display: block;
+    /* position: absolute; */
+    z-index: 100000;
+    background: var(--background-color);
+    width: 100%;
+    padding: 0;
+    margin-top: 0;
+    border-radius: var(--button-border-radius);
+    max-height: 0;
+    overflow-y: auto;
+    transition: all 0.25s ease;
+    opacity: 0;
+    /* box-shadow: var(--box-shadow); */
+}
+
+.number-input {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.display {
+    flex-grow: 1;
+    text-align: center;
+    padding: var(--modal-padding);
+}
+
+.increment-button, .decrement-button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: #007bff;
+    color: var(--text-color);
+    font-weight: 900;
+    border-radius: var(--button-border-radius);
+}
+
+.text-element-input .label, .password-element-input .label, .textarea-element-input .label {
+    display: block;
+    font-size: var(--font-size);
+    color: var(--text-color);
+    margin-bottom: var(--modal-padding);
+}
+
+.text-element-input .display, .password-element-input .display {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.text-element-input .display, .textarea-element-input .display, .password-element-input .display {
+    min-height: 20px;
+    cursor: text;
+    word-break: break-all;
+    text-align: start;
+}
+
+.textarea-element-input .display {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    resize: vertical;
+    min-height: 100px;
+    max-height: 300px;
+    word-break: break-word;
+    text-overflow: clip;
+    white-space: break-spaces;
+}
+
+.eye-icon {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    height: 20px;
+    bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dropdown-button, .datepicker-parent {
+    padding-right: calc(var(--modal-padding) * 2);
+    width: 100%;
+    text-align: start;
+    height: calc(1.5 * var(--button-height));
+}
+
+.dropdown-button::after, .datepicker-parent::after {
+    content: '×';
+    position: absolute;
+    right: calc(0.2 * var(--button-height));
+    width: calc(2 * var(--modal-padding));
+    height: var(--font-size-heading);
+    font-size: calc(2 * var(--font-size-heading));
+    font-weight: 900;
+    display: flex;
+    top: calc(0.5 * var(--button-height));
+    justify-content: center;
+    align-items: center;
+    rotate: 45deg;
+    transition: all 0.25s ease;
+}
+
+.dropdown-button.selected::after, .datepicker-parent.selected::after {
+    rotate: 0deg;
+}
+
+.dropdown-menu.show {
+    max-height: 100px;
+    padding: var(--modal-padding);
+    opacity: 1;
+    margin-top: 10px;
+}
+
+.slider-container {
+    display: flex;
+    align-items: center;
+}
+
+.slider-container label {
+    margin-right: var(--modal-padding);
+    font-size: var(--font-size);
+    color: var(--text-color);
+}
+
+.slider-track {
+    position: relative;
+    flex-grow: 1;
+    height: 6px;
+    background: var(--slider-bg);
+    border-radius: var(--button-border-radius);
+    margin-right: var(--modal-padding);
+}
+
+.slider-thumb {
+    position: absolute;
+    top: -7px;
+    width: 20px;
+    height: 20px;
+    background: var(--slider-thumb-bg);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s;
+    translate: -50% 0;
+}
+
+.slider-thumb:hover {
+    background: var(--slider-thumb-hover-bg);
+}
+
+.slider-value {
+    font-size: var(--font-size);
+    color: var(--text-color);
+}
+
+.color-display {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
     cursor: pointer;
 }
 
-.modal-background .modal select option {
-    height: var(--button-height);
-    width: 100%;
-    border: none;
-    outline: none;
-    padding: 0 var(--padding);
+.color-palette {
+    display: none;
+    position: absolute;
+    background: #fff;
+    padding: var(--modal-padding);
+    z-index: 1000;
+}
+
+.hex-input {
+    width: 70px;
+    margin-bottom: var(--modal-padding);
+    padding: var(--modal-padding);
+}
+
+.rgb-input {
+    width: 50px;
+    margin-right: var(--modal-padding);
+    padding: var(--modal-padding);
+}
+
+.color-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    margin-top: var(--modal-padding);
+}
+
+.color-selector {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    position: absolute;
+    left: 70px;
+    top: 70px;
+}
+
+.ratingInput label {
+    display: block;
     font-size: var(--font-size);
-    font-weight: 500;
     color: var(--text-color);
-    background: var(--overlay-color);
-    border-radius: var(--border-radius-small);
-    box-shadow: var(--box-shadow);
-    margin-bottom: var(--padding);
+    margin-bottom: var(--modal-padding);
 }
 
-/* MULTIPLE LINES */
-.modal-background .modal textarea {
-    height: 100px;
-    min-height: 100px;
-    max-height: 500px;
-    width: 100%;
-    min-width: 100%;
-    max-width: 100%;
-    border: none;
-    outline: none;
-    padding: var(--padding);
-    font-size: var(--font-size);
-    font-weight: 500;
-    color: var(--text-color);
-    background: var(--overlay-color);
-    border-radius: var(--border-radius-small);
-    box-shadow: var(--box-shadow);
-    margin-bottom: var(--padding);
-}
-
-/* DATE */
-.modal-background .modal input[type="date"] {
-    height: var(--button-height);
-    width: 100%;
-    border: none;
-    outline: none;
-    padding: 0 var(--padding);
-    font-size: var(--font-size);
-    font-weight: 500;
-    color: var(--text-color);
-    background: var(--overlay-color);
-    border-radius: var(--border-radius-small);
-    box-shadow: var(--box-shadow);
-    margin-bottom: var(--padding);
-}
-
-
-/* BUTTON */
-.modal-background .modal button {
-    height: var(--button-height);
-    width: 100%;
-    border: none;
-    outline: none;
-    padding: 0 var(--padding);
-    font-size: var(--font-size);
-    font-weight: 500;
-    color: var(--white-color);
-    background: var(--accent-color);
-    border-radius: var(--border-radius-small);
-    box-shadow: var(--box-shadow);
-}
-
-.modal-background .modal button#submitBtn {
-    margin-top: var(--padding);
-}
-
-/* SINGEL TOGGLE INPUT */
-.modal-background .modal .toggle-parent {
+.rating-container {
     display: flex;
-    gap: var(--padding);
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    height: var(--button-height);
-    margin-bottom: var(--padding);
+    gap: 5px;
+    justify-content: space-around;
 }
 
-.modal-background .modal .toggle-parent input[type="checkbox"] {
-    height: var(--button-height);
-    width: var(--button-height);
-    border-radius: var(--border-radius-small);
-}
-
-.modal-background .modal .toggle-parent label {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: var(--button-height);
-    padding: 0 var(--padding);
-    font-size: var(--font-size);
-    font-weight: 500;
+.rating-container span {
+    font-size: calc(2 * var(--font-size-heading));
+    cursor: pointer;
     color: var(--text-color);
-    border-radius: var(--border-radius-small);
-    box-shadow: var(--box-shadow);
+    transition: color 0.3s;
+    font-weight: 900;
 }
 
-/* TOGGLE GROUP INPUT */
-.modal-background .modal .multi-toggle {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100% / 1, max(135px, 100% / 3)), 1fr));
-    grid-column-gap: var(--padding);
-    margin-bottom: var(--padding);
+.rating-container span:hover,
+.rating-container span:hover ~ span,
+.rating-container span.active {
+    color: var(--text-color);
 }
 
-/* TEXT */
-.modal-background .modal p {
-    font-size: var(--font-size);
-    margin-bottom: var(--padding);
-}
 
+@media only screen and (max-width: 1000px) {
+    .zermos-modal {
+        width: 80%;
+    }
+}
 
 @media only screen and (max-width: 40cm) {
-    .modal-background {
+    .zermos-modal-background {
         left: calc(180px + var(--padding));
         width: calc(100% - (180px + var(--padding)));
-        padding: calc(96px - var(--padding) * 2) 8px var(--padding) var(--padding);
     }
 }
 
 @media only screen and (max-width: 1200px) {
-    .modal-background {
-        z-index: 100;
-        left: 0 !important;
-        width: calc(100% - 64px) !important;
-        padding: var(--padding);
+
+    .zermos-modal-background {
+        left: 0;
+        width: calc(100% - 64px);
     }
 
-    .left .modal-background {
+    .offline .zermos-modal-background {
+        height: calc(100% - 15px);
+        top: 0;
+    }
+
+
+    .left .zermos-modal-background {
         right: 0 !important;
         left: unset !important;
     }

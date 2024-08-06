@@ -1,384 +1,1016 @@
 ﻿class ZermosModal {
-    constructor() {
-        this.title = '';
-        this.fields = [];
-        this.elements = [];
-        this.onSubmitCallback = null;
-        this.onCloseCallback = null;
-        this.closingDisabled = false;
-        this.fadeDuration = 500;
-        this.submitButtonLabel = 'Verstuur!';
+    constructor(components = [], conditions = {}) {
+        this.components = components;
+        this.conditions = conditions;
+        this.close();
     }
 
-    //ADDERS
-    
-    //
-    // @param {string} text - The text to be displayed
-    //
-    addText(text) {
-        this.fields.push(["text",text]);
+    addComponent(component) {
+        component.id = btoa(crypto.getRandomValues(new Uint8Array(8))).slice(0,11)
+        this.components.push(component);
         return this;
     }
 
-    //
-    // @param {string} input - The placeholder text for the input
-    //
-    addInput(input) {
-        this.fields.push(["text_input",input]);
-        return this;
-    }
-    
-    //
-    // @param {string} input - The placeholder text for the input
-    //
-    addMultilineInput(input) {
-        this.fields.push(["multiline_input", input]);
-        return this;
-    }
-    
-    //
-    // @param {string} input - The placeholder text for the input
-    // @param {array} options - The options for the select input
-    //
-    addSelectInput(input, options) {
-        this.fields.push(["select_input", input, options]);
+    setCondition(key, value) {
+        this.conditions[key] = value;
+        this.updateRenderedModal();
         return this;
     }
 
-    //
-    // @param {string} input - The placeholder text for the input
-    // @param {Date} defaultDate - The default date for the input
-    //
-    addDateInput(input, defaultDate) {
-        this.fields.push(["date_input", input, defaultDate]);
-        return this;
-    }
-
-    //
-    // @param {string} label - The label for the button
-    // @param {function} callback - The callback for the button
-    //
-    addButton(label, callback) {
-        this.fields.push(["button", label, callback]);
-        return this;
-    }
-    
-    //
-    // @param {string} label - The label for the toggle
-    // @param {boolean} toggled - Whether the toggle is toggled or not
-    //
-    addToggle(label, toggled) {
-        this.fields.push(["toggle", label, toggled]);
-        return this;
-    }
-    
-    //
-    // @param {array} toggles - The labels for the toggles
-    // @param {array} toggled - Whether the toggles are toggled or not
-    //
-    addMultiToggles(toggles, toggled) {
-        //make a list of toggles which collectively return an array of true/false values
-        //this array is then returned to the callback
-        this.fields.push(["multi_toggle", toggles, toggled]);
-        return this;
-    }
-    
-    //SETTERS
-    
-    //
-    // @param {string} title - The title of the modal
-    //
-    setTitle(title) {
-        this.title = title;
-        return this;
-    }
-    
-    //
-    // @param {number} duration - The duration of the fade in/out animation
-    //
-    setFadeDuration(duration) {
-        this.fadeDuration = duration;
-        return this;
-    }
-    
-    //
-    // @param {string} label - The label for the submit button
-    //
-    setSubmitButtonLabel(label) {
-        this.submitButtonLabel = label;
-        return this;
-    }
-    
-    //
-    // This disables the closing of the modal when clicking on the background
-    //
-    disableClose() {
-        this.closingDisabled = true;
-        return this;
-    }
-    
-    //
-    // This hides the submit button
-    //
-    hideSubmitButton() {
-        this.submitButtonLabel = null;
-        return this;
-    }
-
-    //CALLBACKS
-    
-    //
-    // The callback for when the submit button is clicked
-    // @param {function} callback - The callback for the submit button
-    //
-    onSubmit(callback) {
-        this.onSubmitCallback = callback;
-        return this;
-    }
-
-    //
-    // The callback for when the modal is closed
-    // @param {function}    
-    //
-    onClose(callback) {
-        this.onCloseCallback = callback;
-        return this;
-    }
-    
-    //HELPERS
-    
-    //
-    // Returns the values of the input fields
-    //
-    getConstructorValues() {
-        console.log(this);
-        return this;
-    }
-
-    //
-    // Opens the modal
-    //
-    open() {
-        //remove any existing modal
-        unloadModal();
-        
-        
-        // Create the modal HTML, add event listeners, and display it
-        const modal = createModal.call(this);
-
-        function createModal() {
-            const modal = createDivWithClass('modal');
-            modal.id = 'modal';
-
-            const modalContent = createDivWithClass('modal-content');
-            var title = document.createElement('h1');
-            title.textContent = this.title;
-            modalContent.appendChild(title);
-
-            const fields = createInputFields(this.fields);
-            this.elements = fields.children;
-            
-            const submitButton = createButton('submitBtn', this.submitButtonLabel);
-
-            modal.appendChild(modalContent);
-            modal.appendChild(fields);
-            if (submitButton !== null)
-                modal.appendChild(submitButton);
-
-            const modalBackground = createDivWithClass('modal-background');
-            modalBackground.id = 'modal';
-            modalBackground.style.opacity = 0;
-            modalBackground.appendChild(modal);
-
-            return modalBackground;
-        }
-
-        function createDivWithClass(className) {
-            const div = document.createElement('div');
-            div.classList.add(className);
-            return div;
-        }
-
-        function createInputFields(fields) {
-            const inputContainer = createDivWithClass('input-container');
-            fields.forEach((input, index) => {
-                let inputField;
-                
-                if (input[0] === "text_input") 
-                    inputField = createInput(`input${index}`, input[1]);
-                else if (input[0] === "select_input")
-                    inputField = createSelectInput(`input${index}`, input[2]);
-                else if (input[0] === "multiline_input")
-                    inputField = createMultilineInput(`input${index}`, input[1]);
-                else if (input[0] === "date_input")
-                    inputField = createDateInput(`input${index}`, input[1], input[2]);
-                else if (input[0] === "button")
-                    inputField = createButton(`input${index}`, input[1], input[2]);
-                else if (input[0] === "text")
-                    inputField = createText(input[1]);
-                else if (input[0] === "toggle")
-                    inputField = createToggle(`input${index}`, input[1], input[2]);
-                else if (input[0] === "multi_toggle")
-                    inputField = createMultiToggle(`input${index}`, input[1], input[2]);
-
-                inputContainer.appendChild(inputField);
-            });
-            return inputContainer;
-        }
-
-        function createInput(id, placeholder) {
-            const input = document.createElement('input');
-            input.id = id;
-            input.type = "text";
-            input.placeholder = placeholder;
-            input.dataset.type = "single_text_input";
-            return input;
-        }
-
-        function createSelectInput(id, options) {
-            const input = document.createElement('select');
-            input.id = id;
-            options.forEach((option) => {
-                const optionElement = document.createElement('option');
-                optionElement.value = option;
-                optionElement.textContent = option;
-                input.appendChild(optionElement);
-            });
-            input.dataset.type = "select";
-            return input;
-        }
-        
-        function createMultilineInput(id, placeholder) {
-            const input = document.createElement('textarea');
-            input.id = id;
-            input.placeholder = placeholder;
-            input.dataset.type = "multiline_text_input";
-            return input;
-        }
-        
-        function createDateInput(id, placeholder, defaultDate) {
-            const input = document.createElement('input');
-            input.id = id;
-            input.type = "date";
-            input.placeholder = placeholder;
-            if (defaultDate) {
-                input.value = defaultDate.toLocaleString('sv-SE').split(' ')[0];
+    getComponentsValue() {
+        var values = [];
+        var correctForm = true;
+        this.components.forEach((elem) => {
+            if (elem.type === "submenu"){
+                var subValues = elem.subModal.getComponentsValue();
+                subValues.correct == false ? correctForm = false : null;
+                values.push(...subValues.values)
             }
-            input.dataset.type = "date";
-            return input;
-        }
-        
-        function createButton(id, label, callback) {
-            if (!label) return null;
-            
-            const button = document.createElement('button');
-            button.id = id;
-            button.textContent = label;
-            button.addEventListener('click', callback);
-            button.dataset.type = "button";
-            return button;
-        }
-        
-        function createToggle(id, label, toggled) {
-            const toggleParent = document.createElement('div');
-            toggleParent.classList.add('toggle-parent');
-            
-            const toggle = document.createElement('input');
-            toggle.id = id;
-            toggle.type = "checkbox";
-            toggle.textContent = label;
-            toggle.checked = toggled;
-            toggle.addEventListener('click', () => {
-                toggle.classList.toggle('active');
-            });
-            
-            const toggleLabel = document.createElement('label');
-            toggleLabel.htmlFor = id;
-            toggleLabel.textContent = label;
-            
-            toggleParent.appendChild(toggle);
-            toggleParent.appendChild(toggleLabel);
-                        
-            toggleParent.dataset.type = "single_toggle";
-            return toggleParent;
-        }
-        
-        function createMultiToggle(id, labels, toggled) {
-            const toggle = document.createElement('div');
-            toggle.id = id;
-            toggle.classList.add('multi-toggle');
-            labels.forEach((label, index) => {
-                toggle.appendChild(createToggle(`${id}${index}`, label, toggled[index]));
-            });
-            toggle.dataset.type = "multi_toggle";
-            return toggle;
-        }
-        
-        function createText(text) {
-            const p = document.createElement('p');
-            p.innerHTML = text;
-            p.dataset.type = "text";
-            return p;
-        }
+            if ((elem.required && (elem.userSetValue === "" || elem.userSetValue === null || elem.userSetValue === undefined)) && this.isInputType(elem.type)){
+                correctForm = false;
+                values.push({type: elem.type, id: elem.id, value: null, correct: false});
+            }
+            else if (this.isInputType(elem.type))
+            {
+                var value = {type: elem.type, id: elem.id, value: null, correct: true};
+                if (elem.userSetValue === "true" || elem.userSetValue === "false")
+                    value.value = !!elem.userSetValue;
+                else if (elem.userSetValue === undefined)
+                    value.value = null;
+                else
+                    value.value = elem.userSetValue;
 
-        function fade(element, opacity, duration) {
-            setTimeout(() => {
-                element.style.transition = `opacity ${duration}ms`;
-                element.style.opacity = opacity;
-            }, 10);
-        }
-        
-        document.body.appendChild(modal);
-        fade(modal, 1, this.fadeDuration);
-
-        const submitButton = modal.querySelector('#submitBtn');
-        
-
-        if (submitButton) {
-            submitButton.addEventListener('click', () => {
-                if (this.onSubmitCallback) {
-                    
-                    const inputValues = Array.from(this.elements).map((inputElement) => {
-                        if (inputElement.dataset.type === "text") return null;
-                        if (inputElement.dataset.type === "button") return null;
-                        
-                        
-                        //special case for toggles
-                        if (inputElement.dataset.type === "single_toggle") {
-                            return inputElement.children[0].checked;
-                        } else if (inputElement.dataset.type === "multi_toggle") {
-                            return Array.from(inputElement.children).map(child => child.children[0].checked);
-                        } 
-                        
-                        //everything else
-                        else {
-                            return inputElement.value;
-                        }
-                    });
-                    this.onSubmitCallback(...inputValues.filter(value => value !== null));
-                }
-                unloadModal();
-            });
-        }
-        
-        document.querySelector('#modal').addEventListener('click', (e) => {
-            if (this.closingDisabled) return;
-            if (this.onCloseCallback) this.onCloseCallback();
-            
-            
-            //if the one clicked is not the background (modal), return
-            if (e.target.id !== 'modal') return;
-            
-            var modal = document.querySelector('#modal');
-            fade(modal, 0, this.fadeDuration);
-            setTimeout(() => {
-                unloadModal()
-            }, this.fadeDuration);
+                values.push(value)
+            }
         });
+
+        return {correct: correctForm, values: values};
+    }
+
+    isInputType(type){
+        return type.toLowerCase().includes("input");
+    }
+
+    updateRenderedModal() {
+        document.querySelectorAll('div[showCondition]').forEach(element => {
+            element.parentElement.style.display =
+                this.evaluateExpression(element.getAttribute("showCondition")) ? "block" : "none";
+        });
+    }
+
+    addHeading(text, subheading = "", level = 1) {
+        return this.addComponent({ type: 'heading', text, subheading, level });
+    }
+
+    addToggle(label, initialState = false, onChange = () => {}) {
+        return this.addComponent({ type: 'toggleInput', label, state: initialState, onChange });
+    }
+
+    addButton(text, onClick = () => {}) {
+        return this.addComponent({ type: 'button', text, onClick });
+    }
+
+    addDoubleButtons(text, secondText, onClick = () => {}, secondOnClick = () => {}) {
+        return this.addComponent({ type: 'doubleButton', text, onClick, secondText, secondOnClick });
+    }
+
+    addTripleButtons(text, secondText, thirdText, onClick = () => {}, secondOnClick = () => {}, thirdOnClick = () => {}) {
+        return this.addComponent({ type: 'tripleButton', text, onClick, secondText, secondOnClick, thirdText, thirdOnClick });
+    }
+
+    addSubmenu(showCondition, subModal) {
+        return this.addComponent({ type: 'submenu', showCondition, subModal });
+    }
+
+    addText(text) {
+        return this.addComponent({ type: 'text', text });
+    }
+
+    addUrl(url, showFull = false, copyButton = true) {
+        return this.addComponent({ type: 'url', url, showFull, copyButton });
+    }
+
+    ///INPUT ELEMENTS
+    addDatePicker(required = false, initialDate = new Date(), onChange = () => {}) {
+        return this.addComponent({ type: 'datePickerInput', required, initialDate, onChange });
+    }
+
+    addDropdown(options, required = false, multiSelect = false, onChange = () => {}) {
+        return this.addComponent({ type: 'dropdownInput', options, required, multiSelect, onChange });
+    }
+
+    addSeparator(text = '') {
+        return this.addComponent({ type: 'separator', text });
+    }
+
+    addImage(src, alt = '') {
+        return this.addComponent({ type: 'image', src, alt });
+    }
+
+    addSpacer(height = "20px") {
+        return this.addComponent({ type: 'spacer', height });
+    }
+
+    addNumberInput(required = false, initialValue = 0, decimals = 0, min = Number.MIN_VALUE, max = Number.MAX_VALUE, step = 1, onChange = () => {}) {
+        return this.addComponent({ type: 'numberInput', required, initialValue, decimals, min, max, step, onChange });
+    }
+
+    addTextInput(required = false, initialValue = '', maxLength = null, onChange = () => {}) {
+        return this.addComponent({ type: 'textInput', required, initialValue, maxLength, onChange });
+    }
+
+    addPasswordInput(required = false, maxLength = null, onChange = () => {}) {
+        return this.addComponent({ type: 'passwordInput', required, maxLength, onChange });
+    }
+
+    addTextArea(required = false, initialValue = '', maxLength = null, onChange = () => {}) {
+        return this.addComponent({ type: 'textAreaInput', required, initialValue, maxLength, onChange });
+    }
+
+    addCheckbox(initialState = false, onChange = () => {}) {
+        return this.addComponent({ type: 'toggleInput', state: initialState, asCheckbox: true, onChange });
+    }
+
+    /// NEW
+    addSlider(min = 0, max = 100, step = 1, initialValue = 50, onChange = () => {}) {
+        return this.addComponent({ type: 'sliderInput', min, max, step, initialValue, onChange });
+    }
+
+    addColorPicker(required, initialColor = '#000000', onChange = () => {}) {
+        return this.addComponent({ type: 'colorPickerInput', required, initialColor, onChange });
+    }
+
+    addRating(required, maxRating = 5, initialRating = 0, onChange = () => {}) {
+        return this.addComponent({ type: 'ratingInput', required, maxRating, initialRating, onChange });
+    }
+
+    render() {
+        const modalElement = document.createElement('div');
+        modalElement.className = 'zermos-modal';
+        this.components.forEach(component => {
+            modalElement.appendChild(this.renderComponent(component));
+        });
+        return modalElement;
+    }
+
+    renderComponent(component) {
+        const componentElement = document.createElement('div');
+        componentElement.classList.add(component.type);
+        componentElement.id = component.id;
+
+        const renderMethods = {
+            heading: this.renderHeading,
+            button: this.renderButton,
+            doubleButton: this.renderDoubleButton,
+            tripleButton: this.renderTripleButton,
+            submenu: this.renderSubmenu,
+            text: this.renderText,
+            toggleInput: this.renderToggle,
+            url: this.renderUrl,
+            spacer: this.renderSpacer,
+            separator: this.renderSeparator,
+            image: this.renderImage,
+            datePickerInput: this.renderDatePicker,
+            dropdownInput: this.renderDropdown,
+            numberInput: this.renderNumberInput,
+            textInput: this.renderTextInput,
+            passwordInput: this.renderPasswordInput,
+            textAreaInput: this.renderTextArea,
+            sliderInput: this.renderSlider,
+            colorPickerInput: this.renderColorPicker,
+            ratingInput: this.renderRating,
+        };
+
+        const renderMethod = renderMethods[component.type] || this.renderDefault;
+        return renderMethod.call(this, component, componentElement);
+    }
+
+    renderHeading(component, componentElement) {
+        const headingElement = document.createElement(`h${component.level}`);
+        headingElement.innerText = component.text;
+        const textElement = document.createElement('p');
+        textElement.innerText = component.subheading;
+        componentElement.append(headingElement, textElement);
+        return componentElement;
+    }
+
+    renderButton(component, componentElement) {
+        const buttonElement = document.createElement("div");
+        buttonElement.innerText = component.text;
+        buttonElement.onclick = () => component.onClick(this);
+        componentElement.appendChild(buttonElement);
+        return componentElement;
+    }
+
+    renderDoubleButton(component, componentElement) {
+        const button1= document.createElement("div");
+        button1.innerText = component.text;
+        button1.onclick = () => component.onClick(this);
+
+        const button2 = document.createElement("div");
+        button2.innerText = component.secondText;
+        button2.onclick = () => component.secondOnClick(this);
+
+        componentElement.append(button1, button2);
+        return componentElement;
+    }
+
+    renderTripleButton(component, componentElement) {
+        const button1 = document.createElement("div");
+        button1.innerText = component.text;
+        button1.onclick = () => component.onClick(this);
+
+        const button2 = document.createElement("div");
+        button2.innerText = component.secondText;
+        button2.onclick = () => component.secondOnClick(this);
+
+        const button3 = document.createElement("div");
+        button3.innerText = component.thirdText;
+        button3.onclick = () => component.thirdOnClick(this);
+
+        componentElement.append(button1, button2, button3);
+        return componentElement;
+    }
+
+    renderSubmenu(component, componentElement) {
+        const subMenuElement = component.subModal.render();
+        subMenuElement.setAttribute("showCondition", component.showCondition.replace("\"", "'"));
+        componentElement.appendChild(subMenuElement);
+        componentElement.style.display = this.evaluateExpression(component.showCondition) ? "block" : "none";
+        return componentElement;
+    }
+
+    renderText(component, componentElement) {
+        const textElement = document.createElement('p');
+        textElement.innerText = component.text;
+        componentElement.appendChild(textElement);
+        return componentElement;
+    }
+
+    renderToggle(component, componentElement) {
+        component.userSetValue = component.state.toString();
+
+        const toggleElement = document.createElement('div');
+        toggleElement.classList.add("toggle-switch");
+        component.asCheckbox ? toggleElement.classList.add("as-checkbox") : null;
+        if (component.state) toggleElement.classList.add("active");
+        toggleElement.innerHTML = "<div class=\"switch\"></div>";
+
+        toggleElement.addEventListener('click', () => {
+            toggleElement.classList.toggle('active');
+            const isActive = toggleElement.classList.contains('active');
+            if (component.onChange) {
+                component.onChange(this, isActive);
+                component.userSetValue = isActive.toString();
+            }
+        });
+
+        const toggleLabelElement = document.createElement('div');
+        toggleLabelElement.classList.add("toggle-label");
+        toggleLabelElement.innerText = component.label;
+
+        componentElement.appendChild(toggleElement);
+        componentElement.appendChild(toggleLabelElement)
+        return componentElement;
+    }
+
+    renderUrl(component, componentElement) {
+        const urlSection = document.createElement('div');
+        urlSection.className = 'url-section';
+
+        const urlField = document.createElement('div');
+        urlField.className = 'url-field';
+        urlField.textContent = component.showFull ? component.url : (new URL(component.url).pathname + new URL(component.url).search);
+        urlField.contentEditable = !component.copyButton;
+
+        if (component.copyButton) {
+            const copyButton = document.createElement('div');
+            copyButton.className = 'copy button';
+            copyButton.textContent = 'Kopieer';
+
+            copyButton.addEventListener('click', () => {
+                navigator.clipboard.writeText(component.url)
+                    .then(() => console.log(`"${component.url}" was copied to your clipboard.`))
+                    .catch(err => console.error(`Error copying text to clipboard: ${err}`));
+            });
+
+            urlSection.appendChild(copyButton);
+        }
+        urlSection.appendChild(urlField);
+
+        componentElement.appendChild(urlSection);
+        return componentElement;
+    }
+
+    renderSpacer(component, componentElement) {
+        componentElement.style.height = component.height;
+        return componentElement;
+    }
+
+    renderSeparator(component, componentElement) {
+        const separatorTextElement = document.createElement('p');
+        separatorTextElement.innerText = component.text;
+        componentElement.appendChild(separatorTextElement);
+        return componentElement;
+    }
+
+    renderImage(component, componentElement) {
+        const imageElement = document.createElement('img');
+        imageElement.src = component.src;
+        imageElement.alt = component.alt;
+        componentElement.appendChild(imageElement);
+        return componentElement;
+    }
+
+    renderDatePicker(component, componentElement) {
+        const datepicker = document.createElement('div');
+        datepicker.className = 'datepicker-parent';
+
+        const selectedDateElem = document.createElement('div');
+        selectedDateElem.className = 'selected-date';
+        selectedDateElem.textContent = 'Select a date';
+        datepicker.appendChild(selectedDateElem);
+
+        const calendarElem = document.createElement('div');
+        calendarElem.className = 'calendar';
+
+        const calendarHeader = document.createElement('div');
+        calendarHeader.className = 'calendar-header';
+        calendarElem.appendChild(calendarHeader);
+
+        const prevMonthButton = document.createElement('div');
+        prevMonthButton.className = 'prev-month';
+        prevMonthButton.textContent = '<';
+        calendarHeader.appendChild(prevMonthButton);
+
+        const monthYearElem = document.createElement('span');
+        monthYearElem.className = 'month-year';
+        calendarHeader.appendChild(monthYearElem);
+
+        const nextMonthButton = document.createElement('div');
+        nextMonthButton.className = 'next-month';
+        nextMonthButton.textContent = '>';
+        calendarHeader.appendChild(nextMonthButton);
+
+        const calendarBody = document.createElement('div');
+        calendarBody.className = 'calendar-body';
+        calendarElem.appendChild(calendarBody);
+
+        componentElement.appendChild(datepicker);
+        componentElement.appendChild(calendarElem);
+
+        let selectedDate = component.initialDate;
+        let currentMonth = selectedDate.getMonth();
+        let currentYear = selectedDate.getFullYear();
+
+        const renderCalendar = (month, year) => {
+            calendarBody.innerHTML = '';
+            const firstDay = new Date(year, month).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            monthYearElem.textContent = new Date(year, month + 1, 0).toLocaleString('default', { year: 'numeric', month: 'long' });
+
+            for (let i = 0; i < firstDay - 1; i++) {
+                calendarBody.appendChild(document.createElement('div'));
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElem = document.createElement('div');
+                dayElem.textContent = day;
+                dayElem.classList.add('day');
+                if (day === selectedDate.getDate() && month === selectedDate.getMonth() && year === selectedDate.getFullYear()) {
+                    dayElem.classList.add('selected');
+                }
+                dayElem.addEventListener('click', () => {
+                    selectedDate = new Date(year, month, day);
+                    selectedDateElem.textContent = selectedDate.toDateString();
+                    renderCalendar(currentMonth, currentYear);
+                    if (component.onChange) {
+                        component.onChange(this, selectedDate);
+                        component.userSetValue = selectedDate;
+                    }
+                });
+                calendarBody.appendChild(dayElem);
+            }
+        };
+
+        datepicker.addEventListener('click', () => {
+            datepicker.classList.toggle("selected");
+            calendarElem.classList.toggle("show");
+        });
+
+        prevMonthButton.addEventListener('click', () => {
+            if (currentMonth === 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else {
+                currentMonth--;
+            }
+            renderCalendar(currentMonth, currentYear);
+        });
+
+        nextMonthButton.addEventListener('click', () => {
+            if (currentMonth === 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else {
+                currentMonth++;
+            }
+            renderCalendar(currentMonth, currentYear);
+        });
+
+        renderCalendar(currentMonth, currentYear);
+
+        return componentElement;
+    }
+
+    renderDropdown(component, componentElement) {
+
+        const dropdownElement = document.createElement('div');
+        dropdownElement.classList.add('dropdown');
+
+        const dropdownButton = document.createElement('div');
+        dropdownButton.classList.add('dropdown-button');
+        dropdownButton.innerText = 'Select...';
+
+        const dropdownMenu = document.createElement('div');
+        dropdownMenu.classList.add('dropdown-menu');
+
+        component.options.forEach(option => {
+            const optionElement = document.createElement('div');
+            optionElement.classList.add('dropdown-option');
+            optionElement.innerText = option.label;
+            optionElement.dataset.value = option.value;
+
+            optionElement.addEventListener('click', () => {
+                if (component.multiSelect) {
+                    optionElement.classList.toggle('selected');
+                } else {
+                    Array.from(dropdownMenu.children).forEach(child => child.classList.remove('selected'));
+                    optionElement.classList.add('selected');
+                    dropdownButton.click();
+                }
+                const selectedOptions = Array.from(dropdownMenu.children)
+                    .filter(child => child.classList.contains('selected'))
+                    .map(child => child.dataset.value);
+
+                dropdownButton.innerText = selectedOptions.length ? selectedOptions.join(", ") : "Select...";
+
+                if (component.onChange) {
+                    component.onChange(this, component.multiSelect ? selectedOptions : selectedOptions[0]);
+                    component.userSetValue = component.multiSelect ? selectedOptions : selectedOptions[0];
+                }
+            });
+
+            dropdownMenu.appendChild(optionElement);
+        });
+
+        dropdownButton.addEventListener('click', () => {
+            dropdownButton.classList.toggle("selected");
+            dropdownMenu.classList.toggle("show");
+        });
+
+        dropdownElement.appendChild(dropdownButton);
+        dropdownElement.appendChild(dropdownMenu);
+
+        componentElement.appendChild(dropdownElement);
+        return componentElement;
+    }
+
+    renderNumberInput(component, componentElement) {
+        const numberInput = document.createElement('div');
+        numberInput.className = 'number-input';
+
+        const decrementButton = document.createElement('div');
+        decrementButton.className = 'decrement-button';
+        decrementButton.textContent = '-';
+
+        const numberDisplay = document.createElement('span');
+        numberDisplay.contentEditable = 'true';
+        numberDisplay.className = 'display';
+
+        const incrementButton = document.createElement('div');
+        incrementButton.className = 'increment-button';
+        incrementButton.textContent = '+';
+
+        numberInput.append(decrementButton, numberDisplay, incrementButton);
+
+        let value = component.initialValue;
+
+        const updateDisplay = () => {
+            numberDisplay.textContent = value.toFixed(component.decimals);
+            if (component.onChange) {
+                component.onChange(this, value);
+                component.userSetValue = value;
+            }
+        };
+
+        const increment = () => {
+            if (value + component.step <= component.max) {
+                value += component.step;
+                updateDisplay();
+            }
+        };
+
+        const decrement = () => {
+            if (value - component.step >= component.min) {
+                value -= component.step;
+                updateDisplay();
+            }
+        };
+
+        const validateAndSetInput = (inputValue) => {
+            let parsedValue = parseFloat(inputValue.replace(',', '.'));
+            if (!isNaN(parsedValue) && parsedValue >= component.min && parsedValue <= component.max) {
+                value = parsedValue;
+                updateDisplay();
+            }
+        };
+
+        incrementButton.addEventListener("click", increment);
+        decrementButton.addEventListener("click", decrement);
+
+        numberDisplay.addEventListener("input", (e) => validateAndSetInput(e.target.textContent));
+        numberDisplay.addEventListener("keypress", (e) => {
+            if (!/[0-9,.]/.test(String.fromCharCode(e.which))) {
+                e.preventDefault();
+            }
+        });
+
+        updateDisplay();
+        componentElement.appendChild(numberInput);
+        return componentElement;
+    }
+
+    renderTextInput(component, componentElement) {
+        const textElementInput = document.createElement('div');
+        textElementInput.className = 'text-element-input';
+
+        const textDisplay = document.createElement('div');
+        textDisplay.contentEditable = 'true';
+        textDisplay.className = 'display';
+        textDisplay.textContent = component.initialValue;
+
+        textElementInput.append(textDisplay);
+
+        const handleInput = (e) => {
+            if (component.maxLength && e.target.innerText.length > component.maxLength) {
+                e.target.innerText = e.target.innerText.slice(0, component.maxLength);
+            }
+            if (component.onChange) {
+                component.onChange(this, e.target.innerText);
+                component.userSetValue = e.target.innerText;
+            }
+        };
+
+        textDisplay.addEventListener("input", handleInput);
+
+        componentElement.appendChild(textElementInput);
+        return componentElement;
+    }
+
+    renderPasswordInput(component, componentElement) {
+        const passwordInput = document.createElement('div');
+        passwordInput.className = 'password-element-input';
+
+        const textDisplay = document.createElement('div');
+        textDisplay.contentEditable = 'true';
+        textDisplay.className = 'display';
+
+        const eyeIcon = document.createElement('span');
+        eyeIcon.innerText = "👀";
+        eyeIcon.className = 'eye-icon';
+
+        passwordInput.append(textDisplay, eyeIcon);
+
+        let password = '';
+        let showPassword = false;
+
+        const updateDisplay = () => {
+            textDisplay.innerText = showPassword ? password : '•'.repeat(password.length);
+            if (component.onChange) {
+                component.onChange(this, password);
+                component.userSetValue = password;
+            }
+        };
+
+        const handleKeydown = (e) => {
+            let sel = window.getSelection();
+            let pos = sel.focusOffset;
+
+            if (e.key === "Backspace" && pos > 0) {
+                password = password.slice(0, pos - 1) + password.slice(pos);
+            } else if (e.key.length === 1 && (!component.maxLength || password.length < component.maxLength)) {
+                password = password.slice(0, pos) + e.key + password.slice(pos);
+            } else if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+                e.preventDefault();
+            }
+
+            updateDisplay();
+            this.setCursorPosition(textDisplay, pos + (e.key === "Backspace" ? -1 : 1));
+            e.preventDefault();
+        };
+
+        eyeIcon.addEventListener('click', () => {
+            showPassword = !showPassword;
+            updateDisplay();
+        });
+
+        textDisplay.addEventListener("keydown", handleKeydown);
+
+        componentElement.appendChild(passwordInput);
+        return componentElement;
+    }
+
+    renderTextArea(component, componentElement) {
+        const textAreaElementInput = document.createElement('div');
+        textAreaElementInput.className = 'textarea-element-input';
+
+        const textDisplay = document.createElement('span');
+        textDisplay.contentEditable = 'true';
+        textDisplay.className = 'display';
+        textDisplay.role = 'textbox';
+        textDisplay.textContent = component.initialValue;
+
+        textAreaElementInput.append(textDisplay);
+
+        const handleInput = (e) => {
+            if (component.maxLength && e.target.innerText.length > component.maxLength) {
+                e.target.innerText = e.target.innerText.slice(0, component.maxLength);
+            }
+            if (component.onChange) {
+                component.onChange(this, e.target.innerText);
+                component.userSetValue = e.target.innerText;
+            }
+        };
+
+        textDisplay.addEventListener("input", handleInput);
+
+        componentElement.appendChild(textAreaElementInput);
+        return componentElement;
+    }
+
+    renderSlider(component, componentElement) {
+        const sliderContainer = document.createElement('div');
+        sliderContainer.className = 'slider-container';
+
+        const sliderTrack = document.createElement('div');
+        sliderTrack.className = 'slider-track';
+
+        const sliderThumb = document.createElement('div');
+        sliderThumb.className = 'slider-thumb';
+
+        const valueDisplay = document.createElement('span');
+        valueDisplay.className = 'slider-value';
+        valueDisplay.textContent = component.initialValue;
+
+        sliderTrack.appendChild(sliderThumb);
+        sliderContainer.append(sliderTrack, valueDisplay);
+
+        const min = component.min;
+        const max = component.max;
+        const range = max - min;
+
+        // Set initial position
+        const initialPercentage = ((component.initialValue - min) / range) * 100;
+        sliderThumb.style.left = `${initialPercentage}%`;
+
+        let isDragging = false;
+
+        const updateSliderValue = (clientX) => {
+            const rect = sliderTrack.getBoundingClientRect();
+            let percentage = (clientX - rect.left) / rect.width;
+            percentage = Math.max(0, Math.min(percentage, 1));
+
+            const value = min + percentage * range;
+            const roundedValue = Math.round(value / component.step) * component.step;
+
+            sliderThumb.style.left = `${percentage * 100}%`;
+            valueDisplay.textContent = roundedValue.toFixed(getDecimalPlaces(component.step));
+
+            if (component.onChange) {
+                component.onChange(this, roundedValue);
+                component.userSetValue = roundedValue;
+            }
+        };
+
+        sliderTrack.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            applyNoSelectionClass(true); // Apply no-selection class
+            updateSliderValue(e.clientX);
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                updateSliderValue(e.clientX);
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            applyNoSelectionClass(false); // Apply no-selection class
+        });
+
+        componentElement.appendChild(sliderContainer);
+        return componentElement;
+
+        function getDecimalPlaces(num) {
+            // Ensure num is a floating-point number
+            let floatNum = parseFloat(num);
+            if (Math.floor(floatNum) === floatNum) return 0; // Check if the number is an integer
+
+            let decimalPart = floatNum.toString().split('.')[1];
+
+            // Trim any trailing zeroes for a more sensible decimal count
+            if (decimalPart) {
+                decimalPart = decimalPart.replace(/0+$/, '');
+                return Math.min(decimalPart.length, 2);
+            } else {
+                return 0;
+            }
+        }
+
+        // Add this function to apply and remove the no-selection CSS class
+        function applyNoSelectionClass(apply) {
+            if (apply) {
+                document.body.classList.add('no-select');
+            } else {
+                document.body.classList.remove('no-select');
+            }
+        }
+    }
+
+    renderColorPicker(component, componentElement) {
+        const colorPickerContainer = document.createElement('div');
+        colorPickerContainer.className = 'color-picker-container';
+
+        const colorDisplay = document.createElement('div');
+        colorDisplay.className = 'color-display';
+        colorDisplay.style.backgroundColor = component.initialColor;
+
+        const colorPalette = document.createElement('div');
+        colorPalette.className = 'color-palette';
+        colorPalette.style.display = "none";
+
+        const hexInput = document.createElement('div');
+        hexInput.className = 'hex-input';
+        hexInput.contentEditable = 'true';
+        hexInput.textContent = component.initialColor;
+
+        const rgbInputs = ['R', 'G', 'B'].map(channel => {
+            const input = document.createElement('div');
+            input.className = 'rgb-input';
+            input.contentEditable = 'true';
+            input.textContent = '0';
+            return input;
+        });
+
+        const colorCircle = document.createElement('canvas');
+        colorCircle.className = 'color-circle';
+        colorCircle.width = 150;
+        colorCircle.height = 150;
+
+        const ctx = colorCircle.getContext('2d');
+
+// Create a conic gradient
+        const gradient = ctx.createConicGradient(0, 75, 75);
+
+// Add five color stops
+        gradient.addColorStop(0, "red");
+        gradient.addColorStop(1/6, "yellow");
+        gradient.addColorStop(2/6, "lime");
+        gradient.addColorStop(3/6, "cyan");
+        gradient.addColorStop(4/6, "blue");
+        gradient.addColorStop(5/6, "magenta");
+        gradient.addColorStop(1, "red");
+
+// Set the fill style and draw a rectangle
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 150, 150);
+
+        const colorSelector = document.createElement('div');
+        colorSelector.className = 'color-selector';
+
+        const updateColorDisplay = (color) => {
+            colorDisplay.style.backgroundColor = color;
+            if (component.onChange) {
+                component.onChange(this, color);
+                component.userSetValue = color;
+            }
+        };
+
+        const hexToRgb = (hex) => {
+            const bigint = parseInt(hex.slice(1), 16);
+            return {
+                r: (bigint >> 16) & 255,
+                g: (bigint >> 8) & 255,
+                b: bigint & 255
+            };
+        };
+
+        const rgbToHex = (r, g, b) => {
+            return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()}`;
+        };
+
+        const setColorFromHex = (hex) => {
+            const { r, g, b } = hexToRgb(hex);
+            rgbInputs[0].textContent = r;
+            rgbInputs[1].textContent = g;
+            rgbInputs[2].textContent = b;
+            updateColorDisplay(hex);
+        };
+
+        const setColorFromRgb = () => {
+            const r = parseInt(rgbInputs[0].textContent, 10) || 0;
+            const g = parseInt(rgbInputs[1].textContent, 10) || 0;
+            const b = parseInt(rgbInputs[2].textContent, 10) || 0;
+            const hex = rgbToHex(r, g, b);
+            hexInput.textContent = hex;
+            updateColorDisplay(hex);
+        };
+
+        hexInput.addEventListener('input', (e) => {
+            const hex = e.target.textContent.trim();
+            if (/^#[0-9A-F]{6}$/i.test(hex)) {
+                setColorFromHex(hex);
+            }
+        });
+
+        rgbInputs.forEach(input => {
+            input.addEventListener('input', setColorFromRgb);
+        });
+
+        colorDisplay.addEventListener('click', () => {
+            colorPalette.style.display = colorPalette.style.display === 'none' ? 'block' : 'none';
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!colorPickerContainer.contains(event.target)) {
+                colorPalette.style.display = 'none';
+            }
+        });
+
+        colorCircle.addEventListener('click', (e) => {
+            const rect = colorCircle.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const pixel = ctx.getImageData(x, y, 1, 1).data;
+            const hex = rgbToHex(pixel[0], pixel[1], pixel[2]);
+            setColorFromHex(hex);
+            colorSelector.style.left = `${x - 5}px`;
+            colorSelector.style.top = `${y - 5}px`;
+        });
+
+        const { r, g, b } = hexToRgb(component.initialColor);
+        rgbInputs[0].textContent = r;
+        rgbInputs[1].textContent = g;
+        rgbInputs[2].textContent = b;
+
+        colorCircle.appendChild(colorSelector);
+        colorPalette.append(hexInput, ...rgbInputs, colorCircle);
+        colorPickerContainer.append(colorDisplay, colorPalette);
+        componentElement.appendChild(colorPickerContainer);
+        return componentElement;
+    }
+
+    renderDefault(component, componentElement) {
+        componentElement.innerText = `couldn't render component of type: ${component.type}`;
+        return componentElement;
+    }
+
+    renderRating(component, componentElement) {
+        const ratingContainer = document.createElement('div');
+        ratingContainer.className = 'rating-container';
+
+        for (let i = 1; i <= component.maxRating; i++) {
+            const star = document.createElement('span');
+            star.textContent = '☆';
+            star.dataset.value = i;
+
+            if (i <= component.initialRating) {
+                star.textContent = '★';
+            }
+
+            star.addEventListener('click', (e) => {
+                const value = parseInt(e.target.dataset.value);
+                ratingContainer.querySelectorAll('span').forEach((s, index) => {
+                    s.textContent = index < value ? '★' : '☆';
+                });
+                if (component.onChange) {
+                    component.onChange(this, value);
+                    component.userSetValue = value;
+                }
+            });
+
+            ratingContainer.appendChild(star);
+        }
+
+        componentElement.append(ratingContainer);
+        return componentElement;
+    }
+
+    setCursorPosition(contentEditableElement, position) {
+        position = Math.max(0, Math.min(position, contentEditableElement.textContent.length));
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.setStart(contentEditableElement.childNodes[0] || contentEditableElement, position);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
+
+    evaluateExpression(expression) {
+        const comparisonMatch = expression.match(/^(\w+)\s*(==|!=|>=|<=|>|<)\s*(.+)$/);
+        if (!comparisonMatch) return false;
+
+        const [_, key, operator, value] = comparisonMatch;
+        const conditionValue = this.conditions[key];
+        const comparedValue = this.parseValue(value);
+
+        const operations = {
+            '==': (a, b) => a === b,
+            '!=': (a, b) => a !== b,
+            '>': (a, b) => a > b,
+            '<': (a, b) => a < b,
+            '>=': (a, b) => a >= b,
+            '<=': (a, b) => a <= b
+        };
+
+        return operations[operator](conditionValue, comparedValue);
+    }
+
+    parseValue(value) {
+        if (value === 'true') return true;
+        if (value === 'false') return false;
+        if (!isNaN(value)) return parseFloat(value);
+        if (/^["'].*["']$/.test(value)) return value.slice(1, -1);
+        throw new Error('Unsupported value type:' + value);
+    }
+
+    open() {
+        const modalElement = this.render();
+        
+        const modalBackground = document.createElement('div');
+        modalBackground.className = 'zermos-modal-background';
+        modalBackground.addEventListener('click', (e) => {
+            if (e.target === modalBackground) this.close();
+        });
+        modalBackground.style.opacity = 0;
+        
+        //.zermos-modal-container
+        const modalContainer = document.createElement('div');
+        modalContainer.className = 'zermos-modal-container';
+
+        modalContainer.appendChild(modalElement);
+        modalBackground.appendChild(modalContainer);
+        document.body.appendChild(modalBackground);
+
+        ease(0, 1, 250, opacity => modalBackground.style.opacity = opacity);
+    }
+    
+    close() {
+        document.querySelectorAll('.zermos-modal-background').forEach(modal => modal.remove());
+    }
+
+    deepCopy() {
+        const copiedComponents = this.components.map(component => ({...component}));
+        const copiedConditions = {...this.conditions};
+        return new ZermosModal(copiedComponents, copiedConditions);
     }
 }
 
+
+// Subclass for submenus, can override or add specific submenu behavior
+class ZermosSubModal extends ZermosModal {}
+
 function unloadModal() {
-    if (document.querySelector('#modal'))
-        document.body.removeChild(document.querySelector('#modal'));
+    var modal = document.querySelector('.zermos-modal-background');
+    if (modal) {
+        ease(1, 0, 250, opacity => modal.style.opacity = opacity);
+        setTimeout(() => modal.remove(), 300);
+    }
+}
+
+function ease(start, end, time, callback) {
+    start = Number(start);
+    end = Number(end);
+    const startTime = Date.now();
+    const duration = time;
+
+    function update() {
+        const currentTime = Date.now();
+        const elapsed = currentTime - startTime;
+
+        if (elapsed >= duration) {
+            callback(end);
+        } else {
+            const progress = elapsed / duration;
+            const easedValue = start + (end - start) * (progress * (2 - progress));
+            callback(easedValue);
+            requestAnimationFrame(update);
+        }
+    }
+
+    requestAnimationFrame(update);
 }

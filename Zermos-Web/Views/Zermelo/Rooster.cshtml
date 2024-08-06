@@ -414,7 +414,7 @@ function OpenLessonDetail(base64){
     const json = JSON.parse(atob(base64));
     
     var lessonDetail = new ZermosModal()
-    .setTitle((json.subjects[0] ?? '?') + " - " + new Date(json.start * 1000).toLocaleDateString("nl-NL", { weekday: 'long', month: 'short', day: 'numeric'}));
+    .addHeading((json.subjects[0] ?? '?') + " - " + new Date(json.start * 1000).toLocaleDateString("nl-NL", { weekday: 'long', month: 'short', day: 'numeric'}));
     
     lessonDetail.addText("Je hebt:");
     if (json.teachers.length > 0) 
@@ -436,9 +436,8 @@ function OpenLessonDetail(base64){
     
     lessonDetail.addText("De les is van: " + new Date(json.start * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1] + " tot " + new Date(json.end * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1])
     
-    lessonDetail.addText("&ZeroWidthSpace;")
-    .setSubmitButtonLabel("Bekijk huiswerk")
-    .onSubmit(() => {
+    lessonDetail.addSpacer('var(--padding)')
+    .addButton("Bekijk huiswerk (indien beschikbaar)", () => {
         ReplacePage('/Somtoday/Huiswerk?les=' + json.start);
     });
        
@@ -457,13 +456,17 @@ function OpenLessonDetail(base64){
 addButtonToPage('fa-share-from-square', () => {
    
     new ZermosModal()
-    .setTitle("Deel je rooster")
+    .addHeading("Deel je rooster")
     .addText("Deel je rooster met je vrienden! De pagina die je nu ziet wordt als link gedeeld, zij hoeven geen account hiervoor te hebben.")
-    .addDateInput("Wat is de verval datum?", new Date(Date.now() + 604800000))
-    .hideSubmitButton()
-    .addButton("Deel", () => {
+    .addDatePicker(true, new Date(Date.now() + 604800000))
+    .addButton("Deel", (ctx) => {
         
-        const date = document.getElementById('input1').value;
+        var values = ctx.getComponentsValue();
+        
+        if (values.correct === false) return;
+        
+        
+        const date = values[0];
         const dateObject = new Date(date);
         const currentYear = new Date().getFullYear();
         var expires_at = Math.floor(dateObject.getTime() / 1000);
@@ -473,13 +476,9 @@ addButtonToPage('fa-share-from-square', () => {
         .then(response => response.text())
         .then((url) => {
             new ZermosModal()
-            .setTitle("Deel je rooster")
+            .addHeading("Deel je rooster")
             .addText("Deel je rooster met je vrienden! De pagina die je nu ziet wordt als link gedeeld, zij hoeven geen account hiervoor te hebben.")
-            .addText("De link is: " + url)
-            .hideSubmitButton()
-            .addButton("Kopieer link", () => {
-                copyToClipboard(url);
-            })
+            .addUrl(url, false, true)
             .open();
         });
     })
@@ -491,8 +490,7 @@ addButtonToPage('fa-share-from-square', () => {
 addButtonToPage('fa-list', () => {
    
     new ZermosModal()
-    .setTitle("Je paklijst")
-    .setSubmitButtonLabel("Oke")
+    .addHeading("Je paklijst")
     .addText("Je hebt vandaag de volgende vakken:")
     @{
         try
@@ -512,7 +510,7 @@ addButtonToPage('fa-list', () => {
             @Html.Raw("    .addText(\"Er is iets fout gegaan bij het ophalen van de vakken. Probeer het later opnieuw.\")")
         }
     }
-    
+    .addButton("Ok!", (ctx) => {ctx.close()})
     .open();
     
 }, VerticalAlignment.TL, Background.Primary);
@@ -526,13 +524,13 @@ notCurrentWeek.addEventListener('click', () => {
     if (clicked <= 1) {
         HideNotCurrentWeek()
         new ZermosModal()
-        .setTitle("Dit is niet deze week!")
+        .addHeading("Dit is niet deze week!")
         .addText("Je zit nu in week " + weeks[1].dataset.week + " van " + weeks[1].dataset.year + ".")
         .addText("De huidige datum is " + new Date().toLocaleDateString("nl-NL", { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'}) + ".")
         .addText("Handig om te weten, toch Teun?")
-        .setSubmitButtonLabel("Ja dat klopt...")
-        .onSubmit(() => {
+        .addButton("Ja dat klopt...", (ctx) => {
             ShowNotCurrentWeek();
+            ctx.close();
         })
         .open();
         

@@ -20,7 +20,7 @@ function OpenLessonDetail(base64){
     const json = JSON.parse(atob(base64));
     
     var lessonDetail = new ZermosModal()
-    .setTitle((json.subjects[0] ?? '?') + " - " + new Date(json.start * 1000).toLocaleDateString("nl-NL", { weekday: 'long', month: 'short', day: 'numeric'}));
+    .addHeading((json.subjects[0] ?? '?') + " - " + new Date(json.start * 1000).toLocaleDateString("nl-NL", { weekday: 'long', month: 'short', day: 'numeric'}));
     
         lessonDetail.addText("Degene die dit rooster gedeeld heeft:");
     if (json.teachers.length > 0) 
@@ -31,8 +31,7 @@ function OpenLessonDetail(base64){
         lessonDetail.addText("• met groep " + json.groups.join(", ") + ".");   
     
     lessonDetail.addText("De les is van: " + new Date(json.start * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1] + " tot " + new Date(json.end * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1])
-    .hideSubmitButton();
-    
+        
     for (var i = 0; i < json.status.length; i++) {
         var status = json.status[i];
 

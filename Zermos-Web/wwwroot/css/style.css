@@ -2,6 +2,7 @@
 :root, .light {
     /* light mode */
     --background-color: #f8f9fa;
+    --background-color-rgb: 248, 249, 250;
     --overlay-color: #ffffff;
     --overlay-overlay-color: #f3f6f4;
     --text-color: #344767;
@@ -37,6 +38,7 @@
 
 .dark {
     --background-color: #1a1a1a;
+    --background-color-rgb: 26, 26, 26;
     --overlay-color: #2d2d2d;
     --overlay-overlay-color: #414141;
     --text-color: #b9b9b9;
@@ -53,6 +55,7 @@
 
 .blue {
     --background-color: #f8f9fa;
+    --background-color-rgb: 248, 249, 250;
     --overlay-color: #ffffff;
     --overlay-overlay-color: #f3f6f4;
     --text-color: #344767;
@@ -70,6 +73,7 @@
 
 .red {
     --background-color: #1a1a1a;
+    --background-color-rgb: 26, 26, 26;
     --overlay-color: #2d2d2d;
     --overlay-overlay-color: #414141;
     --text-color: #b9b9b9;
@@ -86,6 +90,7 @@
 
 .pink {
     --background-color: #ffebf2;
+    --background-color-rgb: 255, 235, 242;
     --overlay-color: #ffffff;
     --overlay-overlay-color: #f3f6f4;
     --text-color: #344767;

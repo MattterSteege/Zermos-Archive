@@ -1,9 +1,9 @@
 ﻿const Zermos = {
   CurrentVersion: "",
-  mainBeforeLoad: function (callback) {},
-  mainAfterLoad: function (callback) {},
-  mainUnload: function (callback) {},
-  checkForUpdates: function (callback) {},
+  mainBeforeLoad: function(callback) {},
+  mainAfterLoad: function(callback) {},
+  mainUnload: function(callback) {},
+  checkForUpdates: function(callback) {},
 };
 
 //==============================VARIABLES==============================
@@ -140,7 +140,7 @@ var loadingTexts = [
 //==============================SCROLLING SYSTEM TOP==============================
 function getElementY(query) {
   return (
-    main.scrollTop + document.querySelector(query).getBoundingClientRect().top
+      main.scrollTop + document.querySelector(query).getBoundingClientRect().top
   );
 }
 
@@ -149,14 +149,14 @@ function doScrolling(element, duration) {
   var elementY = getElementY(element);
   // If element is close to page's bottom then window will scroll only to some position above the element.
   var targetY =
-    document.body.scrollHeight - elementY < main.innerHeight
-      ? document.body.scrollHeight - main.innerHeight
-      : elementY;
+      document.body.scrollHeight - elementY < main.innerHeight ?
+          document.body.scrollHeight - main.innerHeight :
+          elementY;
   var diff = targetY - startingY;
 
   // Easing function: easeInOutCubic
   // From: https://gist.github.com/gre/1650294
-  var easing = function (t) {
+  var easing = function(t) {
     return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
   };
   var start;
@@ -191,7 +191,7 @@ function doScrolling(element, duration) {
 //==============================SCROLLING SYSTEM LEFT==============================
 function getElementX(query) {
   return (
-    main.scrollLeft + document.querySelector(query).getBoundingClientRect().left
+      main.scrollLeft + document.querySelector(query).getBoundingClientRect().left
   );
 }
 
@@ -200,14 +200,14 @@ function doScrollingLeft(scrollelement, element, duration) {
   var elementX = getElementX(element);
   // If element is close to page's bottom then window will scroll only to some position above the element.
   var targetX =
-    document.body.scrollWidth - elementX < main.innerWidth
-      ? document.body.scrollWidth - main.innerWidth
-      : elementX;
+      document.body.scrollWidth - elementX < main.innerWidth ?
+          document.body.scrollWidth - main.innerWidth :
+          elementX;
   var diff = targetX - startingX;
 
   // Easing function: easeInOutCubic
   // From: https://gist.github.com/gre/1650294
-  var easing = function (t) {
+  var easing = function(t) {
     return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
   };
   var start;
@@ -254,7 +254,7 @@ function createButtonForSidebar(icon, onclick, background) {
   buttonIcon.classList.add("menu-icons-custom");
   buttonIcon.classList.add("fa-fw");
   buttonIcon.style.background = `var(--${
-    background === Background.Primary ? "inactive-color" : background
+      background === Background.Primary ? "inactive-color" : background
   })`;
   mainButton.appendChild(buttonIcon);
 
@@ -285,10 +285,10 @@ const Background = {
 };
 
 function createButtonForBottomRight(
-  icon,
-  onclick,
-  verticalAlignment,
-  background
+    icon,
+    onclick,
+    verticalAlignment,
+    background
 ) {
   const mainButton = document.createElement("li");
   mainButton.classList.add("menu-item-right");
@@ -299,21 +299,21 @@ function createButtonForBottomRight(
   switch (verticalAlignment) {
     case VerticalAlignment.TB: //done
       mainButton.style.top = `calc(var(--padding) + ${
-        buttonCountVerticalTopRight * 48
+          buttonCountVerticalTopRight * 48
       }px + var(--padding) * ${buttonCountVerticalTopRight})`;
       buttonCountVerticalTopRight++;
       break;
     case VerticalAlignment.TL: //done
       mainButton.style.top = `var(--padding)`;
       mainButton.style.right = `calc(var(--padding) + ${
-        buttonCountHorizontalTopRight * 48
+          buttonCountHorizontalTopRight * 48
       }px + var(--padding) * ${buttonCountHorizontalTopRight})`;
       buttonCountHorizontalTopRight++;
       break;
     case VerticalAlignment.BL:
       mainButton.style.bottom = `var(--padding)`;
       mainButton.style.right = `calc(var(--padding) + ${
-        buttonCountHorizontalBottomRight * 48
+          buttonCountHorizontalBottomRight * 48
       }px + var(--padding) * ${buttonCountHorizontalBottomRight})`;
       buttonCountHorizontalBottomRight++;
       bottomRightCornerOccupied = true;
@@ -321,7 +321,7 @@ function createButtonForBottomRight(
     default:
     case VerticalAlignment.BT:
       mainButton.style.bottom = `calc(var(--padding) + ${
-        buttonCountVerticalBottomRight * 48
+          buttonCountVerticalBottomRight * 48
       }px + var(--padding) * ${buttonCountVerticalBottomRight})`;
       buttonCountVerticalBottomRight++;
       bottomRightCornerOccupied = true;
@@ -329,9 +329,9 @@ function createButtonForBottomRight(
   }
 
   if (
-    bottomRightCornerOccupied &&
-    (buttonCountVerticalBottomRight === 0 ||
-      buttonCountHorizontalBottomRight === 0)
+      bottomRightCornerOccupied &&
+      (buttonCountVerticalBottomRight === 0 ||
+          buttonCountHorizontalBottomRight === 0)
   )
     if (buttonCountVerticalBottomRight === 0) buttonCountVerticalBottomRight++;
     else buttonCountHorizontalBottomRight++;
@@ -353,10 +353,10 @@ function createButtonForBottomRight(
 }
 
 function addButtonToPage(
-  icon,
-  onclick,
-  verticalAlignment = VerticalAlignment.BT,
-  background = Background.Accent
+    icon,
+    onclick,
+    verticalAlignment = VerticalAlignment.BT,
+    background = Background.Accent
 ) {
   var buttons = document.querySelectorAll(".menu-item-right");
   var button = [];
@@ -371,14 +371,14 @@ function addButtonToPage(
   button.push(createButtonForSidebar(icon, onclick, background));
 
   if (
-    verticalAlignment === VerticalAlignment.BL ||
-    verticalAlignment === VerticalAlignment.BT
+      verticalAlignment === VerticalAlignment.BL ||
+      verticalAlignment === VerticalAlignment.BT
   )
     document.querySelector(".bottom ul").appendChild(button[0]);
   else document.querySelector(".bottom ul .spacer").after(button[0]);
 
   button.push(
-    createButtonForBottomRight(icon, onclick, verticalAlignment, background)
+      createButtonForBottomRight(icon, onclick, verticalAlignment, background)
   );
 
   document.querySelector(".bottom ul").appendChild(button[1]);
@@ -388,18 +388,18 @@ function addButtonToPage(
 
 //==============================UTILITY FUNCTIONS==============================
 let isMobile = () =>
-  !!(
-    navigator.userAgent.match(/Android/i) ||
-    navigator.userAgent.match(/webOS/i) ||
-    navigator.userAgent.match(/iPhone/i) ||
-    navigator.userAgent.match(/iPad/i) ||
-    navigator.userAgent.match(/iPod/i) ||
-    navigator.userAgent.match(/BlackBerry/i) ||
-    navigator.userAgent.match(/Windows Phone/i)
-  );
+    !!(
+        navigator.userAgent.match(/Android/i) ||
+        navigator.userAgent.match(/webOS/i) ||
+        navigator.userAgent.match(/iPhone/i) ||
+        navigator.userAgent.match(/iPad/i) ||
+        navigator.userAgent.match(/iPod/i) ||
+        navigator.userAgent.match(/BlackBerry/i) ||
+        navigator.userAgent.match(/Windows Phone/i)
+    );
 
 let isSmartWatch = () =>
-//check if screen is smaller than 600px
+    //check if screen is smaller than 600px
     window.matchMedia("(max-width: 600px)").matches;
 
 function copyToClipboard(text) {
@@ -428,7 +428,7 @@ function waitForObject(obj, callback, interval = 100) {
   if (typeof obj !== "undefined") {
     callback(obj);
   } else {
-    setTimeout(function () {
+    setTimeout(function() {
       waitForObject(obj, callback, interval);
     }, interval);
   }
@@ -483,8 +483,8 @@ let eventListeners = [];
 function addEventListenerToMain(type, listener, options) {
   // Check if an event listener of the same type already exists for #main
   const existingListener = eventListeners.find(
-    (eventListener) =>
-      eventListener.type === type && eventListener.listener === listener
+      (eventListener) =>
+          eventListener.type === type && eventListener.listener === listener
   );
 
   // If not, add the new listener to #main and store it in the eventListeners array
@@ -502,8 +502,8 @@ const getEventListenersFromMain = () => eventListeners;
 function removeEventListenerFromMain(type, listener) {
   // Remove the listener from the eventListeners array
   eventListeners = eventListeners.filter(
-    (eventListener) =>
-      !(eventListener.type === type && eventListener.listener === listener)
+      (eventListener) =>
+          !(eventListener.type === type && eventListener.listener === listener)
   );
 
   // Remove the listener from #main
@@ -535,63 +535,64 @@ async function ZermosShareImage(title, text, blob) {
     await navigator.share(data);
     return true;
   } catch (err) {
-    return { name: err.name, message: err.message };
+    return {
+      name: err.name,
+      message: err.message
+    };
   }
 }
 
 //==============================UPDATE SYSTEM==============================
 Zermos.checkForUpdates = () => {
   var version_user = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("version_used"))
-    .split("=")[1];
+      .split("; ")
+      .find((row) => row.startsWith("version_used"))
+      .split("=")[1];
   if (version_user !== Zermos.CurrentVersion && version_user !== "") {
     //show modal
     new ZermosModal()
-      .setTitle("Zermos is geupdate!")
-      .addText(
-        "Zermos is weer een versietje ouder 🥳. Er zijn natuurlijk weer nieuwe functies toegevoegd en bugs gefixt. Veel plezier met de nieuwe versie!"
-      )
-      .addText(
-        "Je gebruikt nu versie " +
-          Zermos.CurrentVersion +
-          ", de vorige keer dat je Zermos bezocht was dat versie " +
-          version_user
-      )
-      .addButton("Check wat er nieuw is", function () {
-        window.open("https://zermos-docs.kronk.tech/WhatsNew.html", "_blank");
-      })
-      .setSubmitButtonLabel("Let's go, ik ben er klaar voor!")
-      .disableClose()
-      .onSubmit(function () {
-        var url =
-          "/Account/UpdateSetting?key=version_used&value=" +
-          Zermos.CurrentVersion;
-        fetch(url, {
-          method: "POST",
-        });
+        .addHeading("Zermos is geupdate!")
+        .addText(
+            "Zermos is weer een versietje ouder 🥳. Er zijn natuurlijk weer nieuwe functies toegevoegd en bugs gefixt. Veel plezier met de nieuwe versie!"
+        )
+        .addText(
+            "Je gebruikt nu versie " +
+            Zermos.CurrentVersion +
+            ", de vorige keer dat je Zermos bezocht was dat versie " +
+            version_user
+        )
+        .addButton("Check wat er nieuw is", function() {
+          window.open("https://zermos-docs.kronk.tech/WhatsNew.html", "_blank");
+        })
+        .addButton("let's go, ik ben er klaar voor!", function() {
+          var url =
+              "/Account/UpdateSetting?key=version_used&value=" +
+              Zermos.CurrentVersion;
+          fetch(url, {
+            method: "POST",
+          });
 
-        //set cookie version_used
-        document.cookie =
-          "version_used=" +
-          Zermos.CurrentVersion +
-          "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
-      })
-      .open();
-    
-      localStorage.clear();
+          //set cookie version_used
+          document.cookie =
+              "version_used=" +
+              Zermos.CurrentVersion +
+              "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+        })
+        .open();
+
+    localStorage.clear();
   } else if (version_user === "") {
     var url =
-      "/Account/UpdateSetting?key=version_used&value=" + Zermos.CurrentVersion;
+        "/Account/UpdateSetting?key=version_used&value=" + Zermos.CurrentVersion;
     fetch(url, {
       method: "POST",
     });
 
     //set cookie version_used
     document.cookie =
-      "version_used=" +
-      Zermos.CurrentVersion +
-      "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+        "version_used=" +
+        Zermos.CurrentVersion +
+        "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
   }
 };
 
@@ -600,16 +601,16 @@ Zermos.mainUnload.bind(() => {
 });
 
 //==============================TITLE TEXT==============================
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
   const elements = document.querySelectorAll(".svgText");
   // Zermos.log(elements);
 
-  elements.forEach(function (element) {
-    element.addEventListener("mouseover", function () {
+  elements.forEach(function(element) {
+    element.addEventListener("mouseover", function() {
       element.classList.add("animating");
     });
 
-    element.addEventListener("transitionend", function () {
+    element.addEventListener("transitionend", function() {
       element.classList.remove("animating");
     });
   });
@@ -627,32 +628,32 @@ document.addEventListener("DOMContentLoaded", function () {
 // Overwrite console.log to log to the console and to an array
 var consoleArray = [];
 
-Zermos.log = function (...args) {
+Zermos.log = function(...args) {
   consoleArray.push([...args, "log"]);
   Zermos.trace(`%c[Log]%c`, "font-weight:700;color:royalblue;", "", ...args);
 };
 
-Zermos.error = function (...args) {
+Zermos.error = function(...args) {
   consoleArray.push([...args, "error"]);
   Zermos.trace(`%c[Error]%c`, "font-weight:700;color:red;", "", ...args);
 };
 
-Zermos.warn = function (...args) {
+Zermos.warn = function(...args) {
   consoleArray.push([...args, "warn"]);
   Zermos.trace(`%c[Warn]%c`, "font-weight:700;color:gold;", "", ...args);
 };
 
-Zermos.info = function (...args) {
+Zermos.info = function(...args) {
   consoleArray.push([...args, "info"]);
   Zermos.trace(`%c[Info]%c`, "font-weight:700;color:blue;", "", ...args);
 };
 
-Zermos.debug = function (...args) {
+Zermos.debug = function(...args) {
   consoleArray.push([...args, "debug"]);
   Zermos.trace(`%c[Debug]%c`, "font-weight:700;color:orange;", "", ...args);
 };
 
-Zermos.trace = function (...args) {
+Zermos.trace = function(...args) {
   consoleArray[consoleArray.length - 1].push(new Error().stack);
   console.trace(...args);
 };
@@ -662,14 +663,14 @@ Zermos.trace = function (...args) {
 function TogglePreview(preview) {
   var cookie = document.cookie;
   var previewCookie = cookie
-    .split(";")
-    .find((c) => c.trim().startsWith("preview="));
+      .split(";")
+      .find((c) => c.trim().startsWith("preview="));
   if (previewCookie === undefined) {
     // Set cookie with expiration date 10 years from now
     var expiresDate = new Date();
     expiresDate.setFullYear(expiresDate.getFullYear() + 10);
     document.cookie =
-      "preview=" + preview + "; expires=" + expiresDate.toUTCString();
+        "preview=" + preview + "; expires=" + expiresDate.toUTCString();
   } else {
     var previews = previewCookie.split("=")[1].split("-");
     if (previews.includes(preview)) {
@@ -682,10 +683,10 @@ function TogglePreview(preview) {
     var expiresDate = new Date();
     expiresDate.setFullYear(expiresDate.getFullYear() + 10);
     document.cookie =
-      "preview=" +
-      previews.join("-") +
-      "; expires=" +
-      expiresDate.toUTCString();
+        "preview=" +
+        previews.join("-") +
+        "; expires=" +
+        expiresDate.toUTCString();
   }
 
   var element = document.querySelector("[data-preview-id='" + preview + "']");
@@ -701,8 +702,8 @@ function TogglePreview(preview) {
 function HasPreview(preview) {
   var cookie = document.cookie;
   var previewCookie = cookie
-    .split(";")
-    .find((c) => c.trim().startsWith("preview="));
+      .split(";")
+      .find((c) => c.trim().startsWith("preview="));
   if (previewCookie === undefined) {
     return false;
   } else {
@@ -712,34 +713,35 @@ function HasPreview(preview) {
 
 //==============================================================
 var sidebarLoadSpeed = 250;
+
 function newSidebar(forceShow = false) {
   fetch("/data/sidebar?no-framework&forceShow=" + forceShow)
-    .then(response => response.text())
-    .then(data => {
-      var sidebar = document.querySelector("#sidebar")
-      
-      //if the data is the same, don't reload the sidebar
-        if(sidebar.innerHTML === data) return;
-      
-      var children = Array.from(sidebar.children);
-      ease(1, 0, sidebarLoadSpeed * (0.8), (value) => {
-        children.forEach((child) => {
-            child.style.opacity = value;
-        });
-      });
-      setTimeout(() => {
-        sidebar.innerHTML = data;
+      .then(response => response.text())
+      .then(data => {
+        var sidebar = document.querySelector("#sidebar")
+
+        //if the data is the same, don't reload the sidebar
+        if (sidebar.innerHTML === data) return;
+
         var children = Array.from(sidebar.children);
-        children.forEach((child) => {
-          child.style.opacity = 0;
-        });
-        ease(0, 1, sidebarLoadSpeed * (0.8), (value) => {
+        ease(1, 0, sidebarLoadSpeed * (0.8), (value) => {
           children.forEach((child) => {
             child.style.opacity = value;
           });
         });
-      }, sidebarLoadSpeed);
-    });
+        setTimeout(() => {
+          sidebar.innerHTML = data;
+          var children = Array.from(sidebar.children);
+          children.forEach((child) => {
+            child.style.opacity = 0;
+          });
+          ease(0, 1, sidebarLoadSpeed * (0.8), (value) => {
+            children.forEach((child) => {
+              child.style.opacity = value;
+            });
+          });
+        }, sidebarLoadSpeed);
+      });
 }
 
 function ease(start, end, time, callback) {
