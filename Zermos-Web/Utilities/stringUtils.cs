@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -142,6 +143,85 @@ namespace Zermos_Web.Utilities
             decodedString = HttpUtility.UrlDecode(decodedString);
             
             return decodedString;
+        }
+        
+        /// <summary>
+        /// Encodes a string to a base62 string.
+        /// </summary>
+        /// <param name="str">The string to encode.</param>
+        /// <returns>The base62 encoded string.</returns>
+        public static string shortenUUID(this string uuid)
+        {
+            // Convert the UUID to a BigInteger
+            BigInteger bigInt = new BigInteger(uuid.Replace("-", "").Select(c => (byte)c).ToArray());
+            
+            // Define the base62 characters
+            const string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            
+            // Define the result string
+            string result = "";
+            
+            // While the bigInt is greater than 0
+            while (bigInt > 0)
+            {
+                // Get the remainder of the bigInt divided by 62
+                int remainder = (int)(bigInt % 62);
+                
+                // Add the character at the remainder index to the result string
+                result = chars[remainder] + result;
+                
+                // Divide the bigInt by 62
+                bigInt /= 62;
+            }
+            
+            // Return the result string
+            return result;
+        }
+
+        /// <summary>
+        /// Decodes a base62 string to a string.
+        /// </summary>
+        /// <param name="str">The base62 string to decode.</param>
+        /// <returns>The decoded string.</returns>
+        public static string expandUUID(this string base62)
+        {
+            // Define the base62 characters
+            const string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+            // Define the result BigInteger
+            BigInteger result = 0;
+
+            // For each character in the base62 string
+            foreach (char c in base62)
+            {
+                // Multiply the result by 62
+                result *= 62;
+
+                // Add the index of the character in the base62 characters to the result
+                result += chars.IndexOf(c);
+            }
+
+            // Convert the result to a byte array
+            byte[] bytes = result.ToByteArray();
+
+            // Define the result string
+            string resultStr = "";
+
+            // For each byte in the byte array
+            foreach (byte b in bytes)
+            {
+                // Add the byte to the result string
+                resultStr += (char) b;
+            }
+
+            //add back the dashes
+            resultStr = resultStr.Insert(8, "-");
+            resultStr = resultStr.Insert(13, "-");
+            resultStr = resultStr.Insert(18, "-");
+            resultStr = resultStr.Insert(23, "-");
+            
+            // Return the result string
+            return resultStr;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿//#define BETA
+﻿#define BETA
 
 using System.Collections.Generic;
 using System.Net.Http;

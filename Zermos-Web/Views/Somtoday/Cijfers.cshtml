@@ -45,7 +45,7 @@
         {
             if (grade.cijfer == "-") { continue; }
 
-            <table class="grade-table" @Html.Raw(GetNotificationClass(grade.cijfers?[0]?.datumInvoerEerstePoging ?? DateTime.MaxValue)) onclick="ReplacePage('@Url.Action("CijferVoorVak", "Somtoday", new { vak = grade.vakAfkorting.Capitalize() })')">
+            <table class="grade-table" @Html.Raw(GetNotificationClass(grade.cijfers?[0]?.datumInvoerEerstePoging ?? DateTime.MaxValue)) onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()/@grade.vakuuid.shortenUUID()/@Model.relevanteCijferLichtingUUID.shortenUUID()/@Model.leerjaarUUID.shortenUUID()')">
                 <tr class="grade-table-header">
                     <td rowspan="2"><i class="fa-solid fa-book" data-name="@grade.vakNaam.ToLower()" data-name-short="@grade.vakAfkorting.ToLower()"></i></td>
                     <td>@grade.vakNaam.Capitalize()</td>
@@ -55,7 +55,7 @@
                 </tr>
                 @if (grade.cijfers != null && grade.cijfers.Count > 0)
                 {
-                    <tr class="grade-table-header">
+                    <tr class="grade-table-header">+
                         <td style="display: none"></td>
                         <td>Laatste cijfer</td>
                         <td></td>
@@ -392,82 +392,29 @@
 
 </script>
 
-@* <script minimize> *@
-@* @Context.Items["dmjs"] *@
-@* *@
-@* //get all the sortedGrades.vak.naam and put them in an array with quotes around them *@
-@* var vakken = ["@Html.Raw(string.Join("\",\"", sortedGrades.Select(x => x.vak.naam).Distinct()))"]; *@
-@* var short = ["@Html.Raw(string.Join("\",\"", sortedGrades.Select(x => x.vak.afkorting).Distinct()))"]; *@
-@* *@
-@* // share button *@
-@* addButtonToPage('fa-share-from-square', () => { *@
-@* *@
-@*     new ZermosModal() *@
-@*     .setTitle("Deel je cijfers") *@
-@*     .addText("Deel je cijfers met je vrienden! Kies hieronder een datum tot wanneer je cijfers gedeeld mogen worden, welke cijfers zichtbaar zijn én of ze alleen je gemiddelde mogen zien of ook de individuele cijfers. Pas wel op, nieuwe cijfers blijven niet automatisch gedeeld worden, je moet dus een nieuwe link genereren als je nieuwe cijfers wilt delen.") *@
-@*     .addDateInput("Wat is de verval datum?", new Date(Date.now() + 604800000)) *@
-@*     .addToggle("Laat individuele cijfers zien", false) *@
-@*     .addMultiToggles(vakken, vakken, vakken.map(vak => true)) *@
-@*     .setSubmitButtonLabel("Deel") *@
-@*     .onSubmit((date, indivd, allowed) => { *@
-@* *@
-@*         //make date to a dd-mm-yyyy format *@
-@*         var expires_at = date.split('-'); *@
-@*         expires_at = expires_at[1] + '-' + expires_at[0] + '-' + expires_at[2]; *@
-@* *@
-@* *@
-@* *@
-@*         var vakken = []; *@
-@*         for (var i = 0; i < allowed.length; i++) { *@
-@*             if (allowed[i]) { *@
-@*                 vakken.push(short[i]); *@
-@*             } *@
-@*         } *@
-@* *@
-@*         Zermos.log(vakken, allowed); *@
-@* *@
-@*         //return's an plan string url *@
-@*         fetch('/Somtoday/Cijfers/GenereerToken?expires_at=' + expires_at + '&vakken=' + vakken.join(',') + '&show_individual_grades=' + document.getElementById('input2').checked) *@
-@*         .then(response => response.text()) *@
-@*         .then((url) => { *@
-@*             new ZermosModal() *@
-@*             .setTitle("Deel je cijfers") *@
-@*             .addText("Deel je cijfers met je vrienden, zij hoeven geen account hiervoor te hebben.") *@
-@*             .addText("De link is: " + url) *@
-@*             .hideSubmitButton() *@
-@*             .addButton("Kopieer link", () => { *@
-@*                 copyToClipboard(url); *@
-@*             }) *@
-@*             .open(); *@
-@*         }); *@
-@* *@
-@*     }) *@
-@*     .open(); *@
-@* *@
-@* }, VerticalAlignment.TL, Background.Primary); *@
-@* *@
-@* addButtonToPage("fa-clock-rotate-left", () => { *@
-@* *@
-@*    //show last 10 grades *@
-@*     new ZermosModal() *@
-@*     .setTitle("Laatste 10 cijfers") *@
-@*     .setSubmitButtonLabel("Sluiten") *@
-@*     .addText("Hieronder zie je de laatste 10 cijfers die je hebt gehaald.") *@
-@* @{ *@
-@*     @foreach (var grade in Model.items.OrderByDescending(x => x.datumInvoer).Take(10)) *@
-@*     { *@
-@* <text> *@
-@*     .addText('@grade.vak.naam - @(grade.weging == 0 ? grade.examenWeging : grade.weging)x - @grade.geldendResultaat - @(grade.omschrijving ?? "")') *@
-@* </text> *@
-@*     } *@
-@* } *@
-@* *@
-@*     .open(); *@
-@* *@
-@* }, VerticalAlignment.BL, Background.Accent); *@
-@* *@
-@* addButtonToPage("fa-refresh", () => { *@
-@*     document.cookie = "cached-somtoday-grades=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; *@
-@*     ReplacePage('/Somtoday/Cijfers'); *@
-@* }, VerticalAlignment.TL, Background.Primary); *@
-@* </script> *@
+<script minimize>
+@Context.Items["dmjs"]
+
+addButtonToPage("fa-refresh", () => {
+    document.cookie = "cached-somtoday-grades=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    ReplacePage('/Somtoday/Cijfers');
+}, VerticalAlignment.TL, Background.Primary);
+
+var jaarlagen = JSON.parse('@Html.Raw(Json.Serialize(Model.plaatsing.Select(jaargang => new { label = jaargang.stamgroepnaam, value = Model.plaatsing.IndexOf(jaargang) + 1 })))');
+
+addButtonToPage("fa-history", () => {
+    new ZermosModal()
+    .addHeading("Vorige jaarlagen")
+    .addText("Van welke jaarlagen wil je de cijfers zien?")
+    .addDropdown(jaarlagen, true, false)
+    .addButton("Start de tijdmachine!", (ctx) => { 
+        var value = ctx.getComponentsValue().values[0].value;
+        console.log(value);
+        if (value !== "") {
+            ReplacePage(`/Somtoday/Cijfers?leerjaar=${value}`);
+        }
+        ctx.close(); 
+    })
+    .open();
+}, VerticalAlignment.BT, Background.Accent);
+</script>

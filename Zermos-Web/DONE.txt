@@ -5,6 +5,9 @@ Version 0.6.1
     
 - somtoday - huiswerk
     - Alle huiswerkvormen (toekenning, dag & week) worden nu tergelijkertijd opgehaald i.p.v 1 voor 1, dat de laadtijd van de huiswerkpagina aanzienlijk verkort met ongv. 400-600ms.
+   
+- Somtoday - cijfers
+    - "Geen oude koeien uit de sloot halen." Wat? natuurlijk wel! Je kan nu je cijfers van andre jaarlage bekijken, ga naar je cijfers en klik op het 'geschiendenis' icoontje om je cijfers van vorige jaren te bekijken.
     
 - algemeen
     - Het systeem dat de URL (bijv. /huiswerk) veranderd is aangepast, het nieuwe URL systeem laat nu /Somtoday/Huiswerk zien i.p.v /#/Somtoday/Huiswerk. De hash (#) is verwijderd. (basically gewoon voor aesthetics)

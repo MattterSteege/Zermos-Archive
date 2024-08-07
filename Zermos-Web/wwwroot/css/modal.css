@@ -28,8 +28,8 @@
     height: 100%;
     position: fixed;
     z-index: 100000000;
-    backdrop-filter: blur(var(--padding));
-    -webkit-backdrop-filter: blur(var(--padding));
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
     opacity: 0;
     display: flex;
     justify-content: center;

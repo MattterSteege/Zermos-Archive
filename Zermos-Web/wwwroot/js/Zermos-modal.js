@@ -441,6 +441,7 @@
             optionElement.classList.add('dropdown-option');
             optionElement.innerText = option.label;
             optionElement.dataset.value = option.value;
+            optionElement.dataset.label = option.label;
 
             optionElement.addEventListener('click', () => {
                 if (component.multiSelect) {
@@ -453,8 +454,12 @@
                 const selectedOptions = Array.from(dropdownMenu.children)
                     .filter(child => child.classList.contains('selected'))
                     .map(child => child.dataset.value);
+                
+                const selectedOptionsLabels = Array.from(dropdownMenu.children)
+                    .filter(child => child.classList.contains('selected'))
+                    .map(child => child.dataset.label);
 
-                dropdownButton.innerText = selectedOptions.length ? selectedOptions.join(", ") : "Select...";
+                dropdownButton.innerText = selectedOptionsLabels.length ? selectedOptionsLabels.join(", ") : "Select...";
 
                 if (component.onChange) {
                     component.onChange(this, component.multiSelect ? selectedOptions : selectedOptions[0]);

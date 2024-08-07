@@ -48,15 +48,30 @@ namespace Zermos_Web.Controllers
             {
                 user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
             }
+
+            SomtodayPlaatsingenModel plaatsingen;
             
-            SomtodayPlaatsingenModel plaatsingen = (user.cached_somtoday_plaatsingen == null) ? await somtodayApi.GetPlaatsingen(user) : JsonConvert.DeserializeObject<SomtodayPlaatsingenModel>(user.cached_somtoday_plaatsingen);
+            if (Request.Cookies.ContainsKey("cached-somtoday-plaatsingen"))
+            {
+                plaatsingen = JsonConvert.DeserializeObject<SomtodayPlaatsingenModel>(ZermosUser.cached_somtoday_plaatsingen ?? "{}");
+                if (plaatsingen.items.Count == 0)
+                {
+                    plaatsingen = await somtodayApi.GetPlaatsingen(user);
+                    Response.Cookies.Append("cached-somtoday-plaatsingen", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMonths(1)});
+                }
+            }
+            else
+            {
+                plaatsingen = await somtodayApi.GetPlaatsingen(user);
+                Response.Cookies.Append("cached-somtoday-plaatsingen", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMonths(1)});
+            }
 
             SortedSomtodayGradesModel grades = new();
             
-            if (leerjaar == -1)
+            if (leerjaar == -1 || leerjaar == plaatsingen.items.Count)
                 grades = await somtodayApi.GetCurrentGradesAndVakgemiddelden(user, plaatsingen);
             else
-                grades = await somtodayApi.GetGradesAndVakgemiddelden(user, plaatsingen, leerjaar: leerjaar);
+                grades = await somtodayApi.GetGradesAndVakgemiddelden(user, plaatsingen, leerjaar);
             
             if (leerjaar == -1)
             {
@@ -73,17 +88,12 @@ namespace Zermos_Web.Controllers
         }
 
         [ZermosPage]
-        [HttpGet("Somtoday/Cijfers/{vak}")]
-        public async Task<IActionResult> CijferVoorVak(string vak)
+        [HttpGet("Somtoday/Cijfers/{vak}/{vakUUID}/{lichtingUUID}/{plaatsingUuid}")]
+        public async Task<IActionResult> CijferVoorVak(string vakUUID, string lichtingUUID, string plaatsingUuid)
         {
-            if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
-            {
-                var _grades = JsonConvert.DeserializeObject<SortedSomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? "{}");
-                _grades.items = _grades.items.FindAll(x => x.vakAfkorting.ToLower() == vak.ToLower());
-                _grades.lastGrades = null;
-                _grades.voortGangsdossierGemiddelde = null;
-                return PartialView(_grades);
-            }
+            vakUUID = vakUUID.expandUUID();
+            lichtingUUID = lichtingUUID.expandUUID();
+            plaatsingUuid = plaatsingUuid.expandUUID();
             
             var user = ZermosUser;
             
@@ -91,63 +101,104 @@ namespace Zermos_Web.Controllers
             {
                 user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
             }
-            
-            SomtodayPlaatsingenModel plaatsingen = (user.cached_somtoday_plaatsingen == null) ? await somtodayApi.GetPlaatsingen(user) : JsonConvert.DeserializeObject<SomtodayPlaatsingenModel>(user.cached_somtoday_plaatsingen);
-            
-            var grades = await somtodayApi.GetCurrentGradesAndVakgemiddelden(user, plaatsingen);
-            
-            ZermosUser = new user
-            {
-                cached_somtoday_grades = JsonConvert.SerializeObject(grades),
-                cached_somtoday_plaatsingen = JsonConvert.SerializeObject(plaatsingen)
-            };
-            
-            Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
 
-            grades.items = grades.items.FindAll(x => x.vakAfkorting.ToLower() == vak.ToLower());
-            grades.lastGrades = null;
-            grades.voortGangsdossierGemiddelde = null;
+            SomtodayPlaatsingenModel plaatsingen;
+            
+            if (Request.Cookies.ContainsKey("cached-somtoday-plaatsingen"))
+            {
+                plaatsingen = JsonConvert.DeserializeObject<SomtodayPlaatsingenModel>(ZermosUser.cached_somtoday_plaatsingen ?? "{}");
+                if (plaatsingen.items.Count == 0)
+                {
+                    plaatsingen = await somtodayApi.GetPlaatsingen(user);
+                    Response.Cookies.Append("cached-somtoday-plaatsingen", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMonths(1)});
+                }
+            }
+            else
+            {
+                plaatsingen = await somtodayApi.GetPlaatsingen(user);
+                Response.Cookies.Append("cached-somtoday-plaatsingen", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMonths(1)});
+            }
+
+            SortedSomtodayGradesModel grades;
+
+            if (vakUUID == null || lichtingUUID == null || plaatsingUuid == null)
+            {
+                grades = await somtodayApi.GetCurrentGradesAndVakgemiddelden(user, plaatsingen);
+                ZermosUser = new user
+                {
+                    cached_somtoday_grades = JsonConvert.SerializeObject(grades),
+                    cached_somtoday_plaatsingen = JsonConvert.SerializeObject(plaatsingen)
+                };
+            }
+            else
+            {
+                grades = await somtodayApi.GetGradesFromUUID(user, vakUUID, lichtingUUID, plaatsingUuid);
+                ZermosUser = new user
+                {
+                    cached_somtoday_plaatsingen = JsonConvert.SerializeObject(plaatsingen)
+                };
+            }
+            
+            
+            //Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
+
+            //grades.items = grades.items.FindAll(x => x.vakAfkorting.ToLower() == vak.ToLower());
+            //grades.lastGrades = null;
+            //grades.voortGangsdossierGemiddelde = null;
             
             return PartialView(grades);
         }
 
         [ZermosPage]
-        [HttpGet("Somtoday/Cijfers/{vak}/Statistieken")]
-        public async Task<IActionResult> CijferStatistieken(string vak, bool asPFD = false)
+        [HttpGet("Somtoday/Cijfers/{vak}/{vakUUID}/{lichtingUUID}/{plaatsingUuid}/Statistieken")]
+        public async Task<IActionResult> CijferStatistieken(string vakUUID, string lichtingUUID, string plaatsingUuid)
         {
-            SortedSomtodayGradesModel somtodayGradesModel;
+            vakUUID = vakUUID.expandUUID();
+            lichtingUUID = lichtingUUID.expandUUID();
+            plaatsingUuid = plaatsingUuid.expandUUID();
             
-            if (Request.Cookies.ContainsKey("cached-somtoday-grades"))
+            var user = ZermosUser;
+            
+            if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
-                somtodayGradesModel = JsonConvert.DeserializeObject<SortedSomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? "{}");
-                somtodayGradesModel.items = somtodayGradesModel.items.FindAll(x => x.vakAfkorting.ToLower() == vak.ToLower());
-                somtodayGradesModel.lastGrades = null;
-                somtodayGradesModel.voortGangsdossierGemiddelde = somtodayGradesModel.items[0].cijfer.ToFloat();
+                user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
+            }
+
+            SomtodayPlaatsingenModel plaatsingen;
+            
+            if (Request.Cookies.ContainsKey("cached-somtoday-plaatsingen"))
+            {
+                plaatsingen = JsonConvert.DeserializeObject<SomtodayPlaatsingenModel>(ZermosUser.cached_somtoday_plaatsingen ?? "{}");
+                if (plaatsingen.items.Count == 0)
+                {
+                    plaatsingen = await somtodayApi.GetPlaatsingen(user);
+                    Response.Cookies.Append("cached-somtoday-plaatsingen", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMonths(1)});
+                }
             }
             else
             {
-                var user = ZermosUser;
-            
-                if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
-                {
-                    user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
-                }
-            
-                SomtodayPlaatsingenModel plaatsingen = (user.cached_somtoday_plaatsingen == null) ? await somtodayApi.GetPlaatsingen(user) : JsonConvert.DeserializeObject<SomtodayPlaatsingenModel>(user.cached_somtoday_plaatsingen);
-            
+                plaatsingen = await somtodayApi.GetPlaatsingen(user);
+                Response.Cookies.Append("cached-somtoday-plaatsingen", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMonths(1)});
+            }
+
+            SortedSomtodayGradesModel somtodayGradesModel;
+
+            if (vakUUID == null || lichtingUUID == null || plaatsingUuid == null)
+            {
                 somtodayGradesModel = await somtodayApi.GetCurrentGradesAndVakgemiddelden(user, plaatsingen);
-            
                 ZermosUser = new user
                 {
                     cached_somtoday_grades = JsonConvert.SerializeObject(somtodayGradesModel),
                     cached_somtoday_plaatsingen = JsonConvert.SerializeObject(plaatsingen)
                 };
-            
-                Response.Cookies.Append("cached-somtoday-grades", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
-
-                somtodayGradesModel.items = somtodayGradesModel.items.FindAll(x => x.vakAfkorting == vak.ToLower());
-                somtodayGradesModel.lastGrades = null;
-                somtodayGradesModel.voortGangsdossierGemiddelde = null;
+            }
+            else
+            {
+                somtodayGradesModel = await somtodayApi.GetGradesFromUUID(user, vakUUID, lichtingUUID, plaatsingUuid);
+                ZermosUser = new user
+                {
+                    cached_somtoday_plaatsingen = JsonConvert.SerializeObject(plaatsingen)
+                };
             }
             
             //calc the stats:

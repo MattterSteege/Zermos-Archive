@@ -173,7 +173,8 @@ public class SomtodayAPI
             lastGrades = new List<Models.SomtodayGradesModel.Item>(),
             voortGangsdossierGemiddelde = vakgemiddelden?.voortgangsdossierGemiddelde,
             relevanteCijferLichtingUUID = vakgemiddelden?.gemiddelden.FirstOrDefault()?.relevanteCijferLichtingUUID,
-            leerjaarUUID = plaatsingen.items[^1].UUID
+            leerjaarUUID = plaatsingen.items[^1].UUID,
+            plaatsing = plaatsingen.items
         };
 
         foreach (var grade in gradesBySubjectGrouped)
@@ -232,7 +233,7 @@ public class SomtodayAPI
     /// </summary>
     /// <param name="user"></param>
     /// <param name="plaatsingen"></param>
-    /// <param name="gradeType"></param>
+    /// <param name="leerjaar"></param>
     /// <returns></returns>
     public async Task<SortedSomtodayGradesModel> GetGradesAndVakgemiddelden(user user, SomtodayPlaatsingenModel plaatsingen, int leerjaar = -1)
     {
@@ -257,7 +258,8 @@ public class SomtodayAPI
             voortGangsdossierGemiddelde = vakgemiddelden?.voortgangsdossierGemiddelde,
             relevanteCijferLichtingUUID = vakgemiddelden?.gemiddelden.FirstOrDefault()?.relevanteCijferLichtingUUID,
             leerjaarUUID = plaatsingen.items[^1].UUID,
-            onlyVoorVoortgang = true
+            onlyVoorVoortgang = true,
+            plaatsing = plaatsingen.items
         };
 
         foreach (var grade in vakgemiddelden.gemiddelden)
@@ -275,11 +277,90 @@ public class SomtodayAPI
         }
         
         sortedGrades.items = sortedGrades.items.OrderBy(x => x.vakNaam).ToList();
+        sortedGrades.leerjaarUUID = plaatsingUUID;
         
         #if DEBUG
         watch.Stop();
         Console.WriteLine(watch.ElapsedMilliseconds + "ms");
         #endif
+        
+        return sortedGrades;
+    }
+
+    /// <summary>
+    /// Fetches all the grades from think current year. This is for the general grades page.
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="vakUUID">The UUID param inside the vak class inside the somtodayGradesModel</param>
+    /// <param name="lichtingUUID">relevanteCijferLichting > UUID</param>
+    /// <param name="plaatsingUuid">items[^1] > UUID</param>
+    /// <returns></returns>
+    public async Task<SortedSomtodayGradesModel> GetGradesFromUUID(user user, string vakUUID, string lichtingUUID, string plaatsingUuid)
+    {
+        
+        //https://api.somtoday.nl/rest/v1/geldendvoortgangsdossierresultaten/vakresultaten/1409824200/vak/{vakUUID}/lichting/{lichtingUUID}?additional=vaknaam&additional=resultaatkolom&additional=naamalternatiefniveau&additional=naamstandaardniveau&additional=periodeAfkorting&type=Toetskolom&type=SamengesteldeToetsKolom&type=Werkstukcijferkolom&type=Advieskolom&type=PeriodeGemiddeldeKolom&type=RapportGemiddeldeKolom&type=RapportCijferKolom&type=RapportToetskolom&type=SEGemiddeldeKolom&type=ToetssoortGemiddeldeKolom&sort=desc-geldendResultaatCijferInvoer&plaatsingUuid={plaatsingUuid}
+        //https://api.somtoday.nl/rest/v1/geldendexamendossierresultaten/vakresultaten/1409824200/vak/{vakUUID}/lichting/{lichtingUUID}?additional=vaknaam&additional=resultaatkolom&additional=naamalternatiefniveau&additional=naamstandaardniveau&type=Toetskolom&type=SamengesteldeToetsKolom&type=Werkstukcijferkolom&type=Advieskolom&type=PeriodeGemiddeldeKolom&type=RapportGemiddeldeKolom&type=RapportCijferKolom&type=RapportToetskolom&type=SEGemiddeldeKolom&type=ToetssoortGemiddeldeKolom&sort=desc-geldendResultaatCijferInvoer&plaatsingUuid={plaatsingUuid}
+        
+#if DEBUG
+        var watch = Stopwatch.StartNew();
+#endif
+        
+        var urls = new[]
+        {
+            //voeg &type=PeriodeGemiddeldeKolom&type=RapportGemiddeldeKolom&type=RapportCijferKolom&type=RapportToetskolom&type=SEGemiddeldeKolom&type=ToetssoortGemiddeldeKolom toe als je de verschillende gemiddelden wilt zien en wilt verwerken in Zermos
+            $"https://api.somtoday.nl/rest/v1/geldendvoortgangsdossierresultaten/vakresultaten/{user.somtoday_student_id}/vak/{vakUUID}/lichting/{lichtingUUID}?additional=vaknaam&additional=resultaatkolom&additional=naamalternatiefniveau&additional=naamstandaardniveau&additional=periodeAfkorting&type=Toetskolom&type=SamengesteldeToetsKolom&type=Werkstukcijferkolom&type=Advieskolom&sort=desc-geldendResultaatCijferInvoer&plaatsingUuid={plaatsingUuid}",
+            $"https://api.somtoday.nl/rest/v1/geldendexamendossierresultaten/vakresultaten/{user.somtoday_student_id}/vak/{vakUUID}/lichting/{lichtingUUID}?additional=vaknaam&additional=resultaatkolom&additional=naamalternatiefniveau&additional=naamstandaardniveau&type=Toetskolom&type=SamengesteldeToetsKolom&type=Werkstukcijferkolom&type=Advieskolom&sort=desc-geldendResultaatCijferInvoer&plaatsingUuid={plaatsingUuid}"
+        };
+        
+        _httpClient.DefaultRequestHeaders.Clear();
+        _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
+        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        
+        var tasks = urls.Select(url => url != null ? _httpClient.GetAsync(url) : Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.OK))).ToArray();
+        
+        await Task.WhenAll(tasks);
+        
+        if (tasks.Any(t => !t.Result.IsSuccessStatusCode))
+            return null;
+        
+        var jsonTasks = tasks.Select(t => t.Result.Content.ReadAsStringAsync()).ToArray();
+        await Task.WhenAll(jsonTasks);
+        
+        var grades = JsonConvert.DeserializeObject<SomtodayGradesModel>(jsonTasks[0].Result);
+        var gradesSE = JsonConvert.DeserializeObject<SomtodayGradesModel>(jsonTasks[1].Result);
+        
+        var sortedGrades = new SortedSomtodayGradesModel
+        {
+            items = new List<Models.SortedSomtodayGradesModel.Item>(),
+            lastGrades = new List<Models.SomtodayGradesModel.Item>(),
+            voortGangsdossierGemiddelde = null,
+            relevanteCijferLichtingUUID = lichtingUUID,
+            leerjaarUUID = plaatsingUuid
+        };
+        
+        var item = new Models.SortedSomtodayGradesModel.Item
+        {
+            cijfers = grades.items,
+            weging = grades.items.Sum(x => x.weging),
+            cijfer = grades.items.FirstOrDefault()?.formattedResultaat ?? "-",
+            cijfersSE = gradesSE.items,
+            wegingSE = gradesSE.items.Sum(x => x.weging),
+            cijferSE =gradesSE.items.FirstOrDefault()?.formattedResultaat ?? "-",
+            vakNaam = grades.items.FirstOrDefault()?.additionalObjects.vaknaam,
+            vakAfkorting = "?", 
+            vakuuid = grades.items.FirstOrDefault()?.additionalObjects.vakuuid,
+        };
+        
+        sortedGrades.items.Add(item);
+        
+        sortedGrades.relevanteCijferLichtingUUID = lichtingUUID;
+        sortedGrades.leerjaarUUID = plaatsingUuid;
+        sortedGrades.items[0].vakuuid = vakUUID;
+        
+#if DEBUG
+        watch.Stop();
+        Console.WriteLine(watch.ElapsedMilliseconds + "ms");
+#endif
         
         return sortedGrades;
     }
@@ -304,10 +385,6 @@ public class SomtodayAPI
     
     public async Task<SomtodayHomeworkModel> GetHomeworkAsync(user user, int dagen)
     {
-        //$"https://api.somtoday.nl/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
-        //$"https://api.somtoday.nl/rest/v1/studiewijzeritemdagtoekenningen?schooljaar=&begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
-        //$"https://api.somtoday.nl/rest/v1/studiewijzeritemweektoekenningen?schooljaar=&begintNaOfOp={_startDate}&additional=swigemaaktVinkjes";
-        
         #if DEBUG
         var watch = Stopwatch.StartNew();
         #endif

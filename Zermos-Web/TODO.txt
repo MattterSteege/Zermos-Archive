@@ -14,4 +14,8 @@ TODO: de roosters van vrienden koppelen -> share allow [email] to view your sche
 TODO: als somtoday wel gekoppeld is en Zermelo niet, laat dan het rooster uit SOMtoday zien (met een melding dat je zermelo moet koppelen)
 TODO: replace the current MODAL system with the new one!
     - Huiswerk.cshtml
-    - GedeeldeCijfers.cshtml8
+    - GedeeldeCijfers.cshtml
+TODO: better ooo (order of operations) loading of new pages:
+    - start fetching the data AND start showing the loading screen
+    - when the data is fetched AND the loading screen is fully faded in, set the data
+    - when the data is set, fade out the loading screen

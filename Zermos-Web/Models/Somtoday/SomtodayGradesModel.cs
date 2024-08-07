@@ -80,5 +80,6 @@ namespace Zermos_Web.Models.SortedSomtodayGradesModel
         public string leerjaarUUID { get; set; }
         public string relevanteCijferLichtingUUID { get; set; }
         public bool onlyVoorVoortgang { get; set; }
+        public List<SomtodayPlaatsingen.Item> plaatsing { get; set; }
     }
 }

@@ -87,7 +87,7 @@ window.onload = () => {
         Zermos.log(`Zermos-web versie: ${Zermos.CurrentVersion}`);
         Zermos.log(`Zermos-framework is geladen`);
         history.replaceState(null, null, "/");
-        ReplacePage('@ViewData["url"]');
+        ReplacePage('@Html.Raw(ViewData["url"])');
     }, 500);
     
     setTimeout(() => {
