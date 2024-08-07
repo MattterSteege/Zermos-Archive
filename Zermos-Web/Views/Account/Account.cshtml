@@ -23,16 +23,6 @@
             <p><b>@share.page</b> - geldig tot: @share.expires_at.ToString("d/M/yyyy") - <a href="@share.url">Bekijk hier</a></p>
         }
     </div>
-
-    <div class="account-item clickable" onclick="window.location.href='https://zermos-docs.kronk.tech/'">
-        <h1>Vragen over Zermos?</h1>
-        <a>Kijk hier of je vraag beantwoord kan worden</a>
-    </div>
-    
-    <div class="account-item clickable" onclick="window.location.href='https://zermos-docs.kronk.tech/PWA%20installeren'">
-        <h1>Zermos installeren</h1> 
-        <a>Klik hier voor de uitleg</a>
-    </div>
     
     <div onclick="ReplacePage('@Url.Action("Settings", "Account")')" class="account-item clickable">
         <h1>Instellingen</h1>
@@ -117,6 +107,21 @@
     <div class="account-item">
         <h1>Uitloggen?</h1>
         <button onclick="ReplacePage('/logout')" class="koppel-knop ontkoppelen">Wil je uitloggen?</button>
+    </div>
+
+    <div class="account-item clickable" onclick="window.location.href='https://zermos-docs.kronk.tech/'">
+        <h1>Vragen over Zermos? (zermos-docs.kronk.tech)</h1>
+        <a>Kijk hier of je vraag beantwoord kan worden</a>
+    </div>
+
+    <div class="account-item clickable" onclick="window.location.href='https://discord.gg/krP9se64TD'">
+        <h1>Nogsteeds vragen over Zermos? (discord)</h1>
+        <a>Kijk hier of je vraag hier dan beantwoord kan worden</a>
+    </div>
+
+    <div class="account-item clickable" onclick="window.location.href='https://zermos-docs.kronk.tech/PWA%20installeren'">
+        <h1>Zermos installeren</h1>
+        <a>Klik hier voor de uitleg</a>
     </div>
 </div>
 

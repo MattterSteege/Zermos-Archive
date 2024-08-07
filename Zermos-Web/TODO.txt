@@ -6,7 +6,6 @@ TODO: QR koppelen voor smartwatch, dan weet je ook gelijk dat de gebruiker een s
 TODO: jaarbijlagen bij leermiddelen
 TODO: laat zien hoe vaak je het meestvoorkomende cijfer hebt gehaald
 TODO: padding onder de cijfers Totaalgemiddelde (https://cdn.discordapp.com/attachments/1256698797002588355/1263882261011366009/IMG_6913.png?ex=669bd994&is=669a8814&hm=d46e0b044020cfbdebf385e9170b80020fcea12a5e3452da5d57ab23b3417818&)
-TODO: elke 12 uur de tokens refreshen van somtoday accounts
 TODO: Refresh de somtoday tokens elke 12 uur als de tokens verkregen is door de hackkerman methode (IE id somtoday-leerling-web)
 TODO: husiwerk pagina redesign
 TODO: huiswerk afvinken
@@ -15,4 +14,4 @@ TODO: de roosters van vrienden koppelen -> share allow [email] to view your sche
 TODO: als somtoday wel gekoppeld is en Zermelo niet, laat dan het rooster uit SOMtoday zien (met een melding dat je zermelo moet koppelen)
 TODO: replace the current MODAL system with the new one!
     - Huiswerk.cshtml
-    - GedeeldeCijfers.cshtml
+    - GedeeldeCijfers.cshtml8

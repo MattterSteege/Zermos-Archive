@@ -15,7 +15,7 @@
     
     string GetNotificationClass(DateTime? lastGradeDate)
     {
-        if (lastGradeDate == null) return "";
+        if (lastGradeDate == null || lastGradeDate == DateTime.MaxValue) return "";
         return lastUpdated < lastGradeDate ? "notify-me" : "";
     }
     
