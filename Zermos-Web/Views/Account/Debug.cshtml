@@ -43,6 +43,8 @@
         <h1>Zermos watch</h1>
         <p>Zet hier de optie om het rooster te laten zien in smartwatch modus aan of uit.</p>
     </div>
+
+    <h4>DEV settings</h4>
     
     <div class="account-item" data-preview-id="Dont_minimize_js" onclick="TogglePreview('Dont_minimize_js')">
         <h1>Zet de JS minizer uit</h1>
@@ -58,13 +60,20 @@
         <h1>Debug Instance</h1>
         <p>Open an eruda debug instance</p>
     </div>
+
+    <h4>GOTO's</h4>
     
     @if(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") == "DEV") {
     <div class="account-item" onclick="ReplacePage('@Url.Action("LoginAs", "Authentication")')">
         <h1>Login als</h1>
         <p>Ga naar de login als pagina</p>
     </div>
-}
+    }
+
+    <div class="account-item" onclick="ReplacePage('/Intro')">
+        <h1>Introduction required!</h1>
+        <p>Ga naar de intro pagina</p>
+    </div>
     
     <h4>device info</h4>
     
