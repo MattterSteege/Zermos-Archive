@@ -45,7 +45,7 @@
         {
             if (grade.cijfer == "-") { continue; }
 
-            <table class="grade-table" @Html.Raw(GetNotificationClass(grade.cijfers?[0]?.datumInvoerEerstePoging ?? DateTime.MaxValue)) onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()/@grade.vakuuid.shortenUUID()/@Model.relevanteCijferLichtingUUID.shortenUUID()/@Model.leerjaarUUID.shortenUUID()')">
+            <table class="grade-table" @Html.Raw(GetNotificationClass(grade.cijfers?[0]?.datumInvoerEerstePoging ?? DateTime.MaxValue)) onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()/@grade.vakuuid.simpleEncodeUUID()/@Model.relevanteCijferLichtingUUID.simpleEncodeUUID()/@Model.leerjaarUUID.simpleEncodeUUID()')">
                 <tr class="grade-table-header">
                     <td rowspan="2"><i class="fa-solid fa-book" data-name="@grade.vakNaam.ToLower()" data-name-short="@grade.vakAfkorting.ToLower()"></i></td>
                     <td>@grade.vakNaam.Capitalize()</td>
@@ -95,7 +95,7 @@
             cijferSECount++;
             
             //Combine the data from cijferSE with the structure of cijfer
-            <table class="grade-table" @Html.Raw(GetNotificationClass((grade.cijfersSE != null && grade.cijfersSE.Count > 0) ? grade.cijfersSE.FirstOrDefault()!.datumInvoerEerstePoging : DateTime.MinValue)) onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()/@grade.vakuuid.shortenUUID()/@Model.relevanteCijferLichtingUUID.shortenUUID()/@Model.leerjaarUUID.shortenUUID()')">
+            <table class="grade-table" @Html.Raw(GetNotificationClass((grade.cijfersSE != null && grade.cijfersSE.Count > 0) ? grade.cijfersSE.FirstOrDefault()!.datumInvoerEerstePoging : DateTime.MinValue)) onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()/@grade.vakuuid.simpleEncodeUUID()/@Model.relevanteCijferLichtingUUID.simpleEncodeUUID()/@Model.leerjaarUUID.simpleEncodeUUID()')">
                 <tr class="grade-table-header">
                     <td rowspan="2"><i class="fa-solid fa-book" data-name="@grade.vakNaam.ToLower()" data-name-short="@grade.vakAfkorting.ToLower()"></i></td>
                     <td>@grade.vakNaam</td>
@@ -328,21 +328,27 @@
                 new ZermosModal()
                 .addHeading("Voortgangsdossier")
                 .addText("Pas de instellingen aan van het voortgangsdossier. Je kan het volgende aanpassen:")
-                .addToggle("Afronden op een heel getal", afronden)
-                .addToggle("Geen kleur geven aan je cijfer", hideColor)
-                .addButton("oke", (ctx) => {
-                    var values = ctx.getComponentsValue();
+                .addToggle("Afronden op een heel getal", afronden, (ctx, isActive) => {
+                    afronden = isActive;
+                    toggleSEGradeRounding(parentPanel, isActive);
 
-                    var newSettings = `afronden=${values.values[0].value};hideColor=${values.values[1].value};`;
+                    var newSettings = `afronden=${afronden};hideColor=${hideColor};`;
                     parentPanel.dataset.settings = newSettings;
-                    
-                    saveSettings(parentPanel, null);
-                    
-                    //update the grades
-                    toggleSEGradeRounding(parentPanel, afronden);
-                    toggleSuffAndInsuff(parentPanel, hideColor);
 
-                    ctx.close();
+                    var save = getSettings();
+                    save[0] = newSettings;
+                    localStorage.setItem('gradeSettings', JSON.stringify(save));
+                })
+                .addToggle("Geen kleur geven aan je cijfer", hideColor, (ctx, isActive) => {
+                    hideColor = isActive;
+                    toggleSuffAndInsuff(parentPanel, isActive);
+
+                    var newSettings = `afronden=${afronden};hideColor=${hideColor};`;
+                    parentPanel.dataset.settings = newSettings;
+
+                    var save = getSettings();
+                    save[0] = newSettings;
+                    localStorage.setItem('gradeSettings', JSON.stringify(save));
                 })
                 .open();
             }
@@ -357,21 +363,27 @@
                 new ZermosModal()
                 .addHeading("Schoolexamen cijfers")
                 .addText("Pas de instellingen aan van de schoolexamen cijfers. Je kan het volgende aanpassen:")
-                .addToggle("Afronden op een heel getal", afronden)
-                .addToggle("Geen kleur geven aan je cijfer", hideColor)
-                .addButton("oke", (ctx) => {
-                    var values = ctx.getComponentsValue();
-                
-                    var newSettings = `afronden=${values.values[0].value};hideColor=${values.values[1].value};`;
+                .addToggle("Afronden op een heel getal", afronden, (ctx, isActive) => {
+                    afronden = isActive;
+                    toggleSEGradeRounding(parentPanel, isActive);
+
+                    var newSettings = `afronden=${afronden};hideColor=${hideColor};`;
                     parentPanel.dataset.settings = newSettings;
-                    
-                    saveSettings(null, parentPanel);
-                    
-                    //update the grades
-                    toggleSEGradeRounding(parentPanel, afronden);
-                    toggleSuffAndInsuff(parentPanel, hideColor);
-                    
-                    ctx.close();
+
+                    var save = getSettings();
+                    save[1] = newSettings;
+                    localStorage.setItem('gradeSettings', JSON.stringify(save));
+                })
+                .addToggle("Geen kleur geven aan je cijfer", hideColor, (ctx, isActive) => {
+                    hideColor = isActive;
+                    toggleSuffAndInsuff(parentPanel, isActive);
+
+                    var newSettings = `afronden=${afronden};hideColor=${hideColor};`;
+                    parentPanel.dataset.settings = newSettings;
+
+                    var save = getSettings();
+                    save[1] = newSettings;
+                    localStorage.setItem('gradeSettings', JSON.stringify(save));
                 })
                 .open();
             }
@@ -388,7 +400,7 @@
             else if (panel === 'examen') {
                 new ZermosModal()
                 .addHeading("Schoolexamen cijfers")
-                .addText("De schoolexamen cijfers zijn cijfers die je hebt gehaald voor toetsen die meetellen voor je schoolexamen. Dit zijn cijfers die uiteindelijk meetellen voor je centraal examen. <br><br>Helaas hebben deze cijfers geen pagina waar je alle cijfers kan zien die je hebt gehaald, dit komt omdat de cijfers (vaak) over verschillende leerjaren worden gegeven en ik dat niet in een keer kan opvragen. Hopelijk komt dit in de toekomst nog, maar dat is momenteel niet mijn grootste prioriteit. Als je SE cijfers hebt voor vakken waar je dat jaar ook voorgangsdossier cijfers voor hebt gekregen kun je ze wel bekijken, ga dan naar 'Rapport' en klik op het desbetreffende vak.")
+                .addText("De schoolexamen cijfers zijn cijfers die je hebt gehaald voor toetsen die meetellen voor je schoolexamen. Dit zijn cijfers die uiteindelijk meetellen voor je centraal examen. <br><br>Helaas hebben deze cijfers geen pagina waar je alle cijfers kan zien die je hebt gehaald, dit komt omdat de cijfers (vaak) over verschillende leerjaren worden gegeven en ik dat niet in een keer kan opvragen. Hopelijk komt dit in de toekomst nog, maar dat is momenteel niet mijn grootste prioriteit. Als je SE cijfers hebt voor vakken waar je dat jaar ook voorgangsdossier cijfers voor hebt gekregen kun je ze wel bekijken, ga dan naar 'Rapport' en klik op het desbetreffende vak.", true)
                 .addButton("Hmm, oké", (ctx) => { ctx.close(); })
                 .open();
             }

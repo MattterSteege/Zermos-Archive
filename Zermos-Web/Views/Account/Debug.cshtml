@@ -96,10 +96,22 @@
         <p id="internet_connection">Internet Connection: 0mbps</p>
     </div>
     
+    <div class="account-item">
+        <h1>Opslag info</h1>
+        <p>Deze informatie kan handig zijn als je problemen ondervindt bijv. cache</p>
+        <p id="ls_size">localstorage size: [CALC...]</p>
+        <p id="co_size">cookies size: [CALC...]</p>
+        <p id="ss_size">sessionstorage size: [CALC...]</p>
+    </div>
+    
     <h4>LOGS</h4>
     
-    <div class="account-item" id="logs">
-        <h1>Logs</h1>
+    <div class="account-item" id="Clogs">
+        <h1>Console Logs</h1>
+    </div>
+    
+    <div class="account-item" id="Nlogs">
+        <h1>Network Logs</h1>
     </div>
 </div>
 
@@ -111,22 +123,32 @@ Zermos.mainAfterLoad = () => {
         document.getElementById("internet_connection").innerText = "Internet Connection: " + (connection.downlink / 8) + "MB per second";
     }
 
-    refreshLogs();
+    refreshConsoleLogs();
+    refreshNetworkLogs();
+
+    var localstorageSize = 0,_xLen, _x;for (_x in localStorage) {if (!localStorage.hasOwnProperty(_x)) {continue;}_xLen = ((localStorage[_x].length + _x.length) * 2);localstorageSize += _xLen;} //Bytes
+    var cookiesSize = 0;var cookies = document.cookie.split(";");for (var i = 0; i < cookies.length; i++) {cookiesSize += cookies[i].length;} //Bytes
+    var sessionstorageSize = 0,_yLen, _y;for (_y in sessionStorage) {if (!sessionStorage.hasOwnProperty(_y)) {continue;}_yLen = ((sessionStorage[_y].length + _y.length) * 2);sessionstorageSize += _yLen;} //Bytes
+    
+    document.getElementById("ls_size").innerText = "localstorage size: " + (localstorageSize / 1024).toFixed(2) + "KB";
+    document.getElementById("co_size").innerText = "cookies size: " + (cookiesSize / 1024).toFixed(2) + "KB";
+    document.getElementById("ss_size").innerText = "sessionstorage size: " + (sessionstorageSize / 1024).toFixed(2) + "KB";
 }
 
 addEventListenerToMain("onerror", function(e) {
-    refreshLogs();
+    refreshConsoleLogs();
 });
 
 addButtonToPage("fa-refresh", () => {
-    refreshLogs()
+    refreshConsoleLogs()
+    refreshNetworkLogs();
 }, VerticalAlignment.TL, Background.Primary);
 
-function refreshLogs() {
+function refreshConsoleLogs() {
     //loop over consoleArray and write to logs
-    var logs = document.getElementById("logs");
+    var logs = document.getElementById("Clogs");
 
-    logs.innerHTML = "<h1>Logs</h1>";
+    logs.innerHTML = "<h1>Console Logs</h1>";
 
     for (var i = 0; i < consoleArray.length; i++) {
         var type = consoleArray[i][0];
@@ -152,6 +174,40 @@ function refreshLogs() {
         log.appendChild(argsElement);
         if (stack) {
             log.appendChild(stackElement);
+        }
+
+        logs.appendChild(log);
+    }
+}
+
+function refreshNetworkLogs() {
+    var logs = document.getElementById("Nlogs");
+    logs.innerHTML = "<h1>Network Logs</h1>";
+
+    for (var i = 0; i < networkArray.length; i++) {
+        var method = networkArray[i][0];
+        var url = networkArray[i][1];
+        var status = networkArray[i][2];
+        var fetchTime = networkArray[i][3];
+        var errorMessage = networkArray[i][4];
+
+        var log = document.createElement("div");
+        log.classList.add("log");
+        log.style.marginTop = "5px";
+        log.classList.add("status-" + (status < 400 ? "success" : "error"));
+
+        var argsElement = document.createElement("p");
+        argsElement.classList.add("args");
+        argsElement.innerHTML = `[${method}] (${status}) ${fetchTime.toFixed()}ms - ${url}`;
+
+        log.appendChild(argsElement);
+
+        if (errorMessage) {
+            var errorElement = document.createElement("p");
+            errorElement.classList.add("error-message");
+            errorElement.style.color = "red";
+            errorElement.innerHTML = `&nbsp;⤷&nbsp;Error: ${errorMessage}`;
+            log.appendChild(errorElement);
         }
 
         logs.appendChild(log);

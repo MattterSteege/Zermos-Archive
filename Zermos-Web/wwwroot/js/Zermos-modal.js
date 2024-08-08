@@ -85,8 +85,8 @@
         return this.addComponent({ type: 'submenu', showCondition, subModal });
     }
 
-    addText(text) {
-        return this.addComponent({ type: 'text', text });
+    addText(text, asHtml = false) {
+        return this.addComponent({ type: 'text', text, asHtml: asHtml });
     }
 
     addLabel(text) {
@@ -250,7 +250,7 @@
 
     renderText(component, componentElement) {
         const textElement = document.createElement('p');
-        textElement.innerText = component.text;
+        component.asHtml ? textElement.innerHTML = component.text : textElement.innerText = component.text;
         componentElement.appendChild(textElement);
         return componentElement;
     }

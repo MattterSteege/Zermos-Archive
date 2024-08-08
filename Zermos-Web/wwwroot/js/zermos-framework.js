@@ -671,6 +671,41 @@ window.onerror = function(message, source, lineno, colno, error) {
     return true;
 };
 
+//==============================NETWORKING OVERWRITE==============================
+// Overwrite fetch to log to the console
+var networkArray = [];
+
+const originalFetch = window.fetch;
+window.fetch = async function(...args) {
+  const [resource, config] = args;
+  const method = config?.method || 'GET';
+
+  const startTime = performance.now(); // Start time
+
+  try {
+    const response = await originalFetch(...args);
+    const status = response.status;
+    const url = response.url;
+    const endTime = performance.now(); // End time
+    const fetchTime = endTime - startTime; // Calculate fetch time
+    let errorMessage = null;
+
+    if (status >= 400) {
+      errorMessage = await response.text();
+    }
+
+    networkArray.push([method, url, status, fetchTime, errorMessage]);
+
+    return response;
+  } catch (error) {
+    const endTime = performance.now(); // End time
+    const fetchTime = endTime - startTime; // Calculate fetch time
+
+    networkArray.push([method, resource, 0, fetchTime, error.message]);
+    throw error;
+  }
+};
+
 //==============================PREVIEW SYSTEM==============================
 //cookie preview=microsoft-somtoday-zermelo > TogglePreview("microsoft") > preview=somtoday-zermelo
 function TogglePreview(preview) {

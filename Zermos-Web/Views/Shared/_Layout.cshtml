@@ -133,8 +133,8 @@ function ReplacePage(url, force) {
     }
 
     if (url.startsWith("./")) {
-        // get current path and add the url to it
-        url = window.location.pathname + url.substring(1);
+        // get current path and add the url to it (if the pathname ends with /, remove it)
+        url = window.location.pathname.endsWith("/") ? window.location.pathname + url.substring(2) : window.location.pathname + url.substring(1);
     }
 
     content.style.opacity = "1";

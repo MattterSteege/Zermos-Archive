@@ -91,9 +91,9 @@ namespace Zermos_Web.Controllers
         [HttpGet("Somtoday/Cijfers/{vak}/{vakUUID}/{lichtingUUID}/{plaatsingUuid}")]
         public async Task<IActionResult> CijferVoorVak(string vakUUID, string lichtingUUID, string plaatsingUuid)
         {
-            vakUUID = vakUUID.expandUUID();
-            lichtingUUID = lichtingUUID.expandUUID();
-            plaatsingUuid = plaatsingUuid.expandUUID();
+            vakUUID = vakUUID.simpleDecodeUUID();
+            lichtingUUID = lichtingUUID.simpleDecodeUUID();
+            plaatsingUuid = plaatsingUuid.simpleDecodeUUID();
             
             var user = ZermosUser;
             
@@ -153,9 +153,9 @@ namespace Zermos_Web.Controllers
         [HttpGet("Somtoday/Cijfers/{vak}/{vakUUID}/{lichtingUUID}/{plaatsingUuid}/Statistieken")]
         public async Task<IActionResult> CijferStatistieken(string vakUUID, string lichtingUUID, string plaatsingUuid)
         {
-            vakUUID = vakUUID.expandUUID();
-            lichtingUUID = lichtingUUID.expandUUID();
-            plaatsingUuid = plaatsingUuid.expandUUID();
+            vakUUID = vakUUID.simpleDecodeUUID();
+            lichtingUUID = lichtingUUID.simpleDecodeUUID();
+            plaatsingUuid = plaatsingUuid.simpleDecodeUUID();
             
             var user = ZermosUser;
             
