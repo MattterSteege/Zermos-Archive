@@ -417,7 +417,7 @@ function copyToClipboard(text) {
     try {
       document.execCommand("copy");
     } catch (err) {
-      Zermos.error("Fallback: Oops, unable to copy", err);
+      console.error("Fallback: Oops, unable to copy", err);
     }
 
     document.body.removeChild(textArea);
@@ -599,13 +599,13 @@ Zermos.checkForUpdates = () => {
 };
 
 Zermos.mainUnload.bind(() => {
-  Zermos.log("unloading");
+  Console.log("unloading");
 });
 
 //==============================TITLE TEXT==============================
 document.addEventListener("DOMContentLoaded", function() {
   const elements = document.querySelectorAll(".svgText");
-  // Zermos.log(elements);
+  // console.log(elements);
 
   elements.forEach(function(element) {
     element.addEventListener("mouseover", function() {
@@ -630,34 +630,45 @@ document.addEventListener("DOMContentLoaded", function() {
 // Overwrite console.log to log to the console and to an array
 var consoleArray = [];
 
-Zermos.log = function(...args) {
-  consoleArray.push([...args, "log"]);
-  Zermos.trace(`%c[Log]%c`, "font-weight:700;color:royalblue;", "", ...args);
+consoleLog = console.log;
+console.log = function(...args) {
+    consoleArray.push(["log", null, ...args]);
+    consoleLog(`%c[Log]%c`, "font-weight:700;color:royalblue;", "", ...args);
 };
 
-Zermos.error = function(...args) {
-  consoleArray.push([...args, "error"]);
-  Zermos.trace(`%c[Error]%c`, "font-weight:700;color:red;", "", ...args);
+consoleError = console.error;
+console.error = function(...args) {
+    consoleArray.push(["error", new Error().stack, ...args]);
+    consoleError(`%c[Error]%c`, "font-weight:700;color:red;", "", ...args);
 };
 
-Zermos.warn = function(...args) {
-  consoleArray.push([...args, "warn"]);
-  Zermos.trace(`%c[Warn]%c`, "font-weight:700;color:gold;", "", ...args);
+consoleWarn = console.warn;
+console.warn = function(...args) {
+    consoleArray.push(["warn", new Error().stack, ...args]);
+    consoleWarn(`%c[Warn]%c`, "font-weight:700;color:gold;", "", ...args);
 };
 
-Zermos.info = function(...args) {
-  consoleArray.push([...args, "info"]);
-  Zermos.trace(`%c[Info]%c`, "font-weight:700;color:blue;", "", ...args);
+consoleInfo = console.info;
+console.info = function(...args) {
+    consoleArray.push(["info", null, ...args]);
+    consoleInfo(`%c[Info]%c`, "font-weight:700;color:blue;", "", ...args);
 };
 
-Zermos.debug = function(...args) {
-  consoleArray.push([...args, "debug"]);
-  Zermos.trace(`%c[Debug]%c`, "font-weight:700;color:orange;", "", ...args);
+consoleDebug = console.debug;
+console.debug = function(...args) {
+    consoleArray.push(["debug", new Error().stack, ...args]);
+    consoleDebug(`%c[Debug]%c`, "font-weight:700;color:orange;", "", ...args);
 };
 
-Zermos.trace = function(...args) {
-  consoleArray[consoleArray.length - 1].push(new Error().stack);
-  console.trace(...args);
+window.onerror = function(message, source, lineno, colno, error) {
+    consoleArray.push(["error", new Error().stack, message]);
+    consoleError(
+        `%c[Error]%c ${message} in ${source}:${lineno}:${colno}`,
+        "font-weight:700;color:red;",
+        ""
+    );
+    
+    return true;
 };
 
 //==============================PREVIEW SYSTEM==============================

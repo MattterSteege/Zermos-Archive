@@ -60,7 +60,7 @@
             }
 
         } catch (error) {
-            Zermos.error("Error fetching info board data:", error);
+            console.error("Error fetching info board data:", error);
         }
 
         return { items: model, save_time: new Date() };
@@ -70,12 +70,12 @@
     var infoBordData = localStorage.getItem("infoBordData");
     if (infoBordData) {
         infoBordData = JSON.parse(infoBordData);
-        Zermos.log("Data loaded from local storage");
-        Zermos.log(infoBordData);
+        console.log("Data loaded from local storage");
+        console.log(infoBordData);
     } else {
-        Zermos.log("Data loaded from fetch");
+        console.log("Data loaded from fetch");
         fetchInfoBordData().then(data => {
-            Zermos.log(data);
+            console.log(data);
             localStorage.setItem("infoBordData", JSON.stringify(data));
         });
     }
@@ -86,13 +86,13 @@
         var currentTime = new Date();
         var diff = currentTime - saveTime;
         var diffInMinutes = diff / 1000 / 60;
-        Zermos.log("Data is " + diffInMinutes + " minutes old");
+        console.log("Data is " + diffInMinutes + " minutes old");
         
         if (diffInMinutes < 60) {
             renderData(infoBordData.items);
         }
         else {
-            Zermos.log("Data is older than 60 minutes, fetching new data");
+            console.log("Data is older than 60 minutes, fetching new data");
             fetchInfoBordData().then(data => {
                 renderData(data.items);
                 localStorage.setItem("infoBordData", JSON.stringify(data));

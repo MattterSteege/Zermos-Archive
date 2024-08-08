@@ -345,7 +345,7 @@ function NextWeekAnim() {
     var newWeek = current - 100;
     newWeek = Math.ceil(newWeek / 100) * 100;
 
-    Zermos.log(current, newWeek);
+    console.log(current, newWeek);
     animating = true;
     ease(current, newWeek, 500, (value) => {
         weekCarousel.style.transform = `translateX(${value}%)`;
@@ -366,7 +366,7 @@ function PrevWeekAnim() {
     var newWeek = current + 100;
     newWeek = Math.floor(newWeek / 100) * 100;
 
-    Zermos.log(current, newWeek);
+    console.log(current, newWeek);
     animating = true;
     ease(current, newWeek, 500, (value) => {
         weekCarousel.style.transform = `translateX(${value}%)`;

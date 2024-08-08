@@ -30,7 +30,7 @@
         var inputs = form.getElementsByTagName("input");
         //school is equel to the uuid of the selected school name
         url += "?username=" + btoa(encodeURIComponent(inputs[1].value)).replace("=", "") + "&password=" + btoa(encodeURIComponent(inputs[2].value)).replace("=", "") + "&school=" + schools.find(school => school[0] === inputs[0].value)[1];
-        Zermos.log(url)
+        console.log(url)
         
         var button = document.getElementsByTagName("button")[0];
         button.innerHTML = "Bezig met laden...";
@@ -55,7 +55,7 @@
         if (url.includes("ontkoppel")) {
             button.innerHTML = "Log opnieuw in";
             button.disabled = false;
-            Zermos.warn("Crises averted");
+            console.warn("Crises averted");
             
             return;
         }

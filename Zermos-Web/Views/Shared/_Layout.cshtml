@@ -84,8 +84,8 @@ window.onload = () => {
 
     waitForObject(Zermos, function () {
         Zermos.CurrentVersion = "@Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION")";
-        Zermos.log(`Zermos-web versie: ${Zermos.CurrentVersion}`);
-        Zermos.log(`Zermos-framework is geladen`);
+        console.log(`Zermos-web versie: ${Zermos.CurrentVersion}`);
+        console.log(`Zermos-framework is geladen`);
         history.replaceState(null, null, "/");
         ReplacePage('@Html.Raw(ViewData["url"])');
     }, 500);
@@ -149,6 +149,12 @@ function ReplacePage(url, force) {
 
     fetch(url, { cache: "no-cache", method: "GET", headers: {'X-Requested-With': 'XMLHttpRequest'}, })
     .then(async response => {
+
+        if(!response.ok)
+        {
+            return Promise.reject(response);
+        }
+    
         if (response.status === 299) {
             const data = await response.text();
             window.open(data, "_blank");
@@ -178,6 +184,7 @@ function ReplacePage(url, force) {
         if (xhr.status === 401) {
             isRunning = false;
             ReplacePage("/Login");
+            
         } else {
             document.getElementsByClassName("loader-text")[0].innerHTML = "De pagina kon niet worden opgevraagd.";
             document.querySelectorAll(".loading-dots").forEach(function(dot) {
@@ -255,14 +262,15 @@ function doPageReplace(data, url){
 
         setTimeout(function() {
             //log the time it took to load the page
+            const timerEnd = performance.now();
+            console.log(`Page load took ${timerEnd - timerStart}ms`);
+            
+            cachePage(data, url);
+
             try {
                 Zermos.mainAfterLoad();
             } catch (e) {}
             Zermos.mainAfterLoad = () => {};
-            const timerEnd = performance.now();
-            Zermos.log(`Page load took ${timerEnd - timerStart}ms`);
-            
-            cachePage(data, url);
 
             return true;
         }, 250);
@@ -277,7 +285,6 @@ window.onbeforeunload = function() {
 window.addEventListener("popstate", function(e) {
     ReplacePage(e.target.location.pathname, true);
 });
-
 </script>
 </body>
 </html>

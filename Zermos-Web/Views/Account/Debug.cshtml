@@ -100,14 +100,51 @@ Zermos.mainAfterLoad = () => {
     if (connection !== undefined) {
         document.getElementById("internet_connection").innerText = "Internet Connection: " + (connection.downlink / 8) + "MB per second";
     }
-    
+
+    refreshLogs();
+}
+
+addEventListenerToMain("onerror", function(e) {
+    refreshLogs();
+});
+
+addButtonToPage("fa-refresh", () => {
+    refreshLogs()
+}, VerticalAlignment.TL, Background.Primary);
+
+function refreshLogs() {
     //loop over consoleArray and write to logs
     var logs = document.getElementById("logs");
+
+    logs.innerHTML = "<h1>Logs</h1>";
+
     for (var i = 0; i < consoleArray.length; i++) {
-        var log = consoleArray[i][1] + " - " + consoleArray[i][0] + consoleArray[i][2].substring(5).replaceAll("    ", "<br>&nbsp;&nbsp;&nbsp;↳&nbsp;&nbsp;&nbsp;&nbsp;");
-        var logElement = document.createElement("p");
-        logElement.innerHTML = log + "<br>&nbsp;";
-        logs.appendChild(logElement);
+        var type = consoleArray[i][0];
+        var stack = consoleArray[i][1];
+        var args = consoleArray[i][2];
+
+        var log = document.createElement("div");
+        log.classList.add("log");
+        log.style.marginTop = "5px";
+        log.classList.add("type-" + type);
+
+        if (stack) {
+            var stackElement = document.createElement("p");
+            stackElement.classList.add("stack");
+            //turn every line of the stack into a : ⤷ [stack line]
+            stackElement.innerHTML = "&nbsp;⤷&nbsp;&nbsp;&nbsp;&nbsp;" + stack.replace("Error\n", "").split("\n").join("\n&nbsp;⤷&nbsp;&nbsp;&nbsp;&nbsp;");
+        }
+
+        var argsElement = document.createElement("p");
+        argsElement.classList.add("args");
+        argsElement.innerText = "[" + type + "] - "  + args;
+
+        log.appendChild(argsElement);
+        if (stack) {
+            log.appendChild(stackElement);
+        }
+
+        logs.appendChild(log);
     }
 }
 
