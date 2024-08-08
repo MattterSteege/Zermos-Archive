@@ -35,9 +35,9 @@ namespace Zermos_Web.Controllers
         [ZermosPage]
         [SomtodayRequirement]
         [HttpGet("Somtoday/Cijfers")]
-        public async Task<IActionResult> Cijfers(int leerjaar = -1)
+        public async Task<IActionResult> Cijfers(string leerjaar = "0")
         {
-            if (Request.Cookies.ContainsKey("cached-somtoday-grades") && leerjaar == -1)
+            if (Request.Cookies.ContainsKey("cached-somtoday-grades") && leerjaar == "0")
             {
                 return PartialView(JsonConvert.DeserializeObject<SortedSomtodayGradesModel>(ZermosUser.cached_somtoday_grades ?? "{}"));
             }
@@ -68,12 +68,12 @@ namespace Zermos_Web.Controllers
 
             SortedSomtodayGradesModel grades = new();
             
-            if (leerjaar == -1 || leerjaar == plaatsingen.items.Count)
+            if (leerjaar == "0" || leerjaar == plaatsingen.items.FirstOrDefault(x => x.huidig)!?.stamgroepnaam)
                 grades = await somtodayApi.GetCurrentGradesAndVakgemiddelden(user, plaatsingen);
             else
                 grades = await somtodayApi.GetGradesAndVakgemiddelden(user, plaatsingen, leerjaar);
             
-            if (leerjaar == -1)
+            if (leerjaar == "0")
             {
                 ZermosUser = new user
                 {
@@ -313,8 +313,7 @@ namespace Zermos_Web.Controllers
 
             var somtodayHomework = await somtodayApi.GetHomeworkAsync(user, dagen);
             
-            if (somtodayHomework == null)
-                return PartialView(new SomtodayHomeworkModel {items = new List<Models.somtodayHomeworkModel.Item>()});
+            somtodayHomework ??= new SomtodayHomeworkModel {items = new List<Models.somtodayHomeworkModel.Item>()};
             
             ZermosUser = new user
             {
@@ -373,13 +372,21 @@ namespace Zermos_Web.Controllers
 
             return remapedHomework;
         }
-
+        
         [Authorize]
         [SomtodayRequirement]
         [HttpPost("Somtoday/Huiswerk/Nieuw")]
-        public IActionResult NieuwHuiswerkPOST([FromBody] CustomHuiswerkModel customHuiswerkModel)
+        public IActionResult NieuwHuiswerkPOST()
         {
-            if (customHuiswerkModel == null)
+            //FORM: deadline=2024-8-15+23%3A59%3A59&titel=tests&omschrijving=fgdsfgsdffgdsfgsdfbsgfdh
+            var customHuiswerkModel = new CustomHuiswerkModel
+            {
+                deadline = DateTime.Parse(Request.Form["deadline"]),
+                titel = Request.Form["titel"],
+                omschrijving = Request.Form["omschrijving"]
+            };
+            
+            if (customHuiswerkModel.titel.IsNullOrEmpty() || customHuiswerkModel.omschrijving.IsNullOrEmpty() || customHuiswerkModel.deadline == DateTime.MinValue || customHuiswerkModel.deadline < DateTime.Now)
                 return BadRequest();
             
             var homework = JsonConvert.DeserializeObject<List<CustomHuiswerkModel>>(ZermosUser.custom_huiswerk ?? "[]") ?? new List<CustomHuiswerkModel>();

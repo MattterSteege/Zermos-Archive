@@ -43,6 +43,11 @@
         <h1>Zermos watch</h1>
         <p>Zet hier de optie om het rooster te laten zien in smartwatch modus aan of uit.</p>
     </div>
+    
+    <div class="account-item" onclick='document.querySelector("html").style.filter = "blur(" + Math.floor(Math.random() * 5) + "px)"'>
+        <h1>C#?</h1>
+        <p>Fuck around and find out?</p>
+    </div>
 
     <h4>DEV settings</h4>
     
@@ -59,6 +64,11 @@
     <div class="account-item" onclick="var script = document.createElement('script'); script.src='https://cdn.jsdelivr.net/npm/eruda'; document.body.append(script); script.onload = function () { eruda.init(); }">
         <h1>Debug Instance</h1>
         <p>Open an eruda debug instance</p>
+    </div>
+    
+    <div class="account-item" onclick="testAPI()">
+        <h1>Test API latency</h1>
+        <p>Klik om basic API data te ontvangen</p>
     </div>
 
     <h4>GOTO's</h4>
@@ -181,6 +191,39 @@ function RefreshCache() {
     }
     
     localStorage.clear();
+}
+
+function testAPI() {
+    
+    fetch("/api/test", {
+        method: "POST",
+        body: "timesend=" + new Date().getTime(),
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    }).then(response => response.json()).then(data => {
+        var timeRequestRecieved = new Date(data.timeRequestRecieved);
+        var timeRequestSend = new Date(data.timeRequestSend);
+        var timeResponseSend = new Date(data.timeResponseSend);
+        var timeResponseRecieved = new Date();
+        var timeQuery = data.timeQuery;
+        
+        var timeRequest = timeRequestRecieved - timeRequestSend;
+        var timeResponse = timeResponseRecieved - timeResponseSend;
+        var total = timeResponseRecieved - timeRequestSend;
+        
+        new ZermosModal()
+        .addHeading("API test resulaten")
+        .addText("Request tijd: ~" + timeRequest + "ms (" + (Math.round(timeRequest  / total * 100 * 100) / 100).toFixed(2) + "%)")
+        .addText("Response tijd: ~" + timeResponse + "ms (" + (Math.round(timeResponse / total * 100 * 100) / 100).toFixed(2) + "%)")
+        .addText("Query tijd: ~" + timeQuery + "ms (" + (Math.round(timeQuery / total * 100 * 100) / 100).toFixed(2) + "%)")
+        .addSeparator()
+        .addText("Totaal tijd: ~" + (total) + "ms")
+        .addSeparator()
+        .addText("De tijd kan afwijken met een maximum van +/-1ms door afrondingen. Als de totale tijd onder de 100ms is, dan is de snelheid van de API op een goed niveau.")
+        .open();                
+    });
+
 }
 
 CheckPreviews();

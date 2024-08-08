@@ -95,7 +95,7 @@
             cijferSECount++;
             
             //Combine the data from cijferSE with the structure of cijfer
-            <table class="grade-table" @Html.Raw(GetNotificationClass((grade.cijfersSE != null && grade.cijfersSE.Count > 0) ? grade.cijfersSE.FirstOrDefault()!.datumInvoerEerstePoging : DateTime.MinValue))> @*onclick="ReplacePage('@Url.Action("CijferVoorVak", "Somtoday", new { vak = grade.vakAfkorting.Capitalize() })')"*@
+            <table class="grade-table" @Html.Raw(GetNotificationClass((grade.cijfersSE != null && grade.cijfersSE.Count > 0) ? grade.cijfersSE.FirstOrDefault()!.datumInvoerEerstePoging : DateTime.MinValue)) onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()/@grade.vakuuid.shortenUUID()/@Model.relevanteCijferLichtingUUID.shortenUUID()/@Model.leerjaarUUID.shortenUUID()')">
                 <tr class="grade-table-header">
                     <td rowspan="2"><i class="fa-solid fa-book" data-name="@grade.vakNaam.ToLower()" data-name-short="@grade.vakAfkorting.ToLower()"></i></td>
                     <td>@grade.vakNaam</td>
@@ -326,20 +326,23 @@
                 var hideColor = settings.find(x => x.startsWith('hideColor')) ? settings.find(x => x.startsWith('hideColor')).split('=')[1] === 'true' : false;
             
                 new ZermosModal()
-                .setTitle("Voortgangsdossier")
+                .addHeading("Voortgangsdossier")
                 .addText("Pas de instellingen aan van het voortgangsdossier. Je kan het volgende aanpassen:")
                 .addToggle("Afronden op een heel getal", afronden)
                 .addToggle("Geen kleur geven aan je cijfer", hideColor)
-                .setSubmitButtonLabel("oke")
-                .onSubmit((afronden, hideColor) => {
-                    var newSettings = `afronden=${afronden};hideColor=${hideColor};`;
+                .addButton("oke", (ctx) => {
+                    var values = ctx.getComponentsValue();
+
+                    var newSettings = `afronden=${values.values[0].value};hideColor=${values.values[1].value};`;
                     parentPanel.dataset.settings = newSettings;
+                    
+                    saveSettings(parentPanel, null);
                     
                     //update the grades
                     toggleSEGradeRounding(parentPanel, afronden);
                     toggleSuffAndInsuff(parentPanel, hideColor);
-                    
-                    saveSettings(parentPanel, null);
+
+                    ctx.close();
                 })
                 .open();
             }
@@ -362,11 +365,12 @@
                     var newSettings = `afronden=${values.values[0].value};hideColor=${values.values[1].value};`;
                     parentPanel.dataset.settings = newSettings;
                     
+                    saveSettings(null, parentPanel);
+                    
                     //update the grades
                     toggleSEGradeRounding(parentPanel, afronden);
                     toggleSuffAndInsuff(parentPanel, hideColor);
                     
-                    saveSettings(null, parentPanel);
                     ctx.close();
                 })
                 .open();
@@ -390,31 +394,25 @@
             }
         }
 
-</script>
+    addButtonToPage("fa-refresh", () => {
+        document.cookie = "cached-somtoday-grades=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        ReplacePage('/Somtoday/Cijfers');
+    }, VerticalAlignment.TL, Background.Primary);
 
-<script minimize>
-@Context.Items["dmjs"]
+    var jaarlagen = JSON.parse('@Html.Raw(Json.Serialize(Model.plaatsing.Select(jaargang => new { label = jaargang.stamgroepnaam, value = Model.plaatsing.IndexOf(jaargang) + 1 })))');
 
-addButtonToPage("fa-refresh", () => {
-    document.cookie = "cached-somtoday-grades=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    ReplacePage('/Somtoday/Cijfers');
-}, VerticalAlignment.TL, Background.Primary);
-
-var jaarlagen = JSON.parse('@Html.Raw(Json.Serialize(Model.plaatsing.Select(jaargang => new { label = jaargang.stamgroepnaam, value = Model.plaatsing.IndexOf(jaargang) + 1 })))');
-
-addButtonToPage("fa-history", () => {
-    new ZermosModal()
-    .addHeading("Vorige jaarlagen")
-    .addText("Van welke jaarlagen wil je de cijfers zien?")
-    .addDropdown(jaarlagen, true, false)
-    .addButton("Start de tijdmachine!", (ctx) => { 
-        var value = ctx.getComponentsValue().values[0].value;
-        console.log(value);
-        if (value !== "") {
-            ReplacePage(`/Somtoday/Cijfers?leerjaar=${value}`);
-        }
-        ctx.close(); 
-    })
-    .open();
-}, VerticalAlignment.BT, Background.Accent);
+    addButtonToPage("fa-history", () => {
+        new ZermosModal()
+        .addHeading("Vorige jaarlagen")
+        .addText("Van welke jaarlagen wil je de cijfers zien?")
+        .addDropdown(jaarlagen, true, false)
+        .addButton("Start de tijdmachine!", (ctx) => { 
+            var value = ctx.getComponentsValue().values[0].value;
+            if (value !== "") {
+                ReplacePage(`/Somtoday/Cijfers?leerjaar=${value.label}`, true);
+            }
+            ctx.close(); 
+        })
+        .open();
+    }, VerticalAlignment.BT, Background.Accent);
 </script>

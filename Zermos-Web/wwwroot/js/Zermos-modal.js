@@ -17,6 +17,9 @@
         return this;
     }
 
+    
+    //Returns the values of all the components in the modal an example would be (in json, but it's an object):
+    //{ correct: true, values: [{type: "input", id: "input1", value: "value1", correct: true}, ... ] }
     getComponentsValue() {
         var values = [];
         var correctForm = true;
@@ -86,12 +89,16 @@
         return this.addComponent({ type: 'text', text });
     }
 
+    addLabel(text) {
+        return this.addComponent({ type: 'label', text });
+    }
+
     addUrl(url, showFull = false, copyButton = true) {
         return this.addComponent({ type: 'url', url, showFull, copyButton });
     }
 
     ///INPUT ELEMENTS
-    addDatePicker(required = false, initialDate = new Date(), onChange = () => {}) {
+    addDatePicker(required = false, initialDate = null, onChange = () => {}) {
         return this.addComponent({ type: 'datePickerInput', required, initialDate, onChange });
     }
 
@@ -165,6 +172,7 @@
             tripleButton: this.renderTripleButton,
             submenu: this.renderSubmenu,
             text: this.renderText,
+            label: this.renderLabel,
             toggleInput: this.renderToggle,
             url: this.renderUrl,
             spacer: this.renderSpacer,
@@ -247,9 +255,16 @@
         return componentElement;
     }
 
+    renderLabel(component, componentElement) {
+        const labelElement = document.createElement('label');
+        labelElement.innerText = component.text;
+        componentElement.appendChild(labelElement);
+        return componentElement;
+    }
+
     renderToggle(component, componentElement) {
         component.userSetValue = component.state.toString();
-
+        
         const toggleElement = document.createElement('div');
         toggleElement.classList.add("toggle-switch");
         component.asCheckbox ? toggleElement.classList.add("as-checkbox") : null;
@@ -261,7 +276,7 @@
             const isActive = toggleElement.classList.contains('active');
             if (component.onChange) {
                 component.onChange(this, isActive);
-                component.userSetValue = isActive.toString();
+                component.userSetValue = isActive;
             }
         });
 
@@ -309,8 +324,10 @@
 
     renderSeparator(component, componentElement) {
         const separatorTextElement = document.createElement('p');
+        const separatorLineElement = document.createElement('div');
         separatorTextElement.innerText = component.text;
         componentElement.appendChild(separatorTextElement);
+        componentElement.appendChild(separatorLineElement);
         return componentElement;
     }
 
@@ -328,7 +345,8 @@
 
         const selectedDateElem = document.createElement('div');
         selectedDateElem.className = 'selected-date';
-        selectedDateElem.textContent = 'Select a date';
+        selectedDateElem.textContent = component.initialDate?.toLocaleDateString("nl-NL", {weekday: 'long',year: 'numeric',month: 'long',day: 'numeric'}) ?? 'Kies een datum';
+        if (component.initialDate) component.userSetValue = component.initialDate;
         datepicker.appendChild(selectedDateElem);
 
         const calendarElem = document.createElement('div');
@@ -383,7 +401,7 @@
                 }
                 dayElem.addEventListener('click', () => {
                     selectedDate = new Date(year, month, day);
-                    selectedDateElem.textContent = selectedDate.toDateString();
+                    selectedDateElem.textContent = selectedDate.toLocaleDateString("nl-NL", {weekday: 'long',year: 'numeric',month: 'long',day: 'numeric'});
                     renderCalendar(currentMonth, currentYear);
                     if (component.onChange) {
                         component.onChange(this, selectedDate);
@@ -453,7 +471,7 @@
                 }
                 const selectedOptions = Array.from(dropdownMenu.children)
                     .filter(child => child.classList.contains('selected'))
-                    .map(child => child.dataset.value);
+                    .map(child => child.dataset);
                 
                 const selectedOptionsLabels = Array.from(dropdownMenu.children)
                     .filter(child => child.classList.contains('selected'))
@@ -989,7 +1007,7 @@
 // Subclass for submenus, can override or add specific submenu behavior
 class ZermosSubModal extends ZermosModal {}
 
-function unloadModal() {
+window.unloadModal = () => {
     var modal = document.querySelector('.zermos-modal-background');
     if (modal) {
         ease(1, 0, 250, opacity => modal.style.opacity = opacity);

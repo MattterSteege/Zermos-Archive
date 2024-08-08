@@ -104,23 +104,43 @@
         
     function AddHomework() {
         new ZermosModal()
-        .setTitle("Huiswerk toevoegen")
-        .addDateInput("Wanneer moet het huiswerk af zijn?")
-        .addInput("Welke titel krijgt het huiswerk?")
-        .addMultilineInput("Wat is de beschrijving van het huiswerk?")
-        .setSubmitButtonLabel("Huiswerk toevoegen")
-        .onSubmit((date, titel, desc) => {
-            date = date + "T00:00:00";
+        .addHeading("Huiswerk toevoegen")
+        .addText("Wanneer moet het huiswerk af zijn?")
+        .addDatePicker(true, (new Date( Date.now() + (6.048e+8))))
+        .addLabel("Welke titel krijg het huiswerk?")
+        .addTextInput(true, "", 255)
+        .addLabel("Welke beschrijving krijg het huiswerk?")
+        .addTextArea(false, "")
+        .addButton("Huiswerk toevoegen", (ctx) => {
+            var values = ctx.getComponentsValue();
+            
+            console.log(values);
+            
+            if (values.correct === false) {
+                return;
+            }
+            
+            var date = values.values[0].value;
+            var titel = values.values[1].value;
+            var desc = values.values[2].value;
+        
+            //turn date into string: yyyy-MM-dd HH:mm:ss
+            date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " 23:59:59";
+
+            const data = new URLSearchParams(new FormData());
+            data.append('deadline', date);
+            data.append('titel', values.values[1].value);
+            data.append('omschrijving', values.values[2].value);
             
             fetch('/Somtoday/Huiswerk/Nieuw', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: JSON.stringify({ "deadline": date, "titel": titel, "omschrijving": desc })
+                body: data
             }).then(response => {
                 if (response.status === 200) {
-                    ReplacePage('/Somtoday/Huiswerk');
+                    ReplacePage('/Somtoday/Huiswerk', true);
                 }
             }).catch(error => {
                 console.error(error);

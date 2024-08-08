@@ -235,13 +235,13 @@ public class SomtodayAPI
     /// <param name="plaatsingen"></param>
     /// <param name="leerjaar"></param>
     /// <returns></returns>
-    public async Task<SortedSomtodayGradesModel> GetGradesAndVakgemiddelden(user user, SomtodayPlaatsingenModel plaatsingen, int leerjaar = -1)
+    public async Task<SortedSomtodayGradesModel> GetGradesAndVakgemiddelden(user user, SomtodayPlaatsingenModel plaatsingen, string leerjaar = "0")
     {
         #if DEBUG
         var watch = Stopwatch.StartNew();
         #endif
         
-        string plaatsingUUID = leerjaar == -1 ? plaatsingen.items[^1].UUID : plaatsingen.items.FirstOrDefault(x => x.leerjaar == leerjaar)?.UUID;
+        string plaatsingUUID = leerjaar == "0" ? plaatsingen.items[^1].UUID : plaatsingen.items.FirstOrDefault(x => x.stamgroepnaam == leerjaar)?.UUID;
         
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);

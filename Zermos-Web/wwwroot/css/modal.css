@@ -180,6 +180,10 @@
     align-items: center;
 }
 
+.label {
+    margin: 0 var(--modal-padding) calc(var(--modal-padding) / 2) !important;
+}
+
 .url-field {
     margin-right: var(--modal-padding);
 }

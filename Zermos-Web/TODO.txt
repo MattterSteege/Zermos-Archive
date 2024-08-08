@@ -19,3 +19,5 @@ TODO: better ooo (order of operations) loading of new pages:
     - start fetching the data AND start showing the loading screen
     - when the data is fetched AND the loading screen is fully faded in, set the data
     - when the data is set, fade out the loading screen
+    
+TODO: fix grade settings
