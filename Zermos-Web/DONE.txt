@@ -5,6 +5,7 @@ Version 0.6.1
     
 - somtoday - huiswerk
     - Alle huiswerkvormen (toekenning, dag & week) worden nu tergelijkertijd opgehaald i.p.v 1 voor 1, dat de laadtijd van de huiswerkpagina aanzienlijk verkort met ongv. 400-600ms.
+    - Ik heb de het sorteren van huiswerk aangepast, maar ik weet nog niet zeker of het goed werkt (te kort aan huiswerk om te testen, ik ben ook de eerste met dit probleem), dus als je problemen ondervindt, laat het me weten!
    
 - Somtoday - cijfers
     - "Geen oude koeien uit de sloot halen." Wat? natuurlijk wel! Je kan nu je cijfers van andre jaarlage bekijken, ga naar je cijfers en klik op het 'geschiendenis' icoontje om je cijfers van vorige jaren te bekijken.

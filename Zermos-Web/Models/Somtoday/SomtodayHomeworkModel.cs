@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Models.somtodayHomeworkModel
 {
@@ -14,6 +15,7 @@ namespace Zermos_Web.Models.somtodayHomeworkModel
         public List<Link> links { get; set; }
         [JsonIgnore]
         public string huiswerkType => links != null ? links[0].type.Contains("Dag") ? "dag" : links[0].type.Contains("Week") ? "week" : "normaal" : "normaal";
+        public string huiswerkId => links != null ? links[0].id.ToString() : Guid.NewGuid().ToString();
         public AdditionalObjects additionalObjects { get; set; }
         public StudiewijzerItem studiewijzerItem { get; set; }
         public Lesgroep lesgroep { get; set; }
@@ -73,6 +75,7 @@ namespace Zermos_Web.Models.somtodayHomeworkModel
     public class Link
     {
         public string type { get; set; }
+        public object id { get; set; }
     }
     
 //     public class SomtodayHomeworkModel

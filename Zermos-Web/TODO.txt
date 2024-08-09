@@ -13,7 +13,6 @@ TODO: Refresh de somtoday tokens elke 12 uur als de tokens verkregen is door de 
 TODO: de roosters van vrienden koppelen -> share allow [email] to view your schedule
 TODO: als somtoday wel gekoppeld is en Zermelo niet, laat dan het rooster uit SOMtoday zien (met een melding dat je zermelo moet koppelen)
 TODO: replace the current MODAL system with the new one!
-    - Huiswerk.cshtml
     - GedeeldeCijfers.cshtml
     
     

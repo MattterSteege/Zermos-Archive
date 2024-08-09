@@ -50,7 +50,10 @@ namespace Zermos_Web.APIs
             var response = await _httpClient.GetAsync(baseUrl);
 
             if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Error: " + response.StatusCode, await response.Content.ReadAsStringAsync());   
                 return EmptyModel();
+            }
 
             var timestamps = user.zermelo_timestamps ?? "08:00-17:00";
             timestamps = (timestamps == "-" ? "08:00-17:00" : timestamps);

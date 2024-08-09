@@ -69,6 +69,10 @@
         return this.addComponent({ type: 'toggleInput', label, state: initialState, onChange });
     }
 
+    addMultiToggles(labels, initialStates = [],  onChange = () => {}) {
+        return this.addComponent({ type: 'multiToggleInput', labels, states: initialStates, onChange });
+    }
+
     addButton(text, onClick = () => {}) {
         return this.addComponent({ type: 'button', text, onClick });
     }
@@ -137,6 +141,10 @@
     addCheckbox(initialState = false, onChange = () => {}) {
         return this.addComponent({ type: 'toggleInput', state: initialState, asCheckbox: true, onChange });
     }
+    
+    addMultiCheckbox(labels, initialStates = [], onChange = () => {}) {
+        return this.addComponent({ type: 'multiToggleInput', labels, states: initialStates, asCheckbox: true, onChange });
+    }
 
     /// NEW
     addSlider(min = 0, max = 100, step = 1, initialValue = 50, onChange = () => {}) {
@@ -174,6 +182,7 @@
             text: this.renderText,
             label: this.renderLabel,
             toggleInput: this.renderToggle,
+            multiToggleInput: this.renderMultiToggle,
             url: this.renderUrl,
             spacer: this.renderSpacer,
             separator: this.renderSeparator,
@@ -286,6 +295,29 @@
 
         componentElement.appendChild(toggleElement);
         componentElement.appendChild(toggleLabelElement)
+        return componentElement;
+    }
+
+    renderMultiToggle(component, componentElement) {
+        //make a 2 column grid and add a toggle for each label (renderToggle)
+        const toggleContainer = document.createElement('div');
+        toggleContainer.classList.add('multi-toggle-container');
+
+        component.userSetValue = component.states.map(state => state.toString());
+        
+        component.labels.forEach((label, index) => {
+            const toggle = this.renderToggle({ type: 'toggleInput', label, state: component.states[index], asCheckbox: component.asCheckbox, onChange: (ctx, value) => {
+                component.states[index] = value;
+                if (component.onChange) {
+                    component.onChange(this, component.states);
+                    component.userSetValue = component.states;
+                }
+            }}, document.createElement('div'));
+            toggleContainer.appendChild(toggle);
+        });
+        
+        componentElement.appendChild(toggleContainer);
+        
         return componentElement;
     }
 
