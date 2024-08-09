@@ -56,6 +56,11 @@
         <p>Als je problemen ondervindt met de JS minimizer, zet deze Preview dan aan</p>
     </div>
     
+    <div class="account-item" data-preview-id="old_ooo" onclick="TogglePreview('old_ooo')">
+        <h1>Zet de voorgaande OOO (order of operation) aan/uit</h1>
+        <p>Hier mee zet je de volgorde van laadpagina/pagina opvragen aan/uit. De oude methode deed alles per stap: laadscherm fadeIn > fetch > laadscherm Fadeout. De nieuwe methode doet: laadscherm FadeIn & fetch > wait till fetch is done > laadscherm fadeOut</p> 
+    </div>
+    
     <div class="account-item" data-preview-id="incognito" onclick="TogglePreview('incognito')">
         <h1>Incognito</h1>
         <p>Is het een Ninja, is het een Hacker? Nee, ik zie het niet!</p>
@@ -92,7 +97,7 @@
         <p>Deze informatie kan handig zijn als je problemen ondervindt met Zermos.</p>
         <p>Device: @Context.Request.Headers["User-Agent"]</p>
         <p>Account ID: @User.FindFirstValue("email").StringToBase64String()</p>
-        <p id="screen_size">Scrren Size: 000x000</p>
+        <p id="screen_size">Screen Size: 000x000</p>
         <p id="internet_connection">Internet Connection: 0mbps</p>
     </div>
     

@@ -3,21 +3,25 @@ TODO: make time use login, so the user get's logged out after the session is clo
 TODO: dagrooster
 TODO: een demo versie van Zermos om te laten zien aan nieuwe gebruikers
 TODO: QR koppelen voor smartwatch, dan weet je ook gelijk dat de gebruiker een smartwatch is en kan je dat in de cookies opslaan en de gebruiker niet meer vragen of hij een smartwatch op dat moment gebruikt
-TODO: jaarbijlagen bij leermiddelen
-TODO: laat zien hoe vaak je het meestvoorkomende cijfer hebt gehaald
-TODO: padding onder de cijfers Totaalgemiddelde (https://cdn.discordapp.com/attachments/1256698797002588355/1263882261011366009/IMG_6913.png?ex=669bd994&is=669a8814&hm=d46e0b044020cfbdebf385e9170b80020fcea12a5e3452da5d57ab23b3417818&)
-TODO: Refresh de somtoday tokens elke 12 uur als de tokens verkregen is door de hackkerman methode (IE id somtoday-leerling-web)
 TODO: husiwerk pagina redesign
 TODO: huiswerk afvinken
 TODO: infowijs pagina's redesign
+
+TODO: jaarbijlagen bij leermiddelen
+TODO: padding onder de cijfers Totaalgemiddelde (https://cdn.discordapp.com/attachments/1256698797002588355/1263882261011366009/IMG_6913.png?ex=669bd994&is=669a8814&hm=d46e0b044020cfbdebf385e9170b80020fcea12a5e3452da5d57ab23b3417818&)
+TODO: Refresh de somtoday tokens elke 12 uur als de tokens verkregen is door de hackkerman methode (IE id somtoday-leerling-web)
 TODO: de roosters van vrienden koppelen -> share allow [email] to view your schedule
 TODO: als somtoday wel gekoppeld is en Zermelo niet, laat dan het rooster uit SOMtoday zien (met een melding dat je zermelo moet koppelen)
 TODO: replace the current MODAL system with the new one!
     - Huiswerk.cshtml
     - GedeeldeCijfers.cshtml
-TODO: better ooo (order of operations) loading of new pages:
-    - start fetching the data AND start showing the loading screen
-    - when the data is fetched AND the loading screen is fully faded in, set the data
-    - when the data is set, fade out the loading screen
     
-TODO: fix grade settings
+    
+    
+Discord server webhooks:
+#informatie: https://discord.com/api/webhooks/1271383220813959251/6YaYKl88vmXV_AH_dfoX-3qTKveuXpaSHTPuuJjPfJTQZfqZyTrCCz3J5-Hf1odT48hA
+#github-feeds: https://discord.com/api/webhooks/1265994706958028926/LDrbV7YsiuRQIpV-W-5VBkbq6HnprimipbuEqHxpvCMJCSNH8iZpqPIa5cTmBRZh_4i2
+#suggestions: https://discord.com/api/webhooks/1271384153002213377/-Bt4dtPEY8fe3LLREQpPRKj46R_mZcD0kR1OU1rxWAq8cjjIo00JgwBb0kYkcgEk53VB
+#bugs: https://discord.com/api/webhooks/1271384242517053491/e5AFmZvHIKbryPW1cvnKRpqbqLGiaBkKADOakGcr4jhSkMt1ZUXQioX4hZ4J1pF6c3Jt
+
+de kleur voor de embeds is #2f3136

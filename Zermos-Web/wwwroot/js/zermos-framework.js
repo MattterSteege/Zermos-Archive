@@ -563,6 +563,9 @@ Zermos.checkForUpdates = () => {
         )
         .addButton("Check wat er nieuw is", function() {
           window.open("https://zermos-docs.kronk.tech/WhatsNew.html", "_blank");
+        })        
+        .addButton("Meer informatie in de Discord server", function() {
+          window.open("https://discord.gg/krP9se64TD", "_blank");
         })
         .addButton("let's go, ik ben er klaar voor!", (ctx) => {
           var url =

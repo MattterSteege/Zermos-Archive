@@ -1,5 +1,8 @@
-﻿@using Zermos_Web.Utilities
+﻿@using System.Security.Claims
+@using Zermos_Web.Utilities
 @using Infrastructure.Entities
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Zermos_Web.TagHelpers
 @model dynamic
 
 
@@ -52,6 +55,11 @@
                 }
             }
         </div>
+    </div>
+
+    <div class="account-item" onclick="OpenSuggestionOrBugModal()">
+        <h1>suggesties/problemen</h1>
+        <p>Heb je een suggestie of een probleem? Laat het me weten!</p>
     </div>
 
     <div class="account-item">
@@ -195,4 +203,101 @@
     else {
         document.getElementById('absence').innerHTML = '<h1>Afwezigheid</h1><p>Om je afwezigheid te kunnen zien moet je online zijn.</p>';
     }
+
+
+function OpenSuggestionOrBugModal() {
+
+    const ideaSubmissionSubModal = new ZermosSubModal()
+        .addHeading("Vertel eens, wat is jouw idee?", "", 2)
+        .addTextArea(true)
+
+    const bugSubmissionSubModal = new ZermosSubModal()
+        .addHeading("Vertel eens, wat is het probleem?", "", 2)
+        .addTextArea(true)
+        .addText("Met je bug report wordt de volgende informatie meegestuurd:\n- De omgeving waarin je Zermos gebruikt\n- De opslag informatie die Zermos heeft opgeslagen in je browser (alleen de statistieken, niet de informatie zelf)\n- De console log van Zermos\n- De netwerk log van Zermos")
+
+    const modal = new ZermosModal();
+
+    modal.addHeading("Bug of idee?")
+        .addText("Heb je een bug gevonden in Zermos of heb je een baanbrekend idee, vul de korte vragenlijst hieronder!")
+        .addDropdown([
+            { label: "Ik wil een bug rapporteren", value: "bug" },
+            { label: "Ik heb een idee voor Zermos", value: "idee" }
+        ], true, false, (ctx, value) => modal.setCondition("type", value.value))
+        .addSubmenu("type == \"idee\"", ideaSubmissionSubModal)
+        .addSubmenu("type == \"bug\"", bugSubmissionSubModal)
+        .addText("kan ik je via je mail (@User.FindFirstValue("email")) bereiken op als ik extra vragen heb of ontwikkelingen?")
+        .addToggle("Ja dat mag", false)
+        .addButton("versturen", (ctx) => {
+            var values = ctx.getComponentsValue();
+            if (values.values[0].correct && values.values[2].correct) {
+                //send the bug report
+                
+                var deviceInfo = "Deze informatie kan handig zijn als je problemen ondervindt met Zermos.\n\nDevice: " + navigator.userAgent + "\nAccount ID: " + btoa('@User.FindFirstValue("email")') + "\nScreen Size: " + window.screen.width + "x" + window.screen.height + "\nInternet Connection: " + navigator.connection.downlink + "mbps";
+                    var localstorageSize = 0,_xLen, _x;for (_x in localStorage) {if (!localStorage.hasOwnProperty(_x)) {continue;}_xLen = ((localStorage[_x].length + _x.length) * 2);localstorageSize += _xLen;} //Bytes
+                    var cookiesSize = 0;var cookies = document.cookie.split(";");for (var i = 0; i < cookies.length; i++) {cookiesSize += cookies[i].length;} //Bytes
+                    var sessionstorageSize = 0,_yLen, _y;for (_y in sessionStorage) {if (!sessionStorage.hasOwnProperty(_y)) {continue;}_yLen = ((sessionStorage[_y].length + _y.length) * 2);sessionstorageSize += _yLen;} //Bytes
+                var storageInfo = "localstorage size: " + (localstorageSize / 1024).toFixed(2) + "KB\ncookies size: " + (cookiesSize / 1024).toFixed(2) + "KB\nsessionstorage size: " + (sessionstorageSize / 1024).toFixed(2) + "KB";
+                var consoleLog = "";consoleLog += "[log] - Zermos-web versie: " + Zermos.version + "\n";consoleLog += "[log] - Zermos-framework is geladen\n";consoleLog += "[log] - Page load took " + performance.now() + "ms\n";consoleLog += "[log] - Page load took " + (performance.now() - performance.timeOrigin) + "ms";
+                var networkLog = networkArray.map(([method, url, status, fetchTime, errorMessage]) => `[${method}] (${status}) ${fetchTime.toFixed()}ms - ${url}${errorMessage ? `\n  ⤷ Error: ${errorMessage}` : ""}`).join("\n");
+                var description = values.values[2].value;
+                
+                description += (values.values[3].value ? "\n\nIk mag benaderd worden via mijn mail" : "\n\nIk mag niet benaderd worden via mijn mail");
+                
+                fetch("/report/bug", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "Enviroment": deviceInfo,
+                        "OpslagInfo": storageInfo,
+                        "ConsoleLog": consoleLog,
+                        "NetworkLog": networkLog,
+                        "Description": description
+                    })
+                });
+            }
+            else if (values.values[0].correct && values.values[1].correct) {
+                var description = values.values[1].value;
+                //send the idea
+                fetch("/report/idea", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "Description": description
+                    })
+                });
+            }
+        })
+        .open();
+}
+
+@*
+const myHeaders = new Headers();
+myHeaders.append("Origin", "https://zermos.kronk.tech");
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+    "Enviroment": "Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 OPR/109.0.0.0\n\nAccount ID: NTgzNzNAY2NnLWxlZXJsaW5nLm5s\nScreen Size: 1879x970\nInternet Connection: 1.25MB per second",
+    "OpslagInfo": "Deze informatie kan handig zijn als je problemen ondervindt bijv. cache\n\nlocalstorage size: 27.63KB\ncookies size: 0.27KB\nsessionstorage size: 0.00KB",
+    "ConsoleLog": "[log] - Zermos-web versie: DEV\n[log] - Zermos-framework is geladen\n[log] - Page load took 268ms\n[log] - Page load took 262.19999980926514ms",
+    "NetworkLog": "[GET] (200) 161ms - https://192.168.178.22:5001/Account\n[GET] (200) 13ms - https://192.168.178.22:5001/css/account.min.css?v=B3JkX5HASG\n[GET] (200) 398ms - https://192.168.178.22:5001/Somtoday/Afwezigheid\n[GET] (200) 19ms - https://192.168.178.22:5001/Account/Debug\n[GET] (200) 6ms - https://192.168.178.22:5001/css/account.min.css?v=B3JkX5HASG",
+    "Description": "When a user tries to save a new record in the \"Customer\" module and includes special characters (e.g., #, @, %) in the \"Name\" field, the application crashes immediately. This results in data loss, and the user is unable to recover the unsaved information. The issue appears to be related to input validation or encoding of special characters.",
+});
+
+const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow"
+};
+
+fetch("https://192.168.178.22:5001/report/bug", requestOptions)
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.error(error));
+*@
 </script>

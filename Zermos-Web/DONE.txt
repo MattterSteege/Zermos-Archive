@@ -63,4 +63,6 @@ Version 0.6.1
         - C#!? leuk om op te klikken, maar ik zeg niet wat het doet :wink:
     - Er is nu een nieuwe knop naar de Zermos discord server, bekijk hier nieuwe én opkomende features, krijg meldingen bij nieuwe updates. (klik hier)[https://discord.gg/krP9se64TD] Je kan de knop vinden in het account menu (rechtsbovenin).
     - Er is een update aan het login systeem, klein foutje dat inloggen een beetje moeilijk maakte.
+    - De volgorde van het inladen van nieuwe pagina's is geüpdate, dit zorg voor net wat extra snelheid met 200ms-250ms minder laadtijd. Dit is onafhankelijk van je internetsnelheid!
+    - Heb je ene idee of een suggestie? Laat het weten in de Zermos discord server! (klik hier)[https://discord.gg/krP9se64TD] of via de "suggesties/problemen" knop op de accopunt pagina
     
