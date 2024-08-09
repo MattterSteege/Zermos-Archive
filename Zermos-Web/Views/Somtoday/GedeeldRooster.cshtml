@@ -2,6 +2,11 @@
 @using Zermos_Web.Utilities
 @model Zermos_Web.Models.SortedSomtodayGradesModel.SortedSomtodayGradesModel
 
+@{
+    float cijferSEAverage = 0;
+    int cijferSECount = 0;
+}
+
 <link rel="stylesheet" href="/css/somtoday.css" preload/>
 
 <!--  Create 2 equal sized panels, left should be grades and SE grades both with a slider at the top to select which one, the right the last x grades ->
@@ -13,38 +18,26 @@
     <div id="underline" style="left: -100px; width: 0"></div>
 </div>
 <div class="grades-container">
-    <div id="panel1" class="panel" data-settings=""> <!-- Voortgangsdossier -->
-        <h1 class="grades-title">Voortgangsdossier   <span class="icon-container"><i class="fa-solid fa-list-dropdown" onclick="showSettings('voortgang')"></i><i class="fa-solid fa-info-circle" onclick="showInfo('voortgang')"></i></span></h1>
+    <div id="panel1" class="panel" style="display: flex;"> <!-- Voortgangsdossier -->
+        <h1 class="grades-title">Voortgangsdossier</h1>
         @foreach (var grade in Model.items)
         {
             if (grade.cijfer == "-") { continue; }
 
-            <table class="grade-table" onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()/@grade.vakuuid.simpleEncodeUUID()/@Model.relevanteCijferLichtingUUID.simpleEncodeUUID()/@Model.leerjaarUUID.simpleEncodeUUID()')">
+            <table class="grade-table">
                 <tr class="grade-table-header">
                     <td rowspan="2"><i class="fa-solid fa-book" data-name="@grade.vakNaam.ToLower()" data-name-short="@grade.vakAfkorting.ToLower()"></i></td>
                     <td>@grade.vakNaam.Capitalize()</td>
-                    <td>@(grade.weging)x</td>
+                    <td></td>
                     <td class="@(grade.cijfer.ToFloat() >= 5.45f ? "sufficient" : "insufficient ")">@grade.cijfer.Replace(",", ".")</td>
                     <td style="display: none" class="@(grade.cijfer.ToFloat() >= 5.45f ? "sufficient" : "insufficient ")">@grade.cijfer.ToFloat().ExamenAfronding()</td>
                 </tr>
-                @if (grade.cijfers != null && grade.cijfers.Count > 0)
-                {
-                    <tr class="grade-table-header">+
-                        <td style="display: none"></td>
-                        <td>Laatste cijfer</td>
-                        <td></td>
-                        <td class="@(grade.cijfers[0].cijfer >= 5.45 ? "sufficient" : "insufficient ")">@grade.cijfers[0].formattedResultaat</td>
-                    </tr>
-                }
-                else
-                {
-                    <tr class="grade-table-header">
-                        <td style="display: none"></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                }
+                <tr class="grade-table-header">
+                    <td style="display: none"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
             </table>
         }
         
@@ -57,15 +50,36 @@
         </table>
     </div>
 </div>
-
 <script minimize>
-//@Context.Items["dmjs"]
-const selectedButton = document.getElementById("togglePanel1");
-if (selectedButton) {
-    const buttonRect = selectedButton.getBoundingClientRect();
-    const containerRect = selectedButton.parentElement.getBoundingClientRect();
+@Context.Items["dmjs"]
+    Zermos.mainAfterLoad = () => {
+        
+        const selectedButton = buttons[0];
+        if (selectedButton) {
+            const buttonRect = selectedButton.getBoundingClientRect();
+            const containerRect = selectedButton.parentElement.getBoundingClientRect();
 
-    underline.style.width = `${buttonRect.width}px`;
-    underline.style.left = `${buttonRect.left - containerRect.left}px`;
-}
+            underline.style.width = `${buttonRect.width}px`;
+            underline.style.left = `${buttonRect.left - containerRect.left}px`;
+        }
+    };
+
+    //get all the icons at /vakkenIcons.json
+    fetch('/vakkenIcons.json')
+    .then(response => response.json())
+    .then((icons) => {
+        //get all the icons and put them in a map
+        var iconMap = new Map();
+        icons.forEach(icon => {
+            icon.keywords.forEach(keyword => {
+                iconMap.set(keyword, icon.icon);
+            });
+        });
+
+        //check if the name-short or name is in the iconMap, if it is, set the icon to the iconMap value, if not, set it to the default icon
+        document.querySelectorAll('.grade-table-header i').forEach((icon) => {
+            icon.outerHTML = iconMap.get(icon.dataset.name.toLowerCase()) ?? iconMap.get(icon.dataset.nameShort.toLowerCase()) ?? "<i class=\"fa-solid fa-book\"></i>";
+        });
+    });
+
 </script>

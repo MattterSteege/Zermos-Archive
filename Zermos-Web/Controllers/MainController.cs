@@ -20,7 +20,7 @@ namespace Zermos_Web.Controllers
         {
             var user = ZermosUser ?? new Infrastructure.Entities.user();
             
-            if ((User.Identity == null || !User.Identity.IsAuthenticated) && Request.Cookies["version_used"] == null)
+            if (User.Identity is not {IsAuthenticated: true} && Request.Cookies["version_used"] == null && (url == null || !url.ToLower().Contains("gedeeld")))
             {
                 url = "/Intro";
                 Response.Cookies.Append("seen_intro", "true", new Microsoft.AspNetCore.Http.CookieOptions

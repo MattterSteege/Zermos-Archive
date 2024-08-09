@@ -461,18 +461,18 @@ addButtonToPage('fa-share-from-square', () => {
     .addDatePicker(true, new Date(Date.now() + 604800000))
     .addButton("Deel", (ctx) => {
         
-        var values = ctx.getComponentsValue();
+        var values = ctx.getComponentsValue().values;
         
         if (values.correct === false) return;
         
         
-        const date = values[0];
+        const date = values[0].value;
         const dateObject = new Date(date);
         const currentYear = new Date().getFullYear();
         var expires_at = Math.floor(dateObject.getTime() / 1000);
         
         //return's an plan string url
-        fetch('/zermelo/GenereerToken?year=' + currentYear+ '&week=' + currentWeek + '&expires_at=' + expires_at)
+        fetch('/zermelo/rooster/genereer-token?year=' + currentYear+ '&week=' + currentWeek + '&expires_at=' + expires_at)
         .then(response => response.text())
         .then((url) => {
             new ZermosModal()

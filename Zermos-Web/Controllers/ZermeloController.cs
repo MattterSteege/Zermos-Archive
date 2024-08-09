@@ -50,6 +50,7 @@ namespace Zermos_Web.Controllers
 
         [Authorize]
         [ZermeloRequirement]
+        [Route("/zermelo/rooster/genereer-token")]
         public async Task<IActionResult> GenereerToken(string year, string week, DateTime? expires_at, int max_uses = int.MaxValue)
         {
             if (string.IsNullOrEmpty(year) || string.IsNullOrEmpty(week))

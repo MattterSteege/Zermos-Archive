@@ -406,11 +406,6 @@
             }
         }
 
-    addButtonToPage("fa-refresh", () => {
-        document.cookie = "cached-somtoday-grades=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        ReplacePage('/Somtoday/Cijfers');
-    }, VerticalAlignment.TL, Background.Primary);
-
     var jaarlagen = JSON.parse('@Html.Raw(Json.Serialize(Model.plaatsing.Select(jaargang => new { label = jaargang.stamgroepnaam, value = Model.plaatsing.IndexOf(jaargang) + 1 })))');
 
     addButtonToPage("fa-history", () => {
@@ -427,4 +422,40 @@
         })
         .open();
     }, VerticalAlignment.BT, Background.Accent);
+
+    // share button
+    addButtonToPage('fa-share-from-square', () => {
+
+        new ZermosModal()
+            .addHeading("Deel je cijfers")
+            .addText("Deel je cijfers met je vrienden! Selecteer uit welk jaar en week je cijfers wilt delen en dan krijg je een persoonlijke link die je kan delen. Je hoeft geen account te hebben om deze link te bekijken.")
+            .addDropdown(jaarlagen, true, false)
+            .addDatePicker(true, new Date(Date.now() + 604800000))
+            .addButton("Deel", (ctx) => {
+
+                var values = ctx.getComponentsValue().values;
+
+                if (values.correct === false) return;
+
+                const leerjaar = values[0].value.label;
+
+                const date = values[1].value;
+                const dateObject = new Date(date);
+                const currentYear = new Date().getFullYear();
+                var expires_at = Math.floor(dateObject.getTime() / 1000);
+
+                //return's an plan string url
+                fetch('/Somtoday/Cijfers/genereer-token?leerjaar=' + leerjaar + '&expires_at=' + expires_at)
+                    .then(response => response.text())
+                    .then((url) => {
+                        new ZermosModal()
+                            .addHeading("Deel je cijfers")
+                            .addText("Hier is de link die je kan delen met je vrienden. Deze link is geldig tot de datum die je hebt gekozen. Bekijk je geldige links op de account pagina.")
+                            .addUrl(url, false, true)
+                            .open();
+                    });
+            })
+            .open();
+
+    }, VerticalAlignment.TL, Background.Primary);
 </script>
