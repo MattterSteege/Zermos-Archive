@@ -11,11 +11,7 @@ TODO: jaarbijlagen bij leermiddelen
 TODO: padding onder de cijfers Totaalgemiddelde (https://cdn.discordapp.com/attachments/1256698797002588355/1263882261011366009/IMG_6913.png?ex=669bd994&is=669a8814&hm=d46e0b044020cfbdebf385e9170b80020fcea12a5e3452da5d57ab23b3417818&)
 TODO: Refresh de somtoday tokens elke 12 uur als de tokens verkregen is door de hackkerman methode (IE id somtoday-leerling-web)
 TODO: de roosters van vrienden koppelen -> share allow [email] to view your schedule
-TODO: als somtoday wel gekoppeld is en Zermelo niet, laat dan het rooster uit SOMtoday zien (met een melding dat je zermelo moet koppelen)
-TODO: replace the current MODAL system with the new one!
-    - GedeeldeCijfers.cshtml
-    
-    
+TODO: als somtoday wel gekoppeld is en Zermelo niet, laat dan het rooster uit SOMtoday zien (met een melding dat je zermelo moet koppelen) 
     
 Discord server webhooks:
 #informatie: https://discord.com/api/webhooks/1271383220813959251/6YaYKl88vmXV_AH_dfoX-3qTKveuXpaSHTPuuJjPfJTQZfqZyTrCCz3J5-Hf1odT48hA
@@ -24,3 +20,6 @@ Discord server webhooks:
 #bugs: https://discord.com/api/webhooks/1271384242517053491/e5AFmZvHIKbryPW1cvnKRpqbqLGiaBkKADOakGcr4jhSkMt1ZUXQioX4hZ4J1pF6c3Jt
 
 de kleur voor de embeds is #2f3136
+
+Experiment, check if deze refresh token nog geldig is na 8 uur, ik hoop van wel!
+: eyJ4NXQjUzI1NiI6IkdpZ295b0kyZXcxQS00TDUweGoyWGlPdXIxdE9BMFo3M05mYmZuQXFkU3ciLCJraWQiOiJpcmlkaXVtaWRwLTE2NjgzMzc3ODYzMTA4ODY0NzQwNTkwOTk4NzcyNDAzMjI1MTM0NSIsInR5cCI6InJ0K2p3dCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJjMjNmYmI5OS1iZTRiLTRjMTEtYmJmNS01N2U3ZmM0ZjQzODhcXDM3NWQyMTNmLThmYjYtNGZlNC1iMzM2LWU5MmY3YTIyYzVkZSIsImFtciI6InB3ZCIsImlzcyI6Imh0dHBzOi8vc29tdG9kYXkubmwiLCJ0eXBlIjoicmVmcmVzaCIsImNsaWVudF9pZCI6InNvbXRvZGF5LWxlZXJsaW5nLXdlYiIsImF1ZCI6Imh0dHBzOi8vc29tdG9kYXkubmwiLCJuYmYiOjE3MjMzMDcyMjAsInNjb3BlIjoib3BlbmlkIiwiY2xhaW1zIjp7ImlkX3Rva2VuIjp7Im9yZ25hbWUiOm51bGwsImFmZmlsaWF0aW9uIjp7InZhbHVlcyI6WyJzdHVkZW50IiwicGFyZW50L2d1YXJkaWFuIl19LCJsZWVybGluZ2VuIjpudWxsLCJnaXZlbl9uYW1lIjpudWxsfX0sImV4cCI6MTcyMzMzNjAyMCwiaWF0IjoxNzIzMzA3MjIwLCJqdGkiOiIwOTdjMzgwMy02NGY1LTRkYTMtOWYxZS1jMWYwMTA3YmFkNmM6MTgyMzQwODkxNzMyMjkiLCJyZWZyZXNoX2NvdW50IjowfQ.rCmvECepfbMjzJBaR6KNJsV7t1oqKMB9kIOaf7INi6wHNwvFj5yrtLS6HJuzIUg68r0Ty1umCT2bxMQHKF__ymxXo92xpzEM_porITHwB6ZMGvJCMogEjSdKUHpHLyownCA_54-kAFOISSkNyGxDXj6iD-4Npx885LfGjvSvoMbXq6xCJaWYEF5yvWvvj4snYETfXGmyTZAmhaL8WrL9YSuh-cLqqMT359Hjg3Y6vomD-ghSzy-1BziJ6s9H_cnbW7IzAfen4S_fUYsNzZ4penZ1-tuDebRm4vU_1WQYO9oFuIlKiig1hn6LvUa8Qm4l0gLMx-OrunUhc1UNi66FJw

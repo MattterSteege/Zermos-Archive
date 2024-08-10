@@ -266,7 +266,6 @@
     display: flex;
     justify-content: space-between;
     padding: var(--modal-padding);
-    background: #f0f0f0;
 }
 
 .calendar-body {
@@ -274,6 +273,7 @@
     grid-template-columns: repeat(7, 1fr);
     gap: var(--padding);
     padding: var(--modal-padding);
+    padding-top: 0;
 }
 
 .calendar-body div {
@@ -284,7 +284,8 @@
 }
 
 .calendar-body .day {
-    background: #e0e0e0;
+    background: var(--modal-bg);
+    color: var(--text-color);
 }
 
 .calendar-body .selected {
