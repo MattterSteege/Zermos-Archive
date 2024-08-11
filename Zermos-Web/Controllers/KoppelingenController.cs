@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -7,10 +9,12 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -631,7 +635,53 @@ namespace Zermos_Web.Controllers
             code = Regex.Replace(code, "=+$", "");
             return code;
         }
+        
+        private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(10); // Adjust the limit as needed
 
+        [HttpGet]
+        [Route("/Koppelingen/Somtoday/RefreshForAll")]
+        public async Task<IActionResult> RefreshTokensForAll()
+        {
+            var message = "Refreshing tokens for all users with a valid refresh token.\n";
+    
+            var users = await _user.GetUsersWithSomtodayAsync();
+            var filteredUsers = users.Where(x => 
+                    TokenUtils.GetTokenExpiration(x.somtoday_refresh_token) > DateTime.Now && 
+                    TokenUtils.DecodeJwt(x.somtoday_refresh_token).payload.client_id == "somtoday-leerling-web")
+                .ToList();
+            users = null; // Clear the list to free up memory
+
+            var tasks = filteredUsers.Select(async user =>
+            {
+                await _semaphore.WaitAsync(); // Wait for access
+                try
+                {
+                    var somtoday = await somtodayApi.RefreshTokenAsync(user.somtoday_refresh_token);
+
+                    if (somtoday == null)
+                    {
+                        message += $"Failed to refresh token for {user.email}\n";
+                        return;
+                    }
+            
+                    await _user.UpdateUserAsync(user.email, new user
+                    {
+                        somtoday_access_token = somtoday.access_token,
+                        somtoday_refresh_token = somtoday.refresh_token
+                    });
+
+                    message += $"Refreshed token for {user.email}\n";
+                }
+                finally
+                {
+                    _semaphore.Release(); // Release access
+                }
+            });
+
+            await Task.WhenAll(tasks);
+    
+            return Ok(message);
+        }
         #endregion
     }
 }

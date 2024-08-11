@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Zermos_Web.Controllers;
+using Zermos_Web.Utilities;
 
 //using WebEssentials.AspNetCore.Pwa;
 
@@ -29,7 +30,10 @@ namespace Zermos_Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<ZermosContext>();
+
+            services.AddDbContext<ZermosContext>(options =>
+                options.UseMySQL("server=REDACTED_IP_ADRESS;user=root;password=REDACTED_DATABASE_PASSWORD;database=REDACTED_DATABASE_NAME;port=3306;Connect Timeout=5;"));
+            
             services.AddScoped<Users>();
             services.AddScoped<Shares>();
             
@@ -50,6 +54,10 @@ namespace Zermos_Web
             
             //sets the data protection keys to be stored in the /dataprotection folder (in the docker volume dataprotection)
             services.AddDataProtection().PersistKeysToFileSystem(new System.IO.DirectoryInfo("/dataprotection"));
+            
+            //somtoday token refresher (for hackerman method only
+            services.AddHttpClient(); // Register IHttpClientFactory
+            services.AddHostedService<SomtodayTokenRefresher>(); // Register the token refresher service
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

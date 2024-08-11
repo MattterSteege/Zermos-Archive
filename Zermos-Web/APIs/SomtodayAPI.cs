@@ -41,10 +41,11 @@ public class SomtodayAPI
 
     public async Task<SomtodayAuthenticatieModel> RefreshTokenAsync(string token)
     {
-        if (token == null) throw new ArgumentNullException(nameof(token));
+        if (token == null) 
+            throw new ArgumentNullException(nameof(token));
 
         string clientId = (string) TokenUtils.DecodeJwt(token).payload.client_id;
-        
+    
         var form = new Dictionary<string, string>
         {
             {"grant_type", "refresh_token"},
@@ -55,13 +56,15 @@ public class SomtodayAPI
 
         var response = await _httpClient.PostAsync("https://inloggen.somtoday.nl/oauth2/token", new FormUrlEncodedContent(form));
 
-        if (response.IsSuccessStatusCode == false)
+        if (!response.IsSuccessStatusCode)
         {
-            Console.WriteLine(response.Content.ReadAsStringAsync().Result);
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(errorMessage);
             return null;
         }
-            
-        return JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(await response.Content.ReadAsStringAsync());
+        
+        var content = await response.Content.ReadAsStringAsync();
+        return JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(content);
     }
     
     public async Task<SomtodayAfwezigheidModel> GetAfwezigheidAsync(user user)

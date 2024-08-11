@@ -256,6 +256,11 @@ function OpenSuggestionOrBugModal() {
                         "NetworkLog": networkLog,
                         "Description": description
                     })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        ctx.close();
+                    }
                 });
             }
             else if (values.values[0].correct && values.values[1].correct) {
@@ -269,35 +274,14 @@ function OpenSuggestionOrBugModal() {
                     body: JSON.stringify({
                         "Description": description
                     })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        ctx.close();
+                    }
                 });
             }
         })
         .open();
 }
-
-@*
-const myHeaders = new Headers();
-myHeaders.append("Origin", "https://zermos.kronk.tech");
-myHeaders.append("Content-Type", "application/json");
-
-const raw = JSON.stringify({
-    "Enviroment": "Device: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 OPR/109.0.0.0\n\nAccount ID: NTgzNzNAY2NnLWxlZXJsaW5nLm5s\nScreen Size: 1879x970\nInternet Connection: 1.25MB per second",
-    "OpslagInfo": "Deze informatie kan handig zijn als je problemen ondervindt bijv. cache\n\nlocalstorage size: 27.63KB\ncookies size: 0.27KB\nsessionstorage size: 0.00KB",
-    "ConsoleLog": "[log] - Zermos-web versie: DEV\n[log] - Zermos-framework is geladen\n[log] - Page load took 268ms\n[log] - Page load took 262.19999980926514ms",
-    "NetworkLog": "[GET] (200) 161ms - https://192.168.178.22:5001/Account\n[GET] (200) 13ms - https://192.168.178.22:5001/css/account.min.css?v=B3JkX5HASG\n[GET] (200) 398ms - https://192.168.178.22:5001/Somtoday/Afwezigheid\n[GET] (200) 19ms - https://192.168.178.22:5001/Account/Debug\n[GET] (200) 6ms - https://192.168.178.22:5001/css/account.min.css?v=B3JkX5HASG",
-    "Description": "When a user tries to save a new record in the \"Customer\" module and includes special characters (e.g., #, @, %) in the \"Name\" field, the application crashes immediately. This results in data loss, and the user is unable to recover the unsaved information. The issue appears to be related to input validation or encoding of special characters.",
-});
-
-const requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow"
-};
-
-fetch("https://192.168.178.22:5001/report/bug", requestOptions)
-    .then((response) => response.text())
-    .then((result) => console.log(result))
-    .catch((error) => console.error(error));
-*@
 </script>

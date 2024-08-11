@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.Context;
 using Infrastructure.Entities;
@@ -35,6 +36,18 @@ namespace Infrastructure
                 return new List<user>();
             }
             #endif
+        }
+
+        public async Task<List<user>> GetUsersWithSomtodayAsync()
+        {
+            try
+            {
+                return await _context.users.AsNoTracking().Where(x => x.somtoday_refresh_token != null).ToListAsync();
+            }
+            catch
+            {
+                return new List<user>();
+            }
         }
 
         /// <summary>

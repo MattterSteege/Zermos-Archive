@@ -11,7 +11,7 @@ namespace Zermos_Web.Controllers
 {
     public abstract class BaseController : Controller
     {
-        private readonly Users _user;
+        protected readonly Users _user;
         private readonly Shares _share;
         private readonly ILogger<BaseController> _logger;
         private readonly GlobalVariables _globalVariables;

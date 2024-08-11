@@ -48,7 +48,7 @@ namespace Zermos_Web.Controllers
                     new 
                     {
                         title = "",
-                        description = "",
+                        description = report.Description,
                         color = 3092790,
                         footer = new 
                         {
@@ -96,18 +96,6 @@ namespace Zermos_Web.Controllers
                                 name = "Console Logs",
                                 value = report.ConsoleLog,
                                 inline = false
-                            },
-                            new 
-                            {
-                                name = "Network Logs",
-                                value = report.NetworkLog,
-                                inline = false
-                            },
-                            new 
-                            {
-                                name = "Description",
-                                value = report.Description,
-                                inline = false
                             }
                         },
                         url = origin.AbsoluteUri
@@ -146,7 +134,7 @@ namespace Zermos_Web.Controllers
                     new 
                     {
                         title = "",
-                        description = "",
+                        description = report.Description,
                         color = 3092790,
                         footer = new 
                         {
@@ -176,12 +164,6 @@ namespace Zermos_Web.Controllers
                                 name = "Reported On",
                                 value = report.ReportedAt.ToString("dd MMMM yyyy HH:mm:ss"),
                                 inline = true
-                            },
-                            new 
-                            {
-                                name = "Description",
-                                value = report.Description,
-                                inline = false
                             }
                         },
                         url = origin.AbsoluteUri
