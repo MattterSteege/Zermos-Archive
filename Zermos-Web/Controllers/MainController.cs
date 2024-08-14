@@ -139,9 +139,6 @@ namespace Zermos_Web.Controllers
         [Route("/api/test")]
         public IActionResult Test()
         {
-            //in the body:
-            //timesend = new Date().getTime();
-            
             DateTime timeRequestRecieved = DateTime.UtcNow;
             DateTime timeRequestSend = Request.Form.ContainsKey("timesend") ? new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(long.Parse(Request.Form["timesend"])) : DateTime.MinValue;
             
@@ -150,9 +147,9 @@ namespace Zermos_Web.Controllers
             stopwatch.Stop();
             
             Console.WriteLine($"User: {user.email} initiated api test\n" +
-                              $"Request send at: {timeRequestSend}\n" +
-                              $"Request recieved at: {timeRequestRecieved}\n" +
-                              $"Response send at: {DateTime.UtcNow}\n" +
+                              $"Request send at: {timeRequestSend:HH:mm:ss.fff}\n" +
+                              $"Request recieved at: {timeRequestRecieved:HH:mm:ss.fff}\n" +
+                              $"Response send at: {DateTime.UtcNow:HH:mm:ss.fff}\n" +
                               $"DataBase query took: {stopwatch.ElapsedMilliseconds}ms");
             
             return Json(new

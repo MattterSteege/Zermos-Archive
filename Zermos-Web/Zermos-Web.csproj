@@ -9,6 +9,7 @@
         <LangVersion>10</LangVersion>
         <ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
         <Version>1</Version>
+        <DefineConstants>$(DefineConstants);BETA</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>

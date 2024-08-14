@@ -210,5 +210,10 @@ namespace Zermos_Web.Utilities
             var uuid = new string(result);
             return uuid.Insert(8, "-").Insert(13, "-").Insert(18, "-").Insert(23, "-");
         }
+        
+        public static string UrlDecode(this string str)
+        {
+            return HttpUtility.UrlDecode(str);
+        }
     }
 }

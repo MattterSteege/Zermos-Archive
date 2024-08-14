@@ -55,9 +55,14 @@ namespace Zermos_Web
             //sets the data protection keys to be stored in the /dataprotection folder (in the docker volume dataprotection)
             services.AddDataProtection().PersistKeysToFileSystem(new System.IO.DirectoryInfo("/dataprotection"));
             
-            //somtoday token refresher (for hackerman method only
-            services.AddHttpClient(); // Register IHttpClientFactory
-            services.AddHostedService<SomtodayTokenRefresher>(); // Register the token refresher service
+#if RELEASE && BETA
+            Console.WriteLine("BETA RELEASE VERSION");
+#elif RELEASE && !BETA
+            Console.WriteLine("PROD RELEASE VERSION");
+#else
+            Console.WriteLine("NON-RELEASE VERSION");
+#endif
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

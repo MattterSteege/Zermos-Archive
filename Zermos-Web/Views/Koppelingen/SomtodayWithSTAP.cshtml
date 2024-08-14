@@ -1,0 +1,70 @@
+﻿@model Zermos_Web.Models.Somtoday.SomtodayPreAuthenticationModel
+
+<link rel="stylesheet" href="/css/koppelingen.css" preload/>
+
+<div class="login">
+    <div class="login-explanation">
+        <h1>Koppel Somtoday aan je account!</h1>
+        <p>Er is nieuwe methode! Inloggen met STAP, deze methode, blabblablalbas fillertext etc. Lorum bipsum etc.</p>
+
+        <div class="code-child">
+            <div class="codeblock">
+                <div class="codeblock-header">
+                    <button class="copy-button" onclick="copyToClipboard(`@(Model.vanityUrl)`)">Kopieer</button>
+                </div>
+                <div class="codeblock-content">
+                    <code style="white-space: pre-wrap;">@(Model.vanityUrl)</code>
+                </div>
+            </div>
+        </div>
+        
+        <p>Als je de error in Som ziet, refresh dan en tada!</p>
+    </div>
+</div>
+
+<script minimize>
+@Context.Items["dmjs"]
+
+    document.querySelector('.copy-button').addEventListener('click', function() {
+        document.querySelector('.copy-button').innerHTML = 'Gelukt!';
+        setTimeout(() => {
+            document.querySelector('.copy-button').innerHTML = 'Kopieer';
+        }, 3000);
+    });
+
+    var CheckingTimeout = null;
+
+    setTimeout(function() {
+        SendCheck();
+    }, 10000);
+
+    Zermos.mainUnload = function() {
+        clearTimeout(CheckingTimeout);
+    };
+
+    function SendCheck() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/Koppelingen/Somtoday/STAP/isCompleted");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    if (xhr.responseText === "true") {
+                        clearInterval(CheckingTimeout);
+                        newSidebar();
+                        ReplacePage('@Url.Action("Account", "Account")');
+                    } else {
+                        CheckingTimeout = setTimeout(function() {
+                            SendCheck();
+                        }, 2500);
+                    }
+                }
+                else {
+                    CheckingTimeout = setTimeout(function() {
+                        SendCheck();
+                    }, 2500);
+                }
+            }
+        };
+        xhr.send();
+    }
+</script>

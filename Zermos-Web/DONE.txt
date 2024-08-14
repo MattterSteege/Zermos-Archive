@@ -1,7 +1,9 @@
 Version 0.6.1
 
 - koppelingen - somtoday
-    - De hackerman koppeling methode stuurt je nu naar leerling.somtoday.ml/login?splash=true, zodat je altijd ingelogd bent als je de methode uitvoerd.
+    - De hackerman koppeling methode stuurt je nu naar leerling.somtoday.nl/login?splash=true, zodat je altijd ingelogd bent als je de methode uitvoerd.
+    - De hackerman methode is nu niet meer aanbevolen om te gebruiken (hij werkt nog wel, maar er is een betere manier nu)
+    - Er is een nieuwe authenticatiemethode toegevoegd, deze werkt bij elk type account en zelfs als je inlogd met bijv. Microsoft of google als third-party authenticatie.
     
 - somtoday - huiswerk
     - Alle huiswerkvormen (toekenning, dag & week) worden nu tergelijkertijd opgehaald i.p.v 1 voor 1, dat de laadtijd van de huiswerkpagina aanzienlijk verkort met ongv. 400-600ms.

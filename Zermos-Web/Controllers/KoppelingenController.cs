@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -9,24 +7,22 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zermos_Web.APIs;
 using Zermos_Web.Models;
 using Zermos_Web.Models.Requirements;
+using Zermos_Web.Models.Somtoday;
 using Zermos_Web.Models.zermeloUserModel;
 using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
 {
-    [Authorize]
     public class KoppelingenController : BaseController
     {
         public KoppelingenController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
@@ -73,6 +69,7 @@ namespace Zermos_Web.Controllers
         private readonly HttpClient _normalHttpClient = new();
 
         [HttpGet]
+        [Authorize]
         [ZermosPage]
         public IActionResult Index()
         {
@@ -81,6 +78,7 @@ namespace Zermos_Web.Controllers
 
         #region ontkoppelen
 
+        [Authorize]
         [HttpPost("/Koppelingen/Ontkoppel/{app}")]
         public IActionResult Ontkoppel(string app)
         {
@@ -119,6 +117,7 @@ namespace Zermos_Web.Controllers
         #region infowijs
 
         [HttpGet]
+        [Authorize]
         [ZermosPage]
         [Route("/Koppelingen/Infowijs/Ongekoppeld")]
         public IActionResult InfowijsNietGekoppeld()
@@ -127,6 +126,7 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ZermosPage]
         public IActionResult Infowijs()
         {
@@ -134,8 +134,9 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpGet]
-        [Route("Koppelingen/Infowijs/Email")]
+        [Authorize]
         [ZermosPage]
+        [Route("Koppelingen/Infowijs/Email")]
         public IActionResult InfowijsWithEmail(string email, bool retry = false)
         {
             ViewData["retry"] = false;
@@ -143,6 +144,7 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [Route("Koppelingen/Infowijs/Email")]
         public async Task<IActionResult> InfowijsWithEmail(string email, string customer_product_id, string user_id,
             string id)
@@ -190,8 +192,9 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpGet]
-        [Route("Koppelingen/Infowijs/Qr")]
+        [Authorize]
         [ZermosPage]
+        [Route("Koppelingen/Infowijs/Qr")]
         public async Task<IActionResult> InfowijsQr(string uuid, bool retry = false)
         {
             if (uuid != null)
@@ -216,6 +219,7 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [Route("Koppelingen/Infowijs/Qr")]
         public async Task<IActionResult> InfowijsQr(string uuid)
         {
@@ -249,6 +253,7 @@ namespace Zermos_Web.Controllers
         #region Zermelo
 
         [HttpGet]
+        [Authorize]
         [ZermosPage]
         [Route("/Koppelingen/Zermelo/Ongekoppeld")]
         public IActionResult ZermeloNietGekoppeld()
@@ -257,6 +262,7 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ZermosPage]
         public IActionResult Zermelo()
         {
@@ -264,6 +270,7 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [Route("/Koppelingen/Zermelo/Wachtwoord")]
         public async Task<IActionResult> ZermeloWithPassword(string username, string password, string portal = "ccg")
         {
@@ -313,6 +320,7 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ZermosPage]
         [Route("/Koppelingen/Zermelo/Qr")]
         public IActionResult ZermeloWithQr()
@@ -321,6 +329,7 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ZermosPage]
         [Route("/Koppelingen/Zermelo/Code")]
         public IActionResult ZermeloWithCode()
@@ -329,6 +338,7 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [Route("/Koppelingen/Zermelo/Code")]
         public async Task<IActionResult> ZermeloWithCode(string code, string institution)
         {
@@ -378,6 +388,7 @@ namespace Zermos_Web.Controllers
         #region Somtoday
 
         [HttpGet]
+        [Authorize]
         [ZermosPage]
         [Route("/Koppelingen/Somtoday/Ongekoppeld")]
         public IActionResult SomtodayNietGekoppeld()
@@ -386,6 +397,7 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ZermosPage]
         [Route("/Koppelingen/Somtoday")]
         public IActionResult Somtoday()
@@ -394,6 +406,7 @@ namespace Zermos_Web.Controllers
         }
         
         [HttpGet]
+        [Authorize]
         [ZermosPage]
         [Route("/Koppelingen/Somtoday/HackerMan")]
         public IActionResult SomtodayHackerman()
@@ -402,6 +415,7 @@ namespace Zermos_Web.Controllers
         }
         
         [HttpGet]
+        [Authorize]
         [ZermosPage]
         [Route("/Koppelingen/Somtoday/Callback")]
         public async Task<IActionResult> SomtodayCallback()
@@ -431,6 +445,7 @@ namespace Zermos_Web.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ZermosPage]
         [Route("/Koppelingen/Somtoday/Inloggegevens")]
         public IActionResult SomtodayWithCreds()
@@ -439,6 +454,7 @@ namespace Zermos_Web.Controllers
         }
         
         [HttpPost]
+        [Authorize]
         [Route("/Koppelingen/Somtoday/Inloggegevens")]
         public async Task<IActionResult> SomtodayCreds(string username, string password, string school)
         {
@@ -636,51 +652,79 @@ namespace Zermos_Web.Controllers
             return code;
         }
         
-        private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(10); // Adjust the limit as needed
-
         [HttpGet]
-        [Route("/Koppelingen/Somtoday/RefreshForAll")]
-        public async Task<IActionResult> RefreshTokensForAll()
+        [Authorize]
+        [ZermosPage]
+        [Route("/Koppelingen/Somtoday/STAP")]
+        public async Task<IActionResult> SomtodayWithSTAP()
         {
-            var message = "Refreshing tokens for all users with a valid refresh token.\n";
-    
-            var users = await _user.GetUsersWithSomtodayAsync();
-            var filteredUsers = users.Where(x => 
-                    TokenUtils.GetTokenExpiration(x.somtoday_refresh_token) > DateTime.Now && 
-                    TokenUtils.DecodeJwt(x.somtoday_refresh_token).payload.client_id == "somtoday-leerling-web")
-                .ToList();
-            users = null; // Clear the list to free up memory
-
-            var tasks = filteredUsers.Select(async user =>
+            SomtodayPreAuthenticationModel model = new()
             {
-                await _semaphore.WaitAsync(); // Wait for access
-                try
-                {
-                    var somtoday = await somtodayApi.RefreshTokenAsync(user.somtoday_refresh_token);
-
-                    if (somtoday == null)
-                    {
-                        message += $"Failed to refresh token for {user.email}\n";
-                        return;
-                    }
+                user = ZermosEmail,
+#if (RELEASE && !BETA)
+                callbackUrl = "https://zermos.kronk.tech/Koppelingen/Somtoday/STAP"
+#elif (RELEASE && BETA)
+                callbackUrl = "https://zermos-beta.kronk.tech/Koppelingen/Somtoday/STAP"
+#else
+                callbackUrl = "https://test-server.kronk.tech/Koppelingen/Somtoday/STAP"
+#endif
+            };
             
-                    await _user.UpdateUserAsync(user.email, new user
-                    {
-                        somtoday_access_token = somtoday.access_token,
-                        somtoday_refresh_token = somtoday.refresh_token
-                    });
+            //request url at https://somtoday.kronk.tech/requestUrl?user=ZermosEmail&callbackUrl=callbackUrl
+            var requestUrl = "https://somtoday.kronk.tech/requestUrl?user=" + model.user + "&callbackUrl=" + model.callbackUrl;
+            var response = _normalHttpClient.GetAsync(requestUrl).Result;
+            model = JsonConvert.DeserializeObject<SomtodayPreAuthenticationModel>(await response.Content.ReadAsStringAsync());
+            
+            return PartialView(model);
+        }
+        
+        [HttpGet]
+        [Authorize]
+        [Route("/Koppelingen/Somtoday/STAP/isCompleted")]
+        public IActionResult SomtodayWithSTAPCompleted()
+        {
+            var user = ZermosUser;
+            if (user.somtoday_access_token.IsNullOrEmpty() || user.somtoday_refresh_token.IsNullOrEmpty() || user.somtoday_student_id.IsNullOrEmpty() || !TokenUtils.CheckToken(user.somtoday_refresh_token))
+                return Ok(false);
+            
+            return Ok(true);
+        }
 
-                    message += $"Refreshed token for {user.email}\n";
-                }
-                finally
-                {
-                    _semaphore.Release(); // Release access
-                }
-            });
-
-            await Task.WhenAll(tasks);
-    
-            return Ok(message);
+        [HttpPost]
+        [Route("/Koppelingen/Somtoday/STAP")]
+        public async Task<IActionResult> LegitAuth([FromBody] SomtodayPreAuthenticationModel model)
+        {
+            if (model == null)
+                return Ok("failed");
+            
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://inloggen.somtoday.nl/oauth2/token");
+            
+            request.Headers.Add("accept", "application/json, text/plain, */*");
+            request.Headers.Add("origin", "https://leerling.somtoday.nl");
+            
+            var collection = new List<KeyValuePair<string, string>>();
+            collection.Add(new("grant_type", "authorization_code"));
+            collection.Add(new("code", model.code.UrlDecode()));
+            collection.Add(new("redirect_uri", "somtoday://nl.topicus.somtoday.leerling/oauth/callback"));
+            collection.Add(new("code_verifier", model.code_verifier.UrlDecode()));
+            collection.Add(new("client_id", "somtoday-leerling-native"));
+            collection.Add(new("claims", "{\"id_token\":{\"given_name\":null, \"leerlingen\":null, \"orgname\": null, \"affiliation\":{\"values\":[\"student\",\"parent/guardian\"]} }}"));
+            var content = new FormUrlEncodedContent(collection);
+            request.Content = content;
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            
+            
+            var responseString = await response.Content.ReadAsStringAsync();
+            var somtodayAuthentication = JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(responseString);
+            
+            var user = await GetSomtodayStudent(somtodayAuthentication.access_token);
+            user.somtoday_access_token = somtodayAuthentication.access_token;
+            user.somtoday_refresh_token = somtodayAuthentication.refresh_token;
+            
+            await _user.UpdateUserAsync(model.user, user);
+            return Ok("Fuck off");
         }
         #endregion
     }
