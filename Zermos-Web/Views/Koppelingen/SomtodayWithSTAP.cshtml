@@ -17,8 +17,8 @@
                 </div>
             </div>
         </div>
-        
-        <p>Als je de error in Som ziet, refresh dan en tada!</p>
+
+        <a id="openSomtodayApp" href="somtoday://nl.topicus.somtoday.leerling/oauth/callback">Open mobiele Somtoday app</a>
     </div>
 </div>
 
@@ -31,6 +31,16 @@
             document.querySelector('.copy-button').innerHTML = 'Kopieer';
         }, 3000);
     });
+    
+    Zermos.mainBeforeLoad = () => {
+        var doc = document.querySelector('#openSomtodayApp');
+        //if mobile device is android or ios do NOT hide the button, else hide it
+        if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+            doc.style.display = "block";
+        } else {
+            doc.style.display = "none";
+        }
+    }
 
     var CheckingTimeout = null;
 

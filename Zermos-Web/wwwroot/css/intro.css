@@ -34,6 +34,9 @@ nav {
     background: var(--overlay-color);
     box-shadow: var(--box-shadow);
     border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .hero > * {
