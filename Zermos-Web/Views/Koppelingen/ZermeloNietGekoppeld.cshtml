@@ -208,6 +208,6 @@
 new ZermosModal()
 .addHeading({text: "Zermelo is niet gekoppeld"})
 .addHeading({text: "Zermelo is zo te zien niet aan je Zermos account gekoppeld, hierdoor mis je een aantal functies. Klik op de knop hieronder om naar de koppelingen pagina te gaan en Zermelo te koppelen."})
-.addButton("Ga naar koppelingen", () => ReplacePage('/koppelingen/Zermelo'))
+.addButton({text: "Ga naar koppelingen", onClick: () => ReplacePage('/koppelingen/Zermelo')})
 .open();
 </script>

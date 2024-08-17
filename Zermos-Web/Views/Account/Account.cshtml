@@ -195,7 +195,7 @@
                 var dateEnd = new Date(absence.eindDatumTijd);
                 abscenceModal.addHeading({text: dateStart.toLocaleDateString() + ' ' + dateStart.toLocaleTimeString() + ' - ' + dateEnd.toLocaleTimeString() + ' ' + dateEnd.toLocaleDateString()});
             })
-            .addButton('Sluiten', (ctx) => ctx.close())
+            .addButton({text: 'Sluiten', onClick: (ctx) => ctx.close()})
             .open();
 
         }
@@ -228,7 +228,7 @@ function OpenSuggestionOrBugModal() {
         .addSubmenu({showCondition: "type == \"bug\"", subModal: bugSubmissionSubModal})
         .addHeading({text: "kan ik je via je mail (@User.FindFirstValue("email")) bereiken op als ik extra vragen heb of ontwikkelingen?"})
         .addToggle({label: "Ja dat mag", initialState: false})
-        .addButton("versturen", (ctx) => {
+        .addButton({text: "versturen", onClick: (ctx) => {
             var values = ctx.getComponentsValue();
             if (values.values[0].correct && values.values[2].correct) {
                 //send the bug report
@@ -281,7 +281,7 @@ function OpenSuggestionOrBugModal() {
                     }
                 });
             }
-        })
+        }})
         .open();
 }
 </script>

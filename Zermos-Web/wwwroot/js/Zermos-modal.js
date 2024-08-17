@@ -1,12 +1,12 @@
 ﻿class ZermosModal {
-    constructor(components = [], conditions = {}) {
+    constructor(disableClosing = false, components = [], conditions = {}) {
+        this.disableClosing = disableClosing;
         this.components = components;
         this.conditions = conditions;
         this.close();
     }
 
     addComponent(component) {
-        //component.id ??= btoa(crypto.getRandomValues(new Uint8Array(8))).slice(0,11)
         if (!component.id) component.id = btoa(crypto.getRandomValues(new Uint8Array(8))).slice(0,11);
         this.components.push(component);
         return this;
@@ -62,101 +62,105 @@
         });
     }
 
-    addHeading({text, subheading = "", level = 1}) {
-        return this.addComponent({ type: 'heading', text, subheading, level });
+    addHeading({text, subheading = "", level = 1, id = undefined}) {
+        return this.addComponent({ type: 'heading', text, subheading, level, id: id});
     }
 
-    addToggle({label, initialState = false, onChange = () => {}}) {
-        return this.addComponent({ type: 'toggleInput', label, state: initialState, onChange });
+    addToggle({label, initialState = false, onChange = () => {}, id = undefined}) {
+        return this.addComponent({ type: 'toggleInput', label, state: initialState, onChange, id: id});
     }
 
-    addMultiToggles({labels, initialStates = [],  onChange = () => {}}) {
-        return this.addComponent({ type: 'multiToggleInput', labels, states: initialStates, onChange });
+    addMultiToggles({labels, initialStates = [],  onChange = () => {}, id = undefined}) {
+        return this.addComponent({ type: 'multiToggleInput', labels, states: initialStates, onChange, id: id});
     }
 
-    addButton(text, onClick = () => {}, id = undefined) { //TODO
-        return this.addComponent({ type: 'button', text, onClick, id});
+    addButton({text, onClick = () => {}, id = undefined}) { //TODO
+        return this.addComponent({ type: 'button', text, onClick, id: id});
     }
 
-    addDoubleButtons({text, secondText, onClick = () => {}, secondOnClick = () => {}}) {
-        return this.addComponent({ type: 'doubleButton', text, onClick, secondText, secondOnClick });
+    addDoubleButtons({text, secondText, onClick = () => {}, secondOnClick = () => {}, id = undefined}) {
+        return this.addComponent({ type: 'doubleButton', text, onClick, secondText, secondOnClick, id: id});
     }
 
-    addTripleButtons({text, secondText, thirdText, onClick = () => {}, secondOnClick = () => {}, thirdOnClick = () => {}}) {
-        return this.addComponent({ type: 'tripleButton', text, onClick, secondText, secondOnClick, thirdText, thirdOnClick });
+    addTripleButtons({text, secondText, thirdText, onClick = () => {}, secondOnClick = () => {}, thirdOnClick = () => {}, id = undefined}) {
+        return this.addComponent({ type: 'tripleButton', text, onClick, secondText, secondOnClick, thirdText, thirdOnClick, id: id});
     }
 
-    addSubmenu({showCondition, subModal}) {
-        return this.addComponent({ type: 'submenu', showCondition, subModal });
+    addSubmenu({showCondition, subModal, id = undefined}) {
+        return this.addComponent({ type: 'submenu', showCondition, subModal, id: id});
     }
 
-    addText({text, asHtml = false}) {
-        return this.addComponent({ type: 'text', text, asHtml: asHtml });
+    addText({text, asHtml = false, id = undefined}) {
+        return this.addComponent({ type: 'text', text, asHtml: asHtml, id: id});
     }
 
-    addLabel({text}) {
-        return this.addComponent({ type: 'label', text });
+    addLabel({text, id = undefined}) {
+        return this.addComponent({ type: 'label', text, id: id});
     }
 
-    addUrl({url, showFull = false, copyButton = true}) {
-        return this.addComponent({ type: 'url', url, showFull, copyButton });
+    addUrl({url, showFull = false, copyButton = true, id = undefined}) {
+        return this.addComponent({ type: 'url', url, showFull, copyButton, id: id});
     }
 
     ///INPUT ELEMENTS
-    addDatePicker({required = false, initialDate = undefined, onChange = () => {}}) {
-        return this.addComponent({ type: 'datePickerInput', required, initialDate, onChange });
+    addDatePicker({required = false, initialDate = undefined, onChange = () => {}, id = undefined}) {
+        return this.addComponent({ type: 'datePickerInput', required, initialDate, onChange, id: id});
     }
 
-    addDropdown({options, required = false, multiSelect = false, onChange = () => {}}) {
-        return this.addComponent({ type: 'dropdownInput', options, required, multiSelect, onChange });
+    addDropdown({options, required = false, multiSelect = false, onChange = () => {}, id = undefined}) {
+        return this.addComponent({ type: 'dropdownInput', options, required, multiSelect, onChange, id: id});
     }
 
-    addSeparator({text = ''}) {
-        return this.addComponent({ type: 'separator', text });
+    addSeparator({text = '', id = undefined}) {
+        return this.addComponent({ type: 'separator', text, id: id});
     }
 
-    addImage({src, alt = ''}) {
-        return this.addComponent({ type: 'image', src, alt });
+    addImage({src, alt = '', id = undefined}) {
+        return this.addComponent({ type: 'image', src, alt, id: id});
     }
 
-    addSpacer({height = "20px"}) {
-        return this.addComponent({ type: 'spacer', height });
+    addSpacer({height = "20px", id = undefined}) {
+        return this.addComponent({ type: 'spacer', height, id: id});
     }
 
-    addNumberInput({required = false, initialValue = 0, decimals = 0, min = Number.MIN_VALUE, max = Number.MAX_VALUE, step = 1, onChange = () => {}}) {
-        return this.addComponent({ type: 'numberInput', required, initialValue, decimals, min, max, step, onChange });
+    addNumberInput({required = false, initialValue = 0, decimals = 0, min = Number.MIN_VALUE, max = Number.MAX_VALUE, step = 1, onChange = () => {}, id = undefined}) {
+        return this.addComponent({ type: 'numberInput', required, initialValue, decimals, min, max, step, onChange, id: id});
     }
 
-    addTextInput({required = false, initialValue = '', maxLength = null, onChange = () => {}}) {
-        return this.addComponent({ type: 'textInput', required, initialValue, maxLength, onChange });
+    addTextInput({required = false, initialValue = '', maxLength = null, onChange = () => {}, id = undefined}) {
+        return this.addComponent({ type: 'textInput', required, initialValue, maxLength, onChange, id: id});
     }
 
-    addPasswordInput({required = false, maxLength = null, onChange = () => {}}) {
-        return this.addComponent({ type: 'passwordInput', required, maxLength, onChange });
+    addPasswordInput({required = false, maxLength = null, onChange = () => {}, id = undefined}) {
+        return this.addComponent({ type: 'passwordInput', required, maxLength, onChange, id: id});
     }
 
-    addTextArea({required = false, initialValue = '', maxLength = null, onChange = () => {}}) {
-        return this.addComponent({ type: 'textAreaInput', required, initialValue, maxLength, onChange });
+    addTextArea({required = false, initialValue = '', maxLength = null, onChange = () => {}, id = undefined}) {
+        return this.addComponent({ type: 'textAreaInput', required, initialValue, maxLength, onChange, id: id});
     }
 
-    addCheckbox({initialState = false, onChange = () => {}}) {
-        return this.addComponent({ type: 'toggleInput', state: initialState, asCheckbox: true, onChange });
+    addCheckbox({initialState = false, onChange = () => {}, id = undefined}) {
+        return this.addComponent({ type: 'toggleInput', state: initialState, asCheckbox: true, onChange, id: id});
     }
     
-    addMultiCheckbox(labels, initialStates = [], onChange = () => {}) {
-        return this.addComponent({ type: 'multiToggleInput', labels, states: initialStates, asCheckbox: true, onChange });
+    addMultiCheckbox(labels, initialStates = [], onChange = () => {}, id = undefined) {
+        return this.addComponent({ type: 'multiToggleInput', labels, states: initialStates, asCheckbox: true, onChange, id: id});
     }
     
-    addSlider({min = 0, max = 100, step = 1, initialValue = 50, onChange = () => {}}) {
-        return this.addComponent({ type: 'sliderInput', min, max, step, initialValue, onChange });
+    addSlider({min = 0, max = 100, step = 1, initialValue = 50, onChange = () => {}, id = undefined}) {
+        return this.addComponent({ type: 'sliderInput', min, max, step, initialValue, onChange, id: id});
     }
 
-    addColorPicker({required, initialColor = '#000000', onChange = () => {}}) {
-        return this.addComponent({ type: 'colorPickerInput', required, initialColor, onChange });
+    addColorPicker({required, initialColor = '#000000', onChange = () => {}, id = undefined}) {
+        return this.addComponent({ type: 'colorPickerInput', required, initialColor, onChange, id: id});
     }
 
-    addRating({required, maxRating = 5, initialRating = 0, onChange = () => {}}) {
-        return this.addComponent({ type: 'ratingInput', required, maxRating, initialRating, onChange });
+    addRating({required, maxRating = 5, initialRating = 0, onChange = () => {}, id = undefined}) {
+        return this.addComponent({ type: 'ratingInput', required, maxRating, initialRating, onChange, id: id});
+    }
+    
+    addHTML({html, id = undefined}) {
+        return this.addComponent({ type: 'html', html, id: id});
     }
 
     render() {
@@ -336,9 +340,7 @@
             copyButton.textContent = 'Kopieer';
 
             copyButton.addEventListener('click', () => {
-                navigator.clipboard.writeText(component.url)
-                    .then(() => console.log(`"${component.url}" was copied to your clipboard.`))
-                    .catch(err => console.error(`Error copying text to clipboard: ${err}`));
+                navigator.clipboard.writeText(component.url);
             });
 
             urlSection.appendChild(copyButton);
@@ -1007,10 +1009,14 @@
         const modalElement = this.render();
         
         const modalBackground = document.createElement('div');
+        
         modalBackground.className = 'zermos-modal-background';
-        modalBackground.addEventListener('click', (e) => {
-            if (e.target === modalBackground) this.close();
-        });
+        if (!this.disableClosing) {
+            modalBackground.addEventListener('click', (e) => {
+                if (e.target === modalBackground) this.close();
+            });
+        }
+        
         modalBackground.style.opacity = 0;
         
         //.zermos-modal-container
@@ -1022,6 +1028,23 @@
         document.body.appendChild(modalBackground);
 
         ease(0, 1, 250, opacity => modalBackground.style.opacity = opacity);
+
+        return this;
+    }
+    
+    openTroughAppending(element) {        
+        const modalElement = this.render();
+        
+        var centeringDiv = document.createElement('div');
+        centeringDiv.style.display = "flex";
+        centeringDiv.style.justifyContent = "center";
+        centeringDiv.style.alignItems = "center";
+        centeringDiv.style.height = "100%";
+        centeringDiv.style.width = "100%";
+
+        centeringDiv.appendChild(modalElement);
+        element.appendChild(centeringDiv);
+        return this;
     }
     
     close() {
@@ -1031,7 +1054,7 @@
     deepCopy() {
         const copiedComponents = this.components.map(component => ({...component}));
         const copiedConditions = {...this.conditions};
-        return new ZermosModal(copiedComponents, copiedConditions);
+        return new ZermosModal(this.disableClosing, copiedComponents, copiedConditions);
     }
 }
 

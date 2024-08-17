@@ -29,66 +29,10 @@
 <script minimize>
 @Context.Items["dmjs"]
 
-//when user submits the form, use the function below to check if the user is logged in
-document.getElementsByTagName("form")[0].addEventListener("submit", send);
-document.getElementsByTagName("form")[1].addEventListener("submit", send);
-var form = document.getElementsByTagName("form")[0];
-var button = document.getElementsByClassName("submit")[0];
+//say that the email must be the email that is used to log into infowijs (most likely the school email)
+//request the products with the new infowijs endpoint
+//send an email to the correct email using the existing email service
 
-function send(e) {
-    e.preventDefault();
-    button.innerHTML = "Bezig met laden...";
-    button.disabled = true;
-    
-    //for each input field, add it a parameter to the url
-    //?first=value&second=value&third=value
-    var url = form.action;
-    var inputs = form.getElementsByTagName("input");
-    for (var i = 0; i < inputs.length; i++) {
-        var input = inputs[i];
-        if (input.type === "hidden") continue;
-        url += (i === 0 ? "?" : "&") + input.name + "=" + input.value;
-    }
-        
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", url)
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {            
-            if (xhr.status === 200) {
-                if (xhr.responseText === "success") {
-                    newSidebar();
-                    ReplacePage('@Url.Action("Account", "Account")');
-                }
-                else if (xhr.responseText.startsWith("?"))
-                {
-                    var query = xhr.responseText;
-                    //email = ?[email]?customer_product_id=[customer_product_id]&user_id=[user_id]&id=[id]
-                    query = query.substring(1);
-                    var email = query.split("?")[0];
-                    query = query.substring(email.length);
-                    
-                    document.getElementById("email-text").innerHTML = email;
-                    
-                    //set action url to the current url with the query string
-                    form = document.getElementsByTagName("form")[1];
-                    button = document.getElementsByClassName("submit")[1];
-                    
-                    form.action = form.action + query;
-                    
-                    //hide the first form
-                    document.getElementsByClassName("login")[0].style.display = "none";
-                    document.getElementsByClassName("login")[1].style.display = "flex";
-                    
-                }
-                else
-                {
-                    button.innerHTML = "Check opnieuw of je ingelogd bent";
-                    button.disabled = false;
-                }
-            }
-        }
-    };
-    xhr.send();
-}
+
 
 </script>

@@ -28,6 +28,7 @@ namespace Zermos_Web.Controllers
         public KoppelingenController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
         
         SomtodayAPI somtodayApi = new(new HttpClient());
+        InfowijsApi InfowijsApi = new(new HttpClient());
 
         private readonly HttpClient _infowijsHttpClient = new()
         {
@@ -35,7 +36,6 @@ namespace Zermos_Web.Controllers
             {
                 {"accept", "application/vnd.infowijs.v1+json"},
                 {"x-infowijs-client", "nl.infowijs.hoy.android"}
-                // {"x-infowijs-client", "nl.infowijs.hoy.android/nl.infowijs.client.antonius"}
             }
         };
 

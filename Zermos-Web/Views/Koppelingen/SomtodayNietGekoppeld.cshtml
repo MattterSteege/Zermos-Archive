@@ -423,6 +423,6 @@ Zermos.mainUnload = () => {
 new ZermosModal()
 .addHeading({text: "Somtoday is niet gekoppeld"})
 .addHeading({text: "Omdat je Somtoday nog niet aan je Zermos account gekoppeld hebt, mis je nu toegang tot je huiswerk en je cijfers. Klik op de knop hieronder om naar de koppelingen pagina te gaan en Somtoday te koppelen."})
-.addButton("Ga naar koppelingen", () => ReplacePage('/koppelingen/Somtoday'))
+.addButton({text: "Ga naar koppelingen", onClick: () => ReplacePage('/koppelingen/Somtoday')})
 .open();
 </script>

@@ -394,14 +394,14 @@
                 new ZermosModal()
                 .addHeading({text: "Voortgangsdossier"})
                 .addHeading({text: "Het voortgangsdossier is een overzicht van alle cijfers die je hebt gehaald die meetellen voor je voortgangsdossier. Dit zijn cijfers van toetsen, opdrachten en andere beoordelingen."})
-                .addButton("aight", (ctx) => { ctx.close(); })
+                .addButton({text: "aight", onClick: (ctx) => { ctx.close(); }})
                 .open();
             }
             else if (panel === 'examen') {
                 new ZermosModal()
                 .addHeading({text: "Schoolexamen cijfers"})
                 .addHeading({text: "De schoolexamen cijfers zijn cijfers die je hebt gehaald voor toetsen die meetellen voor je schoolexamen. Dit zijn cijfers die uiteindelijk meetellen voor je centraal examen. <br><br>Helaas hebben deze cijfers geen pagina waar je alle cijfers kan zien die je hebt gehaald, dit komt omdat de cijfers (vaak) over verschillende leerjaren worden gegeven en ik dat niet in een keer kan opvragen. Hopelijk komt dit in de toekomst nog, maar dat is momenteel niet mijn grootste prioriteit. Als je SE cijfers hebt voor vakken waar je dat jaar ook voorgangsdossier cijfers voor hebt gekregen kun je ze wel bekijken, ga dan naar 'Rapport' en klik op het desbetreffende vak.", true})
-                .addButton("Hmm, oké", (ctx) => { ctx.close(); })
+                .addButton({text: "Hmm, oké", onClick: (ctx) => { ctx.close(); }})
                 .open();
             }
         }
@@ -413,14 +413,11 @@
         .addHeading({text: "Vorige jaarlagen"})
         .addHeading({text: "Van welke jaarlagen wil je de cijfers zien?"})
         .addDropdown({options: jaarlagen, required: true})
-        .addButton("Start de tijdmachine!", (ctx) => { 
-            var value = ctx.getComponentsValue().values[0].value;
+        .addButton({text: "Start de tijdmachine!", onClick: (ctx) => { var value = ctx.getComponentsValue().values[0].value;
             if (value !== "") {
                 ReplacePage(`/Somtoday/Cijfers?leerjaar=${value.label}`, true);
             }
-            ctx.close(); 
-        })
-        .open();
+            ctx.close(); }})        .open();
     }, VerticalAlignment.BT, Background.Accent);
 
     // share button
@@ -431,7 +428,7 @@
             .addHeading({text: "Deel je cijfers met je vrienden! Selecteer uit welk jaar en week je cijfers wilt delen en dan krijg je een persoonlijke link die je kan delen. Je hoeft geen account te hebben om deze link te bekijken."})
             .addDropdown({options: jaarlagen, required: true})
             .addDatePicker({required: true, initialDate: new Date(Date.now() + 604800000)})
-            .addButton("Deel", (ctx) => {
+            .addButton({text: "Deel", onClick: (ctx) => {
 
                 var values = ctx.getComponentsValue().values;
 
@@ -454,7 +451,7 @@
                             .addUrl({url: url, showFull: false, copyButton: true})
                             .open();
                     });
-            })
+            }})
             .open();
 
     }, VerticalAlignment.TL, Background.Primary);

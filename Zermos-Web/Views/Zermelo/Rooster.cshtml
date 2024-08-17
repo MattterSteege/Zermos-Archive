@@ -437,9 +437,9 @@ function OpenLessonDetail(base64){
     lessonDetail.addHeading({text: "De les is van: " + new Date(json.start * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1] + " tot " + new Date(json.end * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1]})
     
     lessonDetail.addSpacer({height: 'var(--padding)'})
-    .addButton("Bekijk huiswerk (indien beschikbaar)", () => {
+    .addButton({text: "Bekijk huiswerk (indien beschikbaar)", onClick: () => {
         ReplacePage('/Somtoday/Huiswerk?les=' + json.start);
-    });
+    }});
        
     // for (var i = 0; i < json.status.length; i++) {
     //     var status = json.status[i];
@@ -459,7 +459,7 @@ addButtonToPage('fa-share-from-square', () => {
     .addHeading({text: "Deel je rooster"})
     .addHeading({text: "Deel je rooster met je vrienden! De pagina die je nu ziet wordt als link gedeeld, zij hoeven geen account hiervoor te hebben."})
     .addDatePicker({required: true, initialDate: new Date(Date.now() + 604800000)})
-    .addButton("Deel", (ctx) => {
+    .addButton({text: "Deel", onClick: (ctx) => {
         
         var values = ctx.getComponentsValue().values;
         
@@ -481,7 +481,7 @@ addButtonToPage('fa-share-from-square', () => {
             .addUrl({url: url, showFull: false, copyButton: true})
             .open();
         });
-    })
+    }})
     .open();
     
 }, VerticalAlignment.TL, Background.Primary);
@@ -510,7 +510,7 @@ addButtonToPage('fa-list', () => {
             @Html.Raw("    .addHeading({text: \"Er is iets fout gegaan bij het ophalen van de vakken. Probeer het later opnieuw.\"})")
         }
     }
-    .addButton("Ok!", (ctx) => {ctx.close()})
+    .addButton({text: "Ok!", onClick: (ctx) => {ctx.close()}})
     .open();
     
 }, VerticalAlignment.TL, Background.Primary);
@@ -528,10 +528,10 @@ notCurrentWeek.addEventListener('click', () => {
         .addHeading({text: "Je zit nu in week " + weeks[1].dataset.week + " van " + weeks[1].dataset.year + "."})
         .addHeading({text: "De huidige datum is " + new Date().toLocaleDateString("nl-NL", { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'}) + "."})
         .addHeading({text: "Handig om te weten, toch Teun?"})
-        .addButton("Ja dat klopt...", (ctx) => {
+        .addButton({text: "Ja dat klopt...", onClick: (ctx) => {
             ShowNotCurrentWeek();
             ctx.close();
-        })
+        }})
         .open();
         
         clicked = 5;

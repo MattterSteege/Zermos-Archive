@@ -5,4 +5,10 @@ Version 0.6.2
     - Er is een nieuwe authenticatiemethode toegevoegd, deze werkt bij elk type account en zelfs als je inlogd met bijv. Microsoft of google als third-party authenticatie.
     
 - infowijs - schoolkalender
-    - Er was een klein foutje waar het eerste bericht niet goed inlaadde, dit is nu gefixt (door hem hardnekking te verwijderen, het was toch niet een echt bericht, maar gewoon een by-product)    
+    - Er was een klein foutje waar het eerste bericht niet goed inlaadde, dit is nu gefixt (door hem hardnekking te verwijderen, het was toch niet een echt bericht, maar gewoon een by-product)
+    
+- algemeen
+    - Ik heb het modal systeem weer geupdate, voor beter controle over de modals
+    
+- koppelingen
+    - Ik heb elke koppeling pagina een modal gegeven ipv een ontworpen pagina, dit is voor consistenteit en omdat het makkelijker is om te maken.    

@@ -107,7 +107,7 @@
         .addTextInput({required: true, maxLength: 255})
         .addLabel({text: "Welke beschrijving krijg het huiswerk?"})
         .addTextArea()
-        .addButton("Huiswerk toevoegen", (ctx) => {
+        .addButton({text: "Huiswerk toevoegen", onClick: (ctx) => {
             var values = ctx.getComponentsValue();
             
             console.log(values);
@@ -139,7 +139,7 @@
             }).catch(error => {
                 console.error(error);
             });
-        })
+        }})
         .open();
     }
 

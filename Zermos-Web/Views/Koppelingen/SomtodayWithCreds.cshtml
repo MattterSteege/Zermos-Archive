@@ -27,7 +27,7 @@ var modal = new ZermosModal()
     addTextInput({required: true})
     .addLabel({text: "12-cijferige code:"})
     .addTextInput({required: true, maxLength: 15})
-    .addButton("Koppel Zermelo", (ctx) => {
+    .addButton({text: "Koppel Zermelo", onClick: (ctx) => {
         var submitbutton = document.getElementById("submit-button");
 
         function checkCode(ctx) {
@@ -58,7 +58,7 @@ var modal = new ZermosModal()
         }
 
         checkCode(ctx);
-    }, "submit-button")
+    }, id: "submit-button"})
     .open();
 
     //when user submits the form, use the function below to check if the user is logged in

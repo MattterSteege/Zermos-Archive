@@ -88,6 +88,14 @@ namespace Zermos_Web.APIs
             */
         }
         
+        public async Task<InfowijsCustomerProductsModel> GetCustomerProductsAsync(string email)
+        {
+            //curl 'https://api.infowijs.nl/sessions/customer-products' --data-raw '{"username":"58373@ccg-leerling.nl"}' POST
+            var body = "{\"username\":\"" + email + "\"}";
+            var response = await _httpClient.PostAsync("https://api.infowijs.nl/sessions/customer-products", new StringContent(body, System.Text.Encoding.UTF8, "application/json"));
+            return JsonConvert.DeserializeObject<InfowijsCustomerProductsModel>(await response.Content.ReadAsStringAsync(), Converter.Settings);
+        }
+        
         public async Task<InfowijsEventsModel> GetSchoolKalenderAsync(user user)
         {
             var json = TokenUtils.DecodeJwt(user.infowijs_access_token);

@@ -554,13 +554,13 @@ Zermos.checkForUpdates = () => {
         .addHeading({text: "Zermos is geupdate!"})
         .addHeading({text: "Zermos is weer een versietje ouder 🥳. Er zijn natuurlijk weer nieuwe functies toegevoegd en bugs gefixt. Veel plezier met de nieuwe versie!"})
         .addHeading({text: "Je gebruikt nu versie " + Zermos.CurrentVersion + ", de vorige keer dat je Zermos bezocht was dat versie " + version_user})
-        .addButton("Check wat er nieuw is", (_) => {
+        .addButton({text: "Check wat er nieuw is", onClick: (_) => {
           window.open("https://zermos-docs.kronk.tech/WhatsNew.html", "_blank");
-        })        
-        .addButton("Meer informatie in de Discord server", (_) => {
+        }})        
+        .addButton({text: "Meer informatie in de Discord server", onClick: (_) => {
           window.open("https://discord.gg/krP9se64TD", "_blank");
-        })
-        .addButton("let's go, ik ben er klaar voor!", (ctx) => {
+        }})
+        .addButton({text: "let's go, ik ben er klaar voor!", onClick: (ctx) => {
           var url =
               "/Account/UpdateSetting?key=version_used&value=" +
               Zermos.CurrentVersion;
@@ -575,7 +575,7 @@ Zermos.checkForUpdates = () => {
               "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
           
             ctx.close();
-        })
+        }})
         .open();
 
     localStorage.clear();

@@ -13,12 +13,12 @@
     .addHeading({text: "Als je terug bent bij Zermos en alles goed is gegaan, word je automatisch teruggestuurd naar je accountpagina."})
     .addSpacer({height: "var(--padding)"})
     .addUrl({url: "@Model.vanityUrl", showFull: true, copyButton: false})
-    .addButton("Kopieer code", () => {
+    .addButton({text: "Kopieer code", onClick: () => {
         copyToClipboard("@Model.vanityUrl");
-    })
-    .addButton("Open mobiele Somtoday app", () => {
+    }})
+    .addButton({text: "Open mobiele Somtoday app", onClick: () => {
         window.location.href = "somtoday://nl.topicus.somtoday.leerling/oauth/callback";
-    })
+    }})
     .open();
     
     

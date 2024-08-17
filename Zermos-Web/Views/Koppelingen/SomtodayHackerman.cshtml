@@ -75,13 +75,13 @@
             .addHeading({text: "Je hebt zojuist de code in je klembord gekregen, plak deze code hieronder en klik op 'Koppel Somtoday aan je account!'"})
             .addLabel({text: "Somtoday code:"})
             addTextInput({required: true})
-            .addButton("Koppel Somtoday aan je account!", (ctx) => {
+            .addButton({text: "Koppel Somtoday aan je account!", onClick: (ctx) => {
                 var code = ctx.getComponentsValue().values[0].value;
 
                 if (code.startsWith("ey")) {
                     ReplacePage('/Koppelingen/Somtoday/Callback?' + code);
                 }
-            })
+            }})
             .open();
         }
     

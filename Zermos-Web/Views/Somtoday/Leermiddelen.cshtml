@@ -41,7 +41,7 @@
             .addTextInput({required: true})
             .addLabel({text: 'Uitgever van het leermiddel'})
             .addTextInput({required: true})
-            .addButton('Toevoegen', (ctx) => {
+            .addButton({text: 'Toevoegen', onClick: (ctx) => {
 
                 var values = ctx.getComponentsValue();
                 
@@ -63,11 +63,11 @@
                             new ZermosModal()
                                 .addHeading({text: 'Fout'})
                                 .addHeading({text: data.error})
-                                .addButton('Sluiten')
+                                .addButton({text: 'Sluiten'})
                                 .open()
                         }
                     })
-            })
+            }})
             .open()
     }
 </script>

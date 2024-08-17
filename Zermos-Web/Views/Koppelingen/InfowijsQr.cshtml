@@ -2,20 +2,6 @@
 
 <link rel="stylesheet" href="/css/koppelingen.css" preload/>
 
-<div class="login">
-    <div class="login-explanation">
-        <p>Vul hier je schoolmail in.</p>
-        <p>Scan deze code met de QR code scanner in de antonius app (Antonius app > Meer > Hoy Scan) en je bent ingelogd!</p>
-        <img onload="imageLoaded()" src="https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=@(ViewData["qr_text"])" alt="qr code" class="img-thumbnail">
-        <div class="loading-icon">
-            <img src="/images/Loading-Icon-by-Kanggraphic-27-580x386-removebg-preview.png" >
-        </div>
-    </div>
-    <form method="post" asp-controller="Koppelingen" asp-action="InfowijsQr" asp-route-uuid="@ViewData["uuid"]" asp-route-retry="true">
-        @* <button class="input submit" type="submit" id="check">Check @((bool)ViewData["retry"]! ? "opnieuw" : "") of je ingelogd bent</button> *@
-    </form>
-</div>
-
 <script minimize>
 @Context.Items["dmjs"]
 
@@ -23,28 +9,22 @@ var modal = new ZermosModal()
 .addHeading({text: "Vul hier je schoolmail in."})
 .addHeading({text: "Scan deze code met de QR code scanner in de antonius app (Antonius app > Meer > Hoy Scan) en je bent ingelogd!"})
 .addImage({src: "https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=@(ViewData["qr_text"])", alt: "qr code"})
-.addButton("Koppel Zermelo", (ctx) => {
-    
-})
-.open();
+.addButton({text: "Koppel Infowijs", onClick: () => {
+    SendCheck();
+}, id: "submit-button"})
+.openTroughAppending(main);
 
-function imageLoaded() {
-    var loadingIcon = document.getElementsByClassName("loading-icon")[0];
-    loadingIcon.style.display = "none";
-}
+var CheckingTimeout = setTimeout(function() {
+    SendCheck();
+}, 10000);
 
-var CheckingTimeout = null;
-
-SendCheck();
-
-Zermos.mainUnload = function() {
+Zermos.mainUnload = () => {
     clearTimeout(CheckingTimeout);
 };
 
 function SendCheck() {
-    var form = document.getElementsByTagName("form")[0];
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", form.action);
+    xhr.open("POST", "@Url.Action("InfowijsQr", "Koppelingen", new { uuid = ViewData["uuid"]})");
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
@@ -55,13 +35,13 @@ function SendCheck() {
                 } else {
                     CheckingTimeout = setTimeout(function() {
                         SendCheck();
-                    }, 1000);
+                    }, 2500);
                 }
             }
             else {
                 CheckingTimeout = setTimeout(function() {
                     SendCheck();
-                }, 1000);
+                }, 2500);
             }
         }
     };
