@@ -45,7 +45,7 @@
         {
             if (grade.cijfer == "-") { continue; }
 
-            <table class="grade-table" @Html.Raw(GetNotificationClass(grade.cijfers?[0]?.datumInvoerEerstePoging ?? DateTime.MaxValue)) onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()/@grade.vakuuid.simpleEncodeUUID()/@Model.relevanteCijferLichtingUUID.simpleEncodeUUID()/@Model.leerjaarUUID.simpleEncodeUUID()')">
+            <table class="grade-table" @Html.Raw(GetNotificationClass(grade.cijfers?[0]?.datumInvoerEerstePoging ?? DateTime.MaxValue)) onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()/@grade.vakuuid.ShortenUUID()/@Model.relevanteCijferLichtingUUID.ShortenUUID()/@Model.leerjaarUUID.ShortenUUID()')">
                 <tr class="grade-table-header">
                     <td rowspan="2"><i class="fa-solid fa-book" data-name="@grade.vakNaam.ToLower()" data-name-short="@grade.vakAfkorting.ToLower()"></i></td>
                     <td>@grade.vakNaam.Capitalize()</td>
@@ -95,7 +95,7 @@
             cijferSECount++;
             
             //Combine the data from cijferSE with the structure of cijfer
-            <table class="grade-table" @Html.Raw(GetNotificationClass((grade.cijfersSE != null && grade.cijfersSE.Count > 0) ? grade.cijfersSE.FirstOrDefault()!.datumInvoerEerstePoging : DateTime.MinValue)) onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()/@grade.vakuuid.simpleEncodeUUID()/@Model.relevanteCijferLichtingUUID.simpleEncodeUUID()/@Model.leerjaarUUID.simpleEncodeUUID()')">
+            <table class="grade-table" @Html.Raw(GetNotificationClass((grade.cijfersSE != null && grade.cijfersSE.Count > 0) ? grade.cijfersSE.FirstOrDefault()!.datumInvoerEerstePoging : DateTime.MinValue)) onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()/@grade.vakuuid.ShortenUUID()/@Model.relevanteCijferLichtingUUID.ShortenUUID()/@Model.leerjaarUUID.ShortenUUID()')">
                 <tr class="grade-table-header">
                     <td rowspan="2"><i class="fa-solid fa-book" data-name="@grade.vakNaam.ToLower()" data-name-short="@grade.vakAfkorting.ToLower()"></i></td>
                     <td>@grade.vakNaam</td>
@@ -326,9 +326,9 @@
                 var hideColor = settings.find(x => x.startsWith('hideColor')) ? settings.find(x => x.startsWith('hideColor')).split('=')[1] === 'true' : false;
             
                 new ZermosModal()
-                .addHeading("Voortgangsdossier")
-                .addText("Pas de instellingen aan van het voortgangsdossier. Je kan het volgende aanpassen:")
-                .addToggle("Afronden op een heel getal", afronden, (ctx, isActive) => {
+                .addHeading({text: "Voortgangsdossier"})
+                .addHeading({text: "Pas de instellingen aan van het voortgangsdossier. Je kan het volgende aanpassen:"})
+                .addToggle({label: "Afronden op een heel getal", initialState: afronden, onChange: (ctx, isActive) => {
                     afronden = isActive;
                     toggleSEGradeRounding(parentPanel, isActive);
 
@@ -338,8 +338,8 @@
                     var save = getSettings();
                     save[0] = newSettings;
                     localStorage.setItem('gradeSettings', JSON.stringify(save));
-                })
-                .addToggle("Geen kleur geven aan je cijfer", hideColor, (ctx, isActive) => {
+                }})
+                .addToggle({label: "Geen kleur geven aan je cijfer", initialState: hideColor, onChange: (ctx, isActive) => {
                     hideColor = isActive;
                     toggleSuffAndInsuff(parentPanel, isActive);
 
@@ -349,7 +349,7 @@
                     var save = getSettings();
                     save[0] = newSettings;
                     localStorage.setItem('gradeSettings', JSON.stringify(save));
-                })
+                }})
                 .open();
             }
             else if (panel === 'examen') {
@@ -361,9 +361,9 @@
                 var hideColor = settings.find(x => x.startsWith('hideColor')) ? settings.find(x => x.startsWith('hideColor')).split('=')[1] === 'true' : false;
             
                 new ZermosModal()
-                .addHeading("Schoolexamen cijfers")
-                .addText("Pas de instellingen aan van de schoolexamen cijfers. Je kan het volgende aanpassen:")
-                .addToggle("Afronden op een heel getal", afronden, (ctx, isActive) => {
+                .addHeading({text: "Schoolexamen cijfers"})
+                .addHeading({text: "Pas de instellingen aan van de schoolexamen cijfers. Je kan het volgende aanpassen:"})
+                .addToggle({label: "Afronden op een heel getal", initialState: afronden, onChange: (ctx, isActive) => {
                     afronden = isActive;
                     toggleSEGradeRounding(parentPanel, isActive);
 
@@ -373,8 +373,8 @@
                     var save = getSettings();
                     save[1] = newSettings;
                     localStorage.setItem('gradeSettings', JSON.stringify(save));
-                })
-                .addToggle("Geen kleur geven aan je cijfer", hideColor, (ctx, isActive) => {
+                }})
+                .addToggle({label: "Geen kleur geven aan je cijfer", initialState: hideColor, onChange: (ctx, isActive) => {
                     hideColor = isActive;
                     toggleSuffAndInsuff(parentPanel, isActive);
 
@@ -384,7 +384,7 @@
                     var save = getSettings();
                     save[1] = newSettings;
                     localStorage.setItem('gradeSettings', JSON.stringify(save));
-                })
+                }})
                 .open();
             }
         }
@@ -392,15 +392,15 @@
         function showInfo(panel) {
             if (panel === 'voortgang') {
                 new ZermosModal()
-                .addHeading("Voortgangsdossier")
-                .addText("Het voortgangsdossier is een overzicht van alle cijfers die je hebt gehaald die meetellen voor je voortgangsdossier. Dit zijn cijfers van toetsen, opdrachten en andere beoordelingen.")
+                .addHeading({text: "Voortgangsdossier"})
+                .addHeading({text: "Het voortgangsdossier is een overzicht van alle cijfers die je hebt gehaald die meetellen voor je voortgangsdossier. Dit zijn cijfers van toetsen, opdrachten en andere beoordelingen."})
                 .addButton("aight", (ctx) => { ctx.close(); })
                 .open();
             }
             else if (panel === 'examen') {
                 new ZermosModal()
-                .addHeading("Schoolexamen cijfers")
-                .addText("De schoolexamen cijfers zijn cijfers die je hebt gehaald voor toetsen die meetellen voor je schoolexamen. Dit zijn cijfers die uiteindelijk meetellen voor je centraal examen. <br><br>Helaas hebben deze cijfers geen pagina waar je alle cijfers kan zien die je hebt gehaald, dit komt omdat de cijfers (vaak) over verschillende leerjaren worden gegeven en ik dat niet in een keer kan opvragen. Hopelijk komt dit in de toekomst nog, maar dat is momenteel niet mijn grootste prioriteit. Als je SE cijfers hebt voor vakken waar je dat jaar ook voorgangsdossier cijfers voor hebt gekregen kun je ze wel bekijken, ga dan naar 'Rapport' en klik op het desbetreffende vak.", true)
+                .addHeading({text: "Schoolexamen cijfers"})
+                .addHeading({text: "De schoolexamen cijfers zijn cijfers die je hebt gehaald voor toetsen die meetellen voor je schoolexamen. Dit zijn cijfers die uiteindelijk meetellen voor je centraal examen. <br><br>Helaas hebben deze cijfers geen pagina waar je alle cijfers kan zien die je hebt gehaald, dit komt omdat de cijfers (vaak) over verschillende leerjaren worden gegeven en ik dat niet in een keer kan opvragen. Hopelijk komt dit in de toekomst nog, maar dat is momenteel niet mijn grootste prioriteit. Als je SE cijfers hebt voor vakken waar je dat jaar ook voorgangsdossier cijfers voor hebt gekregen kun je ze wel bekijken, ga dan naar 'Rapport' en klik op het desbetreffende vak.", true})
                 .addButton("Hmm, oké", (ctx) => { ctx.close(); })
                 .open();
             }
@@ -410,9 +410,9 @@
 
     addButtonToPage("fa-history", () => {
         new ZermosModal()
-        .addHeading("Vorige jaarlagen")
-        .addText("Van welke jaarlagen wil je de cijfers zien?")
-        .addDropdown(jaarlagen, true, false)
+        .addHeading({text: "Vorige jaarlagen"})
+        .addHeading({text: "Van welke jaarlagen wil je de cijfers zien?"})
+        .addDropdown({options: jaarlagen, required: true})
         .addButton("Start de tijdmachine!", (ctx) => { 
             var value = ctx.getComponentsValue().values[0].value;
             if (value !== "") {
@@ -427,10 +427,10 @@
     addButtonToPage('fa-share-from-square', () => {
 
         new ZermosModal()
-            .addHeading("Deel je cijfers")
-            .addText("Deel je cijfers met je vrienden! Selecteer uit welk jaar en week je cijfers wilt delen en dan krijg je een persoonlijke link die je kan delen. Je hoeft geen account te hebben om deze link te bekijken.")
-            .addDropdown(jaarlagen, true, false)
-            .addDatePicker(true, new Date(Date.now() + 604800000))
+            .addHeading({text: "Deel je cijfers"})
+            .addHeading({text: "Deel je cijfers met je vrienden! Selecteer uit welk jaar en week je cijfers wilt delen en dan krijg je een persoonlijke link die je kan delen. Je hoeft geen account te hebben om deze link te bekijken."})
+            .addDropdown({options: jaarlagen, required: true})
+            .addDatePicker({required: true, initialDate: new Date(Date.now() + 604800000)})
             .addButton("Deel", (ctx) => {
 
                 var values = ctx.getComponentsValue().values;
@@ -449,9 +449,9 @@
                     .then(response => response.text())
                     .then((url) => {
                         new ZermosModal()
-                            .addHeading("Deel je cijfers")
-                            .addText("Hier is de link die je kan delen met je vrienden. Deze link is geldig tot de datum die je hebt gekozen. Bekijk je geldige links op de account pagina.")
-                            .addUrl(url, false, true)
+                            .addHeading({text: "Deel je cijfers"})
+                            .addHeading({text: "Hier is de link die je kan delen met je vrienden. Deze link is geldig tot de datum die je hebt gekozen. Bekijk je geldige links op de account pagina."})
+                            .addUrl({url: url, showFull: false, copyButton: true})
                             .open();
                     });
             })

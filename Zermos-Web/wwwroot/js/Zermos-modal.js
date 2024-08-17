@@ -6,7 +6,8 @@
     }
 
     addComponent(component) {
-        component.id = btoa(crypto.getRandomValues(new Uint8Array(8))).slice(0,11)
+        //component.id ??= btoa(crypto.getRandomValues(new Uint8Array(8))).slice(0,11)
+        if (!component.id) component.id = btoa(crypto.getRandomValues(new Uint8Array(8))).slice(0,11);
         this.components.push(component);
         return this;
     }
@@ -61,101 +62,100 @@
         });
     }
 
-    addHeading(text, subheading = "", level = 1) {
+    addHeading({text, subheading = "", level = 1}) {
         return this.addComponent({ type: 'heading', text, subheading, level });
     }
 
-    addToggle(label, initialState = false, onChange = () => {}) {
+    addToggle({label, initialState = false, onChange = () => {}}) {
         return this.addComponent({ type: 'toggleInput', label, state: initialState, onChange });
     }
 
-    addMultiToggles(labels, initialStates = [],  onChange = () => {}) {
+    addMultiToggles({labels, initialStates = [],  onChange = () => {}}) {
         return this.addComponent({ type: 'multiToggleInput', labels, states: initialStates, onChange });
     }
 
-    addButton(text, onClick = () => {}) {
-        return this.addComponent({ type: 'button', text, onClick });
+    addButton(text, onClick = () => {}, id = undefined) { //TODO
+        return this.addComponent({ type: 'button', text, onClick, id});
     }
 
-    addDoubleButtons(text, secondText, onClick = () => {}, secondOnClick = () => {}) {
+    addDoubleButtons({text, secondText, onClick = () => {}, secondOnClick = () => {}}) {
         return this.addComponent({ type: 'doubleButton', text, onClick, secondText, secondOnClick });
     }
 
-    addTripleButtons(text, secondText, thirdText, onClick = () => {}, secondOnClick = () => {}, thirdOnClick = () => {}) {
+    addTripleButtons({text, secondText, thirdText, onClick = () => {}, secondOnClick = () => {}, thirdOnClick = () => {}}) {
         return this.addComponent({ type: 'tripleButton', text, onClick, secondText, secondOnClick, thirdText, thirdOnClick });
     }
 
-    addSubmenu(showCondition, subModal) {
+    addSubmenu({showCondition, subModal}) {
         return this.addComponent({ type: 'submenu', showCondition, subModal });
     }
 
-    addText(text, asHtml = false) {
+    addText({text, asHtml = false}) {
         return this.addComponent({ type: 'text', text, asHtml: asHtml });
     }
 
-    addLabel(text) {
+    addLabel({text}) {
         return this.addComponent({ type: 'label', text });
     }
 
-    addUrl(url, showFull = false, copyButton = true) {
+    addUrl({url, showFull = false, copyButton = true}) {
         return this.addComponent({ type: 'url', url, showFull, copyButton });
     }
 
     ///INPUT ELEMENTS
-    addDatePicker(required = false, initialDate = null, onChange = () => {}) {
+    addDatePicker({required = false, initialDate = undefined, onChange = () => {}}) {
         return this.addComponent({ type: 'datePickerInput', required, initialDate, onChange });
     }
 
-    addDropdown(options, required = false, multiSelect = false, onChange = () => {}) {
+    addDropdown({options, required = false, multiSelect = false, onChange = () => {}}) {
         return this.addComponent({ type: 'dropdownInput', options, required, multiSelect, onChange });
     }
 
-    addSeparator(text = '') {
+    addSeparator({text = ''}) {
         return this.addComponent({ type: 'separator', text });
     }
 
-    addImage(src, alt = '') {
+    addImage({src, alt = ''}) {
         return this.addComponent({ type: 'image', src, alt });
     }
 
-    addSpacer(height = "20px") {
+    addSpacer({height = "20px"}) {
         return this.addComponent({ type: 'spacer', height });
     }
 
-    addNumberInput(required = false, initialValue = 0, decimals = 0, min = Number.MIN_VALUE, max = Number.MAX_VALUE, step = 1, onChange = () => {}) {
+    addNumberInput({required = false, initialValue = 0, decimals = 0, min = Number.MIN_VALUE, max = Number.MAX_VALUE, step = 1, onChange = () => {}}) {
         return this.addComponent({ type: 'numberInput', required, initialValue, decimals, min, max, step, onChange });
     }
 
-    addTextInput(required = false, initialValue = '', maxLength = null, onChange = () => {}) {
+    addTextInput({required = false, initialValue = '', maxLength = null, onChange = () => {}}) {
         return this.addComponent({ type: 'textInput', required, initialValue, maxLength, onChange });
     }
 
-    addPasswordInput(required = false, maxLength = null, onChange = () => {}) {
+    addPasswordInput({required = false, maxLength = null, onChange = () => {}}) {
         return this.addComponent({ type: 'passwordInput', required, maxLength, onChange });
     }
 
-    addTextArea(required = false, initialValue = '', maxLength = null, onChange = () => {}) {
+    addTextArea({required = false, initialValue = '', maxLength = null, onChange = () => {}}) {
         return this.addComponent({ type: 'textAreaInput', required, initialValue, maxLength, onChange });
     }
 
-    addCheckbox(initialState = false, onChange = () => {}) {
+    addCheckbox({initialState = false, onChange = () => {}}) {
         return this.addComponent({ type: 'toggleInput', state: initialState, asCheckbox: true, onChange });
     }
     
     addMultiCheckbox(labels, initialStates = [], onChange = () => {}) {
         return this.addComponent({ type: 'multiToggleInput', labels, states: initialStates, asCheckbox: true, onChange });
     }
-
-    /// NEW
-    addSlider(min = 0, max = 100, step = 1, initialValue = 50, onChange = () => {}) {
+    
+    addSlider({min = 0, max = 100, step = 1, initialValue = 50, onChange = () => {}}) {
         return this.addComponent({ type: 'sliderInput', min, max, step, initialValue, onChange });
     }
 
-    addColorPicker(required, initialColor = '#000000', onChange = () => {}) {
+    addColorPicker({required, initialColor = '#000000', onChange = () => {}}) {
         return this.addComponent({ type: 'colorPickerInput', required, initialColor, onChange });
     }
 
-    addRating(required, maxRating = 5, initialRating = 0, onChange = () => {}) {
+    addRating({required, maxRating = 5, initialRating = 0, onChange = () => {}}) {
         return this.addComponent({ type: 'ratingInput', required, maxRating, initialRating, onChange });
     }
 

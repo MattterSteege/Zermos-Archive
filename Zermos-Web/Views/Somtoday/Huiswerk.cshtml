@@ -100,13 +100,13 @@
         
     function AddHomework() {
         new ZermosModal()
-        .addHeading("Huiswerk toevoegen")
-        .addText("Wanneer moet het huiswerk af zijn?")
-        .addDatePicker(true, (new Date( Date.now() + (6.048e+8))))
-        .addLabel("Welke titel krijg het huiswerk?")
-        .addTextInput(true, "", 255)
-        .addLabel("Welke beschrijving krijg het huiswerk?")
-        .addTextArea(false, "")
+        .addHeading({text: "Huiswerk toevoegen"})
+        .addHeading({text: "Wanneer moet het huiswerk af zijn?"})
+        .addDatePicker({required: true, initialDate: (new Date( Date.now() + (6.048e+8)))})
+        .addLabel({text: "Welke titel krijg het huiswerk?"})
+        .addTextInput({required: true, maxLength: 255})
+        .addLabel({text: "Welke beschrijving krijg het huiswerk?"})
+        .addTextArea()
         .addButton("Huiswerk toevoegen", (ctx) => {
             var values = ctx.getComponentsValue();
             
@@ -226,11 +226,11 @@
     
     function loadHomeworkSorting() {            
         new ZermosModal()
-        .addHeading("Huiswerk verbergen")
-        .addText("Klik op een vak om het huiswerk van dat vak te verbergen of te tonen of te verbergen.")
-        .addMultiCheckbox(allSubjects, allSubjectsShown, (_, values) => toggleSubjects(values))
-        .addText("Klik op een type huiswerk om het huiswerk van dat type te verbergen of te tonen.")
-        .addMultiCheckbox(allTypes, allTypesShown, (_, values) => toggleTypes(values))
+        .addHeading({text: "Huiswerk verbergen"})
+        .addHeading({text: "Klik op een vak om het huiswerk van dat vak te verbergen of te tonen of te verbergen."})
+        .addMultiCheckbox({labels: allSubjects, initialStates: allSubjectsShown, onChange: (_, values) => toggleSubjects(values)})
+        .addHeading({text: "Klik op een type huiswerk om het huiswerk van dat type te verbergen of te tonen."})
+        .addMultiCheckbox({labels: allTypes, initialStates: allTypesShown, onChange: (_, values) => toggleTypes(values)})
         .open();        
     }
 

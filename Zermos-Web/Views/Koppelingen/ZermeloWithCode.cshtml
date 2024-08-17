@@ -1,98 +1,47 @@
-﻿@using System.Security.Claims
-@model dynamic
+﻿@model dynamic
 
 <link rel="stylesheet" href="/css/koppelingen.css" preload/>
 
-<div class="login">
-    <div class="login-explanation">
-        <h1>Koppel Zermelo aan je account!</h1>
-        <p>Zermelo koppelen met een koppelcode? Om Zermelo aan je account te koppelen moet je een code invoeren. Deze code kun je vinden in Zermelo, <a target="_blank" href="https://ccg.zportal.nl/app/">hier</a> om precies te zijn. Als je op de website van Zermelo bent, klik dan op 'instellingen' en daarna op 'koppel externe applicatie'. Voer de 3-letterige code in het bovenste veld in en de 12-cijferige code in het onderste veld.</p>
-    </div>
-    <form method="post" asp-controller="Koppelingen" asp-action="ZermeloWithCode" class="form-control">
-        <input class="input" type="text" name="institution" placeholder="abc">
-        <input class="input" type="text" name="code" placeholder="123 456 789 012">
-        <button class="input submit" type="submit">Inloggen</button>
-    </form>
-</div>
-
 <script minimize>
 @Context.Items["dmjs"]
-
-    var inputfield = $('input[name="code"]');
-    var institutionfield = $('input[name="institution"]');
-    var submitbutton = $('button[type="submit"]');
-    
-    
-    //when a user is typing the code add a space after every 3 characters
-    //when there are a total of 12 non-space characters, enable the submit button
-//inputfield.on('input', function () {
-        //    var value = inputfield.val();
-        //    var length = value.length;
-        //    var spaceCount = (value.match(/ /g) || []).length;
-        //    if (length === 3 || length === 7 || length === 11) {
-            //        if (spaceCount < 3) {
-                //            inputfield.val(value + " ");
-                //         }
-            //     }
-        //     if (((length === 15 && spaceCount === 3) || (length === 12 && spaceCount === 0)) && institutionfield.val().length === 3) {
-            //submitbutton.click();
-            //    }
-    //});
-    
-    //when the user presses enter, submit the form
-//inputfield.keypress(function (e) {
-        //    if (e.which === 13) {
-            //        submitbutton.click();
-            //    }
-        //});
-    
-    //when a user pastes a code, remove all spaces, place a space after every 3 characters and submit the form
-//inputfield.on('paste', async function () {
-//     
-//     //replace all spaces with nothing
-//     var value = inputfield.val().replace(/ /g, "");
-//     var length = value.length;
-//    
-//    await new Promise(res => setTimeout(res, 1000));
-//    
-//    if (length === 12 && institutionfield.val().length === 3) {
-//        submitbutton.click();
-//  //  }
-// });
-
-    //when user submits the form, use the function below to check if the user is logged in
-    document.getElementsByTagName("form")[0].addEventListener("submit", function (e) {
-        e.preventDefault();
+    var modal = new ZermosModal()
+    .addHeading({text: "Koppel Zermelo aan je account!"})
+    .addHeading({text: "Zermelo koppelen met een koppelcode? Om Zermelo aan je account te koppelen moet je een code invoeren. Deze code kun je vinden in Zermelo, <a target='_blank' href='https://ccg.zportal.nl/app/'>hier</a> om precies te zijn. Als je op de website van Zermelo bent, klik dan op 'instellingen' en daarna op 'koppel externe applicatie'. Voer de 3-letterige code in het bovenste veld in en de 12-cijferige code in het onderste veld.", true})
+    .addLabel({text: "schoolcode code:"})
+    addTextInput({required: true})
+    .addLabel({text: "12-cijferige code:"})
+    .addTextInput({required: true, maxLength: 15})
+    .addButton("Koppel Zermelo", (ctx) => {
+        var submitbutton = document.getElementById("submit-button");
         
-        var form = document.getElementsByTagName("form")[0];
-        
-        var url = form.action;
-        var inputs = form.getElementsByTagName("input");
-        for (var i = 0; i < inputs.length; i++) {
-            var input = inputs[i];
-            if (input.type === "hidden") continue;
-            url += (i === 0 ? "?" : "&") + input.name + "=" + input.value;
+        function checkCode(ctx) {
+            var code = ctx.getComponentsValue().values[1].value || "";
+            var institution = ctx.getComponentsValue().values[0].value || "";
+
+            if (code.replace(" ", "").length !== 12) return;
+            
+            fetch('/Koppelingen/Zermelo/Code?code=' + code.replace(" ", "") + '&institution=' + institution, {
+                method: 'POST'
+            }).then(response => {
+                if (response.status === 200) {
+                    response.text().then(text => {
+                        if (text === "success") {
+                            newSidebar();
+                            ReplacePage('@Url.Action("Account", "Account")');
+                        }
+                        else {
+                            submitbutton.querySelector("div").innerText = "Code is verkeerd";
+                            submitbutton.disabled = false;
+                            setTimeout(function () {
+                                submitbutton.querySelector("div").innerText = "Koppel Zermelo";
+                            }, 2000);
+                        }
+                    });
+                }
+            });
         }
         
-        var button = document.getElementsByTagName("button")[0];
-        button.innerHTML = "Bezig met laden...";
-        button.disabled = true;
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", url);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    if (xhr.responseText === "success") {
-                        newSidebar();
-                        ReplacePage('@Url.Action("Account", "Account")');
-                    }
-                    else {
-                        button.innerHTML = "Log opnieuw in";
-                        button.disabled = false;
-                    }
-                }
-            }
-        };
-        xhr.send();
-    });
+        checkCode(ctx);
+    }, "submit-button")
+    .open();
 </script>

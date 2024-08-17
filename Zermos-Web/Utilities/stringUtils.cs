@@ -145,39 +145,31 @@ namespace Zermos_Web.Utilities
             return decodedString;
         }
         
-        const string alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
-        const int shift = -10;
+        const string alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~"; //66 characters
+        const string uuidChars = "0123456789abcdef";
         
         /// <summary>
-        /// Encodes a string to a base62 string.
+        /// Encodes a uuid to be shorter. turns a 32 character uuid into a 21 character string.
         /// </summary>
         /// <param name="str">The string to encode.</param>
         /// <returns>The base62 encoded string.</returns>
-        public static string simpleEncodeUUID(this string uuid)
+        public static string ShortenUUID(this string uuid)
         {
             uuid = uuid.Replace("-", "");
             
-            int alphabetLength = alphabet.Length;
-            char[] encrypted = new char[uuid.Length];
-
-            for (int i = 0; i < uuid.Length; i++)
+            BigInteger number = BigInteger.Parse(uuid, System.Globalization.NumberStyles.HexNumber);
+            StringBuilder result = new StringBuilder();
+            if (number < 0)
             {
-                char c = uuid[i];
-                int index = alphabet.IndexOf(c);
-
-                if (index != -1)
-                {
-                    // Calculate the shifted index with wrap-around
-                    int shiftedIndex = (index + shift + alphabetLength) % alphabetLength;
-                    encrypted[i] = alphabet[shiftedIndex];
-                }
-                else
-                {
-                    encrypted[i] = c; // If the character is not in the alphabet, leave it as is.
-                }
+                number = -number;
+                result.Append("-");
             }
-
-            return new string(encrypted);
+            while (number > 0)
+            {
+                result.Insert(0, alphabet[(int)(number % 66)]);
+                number /= 66;
+            }
+            return result.ToString();
         }
 
         /// <summary>
@@ -185,30 +177,32 @@ namespace Zermos_Web.Utilities
         /// </summary>
         /// <param name="str">The base62 string to decode.</param>
         /// <returns>The decoded string.</returns>
-        public static string simpleDecodeUUID(this string ceaser)
+        public static string simpleDecodeUUID(this string shortUuid)
         {
-            int alphabetLength = alphabet.Length;
-            char[] result = new char[ceaser.Length];
+            BigInteger number = 0;
+            bool isNegative = shortUuid.EndsWith("-");
 
-            for (int i = 0; i < ceaser.Length; i++)
+            if (isNegative) shortUuid = shortUuid.Substring(0, shortUuid.Length - 1);
+
+            foreach (char c in shortUuid)
             {
-                char c = ceaser[i];
-                int index = alphabet.IndexOf(c);
-
-                if (index != -1)
-                {
-                    // Calculate the shifted index with wrap-around
-                    int shiftedIndex = (index - shift + alphabetLength) % alphabetLength;
-                    result[i] = alphabet[shiftedIndex];
-                }
-                else
-                {
-                    result[i] = c; // If the character is not in the alphabet, leave it as is.
-                }
+                number *= 66;
+                number += alphabet.IndexOf(c);
             }
 
-            var uuid = new string(result);
-            return uuid.Insert(8, "-").Insert(13, "-").Insert(18, "-").Insert(23, "-");
+            if (isNegative)
+            {
+                number = -number;
+            }
+
+// Convert the BigInteger back to a hexadecimal string
+            string hexString = number.ToString("X");
+
+// Pad with leading zeros if necessary to get the full 32-character UUID
+            hexString = hexString.PadLeft(32, '0');
+
+// Reinsert the dashes into the UUID
+            return $"{hexString.Substring(0, 8)}-{hexString.Substring(8, 4)}-{hexString.Substring(12, 4)}-{hexString.Substring(16, 4)}-{hexString.Substring(20)}".ToLower();
         }
         
         public static string UrlDecode(this string str)

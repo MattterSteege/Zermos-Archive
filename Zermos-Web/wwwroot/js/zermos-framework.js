@@ -551,20 +551,13 @@ Zermos.checkForUpdates = () => {
   if (version_user !== Zermos.CurrentVersion && version_user !== "") {
     //show modal
     new ZermosModal()
-        .addHeading("Zermos is geupdate!")
-        .addText(
-            "Zermos is weer een versietje ouder 🥳. Er zijn natuurlijk weer nieuwe functies toegevoegd en bugs gefixt. Veel plezier met de nieuwe versie!"
-        )
-        .addText(
-            "Je gebruikt nu versie " +
-            Zermos.CurrentVersion +
-            ", de vorige keer dat je Zermos bezocht was dat versie " +
-            version_user
-        )
-        .addButton("Check wat er nieuw is", function() {
+        .addHeading({text: "Zermos is geupdate!"})
+        .addHeading({text: "Zermos is weer een versietje ouder 🥳. Er zijn natuurlijk weer nieuwe functies toegevoegd en bugs gefixt. Veel plezier met de nieuwe versie!"})
+        .addHeading({text: "Je gebruikt nu versie " + Zermos.CurrentVersion + ", de vorige keer dat je Zermos bezocht was dat versie " + version_user})
+        .addButton("Check wat er nieuw is", (_) => {
           window.open("https://zermos-docs.kronk.tech/WhatsNew.html", "_blank");
         })        
-        .addButton("Meer informatie in de Discord server", function() {
+        .addButton("Meer informatie in de Discord server", (_) => {
           window.open("https://discord.gg/krP9se64TD", "_blank");
         })
         .addButton("let's go, ik ben er klaar voor!", (ctx) => {
@@ -848,21 +841,27 @@ function cachePage(data, url) {
 }
 
 function getCachePage(url) {
-  //get the current page data from localstorage
-  var data = localStorage.getItem(url);
+  showLoadingScreen().then(() => {
+    //get the current page data from localstorage
+    var data = localStorage.getItem(url);
 
-  if (data) {
-    doPageReplace(data, url);
-    return;
-  }
+    if (data) {
+      doPageReplace(data, url);
+      return;
+    }
 
-  document.getElementsByClassName("loader-text")[0].innerHTML = "De pagina kon niet worden opgevraagd.";
-  document.querySelectorAll(".loading-dots").forEach(function(dot) {
-    dot.style.background = "var(--deny-color)";
-    dot.style.animation = "unset";
-    dot.style.transform = "scale(1)";
+    document.getElementsByClassName("loader-text")[0].innerHTML = "De pagina kon niet worden opgevraagd.";
+    document.querySelectorAll(".loading-dots").forEach(function (dot) {
+      dot.style.background = "var(--deny-color)";
+      dot.style.animation = "unset";
+      dot.style.transform = "scale(1)";
+    });
+    history.replaceState(null, " Zermos", url);
+    
+    setTimeout(() => {
+        hideLoadingScreen();
+      }, 250);
   });
-  history.replaceState(null, " Zermos", url);
 }
 
 //cache css

@@ -20,24 +20,24 @@ function OpenLessonDetail(base64){
     const json = JSON.parse(atob(base64));
     
     var lessonDetail = new ZermosModal()
-    .addHeading((json.subjects[0] ?? '?') + " - " + new Date(json.start * 1000).toLocaleDateString("nl-NL", { weekday: 'long', month: 'short', day: 'numeric'}));
+    .addHeading({text: (json.subjects[0] ?? '?') + " - " + new Date(json.start * 1000).toLocaleDateString("nl-NL", { weekday: 'long', month: 'short', day: 'numeric'})});
     
-        lessonDetail.addText("Degene die dit rooster gedeeld heeft:");
+        lessonDetail.addHeading({text: "Degene die dit rooster gedeeld heeft:"});
     if (json.teachers.length > 0) 
-        lessonDetail.addText("• heeft les van " + json.teachers.join(", ") + ".");
+        lessonDetail.addHeading({text: "• heeft les van " + json.teachers.join(", ") + "."});
     if (json.locations.length > 0) 
-        lessonDetail.addText("• in lokaal " + json.locations.join(", ") + ".");
+        lessonDetail.addHeading({text: "• in lokaal " + json.locations.join(", ") + "."});
     if (json.groups.length > 0) 
-        lessonDetail.addText("• met groep " + json.groups.join(", ") + ".");   
+        lessonDetail.addHeading({text: "• met groep " + json.groups.join(", ") + "."});   
     
-    lessonDetail.addText("De les is van: " + new Date(json.start * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1] + " tot " + new Date(json.end * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1])
+    lessonDetail.addHeading({text: "De les is van: " + new Date(json.start * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1] + " tot " + new Date(json.end * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1]})
         
     for (var i = 0; i < json.status.length; i++) {
         var status = json.status[i];
 
         if (status['code'] === 2002) continue;
         
-        lessonDetail.addText("• " + status.nl);
+        lessonDetail.addHeading({text: "• " + status.nl});
     }
     
     lessonDetail.open();

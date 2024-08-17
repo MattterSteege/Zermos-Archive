@@ -37,6 +37,7 @@ public class AuthenticationController : Controller
 #else
     string redirectUrl = "https://localhost:5001/Login/Callback";
 #endif
+    
     const string clientId = "REDACTED_MS_CLIENT_ID";
     const string clientSecret = "REDACTED_MS_CLIENT_SECRET";
 
@@ -171,26 +172,6 @@ public class AuthenticationController : Controller
         _logger.Log(LogLevel.Information, $"User {User.FindFirstValue("email")} logged out");
         return PartialView("Login", new loginModel {code = 3});
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
     #if DEBUG
     [ZermosPage]

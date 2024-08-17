@@ -19,7 +19,7 @@
         {
             if (grade.cijfer == "-") { continue; }
 
-            <table class="grade-table" onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()/@grade.vakuuid.simpleEncodeUUID()/@Model.relevanteCijferLichtingUUID.simpleEncodeUUID()/@Model.leerjaarUUID.simpleEncodeUUID()')">
+            <table class="grade-table" onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()/@grade.vakuuid.ShortenUUID()/@Model.relevanteCijferLichtingUUID.ShortenUUID()/@Model.leerjaarUUID.ShortenUUID()')">
                 <tr class="grade-table-header">
                     <td rowspan="2"><i class="fa-solid fa-book" data-name="@grade.vakNaam.ToLower()" data-name-short="@grade.vakAfkorting.ToLower()"></i></td>
                     <td>@grade.vakNaam.Capitalize()</td>

@@ -184,16 +184,16 @@
 
         function ShowAbscence() {
             var abscenceModal = new ZermosModal()
-            .addHeading('Afwezigheid')
+            .addHeading({text: 'Afwezigheid'})
             
             abscence.items.forEach(absence => {
                 abscenceModal
-                .addText("<hr>")
-                .addText(absence.absentieReden.omschrijving)
-                .addText(absence.opmerkingen);
+                .addSeparator({})
+                .addHeading({text: absence.absentieReden.omschrijving})
+                .addHeading({text: absence.opmerkingen});
                 var dateStart = new Date(absence.beginDatumTijd);
                 var dateEnd = new Date(absence.eindDatumTijd);
-                abscenceModal.addText(dateStart.toLocaleDateString() + ' ' + dateStart.toLocaleTimeString() + ' - ' + dateEnd.toLocaleTimeString() + ' ' + dateEnd.toLocaleDateString());
+                abscenceModal.addHeading({text: dateStart.toLocaleDateString() + ' ' + dateStart.toLocaleTimeString() + ' - ' + dateEnd.toLocaleTimeString() + ' ' + dateEnd.toLocaleDateString()});
             })
             .addButton('Sluiten', (ctx) => ctx.close())
             .open();
@@ -208,26 +208,26 @@
 function OpenSuggestionOrBugModal() {
 
     const ideaSubmissionSubModal = new ZermosSubModal()
-        .addHeading("Vertel eens, wat is jouw idee?", "", 2)
-        .addTextArea(true)
+        .addHeading({text: "Vertel eens, wat is jouw idee?", level: 2})
+        .addTextArea({required: true})
 
     const bugSubmissionSubModal = new ZermosSubModal()
-        .addHeading("Vertel eens, wat is het probleem?", "", 2)
-        .addTextArea(true)
-        .addText("Met je bug report wordt de volgende informatie meegestuurd:\n- De omgeving waarin je Zermos gebruikt\n- De opslag informatie die Zermos heeft opgeslagen in je browser (alleen de statistieken, niet de informatie zelf)\n- De console log van Zermos\n- De netwerk log van Zermos")
+        .addHeading({text: "Vertel eens, wat is het probleem?", level: 2})
+        .addTextArea({required: true})
+        .addHeading({text: "Met je bug report wordt de volgende informatie meegestuurd:\n- De omgeving waarin je Zermos gebruikt\n- De opslag informatie die Zermos heeft opgeslagen in je browser (alleen de statistieken, niet de informatie zelf)\n- De console log van Zermos\n- De netwerk log van Zermos"})
 
     const modal = new ZermosModal();
 
-    modal.addHeading("Bug of idee?")
-        .addText("Heb je een bug gevonden in Zermos of heb je een baanbrekend idee, vul de korte vragenlijst hieronder!")
-        .addDropdown([
+    modal.addHeading({text: "Bug of idee?"})
+        .addHeading({text: "Heb je een bug gevonden in Zermos of heb je een baanbrekend idee, vul de korte vragenlijst hieronder!"})
+        .addDropdown({options: [
             { label: "Ik wil een bug rapporteren", value: "bug" },
             { label: "Ik heb een idee voor Zermos", value: "idee" }
-        ], true, false, (ctx, value) => modal.setCondition("type", value.value))
-        .addSubmenu("type == \"idee\"", ideaSubmissionSubModal)
-        .addSubmenu("type == \"bug\"", bugSubmissionSubModal)
-        .addText("kan ik je via je mail (@User.FindFirstValue("email")) bereiken op als ik extra vragen heb of ontwikkelingen?")
-        .addToggle("Ja dat mag", false)
+        ], required: true, onChange: (ctx, value) => modal.setCondition("type", value.value)})
+        .addSubmenu({showCondition: "type == \"idee\"", subModal: ideaSubmissionSubModal})
+        .addSubmenu({showCondition: "type == \"bug\"", subModal: bugSubmissionSubModal})
+        .addHeading({text: "kan ik je via je mail (@User.FindFirstValue("email")) bereiken op als ik extra vragen heb of ontwikkelingen?"})
+        .addToggle({label: "Ja dat mag", initialState: false})
         .addButton("versturen", (ctx) => {
             var values = ctx.getComponentsValue();
             if (values.values[0].correct && values.values[2].correct) {

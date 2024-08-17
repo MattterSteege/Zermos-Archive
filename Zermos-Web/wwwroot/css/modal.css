@@ -20,7 +20,7 @@
     width: calc(100% - 266px);
     height: 100%;
     position: fixed;
-    z-index: 100000000;
+    z-index: 10000;
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
     opacity: 0;
@@ -181,6 +181,8 @@
     overflow: hidden;
     white-space: nowrap;
     display: flex;
+    height: var(--button-height);
+    line-height: var(--button-height);
     align-items: center;
 }
 
@@ -189,18 +191,18 @@
 }
 
 .url-field {
-    margin-right: var(--modal-padding);
 }
 
 .button.copy {
-    padding: var(--modal-padding);
+    height: var(--button-height);
+    padding: 0 var(--modal-padding);
     background: var(--accent-color);
-    color: var(--text-color);
     border-radius: var(--button-border-radius);
     cursor: pointer;
     text-align: center;
     transition: background 0.3s;
     color: var(--white-color);
+    line-height: var(--button-height);
 }
 
 .separator > div:before {
@@ -362,6 +364,7 @@
     cursor: text;
     word-break: break-all;
     text-align: start;
+    padding: 0 var(--padding);
 }
 
 .textarea-element-input .display {

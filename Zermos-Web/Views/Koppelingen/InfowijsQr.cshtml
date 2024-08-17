@@ -19,6 +19,15 @@
 <script minimize>
 @Context.Items["dmjs"]
 
+var modal = new ZermosModal()
+.addHeading({text: "Vul hier je schoolmail in."})
+.addHeading({text: "Scan deze code met de QR code scanner in de antonius app (Antonius app > Meer > Hoy Scan) en je bent ingelogd!"})
+.addImage({src: "https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=@(ViewData["qr_text"])", alt: "qr code"})
+.addButton("Koppel Zermelo", (ctx) => {
+    
+})
+.open();
+
 function imageLoaded() {
     var loadingIcon = document.getElementsByClassName("loading-icon")[0];
     loadingIcon.style.display = "none";
@@ -32,17 +41,8 @@ Zermos.mainUnload = function() {
     clearTimeout(CheckingTimeout);
 };
 
-//when user submits the form, use the function below to check if the user is logged in
-// document.getElementsByTagName("form")[0].addEventListener("submit", function(e) {
-//     e.preventDefault();
-//     SendCheck();
-// });
-
 function SendCheck() {
     var form = document.getElementsByTagName("form")[0];
-    //var button = document.getElementById("check");
-    //button.innerHTML = "Bezig met laden...";
-    //button.disabled = true;
     var xhr = new XMLHttpRequest();
     xhr.open("POST", form.action);
     xhr.onreadystatechange = function() {

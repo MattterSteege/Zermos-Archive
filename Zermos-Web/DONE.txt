@@ -1,5 +1,8 @@
 Version 0.6.2
 
+- koppelingen - somtoday
     - De hackerman methode is nu niet meer aanbevolen om te gebruiken (hij werkt nog wel, maar er is een betere manier nu)
     - Er is een nieuwe authenticatiemethode toegevoegd, deze werkt bij elk type account en zelfs als je inlogd met bijv. Microsoft of google als third-party authenticatie.
     
+- infowijs - schoolkalender
+    - Er was een klein foutje waar het eerste bericht niet goed inlaadde, dit is nu gefixt (door hem hardnekking te verwijderen, het was toch niet een echt bericht, maar gewoon een by-product)    

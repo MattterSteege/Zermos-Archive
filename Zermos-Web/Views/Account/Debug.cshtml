@@ -258,7 +258,7 @@ function testAPI() {
     
     fetch("/api/test", {
         method: "POST",
-        body: "timesend=" + new Date().getTime(),
+        body: "timesend=" + new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60000).getTime(),
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         }
@@ -266,25 +266,25 @@ function testAPI() {
         var timeRequestRecieved = new Date(data.timeRequestRecieved);
         var timeRequestSend = new Date(data.timeRequestSend);
         var timeResponseSend = new Date(data.timeResponseSend);
-        var timeResponseRecieved = new Date();
+        var now = new Date();
+        var timeResponseRecieved = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
         var timeQuery = data.timeQuery;
         
-        var timeRequest = timeRequestRecieved - timeRequestSend;
-        var timeResponse = timeResponseRecieved - timeResponseSend;
+        var timeRequest = timeRequestRecieved - timeRequestSend + now.getTimezoneOffset() * 60000;
+        var timeResponse = timeResponseRecieved - timeResponseSend - now.getTimezoneOffset() * 60000;
         var total = timeResponseRecieved - timeRequestSend;
         
         new ZermosModal()
-        .addHeading("API test resulaten")
-        .addText("Request tijd: ~" + timeRequest + "ms (" + (Math.round(timeRequest  / total * 100 * 100) / 100).toFixed(2) + "%)")
-        .addText("Response tijd: ~" + timeResponse + "ms (" + (Math.round(timeResponse / total * 100 * 100) / 100).toFixed(2) + "%)")
-        .addText("Query tijd: ~" + timeQuery + "ms (" + (Math.round(timeQuery / total * 100 * 100) / 100).toFixed(2) + "%)")
-        .addSeparator()
-        .addText("Totaal tijd: ~" + (total) + "ms")
-        .addSeparator()
-        .addText("De tijd kan afwijken met een maximum van +/-1ms door afrondingen. Als de totale tijd onder de 100ms is, dan is de snelheid van de API op een goed niveau.")
+        .addHeading({text: "API test resulaten"})
+        .addHeading({text: "Request tijd: ~" + timeRequest + "ms (" + (Math.round(timeRequest  / total * 100 * 100) / 100).toFixed(2) + "%)"})
+        .addHeading({text: "Response tijd: ~" + timeResponse + "ms (" + (Math.round(timeResponse / total * 100 * 100) / 100).toFixed(2) + "%)"})
+        .addHeading({text: "Query tijd: ~" + timeQuery + "ms (" + (Math.round(timeQuery / total * 100 * 100) / 100).toFixed(2) + "%)"})
+        .addSeparator({})
+        .addHeading({text: "Totaal tijd: ~" + (total) + "ms"})
+        .addSeparator({})
+        .addHeading({text: "De tijd kan afwijken met een maximum van +/-1ms door afrondingen. Als de totale tijd onder de 100ms is, dan is de snelheid van de API op een goed niveau."})
         .open();                
     });
-
 }
 
 CheckPreviews();

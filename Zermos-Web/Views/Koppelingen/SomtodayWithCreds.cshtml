@@ -20,6 +20,47 @@
 <script minimize>
 @Context.Items["dmjs"]
 
+var modal = new ZermosModal()
+    .addHeading("Koppel Somtoday aan je account!")
+    .addHeading({text: "Helaas is er geen betere manier om Somtoday te koppelen anders dan je gebruikersnaam en wachtwoord in te voeren. Wees gerust, je wachtwoord wordt niet opgeslagen. Als je meer vragen hebt, dan staat dat <a href=\"https://zermos-docs.kronk.tech/Somtoday#waarom-kan-ik-alleen-inloggen-met-mijn-wachtwoord\">hier</a> uitgelegd<br><br>*Let op! deze koppeling werkt alleen als je in 1 of 2 stappen moet inloggen bij Somtoday (gebruiksnaam en wachtwoord tegelijkertijd óf gebruikersnaam en daarna wachtwoord), als je bij Somtoday inlogt met een externe provider zoals Microsoft, dan kan je helaas niet inloggen!", true})
+    .addLabel({text: "schoolcode code:"})
+    addTextInput({required: true})
+    .addLabel({text: "12-cijferige code:"})
+    .addTextInput({required: true, maxLength: 15})
+    .addButton("Koppel Zermelo", (ctx) => {
+        var submitbutton = document.getElementById("submit-button");
+
+        function checkCode(ctx) {
+            var code = ctx.getComponentsValue().values[1].value || "";
+            var institution = ctx.getComponentsValue().values[0].value || "";
+
+            if (code.replace(" ", "").length !== 12) return;
+
+            fetch('/Koppelingen/Zermelo/Code?code=' + code.replace(" ", "") + '&institution=' + institution, {
+                method: 'POST'
+            }).then(response => {
+                if (response.status === 200) {
+                    response.text().then(text => {
+                        if (text === "success") {
+                            newSidebar();
+                            ReplacePage('@Url.Action("Account", "Account")');
+                        }
+                        else {
+                            submitbutton.querySelector("div").innerText = "Code is verkeerd";
+                            submitbutton.disabled = false;
+                            setTimeout(function () {
+                                submitbutton.querySelector("div").innerText = "Koppel Zermelo";
+                            }, 2000);
+                        }
+                    });
+                }
+            });
+        }
+
+        checkCode(ctx);
+    }, "submit-button")
+    .open();
+
     //when user submits the form, use the function below to check if the user is logged in
     document.getElementsByTagName("form")[0].addEventListener("submit", function (e) {
         e.preventDefault();

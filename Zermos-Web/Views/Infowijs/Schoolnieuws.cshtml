@@ -103,5 +103,11 @@
         for (var i = 0; i < messages.length; i++) {
             messages[i].parentNode.insertBefore(messages[i], messages[i].parentNode.firstChild);
         }
+
+        messages[messages.length - 1].remove();
+        
+        if (messages[0].querySelector(".title") == null) {
+            messages[0].remove();
+        }
     }
 </script>

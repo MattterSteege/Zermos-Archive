@@ -2,46 +2,26 @@
 
 <link rel="stylesheet" href="/css/koppelingen.css" preload/>
 
-<div class="login">
-    <div class="login-explanation">
-        <h1>Koppel Somtoday aan je account!</h1>
-        <p>Er is nieuwe methode! Inloggen met STAP, deze methode, blabblablalbas fillertext etc. Lorum bipsum etc.</p>
-
-        <div class="code-child">
-            <div class="codeblock">
-                <div class="codeblock-header">
-                    <button class="copy-button" onclick="copyToClipboard(`@(Model.vanityUrl)`)">Kopieer</button>
-                </div>
-                <div class="codeblock-content">
-                    <code style="white-space: pre-wrap;">@(Model.vanityUrl)</code>
-                </div>
-            </div>
-        </div>
-
-        <a id="openSomtodayApp" href="somtoday://nl.topicus.somtoday.leerling/oauth/callback">Open mobiele Somtoday app</a>
-    </div>
-</div>
-
 <script minimize>
 @Context.Items["dmjs"]
 
-    document.querySelector('.copy-button').addEventListener('click', function() {
-        document.querySelector('.copy-button').innerHTML = 'Gelukt!';
-        setTimeout(() => {
-            document.querySelector('.copy-button').innerHTML = 'Kopieer';
-        }, 3000);
-    });
+    var modal = new ZermosModal()
+    .addHeading({text: "Koppel Somtoday aan je account!"})
+    .addHeading({text: "Kopieer deze code of zorg ervoor dat je de code goed onthoudt, want je hebt hem later nodig. Open vervolgens de Somtoday leerling app op je mobiel. Dit proces werkt alleen op een mobiel apparaat en niet op een pc of laptop. Je kunt de app handmatig openen, of, als er een 'open Somtoday' knop hieronder staat, daarop klikken. Als je al ingelogd bent in de app, log dan eerst uit."})
+    .addHeading({text: "Zodra je op het inlogscherm bent, moet je vijf keer achter elkaar op het Somtoday logo bovenaan het scherm klikken. Dit opent een lijst met verschillende opties, zoals 'Nightly', 'Productie' en 'Ontwikkel'. Kies in deze lijst voor 'Ontwikkel'. Onderaan het scherm verschijnt nu een invulveld met de tekst \"hostname of ip indien niet localhost\". Hier vul je de eerder gekopieerde of onthouden code in."})
+    .addHeading({text: "Klik daarna op 'Inloggen'. Als je niet automatisch wordt ingelogd, voer dan je inloggegevens in zoals je dat normaal zou doen. Dit is de echte Somtoday inlogpagina, dus je wachtwoord is veilig en wordt niet gestolen of bekeken. Nadat je bent ingelogd, opent de Somtoday app automatisch en krijg je waarschijnlijk een foutmelding te zien. Dit is normaal en betekent dat je succesvol bent ingelogd op Zermos. Ga vervolgens terug naar de Zermos app."})
+    .addHeading({text: "Als je terug bent bij Zermos en alles goed is gegaan, word je automatisch teruggestuurd naar je accountpagina."})
+    .addSpacer({height: "var(--padding)"})
+    .addUrl({url: "@Model.vanityUrl", showFull: true, copyButton: false})
+    .addButton("Kopieer code", () => {
+        copyToClipboard("@Model.vanityUrl");
+    })
+    .addButton("Open mobiele Somtoday app", () => {
+        window.location.href = "somtoday://nl.topicus.somtoday.leerling/oauth/callback";
+    })
+    .open();
     
-    Zermos.mainBeforeLoad = () => {
-        var doc = document.querySelector('#openSomtodayApp');
-        //if mobile device is android or ios do NOT hide the button, else hide it
-        if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
-            doc.style.display = "block";
-        } else {
-            doc.style.display = "none";
-        }
-    }
-
+    
     var CheckingTimeout = null;
 
     setTimeout(function() {

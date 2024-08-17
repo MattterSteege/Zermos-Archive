@@ -33,11 +33,14 @@
     
     function openAddingModal() {
         new ZermosModal()
-            .addHeading('Leermiddel toevoegen')
-            .addText('Voeg je eigen leermiddelen toe aan Zermos, vul de volgende gegevens in:')
-            .addTextInput(true, 'URL van het leermiddel')
-            .addTextInput(true, 'Titel van het leermiddel')
-            .addTextInput(true, 'Uitgever van het leermiddel')
+            .addHeading({text: 'Leermiddel toevoegen'})
+            .addHeading({text: 'Voeg je eigen leermiddelen toe aan Zermos, vul de volgende gegevens in:'})
+            .addLabel({text: 'URL van het leermiddel'})
+            .addTextInput({required: true})
+            .addLabel({text: 'Titel van het leermiddel'})
+            .addTextInput({required: true})
+            .addLabel({text: 'Uitgever van het leermiddel'})
+            .addTextInput({required: true})
             .addButton('Toevoegen', (ctx) => {
 
                 var values = ctx.getComponentsValue();
@@ -58,8 +61,8 @@
                             ReplacePage('/Somtoday/Leermiddelen', true)
                         } else {
                             new ZermosModal()
-                                .addHeading('Fout')
-                                .addText(data.error)
+                                .addHeading({text: 'Fout'})
+                                .addHeading({text: data.error})
                                 .addButton('Sluiten')
                                 .open()
                         }

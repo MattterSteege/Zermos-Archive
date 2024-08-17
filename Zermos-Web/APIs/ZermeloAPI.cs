@@ -51,7 +51,6 @@ namespace Zermos_Web.APIs
 
             if (!response.IsSuccessStatusCode)
             {
-                Console.WriteLine("Error: " + response.StatusCode, await response.Content.ReadAsStringAsync());   
                 return EmptyModel();
             }
 
