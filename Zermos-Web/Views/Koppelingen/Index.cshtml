@@ -16,10 +16,7 @@
         <p>In de schoolkalender staan alle activiteiten die de school heeft ingepland. Denk hierbij aan toetsweken, uitjes en andere activiteiten. In de schoolberichten staan alle berichten die de school heeft geplaatst. Denk hierbij aan mededelingen, nieuwtjes en andere berichten.</p>
         <div class="spacer" style="padding: 0; margin-top: 8px"></div>
         <div class="methods">
-            @if ((User.FindFirstValue("email") ?? "").Contains("ccg-leerling.nl"))
-            {
-                <a onclick="ReplacePage('@Url.Action("InfowijsWithEmail", "Koppelingen")')">Koppel Infowijs met een email</a>
-            }
+            <a onclick="ReplacePage('@Url.Action("InfowijsWithEmail", "Koppelingen")')">Koppel Infowijs met een email</a>
             <a onclick="ReplacePage('@Url.Action("InfowijsQr", "Koppelingen")')">Koppel Infowijs met een QR-code</a>
         </div>
     </div>
