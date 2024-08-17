@@ -1,80 +1,56 @@
 ﻿<link rel="stylesheet" href="/css/koppelingen.css" preload/>
 
 @{
+    
+string code = @"
+// Stap 1: We maken twee hulpmiddelen
+const ontcijferGeheimschrift = JSON.parse;
+const geheugen = localStorage;
 
-#if DEBUG
-    string code = "// Stap 1: We maken twee hulpmiddelen\nconst ontcijferGeheimschrift = JSON.parse;\nconst geheugen = localStorage;\n\n// Stap 2: We bouwen een speciale webadres en gaan er naartoe\ncopy( \n    // Stap 3: We halen een geheime sleutel op\n    ontcijferGeheimschrift(\n        // Stap 4: We zoeken naar de juiste doos met gegevens\n        geheugen[\n            'CapacitorStorage.' + \n            // Stap 5: We vinden de naam van de huidige inloggegevens\n            ontcijferGeheimschrift(\n                // Stap 6: We halen de lijst met alle inloggegevens op\n                geheugen['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']\n            ).currentSessionIdentifier.UUID\n        ]\n    ).refresh_token);\n// Stap 6: open Zermos weer zodat je de code kunt invullen\nwindow.open(\"https://localhost:5001/Koppelingen/Somtoday/HackerMan?copy\", \"_blank\").focus();";
+// Stap 2: We bouwen een speciale webadres en gaan er naartoe
+copy( 
+    // Stap 3: We halen een geheime sleutel op
+    ontcijferGeheimschrift(
+        // Stap 4: We zoeken naar de juiste doos met gegevens
+        geheugen[
+            'CapacitorStorage.' + 
+            // Stap 5: We vinden de naam van de huidige inloggegevens
+            ontcijferGeheimschrift(
+                // Stap 6: We halen de lijst met alle inloggegevens op
+                geheugen['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']
+            ).currentSessionIdentifier.UUID
+        ]
+    ).refresh_token);
 
-#else
-    string code = "// Stap 1: We maken twee hulpmiddelen\nconst ontcijferGeheimschrift = JSON.parse;\nconst geheugen = localStorage;\n\n// Stap 2: We bouwen een speciale webadres en gaan er naartoe\ncopy( \n    // Stap 3: We halen een geheime sleutel op\n    ontcijferGeheimschrift(\n        // Stap 4: We zoeken naar de juiste doos met gegevens\n        geheugen[\n            'CapacitorStorage.' + \n            // Stap 5: We vinden de naam van de huidige inloggegevens\n            ontcijferGeheimschrift(\n                // Stap 6: We halen de lijst met alle inloggegevens op\n                geheugen['CapacitorStorage.SL_AUTH_CONFIG_RECORDS']\n            ).currentSessionIdentifier.UUID\n        ]\n    ).refresh_token);\n// Stap 6: open Zermos weer zodat je de code kunt invullen\nwindow.open(\"https://zermos.kronk.tech/Koppelingen/Somtoday/HackerMan?copy\", \"_blank\").focus();";
-#endif
+console.log('De code is gekopieerd naar je klembord, plak deze in het veld op de koppelpagina van Zermos');
+";
     
 }
-
-<div class="login">
-    <div class="login-explanation">
-        <h1>Koppel Somtoday aan je account!</h1>
-
-        <p>Ben jij die hackerman met een Somtoday account waarbij je een externe login provider gebruikt, dan is deze methode voor jouw. Als je deze stappen goed volgt, dan komt alles goed:</p>
-        <ol>
-            <li>Open de website van Somtoday (met de knop hieronder) en log in totdat je bijv. je rooster of cijfers ziet.</li>
-            <li>Open de console (Ctrl + Shift + J Of Cmd + Option + J)</li>
-            <li>Plak de code in de console en klik op enter</li>
-            <li>Wacht totdat de koppeling gelukt is</li>
-            <p>*Mocht het mis gaan dan is het een goed idee om op de website van Somtoday uit te loggen en via de knop hieronder opnieuw in te loggen.</p>
-        </ol>
-        <p>Als je op 'kopieer' klikt, dan kopieer je de exacte versie als degene die hieronder is beschreven, mocht je het niet vertrouwen vraag dan aan iemand met computerkennis of deze code veilig is!</p>
-        
-        <div class="code-child">
-            <div class="codeblock">
-                <div class="codeblock-header">
-                    <h3>Code blok</h3>
-                    <button class="copy-button" onclick="copyToClipboard(`@(code)`)">Kopieer</button>
-                </div>
-                <div class="codeblock-content">
-                    <code style="white-space: pre-wrap;">@(code)</code>
-                </div>
-            </div>
-        </div>
-        
-    </div>
-    <div class="form-control">
-        <button class="input submit">Open Somtoday</button>
-    </div>
-    
-    <div class="form-control">
-        <button class="input submit" onclick="openConnectModal()">Ik heb (al) een Somtoday token</button>
-    </div>
-</div>
 
 <script minimize>
 @Context.Items["dmjs"]
 
-    document.querySelector('.copy-button').addEventListener('click', function() {
-        document.querySelector('.copy-button').innerHTML = 'Gelukt!';
-        setTimeout(() => {
-            document.querySelector('.copy-button').innerHTML = 'Kopieer';
-        }, 3000);
-    });
-
-    document.querySelector('button.submit').addEventListener('click',function(){
-        window.open('https://leerling.somtoday.nl/login?splash=true','_blank');
-        document.querySelector('button.submit').remove();
-    });
-    
-    Zermos.mainAfterLoad = () => {
-        if (window.location.href.includes('?copy')) {
-            openConnectModal();
-            document.querySelector('button.submit').remove();
-        }
-    }
-    
-    function openConnectModal() {
         new ZermosModal()
+        .addHeading({text: "Koppel Somtoday aan je account!"})
+        .addText({text: "Ben jij die hackerman met een Somtoday account waarbij je een externe login provider gebruikt, dan is deze methode voor jouw. Als je deze stappen goed volgt, dan komt alles goed:"})
+        .addList({items: [
+            "Open de website van Somtoday (met de knop hieronder) en log in totdat je bijv. je rooster of cijfers ziet.",
+            "Open de console (Ctrl + Shift + J Of Cmd + Option + J)",
+            "Plak de code in de console en klik op enter",
+            "Wacht totdat de koppeling gelukt is",
+        ], listType: "ol"})
+        .addLabel({text: "*Mocht het mis gaan dan is het een goed idee om op de website van Somtoday uit te loggen en via de knop hieronder opnieuw in te loggen."})
+        .addText({text: "Als je op 'kopieer' klikt, dan kopieer je de exacte versie als degene die hieronder is beschreven, mocht je het niet vertrouwen vraag dan aan iemand met computerkennis of deze code veilig is!"})
+        .addCodeBlock({code: `@Html.Raw(code)`})
+        .addButton({text: "Open Somtoday", onClick: () => {
+            window.open('https://leerling.somtoday.nl/login?splash=true','_blank');
+        }})
+        .addButton({text: "Ik heb (al) een Somtoday token", onClick: (ctx) => {
+            new ZermosModal()
             .addHeading({text: "Je bent er bijna!"})
             .addHeading({text: "Je hebt zojuist de code in je klembord gekregen, plak deze code hieronder en klik op 'Koppel Somtoday aan je account!'"})
             .addLabel({text: "Somtoday code:"})
-            addTextInput({required: true})
+            .addTextInput({required: true})
             .addButton({text: "Koppel Somtoday aan je account!", onClick: (ctx) => {
                 var code = ctx.getComponentsValue().values[0].value;
 
@@ -82,7 +58,10 @@
                     ReplacePage('/Koppelingen/Somtoday/Callback?' + code);
                 }
             }})
-            .open();
-        }
+            .openTroughAppending(main);
+            
+            ctx.close();
+        }})
+        .openTroughAppending(main);
     
 </script>

@@ -1,4 +1,5 @@
-﻿/* This is a .NET port of the Douglas Crockford's JSMin 'C' project.
+﻿/*
+ * This is a .NET port of the Douglas Crockford's JSMin 'C' project.
  * The author's copyright message is reproduced below.
  */
 
@@ -83,6 +84,7 @@ public sealed class JsMinifier
 
     private int Peek() => _lookAhead = Get();
 
+    //updated to support /**/ comments too
     private int Next()
     {
         int codeunit = Get();
@@ -91,26 +93,26 @@ public sealed class JsMinifier
             switch (Peek())
             {
                 case '/':
-                    while ((codeunit = Get()) > '\n')
+                    // Single-line comment
+                    while ((codeunit = Get()) != '\n' && codeunit != EOF)
                     {
                     }
-
                     break;
                 case '*':
-                    Get();
-                    while ((codeunit = Get()) != ' ')
+                    // Multi-line comment
+                    Get(); // Consume the '*'
+                    while (true)
                     {
-                        if (codeunit == '*')
+                        codeunit = Get();
+                        if (codeunit == EOF)
+                            throw new JsMinificationException("Unterminated multi-line comment.");
+                        if (codeunit == '*' && Peek() == '/')
                         {
-                            if (Peek() == '/')
-                            {
-                                Get();
-                                codeunit = ' ';
-                            }
+                            Get(); // Consume the '/'
+                            codeunit = ' '; // Replace comment with a space
+                            break;
                         }
-                        else if (codeunit == EOF) throw new JsMinificationException("Unterminated comment.");
                     }
-
                     break;
             }
         }

@@ -347,11 +347,23 @@
     border-radius: var(--button-border-radius);
 }
 
-.text-element-input .label, .password-element-input .label, .textarea-element-input .label {
+.text-element-input .label, .password-element-input .label, .textarea-element-input .label, .list li {
     display: block;
     font-size: var(--font-size);
     color: var(--text-color);
     margin-bottom: var(--modal-padding);
+}
+
+.list li {
+    display: list-item;
+    margin-bottom: calc(var(--padding) / 2);
+    margin-left: calc(var(--padding) * 2);
+}
+
+.list li::marker {
+    color: var(--text-color);
+    margin-right: var(--padding);
+    font-size: var(--font-size);
 }
 
 .text-element-input .display, .password-element-input .display {
@@ -384,10 +396,11 @@
     position: absolute;
     right: 10px;
     height: 20px;
-    bottom: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
+    transform: translateY(-50%);
+    top: 50%;
 }
 
 .dropdown-button, .datepicker-parent {
@@ -533,6 +546,11 @@
     color: var(--text-color);
 }
 
+.code pre {
+    background: var(--background-color);
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+}
 
 @media only screen and (max-width: 1000px) {
     .zermos-modal {

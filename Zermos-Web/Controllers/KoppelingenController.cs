@@ -146,35 +146,33 @@ namespace Zermos_Web.Controllers
         [HttpPost]
         [Authorize]
         [Route("Koppelingen/Infowijs/Email")]
-        public async Task<IActionResult> InfowijsWithEmail(string email, string customer_product_id, string user_id,
-            string id)
+        public async Task<IActionResult> InfowijsWithEmail(string email, string customer_product_id, string user_id, string id)
         {
             if (email != null && (customer_product_id == null || user_id == null || id == null))
             {
+                InfowijsCustomerProductsModel productsModel = await InfowijsApi.GetCustomerProductsAsync(email);
+                
                 var url1 = "https://api.infowijs.nl/sessions";
                 var response1 = _infowijsHttpClient.PostAsync(url1, new StringContent(JsonConvert.SerializeObject(new
                 {
                     username = email,
-                    communityName = "antonius"
+                    communityName = productsModel.data[0].name,
                 }), Encoding.UTF8, "application/json")).Result;
 
                 var result1 = response1.Content.ReadAsStringAsync().Result;
                 var antoniusAppAuthenticatieModelData =
                     JsonConvert.DeserializeObject<AntoniusAppAuthenticatieModel>(result1);
-
-                // ViewData["email"] = email;
-                // ViewData["customer_product_id"] = antoniusAppAuthenticatieModelData.data.customer_product_id;
-                // ViewData["user_id"] = antoniusAppAuthenticatieModelData.data.user_id;
-                // ViewData["id"] = antoniusAppAuthenticatieModelData.data.id;
-                // ViewData["retry"] = false;
-                return Ok("?" + email + "?customer_product_id=" +
-                          antoniusAppAuthenticatieModelData.data.customer_product_id + "&user_id=" +
-                          antoniusAppAuthenticatieModelData.data.user_id + "&id=" +
-                          antoniusAppAuthenticatieModelData.data.id);
+                
+                // return Ok(email + ":customer_product_id=" +
+                //           antoniusAppAuthenticatieModelData.data.customer_product_id + "&user_id=" +
+                //           antoniusAppAuthenticatieModelData.data.user_id + "&id=" +
+                //           antoniusAppAuthenticatieModelData.data.id);
+                
+                return Json(new {email, antoniusAppAuthenticatieModelData.data.customer_product_id, antoniusAppAuthenticatieModelData.data.user_id, antoniusAppAuthenticatieModelData.data.id});
             }
 
             var response2 = await _infowijsHttpClient.PostAsync(
-                "https://api.infowijs.nl/sessions/" + id + "/77584871-d26b-11ea-8b2e-060ffde8896c/" + user_id, null);
+                "https://api.infowijs.nl/sessions/" + id + "/" + customer_product_id + "/" + user_id, null);
             var result2 = await response2.Content.ReadAsStringAsync();
 
             try

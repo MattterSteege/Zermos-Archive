@@ -162,6 +162,14 @@
     addHTML({html, id = undefined}) {
         return this.addComponent({ type: 'html', html, id: id});
     }
+    
+    addCodeBlock({code, id = undefined}) {
+        return this.addComponent({ type: 'code', code, id: id});
+    }
+
+    addList({items, listType = "ul", id = undefined}) {
+        return this.addComponent({ type: 'list', items, listType, id: id});
+    }
 
     render() {
         const modalElement = document.createElement('div');
@@ -200,6 +208,9 @@
             sliderInput: this.renderSlider,
             colorPickerInput: this.renderColorPicker,
             ratingInput: this.renderRating,
+            html: this.renderHTML,
+            code: this.renderCodeBlock,
+            list: this.renderList
         };
 
         const renderMethod = renderMethods[component.type] || this.renderDefault;
@@ -966,6 +977,38 @@
         componentElement.append(ratingContainer);
         return componentElement;
     }
+    
+    renderHTML(component, componentElement) {
+        const htmlElement = document.createElement('div');
+        htmlElement.innerHTML = component.html;
+        componentElement.appendChild(htmlElement);
+        return componentElement;
+    }
+    
+    renderCodeBlock(component, componentElement) {
+        const codeBlock = document.createElement('pre');
+        codeBlock.innerText = component.code;
+
+        //replace every <br><br> with <br>, and every <br><br><br><br> with <br><br>
+        codeBlock.innerHTML = codeBlock.innerHTML.replace(/<br><br>/g, "<br>").replace(/<br><br><br><br>/g, "<br><br>").replace(/<br><br><br><br><br><br>/g, "<br><br>");
+        
+        //remove any leading or trailing <br> tags
+        codeBlock.innerHTML = codeBlock.innerHTML.replace(/^<br>/, "").replace(/<br>$/, "");
+        
+        componentElement.appendChild(codeBlock);
+        return componentElement;
+    }
+
+    renderList(component, componentElement) {
+        const listElement = document.createElement(component.listType);
+        component.items.forEach(item => {
+            const listItem = document.createElement('li');
+            listItem.innerText = item;
+            listElement.appendChild(listItem);
+        });
+        componentElement.appendChild(listElement);
+        return componentElement;
+    }
 
     setCursorPosition(contentEditableElement, position) {
         position = Math.max(0, Math.min(position, contentEditableElement.textContent.length));
@@ -1029,6 +1072,8 @@
 
         ease(0, 1, 250, opacity => modalBackground.style.opacity = opacity);
 
+        this.modalElement = modalBackground;
+        this.openingType = "opening";
         return this;
     }
     
@@ -1044,10 +1089,25 @@
 
         centeringDiv.appendChild(modalElement);
         element.appendChild(centeringDiv);
+        
+        this.modalElement = modalElement;
+        this.openingType = "appending";
         return this;
     }
     
+    //close w
     close() {
+        if (this.openingType === "opening") {
+            ease(1, 0, 250, opacity => this.modalElement.style.opacity = opacity);
+            setTimeout(() => this.modalElement.remove(), 300);
+        }
+        
+        if (this.openingType === "appending") {
+            this.modalElement.parentElement.remove();
+        }
+    }
+    
+    closeAll() {
         document.querySelectorAll('.zermos-modal-background').forEach(modal => modal.remove());
     }
 

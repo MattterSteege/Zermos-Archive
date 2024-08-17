@@ -14,12 +14,7 @@ TODO: als somtoday wel gekoppeld is en Zermelo niet, laat dan het rooster uit SO
 TODO: make the new SOM auth page nice with a good explanation of what's happening and how to use it.
     
 TODO: transfer the old custom-page-per-connection into the new modal system
-InfowijsWithEmail.cshtml
-SomtodayHackerman.cshtml
-SomtodayWithCreds.cshtml
 SomtodayWithSTAP.cshtml
-ZermeloNietGekoppeld.cshtml
-ZermeloWithCode.cshtml
 ZermeloWithQr.cshtml
     
 Discord server webhooks:

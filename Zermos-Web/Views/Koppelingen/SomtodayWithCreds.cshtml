@@ -3,106 +3,12 @@
 
 <link rel="stylesheet" href="/css/koppelingen.css" preload/>
 
-<div class="login">
-    <div class="login-explanation">
-        <h1>Koppel Somtoday aan je account!</h1>
-        <p>Helaas is er geen betere manier om Somtoday te koppelen anders dan je gebruikersnaam en wachtwoord in te voeren. Wees gerust, je wachtwoord wordt niet opgeslagen. Als je meer vragen hebt, dan staat dat <a href="https://zermos-docs.kronk.tech/Somtoday#waarom-kan-ik-alleen-inloggen-met-mijn-wachtwoord">hier</a> uitgelegd<br><br>*Let op! deze koppeling werkt alleen als je in 1 of 2 stappen moet inloggen bij Somtoday (gebruiksnaam en wachtwoord tegelijkertijd óf gebruikersnaam en daarna wachtwoord), als je bij Somtoday inlogt met een externe provider zoals Microsoft, dan kan je helaas niet inloggen!</p>
-    </div>
-    <form asp-controller="koppelingen" asp-action="SomtodayWithCreds" method="post" class="form-control">
-        <datalist id="suggestions"></datalist>
-        <input class="input" autoComplete="on" list="suggestions" name="school" placeholder="schoolnaam"/>
-        <input class="input" type="text" name="username" placeholder="gebruikersnaam">
-        <input class="input" type="password" name="password" placeholder="wachtwoord">
-        <button class="input submit" type="submit">Inloggen</button>
-    </form>
-</div>
-
 <script minimize>
 @Context.Items["dmjs"]
-
-var modal = new ZermosModal()
-    .addHeading("Koppel Somtoday aan je account!")
-    .addHeading({text: "Helaas is er geen betere manier om Somtoday te koppelen anders dan je gebruikersnaam en wachtwoord in te voeren. Wees gerust, je wachtwoord wordt niet opgeslagen. Als je meer vragen hebt, dan staat dat <a href=\"https://zermos-docs.kronk.tech/Somtoday#waarom-kan-ik-alleen-inloggen-met-mijn-wachtwoord\">hier</a> uitgelegd<br><br>*Let op! deze koppeling werkt alleen als je in 1 of 2 stappen moet inloggen bij Somtoday (gebruiksnaam en wachtwoord tegelijkertijd óf gebruikersnaam en daarna wachtwoord), als je bij Somtoday inlogt met een externe provider zoals Microsoft, dan kan je helaas niet inloggen!", true})
-    .addLabel({text: "schoolcode code:"})
-    addTextInput({required: true})
-    .addLabel({text: "12-cijferige code:"})
-    .addTextInput({required: true, maxLength: 15})
-    .addButton({text: "Koppel Zermelo", onClick: (ctx) => {
-        var submitbutton = document.getElementById("submit-button");
-
-        function checkCode(ctx) {
-            var code = ctx.getComponentsValue().values[1].value || "";
-            var institution = ctx.getComponentsValue().values[0].value || "";
-
-            if (code.replace(" ", "").length !== 12) return;
-
-            fetch('/Koppelingen/Zermelo/Code?code=' + code.replace(" ", "") + '&institution=' + institution, {
-                method: 'POST'
-            }).then(response => {
-                if (response.status === 200) {
-                    response.text().then(text => {
-                        if (text === "success") {
-                            newSidebar();
-                            ReplacePage('@Url.Action("Account", "Account")');
-                        }
-                        else {
-                            submitbutton.querySelector("div").innerText = "Code is verkeerd";
-                            submitbutton.disabled = false;
-                            setTimeout(function () {
-                                submitbutton.querySelector("div").innerText = "Koppel Zermelo";
-                            }, 2000);
-                        }
-                    });
-                }
-            });
-        }
-
-        checkCode(ctx);
-    }, id: "submit-button"})
-    .open();
-
-    //when user submits the form, use the function below to check if the user is logged in
-    document.getElementsByTagName("form")[0].addEventListener("submit", function (e) {
-        e.preventDefault();
-        
-        var form = document.getElementsByTagName("form")[0];
-        
-        var url = form.action;
-        var inputs = form.getElementsByTagName("input");
-        //school is equel to the uuid of the selected school name
-        url += "?username=" + btoa(encodeURIComponent(inputs[1].value)).replace("=", "") + "&password=" + btoa(encodeURIComponent(inputs[2].value)).replace("=", "") + "&school=" + schools.find(school => school[0] === inputs[0].value)[1];
-        console.log(url)
-        
-        var button = document.getElementsByTagName("button")[0];
-        button.innerHTML = "Bezig met laden...";
-        button.disabled = true;
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", url);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    if (xhr.responseText === "success") {
-                        newSidebar();
-                        ReplacePage('@Url.Action("Account", "Account")');
-                    }
-                    else {
-                        button.innerHTML = "Wachtwoord en/of gebruikersnaam is verkeerd";
-                        button.disabled = false;
-                    }
-                }
-            }
-        };
-        
-        if (url.includes("ontkoppel")) {
-            button.innerHTML = "Log opnieuw in";
-            button.disabled = false;
-            console.warn("Crises averted");
-            
-            return;
-        }
-        
-        xhr.send();
-    });
+    var waitingModal = new ZermosModal()
+    .addHeading({text: "Koppel Somtoday aan je account!"})
+    .addText({text: "De benodigde data wordt nu opgehaald, even geduld a.u.b."})
+    .openTroughAppending(main);
 
     var schools = [];
     var suggestions = document.getElementById("suggestions");
@@ -111,14 +17,42 @@ var modal = new ZermosModal()
     .then(response => response.json())
     .then(data => {
         data[0].instellingen.forEach(school => {
-            //if (school.oidcurls.length === 0) {
-            //    school.loginMethod = "email+password"
-                //schools.push(); {school.naam, school.uuid}
-                schools.push([school.naam, school.uuid]);
-                var option = document.createElement("option");
-                option.value = school.naam;
-                suggestions.appendChild(option);
-            //}
+            schools.push({label: school.naam, value: school.uuid});
         });
+        
+        //sort them by label
+        schools.sort((a, b) => a.label.localeCompare(b.label));
+        
+        waitingModal.close();
+
+        new ZermosModal()
+            .addHeading({text: "Koppel Somtoday aan je account!"})
+            .addText({text: "Helaas is er geen betere manier om Somtoday te koppelen anders dan je gebruikersnaam en wachtwoord in te voeren. Wees gerust, je wachtwoord wordt niet opgeslagen. Als je meer vragen hebt, dan staat dat <a href=\"https://zermos-docs.kronk.tech/Somtoday#waarom-kan-ik-alleen-inloggen-met-mijn-wachtwoord\">hier</a> uitgelegd<br><br>*Let op! deze koppeling werkt alleen als je in 1 of 2 stappen moet inloggen bij Somtoday (gebruiksnaam en wachtwoord tegelijkertijd óf gebruikersnaam en daarna wachtwoord), als je bij Somtoday inlogt met een externe provider zoals Microsoft, dan kan je helaas niet inloggen!", asHtml: true})
+            .addDropdown({options: schools, required: true})
+            .addLabel({text: "Gebruikersnaam"})
+            .addTextInput({required: true})
+            .addLabel({text: "Wachtwoord"})
+            .addPasswordInput({required: true})
+            .addButton({text: "Inloggen", onClick: (ctx) => {
+                    console.log(ctx.getComponentsValue().values);
+                    var school = ctx.getComponentsValue().values[0].value.value;
+                    var username = ctx.getComponentsValue().values[1].value;
+                    var password = ctx.getComponentsValue().values[2].value;
+
+                    var url = "?username=" + btoa(encodeURIComponent(username)).replace("=", "") + "&password=" + btoa(encodeURIComponent(password)).replace("=", "") + "&school=" + school;
+
+                    fetch("@Url.Action("SomtodayWithCreds", "Koppelingen")" + url, {
+                        method: "POST",
+                        body: null,
+                    })
+                        .then((res) => res.text())
+                        .then((text) => {
+                            if(text === "success") {
+                                newSidebar();
+                                ReplacePage("@Url.Action("Account", "Account")");
+                            }
+                        })
+                }})
+            .openTroughAppending(main);
     });
 </script>
