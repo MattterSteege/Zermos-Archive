@@ -21,8 +21,15 @@ public class CustomJsMiddleware
         // Check if the requested file has a .js extension
         if (filePath.EndsWith(".min.js"))
         {
+            if (!File.Exists("wwwroot" + filePath.Replace(".min", "")))
+            {
+                //if it doesn't try to find the .min.js file and serve it
+                await _next(context);
+                return;
+            }
+            
             // Read the content of the requested JavaScript file
-            string fileContent = File.ReadAllText("wwwroot" + filePath.Replace(".min", ""));
+            string fileContent = await File.ReadAllTextAsync("wwwroot" + filePath.Replace(".min", ""));
             
             var length = fileContent.Length;
             

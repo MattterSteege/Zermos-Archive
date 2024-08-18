@@ -57,8 +57,10 @@
 
     updateRenderedModal() {
         document.querySelectorAll('div[showCondition]').forEach(element => {
-            element.parentElement.style.display =
-                this.evaluateExpression(element.getAttribute("showCondition")) ? "block" : "none";
+            if (this.evaluateExpression(element.getAttribute('showCondition')))
+                element.parentElement.classList.remove("hidden");
+            else
+                element.parentElement.classList.add("hidden");
         });
     }
 
@@ -268,7 +270,12 @@
         const subMenuElement = component.subModal.render();
         subMenuElement.setAttribute("showCondition", component.showCondition.replace("\"", "'"));
         componentElement.appendChild(subMenuElement);
-        componentElement.style.display = this.evaluateExpression(component.showCondition) ? "block" : "none";
+
+        if (this.evaluateExpression(component.showCondition)) 
+            componentElement.classList.remove("hidden");
+        else 
+            componentElement.classList.add("hidden");
+        
         return componentElement;
     }
 

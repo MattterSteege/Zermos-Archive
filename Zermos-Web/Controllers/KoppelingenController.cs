@@ -343,7 +343,7 @@ namespace Zermos_Web.Controllers
             //POST /oauth/token?grant_type=authorization_code&code=
             
             if (code.IsNullOrEmpty() || institution.IsNullOrEmpty())
-                return Ok("failed");
+                return Ok("invalid");
             
             
             var url =
@@ -352,7 +352,7 @@ namespace Zermos_Web.Controllers
             var responseString = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
-                return Ok("failed");
+                return Ok("expired");
             
             var zermeloAuthentication = JsonConvert.DeserializeObject<ZermeloAuthenticatieModel>(responseString);
 

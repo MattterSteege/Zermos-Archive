@@ -7,7 +7,7 @@
 
 var modal = new ZermosModal()
 .addHeading({text: "Vul hier je schoolmail in."})
-.addHeading({text: "Scan deze code met de QR code scanner in de antonius app (Antonius app > Meer > Hoy Scan) en je bent ingelogd!"})
+.addText({text: "Scan deze code met de QR code scanner in de antonius app (Antonius app > Meer > Hoy Scan) en je bent ingelogd!"})
 .addImage({src: "https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=@(ViewData["qr_text"])", alt: "qr code"})
 .addButton({text: "Koppel Infowijs", onClick: () => {
     SendCheck();

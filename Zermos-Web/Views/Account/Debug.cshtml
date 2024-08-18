@@ -48,6 +48,11 @@
         <h1>C#?</h1>
         <p>Fuck around and find out?</p>
     </div>
+    
+    <div class="account-item" onclick='openTestModal()'>
+        <h1>Open een modal op te testen of alles werkt</h1>
+        <p>Gewoon leuk, doet verder niks</p>
+    </div>
 
     <h4>DEV settings</h4>
     
@@ -302,4 +307,97 @@ function CheckPreviews() {
         }
     }
 }
+
+function openTestModal(){
+// Create a new modal and chain all the components
+    new ZermosModal(false)
+        .addHeading({text: "Create User Profile", subheading: "Please fill out all the details below", level: 1})
+        .addTextInput({required: true, initialValue: "", maxLength: 50, onChange: (ctx, value) => console.log("Name:", value)})
+        .addLabel({text: "Date of Birth"})
+        .addDatePicker({required: true, initialDate: new Date(), onChange: (ctx, value) => console.log("Birthday:", value)})
+        .addDropdown({
+            options: [
+                {label: "Male", value: "male"},
+                {label: "Female", value: "female"},
+                {label: "Non-binary", value: "non-binary"},
+                {label: "Prefer not to say", value: "not-specified"}
+            ],
+            required: true,
+            multiSelect: false,
+            onChange: (ctx, value) => console.log("Gender:", value)
+        })
+        .addNumberInput({
+            required: true,
+            initialValue: 18,
+            min: 13,
+            max: 120,
+            step: 1,
+            onChange: (ctx, value) => console.log("Age:", value)
+        })
+        .addTextArea({
+            required: false,
+            initialValue: "",
+            maxLength: 500,
+            onChange: (ctx, value) => console.log("Bio:", value)
+        })
+        .addSeparator({text: "Contact Information"})
+        .addTextInput({
+            required: true,
+            initialValue: "",
+            maxLength: 100,
+            onChange: (ctx, value) => console.log("Email:", value)
+        })
+        .addPasswordInput({
+            required: true,
+            maxLength: 50,
+            onChange: (ctx, value) => console.log("Password:", value)
+        })
+        .addColorPicker({
+            required: false,
+            initialColor: "#000000",
+            onChange: (ctx, value) => console.log("Favorite Color:", value)
+        })
+        .addSlider({
+            min: 0,
+            max: 50,
+            step: 1,
+            initialValue: 0,
+            onChange: (ctx, value) => console.log("Years of Experience:", value)
+        })
+        .addRating({
+            required: false,
+            maxRating: 5,
+            initialRating: 3,
+            onChange: (ctx, value) => console.log("Skill Level:", value)
+        })
+        .addMultiToggles({
+            labels: ["Sports", "Music", "Movies", "Travel", "Food"],
+            initialStates: [false, false, false, false, false],
+            onChange: (ctx, values) => console.log("Interests:", values)
+        })
+        .addSeparator({text: "Terms and Conditions"})
+        .addHTML({
+            html: "<p>By creating an account, you agree to our <a href='#'>Terms of Service</a> and <a href='#'>Privacy Policy</a>.</p>"
+        })
+        .addCheckbox({
+            initialState: false,
+            onChange: (ctx, value) => console.log("Agreed to Terms:", value)
+        })
+        .addSpacer({height: "20px"})
+        .addButton({
+            text: "Create Profile",
+            onClick: (ctx) => {
+                console.log("Profile creation attempted");
+                const formData = ctx.getComponentsValue();
+                if (formData.correct) {
+                    console.log("Profile created successfully:", formData.values);
+                    ctx.close();
+                } else {
+                    console.log("Please fill all required fields");
+                }
+            }
+        })
+        .addText("Wil je dit modal systeem nou ook gebruiken, kijk dan op https://github.com/matttersteegem/ZermosModal!")
+        .open();
+    }
 </script>

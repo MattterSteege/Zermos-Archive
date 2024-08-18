@@ -455,6 +455,10 @@ function appendScript(element, scriptToWorkWith, isSrc) {
 
   script.id = "added-by-fetch";
   element.appendChild(script);
+  
+  if (isSrc) {
+    return script;
+  }
 }
 
 // Define a function to append a stylesheet link to the head

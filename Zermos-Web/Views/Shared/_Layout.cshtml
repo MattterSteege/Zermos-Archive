@@ -234,12 +234,20 @@ async function doPageReplace(data, url) {
     html.innerHTML = data;
 
     const scripts = html.getElementsByTagName("script");
+    let amountOfScripts = scripts.length;
+    let scriptPromises = [];
 
     for (let script of scripts) {
         if (script.src) {
             appendScript(document.head, script, true);
+            new Promise((resolve) => {
+                script.onload = resolve;
+            }).then(() => {
+                amountOfScripts--;
+            });
         } else {
             appendScript(document.body, script, false);
+            amountOfScripts--;
         }
     }
 
@@ -259,7 +267,7 @@ async function doPageReplace(data, url) {
         amountOfStylesheets--;
     }
 
-    while (amountOfStylesheets > 0) {
+    while (amountOfStylesheets > 0 || amountOfScripts > 0 || scriptPromises.length > 0) {
         await new Promise(res => setTimeout(res, 50));
     }
 

@@ -13,10 +13,6 @@ TODO: de roosters van vrienden koppelen -> share allow [email] to view your sche
 TODO: als somtoday wel gekoppeld is en Zermelo niet, laat dan het rooster uit SOMtoday zien (met een melding dat je zermelo moet koppelen) 
 TODO: make the new SOM auth page nice with a good explanation of what's happening and how to use it.
     
-TODO: transfer the old custom-page-per-connection into the new modal system
-SomtodayWithSTAP.cshtml
-ZermeloWithQr.cshtml
-    
 Discord server webhooks:
 #informatie: https://discord.com/api/webhooks/1271383220813959251/6YaYKl88vmXV_AH_dfoX-3qTKveuXpaSHTPuuJjPfJTQZfqZyTrCCz3J5-Hf1odT48hA
 #github-feeds: https://discord.com/api/webhooks/1265994706958028926/LDrbV7YsiuRQIpV-W-5VBkbq6HnprimipbuEqHxpvCMJCSNH8iZpqPIa5cTmBRZh_4i2

@@ -64,6 +64,19 @@
     margin-top: var(--modal-padding);
 }
 
+.zermos-modal > div:not(.hidden) {
+    display: block;
+}
+
+.zermos-modal > div.hidden {
+    display: none;
+}
+
+/* last div element in .zermos-modal that does not have the hidden class */
+.zermos-modal:not(.submenu) .zermos-modal > div:last-child:not(.hidden) {
+    margin-bottom: 0;
+}
+
 .heading h1 {
     font-size: var(--font-size-heading);
     color: var(--text-color);
@@ -208,18 +221,19 @@
 .separator > div:before {
     content: '';
     position: absolute;
-    top: 50%;
     left: 0;
     border-top: 1px solid #ccc;
     background: #ccc;
     width: 100%;
-    transform: translateY(-50%);
 }
 
 .separator > div {
     position: relative;
     display: flex;
     justify-content: center;
+    align-items: center;
+    width: 100%;
+    top: -5px;
 }
 
 .separator p {
@@ -229,6 +243,7 @@
     position: relative;
     padding: 0 var(--modal-padding);
     text-align: center;
+    top: 50%;
 }
 
 .image img {
@@ -550,6 +565,7 @@
     background: var(--background-color);
     padding: var(--padding);
     border-radius: var(--border-radius);
+    overflow-y: overlay;
 }
 
 @media only screen and (max-width: 1000px) {
