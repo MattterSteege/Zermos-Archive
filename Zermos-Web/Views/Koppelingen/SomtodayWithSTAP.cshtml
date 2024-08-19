@@ -7,10 +7,12 @@
 
     var modal = new ZermosModal()
     .addHeading({text: "Koppel Somtoday aan je account!"})
-    .addText({text: "Kopieer deze code of zorg ervoor dat je de code goed onthoudt, want je hebt hem later nodig. Open vervolgens de Somtoday leerling app op je mobiel. Dit proces werkt alleen op een mobiel apparaat en niet op een pc of laptop. Je kunt de app handmatig openen, of, als er een 'open Somtoday' knop hieronder staat, daarop klikken. Als je al ingelogd bent in de app, log dan eerst uit."})
-    .addText({text: "Zodra je op het inlogscherm bent, moet je vijf keer achter elkaar op het Somtoday logo bovenaan het scherm klikken. Dit opent een lijst met verschillende opties, zoals 'Nightly', 'Productie' en 'Ontwikkel'. Kies in deze lijst voor 'Ontwikkel'. Onderaan het scherm verschijnt nu een invulveld met de tekst \"hostname of ip indien niet localhost\". Hier vul je de eerder gekopieerde of onthouden code in."})
-    .addText({text: "Klik daarna op 'Inloggen'. Als je niet automatisch wordt ingelogd, voer dan je inloggegevens in zoals je dat normaal zou doen. Dit is de echte Somtoday inlogpagina, dus je wachtwoord is veilig en wordt niet gestolen of bekeken. Nadat je bent ingelogd, opent de Somtoday app automatisch en krijg je waarschijnlijk een foutmelding te zien. Dit is normaal en betekent dat je succesvol bent ingelogd op Zermos. Ga vervolgens terug naar de Zermos app."})
-    .addText({text: "Als je terug bent bij Zermos en alles goed is gegaan, word je automatisch teruggestuurd naar je accountpagina."})
+    .addList({items: [
+        "Kopieer de code en open de Somtoday leerling app op je mobiel (werkt niet op pc/laptop). Log uit als je al bent ingelogd.",
+        "Klik vijf keer op het Somtoday logo op het inlogscherm. Kies 'Ontwikkel' in de lijst. Vul de eerder gekopieerde code in bij het veld onderaan.",
+        "Klik op 'Inloggen'. Als je niet automatisch wordt ingelogd, voer dan je inloggegevens in. Verwacht een foutmelding na het inloggen; dit betekent dat je succesvol bent ingelogd op Zermos.",
+        "Ga terug naar de Zermos app, je wordt automatisch naar je accountpagina geleid."
+    ], listType: "ol"})
     .addUrl({url: "@Model.vanityUrl", showFull: true, copyButton: false})
     .addButton({text: "Kopieer code", onClick: () => {
         copyToClipboard("@Model.vanityUrl");

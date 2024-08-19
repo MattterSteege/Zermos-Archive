@@ -61,7 +61,7 @@ namespace Zermos_Web.APIs
             var secondsStart = int.Parse(start[0]) * 3600 + int.Parse(start[1]) * 60;
             var secondsEnd = int.Parse(end[0]) * 3600 + int.Parse(end[1]) * 60;
             
-            //"[28800, 61200]"
+            //"[28800, 61200]" -> 08:00 - 17:00 in seconds
 
             var zermeloRoosterModel = JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync());
             zermeloRoosterModel.MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year);

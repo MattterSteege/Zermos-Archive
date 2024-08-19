@@ -59,6 +59,7 @@ namespace Zermos_Web.Controllers
             ViewData["isZermeloGekoppeld"] = user.zermelo_access_token_expires_at > DateTime.Now;
             ViewData["isInfowijsGekoppeld"] = TokenUtils.CheckToken(user.infowijs_access_token);
             ViewData["isSomtodayGekoppeld"] = TokenUtils.CheckToken(user.somtoday_refresh_token);
+            ViewData["prefersSomtodayRooster"] = user.prefered_rooster_engine == "somtoday";
             ViewData["forceShow"] = false;
 
             return View();
@@ -71,6 +72,7 @@ namespace Zermos_Web.Controllers
             ViewData["isZermeloGekoppeld"] = user.zermelo_access_token_expires_at > DateTime.Now;
             ViewData["isInfowijsGekoppeld"] = TokenUtils.CheckToken(user.infowijs_access_token);
             ViewData["isSomtodayGekoppeld"] = TokenUtils.CheckToken(user.somtoday_refresh_token);
+            ViewData["prefersSomtodayRooster"] = user.prefered_rooster_engine == "somtoday";
             ViewData["forceShow"] = forceShow;
             return PartialView();
         }

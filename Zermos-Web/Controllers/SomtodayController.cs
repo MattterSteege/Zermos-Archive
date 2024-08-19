@@ -19,7 +19,6 @@ using Zermos_Web.Models.somtodayHomeworkModel;
 using Zermos_Web.Models.SomtodayPlaatsingen;
 using Zermos_Web.Models.SortedSomtodayGradesModel;
 using Zermos_Web.Utilities;
-using Item = Zermos_Web.Models.SomtodayLeermiddelen.Item;
 
 namespace Zermos_Web.Controllers
 {
@@ -584,6 +583,29 @@ namespace Zermos_Web.Controllers
             };
             
             return Ok(leermiddelen);
+        }
+        #endregion
+
+        #region rooster
+        [Authorize]
+        [ZermosPage]
+        [SomtodayRequirement]
+        [HttpGet("/Somtoday/Rooster")]
+        public async Task<IActionResult> Rooster()
+        {
+            var user = ZermosUser;
+            
+            if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
+            {
+                user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
+            }
+            
+            var somtodayRooster = await somtodayApi.GetAfspraakItems(user);
+            
+            foreach (var item in somtodayRooster)
+                item.timeStamps = new List<int> {28800, 61200};
+            
+            return PartialView(somtodayRooster);
         }
         #endregion
         

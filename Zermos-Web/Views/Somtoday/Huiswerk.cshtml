@@ -101,7 +101,7 @@
     function AddHomework() {
         new ZermosModal()
         .addHeading({text: "Huiswerk toevoegen"})
-        .addHeading({text: "Wanneer moet het huiswerk af zijn?"})
+        .addText({text: "Wanneer moet het huiswerk af zijn?"})
         .addDatePicker({required: true, initialDate: (new Date( Date.now() + (6.048e+8)))})
         .addLabel({text: "Welke titel krijg het huiswerk?"})
         .addTextInput({required: true, maxLength: 255})
@@ -227,9 +227,9 @@
     function loadHomeworkSorting() {            
         new ZermosModal()
         .addHeading({text: "Huiswerk verbergen"})
-        .addHeading({text: "Klik op een vak om het huiswerk van dat vak te verbergen of te tonen of te verbergen."})
+        .addText({text: "Klik op een vak om het huiswerk van dat vak te verbergen of te tonen of te verbergen."})
         .addMultiCheckbox({labels: allSubjects, initialStates: allSubjectsShown, onChange: (_, values) => toggleSubjects(values)})
-        .addHeading({text: "Klik op een type huiswerk om het huiswerk van dat type te verbergen of te tonen."})
+        .addText({text: "Klik op een type huiswerk om het huiswerk van dat type te verbergen of te tonen."})
         .addMultiCheckbox({labels: allTypes, initialStates: allTypesShown, onChange: (_, values) => toggleTypes(values)})
         .open();        
     }

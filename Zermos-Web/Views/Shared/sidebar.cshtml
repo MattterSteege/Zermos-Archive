@@ -3,6 +3,7 @@
     bool isZermeloGekoppeld = (bool) ViewData["isZermeloGekoppeld"];
     bool isInfowijsGekoppeld = (bool) ViewData["isInfowijsGekoppeld"];
     bool isSomtodayGekoppeld = (bool) ViewData["isSomtodayGekoppeld"];
+    bool prefersSomtodayRooster = (bool) ViewData["prefersSomtodayRooster"];
     bool forceShow = (bool) (ViewData["forceShow"] ?? "false");
 }
 
@@ -47,7 +48,7 @@
             </li>
         }
 
-        @if (isZermeloGekoppeld || forceShow)
+        @if ((isZermeloGekoppeld && !prefersSomtodayRooster) || forceShow)
         {
         <h5 class="Heading">Zermelo</h5>
 
@@ -65,6 +66,18 @@
         {
         <h5 class="Heading">SOMtoday</h5>
 
+        @if ((prefersSomtodayRooster && !forceShow) || !isZermeloGekoppeld)
+        {
+        <li id="rooster">
+            <a onclick="ReplacePage('@Url.Action("Rooster", "Somtoday")')">
+                <div class="menu-item">
+                    <i class="fa-solid fa-calendar-day menu-icons fa-fw"></i>
+                    <p>Rooster</p>
+                </div>
+            </a>
+        </li>
+        }
+        
         <li id="huiswerk">
             <a onclick="ReplacePage('@Url.Action("Huiswerk", "Somtoday")')">
                 <div class="menu-item">

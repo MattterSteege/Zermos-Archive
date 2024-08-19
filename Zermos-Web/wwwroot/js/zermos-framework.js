@@ -556,8 +556,8 @@ Zermos.checkForUpdates = () => {
     //show modal
     new ZermosModal()
         .addHeading({text: "Zermos is geupdate!"})
-        .addHeading({text: "Zermos is weer een versietje ouder 🥳. Er zijn natuurlijk weer nieuwe functies toegevoegd en bugs gefixt. Veel plezier met de nieuwe versie!"})
-        .addHeading({text: "Je gebruikt nu versie " + Zermos.CurrentVersion + ", de vorige keer dat je Zermos bezocht was dat versie " + version_user})
+        .addText({text: "Zermos is weer een versietje ouder 🥳. Er zijn natuurlijk weer nieuwe functies toegevoegd en bugs gefixt. Veel plezier met de nieuwe versie!"})
+        .addText({text: "Je gebruikt nu versie " + Zermos.CurrentVersion + ", de vorige keer dat je Zermos bezocht was dat versie " + version_user})
         .addButton({text: "Check wat er nieuw is", onClick: (_) => {
           window.open("https://zermos-docs.kronk.tech/WhatsNew.html", "_blank");
         }})        

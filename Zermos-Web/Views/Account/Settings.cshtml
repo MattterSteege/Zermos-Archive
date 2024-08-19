@@ -58,6 +58,15 @@
             <div id="5_save" onclick="UpdateSchooltijen(this)">Opslaan</div>
         </div>
     </div>
+    
+    <div class="setting-item">
+        <h1>Rooster</h1>
+        <p>Welke rooster engine geef je de voorkeur aan. Deze wordt alleen gebruikt als dat mogelijk is!<br>Zermelo heeft meer features, verder zit er geen voordeel aan Somtoday's engine te gebruiken</p>
+        <div class="settings-options">
+            <div id="6_zermelo" onclick="UpdateRoosterEngine('zermelo', this)" class="setting-button@(Model.prefered_rooster_engine != "somtoday" ? " selected" : "")">Zermelo</div>
+            <div id="6_somtoday" onclick="UpdateRoosterEngine('somtoday', this)" class="setting-button@(Model.prefered_rooster_engine == "somtoday" ? " selected" : "")">Somtoday</div>
+        </div>
+    </div>
 </div>
 
 <script minimize>
@@ -105,6 +114,14 @@ function UpdateSchooltijen(element) {
     var start_time = document.getElementById("5_start_time").value;
     var end_time = document.getElementById("5_end_time").value;
     UpdateSetting("zermelo_timestamps", start_time + "-" + end_time, element);
+}
+
+function UpdateRoosterEngine(engine, element) {
+    document.cookie = "prefered_rooster_engine=" + engine + ";path=/;max-age=5184000";
+    UpdateSetting("prefered_rooster_engine", engine, element);
+    setTimeout(() => {
+        location.reload();
+    }, 500);
 }
 
 function UpdateSetting(key, value, element) {   

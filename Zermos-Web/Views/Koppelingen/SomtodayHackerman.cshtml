@@ -48,7 +48,7 @@ console.log('De code is gekopieerd naar je klembord, plak deze in het veld op de
         .addButton({text: "Ik heb (al) een Somtoday token", onClick: (ctx) => {
             new ZermosModal()
             .addHeading({text: "Je bent er bijna!"})
-            .addHeading({text: "Je hebt zojuist de code in je klembord gekregen, plak deze code hieronder en klik op 'Koppel Somtoday aan je account!'"})
+            .addText({text: "Je hebt zojuist de code in je klembord gekregen, plak deze code hieronder en klik op 'Koppel Somtoday aan je account!'"})
             .addLabel({text: "Somtoday code:"})
             .addTextInput({required: true})
             .addButton({text: "Koppel Somtoday aan je account!", onClick: (ctx) => {

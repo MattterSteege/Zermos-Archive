@@ -189,11 +189,11 @@
             abscence.items.forEach(absence => {
                 abscenceModal
                 .addSeparator({})
-                .addHeading({text: absence.absentieReden.omschrijving})
-                .addHeading({text: absence.opmerkingen});
+                .addText({text: absence.absentieReden.omschrijving})
+                .addText({text: absence.opmerkingen});
                 var dateStart = new Date(absence.beginDatumTijd);
                 var dateEnd = new Date(absence.eindDatumTijd);
-                abscenceModal.addHeading({text: dateStart.toLocaleDateString() + ' ' + dateStart.toLocaleTimeString() + ' - ' + dateEnd.toLocaleTimeString() + ' ' + dateEnd.toLocaleDateString()});
+                abscenceModal.addText({text: dateStart.toLocaleDateString() + ' ' + dateStart.toLocaleTimeString() + ' - ' + dateEnd.toLocaleTimeString() + ' ' + dateEnd.toLocaleDateString()});
             })
             .addButton({text: 'Sluiten', onClick: (ctx) => ctx.close()})
             .open();
@@ -214,19 +214,19 @@ function OpenSuggestionOrBugModal() {
     const bugSubmissionSubModal = new ZermosSubModal()
         .addHeading({text: "Vertel eens, wat is het probleem?", level: 2})
         .addTextArea({required: true})
-        .addHeading({text: "Met je bug report wordt de volgende informatie meegestuurd:\n- De omgeving waarin je Zermos gebruikt\n- De opslag informatie die Zermos heeft opgeslagen in je browser (alleen de statistieken, niet de informatie zelf)\n- De console log van Zermos\n- De netwerk log van Zermos"})
+        .addText({text: "Met je bug report wordt de volgende informatie meegestuurd:\n- De omgeving waarin je Zermos gebruikt\n- De opslag informatie die Zermos heeft opgeslagen in je browser (alleen de statistieken, niet de informatie zelf)\n- De console log van Zermos\n- De netwerk log van Zermos"})
 
     const modal = new ZermosModal();
 
     modal.addHeading({text: "Bug of idee?"})
-        .addHeading({text: "Heb je een bug gevonden in Zermos of heb je een baanbrekend idee, vul de korte vragenlijst hieronder!"})
+        .addText({text: "Heb je een bug gevonden in Zermos of heb je een baanbrekend idee, vul de korte vragenlijst hieronder!"})
         .addDropdown({options: [
             { label: "Ik wil een bug rapporteren", value: "bug" },
             { label: "Ik heb een idee voor Zermos", value: "idee" }
         ], required: true, onChange: (ctx, value) => modal.setCondition("type", value.value)})
         .addSubmenu({showCondition: "type == \"idee\"", subModal: ideaSubmissionSubModal})
         .addSubmenu({showCondition: "type == \"bug\"", subModal: bugSubmissionSubModal})
-        .addHeading({text: "kan ik je via je mail (@User.FindFirstValue("email")) bereiken op als ik extra vragen heb of ontwikkelingen?"})
+        .addText({text: "kan ik je via je mail (@User.FindFirstValue("email")) bereiken op als ik extra vragen heb of ontwikkelingen?"})
         .addToggle({label: "Ja dat mag", initialState: false})
         .addButton({text: "versturen", onClick: (ctx) => {
             var values = ctx.getComponentsValue();

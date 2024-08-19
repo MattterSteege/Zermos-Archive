@@ -34,7 +34,7 @@
     function openAddingModal() {
         new ZermosModal()
             .addHeading({text: 'Leermiddel toevoegen'})
-            .addHeading({text: 'Voeg je eigen leermiddelen toe aan Zermos, vul de volgende gegevens in:'})
+            .addText({text: 'Voeg je eigen leermiddelen toe aan Zermos, vul de volgende gegevens in:'})
             .addLabel({text: 'URL van het leermiddel'})
             .addTextInput({required: true})
             .addLabel({text: 'Titel van het leermiddel'})
@@ -62,7 +62,7 @@
                         } else {
                             new ZermosModal()
                                 .addHeading({text: 'Fout'})
-                                .addHeading({text: data.error})
+                                .addText({text: data.error})
                                 .addButton({text: 'Sluiten'})
                                 .open()
                         }

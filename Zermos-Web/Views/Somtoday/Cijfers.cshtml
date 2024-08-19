@@ -327,7 +327,7 @@
             
                 new ZermosModal()
                 .addHeading({text: "Voortgangsdossier"})
-                .addHeading({text: "Pas de instellingen aan van het voortgangsdossier. Je kan het volgende aanpassen:"})
+                .addText({text: "Pas de instellingen aan van het voortgangsdossier. Je kan het volgende aanpassen:"})
                 .addToggle({label: "Afronden op een heel getal", initialState: afronden, onChange: (ctx, isActive) => {
                     afronden = isActive;
                     toggleSEGradeRounding(parentPanel, isActive);
@@ -362,7 +362,7 @@
             
                 new ZermosModal()
                 .addHeading({text: "Schoolexamen cijfers"})
-                .addHeading({text: "Pas de instellingen aan van de schoolexamen cijfers. Je kan het volgende aanpassen:"})
+                .addText({text: "Pas de instellingen aan van de schoolexamen cijfers. Je kan het volgende aanpassen:"})
                 .addToggle({label: "Afronden op een heel getal", initialState: afronden, onChange: (ctx, isActive) => {
                     afronden = isActive;
                     toggleSEGradeRounding(parentPanel, isActive);
@@ -393,14 +393,14 @@
             if (panel === 'voortgang') {
                 new ZermosModal()
                 .addHeading({text: "Voortgangsdossier"})
-                .addHeading({text: "Het voortgangsdossier is een overzicht van alle cijfers die je hebt gehaald die meetellen voor je voortgangsdossier. Dit zijn cijfers van toetsen, opdrachten en andere beoordelingen."})
+                .addText({text: "Het voortgangsdossier is een overzicht van alle cijfers die je hebt gehaald die meetellen voor je voortgangsdossier. Dit zijn cijfers van toetsen, opdrachten en andere beoordelingen."})
                 .addButton({text: "aight", onClick: (ctx) => { ctx.close(); }})
                 .open();
             }
             else if (panel === 'examen') {
                 new ZermosModal()
                 .addHeading({text: "Schoolexamen cijfers"})
-                .addHeading({text: "De schoolexamen cijfers zijn cijfers die je hebt gehaald voor toetsen die meetellen voor je schoolexamen. Dit zijn cijfers die uiteindelijk meetellen voor je centraal examen. <br><br>Helaas hebben deze cijfers geen pagina waar je alle cijfers kan zien die je hebt gehaald, dit komt omdat de cijfers (vaak) over verschillende leerjaren worden gegeven en ik dat niet in een keer kan opvragen. Hopelijk komt dit in de toekomst nog, maar dat is momenteel niet mijn grootste prioriteit. Als je SE cijfers hebt voor vakken waar je dat jaar ook voorgangsdossier cijfers voor hebt gekregen kun je ze wel bekijken, ga dan naar 'Rapport' en klik op het desbetreffende vak.", true})
+                .addText({text: "De schoolexamen cijfers zijn cijfers die je hebt gehaald voor toetsen die meetellen voor je schoolexamen. Dit zijn cijfers die uiteindelijk meetellen voor je centraal examen. <br><br>Helaas hebben deze cijfers geen pagina waar je alle cijfers kan zien die je hebt gehaald, dit komt omdat de cijfers (vaak) over verschillende leerjaren worden gegeven en ik dat niet in een keer kan opvragen. Hopelijk komt dit in de toekomst nog, maar dat is momenteel niet mijn grootste prioriteit. Als je SE cijfers hebt voor vakken waar je dat jaar ook voorgangsdossier cijfers voor hebt gekregen kun je ze wel bekijken, ga dan naar 'Rapport' en klik op het desbetreffende vak.", asHtml: true})
                 .addButton({text: "Hmm, oké", onClick: (ctx) => { ctx.close(); }})
                 .open();
             }
@@ -411,7 +411,7 @@
     addButtonToPage("fa-history", () => {
         new ZermosModal()
         .addHeading({text: "Vorige jaarlagen"})
-        .addHeading({text: "Van welke jaarlagen wil je de cijfers zien?"})
+        .addText({text: "Van welke jaarlagen wil je de cijfers zien?"})
         .addDropdown({options: jaarlagen, required: true})
         .addButton({text: "Start de tijdmachine!", onClick: (ctx) => { var value = ctx.getComponentsValue().values[0].value;
             if (value !== "") {
@@ -425,7 +425,7 @@
 
         new ZermosModal()
             .addHeading({text: "Deel je cijfers"})
-            .addHeading({text: "Deel je cijfers met je vrienden! Selecteer uit welk jaar en week je cijfers wilt delen en dan krijg je een persoonlijke link die je kan delen. Je hoeft geen account te hebben om deze link te bekijken."})
+            .addText({text: "Deel je cijfers met je vrienden! Selecteer uit welk jaar en week je cijfers wilt delen en dan krijg je een persoonlijke link die je kan delen. Je hoeft geen account te hebben om deze link te bekijken."})
             .addDropdown({options: jaarlagen, required: true})
             .addDatePicker({required: true, initialDate: new Date(Date.now() + 604800000)})
             .addButton({text: "Deel", onClick: (ctx) => {
@@ -447,7 +447,7 @@
                     .then((url) => {
                         new ZermosModal()
                             .addHeading({text: "Deel je cijfers"})
-                            .addHeading({text: "Hier is de link die je kan delen met je vrienden. Deze link is geldig tot de datum die je hebt gekozen. Bekijk je geldige links op de account pagina."})
+                            .addText({text: "Hier is de link die je kan delen met je vrienden. Deze link is geldig tot de datum die je hebt gekozen. Bekijk je geldige links op de account pagina."})
                             .addUrl({url: url, showFull: false, copyButton: true})
                             .open();
                     });

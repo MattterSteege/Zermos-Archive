@@ -11,6 +11,7 @@ using Infrastructure.Entities;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Zermos_Web.Models;
+using Zermos_Web.Models.Somtoday;
 using Zermos_Web.Models.SomtodayLeermiddelen;
 using Zermos_Web.Models.SomtodayAfwezigheidModel;
 using Zermos_Web.Models.SomtodayGradesModel;
@@ -428,5 +429,63 @@ public class SomtodayAPI
         #endif
         
         return homework;
+    }
+
+    public async Task<List<SomtodayafspraakitemsModel>> GetAfspraakItems(user user)
+    {
+#if DEBUG
+        var watch = Stopwatch.StartNew();
+#endif
+        
+        var currentDate = DateTime.Now;
+        var currentWeek = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(currentDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+        
+        //var previousWeek = currentWeek - 1;
+        //previousWeek = previousWeek == 0 ? 52 : previousWeek;
+        //var previousYear = previousWeek == 52 ? currentDate.Year - 1 : currentDate.Year;
+        
+        var nextWeek = currentWeek + 1;
+        nextWeek = nextWeek == 53 ? 1 : nextWeek;
+        var nextYear = nextWeek == 1 ? currentDate.Year + 1 : currentDate.Year;
+
+
+
+        var urls = new[]
+        {
+            //$"https://api.somtoday.nl/rest/v1/afspraakitems/1409824200/jaar/{previousYear}/week/{previousWeek}",
+            $"https://api.somtoday.nl/rest/v1/afspraakitems/1409824200/jaar/{currentDate.Year}/week/{currentWeek}",
+            $"https://api.somtoday.nl/rest/v1/afspraakitems/1409824200/jaar/{nextYear}/week/{nextWeek}"
+        };
+        
+        _httpClient.DefaultRequestHeaders.Clear();
+        _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
+        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        
+        var tasks = urls.Select(url => url != null ? _httpClient.GetAsync(url) : Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.OK))).ToArray();
+        
+        await Task.WhenAll(tasks);
+            
+        if (tasks.Any(t => !t.Result.IsSuccessStatusCode))
+            return null;
+        
+        var jsonTasks = tasks.Select(t => t.Result.Content.ReadAsStringAsync()).ToArray();
+        await Task.WhenAll(jsonTasks);
+        
+        List<SomtodayafspraakitemsModel> afspraakItems = new(urls.Length);
+        
+        for (int i = 0; i < urls.Length; i++)
+        {
+            afspraakItems.Add(JsonConvert.DeserializeObject<SomtodayafspraakitemsModel>(jsonTasks[i].Result));
+        }
+        
+        afspraakItems[0].MondayOfAppointmentsWeek = currentDate.AddDays(-((int) currentDate.DayOfWeek - 1));
+        afspraakItems[1].MondayOfAppointmentsWeek = currentDate.AddDays(-((int) currentDate.DayOfWeek - 1)).AddDays(7);
+        
+#if DEBUG
+        watch.Stop();
+        Console.WriteLine(watch.ElapsedMilliseconds + "ms");
+#endif
+        
+        return afspraakItems;
     }
 }

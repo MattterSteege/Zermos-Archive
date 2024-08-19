@@ -83,13 +83,12 @@ namespace Infrastructure.Entities
             set => SetSetting("zermelo_timestamps", value);
         }
         
-        
-        //SOMTODAY SETTINGS
+        //ROOSTER SETTINGS
         [NotMapped, Setting] 
-        public string somtoday_grade_rounding
+        public string prefered_rooster_engine
         {
-            get => GetSetting<string>("somtoday_grade_rounding");
-            set => SetSetting("somtoday_grade_rounding", value);
+            get => GetSetting<string>("prefered_rooster_engine");
+            set => SetSetting("prefered_rooster_engine", value);
         }
         
         // Helper method to get a setting value do with <int> or <string> etc.

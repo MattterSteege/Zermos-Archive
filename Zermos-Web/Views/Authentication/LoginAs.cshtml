@@ -25,7 +25,7 @@
             new ZermosModal()
             .addButton({text: 'Login as'})
             .addHeading({text: 'Are you sure you want to login as this user:'})
-            .addHeading({text: email})
+            .addText({text: email})
             .addButton({text: "YUP!", onClick: () => {
                 TogglePreview('incognito');
                 ReplacePage('/LoginAs?user=' + email);

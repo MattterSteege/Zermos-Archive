@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Zermos_Web.Models.SomtodayGradesModel;
 
 namespace Zermos_Web.Utilities
@@ -170,6 +171,30 @@ namespace Zermos_Web.Utilities
             }
 
             return (float)Math.Floor(grade + 0.5f);
+        }
+
+        public static int LCM(this List<int> numbers)
+        {
+            if (numbers == null || numbers.Count == 0)
+                throw new ArgumentException("The list cannot be null or empty.");
+
+            return numbers.Aggregate(LCMOfTwo);
+        }
+
+        private static int LCMOfTwo(int a, int b)
+        {
+            return Math.Abs(a * b) / GCD(a, b);
+        }
+
+        private static int GCD(int a, int b)
+        {
+            while (b != 0)
+            {
+                int temp = b;
+                b = a % b;
+                a = temp;
+            }
+            return Math.Abs(a);
         }
     }
 }

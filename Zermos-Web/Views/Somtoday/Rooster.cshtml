@@ -1,0 +1,136 @@
+﻿@using System.Globalization
+@using Zermos_Web.Utilities
+@using Item = Zermos_Web.Models.Somtoday.Item
+@model List<Zermos_Web.Models.Somtoday.SomtodayafspraakitemsModel>
+
+<link rel="stylesheet" href="/css/zermelo.css" preload/>
+
+@{
+    var minuteHeight = 0f;
+}
+
+<div class="main-container">
+    <div class="week-carousel" id="week-carousel" style="transform: translateX(0%); transition: transform 0.5s;">
+
+
+        @foreach (var week in Model)
+        {
+            <div class="week">
+                <div class="days-container">
+                    <ul>
+                        <li>@week.MondayOfAppointmentsWeek.GetWeekNumber()</li>
+                        <li>
+                            Ma
+                            <div class="date">@week.MondayOfAppointmentsWeek.ToString("dd MMM")</div>
+                        </li>
+                        <li>
+                            Di
+                            <div class="date">@week.MondayOfAppointmentsWeek.AddDays(1).ToString("dd MMM")</div>
+                        </li>
+                        <li>
+                            Wo
+                            <div class="date">@week.MondayOfAppointmentsWeek.AddDays(2).ToString("dd MMM")</div>
+                        </li>
+                        <li>
+                            Do
+                            <div class="date">@week.MondayOfAppointmentsWeek.AddDays(3).ToString("dd MMM")</div>
+                        </li>
+                        <li>
+                            Vr
+                            <div class="date">@week.MondayOfAppointmentsWeek.AddDays(4).ToString("dd MMM")</div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="lessons-container">
+                    <ul>
+                        @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+                        {
+                            @if (week.items.Count == 0)
+                            {
+                                <li class="empty">Wow, de hele week vrij!</li>
+                                break;
+                            }
+
+                            if (day != DayOfWeek.Saturday && day != DayOfWeek.Sunday)
+                            {
+                                <li class="lesdag">
+                                    @{
+                                        List<Item> appointmentList = week.items.Where(a => a.beginDatumTijd.DayOfWeek == day).OrderBy(x => x.beginDatumTijd).ToList();
+
+                                        if (!appointmentList.Any())
+                                            continue;
+
+                                        //100 means 100% of the height of the container
+                                        //540 means 540 minutes between 08:00 and 17:00
+                                        minuteHeight = 100f / (week.timeStamps[1] - week.timeStamps[0]) * 60; // 60 minutes in an hour
+
+                                        //get the date of the day that the appointments are for
+                                        //8 * 60 + 20 = 500 minutes means 08:20
+                                        var dayStartUnix = appointmentList.First().beginDatumTijd; // this is unix. make the unix time to be the same date but the time should be 08:20
+                                        dayStartUnix -= dayStartUnix.TimeOfDay; // remove the time from the date
+                                        dayStartUnix = dayStartUnix.AddSeconds(week.timeStamps[0]); // add the time to the date
+                                    }
+
+                                    @foreach (var appointment in appointmentList)
+                                    {
+                                        var appointmentHeight = (appointment.eindDatumTijd - appointment.beginDatumTijd).TotalSeconds / 60f * minuteHeight;
+                                        var lessonStart = appointment.beginDatumTijd;
+                                        var appointmentTop = (lessonStart - dayStartUnix).TotalSeconds / 60f * minuteHeight;
+
+                                        <div class="lesson-time-based" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);">
+                                            <p>@appointment.vak.afkorting</p>
+                                            <p>@appointment.omschrijving</p>
+                                        </div>
+                                    }
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                </div>
+                <div class="times-container">
+                    <ul style="grid-template-rows: 30px 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <div class="hours-container">
+                    <ul style="grid-template-rows: 30px 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 8px">
+                        <li></li>
+                        <li>08:00</li>
+                        <li>09:00</li>
+                        <li>10:00</li>
+                        <li>11:00</li>
+                        <li>12:00</li>
+                        <li>13:00</li>
+                        <li>14:00</li>
+                        <li>15:00</li>
+                        <li>16:00</li>
+                    </ul>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+<script>
+    addButtonToPage("fa-arrow-right-arrow-left", () => {
+        let carousel = document.getElementById("week-carousel");
+        
+        if (carousel.style.transform === "translateX(0%)") {
+            carousel.style.transform = "translateX(-100%)";
+        } else {
+            carousel.style.transform = "translateX(0%)";
+        }
+        
+    }, VerticalAlignment.BT, Background.Accent)
+</script>

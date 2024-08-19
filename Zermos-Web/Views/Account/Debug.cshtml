@@ -281,13 +281,13 @@ function testAPI() {
         
         new ZermosModal()
         .addHeading({text: "API test resulaten"})
-        .addHeading({text: "Request tijd: ~" + timeRequest + "ms (" + (Math.round(timeRequest  / total * 100 * 100) / 100).toFixed(2) + "%)"})
-        .addHeading({text: "Response tijd: ~" + timeResponse + "ms (" + (Math.round(timeResponse / total * 100 * 100) / 100).toFixed(2) + "%)"})
-        .addHeading({text: "Query tijd: ~" + timeQuery + "ms (" + (Math.round(timeQuery / total * 100 * 100) / 100).toFixed(2) + "%)"})
+        .addText({text: "Request tijd: ~" + timeRequest + "ms (" + (Math.round(timeRequest  / total * 100 * 100) / 100).toFixed(2) + "%)"})
+        .addText({text: "Response tijd: ~" + timeResponse + "ms (" + (Math.round(timeResponse / total * 100 * 100) / 100).toFixed(2) + "%)"})
+        .addText({text: "Query tijd: ~" + timeQuery + "ms (" + (Math.round(timeQuery / total * 100 * 100) / 100).toFixed(2) + "%)"})
         .addSeparator({})
-        .addHeading({text: "Totaal tijd: ~" + (total) + "ms"})
+        .addText({text: "Totaal tijd: ~" + (total) + "ms"})
         .addSeparator({})
-        .addHeading({text: "De tijd kan afwijken met een maximum van +/-1ms door afrondingen. Als de totale tijd onder de 100ms is, dan is de snelheid van de API op een goed niveau."})
+        .addText({text: "De tijd kan afwijken met een maximum van +/-1ms door afrondingen. Als de totale tijd onder de 100ms is, dan is de snelheid van de API op een goed niveau."})
         .open();                
     });
 }

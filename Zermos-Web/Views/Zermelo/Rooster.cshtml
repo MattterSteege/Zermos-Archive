@@ -414,27 +414,27 @@ function OpenLessonDetail(base64){
     const json = JSON.parse(atob(base64));
     
     var lessonDetail = new ZermosModal()
-    .addHeading({text: (json.subjects[0] ?? '?') + " - " + new Date(json.start * 1000).toLocaleDateString("nl-NL", { weekday: 'long', month: 'short', day: 'numeric'})});
+    .addText({text: (json.subjects[0] ?? '?') + " - " + new Date(json.start * 1000).toLocaleDateString("nl-NL", { weekday: 'long', month: 'short', day: 'numeric'})});
     
-    lessonDetail.addHeading({text: "Je hebt:"});
+    lessonDetail.addText({text: "Je hebt:"});
     if (json.teachers.length > 0) 
-        lessonDetail.addHeading({text: "• les van " + json.teachers.join(", ") + "."});
+        lessonDetail.addText({text: "• les van " + json.teachers.join(", ") + "."});
     if (json.locations.length > 0) 
-        lessonDetail.addHeading({text: "• in lokaal " + json.locations.join(", ") + "."});
+        lessonDetail.addText({text: "• in lokaal " + json.locations.join(", ") + "."});
     // if (json.groups.length > 0) 
     //     lessonDetail.addHeading({text: "• met groep " + json.groups.join(", ") + "."});   
 
     // Check if actions array exists
     if (json.actions && json.actions.length > 0 && json.appointmentType !== "activity") {
-        lessonDetail.addHeading({text: "Je hebt keuze uit de volgende vakken:"});
+        lessonDetail.addText({text: "Je hebt keuze uit de volgende vakken:"});
         // Loop through each action appointment
         json.actions.forEach((action) => {
             action = action.appointment;
-            lessonDetail.addHeading({text: "• " + (action.subjects[0] ?? '?') + " van " + action.teachers.join(", ") + " in lokaal " + action.locations.join(", ")});
+            lessonDetail.addText({text: "• " + (action.subjects[0] ?? '?') + " van " + action.teachers.join(", ") + " in lokaal " + action.locations.join(", ")});
         });
     }
     
-    lessonDetail.addHeading({text: "De les is van: " + new Date(json.start * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1] + " tot " + new Date(json.end * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1]})
+    lessonDetail.addText({text: "De les is van: " + new Date(json.start * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1] + " tot " + new Date(json.end * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1]})
     
     lessonDetail.addSpacer({height: 'var(--padding)'})
     .addButton({text: "Bekijk huiswerk (indien beschikbaar)", onClick: () => {
@@ -457,7 +457,7 @@ addButtonToPage('fa-share-from-square', () => {
    
     new ZermosModal()
     .addHeading({text: "Deel je rooster"})
-    .addHeading({text: "Deel je rooster met je vrienden! De pagina die je nu ziet wordt als link gedeeld, zij hoeven geen account hiervoor te hebben."})
+    .addText({text: "Deel je rooster met je vrienden! De pagina die je nu ziet wordt als link gedeeld, zij hoeven geen account hiervoor te hebben."})
     .addDatePicker({required: true, initialDate: new Date(Date.now() + 604800000)})
     .addButton({text: "Deel", onClick: (ctx) => {
         
@@ -477,7 +477,7 @@ addButtonToPage('fa-share-from-square', () => {
         .then((url) => {
             new ZermosModal()
             .addHeading({text: "Deel je rooster"})
-            .addHeading({text: "Deel je rooster met je vrienden! De pagina die je nu ziet wordt als link gedeeld, zij hoeven geen account hiervoor te hebben."})
+            .addText({text: "Deel je rooster met je vrienden! De pagina die je nu ziet wordt als link gedeeld, zij hoeven geen account hiervoor te hebben."})
             .addUrl({url: url, showFull: false, copyButton: true})
             .open();
         });
@@ -491,7 +491,7 @@ addButtonToPage('fa-list', () => {
    
     new ZermosModal()
     .addHeading({text: "Je paklijst"})
-    .addHeading({text: "Je hebt vandaag de volgende vakken:"})
+    .addText({text: "Je hebt vandaag de volgende vakken:"})
     @{
         try
         {
@@ -502,12 +502,12 @@ addButtonToPage('fa-list', () => {
                     continue;
                 }
 
-                @Html.Raw("    .addHeading({text: \"" + (les.subjects.Count > 0 ? les.subjects[0] : "-") + " van " + (les.teachers.Count > 0 ? les.teachers[0] : "-") + "\"})")
+                @Html.Raw("    .addText({text: \"" + (les.subjects.Count > 0 ? les.subjects[0] : "-") + " van " + (les.teachers.Count > 0 ? les.teachers[0] : "-") + "\"})")
             }
         }
         catch (Exception)
         {
-            @Html.Raw("    .addHeading({text: \"Er is iets fout gegaan bij het ophalen van de vakken. Probeer het later opnieuw.\"})")
+            @Html.Raw("    .addText({text: \"Er is iets fout gegaan bij het ophalen van de vakken. Probeer het later opnieuw.\"})")
         }
     }
     .addButton({text: "Ok!", onClick: (ctx) => {ctx.close()}})
@@ -525,9 +525,9 @@ notCurrentWeek.addEventListener('click', () => {
         HideNotCurrentWeek()
         new ZermosModal()
         .addHeading({text: "Dit is niet deze week!"})
-        .addHeading({text: "Je zit nu in week " + weeks[1].dataset.week + " van " + weeks[1].dataset.year + "."})
-        .addHeading({text: "De huidige datum is " + new Date().toLocaleDateString("nl-NL", { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'}) + "."})
-        .addHeading({text: "Handig om te weten, toch Teun?"})
+        .addText({text: "Je zit nu in week " + weeks[1].dataset.week + " van " + weeks[1].dataset.year + "."})
+        .addText({text: "De huidige datum is " + new Date().toLocaleDateString("nl-NL", { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'}) + "."})
+        .addText({text: "Handig om te weten, toch Teun?"})
         .addButton({text: "Ja dat klopt...", onClick: (ctx) => {
             ShowNotCurrentWeek();
             ctx.close();

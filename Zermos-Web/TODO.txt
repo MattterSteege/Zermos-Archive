@@ -10,8 +10,6 @@ TODO: infowijs pagina's redesign
 TODO: jaarbijlagen bij leermiddelen
 TODO: padding onder de cijfers Totaalgemiddelde (https://cdn.discordapp.com/attachments/1256698797002588355/1263882261011366009/IMG_6913.png?ex=669bd994&is=669a8814&hm=d46e0b044020cfbdebf385e9170b80020fcea12a5e3452da5d57ab23b3417818&)
 TODO: de roosters van vrienden koppelen -> share allow [email] to view your schedule
-TODO: als somtoday wel gekoppeld is en Zermelo niet, laat dan het rooster uit SOMtoday zien (met een melding dat je zermelo moet koppelen) 
-TODO: make the new SOM auth page nice with a good explanation of what's happening and how to use it.
     
 Discord server webhooks:
 #informatie: https://discord.com/api/webhooks/1271383220813959251/6YaYKl88vmXV_AH_dfoX-3qTKveuXpaSHTPuuJjPfJTQZfqZyTrCCz3J5-Hf1odT48hA

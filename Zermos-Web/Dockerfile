@@ -2,7 +2,7 @@
 ARG RELEASE_TYPE=BETA
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
-MAINTAINER Matt ter Steege <matttersteege@gmail.com>
+LABEL maintainer="Matt ter Steege <matttersteege@gmail.com>"
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
