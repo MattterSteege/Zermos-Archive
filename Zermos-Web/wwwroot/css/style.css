@@ -248,7 +248,7 @@ body {
     height: 40px;
     border-radius: var(--border-radius-small);
     background: var(--overlay-color);
-    border: none;
+    /*border: none;*/
     color: var(--text-color);
     font-weight: 700;
     font-size: var(--font-size);

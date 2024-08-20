@@ -102,8 +102,8 @@ pre {
     color: var(--text-color);
     display: block;
     background-color: var(--background-color);
-    border: none;
-    outline: none;
+    /*border: none;*/
+    /*outline: none*/
 }
 .message a.attachment {
     border-radius: var(--border-radius-small);
@@ -113,8 +113,8 @@ pre {
     font-size: var(--font-size);
     display: block;
     background-color: var(--background-color);
-    border: none;
-    outline: none;
+    /*border: none;*/
+    /*outline: none*/
     
     text-align: center;
     margin-top: var(--padding);
@@ -129,8 +129,8 @@ img.photo-attachment {
     padding: var(--padding-small);
     display: block;
     background-color: var(--background-color);
-    border: none;
-    outline: none;
+    /*border: none;*/
+    /*outline: none*/
     text-align: center;
     margin-top: var(--padding);
 }
@@ -145,7 +145,7 @@ img.photo-attachment {
     display: block;
     background-color: var(--background-color);
     border: transparent;
-    outline: none;
+    /*outline: none*/
     height: var(--button-height);
     text-align: center;
 }
