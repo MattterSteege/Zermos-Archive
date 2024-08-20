@@ -105,7 +105,7 @@ pre {
     border: none;
     outline: none;
 }
-.message p.attachment {
+.message a.attachment {
     border-radius: var(--border-radius-small);
     cursor: pointer;
     color: var(--text-color);
@@ -144,9 +144,10 @@ img.photo-attachment {
     font-weight: 700;
     display: block;
     background-color: var(--background-color);
-    border: none;
+    border: transparent;
     outline: none;
     height: var(--button-height);
+    text-align: center;
 }
 
 .calendar-container {

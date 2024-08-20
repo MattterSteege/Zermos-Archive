@@ -18,7 +18,5 @@
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <PkgMicrosoft_EntityFrameworkCore_Tools Condition=" '$(PkgMicrosoft_EntityFrameworkCore_Tools)' == '' ">C:\Users\mattt\.nuget\packages\microsoft.entityframeworkcore.tools\7.0.15</PkgMicrosoft_EntityFrameworkCore_Tools>
-    <PkgjQuery Condition=" '$(PkgjQuery)' == '' ">C:\Users\mattt\.nuget\packages\jquery\3.5.1</PkgjQuery>
-    <PkgChartJS Condition=" '$(PkgChartJS)' == '' ">C:\Users\mattt\.nuget\packages\chartjs\23.1.7</PkgChartJS>
   </PropertyGroup>
 </Project>

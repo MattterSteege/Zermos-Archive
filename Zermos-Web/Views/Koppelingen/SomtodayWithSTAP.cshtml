@@ -20,7 +20,7 @@
     .addButton({text: "Open mobiele Somtoday app", onClick: () => {
         window.location.href = "somtoday://nl.topicus.somtoday.leerling/oauth/callback";
     }})
-    .open();
+    .openTroughAppending(main);
     
     
     var CheckingTimeout = null;

@@ -50,7 +50,7 @@
                             <pre id=@("base-" + indexOfMessage) class="content">@Html.Raw(HTMLUtils.BalanceHtmlTags(HTMLUtils.ConvertLinksInText(content.Content.String).FirstWords(wordCount)))</pre>
                             <span id=@("dots-" + indexOfMessage) style="font-size: var(--font-size);">...</span>
                             <pre id=@("more-" + indexOfMessage) style="display: none;">@Html.Raw(HTMLUtils.ConvertLinksInText(content.Content.String))</pre>
-                            <button onclick=@("readMore(" + indexOfMessage + ")") id=@("myBtn-" + indexOfMessage) class="read-more-btn">Lees meer</button>
+                            <div onclick=@("readMore(" + indexOfMessage + ")") id=@("myBtn-" + indexOfMessage) class="read-more-btn">Lees meer</div>
                         }
                     }
                 </div>
@@ -61,7 +61,7 @@
                 <div class="attachments">
                     @foreach (var attachment in messages3)
                     {
-                        <p onclick="window.open('@attachment.Content.ContentClass.Url');" class="attachment">@(attachment.Content.ContentClass.Name + System.IO.Path.GetExtension(attachment.Content.ContentClass.Url.AbsolutePath))</p>
+                        <a onclick="window.open('@attachment.Content.ContentClass.Url');" class="attachment">@(attachment.Content.ContentClass.Name + System.IO.Path.GetExtension(attachment.Content.ContentClass.Url.AbsolutePath))</a>
                     }
 
                     @foreach (var photo in photos)

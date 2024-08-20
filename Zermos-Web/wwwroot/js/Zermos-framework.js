@@ -4,6 +4,7 @@
   mainAfterLoad: function(callback) {},
   mainUnload: function(callback) {},
   checkForUpdates: function(callback) {},
+  mainProcessAccessibility: function() {},
 };
 
 //==============================VARIABLES==============================

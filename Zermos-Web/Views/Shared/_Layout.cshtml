@@ -17,6 +17,7 @@
     <meta name="theme-color" content="@(Context.Request.Cookies["theme"] == "light" || Context.Request.Cookies["theme"] == "blue" ? "#f8f9fa" : Context.Request.Cookies["theme"] == "dark" || Context.Request.Cookies["theme"] == "red" ? "#1a1a1a" : Context.Request.Cookies["theme"] == "pink" ? "#ffebf2" : "#f8f9fa")">
     <link rel="stylesheet" href="~/css/style.css?v=@version">
     <script defer src="/js/zermos-framework.min.js?v=@version"></script>
+    <script src="/js/Zermos-accessibility.min.js?v=@version" defer></script>
     <script src="/js/Zermos-modal.min.js?v=@version"></script>
     <link rel="stylesheet" href="/css/modal.css?v=@version">
 </head>
@@ -200,6 +201,8 @@ async function ReplacePage(url, force) {
 
         // Now set the data
         await doPageReplace(data, url);
+        
+        Zermos.mainProcessAccessibility();
 
         // After setting the data, hide the loading screen
         await hideLoadingScreen();

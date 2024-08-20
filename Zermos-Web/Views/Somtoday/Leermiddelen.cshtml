@@ -3,22 +3,23 @@
 <link rel="stylesheet" href="/css/somtoday.css" preload/>
 
 <div class="leermiddelen-container">
+    <h1>Online methodes</h1>
     @foreach (var leermiddel in Model.items)
     {
         <div class="leermiddel" onclick="window.open('@leermiddel.URL')">
             <i class="fa-solid fa-external-link"></i>
             <h1>@leermiddel.Title</h1>
-            
+
             @{
-                List<string> desc = new(){};
+                List<string> desc = new() { };
                 desc = leermiddel.Uitgever != null ? desc.Append(leermiddel.Uitgever).ToList() : desc;
                 desc = leermiddel.DashboardMethodeNaam != null ? desc.Append(leermiddel.DashboardMethodeNaam).ToList() : desc;
             }
-            
+
             <p>@string.Join(" • ", desc)</p>
         </div>
     }
-    
+
     @if (Model.items.Count == 0)
     {
         <div class="add-leermiddel" onclick="openAddingModal()">

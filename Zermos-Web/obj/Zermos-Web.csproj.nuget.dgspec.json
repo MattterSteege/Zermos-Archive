@@ -139,18 +139,6 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
-            "ChartJS": {
-              "target": "Package",
-              "version": "[23.1.7, )"
-            },
-            "ChartJSCore": {
-              "target": "Package",
-              "version": "[3.10.1, )"
-            },
-            "MessagePack": {
-              "target": "Package",
-              "version": "[2.6.100-alpha, )"
-            },
             "Microsoft.AspNetCore.Razor.Runtime": {
               "target": "Package",
               "version": "[2.2.0, )"
@@ -190,14 +178,6 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
-            },
-            "Selenium.WebDriver": {
-              "target": "Package",
-              "version": "[4.18.1, )"
-            },
-            "WebDriverManager": {
-              "target": "Package",
-              "version": "[2.17.2, )"
             }
           },
           "imports": [

@@ -8,8 +8,16 @@ TODO: huiswerk afvinken
 TODO: infowijs pagina's redesign
 
 TODO: jaarbijlagen bij leermiddelen
-TODO: padding onder de cijfers Totaalgemiddelde (https://cdn.discordapp.com/attachments/1256698797002588355/1263882261011366009/IMG_6913.png?ex=669bd994&is=669a8814&hm=d46e0b044020cfbdebf385e9170b80020fcea12a5e3452da5d57ab23b3417818&)
 TODO: de roosters van vrienden koppelen -> share allow [email] to view your schedule
+    
+TODO: accessibility:
+ - Use the role="button" attribute on the div to inform assistive technologies that the div should be treated as a button.
+ - Ensure the div is focusable by adding a tabindex="0" attribute. This allows users to navigate to the div using the Tab key.
+ - Handle keyboard events like Enter and Space to simulate button behavior:
+    - When the div receives focus, pressing Enter or Space should trigger the same action as clicking the div.
+    - Use the keydown event to listen for these key presses and trigger the action accordingly.
+ - Use ARIA attributes to convey additional information to screen readers if needed. For example, aria-pressed="true" if the button represents a toggle.
+ - Ensure the div visually looks and behaves like a button, including hover and focus states. This helps all users, including those with cognitive disabilities, understand the element's purpose.   
     
 Discord server webhooks:
 #informatie: https://discord.com/api/webhooks/1271383220813959251/6YaYKl88vmXV_AH_dfoX-3qTKveuXpaSHTPuuJjPfJTQZfqZyTrCCz3J5-Hf1odT48hA
