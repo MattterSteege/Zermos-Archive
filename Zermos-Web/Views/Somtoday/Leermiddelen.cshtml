@@ -3,7 +3,6 @@
 <link rel="stylesheet" href="/css/somtoday.css" preload/>
 
 <div class="leermiddelen-container">
-    <h1>Online methodes</h1>
     @foreach (var leermiddel in Model.items)
     {
         <div class="leermiddel" onclick="window.open('@leermiddel.URL')">

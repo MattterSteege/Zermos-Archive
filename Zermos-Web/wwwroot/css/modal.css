@@ -88,6 +88,7 @@
     justify-content: space-between;
     gap: var(--padding);
     flex-direction: row-reverse;
+    position: relative;
 }
 
 .multi-toggle-container {
@@ -211,8 +212,8 @@
     text-align: left; /* Align the text to the left */
 }
 
-.url-field, .dropdown-button, .datepicker-parent, .text-element-input .display,
-.textarea-element-input .display, .password-element-input .display {
+.url-field, .dropdown-button, .datepicker-parent, .text-element-input.display,
+.textarea-element-input.display, .password-element-input.display {
     flex-grow: 1;
     padding: var(--modal-padding);
     border-radius: var(--button-border-radius);
@@ -226,6 +227,7 @@
     height: var(--button-height);
     line-height: var(--button-height);
     align-items: center;
+    width: 100%;
 }
 
 .label {
@@ -485,36 +487,47 @@
     margin-top: 10px;
 }
 
+/*<div class="sliderInput" id="MTgxLDEwLDg"><div class="slider-container"><input type="range" class="slider-input" min="0" max="50" step="1"><span class="slider-value">0</span></div></div>*/
+
 .slider-container {
     display: flex;
     align-items: center;
+    gap: var(--modal-padding);
+    width: 100%;
 }
 
-.slider-container label {
-    margin-right: var(--modal-padding);
-    font-size: var(--font-size);
-    color: var(--text-color);
+.slider-input {
+    width: 100%;
+    height: 5px;
+    background: var(--inactive-color);
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+}
+
+.slider-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #04AA6D;
+    cursor: pointer;
+}
+
+.slider-input::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #04AA6D;
+    cursor: pointer;
 }
 
 .slider-track {
-    position: relative;
-    flex-grow: 1;
-    height: 6px;
+    width: 100%;
+    height: 5px;
     background: var(--inactive-color);
-    border-radius: var(--button-border-radius);
-    margin-right: var(--modal-padding);
-}
-
-.slider-thumb {
-    position: absolute;
-    top: -7px;
-    width: 20px;
-    height: 20px;
-    background: var(--confirm-color);
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background 0.3s;
-    translate: -50% 0;
+    border-radius: var(--border-radius-small);
+    position: relative;
 }
 
 .slider-value {

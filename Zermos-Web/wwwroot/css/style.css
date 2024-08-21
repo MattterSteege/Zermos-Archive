@@ -443,6 +443,7 @@ main.main {
     height: 100%;
     position: fixed;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: var(--padding);
     padding-top: calc(48px + var(--padding) * 2);
 }

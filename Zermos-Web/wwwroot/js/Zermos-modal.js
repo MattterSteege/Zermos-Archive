@@ -77,7 +77,7 @@
         return this.addComponent({ type: 'multiToggleInput', labels, states: initialStates, onChange, id: id});
     }
 
-    addButton({text, onClick = () => {}, id = undefined}) { //TODO
+    addButton({text, onClick = () => {}, id = undefined}) {
         return this.addComponent({ type: 'button', text, onClick, id: id});
     }
 
@@ -130,15 +130,15 @@
         return this.addComponent({ type: 'numberInput', required, initialValue, decimals, min, max, step, onChange, id: id});
     }
 
-    addTextInput({required = false, initialValue = '', maxLength = null, onChange = () => {}, id = undefined}) {
+    addTextInput({required = false, initialValue = '', maxLength = -1, onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'textInput', required, initialValue, maxLength, onChange, id: id});
     }
 
-    addPasswordInput({required = false, maxLength = null, onChange = () => {}, id = undefined}) {
+    addPasswordInput({required = false, maxLength = -1, onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'passwordInput', required, maxLength, onChange, id: id});
     }
 
-    addTextArea({required = false, initialValue = '', maxLength = null, onChange = () => {}, id = undefined}) {
+    addTextArea({required = false, initialValue = '', maxLength = -1, onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'textAreaInput', required, initialValue, maxLength, onChange, id: id});
     }
 
@@ -189,19 +189,19 @@
         componentElement.id = component.id;
 
         const renderMethods = {
-            heading: this.renderHeading, //
-            button: this.renderButton, //
-            doubleButton: this.renderDoubleButton, //
-            tripleButton: this.renderTripleButton, //
-            submenu: this.renderSubmenu, //
-            text: this.renderText, //
-            label: this.renderLabel, //
-            toggleInput: this.renderToggle, //
-            multiToggleInput: this.renderMultiToggle, //
-            url: this.renderUrl, //
-            spacer: this.renderSpacer, //
-            separator: this.renderSeparator, //
-            image: this.renderImage, //
+            heading: this.renderHeading,
+            button: this.renderButton,
+            doubleButton: this.renderDoubleButton,
+            tripleButton: this.renderTripleButton,
+            submenu: this.renderSubmenu,
+            text: this.renderText,
+            label: this.renderLabel,
+            toggleInput: this.renderToggle,
+            multiToggleInput: this.renderMultiToggle,
+            url: this.renderUrl,
+            spacer: this.renderSpacer,
+            separator: this.renderSeparator,
+            image: this.renderImage,
             datePickerInput: this.renderDatePicker,
             dropdownInput: this.renderDropdown,
             numberInput: this.renderNumberInput,
@@ -528,7 +528,7 @@
         dropdownElement.setAttribute('role', 'combobox');
         dropdownElement.setAttribute('aria-expanded', 'false');
 
-        const dropdownButton = document.createElement('div');
+        const dropdownButton = document.createElement('button');
         dropdownButton.classList.add('dropdown-button');
         dropdownButton.innerText = 'Select...';
         dropdownButton.setAttribute('tabindex', this.getTabIndex());
@@ -585,301 +585,147 @@
     }
 
     renderNumberInput(component, componentElement) {
-        const numberInput = document.createElement('div');
+        const numberInput = document.createElement('input');
+        numberInput.type = 'number';
         numberInput.className = 'number-input';
-        numberInput.setAttribute('role', 'spinbutton');
-        numberInput.setAttribute('aria-valuenow', value);
-        numberInput.setAttribute('aria-valuemin', component.min);
-        numberInput.setAttribute('aria-valuemax', component.max);
+        numberInput.setAttribute('min', component.min);
+        numberInput.setAttribute('max', component.max);
+        numberInput.setAttribute('step', component.step);
+        numberInput.setAttribute('value', component.initialValue.toFixed(component.decimals));
         numberInput.setAttribute('tabindex', this.getTabIndex());
-        
-        const decrementButton = document.createElement('div');
-        decrementButton.className = 'decrement-button';
-        decrementButton.textContent = '-';
 
-        const numberDisplay = document.createElement('span');
-        numberDisplay.contentEditable = 'true';
-        numberDisplay.className = 'display';
-
-        const incrementButton = document.createElement('div');
-        incrementButton.className = 'increment-button';
-        incrementButton.textContent = '+';
-
-        numberInput.append(decrementButton, numberDisplay, incrementButton);
-
-        let value = component.initialValue;
-
-        const updateDisplay = () => {
-            numberDisplay.textContent = value.toFixed(component.decimals);
-            if (component.onChange) {
-                component.onChange(this, value);
-                component.userSetValue = value;
+        const updateValue = (newValue) => {
+            const value = parseFloat(newValue);
+            if (!isNaN(value) && value >= component.min && value <= component.max) {
+                numberInput.value = value.toFixed(component.decimals);
+                if (component.onChange) {
+                    component.onChange(this, value);
+                    component.userSetValue = value;
+                }
             }
         };
 
-        const increment = () => {
-            if (value + component.step <= component.max) {
-                value += component.step;
-                updateDisplay();
-            }
-        };
+        numberInput.addEventListener('input', (e) => updateValue(e.target.value));
+        numberInput.addEventListener('change', (e) => updateValue(e.target.value));
 
-        const decrement = () => {
-            if (value - component.step >= component.min) {
-                value -= component.step;
-                updateDisplay();
-            }
-        };
-
-        const validateAndSetInput = (inputValue) => {
-            let parsedValue = parseFloat(inputValue.replace(',', '.'));
-            if (!isNaN(parsedValue) && parsedValue >= component.min && parsedValue <= component.max) {
-                value = parsedValue;
-                updateDisplay();
-            }
-        };
-
-        incrementButton.addEventListener("click", increment);
-        decrementButton.addEventListener("click", decrement);
-
-        numberDisplay.addEventListener("input", (e) => validateAndSetInput(e.target.textContent));
-        numberDisplay.addEventListener("keypress", (e) => {
-            if (!/[0-9,.]/.test(String.fromCharCode(e.which))) {
-                e.preventDefault();
-            }
-        });
-
-        updateDisplay();
         componentElement.appendChild(numberInput);
         return componentElement;
     }
 
     renderTextInput(component, componentElement) {
-        const textElementInput = document.createElement('div');
-        textElementInput.className = 'text-element-input';
+        const inputElement = document.createElement('input');
+        inputElement.type = 'text';
+        inputElement.className = 'text-element-input display';
+        inputElement.value = component.initialValue;
+        if (component.maxLength !== -1)
+            inputElement.maxLength = component.maxLength;
+        
+        inputElement.tabIndex = this.getTabIndex();
 
-        const textDisplay = document.createElement('div');
-        textDisplay.contentEditable = 'true';
-        textDisplay.className = 'display';
-        textDisplay.textContent = component.initialValue;
-        textDisplay.setAttribute('role', 'textbox');
-        textDisplay.setAttribute('tabindex', this.getTabIndex());
-
-        textElementInput.append(textDisplay);
-
-        const handleInput = (e) => {
-            if (component.maxLength && e.target.innerText.length > component.maxLength) {
-                e.target.innerText = e.target.innerText.slice(0, component.maxLength);
-            }
+        inputElement.addEventListener('input', (e) => {
             if (component.onChange) {
-                component.onChange(this, e.target.innerText);
-                component.userSetValue = e.target.innerText;
+                component.onChange(this, e.target.value);
+                component.userSetValue = e.target.value;
             }
-        };
+        });
 
-        textDisplay.addEventListener("input", handleInput);
-
-        componentElement.appendChild(textElementInput);
+        componentElement.appendChild(inputElement);
         return componentElement;
     }
 
     renderPasswordInput(component, componentElement) {
-        const passwordInput = document.createElement('div');
-        passwordInput.className = 'password-element-input';
-        passwordInput.setAttribute('role', 'textbox');
-        passwordInput.setAttribute('aria-label', 'Password input field');
-        passwordInput.setAttribute('tabindex', this.getTabIndex());
-        passwordInput.setAttribute('aria-live', 'polite');
-
-        const textDisplay = document.createElement('div');
-        textDisplay.contentEditable = 'true';
-        textDisplay.className = 'display';
-        textDisplay.setAttribute('role', 'textbox');
-        textDisplay.setAttribute('aria-label', 'Password input');
-        textDisplay.setAttribute('aria-multiline', 'false');
-        textDisplay.setAttribute('spellcheck', 'false');
+        const inputElement = document.createElement('input');
+        inputElement.type = 'password';
+        inputElement.className = 'password-element-input display';
+        inputElement.tabIndex = this.getTabIndex();
+        if (component.maxLength !== -1)
+            inputElement.maxLength = component.maxLength;
 
         const eyeIcon = document.createElement('div');
         eyeIcon.innerText = "👀";
         eyeIcon.className = 'eye-icon';
         eyeIcon.setAttribute('aria-label', 'Toggle password visibility');
-        eyeIcon.setAttribute('tabindex', '0');
+        eyeIcon.tabIndex = 0;
 
-        passwordInput.append(textDisplay, eyeIcon);
-
-        let password = '';
         let showPassword = false;
-
-        const updateDisplay = () => {
-            textDisplay.innerText = showPassword ? password : '•'.repeat(password.length);
-            if (component.onChange) {
-                component.onChange(this, password);
-                component.userSetValue = password;
-            }
-        };
-
-        const setCursorPosition = (element, position) => {
-            const range = document.createRange();
-            const sel = window.getSelection();
-            range.setStart(element.firstChild, Math.min(position, element.firstChild.length));
-            range.collapse(true);
-            sel.removeAllRanges();
-            sel.addRange(range);
-        };
-
-        const handleKeydown = (e) => {
-            e.preventDefault();
-
-            let sel = window.getSelection();
-            let pos = sel.focusOffset;
-
-            if (e.ctrlKey) return;
-            
-            if (e.key === "Backspace" && pos > 0) {
-                password = password.slice(0, pos - 1) + password.slice(pos);
-                pos--;
-            } else if (e.key.length === 1 && (!component.maxLength || password.length < component.maxLength)) {
-                password = password.slice(0, pos) + e.key + password.slice(pos);
-                pos++;
-            } else if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
-                return;
-            }
-            
-
-            updateDisplay();
-            setCursorPosition(textDisplay, pos);
-        };
 
         eyeIcon.addEventListener('click', () => {
             showPassword = !showPassword;
-            updateDisplay();
+            inputElement.type = showPassword ? 'text' : 'password';
         });
 
-        textDisplay.addEventListener("keydown", handleKeydown);
+        inputElement.addEventListener('input', (e) => {
+            if (component.onChange) {
+                component.onChange(this, e.target.value);
+                component.userSetValue = e.target.value;
+            }
+        });
 
-        componentElement.appendChild(passwordInput);
+        componentElement.appendChild(inputElement);
+        componentElement.appendChild(eyeIcon);
         return componentElement;
     }
-
 
     renderTextArea(component, componentElement) {
-        const textAreaElementInput = document.createElement('div');
-        textAreaElementInput.className = 'textarea-element-input';
+        const textareaElement = document.createElement('textarea');
+        textareaElement.className = 'textarea-element-input display';
+        textareaElement.value = component.initialValue;
+        if (component.maxLength !== -1)
+            textareaElement.maxLength = component.maxLength;
+        
+        textareaElement.tabIndex = this.getTabIndex();
 
-        const textDisplay = document.createElement('span');
-        textDisplay.contentEditable = 'true';
-        textDisplay.className = 'display';
-        textDisplay.role = 'textbox';
-        textDisplay.textContent = component.initialValue;
-        textDisplay.setAttribute('role', 'textbox');
-        textDisplay.setAttribute('tabindex', this.getTabIndex());
-
-        textAreaElementInput.append(textDisplay);
-
-        const handleInput = (e) => {
-            if (component.maxLength && e.target.innerText.length > component.maxLength) {
-                e.target.innerText = e.target.innerText.slice(0, component.maxLength);
-            }
+        textareaElement.addEventListener('input', (e) => {
             if (component.onChange) {
-                component.onChange(this, e.target.innerText);
-                component.userSetValue = e.target.innerText;
+                component.onChange(this, e.target.value);
+                component.userSetValue = e.target.value;
             }
-        };
+        });
 
-        textDisplay.addEventListener("input", handleInput);
-
-        componentElement.appendChild(textAreaElementInput);
+        componentElement.appendChild(textareaElement);
         return componentElement;
     }
-    
-    //======================================================
 
     renderSlider(component, componentElement) {
         const sliderContainer = document.createElement('div');
         sliderContainer.className = 'slider-container';
 
-        const sliderTrack = document.createElement('div');
-        sliderTrack.className = 'slider-track';
-
-        const sliderThumb = document.createElement('div');
-        sliderThumb.className = 'slider-thumb';
+        const sliderInput = document.createElement('input');
+        sliderInput.type = 'range';
+        sliderInput.className = 'slider-input';
+        sliderInput.min = component.min;
+        sliderInput.max = component.max;
+        sliderInput.step = component.step;
+        sliderInput.value = component.initialValue;
 
         const valueDisplay = document.createElement('span');
         valueDisplay.className = 'slider-value';
         valueDisplay.textContent = component.initialValue;
 
-        sliderTrack.appendChild(sliderThumb);
-        sliderContainer.append(sliderTrack, valueDisplay);
-
-        const min = component.min;
-        const max = component.max;
-        const range = max - min;
-
-        // Set initial position
-        const initialPercentage = ((component.initialValue - min) / range) * 100;
-        sliderThumb.style.left = `${initialPercentage}%`;
-
-        let isDragging = false;
-
-        const updateSliderValue = (clientX) => {
-            const rect = sliderTrack.getBoundingClientRect();
-            let percentage = (clientX - rect.left) / rect.width;
-            percentage = Math.max(0, Math.min(percentage, 1));
-
-            const value = min + percentage * range;
-            const roundedValue = Math.round(value / component.step) * component.step;
-
-            sliderThumb.style.left = `${percentage * 100}%`;
+        sliderInput.addEventListener('input', () => {
+            const roundedValue = Math.round(sliderInput.value / component.step) * component.step;
             valueDisplay.textContent = roundedValue.toFixed(getDecimalPlaces(component.step));
 
             if (component.onChange) {
                 component.onChange(this, roundedValue);
                 component.userSetValue = roundedValue;
             }
-        };
-
-        sliderTrack.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            applyNoSelectionClass(true); // Apply no-selection class
-            updateSliderValue(e.clientX);
         });
 
-        document.addEventListener('mousemove', (e) => {
-            if (isDragging) {
-                updateSliderValue(e.clientX);
-            }
-        });
-
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-            applyNoSelectionClass(false); // Apply no-selection class
-        });
-
+        sliderContainer.append(sliderInput, valueDisplay);
         componentElement.appendChild(sliderContainer);
         return componentElement;
 
         function getDecimalPlaces(num) {
-            // Ensure num is a floating-point number
             let floatNum = parseFloat(num);
-            if (Math.floor(floatNum) === floatNum) return 0; // Check if the number is an integer
+            if (Math.floor(floatNum) === floatNum) return 0;
 
             let decimalPart = floatNum.toString().split('.')[1];
-
-            // Trim any trailing zeroes for a more sensible decimal count
             if (decimalPart) {
                 decimalPart = decimalPart.replace(/0+$/, '');
                 return Math.min(decimalPart.length, 2);
             } else {
                 return 0;
-            }
-        }
-
-        // Add this function to apply and remove the no-selection CSS class
-        function applyNoSelectionClass(apply) {
-            if (apply) {
-                document.body.classList.add('no-select');
-            } else {
-                document.body.classList.remove('no-select');
             }
         }
     }
@@ -896,16 +742,18 @@
         colorPalette.className = 'color-palette';
         colorPalette.style.display = "none";
 
-        const hexInput = document.createElement('div');
+        const hexInput = document.createElement('input');
         hexInput.className = 'hex-input';
-        hexInput.contentEditable = 'true';
-        hexInput.textContent = component.initialColor;
+        hexInput.type = 'text';
+        hexInput.value = component.initialColor;
 
         const rgbInputs = ['R', 'G', 'B'].map(channel => {
-            const input = document.createElement('div');
+            const input = document.createElement('input');
             input.className = 'rgb-input';
-            input.contentEditable = 'true';
-            input.textContent = '0';
+            input.type = 'number';
+            input.value = '0';
+            input.min = '0';
+            input.max = '255';
             return input;
         });
 
@@ -916,10 +764,10 @@
 
         const ctx = colorCircle.getContext('2d');
 
-// Create a conic gradient
+        // Create a conic gradient
         const gradient = ctx.createConicGradient(0, 75, 75);
 
-// Add five color stops
+        // Add five color stops
         gradient.addColorStop(0, "red");
         gradient.addColorStop(1/6, "yellow");
         gradient.addColorStop(2/6, "lime");
@@ -928,7 +776,7 @@
         gradient.addColorStop(5/6, "magenta");
         gradient.addColorStop(1, "red");
 
-// Set the fill style and draw a rectangle
+        // Set the fill style and draw a rectangle
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, 150, 150);
 
@@ -958,23 +806,23 @@
 
         const setColorFromHex = (hex) => {
             const { r, g, b } = hexToRgb(hex);
-            rgbInputs[0].textContent = r;
-            rgbInputs[1].textContent = g;
-            rgbInputs[2].textContent = b;
+            rgbInputs[0].value = r;
+            rgbInputs[1].value = g;
+            rgbInputs[2].value = b;
             updateColorDisplay(hex);
         };
 
         const setColorFromRgb = () => {
-            const r = parseInt(rgbInputs[0].textContent, 10) || 0;
-            const g = parseInt(rgbInputs[1].textContent, 10) || 0;
-            const b = parseInt(rgbInputs[2].textContent, 10) || 0;
+            const r = parseInt(rgbInputs[0].value, 10) || 0;
+            const g = parseInt(rgbInputs[1].value, 10) || 0;
+            const b = parseInt(rgbInputs[2].value, 10) || 0;
             const hex = rgbToHex(r, g, b);
-            hexInput.textContent = hex;
+            hexInput.value = hex;
             updateColorDisplay(hex);
         };
 
         hexInput.addEventListener('input', (e) => {
-            const hex = e.target.textContent.trim();
+            const hex = e.target.value.trim();
             if (/^#[0-9A-F]{6}$/i.test(hex)) {
                 setColorFromHex(hex);
             }
@@ -1007,9 +855,9 @@
         });
 
         const { r, g, b } = hexToRgb(component.initialColor);
-        rgbInputs[0].textContent = r;
-        rgbInputs[1].textContent = g;
-        rgbInputs[2].textContent = b;
+        rgbInputs[0].value = r;
+        rgbInputs[1].value = g;
+        rgbInputs[2].value = b;
 
         colorCircle.appendChild(colorSelector);
         colorPalette.append(hexInput, ...rgbInputs, colorCircle);
@@ -1028,26 +876,29 @@
         ratingContainer.className = 'rating-container';
 
         for (let i = 1; i <= component.maxRating; i++) {
-            const star = document.createElement('span');
-            star.textContent = '☆';
-            star.dataset.value = i;
+            const starInput = document.createElement('input');
+            starInput.type = 'radio';
+            starInput.name = 'rating';
+            starInput.id = `star-${i}`;
+            starInput.value = i;
+            starInput.style.display = 'none';
 
-            if (i <= component.initialRating) {
-                star.textContent = '★';
-            }
+            const starLabel = document.createElement('label');
+            starLabel.htmlFor = `star-${i}`;
+            starLabel.textContent = i <= component.initialRating ? '★' : '☆';
 
-            star.addEventListener('click', (e) => {
-                const value = parseInt(e.target.dataset.value);
-                ratingContainer.querySelectorAll('span').forEach((s, index) => {
-                    s.textContent = index < value ? '★' : '☆';
+            starInput.addEventListener('change', () => {
+                ratingContainer.querySelectorAll('label').forEach((label, index) => {
+                    label.textContent = index < starInput.value ? '★' : '☆';
                 });
                 if (component.onChange) {
-                    component.onChange(this, value);
-                    component.userSetValue = value;
+                    component.onChange(this, i);
+                    component.userSetValue = i;
                 }
             });
 
-            ratingContainer.appendChild(star);
+            ratingContainer.appendChild(starInput);
+            ratingContainer.appendChild(starLabel);
         }
 
         componentElement.append(ratingContainer);
