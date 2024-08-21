@@ -40,7 +40,7 @@ const buttonTabIndexOffset = 100;
 
 // Function to handle tabindex for button roles
 function handleButtonRoles() {
-    const buttons = main.querySelectorAll("[role='button']");
+    let buttons = main.querySelectorAll("[role='button']");
 
     buttons.forEach((button, index) => {
         button.setAttribute("tabindex", `${index + 1 + buttonTabIndexOffset}`);

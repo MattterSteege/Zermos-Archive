@@ -124,6 +124,7 @@
     font-weight: 600;
     text-align: center;
     cursor: pointer;
+    border: transparent;
 }
 
 .setting-item .settings-options .setting-button:hover {
@@ -190,22 +191,13 @@
     margin-top: var(--padding-small);
 }
 
-/*
-
-<div class="settings-options">
-            <input type="time" id="5_start_time" name="start_time" min="08:00" max="18:00">
-            <input type="time" id="5_end_time" name="end_time" min="08:00" max="18:00">
-            <div id="5_save" onclick="UpdateSchooltijen(this.parent)">Opslaan</div>
-        </div>
-*/
-
 .setting-item .settings-options input[type="time"] {
     width: 100%;
     padding: var(--padding-small);
     font-size: var(--font-size);
     border-radius: var(--border-radius-small);
     background: var(--overlay-overlay-color);
-    /*border: none;*/
+    border: transparent;
 }
 
 div#\35 _save {

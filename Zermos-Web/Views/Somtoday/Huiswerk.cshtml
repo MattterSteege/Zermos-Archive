@@ -106,7 +106,7 @@
         .addLabel({text: "Welke titel krijg het huiswerk?"})
         .addTextInput({required: true, maxLength: 255})
         .addLabel({text: "Welke beschrijving krijg het huiswerk?"})
-        .addTextArea()
+        .addTextArea({})
         .addButton({text: "Huiswerk toevoegen", onClick: (ctx) => {
             var values = ctx.getComponentsValue();
             

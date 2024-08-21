@@ -129,7 +129,7 @@
 }
 
 
-/*GRADES*/
+/*CIJFERS*/
 .grades-container {
     display: flex;
     height: auto;
@@ -139,10 +139,11 @@
 
 .panel {
     flex: 1;
-    display: none;
+    display: flex;
     flex-direction: column;
     gap: var(--padding);
 }
+
 
 .grade-controls {
     z-index: 100;

@@ -153,10 +153,14 @@ a {
     font-weight: 600;
 }
 
-/*p {*/
-/*    font-size: var(--font-size);*/
-/*    color: var(--text-color);*/
-/*}*/
+button, input {
+    border: unset;
+    background: unset;
+    font-size: var(--font-size);
+    color: var(--text-color);
+    font-weight: 600;
+    cursor: pointer;
+}
 
 html {
     scroll-behavior: smooth;
@@ -312,6 +316,10 @@ body {
     font-weight: 600;
     overflow-y: auto;
     flex-direction: column;
+}
+
+#sidebar .bottom button {
+    width: 100%;
 }
 
 .spacer {

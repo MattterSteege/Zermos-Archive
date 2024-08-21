@@ -6,17 +6,14 @@
 @Context.Items["dmjs"]
 
     var modal = new ZermosModal()
-    .addHeading({text: "Koppel Somtoday aan je account!"})
+    .addHeading({text: "Koppel Somtoday aan je account!", subheading: "lees deze stappen eerst goed door!"})
     .addList({items: [
         "Kopieer de code en open de Somtoday leerling app op je mobiel (werkt niet op pc/laptop). Log uit als je al bent ingelogd.",
         "Klik vijf keer op het Somtoday logo op het inlogscherm. Kies 'Ontwikkel' in de lijst. Vul de eerder gekopieerde code in bij het veld onderaan.",
         "Klik op 'Inloggen'. Als je niet automatisch wordt ingelogd, voer dan je inloggegevens in. Verwacht een foutmelding na het inloggen; dit betekent dat je succesvol bent ingelogd op Zermos.",
         "Ga terug naar de Zermos app, je wordt automatisch naar je accountpagina geleid."
     ], listType: "ol"})
-    .addUrl({url: "@Model.vanityUrl", showFull: true, copyButton: false})
-    .addButton({text: "Kopieer code", onClick: () => {
-        copyToClipboard("@Model.vanityUrl");
-    }})
+    .addUrl({url: "@Model.vanityUrl", showFull: true, copyButton: true})
     .addButton({text: "Open mobiele Somtoday app", onClick: () => {
         window.location.href = "somtoday://nl.topicus.somtoday.leerling/oauth/callback";
     }})

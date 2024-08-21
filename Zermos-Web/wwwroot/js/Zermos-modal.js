@@ -3,6 +3,7 @@
         this.disableClosing = disableClosing;
         this.components = components;
         this.conditions = conditions;
+        this.tabIndex = 0;
         this.close();
     }
 
@@ -188,19 +189,19 @@
         componentElement.id = component.id;
 
         const renderMethods = {
-            heading: this.renderHeading,
-            button: this.renderButton,
-            doubleButton: this.renderDoubleButton,
-            tripleButton: this.renderTripleButton,
-            submenu: this.renderSubmenu,
-            text: this.renderText,
-            label: this.renderLabel,
-            toggleInput: this.renderToggle,
-            multiToggleInput: this.renderMultiToggle,
-            url: this.renderUrl,
-            spacer: this.renderSpacer,
-            separator: this.renderSeparator,
-            image: this.renderImage,
+            heading: this.renderHeading, //
+            button: this.renderButton, //
+            doubleButton: this.renderDoubleButton, //
+            tripleButton: this.renderTripleButton, //
+            submenu: this.renderSubmenu, //
+            text: this.renderText, //
+            label: this.renderLabel, //
+            toggleInput: this.renderToggle, //
+            multiToggleInput: this.renderMultiToggle, //
+            url: this.renderUrl, //
+            spacer: this.renderSpacer, //
+            separator: this.renderSeparator, //
+            image: this.renderImage, //
             datePickerInput: this.renderDatePicker,
             dropdownInput: this.renderDropdown,
             numberInput: this.renderNumberInput,
@@ -229,7 +230,7 @@
     }
 
     renderButton(component, componentElement) {
-        const buttonElement = document.createElement("div");
+        const buttonElement = document.createElement("button");
         buttonElement.innerText = component.text;
         buttonElement.onclick = () => component.onClick(this);
         componentElement.appendChild(buttonElement);
@@ -237,11 +238,11 @@
     }
 
     renderDoubleButton(component, componentElement) {
-        const button1= document.createElement("div");
+        const button1= document.createElement("button");
         button1.innerText = component.text;
         button1.onclick = () => component.onClick(this);
 
-        const button2 = document.createElement("div");
+        const button2 = document.createElement("button");
         button2.innerText = component.secondText;
         button2.onclick = () => component.secondOnClick(this);
 
@@ -250,15 +251,15 @@
     }
 
     renderTripleButton(component, componentElement) {
-        const button1 = document.createElement("div");
+        const button1 = document.createElement("button");
         button1.innerText = component.text;
         button1.onclick = () => component.onClick(this);
 
-        const button2 = document.createElement("div");
+        const button2 = document.createElement("button");
         button2.innerText = component.secondText;
         button2.onclick = () => component.secondOnClick(this);
 
-        const button3 = document.createElement("div");
+        const button3 = document.createElement("button");
         button3.innerText = component.thirdText;
         button3.onclick = () => component.thirdOnClick(this);
 
@@ -295,28 +296,41 @@
 
     renderToggle(component, componentElement) {
         component.userSetValue = component.state.toString();
-        
-        const toggleElement = document.createElement('div');
-        toggleElement.classList.add("toggle-switch");
-        component.asCheckbox ? toggleElement.classList.add("as-checkbox") : null;
-        if (component.state) toggleElement.classList.add("active");
-        toggleElement.innerHTML = "<div class=\"switch\"></div>";
 
-        toggleElement.addEventListener('click', () => {
-            toggleElement.classList.toggle('active');
-            const isActive = toggleElement.classList.contains('active');
+        // Create the input element of type checkbox
+        const toggleElement = document.createElement('input');
+        toggleElement.type = 'checkbox';
+        toggleElement.classList.add('toggle-switch');
+        toggleElement.checked = component.state;
+        toggleElement.setAttribute('role', 'switch');
+        toggleElement.setAttribute('aria-checked', component.state ? 'true' : 'false');
+        toggleElement.setAttribute('tabindex', this.getTabIndex());
+
+        component.asCheckbox ? toggleElement.classList.add('as-checkbox') : null;
+
+        toggleElement.addEventListener('change', () => {
+            const isActive = toggleElement.checked;
+            toggleElement.setAttribute('aria-checked', isActive ? 'true' : 'false');
             if (component.onChange) {
                 component.onChange(this, isActive);
                 component.userSetValue = isActive;
             }
         });
 
-        const toggleLabelElement = document.createElement('div');
-        toggleLabelElement.classList.add("toggle-label");
-        toggleLabelElement.innerText = component.label;
+        // Create the label element and associate it with the input element
+        const toggleLabelElement = document.createElement('label');
+        toggleLabelElement.classList.add('toggle-label');
+        
+        const toggleLabelText = document.createElement('p');
+        toggleLabelText.innerText = component.label;
+        toggleLabelText.setAttribute('for', toggleElement.id);
 
+        componentElement.appendChild(toggleLabelText);
+
+        // Append the elements to the component element
         componentElement.appendChild(toggleElement);
-        componentElement.appendChild(toggleLabelElement)
+        componentElement.appendChild(toggleLabelElement);
+
         return componentElement;
     }
 
@@ -324,6 +338,9 @@
         //make a 2 column grid and add a toggle for each label (renderToggle)
         const toggleContainer = document.createElement('div');
         toggleContainer.classList.add('multi-toggle-container');
+        toggleContainer.setAttribute('role', 'group');
+        toggleContainer.setAttribute('aria-label', 'Multi Toggle Options');
+        toggleContainer.setAttribute('tabindex', this.getTabIndex());
 
         component.userSetValue = component.states.map(state => state.toString());
         
@@ -351,9 +368,11 @@
         urlField.className = 'url-field';
         urlField.textContent = component.showFull ? component.url : (new URL(component.url).pathname + new URL(component.url).search);
         urlField.contentEditable = !component.copyButton;
+        urlField.setAttribute('role', 'link');
+        urlField.setAttribute('tabindex', this.getTabIndex());
 
         if (component.copyButton) {
-            const copyButton = document.createElement('div');
+            const copyButton = document.createElement('button');
             copyButton.className = 'copy button';
             copyButton.textContent = 'Kopieer';
 
@@ -387,6 +406,9 @@
         const imageElement = document.createElement('img');
         imageElement.src = component.src;
         imageElement.alt = component.alt;
+        imageElement.setAttribute('role', 'img');
+        imageElement.setAttribute('aria-label', component.alt);
+        
         componentElement.appendChild(imageElement);
         return componentElement;
     }
@@ -394,6 +416,10 @@
     renderDatePicker(component, componentElement) {
         const datepicker = document.createElement('div');
         datepicker.className = 'datepicker-parent';
+        datepicker.setAttribute('role', 'combobox');
+        datepicker.setAttribute('aria-expanded', 'false');
+        datepicker.setAttribute('aria-haspopup', 'grid');
+        datepicker.setAttribute('tabindex', this.getTabIndex());
 
         const selectedDateElem = document.createElement('div');
         selectedDateElem.className = 'selected-date';
@@ -408,7 +434,7 @@
         calendarHeader.className = 'calendar-header';
         calendarElem.appendChild(calendarHeader);
 
-        const prevMonthButton = document.createElement('div');
+        const prevMonthButton = document.createElement('button');
         prevMonthButton.className = 'prev-month';
         prevMonthButton.textContent = '<';
         calendarHeader.appendChild(prevMonthButton);
@@ -417,7 +443,7 @@
         monthYearElem.className = 'month-year';
         calendarHeader.appendChild(monthYearElem);
 
-        const nextMonthButton = document.createElement('div');
+        const nextMonthButton = document.createElement('button');
         nextMonthButton.className = 'next-month';
         nextMonthButton.textContent = '>';
         calendarHeader.appendChild(nextMonthButton);
@@ -445,7 +471,7 @@
             }
 
             for (let day = 1; day <= daysInMonth; day++) {
-                const dayElem = document.createElement('div');
+                const dayElem = document.createElement('button');
                 dayElem.textContent = day;
                 dayElem.classList.add('day');
                 if (day === selectedDate.getDate() && month === selectedDate.getMonth() && year === selectedDate.getFullYear()) {
@@ -467,6 +493,7 @@
         datepicker.addEventListener('click', () => {
             datepicker.classList.toggle("selected");
             calendarElem.classList.toggle("show");
+            datepicker.setAttribute('aria-expanded', datepicker.classList.contains('selected') ? 'true' : 'false');
         });
 
         prevMonthButton.addEventListener('click', () => {
@@ -498,13 +525,17 @@
 
         const dropdownElement = document.createElement('div');
         dropdownElement.classList.add('dropdown');
+        dropdownElement.setAttribute('role', 'combobox');
+        dropdownElement.setAttribute('aria-expanded', 'false');
 
         const dropdownButton = document.createElement('div');
         dropdownButton.classList.add('dropdown-button');
         dropdownButton.innerText = 'Select...';
+        dropdownButton.setAttribute('tabindex', this.getTabIndex());
 
         const dropdownMenu = document.createElement('div');
         dropdownMenu.classList.add('dropdown-menu');
+        dropdownMenu.setAttribute('role', 'listbox');
 
         component.options.forEach(option => {
             const optionElement = document.createElement('div');
@@ -543,6 +574,7 @@
         dropdownButton.addEventListener('click', () => {
             dropdownButton.classList.toggle("selected");
             dropdownMenu.classList.toggle("show");
+            dropdownElement.setAttribute('aria-expanded', dropdownButton.classList.contains('selected') ? 'true' : 'false');
         });
 
         dropdownElement.appendChild(dropdownButton);
@@ -555,7 +587,12 @@
     renderNumberInput(component, componentElement) {
         const numberInput = document.createElement('div');
         numberInput.className = 'number-input';
-
+        numberInput.setAttribute('role', 'spinbutton');
+        numberInput.setAttribute('aria-valuenow', value);
+        numberInput.setAttribute('aria-valuemin', component.min);
+        numberInput.setAttribute('aria-valuemax', component.max);
+        numberInput.setAttribute('tabindex', this.getTabIndex());
+        
         const decrementButton = document.createElement('div');
         decrementButton.className = 'decrement-button';
         decrementButton.textContent = '-';
@@ -625,6 +662,8 @@
         textDisplay.contentEditable = 'true';
         textDisplay.className = 'display';
         textDisplay.textContent = component.initialValue;
+        textDisplay.setAttribute('role', 'textbox');
+        textDisplay.setAttribute('tabindex', this.getTabIndex());
 
         textElementInput.append(textDisplay);
 
@@ -647,14 +686,24 @@
     renderPasswordInput(component, componentElement) {
         const passwordInput = document.createElement('div');
         passwordInput.className = 'password-element-input';
+        passwordInput.setAttribute('role', 'textbox');
+        passwordInput.setAttribute('aria-label', 'Password input field');
+        passwordInput.setAttribute('tabindex', this.getTabIndex());
+        passwordInput.setAttribute('aria-live', 'polite');
 
         const textDisplay = document.createElement('div');
         textDisplay.contentEditable = 'true';
         textDisplay.className = 'display';
+        textDisplay.setAttribute('role', 'textbox');
+        textDisplay.setAttribute('aria-label', 'Password input');
+        textDisplay.setAttribute('aria-multiline', 'false');
+        textDisplay.setAttribute('spellcheck', 'false');
 
-        const eyeIcon = document.createElement('span');
+        const eyeIcon = document.createElement('div');
         eyeIcon.innerText = "👀";
         eyeIcon.className = 'eye-icon';
+        eyeIcon.setAttribute('aria-label', 'Toggle password visibility');
+        eyeIcon.setAttribute('tabindex', '0');
 
         passwordInput.append(textDisplay, eyeIcon);
 
@@ -669,21 +718,36 @@
             }
         };
 
+        const setCursorPosition = (element, position) => {
+            const range = document.createRange();
+            const sel = window.getSelection();
+            range.setStart(element.firstChild, Math.min(position, element.firstChild.length));
+            range.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        };
+
         const handleKeydown = (e) => {
+            e.preventDefault();
+
             let sel = window.getSelection();
             let pos = sel.focusOffset;
 
+            if (e.ctrlKey) return;
+            
             if (e.key === "Backspace" && pos > 0) {
                 password = password.slice(0, pos - 1) + password.slice(pos);
+                pos--;
             } else if (e.key.length === 1 && (!component.maxLength || password.length < component.maxLength)) {
                 password = password.slice(0, pos) + e.key + password.slice(pos);
+                pos++;
             } else if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
-                e.preventDefault();
+                return;
             }
+            
 
             updateDisplay();
-            this.setCursorPosition(textDisplay, pos + (e.key === "Backspace" ? -1 : 1));
-            e.preventDefault();
+            setCursorPosition(textDisplay, pos);
         };
 
         eyeIcon.addEventListener('click', () => {
@@ -697,6 +761,7 @@
         return componentElement;
     }
 
+
     renderTextArea(component, componentElement) {
         const textAreaElementInput = document.createElement('div');
         textAreaElementInput.className = 'textarea-element-input';
@@ -706,6 +771,8 @@
         textDisplay.className = 'display';
         textDisplay.role = 'textbox';
         textDisplay.textContent = component.initialValue;
+        textDisplay.setAttribute('role', 'textbox');
+        textDisplay.setAttribute('tabindex', this.getTabIndex());
 
         textAreaElementInput.append(textDisplay);
 
@@ -724,6 +791,8 @@
         componentElement.appendChild(textAreaElementInput);
         return componentElement;
     }
+    
+    //======================================================
 
     renderSlider(component, componentElement) {
         const sliderContainer = document.createElement('div');
@@ -1053,6 +1122,10 @@
         if (!isNaN(value)) return parseFloat(value);
         if (/^["'].*["']$/.test(value)) return value.slice(1, -1);
         throw new Error('Unsupported value type:' + value);
+    }
+
+    getTabIndex() {
+        return 1000 + this.tabIndex++;
     }
 
     open() {
