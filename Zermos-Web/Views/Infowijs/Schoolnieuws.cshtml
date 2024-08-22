@@ -109,5 +109,14 @@
         if (messages[0].querySelector(".title") == null) {
             messages[0].remove();
         }
+        
+        //if the height of the message is like this: <div class="message"><div class="contents"></div><div class="attachments"></div></div>
+        //remove the message
+        
+        for (var i = 0; i < messages.length; i++) {
+            if (messages[i].querySelector(".contents").innerHTML.trim() === "" && messages[i].querySelector(".attachments").innerHTML.trim() === "") {
+                messages[i].remove();
+            }
+        }
     }
 </script>

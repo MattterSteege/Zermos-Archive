@@ -5,7 +5,7 @@ TODO: een demo versie van Zermos om te laten zien aan nieuwe gebruikers
 TODO: QR koppelen voor smartwatch, dan weet je ook gelijk dat de gebruiker een smartwatch is en kan je dat in de cookies opslaan en de gebruiker niet meer vragen of hij een smartwatch op dat moment gebruikt
 TODO: husiwerk pagina redesign
 TODO: huiswerk afvinken
-TODO: infowijs pagina's redesign
+TODO: infowijs calendar redesign -> https://i.pinimg.com/736x/43/9a/5a/439a5a83b7161d9caaf29cf8a908ff40.jpg (only right side)
 
 TODO: jaarbijlagen bij leermiddelen
 TODO: de roosters van vrienden koppelen -> share allow [email] to view your schedule
