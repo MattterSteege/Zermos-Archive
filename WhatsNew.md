@@ -4,6 +4,28 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - Versie 0.6.2 - 22-08-2024
+Version 0.6.2
+
+- koppelingen
+    - Ik heb elke koppeling pagina een modal gegeven ipv een ontworpen pagina, dit is voor consistentie en omdat het makkelijker is om te maken.  
+      
+- koppelingen - somtoday
+    - De hackerman methode is nu niet meer aanbevolen om te gebruiken (hij werkt nog wel, maar er is een betere manier nu)
+    - Er is een nieuwe authenticatiemethode toegevoegd, deze werkt bij elk type account en zelfs als je inlogd met bijv. Microsoft of google als third-party authenticatie.
+
+- koppelingen - infowijs
+    - Je kunt nu ook de email methode om in te loggen gebruiken, dit is vooral handig als je op mobiel zit!   
+
+- Somtoday - Rooster!?
+    - Yup, als je geen Zermelo account hebt, maar wel een Somtoday account, dan kun je nu je rooster zien in, helaas is dit rooster wel minder geavanceerd dan die van Zermelo, maar het is beter dan niks! Je krijgt deze rooster engine automatisch als je of 1. geen Zermelo account gekoppeld hebt of 2. je in de instellingen hebt aangegeven dat je liever je Somtoday's rooster engine wilt gebruiken.
+
+- infowijs - schoolkalender
+    - Er was een klein foutje waar het eerste bericht niet goed inlaadde, dit is nu gefixt (door hem hardnekking te verwijderen, het was toch niet een echt bericht, maar gewoon een by-product)
+    
+- algemeen
+    - Ik heb het modal systeem weer geüpdate, voor beter controle over de modals
+
 # Release Notes - Versie 0.6.1 - 14-08-2024
 Version 0.6.1 - Back to school... AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 
