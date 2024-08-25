@@ -94,8 +94,6 @@ var loadingTexts = [
   "Dammen bouwen",
   "Kroketten bakken",
   "Kokosnoten zijn geen specerijen",
-
-  // nog meer laadberichten!!!!
   "Even een Frikandel Speciaal halen",
   "De VOC-mentaliteit aan het oppoetsen",
   "Stamppot aan het prakken",
@@ -610,22 +608,29 @@ document.addEventListener("DOMContentLoaded", function() {
 
   elements.forEach(function(element) {
     element.addEventListener("mouseover", function() {
-      element.classList.add("animating");
+      //if screen is bigger than 1200px
+        if (window.matchMedia("(min-width: 1200px)").matches) {
+          element.classList.add("animating");
+        }
     });
 
     element.addEventListener("transitionend", function() {
       element.classList.remove("animating");
     });
   });
-
-  //remove the version after 5 seconds, fade
-  setTimeout(() => {
-    //fade .version out in 1s
-    $(".version").fadeOut(1000, () => {
-      //remove .version from the DOM
-      $(".version").remove();
+  
+  const top = document.querySelector(".top");
+  top.addEventListener("click", function() {
+    elements.forEach(function(element) {
+        element.classList.add("animating");
+      });
+    
+    setTimeout(() => {
+        elements.forEach(function(element) {
+            element.classList.remove("animating");
+        });
+      }, 300);
     });
-  }, 5000);
 });
 //==============================LOGGING OVERWRITE==============================
 // Overwrite console.log to log to the console and to an array

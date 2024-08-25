@@ -13,12 +13,12 @@
 <div class="week" data-week="@Model.MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.MondayOfAppointmentsWeek.Year" data-unix="@Model.MondayOfAppointmentsWeek.ToUnixTime()">
     <div class="days-container">
         <ul>
-            <li>@Model.MondayOfAppointmentsWeek.GetWeekNumber()</li>
-            <li>Ma<div class="date">@Model.MondayOfAppointmentsWeek.ToString("dd MMM")</div></li>
-            <li>Di<div class="date">@Model.MondayOfAppointmentsWeek.AddDays(1).ToString("dd MMM")</div></li>
-            <li>Wo<div class="date">@Model.MondayOfAppointmentsWeek.AddDays(2).ToString("dd MMM")</div></li>
-            <li>Do<div class="date">@Model.MondayOfAppointmentsWeek.AddDays(3).ToString("dd MMM")</div></li>
-            <li>Vr<div class="date">@Model.MondayOfAppointmentsWeek.AddDays(4).ToString("dd MMM")</div></li>
+            <li><div class="days-top">@Model.MondayOfAppointmentsWeek.GetWeekNumber()</div></li>
+            <li><div class="days-top">Ma<div class="date">@Model.MondayOfAppointmentsWeek.ToString("dd MMM")</div></div></li>
+            <li><div class="days-top">Di<div class="date">@Model.MondayOfAppointmentsWeek.AddDays(1).ToString("dd MMM")</div></div></li>
+            <li><div class="days-top">Wo<div class="date">@Model.MondayOfAppointmentsWeek.AddDays(2).ToString("dd MMM")</div></div></li>
+            <li><div class="days-top">Do<div class="date">@Model.MondayOfAppointmentsWeek.AddDays(3).ToString("dd MMM")</div></div></li>
+            <li><div class="days-top">Vr<div class="date">@Model.MondayOfAppointmentsWeek.AddDays(4).ToString("dd MMM")</div></div></li>
         </ul>
     </div>
     <div class="lessons-container">
@@ -134,7 +134,7 @@
         times = times.Distinct().OrderBy(t => t).ToList();
         timesString = timesString.Distinct().ToList();
         var calcTime = new List<string>();
-        string gridTemplateRows = "40px ";
+        string gridTemplateRows = "0 ";
         
         var minutesLeft = ((Model.timeStamps?[1] - Model.timeStamps?[0]) / 60) ?? 540;
         
@@ -162,6 +162,8 @@
         }
         
         gridTemplateRows += string.Join("fr ", calcTime) + "fr";
+        
+        if (gridTemplateRows == "0 fr") gridTemplateRows = "0";
     }
     <div class="times-container">
         <ul style="grid-template-rows: @gridTemplateRows">

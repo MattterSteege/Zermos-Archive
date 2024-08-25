@@ -108,3 +108,10 @@ namespace Zermos_Web
         }
     }
 }
+
+/*
+    Handy to know:
+    - If you want a GET request with Body, you can use the _GET method, and the middleware will handle it just like a GET request.
+    - Dont want any framework? Just add ?no-framework to the URL, and the middleware will handle the rest.
+     
+ */

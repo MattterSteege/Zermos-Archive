@@ -3,6 +3,7 @@
 @{
     var version = Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION");
     version = version == "DEV" ? TokenUtils.RandomString(10) : version;
+    string preferedFont = (string) ViewData["prefersFont"];
 }
 <!DOCTYPE html>
 <html lang="nl" class="@(Context.Response.GetCookie("theme") ?? Context.Request.Cookies["theme"] ?? "light") @(Context.Response.GetCookie("hand_side") ?? Context.Request.Cookies["hand_side"] ?? "right") @(Context.Response.GetCookie("font_size") ?? Context.Request.Cookies["font_size"] ?? "font-scale-1")">
@@ -20,6 +21,13 @@
     <script src="/js/Zermos-accessibility.min.js?v=@version" defer></script>
     <script src="/js/Zermos-modal.min.js?v=@version"></script>
     <link rel="stylesheet" href="/css/modal.css?v=@version">
+    
+@*TODO: implement correct setting, so not all fonts are loaded unnecesairuly*@
+        <link rel="stylesheet" href="/Fonts/EuclidCircularA/EuclidCircularA.css">
+
+        <link rel="stylesheet" href="Fonts/Inter Web/inter.css">
+
+    
 </head>
 <body>
 
@@ -309,6 +317,24 @@ window.onbeforeunload = function() {
 
 window.addEventListener("popstate", function(e) {
     ReplacePage(e.target.location.pathname, true);
+});
+
+//when user has opend an other app, reload the page after 5 minutes of inactivity
+var visibilityChange = Date.now();
+var minTime = 300000; //5 minutes
+document.addEventListener("visibilitychange", (e) => {
+    if (e.target.visibilityState === "hidden") {
+        visibilityChange = Date.now();
+        main.style.transition = "unset";
+        main.style.opacity = "0"
+    } else {
+        if (visibilityChange === 0) location.reload();
+        else if (Date.now() - visibilityChange > minTime) location.reload();
+        else {
+            main.style.transition = "opacity 0.25s";
+            main.style.opacity = "1"
+        }
+    }
 });
 </script>
 </body>

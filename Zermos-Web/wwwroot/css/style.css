@@ -20,6 +20,7 @@
     --border-radius-small: 7px;
 
     --font-size-multiplier: 1;
+    --font-family: 'Open Sans', sans-serif;
 
     --font-size-heading: calc(16px * var(--font-size-multiplier));
     --font-size-heading-small: calc(12px * var(--font-size-multiplier));
@@ -122,6 +123,28 @@
     --font-size-multiplier: 2;
 }
 
+.normal-font {
+    --font-family: 'Open Sans', sans-serif;
+}
+
+.monospace-font {
+    --font-family: 'Fira Code', monospace;
+}
+
+.euclid-font {
+    --font-family: 'Euclid Circular', sans-serif;
+}
+
+.roboto-font {
+    --font-family: 'Roboto', sans-serif;
+}
+
+.inter-font {
+    --font-family: 'Inter', sans-serif;
+}
+
+/* Begin setting default values */
+
 ::-webkit-scrollbar {
     display: none;
 }
@@ -136,8 +159,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Open Sans', sans-serif;
+    font-family: var(--font-family);
+    -webkit-tap-highlight-color: transparent;
 }
+
+
 
 html, body, div, p, ul, li {
     margin: 0;
@@ -170,6 +196,16 @@ body {
     background: var(--background-color);
     --webkit-font-smoothing: antialiased;
     --moz-osx-font-smoothing: grayscale;
+}
+
+.no-select, .deep-no-select, .deep-no-select * {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.no-click, .deep-no-click, .deep-no-click * {
+    pointer-events: none;
 }
 
 /* End setting default values */
@@ -294,13 +330,13 @@ body {
     position: relative;
     display: inline-block;
     text-shadow: none;
-    transition: transform 0.3s;
-    transform: translateY(10px);
+    transition: translate 0.3s;
+    translate: 0 10px;
     cursor: default;
 }
 
 #sidebar .top .svgText.animating {
-    transform: translateY(-10px);
+    translate: 0 -10px;
 }
 
 /*End of the animation*/

@@ -74,6 +74,13 @@ namespace Infrastructure.Entities
             set => SetSetting("font_size", value);
         }
         
+        [NotMapped, Setting]
+        public string prefers_font
+        {
+            get => GetSetting<string>("prefers_font");
+            set => SetSetting("prefers_font", value);
+        }
+        
         
         //ZERMELO SETTINGS
         [NotMapped, Setting] 
