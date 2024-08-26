@@ -1,4 +1,5 @@
-﻿@model Infrastructure.Entities.user
+﻿@using Zermos_Web.Utilities
+@model Infrastructure.Entities.user
 
 <link rel="stylesheet" href="/css/account.css" preload>
 
@@ -48,6 +49,19 @@
             <button id="4_slecht" onclick="UpdateFontSize('font-scale-5', this)" class="setting-button@(Model.font_size == "font-scale-5" ? " selected" : "")">Slecht (200%)</button>
         </div>
     </div>
+    
+    <div class="setting-item">
+        <h1>Lettertype</h1>
+        <p>Welk lettertype wil je gebruiken?</p>
+        <div class="settings-options">
+            @*Model.prefers_font; euclid, inter, roboto, monospace, normal*@
+            <button id="5_euclid" onclick="UpdateFont('euclid', this)" class="setting-button@(Model.prefers_font == "euclid" ? " selected" : "")@(Model.prefers_font.IsNullOrEmpty() ? " selected" : "")">Euclid</button>
+            <button id="5_normal" onclick="UpdateFont('open-sans', this)" class="setting-button@(Model.prefers_font == "open-sans" ? " selected" : "")">Open Sans</button>
+            <button id="5_monospace" onclick="UpdateFont('monospace', this)" class="setting-button@(Model.prefers_font == "monospace" ? " selected" : "")">Monospace</button>
+            <button id="5_roboto" onclick="UpdateFont('roboto', this)" class="setting-button@(Model.prefers_font == "roboto" ? " selected" : "")">Roboto</button>
+            <button id="5_inter" onclick="UpdateFont('inter', this)" class="setting-button@(Model.prefers_font == "inter" ? " selected" : "")">Inter</button>
+        </div>
+    </div>
 
     <div class="setting-item">
         <h1>Rooster</h1>
@@ -55,7 +69,7 @@
         <div class="settings-options">
             <input type="time" id="5_start_time" name="start_time" min="08:00" max="18:00" value="@Model.zermelo_timestamps?.Split("-")[0]"/>
             <input type="time" id="5_end_time" name="end_time" min="08:00" max="18:00" value="@Model.zermelo_timestamps?.Split("-")[1]"/>
-            <button id="5_save" onclick="UpdateSchooltijen(this)" class="setting-button">Opslaan</button>
+            <button id="6_save" onclick="UpdateSchooltijen(this)" class="setting-button">Opslaan</button>
         </div>
     </div>
     
@@ -63,8 +77,8 @@
         <h1>Rooster</h1>
         <p>Welke rooster engine geef je de voorkeur aan. Deze wordt alleen gebruikt als dat mogelijk is!<br>Zermelo heeft meer features, verder zit er geen voordeel aan Somtoday's engine te gebruiken</p>
         <div class="settings-options">
-            <button id="6_zermelo" onclick="UpdateRoosterEngine('zermelo', this)" class="setting-button@(Model.prefered_rooster_engine != "somtoday" ? " selected" : "")">Zermelo</button>
-            <button id="6_somtoday" onclick="UpdateRoosterEngine('somtoday', this)" class="setting-button@(Model.prefered_rooster_engine == "somtoday" ? " selected" : "")">Somtoday</button>
+            <button id="7_zermelo" onclick="UpdateRoosterEngine('zermelo', this)" class="setting-button@(Model.prefered_rooster_engine != "somtoday" ? " selected" : "")">Zermelo</button>
+            <button id="7_somtoday" onclick="UpdateRoosterEngine('somtoday', this)" class="setting-button@(Model.prefered_rooster_engine == "somtoday" ? " selected" : "")">Somtoday</button>
         </div>
     </div>
 </div>
@@ -108,6 +122,40 @@ function UpdateFontSize(value, element) {
     document.documentElement.classList.add(value);
     document.cookie = "font_size=" + value + ";path=/;max-age=5184000";
     UpdateSetting("font_size", value, element);
+}
+
+function UpdateFont(font, element) {
+    document.documentElement.classList.remove("normal-font");
+    document.documentElement.classList.remove("euclid-font");
+    document.documentElement.classList.remove("monospace-font");
+    document.documentElement.classList.remove("roboto-font");
+    document.documentElement.classList.remove("inter-font");
+    document.documentElement.classList.add(font + "-font");
+    
+    if (font === "euclid" || font === "normal") {
+        var link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = "/Fonts/EuclidCircularA/EuclidCircularA.css";
+        document.head.appendChild(link);
+    } else if (font === "inter") {
+        var link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = "/Fonts/Inter Web/inter.css";
+        document.head.appendChild(link);
+    } else if (font === "roboto") {
+        var link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = "https://fonts.googleapis.com/css?family=Roboto:300,400,600,700";
+        document.head.appendChild(link);
+    } else if (font === "open-sans") {
+        var link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = "https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700";
+        document.head.appendChild(link);
+    }
+    
+    document.cookie = "prefers_font=" + font + ";path=/;max-age=5184000";
+    UpdateSetting("prefers_font", font, element);
 }
 
 function UpdateSchooltijen(element) {

@@ -3,16 +3,15 @@
 @{
     var version = Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION");
     version = version == "DEV" ? TokenUtils.RandomString(10) : version;
-    string preferedFont = (string) ViewData["prefersFont"];
+    string preferedFont = (Context.Response.GetCookie("prefers_font") ?? Context.Request.Cookies["prefers_font"] ?? "normal") + "-font";
 }
 <!DOCTYPE html>
-<html lang="nl" class="@(Context.Response.GetCookie("theme") ?? Context.Request.Cookies["theme"] ?? "light") @(Context.Response.GetCookie("hand_side") ?? Context.Request.Cookies["hand_side"] ?? "right") @(Context.Response.GetCookie("font_size") ?? Context.Request.Cookies["font_size"] ?? "font-scale-1")">
+<html lang="nl" class="@(Context.Response.GetCookie("theme") ?? Context.Request.Cookies["theme"] ?? "light") @(Context.Response.GetCookie("hand_side") ?? Context.Request.Cookies["hand_side"] ?? "right") @(Context.Response.GetCookie("font_size") ?? Context.Request.Cookies["font_size"] ?? "font-scale-1") @preferedFont">
 <head>
     <meta charset="UTF-8">
     <title>Zermos</title>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" crossorigin="anonymous" rel="stylesheet"/>
     <link rel="stylesheet" href="https://fa.kronk.tech">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    @* <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> *@
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="manifest" href="/manifest.webmanifest"/>
     <meta name="theme-color" content="@(Context.Request.Cookies["theme"] == "light" || Context.Request.Cookies["theme"] == "blue" ? "#f8f9fa" : Context.Request.Cookies["theme"] == "dark" || Context.Request.Cookies["theme"] == "red" ? "#1a1a1a" : Context.Request.Cookies["theme"] == "pink" ? "#ffebf2" : "#f8f9fa")">
@@ -22,12 +21,26 @@
     <script src="/js/Zermos-modal.min.js?v=@version"></script>
     <link rel="stylesheet" href="/css/modal.css?v=@version">
     
-@*TODO: implement correct setting, so not all fonts are loaded unnecesairuly*@
-        <link rel="stylesheet" href="/Fonts/EuclidCircularA/EuclidCircularA.css">
-
-        <link rel="stylesheet" href="Fonts/Inter Web/inter.css">
-
-    
+    @if (preferedFont == "euclid-font" || preferedFont == "normal-font")
+    {
+    <link rel="stylesheet" href="/Fonts/EuclidCircularA/EuclidCircularA.css">
+    } 
+    else if (preferedFont == "inter-font")
+    {
+    <link rel="stylesheet" href="Fonts/Inter Web/inter.css">
+    }
+    else if (preferedFont == "roboto-font")
+    {
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,600,700" rel="stylesheet">
+    }
+    else if (preferedFont == "open-sans-font")
+    {
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    }
+    else if (preferedFont == "monospace-font")
+    {
+        @*already preinstalled*@
+    }
 </head>
 <body>
 

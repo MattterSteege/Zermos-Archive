@@ -996,7 +996,12 @@
         //.zermos-modal-container
         const modalContainer = document.createElement('div');
         modalContainer.className = 'zermos-modal-container';
-
+        if (!this.disableClosing) {
+            modalContainer.addEventListener('click', (e) => {
+                if (e.target === modalContainer) this.close();
+            });
+        }
+        
         modalContainer.appendChild(modalElement);
         modalBackground.appendChild(modalContainer);
         document.body.appendChild(modalBackground);

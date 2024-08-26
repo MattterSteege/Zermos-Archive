@@ -8,6 +8,9 @@
     var timesString = new List<string>(); //hh:mm
     var timesAlreadySet = false;
     var minuteHeight = 0f;
+    var dayStartUnix = 0;
+    var timeDifference = new TimeSpan();
+    int timeDifferenceInSeconds = 0;
 }
 
 <div class="week" data-week="@Model.MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.MondayOfAppointmentsWeek.Year" data-unix="@Model.MondayOfAppointmentsWeek.ToUnixTime()">
@@ -52,7 +55,7 @@
 
                             //get the date of the day that the appointments are for
                             //8 * 60 + 20 = 500 minutes means 08:20
-                            var dayStartUnix = appointmentList.First().start; // this is unix. make the unix time to be the same date but the time should be 08:20
+                            dayStartUnix = appointmentList.First().start; // this is unix. make the unix time to be the same date but the time should be 08:20
                             dayStartUnix -= dayStartUnix % 86400; // remove the time from the unix time
                             dayStartUnix += Model.timeStamps[0]; // add the start time of the day to the unix time
 
@@ -60,27 +63,17 @@
                             TimeZoneInfo dutchTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"); // This ID represents the Dutch timezone
                             DateTime utcDateTime = DateTimeOffset.FromUnixTimeSeconds(dayStartUnix).UtcDateTime;
                             DateTime dutchDateTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, dutchTimeZone);
-                            TimeSpan timeDifference = dutchDateTime - utcDateTime;
-                            int timeDifferenceInSeconds = (int) timeDifference.TotalSeconds;
+                            timeDifference = dutchDateTime - utcDateTime;
+                            timeDifferenceInSeconds = (int) timeDifference.TotalSeconds;
 
                             dayStartUnix -= timeDifferenceInSeconds;
-                            
-                            if (times.Count != 0)
-                            {
-                                times.Add(0);
-                                times = times.Distinct().OrderBy(t => t).ToList();
-                                timesString = times.Select(t => DateTimeOffset.FromUnixTimeSeconds(dayStartUnix + timeDifferenceInSeconds + t * 60).ToString("HH:mm")).ToList();
-                                if (times[^1] == (Model.timeStamps[1] / 60 - Model.timeStamps[0] / 60))
-                                {
-                                    timesString.RemoveAt(timesString.Count - 1);
-                                }
-                            }
                         }
 
                         @foreach (var appointment in appointmentList)
                         {
                             //add the amount of minutes from the start of the day to the start of the appointment and the start of the day to the end of the appointment
                             times.Add((appointment.start - dayStartUnix + timeDifference.Seconds) / 60);
+                            times.Add((appointment.end - dayStartUnix + timeDifference.Seconds) / 60);
                             //times.Add((appointment.end - dayStartUnix + timeDifference.Seconds) / 60);
                             
                             //percentage from top = (appointment start time - dayStartUnix) * minuteHeight *@
@@ -131,12 +124,23 @@
 
     </div>
     @{
+        if (times.Count != 0)
+        {
+            times.Add(0);
+            times = times.Distinct().OrderBy(t => t).ToList();
+            timesString = times.Select(t => DateTimeOffset.FromUnixTimeSeconds(dayStartUnix + timeDifferenceInSeconds + t * 60).ToString("HH:mm")).ToList();
+            if (times[^1] == (Model.timeStamps[1] / 60 - Model.timeStamps[0] / 60))
+            {
+                timesString.RemoveAt(timesString.Count - 1);
+            }
+        }
+        
         times = times.Distinct().OrderBy(t => t).ToList();
         timesString = timesString.Distinct().ToList();
         var calcTime = new List<string>();
         string gridTemplateRows = "0 ";
         
-        var minutesLeft = ((Model.timeStamps?[1] - Model.timeStamps?[0]) / 60) ?? 540;
+        var minutesLeft = ((Model.timeStamps?[1] - Model.timeStamps?[0]) / 60) ?? 540; //540m is (08:00 - 17:00)
         
         //calculate the diffrence between times[n] and times[n+1] for each n
         for (var i = 0; i < times.Count; i++)

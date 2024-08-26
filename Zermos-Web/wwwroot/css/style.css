@@ -123,7 +123,7 @@
     --font-size-multiplier: 2;
 }
 
-.normal-font {
+.open-sans-font {
     --font-family: 'Open Sans', sans-serif;
 }
 
@@ -131,7 +131,7 @@
     --font-family: 'Fira Code', monospace;
 }
 
-.euclid-font {
+.euclid-font, .normal-font {
     --font-family: 'Euclid Circular', sans-serif;
 }
 

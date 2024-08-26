@@ -3,6 +3,11 @@ Version 0.6.2.1 - De K klusjes update AKA de uitgestelde update
 - algemeen
     - Er is een klein systempje toegevoegd dat ervoor zorgt dat een te lang gesluimerde app herstart wordt. Dit om te zorgen dat verkeerd gelaadden data niet te lang in de app blijft staan.
     - De activatiemethodes van het Zermos logo (op mobiel en desktop) zijn aangepast. Dus ook op mobiel kan je nu de animatie zien.
+    - Ik heb een instelling gemaakt waarmee je het lettertype van de app kan aanpassen.
+    - Ik heb ook gelijk de default lettertype aangepast naar 'Euclid', dus de app ziet er nu een stukje cleaner uit.
+    - probleem waar modal niet sluit als je op de achtergrond klikt is opgelost.
     
 - Zermelo - rooster
-    - Het uiterlijk is aangepast, daarmee zijn kleine visuele foutejes opgelost.
+    - Het uiterlijk is aangepast, daarmee zijn kleine visuele foutjes opgelost.
+    - Er was een probleem waar het rooster niet de laatste tijd van de dag liet zien, dit is opgelost.
+    

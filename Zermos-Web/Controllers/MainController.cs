@@ -56,12 +56,13 @@ namespace Zermos_Web.Controllers
             Response.Cookies.Append("hand_side", user.hand_side ?? "right");
             Response.Cookies.Append("theme", user.theme ?? "light");
             Response.Cookies.Append("font_size", user.font_size ?? "1");
+            Response.Cookies.Append("prefers_font", user.prefers_font ?? "normal");
+            
             ViewData["isZermeloGekoppeld"] = user.zermelo_access_token_expires_at > DateTime.Now;
             ViewData["isInfowijsGekoppeld"] = TokenUtils.CheckToken(user.infowijs_access_token);
             ViewData["isSomtodayGekoppeld"] = TokenUtils.CheckToken(user.somtoday_refresh_token);
             ViewData["prefersSomtodayRooster"] = user.prefered_rooster_engine == "somtoday";
             ViewData["forceShow"] = false;
-            ViewData["prefersFont"] = user.prefers_font ?? "normal";
 
             return View();
         }

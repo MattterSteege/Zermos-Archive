@@ -9,13 +9,14 @@ TODO: infowijs calendar redesign -> https://i.pinimg.com/736x/43/9a/5a/439a5a83b
 
 TODO: jaarbijlagen bij leermiddelen
 TODO: de roosters van vrienden koppelen -> share allow [email] to view your schedule
-TODO: font settings
     
+    
+    
+     
 Discord server webhooks:
 #informatie: https://discord.com/api/webhooks/1271383220813959251/6YaYKl88vmXV_AH_dfoX-3qTKveuXpaSHTPuuJjPfJTQZfqZyTrCCz3J5-Hf1odT48hA
 #github-feeds: https://discord.com/api/webhooks/1265994706958028926/LDrbV7YsiuRQIpV-W-5VBkbq6HnprimipbuEqHxpvCMJCSNH8iZpqPIa5cTmBRZh_4i2
 #suggestions: https://discord.com/api/webhooks/1271384153002213377/-Bt4dtPEY8fe3LLREQpPRKj46R_mZcD0kR1OU1rxWAq8cjjIo00JgwBb0kYkcgEk53VB
 #bugs: https://discord.com/api/webhooks/1271384242517053491/e5AFmZvHIKbryPW1cvnKRpqbqLGiaBkKADOakGcr4jhSkMt1ZUXQioX4hZ4J1pF6c3Jt
-
 
 de kleur voor de embeds is #2f3136

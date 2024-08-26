@@ -95,7 +95,6 @@ var loadingTexts = [
   "Kroketten bakken",
   "Kokosnoten zijn geen specerijen",
   "Even een Frikandel Speciaal halen",
-  "De VOC-mentaliteit aan het oppoetsen",
   "Stamppot aan het prakken",
   "Wacht even, we zijn nog aan het polderen",
   "De dijken aan het verhogen",
