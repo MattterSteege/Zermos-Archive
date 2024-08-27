@@ -4,6 +4,21 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - Versie 0.6.3 - 27-08-2024
+Version 0.6.3 - Pull the lever, Kronk! Wrong lever!!!!!!!!
+
+- algemeen
+    - Instellingen zijn nu server side gelimiteerd, dus je kunt geen vreemde waardes meer invullen, alleen van tevoren bepaalde waardes
+    - Ik heb een betere manier om Zermos te installeren toegevoegd, je kunt nu op de knop "Installeren" klikken bij je account instellingen (mocht je browser dit niet ondersteunen, dan word je naar de uitleg pagina gestuurd)
+    - Het cache systeem hebt ik uitgeschakeld, omdat het niet goed werkte. Je kunt het wel nog aan zetten in het debug menu (1x klikken op je naam bij je account), maar het werkt niet goed.
+
+- koppelingen - infowijs
+    - als je account geen toegang heeft tot een infowijs account, dan krijg je nu een error te zien.
+    
+- Somtoday - rooster
+    - Het was toch makkelijker dan ik dacht om de rooster engine te laten werken, dus SOMtoday roosters zijn nu beschikbaar!
+    - Je kunt ook je rooster delen als je de Somtoday engine gebruikt, dit kan via de knop "Delen" in de rooster pagina (net zoals bij Zermelo roosters)
+
 # Release Notes - Versie 0.6.2.1 - 26-08-2024
 Version 0.6.2.1 - De K klusjes update AKA de uitgestelde update
 
