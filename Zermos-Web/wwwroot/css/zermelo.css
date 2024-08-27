@@ -222,7 +222,7 @@
     border-left: 4px solid rgb(44, 181, 67);
 }
 
-.lesson {
+.lesson, .ROOSTER {
     border-left: 4px solid rgb(0, 123, 255);
 }
 
@@ -384,6 +384,7 @@ ul:has(> li.empty) {
     height: 2px;
     background: #e69b22;
     opacity: 0.4;
+    top: -100px;
 }
 
 #today::after {

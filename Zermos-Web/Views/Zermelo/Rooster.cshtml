@@ -1,7 +1,4 @@
-﻿@using System.Globalization
-@using Newtonsoft.Json
-@using Zermos_Web.Models.zermelo
-@using Zermos_Web.Utilities
+﻿@using Zermos_Web.Models.zermelo
 @model Zermos_Web.Models.zermelo.ZermeloRoosterModel
 
 @{
@@ -12,7 +9,7 @@
 
 <div class="main-container">
     <div class="week-carousel" id="week-carousel" style="transform: translateX(-0%);">
-        @(await Html.PartialAsync("Rooster-week", Model))
+        @(await Html.PartialAsync("../Zermelo/Rooster-week", Model))
     </div>
     <div class="notCurrentWeek" style="bottom: -50px;">
         Dit is niet de huidige week!
@@ -85,7 +82,7 @@ async function fetchWeek(week, year, append, retry = false) {
     //don't scroll, as long as the user is dragging
     
     
-    fetch('/zermelo/rooster?week=' + newWeek.week + '&year=' + newWeek.year + '&compact=true&no-framework=true')
+    fetch('/@(Model.roosterOrigin)/rooster?week=' + newWeek.week + '&year=' + newWeek.year + '&compact=true&no-framework=true')
     .then(response => {
     
         if (!response.ok && !retry){
@@ -110,7 +107,7 @@ async function fetchWeek(week, year, append, retry = false) {
                 
                 setTimeout(() => {
                     //remove style attribute
-                    weekElement.attributes.removeNamedItem('style');
+                    weekElement.style = "";
                 }, 250);
             }, 100);
         }, 100);
@@ -137,7 +134,7 @@ return new DOMParser().parseFromString(html, 'text/html').body.firstChild;
 Zermos.mainAfterLoad = () => {
     
     if (HasPreview('zermelo_smartwatch')) {
-        ReplacePage('/Zermelo/Smartwatch');
+        ReplacePage('/@(Model.roosterOrigin)/Smartwatch');
     }
     
     let nextWeek = weeksArray[weeksArray.length - 1].week + 1;
@@ -345,7 +342,7 @@ function NextWeekAnim() {
     var newWeek = current - 100;
     newWeek = Math.ceil(newWeek / 100) * 100;
 
-    console.log(current, newWeek);
+    //console.log(current, newWeek);
     animating = true;
     ease(current, newWeek, 500, (value) => {
         weekCarousel.style.transform = `translateX(${value}%)`;
@@ -366,7 +363,7 @@ function PrevWeekAnim() {
     var newWeek = current + 100;
     newWeek = Math.floor(newWeek / 100) * 100;
 
-    console.log(current, newWeek);
+    //console.log(current, newWeek);
     animating = true;
     ease(current, newWeek, 500, (value) => {
         weekCarousel.style.transform = `translateX(${value}%)`;
@@ -472,7 +469,7 @@ addButtonToPage('fa-share-from-square', () => {
         var expires_at = Math.floor(dateObject.getTime() / 1000);
         
         //return's an plan string url
-        fetch('/zermelo/rooster/genereer-token?year=' + currentYear+ '&week=' + currentWeek + '&expires_at=' + expires_at)
+        fetch('/@(Model.roosterOrigin)/rooster/genereer-token?year=' + currentYear+ '&week=' + currentWeek + '&expires_at=' + expires_at)
         .then(response => response.text())
         .then((url) => {
             new ZermosModal()

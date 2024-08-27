@@ -5,6 +5,7 @@
   mainUnload: function(callback) {},
   checkForUpdates: function(callback) {},
   mainProcessAccessibility: function() {},
+  installPrompt: null,
 };
 
 //==============================VARIABLES==============================
@@ -668,9 +669,10 @@ console.debug = function(...args) {
 window.onerror = function(message, source, lineno, colno, error) {
     consoleArray.push(["error", new Error().stack, message]);
     consoleError(
-        `%c[Error]%c ${message} in ${source}:${lineno}:${colno}`,
+        `%c[Error]%c`,
         "font-weight:700;color:red;",
-        ""
+        "",
+        `${message} in ${source}:${lineno}:${colno}`
     );
     
     return true;
@@ -840,6 +842,8 @@ window.addEventListener("load", () => {
 
 //==============================CACHING SYSTEM==============================
 function cachePage(data, url) {
+  if (!HasPreview("enable_cache")) return;
+  
   var lowerUrl = url.toLowerCase();
   if (lowerUrl.includes("login") || lowerUrl.includes("logout") || lowerUrl.includes("callback")) {
     return;
@@ -875,6 +879,7 @@ function getCachePage(url) {
 
 //cache css
 function cacheCSS(url, data) {
+  if (!HasPreview("enable_cache")) return;
   return new Promise((resolve, reject) => {
     if (url.includes("fontawesome") || url.includes("zermos")) {
       resolve(data);

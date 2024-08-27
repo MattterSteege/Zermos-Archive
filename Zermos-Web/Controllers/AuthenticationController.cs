@@ -126,7 +126,8 @@ public class AuthenticationController : Controller
 
         await HttpContext.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "user", "role")));
 
-        _logger.Log(LogLevel.Information,$"User {email} logged in");
+        if (!newUser) _logger.Log(LogLevel.Information,$"User {email} logged in");
+        else _logger.Log(LogLevel.Information,$"New user {email} created and account :)");
         
         if (newUser)
         {

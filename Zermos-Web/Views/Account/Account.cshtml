@@ -127,7 +127,7 @@
         <a>Kijk hier of je vraag hier dan beantwoord kan worden</a>
     </div>
 
-    <div class="account-item clickable" onclick="window.location.href='https://zermos-docs.kronk.tech/PWA%20installeren'">
+    <div class="account-item clickable" id="install-button" onclick="showUserInstallAppBanner()">
         <h1>Zermos installeren</h1>
         <a>Klik hier voor de uitleg</a>
     </div>
@@ -136,73 +136,92 @@
 <script minimize>
 @Context.Items["dmjs"]
 
-    function AreYouSure(app) {
-        document.getElementById(app + '-first').style.display = 'none';
-        document.getElementById(app + '-second').style.display = 'block';
-        
-         new Promise(res => setTimeout(res, 3000)).then(() => {
-            document.getElementById(app + '-first').style.display = 'block';
-            document.getElementById(app + '-second').style.display = 'none';
-        });
-    }
+function AreYouSure(app) {
+    document.getElementById(app + '-first').style.display = 'none';
+    document.getElementById(app + '-second').style.display = 'block';
+    
+     new Promise(res => setTimeout(res, 3000)).then(() => {
+        document.getElementById(app + '-first').style.display = 'block';
+        document.getElementById(app + '-second').style.display = 'none';
+    });
+}
 
-    function Ontkoppel(app) {
-        //<form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="{app}">
-        //   <button id="somtoday-second" class="koppel-knop zeker" style="display: none">Zeker?</button>
-        //</form>
-        
-        fetch('/Koppelingen/ontkoppel/' + app, { method: 'POST' })
-        .then(response => {
-            if (response.ok) { 
-                newSidebar();
-                
-                var element = document.querySelector('.' + app);
-                element.innerHTML = '<p><b>' + app.charAt(0).toUpperCase() + app.slice(1) + '</b> is niet gekoppeld</p>';
-                element.innerHTML += '<button onclick="ReplacePage(\'/Koppelingen/' + app.charAt(0).toUpperCase() + app.slice(1) + '\')" class="koppel-knop koppelen">Koppelen</button>';
+function Ontkoppel(app) {
+    //<form method="POST" asp-controller="Koppelingen" asp-action="Ontkoppel" asp-route-app="{app}">
+    //   <button id="somtoday-second" class="koppel-knop zeker" style="display: none">Zeker?</button>
+    //</form>
+    
+    fetch('/Koppelingen/ontkoppel/' + app, { method: 'POST' })
+    .then(response => {
+        if (response.ok) { 
+            newSidebar();
+            
+            var element = document.querySelector('.' + app);
+            element.innerHTML = '<p><b>' + app.charAt(0).toUpperCase() + app.slice(1) + '</b> is niet gekoppeld</p>';
+            element.innerHTML += '<button onclick="ReplacePage(\'/Koppelingen/' + app.charAt(0).toUpperCase() + app.slice(1) + '\')" class="koppel-knop koppelen">Koppelen</button>';
+        }
+    });
+}
+
+ Zermos.mainBeforeLoad = () => {   
+    //when clicking on #info, toggle the hidden class on the opgeslagen-informatie-grid
+    document.getElementById('info').addEventListener('click', function() {
+        document.querySelector('.account-info-grid').classList.toggle('hidden');
+        document.getElementById('openCloseArrow').style.transform = document.getElementById('openCloseArrow').style.transform === 'rotate(180deg)' ? 'rotate(0deg)' : 'rotate(180deg)';
+    });
+};
+
+if (window.matchMedia('(display-mode: standalone)').matches) {
+    document.getElementById('install-button').style.display = "none";
+} 
+else if (!installable) {
+    document.getElementById('install-button').setAttribute('onclick', 'window.location.href="https://zermos-docs.kronk.tech/PWA%20installeren"');
+} else {
+    document.getElementById('install-button').addEventListener('click', () => {
+        deferredPrompt.prompt();
+
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                document.getElementById('install-button').style.display = "none"; // Hide the button
+            } else {
+                console.log('User dismissed the install prompt');
             }
         });
+    });
+}
+
+if (isUserOnline) {
+    var abscence = null;
+
+    //fetch /Refresh the absence data
+    fetch('/Somtoday/Afwezigheid')
+    .then(response => response.text())
+    .then(data => {
+        abscence = JSON.parse(data);
+        document.getElementById('absence').innerHTML = '<h1>Afwezigheid</h1><p>Je bent dit jaar <b>' + abscence.items.length + '</b> keer afwezig geweest.</p>';
+    });
+
+    function ShowAbscence() {
+        var abscenceModal = new ZermosModal()
+        .addHeading({text: 'Afwezigheid'})
+        
+        abscence.items.forEach(absence => {
+            abscenceModal
+            .addSeparator({})
+            .addText({text: absence.absentieReden.omschrijving})
+            .addText({text: absence.opmerkingen});
+            var dateStart = new Date(absence.beginDatumTijd);
+            var dateEnd = new Date(absence.eindDatumTijd);
+            abscenceModal.addText({text: dateStart.toLocaleDateString() + ' ' + dateStart.toLocaleTimeString() + ' - ' + dateEnd.toLocaleTimeString() + ' ' + dateEnd.toLocaleDateString()});
+        })
+        .addButton({text: 'Sluiten', onClick: (ctx) => ctx.close()})
+        .open();
+
     }
-    
-     Zermos.mainBeforeLoad = () => {   
-        //when clicking on #info, toggle the hidden class on the opgeslagen-informatie-grid
-        document.getElementById('info').addEventListener('click', function() {
-            document.querySelector('.account-info-grid').classList.toggle('hidden');
-            document.getElementById('openCloseArrow').style.transform = document.getElementById('openCloseArrow').style.transform === 'rotate(180deg)' ? 'rotate(0deg)' : 'rotate(180deg)';
-        });
-    };
-
-    if (isUserOnline) {
-        var abscence = null;
-
-        //fetch /Refresh the absence data
-        fetch('/Somtoday/Afwezigheid')
-        .then(response => response.text())
-        .then(data => {
-            abscence = JSON.parse(data);
-            document.getElementById('absence').innerHTML = '<h1>Afwezigheid</h1><p>Je bent dit jaar <b>' + abscence.items.length + '</b> keer afwezig geweest.</p>';
-        });
-
-        function ShowAbscence() {
-            var abscenceModal = new ZermosModal()
-            .addHeading({text: 'Afwezigheid'})
-            
-            abscence.items.forEach(absence => {
-                abscenceModal
-                .addSeparator({})
-                .addText({text: absence.absentieReden.omschrijving})
-                .addText({text: absence.opmerkingen});
-                var dateStart = new Date(absence.beginDatumTijd);
-                var dateEnd = new Date(absence.eindDatumTijd);
-                abscenceModal.addText({text: dateStart.toLocaleDateString() + ' ' + dateStart.toLocaleTimeString() + ' - ' + dateEnd.toLocaleTimeString() + ' ' + dateEnd.toLocaleDateString()});
-            })
-            .addButton({text: 'Sluiten', onClick: (ctx) => ctx.close()})
-            .open();
-
-        }
-    }
-    else {
-        document.getElementById('absence').innerHTML = '<h1>Afwezigheid</h1><p>Om je afwezigheid te kunnen zien moet je online zijn.</p>';
-    }
+}
+else {
+    document.getElementById('absence').innerHTML = '<h1>Afwezigheid</h1><p>Om je afwezigheid te kunnen zien moet je online zijn.</p>';
+}
 
 
 function OpenSuggestionOrBugModal() {

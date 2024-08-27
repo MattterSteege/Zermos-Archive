@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using Infrastructure.Utils;
 
 namespace Infrastructure.Entities
@@ -39,42 +40,42 @@ namespace Infrastructure.Entities
         //Settings
         public string settings { get; set; }
     
-        [NotMapped, Setting] 
+        [NotMapped, Setting("light", "dark", "red", "blue", "pink")] 
         public string theme
         {
             get => GetSetting<string>("theme");
             set => SetSetting("theme", value);
         }
     
-        [NotMapped, Setting] 
+        [NotMapped, Setting("/Zermelo/Rooster", "/Somtoday/Cijfers", "/Somtoday/Huiswerk", "/Infowijs/Schoolnieuws", "/Infowijs/Schoolkalender", "/School/Informatiebord")] 
         public string default_page
         {
             get => GetSetting<string>("default_page");
             set => SetSetting("default_page", value);
         }
     
-        [NotMapped, Setting] 
+        [NotMapped, Setting("left", "right")] 
         public string hand_side
         {
             get => GetSetting<string>("hand_side");
             set => SetSetting("hand_side", value);
         }
         
-        [NotMapped, Setting, Requestable] 
+        [NotMapped, Setting("(\\d\\.?)+|DEV") , Requestable] 
         public string version_used
         {
             get => GetSetting<string>("version_used");
             set => SetSetting("version_used", value);
         }
 
-        [NotMapped, Setting] 
+        [NotMapped, Setting("font-scale-1", "font-scale-2", "font-scale-3", "font-scale-4", "font-scale-5")]
         public string font_size
         {
             get => GetSetting<string>("font_size");
             set => SetSetting("font_size", value);
         }
         
-        [NotMapped, Setting]
+        [NotMapped, Setting("euclid", "open-sans", "monospace", "roboto", "inter")]
         public string prefers_font
         {
             get => GetSetting<string>("prefers_font");
@@ -83,7 +84,7 @@ namespace Infrastructure.Entities
         
         
         //ZERMELO SETTINGS
-        [NotMapped, Setting] 
+        [NotMapped, Setting("\\d{2}:\\d{2}-\\d{2}:\\d{2}")] 
         public string zermelo_timestamps 
         {
             get => GetSetting<string>("zermelo_timestamps");
@@ -91,7 +92,7 @@ namespace Infrastructure.Entities
         }
         
         //ROOSTER SETTINGS
-        [NotMapped, Setting] 
+        [NotMapped, Setting("zermelo", "somtoday")] 
         public string prefered_rooster_engine
         {
             get => GetSetting<string>("prefered_rooster_engine");
@@ -101,10 +102,7 @@ namespace Infrastructure.Entities
         // Helper method to get a setting value do with <int> or <string> etc.
         private T GetSetting<T>(string settingName)
         {
-            if (settings == null)
-            {
-                return default;
-            }
+            if (settings == null) return default;
 
             var settingsArray = settings.Split(';');
             foreach (var setting in settingsArray)
@@ -119,18 +117,30 @@ namespace Infrastructure.Entities
             return default;
         }
 
+
         // Helper method to set a setting value
-        private void SetSetting(string settingName, object settingValue)
+        private void SetSetting(string settingName, string settingValue)
         {
-            if (settings == null)
+            if (settings == null) settings = "";
+            
+            if (settingName.Contains("=") || settingName.Contains(";")) throw new ArgumentException("Setting name cannot contain '=' or ';'.");
+            if (settingValue.Contains("=") || settingValue.Contains(";")) throw new ArgumentException("Setting value cannot contain '=' or ';'.");
+
+            var property = GetType().GetProperty(settingName);
+            if (property != null)
             {
-                settings = "";
+                if (property.GetCustomAttributes(typeof(SettingAttribute), false)
+                        .FirstOrDefault() is SettingAttribute settingAttr && !settingAttr.IsValid(settingValue))
+                {
+                    if (settingAttr.Options.Length == 1)
+                        throw new ArgumentException($"Invalid value '{settingValue}' for setting '{settingName}'. Must match pattern '{settingAttr.Options[0]}'");
+                    throw new ArgumentException($"Invalid value '{settingValue}' for setting '{settingName}'. Possible values: {string.Join(", ", settingAttr.Options)}");
+                }
             }
 
             var settingsArray = settings.Split(';');
             var newSettings = new List<string>();
 
-            // Update or add the setting value
             bool updated = false;
             foreach (var setting in settingsArray)
             {
@@ -153,6 +163,7 @@ namespace Infrastructure.Entities
 
             settings = string.Join(";", newSettings);
         }
+
         
         //set the ! operator for user to check if the user.email is null
         public static bool operator !(user user)

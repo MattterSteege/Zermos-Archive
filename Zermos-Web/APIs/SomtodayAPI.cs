@@ -1,26 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
-using Infrastructure;
 using Infrastructure.Entities;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Zermos_Web.Models;
-using Zermos_Web.Models.Somtoday;
 using Zermos_Web.Models.SomtodayLeermiddelen;
 using Zermos_Web.Models.SomtodayAfwezigheidModel;
 using Zermos_Web.Models.SomtodayGradesModel;
 using Zermos_Web.Models.somtodayHomeworkModel;
 using Zermos_Web.Models.SomtodayPlaatsingen;
+using Zermos_Web.Models.SomtodayRoosterModel;
 using Zermos_Web.Models.SomtodayVakgemiddeldenModel;
 using Zermos_Web.Models.SortedSomtodayGradesModel;
 using Zermos_Web.Utilities;
-using Item = Zermos_Web.Models.somtodayHomeworkModel.Item;
 
 namespace Zermos_Web.APIs;
 
@@ -431,61 +426,39 @@ public class SomtodayAPI
         return homework;
     }
 
-    public async Task<List<SomtodayafspraakitemsModel>> GetAfspraakItems(user user)
+    public async Task<SomtodayRoosterModel> GetRoosterAsync(user user, string year, string week)
     {
 #if DEBUG
         var watch = Stopwatch.StartNew();
 #endif
-        
-        var currentDate = DateTime.Now;
-        var currentWeek = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(currentDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
-        
-        //var previousWeek = currentWeek - 1;
-        //previousWeek = previousWeek == 0 ? 52 : previousWeek;
-        //var previousYear = previousWeek == 52 ? currentDate.Year - 1 : currentDate.Year;
-        
-        var nextWeek = currentWeek + 1;
-        nextWeek = nextWeek == 53 ? 1 : nextWeek;
-        var nextYear = nextWeek == 1 ? currentDate.Year + 1 : currentDate.Year;
+        string url = $"https://api.somtoday.nl/rest/v1/afspraakitems/1409824200/jaar/{year}/week/{week}";
 
-
-
-        var urls = new[]
-        {
-            //$"https://api.somtoday.nl/rest/v1/afspraakitems/1409824200/jaar/{previousYear}/week/{previousWeek}",
-            $"https://api.somtoday.nl/rest/v1/afspraakitems/1409824200/jaar/{currentDate.Year}/week/{currentWeek}",
-            $"https://api.somtoday.nl/rest/v1/afspraakitems/1409824200/jaar/{nextYear}/week/{nextWeek}"
-        };
-        
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
         
-        var tasks = urls.Select(url => url != null ? _httpClient.GetAsync(url) : Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.OK))).ToArray();
+        var response = await _httpClient.GetAsync(url);
         
-        await Task.WhenAll(tasks);
-            
-        if (tasks.Any(t => !t.Result.IsSuccessStatusCode))
+        if (response.IsSuccessStatusCode == false)
             return null;
         
-        var jsonTasks = tasks.Select(t => t.Result.Content.ReadAsStringAsync()).ToArray();
-        await Task.WhenAll(jsonTasks);
+        var afspraakItems = JsonConvert.DeserializeObject<SomtodayRoosterModel>(await response.Content.ReadAsStringAsync());
         
-        List<SomtodayafspraakitemsModel> afspraakItems = new(urls.Length);
-        
-        for (int i = 0; i < urls.Length; i++)
-        {
-            afspraakItems.Add(JsonConvert.DeserializeObject<SomtodayafspraakitemsModel>(jsonTasks[i].Result));
-        }
-        
-        afspraakItems[0].MondayOfAppointmentsWeek = currentDate.AddDays(-((int) currentDate.DayOfWeek - 1));
-        afspraakItems[1].MondayOfAppointmentsWeek = currentDate.AddDays(-((int) currentDate.DayOfWeek - 1)).AddDays(7);
+        var timestamps = user.zermelo_timestamps ?? "08:00-17:00";
+        timestamps = (timestamps == "-" ? "08:00-17:00" : timestamps);
+        var start = timestamps.Split('-')[0].Split(':');
+        var end = timestamps.Split('-')[1].Split(':');
+        var secondsStart = int.Parse(start[0]) * 3600 + int.Parse(start[1]) * 60;
+        var secondsEnd = int.Parse(end[0]) * 3600 + int.Parse(end[1]) * 60;
+            
+        //"[28800, 61200]" -> 08:00 - 17:00 in seconds
+        afspraakItems.MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year);
+        afspraakItems.timeStamps = new List<int> {secondsStart, secondsEnd};
         
 #if DEBUG
         watch.Stop();
         Console.WriteLine(watch.ElapsedMilliseconds + "ms");
 #endif
-        
         return afspraakItems;
     }
 }

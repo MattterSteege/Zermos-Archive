@@ -88,6 +88,11 @@
         <p>Klik om basic API data te ontvangen</p>
     </div>
 
+    <div class="account-item" data-preview-id="enable_cache" onclick="TogglePreview('enable_cache')">
+        <h1>Zet het cahce systeem aan/uit</h1>
+        <p>Het systeem werkte niet goed genoeg voor main branch, dus je kunt het hier aanzetten, maar verwacht wat vreemde dingen.</p>
+    </div>
+
     <h4>GOTO's</h4>
     
     @if(Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION") == "DEV") {
@@ -107,7 +112,7 @@
     <div class="account-item">
         <h1>Device info</h1>
         <p>Deze informatie kan handig zijn als je problemen ondervindt met Zermos.</p>
-        <p>Device: @Context.Request.Headers["User-Agent"]</p>
+        <p id="device_data"></p>
         <p>Account ID: @User.FindFirstValue("email").StringToBase64String()</p>
         <p id="screen_size">Screen Size: 000x000</p>
         <p id="internet_connection">Internet Connection: 0mbps</p>
@@ -139,6 +144,9 @@ Zermos.mainAfterLoad = () => {
     if (connection !== undefined) {
         document.getElementById("internet_connection").innerText = "Internet Connection: " + (connection.downlink / 8) + "MB per second";
     }
+    
+    //add useragent, if the app is standalone etc. as match data as possible
+    document.getElementById("device_data").innerText = "Device: " + navigator.userAgent + "\n" + "Standalone: " + window.matchMedia('(display-mode: standalone)').matches + "\n" + "Dark Mode: " + window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     refreshConsoleLogs();
     refreshNetworkLogs();

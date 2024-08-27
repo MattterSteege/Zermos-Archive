@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Zermos_Web.Models.zermelo;
 
-namespace Zermos_Web.Models.Somtoday;
+namespace Zermos_Web.Models.SomtodayRoosterModel;
 
 public class Item
 {
@@ -24,7 +25,7 @@ public class Item
     public List<string> docentNamen { get; set; }
 }
 
-public class SomtodayafspraakitemsModel
+public class SomtodayRoosterModel
 {
     public List<int> timeStamps;
     public List<Item> items { get; set; }

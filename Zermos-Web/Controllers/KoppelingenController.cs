@@ -152,6 +152,9 @@ namespace Zermos_Web.Controllers
             {
                 InfowijsCustomerProductsModel productsModel = await InfowijsApi.GetCustomerProductsAsync(email);
                 
+                if (productsModel == null || productsModel.data.Count == 0)
+                    return Ok("failed");
+                
                 var url1 = "https://api.infowijs.nl/sessions";
                 var response1 = _infowijsHttpClient.PostAsync(url1, new StringContent(JsonConvert.SerializeObject(new
                 {

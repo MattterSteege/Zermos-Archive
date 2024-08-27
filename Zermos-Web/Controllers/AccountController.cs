@@ -69,7 +69,8 @@ namespace Zermos_Web.Controllers
             try {
                 property.SetValue(userToUpdate, Convert.ChangeType(value, property.PropertyType));
             }
-            catch {
+            catch(Exception e) {
+                if (e.InnerException != null && e.InnerException.Message.StartsWith("Invalid")) return BadRequest(e.InnerException.Message);
                 return BadRequest("Invalid value type, expected " + property.PropertyType.Name + " got " + value.GetType().Name);
             }
 

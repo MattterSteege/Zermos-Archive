@@ -17,7 +17,9 @@ using Zermos_Web.Models.Somtoday;
 using Zermos_Web.Models.SomtodayLeermiddelen;
 using Zermos_Web.Models.somtodayHomeworkModel;
 using Zermos_Web.Models.SomtodayPlaatsingen;
+using Zermos_Web.Models.SomtodayRoosterModel;
 using Zermos_Web.Models.SortedSomtodayGradesModel;
+using Zermos_Web.Models.zermelo;
 using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
@@ -330,7 +332,7 @@ namespace Zermos_Web.Controllers
         
         [ZermosPage]
         [HttpGet("/Somtoday/Cijfers/Gedeeld")]
-        public async Task<IActionResult> GedeeldRooster(string token)
+        public async Task<IActionResult> GedeeldCijfers(string token)
         {
             var cijfers = await GetShare(token);
             
@@ -591,21 +593,70 @@ namespace Zermos_Web.Controllers
         [ZermosPage]
         [SomtodayRequirement]
         [HttpGet("/Somtoday/Rooster")]
-        public async Task<IActionResult> Rooster()
+        public async Task<IActionResult> Rooster(string year, string week, bool compact = false)
         {
+            year ??= DateTime.Now.Year.ToString();
+            week ??= DateTime.Now.GetWeekNumber().ToString();
+            week = week.ToCharArray().Length == 1 ? "0" + week : week;
+            
             var user = ZermosUser;
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
-            {
                 user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
+            
+            var somtodayRooster = await somtodayApi.GetRoosterAsync(user, year, week);
+            ZermeloRoosterModel zermeloRooster = somtodayRooster.TransformToZermeloRoosterModel();
+            
+            ZermosUser = new user();
+            
+            //use the /Zermelo/Rooster-week.cshtml view and /Zermelo/Rooster PartialViews
+            return compact ? PartialView("~/Views/Zermelo/Rooster-week.cshtml", zermeloRooster) 
+                          : PartialView("~/Views/Zermelo/Rooster.cshtml", zermeloRooster);
+        }
+        
+        [Authorize]
+        [SomtodayRequirement]
+        [Route("/Somtoday/Rooster/Genereer-Token")]
+        public async Task<IActionResult> GenereerToken(string year, string week, DateTime? expires_at, int max_uses = int.MaxValue)
+        {
+            if (string.IsNullOrEmpty(year) || string.IsNullOrEmpty(week))
+                return BadRequest("Year or week is null or empty");
+            
+            expires_at ??= DateTime.Now.AddDays(7);
+            week = week.ToCharArray().Length == 1 ? "0" + week : week;
+            
+            var somtodayRooster = await somtodayApi.GetRoosterAsync(ZermosUser, year, week);
+            ZermeloRoosterModel zermeloRooster = somtodayRooster.TransformToZermeloRoosterModel();
+            
+            string url = (await AddShare(new share
+            {
+                key = TokenUtils.RandomString(20),
+                email = ZermosEmail,
+                value = zermeloRooster.ObjectToBase64String(),
+                page = "/Somtoday/Rooster/Gedeeld",
+                expires_at = (DateTime) expires_at,
+                max_uses = max_uses
+            })).url;
+            
+            return Ok(url);
+        }
+        
+        [ZermosPage]
+        [HttpGet("/Somtoday/Rooster/Gedeeld")]
+        public async Task<IActionResult> GedeeldRooster(string token)
+        {
+            var rooster = await GetShare(token);
+            
+            if (rooster == null)
+                return NotFound();
+            
+            if (rooster.expires_at < DateTime.Now)
+            {
+                await DeleteShare(token);
+                return NotFound();
             }
             
-            var somtodayRooster = await somtodayApi.GetAfspraakItems(user);
-            
-            foreach (var item in somtodayRooster)
-                item.timeStamps = new List<int> {28800, 61200};
-            
-            return PartialView(somtodayRooster);
+            return PartialView("~/Views/Zermelo/GedeeldRooster.cshtml", rooster.value.Base64StringToObject<ZermeloRoosterModel>());
         }
         #endregion
         

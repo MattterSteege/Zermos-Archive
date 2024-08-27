@@ -9,7 +9,7 @@ TODO: infowijs calendar redesign -> https://i.pinimg.com/736x/43/9a/5a/439a5a83b
 
 TODO: jaarbijlagen bij leermiddelen
 TODO: de roosters van vrienden koppelen -> share allow [email] to view your schedule
-    
+TODO: fix het rooster, het vraag nu altijd een nieuwe week op als je naar links of rechts swiped, niet alleen als je naar de laatste of eerste swiped
     
     
      

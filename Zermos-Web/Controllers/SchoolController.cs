@@ -25,6 +25,7 @@ namespace Zermos_Web.Controllers
         
         
         [ZermosPage]
+        [Route("/School/Informatiebord")]
         public IActionResult Informatiebord()
         {
             return PartialView();

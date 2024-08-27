@@ -170,7 +170,7 @@ async function ReplacePage(url, force) {
 
     isRunning = true;
 
-    if (!isUserOnline) {
+    if (!isUserOnline && HasPreview("enable_cache")) {
         getCachePage(url);
         isRunning = false;
         return;
@@ -283,7 +283,7 @@ async function doPageReplace(data, url) {
     let amountOfStylesheets = hrefs.length;
 
     for (let href of hrefs) {
-        if (!isUserOnline) {
+        if (!isUserOnline && HasPreview("enable_cache")) {
             getCacheCSS(href);
             amountOfStylesheets--;
             continue;
@@ -329,10 +329,14 @@ window.onbeforeunload = function() {
 }
 
 window.addEventListener("popstate", function(e) {
-    ReplacePage(e.target.location.pathname, true);
+    //check if the user has just hit the next or previous button OR if the user inputed a new url
+    if (e.state === null) { 
+        ReplacePage(window.location.pathname, true);
+    }
+
 });
 
-//when user has opend an other app, reload the page after 5 minutes of inactivity
+@*//when user has opend an other app, reload the page after 5 minutes of inactivity
 var visibilityChange = Date.now();
 var minTime = 300000; //5 minutes
 document.addEventListener("visibilitychange", (e) => {
@@ -348,6 +352,16 @@ document.addEventListener("visibilitychange", (e) => {
             main.style.opacity = "1"
         }
     }
+});*@
+
+//check if the user can install the app (PWA)
+let deferredPrompt;
+let installable = false;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installable = true;
 });
 </script>
 </body>

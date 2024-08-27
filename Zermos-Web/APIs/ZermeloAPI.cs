@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Infrastructure.Entities;
 using Newtonsoft.Json;
 using Zermos_Web.Models.zermelo;
-using Zermos_Web.Models.Zermelo;
 using Zermos_Web.Utilities;
 using Appointment = Zermos_Web.Models.zermelo.Appointment;
 using Response = Zermos_Web.Models.zermelo.Response;
@@ -66,6 +65,7 @@ namespace Zermos_Web.APIs
             var zermeloRoosterModel = JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync());
             zermeloRoosterModel.MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year);
             zermeloRoosterModel.timeStamps = new List<int> {secondsStart, secondsEnd};
+            zermeloRoosterModel.roosterOrigin = "zermelo";
             return zermeloRoosterModel;
         }
         
@@ -89,33 +89,6 @@ namespace Zermos_Web.APIs
             var response = await _httpClient.GetAsync(baseUrl);
             
             return response.IsSuccessStatusCode;
-        }
-
-        public async Task<SimpleZermeloRoosterModel> getRoosterFromStartAndEnd(user user, DateTime startUnix, DateTime endUnix)
-        {
-            var baseUrl = $"https://{user.zermelo_school_abbr}.zportal.nl/api/v3/appointments" +
-                          $"?user={user.school_id}" +
-                          $"&access_token={user.zermelo_access_token}" +
-                          $"&start={startUnix.ToUnixTime()}" +
-                          $"&end={endUnix.ToUnixTime()}" +
-                          $"&fields=subjects,groups,locations,teachers,cancelled,type,start,end";
-            
-            var response = await _httpClient.GetAsync(baseUrl);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                var end = new SimpleZermeloRoosterModel
-                {
-                    response = new Models.Zermelo.Response
-                    {
-                        data = new List<Models.Zermelo.Appointment>()
-                    }
-                };
-                end.response.data.Add(new Models.Zermelo.Appointment());
-                return end;
-            }
-            
-            return JsonConvert.DeserializeObject<SimpleZermeloRoosterModel>(await response.Content.ReadAsStringAsync());
         }
 
         // Private method to create an empty ZermeloRoosterModel for error handling.
