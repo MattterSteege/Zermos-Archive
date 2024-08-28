@@ -59,8 +59,11 @@ public class SomtodayAPI
             if (errorMessage.EndsWith("access_denied")) //error_description=Access denied by resource owner or authorization server: Unauthorized account error=access_denied
                 Console.Write("Unauthorized account, token has expired.");
             
-            if (errorMessage.Contains("invalid_grant")) //error_description=Invalid grant: Token revoked error=invalid_grant
+            else if (errorMessage.Contains("invalid_grant")) //error_description=Invalid grant: Token revoked error=invalid_grant
                 Console.Write("Invalid refresh token. Token has been revoked."); //This can not be fixed by the user, the user has to re-authenticate.
+            
+            else 
+                Console.Write("undefined error: " + errorMessage);
             
             return null;
         }

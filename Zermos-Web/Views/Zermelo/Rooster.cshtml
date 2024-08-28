@@ -38,10 +38,9 @@ function NextWeek() {
         yearToFetch += 1;
     }
     
-    //check if current week is the same as the week to fetch
-    //if (weekToFetch === currentWeek + 1) {
+    if (!elementHasNextNextSibling(getCurrentWeekElement())) {
         fetchWeek(weekToFetch, yearToFetch, true);
-    //}
+    }
 }
 
 
@@ -56,11 +55,10 @@ function PreviousWeek() {
         weekToFetch = 52;
         yearToFetch -= 1;
     }
-    
-    //check if current week is the same as the week to fetch
-    //if (weekToFetch === currentWeek - 1) {
+
+    if (!elementHasPreviousPreviousSibling(getCurrentWeekElement())) {
         fetchWeek(weekToFetch, yearToFetch, false);
-    //}
+    }
 
 }
 
@@ -191,45 +189,12 @@ Zermos.mainBeforeLoad = () => {
         //startXTransform and endXTransform
         var otherXDif = startXTransform - endXTransform;      
         if (otherXDif > minSwipePercentage) {
-            //var newX = startXTransform - 100;
-            //animating = true;
             dragging = false;
-            // ease(endXTransform, newX, 500, (value) => {
-            //     weekCarousel.style.transform = `translateX(${value}%)`;
-            //    
-            //     if (value === newX) {
-            //         dragging = false;
-            //         animating = false;
-            //        
-            //         if (newX === -100 * (weeksArray.length - 1)) {
-            //             NextWeek();
-            //         }
-            //     }
-            // });
-            
-            NextWeekAnim();           
-            return;
+            NextWeekAnim();
         }
         else if (otherXDif < -minSwipePercentage) {
-            //var newX = startXTransform + 100;
-            //animating = true;
-            dragging = false;
-            //animating = false;
-            // ease(endXTransform, newX, 500, (value) => {
-            //     weekCarousel.style.transform = `translateX(${value}%)`;
-            //    
-            //     if (value === newX) {
-            //         dragging = false;
-            //         animating = false;
-            //        
-            //         if (newX === 0) {
-            //             PreviousWeek();
-            //         }
-            //     }
-            // });
-            
-            PrevWeekAnim();          
-            return;
+            dragging = false;            
+            PrevWeekAnim();
         }
         else
         {
@@ -240,8 +205,6 @@ Zermos.mainBeforeLoad = () => {
             
             dragging = false;
             animating = false;
-            
-            return;
         }
     }
 
@@ -335,7 +298,14 @@ addButtonToPage('fa-arrow-left', PrevWeekAnim, VerticalAlignment.BL);
 
 function NextWeekAnim() {
     disableButtons();
-    NextWeek();
+    
+    //check if there is less or equal to 1 week between the current and one of the outer weeks
+    var currentWeekElement = getCurrentWeekElement();
+    var hasNextNextSibling = elementHasNextNextSibling(currentWeekElement);
+    console.log(hasNextNextSibling, currentWeekElement);
+    if (!hasNextNextSibling) {
+        NextWeek();
+    }
     
     //ease the carousel to the next week
     var current = Number(weekCarousel.style.transform.match(/-?\d+/g)[0]);
@@ -356,7 +326,14 @@ function NextWeekAnim() {
 
 function PrevWeekAnim() {
     disableButtons();
-    PreviousWeek();
+    
+    //check if there is less or equal to 1 week between the current and one of the outer weeks
+    var currentWeekElement = getCurrentWeekElement();
+    var hasPreviousPreviousSibling = elementHasPreviousPreviousSibling(currentWeekElement);
+    console.log(hasPreviousPreviousSibling, currentWeekElement);
+    if (!hasPreviousPreviousSibling) {
+        PreviousWeek();
+    }
     
     //ease the carousel to the previous week
     var current = Number(weekCarousel.style.transform.match(/-?\d+/g)[0]);
@@ -558,5 +535,21 @@ function getCurrentWeek() {
     var week = Math.ceil((((date - onejan) / 86400000) + onejan.getDay() + 1) / 7);
     return week;
 }
+
+var getCurrentWeekElement = () => {
+    let index = (Number(weekCarousel.style.transform.match(/-?\d+/g)[0]) * -1) / 100;
+    index = Math.floor(index);
+    console.log(index);
+    return (index >= 0 && index < weeks?.length) ? weeks[index] : null;
+};
+
+var elementHasNextNextSibling = (element) => {
+    return element?.nextElementSibling?.nextElementSibling !== null && element?.nextElementSibling?.nextElementSibling !== undefined;
+};
+
+var elementHasPreviousPreviousSibling = (element) => {
+    return element?.previousElementSibling?.previousElementSibling !== null && element?.previousElementSibling?.previousElementSibling !== undefined;
+};
+
 
 </script>

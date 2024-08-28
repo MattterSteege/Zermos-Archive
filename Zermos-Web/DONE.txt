@@ -6,3 +6,6 @@ Version 0.6.3.1 - bug fixes
 - Zermelo/somtoday - gedeelde links
     - Een probleem waar je de specifieke data van een les niet kon zien is nu opgelost
     - Als de link vervalt, dan krijgt een bezoeker nu een "verlopen" pagina te zien i.p.v. een 404 pagina
+    
+- Zermelo/somtoday - rooster
+    - het swipen naar de volgende en vorige week vraagt nu niet te pas en te onpas een nieuwe week op. Alleen als er 1 week tussen de huidige week en het einde van de lijst zit, dan wordt er een nieuwe week opgevraagd (TL;DR: het rooster is zuiniger met jouw 4G data)
