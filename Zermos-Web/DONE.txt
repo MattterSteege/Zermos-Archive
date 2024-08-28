@@ -1,13 +1,8 @@
-Version 0.6.3 - Pull the lever, Kronk! Wrong lever!!!!!!!!
+Version 0.6.3.1 - bug fixes
 
-- algemeen
-    - Instellingen zijn nu server side gelimiteerd, dus je kunt geen vreemde waardes meer invullen, alleen van tevoren bepaalde waardes
-    - Ik heb een betere manier om Zermos te installeren toegevoegd, je kunt nu op de knop "Installeren" klikken bij je account instellingen (mocht je browser dit niet ondersteunen, dan word je naar de uitleg pagina gestuurd)
-    - Het cache systeem hebt ik uitgeschakeld, omdat het niet goed werkte. Je kunt het wel nog aan zetten in het debug menu (1x klikken op je naam bij je account), maar het werkt niet goed.
+- koppelingen - somtoday
+    - Een klein probleempje met de token verversen is nu deels opgelost (ik heb nu wel een beter inzicht in wat er fout gaat)
 
-- koppelingen - infowijs
-    - als je account geen toegang heeft tot een infowijs account, dan krijg je nu een error te zien.
-    
-- Somtoday - rooster
-    - Het was toch makkelijker dan ik dacht om de rooster engine te laten werken, dus SOMtoday roosters zijn nu beschikbaar!
-    - Je kunt ook je rooster delen als je de Somtoday engine gebruikt, dit kan via de knop "Delen" in de rooster pagina (net zoals bij Zermelo roosters)
+- Zermelo/somtoday - gedeelde links
+    - Een probleem waar je de specifieke data van een les niet kon zien is nu opgelost
+    - Als de link vervalt, dan krijgt een bezoeker nu een "verlopen" pagina te zien i.p.v. een 404 pagina

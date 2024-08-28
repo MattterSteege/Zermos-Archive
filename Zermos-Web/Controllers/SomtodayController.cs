@@ -14,10 +14,10 @@ using Zermos_Web.APIs;
 using Zermos_Web.Models;
 using Zermos_Web.Models.Requirements;
 using Zermos_Web.Models.Somtoday;
+using Zermos_Web.Models.SomtodayAfwezigheidModel;
 using Zermos_Web.Models.SomtodayLeermiddelen;
 using Zermos_Web.Models.somtodayHomeworkModel;
 using Zermos_Web.Models.SomtodayPlaatsingen;
-using Zermos_Web.Models.SomtodayRoosterModel;
 using Zermos_Web.Models.SortedSomtodayGradesModel;
 using Zermos_Web.Models.zermelo;
 using Zermos_Web.Utilities;
@@ -47,7 +47,11 @@ namespace Zermos_Web.Controllers
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
-                user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
+                string access_token = await RefreshToken(user.somtoday_refresh_token);
+                if (access_token == "re-auth")
+                    return RedirectToAction("SomtodayNietGekoppeld", "Koppelingen");
+                
+                user.somtoday_access_token = access_token;
             }
 
             SomtodayPlaatsingenModel plaatsingen;
@@ -100,7 +104,11 @@ namespace Zermos_Web.Controllers
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
-                user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
+                string access_token = await RefreshToken(user.somtoday_refresh_token);
+                if (access_token == "re-auth")
+                    return RedirectToAction("SomtodayNietGekoppeld", "Koppelingen");
+                
+                user.somtoday_access_token = access_token;
             }
 
             SomtodayPlaatsingenModel plaatsingen;
@@ -155,7 +163,11 @@ namespace Zermos_Web.Controllers
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
-                user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
+                string access_token = await RefreshToken(user.somtoday_refresh_token);
+                if (access_token == "re-auth")
+                    return RedirectToAction("SomtodayNietGekoppeld", "Koppelingen");
+                
+                user.somtoday_access_token = access_token;
             }
 
             SomtodayPlaatsingenModel plaatsingen;
@@ -290,7 +302,11 @@ namespace Zermos_Web.Controllers
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
-                user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
+                string access_token = await RefreshToken(user.somtoday_refresh_token);
+                if (access_token == "re-auth")
+                    return RedirectToAction("SomtodayNietGekoppeld", "Koppelingen");
+                
+                user.somtoday_access_token = access_token;
             }
 
             SomtodayPlaatsingenModel plaatsingen;
@@ -337,12 +353,12 @@ namespace Zermos_Web.Controllers
             var cijfers = await GetShare(token);
             
             if (cijfers == null)
-                return NotFound();
+                return RedirectToAction("Verlopen", "Error");
             
             if (cijfers.expires_at < DateTime.Now)
             {
                 await DeleteShare(token);
-                return NotFound();
+                return RedirectToAction("Verlopen", "Error");
             }
             
             return PartialView(cijfers.value.Base64StringToObject<SortedSomtodayGradesModel>());
@@ -371,7 +387,11 @@ namespace Zermos_Web.Controllers
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
             {
-                user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
+                string access_token = await RefreshToken(user.somtoday_refresh_token);
+                if (access_token == "re-auth")
+                    return RedirectToAction("SomtodayNietGekoppeld", "Koppelingen");
+                
+                user.somtoday_access_token = access_token;
             }
 
             var somtodayHomework = await somtodayApi.GetHomeworkAsync(user, dagen);
@@ -441,7 +461,6 @@ namespace Zermos_Web.Controllers
         [HttpPost("Somtoday/Huiswerk/Nieuw")]
         public IActionResult NieuwHuiswerkPOST()
         {
-            //FORM: deadline=2024-8-15+23%3A59%3A59&titel=tests&omschrijving=fgdsfgsdffgdsfgsdfbsgfdh
             var customHuiswerkModel = new CustomHuiswerkModel
             {
                 deadline = DateTime.Parse(Request.Form["deadline"]),
@@ -510,7 +529,16 @@ namespace Zermos_Web.Controllers
             var user = ZermosUser;
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
-                user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
+            {
+                string access_token = await RefreshToken(user.somtoday_refresh_token);
+                if (access_token == "re-auth")
+                {
+                    SomtodayAfwezigheidModel model = ModelUtils.ReturnEmptyModel<SomtodayAfwezigheidModel>();
+                    return Json(model);
+                }
+                user.somtoday_access_token = access_token;
+            }
+            
             var somtodayAfwezigheid = await somtodayApi.GetAfwezigheidAsync(user);
             if (somtodayAfwezigheid == null) return NoContent();
             return Json(somtodayAfwezigheid);
@@ -535,11 +563,17 @@ namespace Zermos_Web.Controllers
             var user = ZermosUser;
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
-                user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
+            {
+                string access_token = await RefreshToken(user.somtoday_refresh_token);
+                if (access_token == "re-auth")
+                    return RedirectToAction("SomtodayNietGekoppeld", "Koppelingen");
+                
+                user.somtoday_access_token = access_token;
+            }
 
             var somtodayLeermiddelen = await somtodayApi.GetStudiemateriaal(user);
-            var customLeermiddelen = JsonConvert.DeserializeObject<SomtodayLeermiddelenModel>(user.custom_leermiddelen ?? "{\"items\": []}");
-            somtodayLeermiddelen.items.AddRange(customLeermiddelen.items);
+            var customLeermiddelen = JsonConvert.DeserializeObject<SomtodayLeermiddelenModel>(user.custom_leermiddelen ?? "{\"items\": []}") ?? new SomtodayLeermiddelenModel { items = new List<Models.SomtodayLeermiddelen.Item>() };
+            somtodayLeermiddelen.items.AddRange(customLeermiddelen.items ?? new List<Models.SomtodayLeermiddelen.Item>());
             
             if (somtodayLeermiddelen.items.Count == 0)
                 return NoContent();
@@ -602,7 +636,13 @@ namespace Zermos_Web.Controllers
             var user = ZermosUser;
             
             if (TokenUtils.CheckToken(user.somtoday_access_token) == false)
-                user.somtoday_access_token = await RefreshToken(user.somtoday_refresh_token);
+            {
+                string access_token = await RefreshToken(user.somtoday_refresh_token);
+                if (access_token == "re-auth")
+                    return RedirectToAction("SomtodayNietGekoppeld", "Koppelingen");
+                
+                user.somtoday_access_token = access_token;
+            }
             
             var somtodayRooster = await somtodayApi.GetRoosterAsync(user, year, week);
             ZermeloRoosterModel zermeloRooster = somtodayRooster.TransformToZermeloRoosterModel();
@@ -648,12 +688,12 @@ namespace Zermos_Web.Controllers
             var rooster = await GetShare(token);
             
             if (rooster == null)
-                return NotFound();
+                return RedirectToAction("Verlopen", "Error");
             
             if (rooster.expires_at < DateTime.Now)
             {
                 await DeleteShare(token);
-                return NotFound();
+                return RedirectToAction("Verlopen", "Error");
             }
             
             return PartialView("~/Views/Zermelo/GedeeldRooster.cshtml", rooster.value.Base64StringToObject<ZermeloRoosterModel>());
@@ -666,6 +706,18 @@ namespace Zermos_Web.Controllers
             if (token == null) return null;
             
             var somtoday = await somtodayApi.RefreshTokenAsync(token);
+
+            if (somtoday == null)
+            {
+                Console.WriteLine(" - triggered by: " + ZermosEmail);
+                ZermosUser = new user
+                {
+                    somtoday_access_token = string.Empty,
+                    somtoday_refresh_token = string.Empty,
+                    somtoday_student_id = string.Empty
+                };
+                return "re-auth";
+            }
             
             ZermosUser = new user
             {

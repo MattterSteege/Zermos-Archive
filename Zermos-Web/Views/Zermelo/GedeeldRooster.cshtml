@@ -16,30 +16,49 @@
 </div>
 
 <script minimize>
-function OpenLessonDetail(base64){
+function OpenLessonDetail(base64) {
     const json = JSON.parse(atob(base64));
-    
-    var lessonDetail = new ZermosModal()
-    .addText({text: (json.subjects[0] ?? '?') + " - " + new Date(json.start * 1000).toLocaleDateString("nl-NL", { weekday: 'long', month: 'short', day: 'numeric'})});
-    
-        lessonDetail.addText({text: "Degene die dit rooster gedeeld heeft:"});
-    if (json.teachers.length > 0) 
-        lessonDetail.addText({text: "• heeft les van " + json.teachers.join(", ") + "."});
-    if (json.locations.length > 0) 
-        lessonDetail.addText({text: "• in lokaal " + json.locations.join(", ") + "."});
-    if (json.groups.length > 0) 
-        lessonDetail.addText({text: "• met groep " + json.groups.join(", ") + "."});   
-    
-    lessonDetail.addText({text: "De les is van: " + new Date(json.start * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1] + " tot " + new Date(json.end * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1]})
-        
-    for (var i = 0; i < json.status.length; i++) {
-        var status = json.status[i];
-
-        if (status['code'] === 2002) continue;
-        
-        lessonDetail.addText({text: "• " + status.nl});
+    var lessonDetail = new ZermosModal().addText({
+        text: (json.subjects[0] ?? '?') + " - " + new Date(json.start * 1000).toLocaleDateString("nl-NL", {
+            weekday: 'long',
+            month: 'short',
+            day: 'numeric'
+        })
+    });
+    lessonDetail.addText({
+        text: "Degene die dit rooster gedeeld heeft:"
+    });
+    if (json.teachers.length > 0)
+        lessonDetail.addText({
+            text: "• heeft les van " + json.teachers.join(", ") + "."
+        });
+    if (json.locations.length > 0)
+        lessonDetail.addText({
+            text: "• in lokaal " + json.locations.join(", ") + "."
+        });
+    if (json.groups && json.groups.length > 0)
+        lessonDetail.addText({
+            text: "• met groep " + json.groups.join(", ") + "."
+        });
+    lessonDetail.addText({
+        text: "De les is van: " + new Date(json.start * 1000).toLocaleDateString("nl-NL", {
+            hour: '2-digit',
+            minute: '2-digit'
+        }).split(" ")[1] + " tot " + new Date(json.end * 1000).toLocaleDateString("nl-NL", {
+            hour: '2-digit',
+            minute: '2-digit'
+        }).split(" ")[1]
+    })
+    if (json.status) {
+        for (var i = 0; i < json.status.length; i++) {
+            var status = json.status[i];
+            if (status['code'] === 2002)
+                continue;
+            lessonDetail.addText({
+                text: "• " + status.nl
+            });
+        }
     }
-    
     lessonDetail.open();
 }
 </script>

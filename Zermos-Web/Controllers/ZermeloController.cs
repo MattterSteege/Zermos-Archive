@@ -81,12 +81,12 @@ namespace Zermos_Web.Controllers
             var rooster = await GetShare(token);
             
             if (rooster == null)
-                return NotFound();
+                return RedirectToAction("Verlopen", "Error");
             
             if (rooster.expires_at < DateTime.Now)
             {
                 await DeleteShare(token);
-                return NotFound();
+                return RedirectToAction("Verlopen", "Error");
             }
             
             return PartialView(rooster.value.Base64StringToObject<ZermeloRoosterModel>());

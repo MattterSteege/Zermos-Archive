@@ -182,6 +182,12 @@ namespace Zermos_Web.Controllers
             // Send report to bug tracker
             return Ok(response.StatusCode);
         }
+
+        [ZermosPage]
+        public IActionResult Verlopen()
+        {
+            return PartialView("Verlopen");
+        }
     }
     
     

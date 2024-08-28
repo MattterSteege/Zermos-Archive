@@ -55,7 +55,13 @@ public class SomtodayAPI
         if (!response.IsSuccessStatusCode)
         {
             var errorMessage = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(errorMessage);
+            
+            if (errorMessage.EndsWith("access_denied")) //error_description=Access denied by resource owner or authorization server: Unauthorized account error=access_denied
+                Console.Write("Unauthorized account, token has expired.");
+            
+            if (errorMessage.Contains("invalid_grant")) //error_description=Invalid grant: Token revoked error=invalid_grant
+                Console.Write("Invalid refresh token. Token has been revoked."); //This can not be fixed by the user, the user has to re-authenticate.
+            
             return null;
         }
         
@@ -431,7 +437,7 @@ public class SomtodayAPI
 #if DEBUG
         var watch = Stopwatch.StartNew();
 #endif
-        string url = $"https://api.somtoday.nl/rest/v1/afspraakitems/1409824200/jaar/{year}/week/{week}";
+        string url = $"https://api.somtoday.nl/rest/v1/afspraakitems/{user.somtoday_student_id}/jaar/{year}/week/{week}";
 
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);

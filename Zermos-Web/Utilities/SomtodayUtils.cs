@@ -46,7 +46,7 @@ public static class SomtodayUtils
                 end = end,
                 cancelled = false, // (a SOMtoday item can never be cancelled, a cancelled appointment would not be in the list)
                 appointmentType = item.afspraakItemType,
-                subjects = new List<string> {item.vak?.naam ?? "N/A"},
+                subjects = new List<string> {item.vak?.afkorting ?? "N/A"},
                 locations = new List<string> {item.locatie},
                 teachers = item.docentNamen,
                 actions = new List<Action>()

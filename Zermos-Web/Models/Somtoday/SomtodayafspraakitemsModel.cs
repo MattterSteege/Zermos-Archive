@@ -36,7 +36,7 @@ public class Vak
 {
     [JsonProperty("$type")]
     public string type { get; set; }
-    public int id { get; set; }
+    public Int64 id { get; set; }
     public string naam { get; set; }
     public string afkorting { get; set; }
     public string UUID { get; set; }

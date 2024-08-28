@@ -56,11 +56,20 @@ namespace Zermos_Web
             services.AddDataProtection().PersistKeysToFileSystem(new System.IO.DirectoryInfo("/dataprotection"));
             
 #if RELEASE && BETA
-            Console.WriteLine("BETA RELEASE VERSION");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($"[{DateTime.Now:HH:mm:ss} Information] ");
+            Console.ResetColor();
+            Console.WriteLine(" BETA RELEASE VERSION");
 #elif RELEASE && !BETA
-            Console.WriteLine("PROD RELEASE VERSION");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($"[{DateTime.Now:HH:mm:ss} Information] ");
+            Console.ResetColor();
+            Console.WriteLine("RELEASE VERSION");
 #else
-            Console.WriteLine("NON-RELEASE VERSION");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($"[{DateTime.Now:HH:mm:ss} Information] ");
+            Console.ResetColor();
+            Console.WriteLine("DEBUG VERSION");
 #endif
 
         }
@@ -74,7 +83,7 @@ namespace Zermos_Web
                 if (context.Response is {StatusCode: 404, HasStarted: false})
                 {
                     //log the error
-                    loggerFactory.CreateLogger("404").LogWarning($"404 error, user {context.User.FindFirst("email")} requested: \"{context.Request.Path}\", but page wasn't found");
+                    loggerFactory.CreateLogger("404").LogWarning($"404 error, user {context.User.FindFirst("email")} requested: \"{context.Request.Path}{context.Request.QueryString}\", but page wasn't found");
                     
                     context.Response.Redirect("/404");
                 }

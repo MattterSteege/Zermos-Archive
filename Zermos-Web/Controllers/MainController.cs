@@ -150,11 +150,11 @@ namespace Zermos_Web.Controllers
             var user = ZermosUser;
             stopwatch.Stop();
             
-            Console.WriteLine($"User: {user.email} initiated api test\n" +
-                              $"Request send at: {timeRequestSend:HH:mm:ss.fff}\n" +
-                              $"Request recieved at: {timeRequestRecieved:HH:mm:ss.fff}\n" +
-                              $"Response send at: {DateTime.UtcNow:HH:mm:ss.fff}\n" +
-                              $"DataBase query took: {stopwatch.ElapsedMilliseconds}ms");
+            Log(LogLevel.Information ,$"User: {user.email} initiated api test\n" +
+                                          $"Request send at: {timeRequestSend:HH:mm:ss.fff}\n" +
+                                          $"Request recieved at: {timeRequestRecieved:HH:mm:ss.fff}\n" +
+                                          $"Response send at: {DateTime.UtcNow:HH:mm:ss.fff}\n" +
+                                          $"DataBase query took: {stopwatch.ElapsedMilliseconds}ms");
             
             return Json(new
             {
