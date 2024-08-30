@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Zermos_Web.Models.Requirements;
+using Zermos_Web.Models.SortedSomtodayGradesModel;
+using Zermos_Web.Models.zermelo;
 using Zermos_Web.Utilities;
 
 namespace Zermos_Web.Controllers
@@ -105,6 +108,12 @@ namespace Zermos_Web.Controllers
         {
             string content = System.IO.File.ReadAllText("wwwroot/js/serviceworker.js");
             
+            //set no-cache headers and referer policy to any source
+            Response.Headers.Add("Cache-Control", "no-cache, no-store, must-revalidate");
+            Response.Headers.Add("Pragma", "no-cache");
+            Response.Headers.Add("Expires", "0");
+            Response.Headers.Add("Referrer-Policy", "no-referrer");
+            
             if (!minify)
                 return Content(content.Replace("${ZERMOSVERSION}", CurrentZermosVersion), "text/javascript");
             
@@ -124,6 +133,34 @@ namespace Zermos_Web.Controllers
                     }
                 }
             }, new JsonSerializerOptions {WriteIndented = true });
+        }
+
+        [Route("/.well-known/assetlinks.json")]
+        public IActionResult AssetLinks()
+        {
+            return Json(new object(), new JsonSerializerOptions {WriteIndented = true});
+        }
+        
+        //any request that requests a png (/x.png) will be redirected to /images/x.png
+        [Route("/{url}.png")]
+        public IActionResult Png(string url)
+        {
+            //return the file from the images folder
+            try
+            {
+                return File(System.IO.File.ReadAllBytes($"wwwroot/images/{url}.png"), "image/png");
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
+        
+        //basic do whatever you want robots.txt
+        [Route("/robots.txt")]
+        public IActionResult Robots()
+        {
+            return Content("User-agent: *\nDisallow: \nDisallow: /js/\nDisallow: /css/\nDisallow: /Fonts/");
         }
 
         [ZermosPage]
@@ -163,6 +200,31 @@ namespace Zermos_Web.Controllers
                 timeResponseSend = DateTime.UtcNow,
                 timeQuery = stopwatch.ElapsedMilliseconds
             }, new JsonSerializerOptions {WriteIndented = true});
+        }
+        
+        [ZermosPage]
+        [Route("/gedeeld/{url}")]
+        public async Task<IActionResult> Gedeeld(string url = "")
+        {
+            var share = await GetShare(url);
+            
+            if (share == null)
+                return RedirectToAction("Verlopen", "Error");
+            
+            if (share.expires_at < DateTime.Now)
+            {
+                await DeleteShare(url);
+                return RedirectToAction("Verlopen", "Error");
+            }
+            
+            if (share.page == "/Zermelo/Rooster/Gedeeld")
+                return PartialView("~/Views/Zermelo/GedeeldRooster.cshtml", share.value.Base64StringToObject<ZermeloRoosterModel>());
+            if (share.page == "/Somtoday/Rooster/Gedeeld")
+                return PartialView("~/Views/Zermelo/GedeeldRooster.cshtml", share.value.Base64StringToObject<ZermeloRoosterModel>());
+            if (share.page == "/Somtoday/Cijfers/Gedeeld")
+                return PartialView("~/Views/Somtoday/GedeeldCijfers.cshtml", share.value.Base64StringToObject<SortedSomtodayGradesModel>());
+
+            return RedirectToAction("Verlopen", "Error");
         }
     }
 }

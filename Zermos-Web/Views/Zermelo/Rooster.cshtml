@@ -63,6 +63,7 @@ function PreviousWeek() {
 }
 
 async function fetchWeek(week, year, append, retry = false) {        
+    if (!isUserOnline) return;
     
     var newWeek = {week: week, year: year};
     
@@ -293,8 +294,10 @@ function ease(start, end, time, callback) {
     const interval = setInterval(update, 10); // Update approximately every 16 milliseconds
 }
 
-addButtonToPage('fa-arrow-right', NextWeekAnim, VerticalAlignment.BL);
-addButtonToPage('fa-arrow-left', PrevWeekAnim, VerticalAlignment.BL);
+if (isUserOnline) {
+    addButtonToPage('fa-arrow-right', NextWeekAnim, VerticalAlignment.BL);
+    addButtonToPage('fa-arrow-left', PrevWeekAnim, VerticalAlignment.BL);
+}
 
 function NextWeekAnim() {
     disableButtons();
@@ -302,7 +305,6 @@ function NextWeekAnim() {
     //check if there is less or equal to 1 week between the current and one of the outer weeks
     var currentWeekElement = getCurrentWeekElement();
     var hasNextNextSibling = elementHasNextNextSibling(currentWeekElement);
-    console.log(hasNextNextSibling, currentWeekElement);
     if (!hasNextNextSibling) {
         NextWeek();
     }
@@ -311,8 +313,7 @@ function NextWeekAnim() {
     var current = Number(weekCarousel.style.transform.match(/-?\d+/g)[0]);
     var newWeek = current - 100;
     newWeek = Math.ceil(newWeek / 100) * 100;
-
-    //console.log(current, newWeek);
+    
     animating = true;
     ease(current, newWeek, 500, (value) => {
         weekCarousel.style.transform = `translateX(${value}%)`;
@@ -330,7 +331,6 @@ function PrevWeekAnim() {
     //check if there is less or equal to 1 week between the current and one of the outer weeks
     var currentWeekElement = getCurrentWeekElement();
     var hasPreviousPreviousSibling = elementHasPreviousPreviousSibling(currentWeekElement);
-    console.log(hasPreviousPreviousSibling, currentWeekElement);
     if (!hasPreviousPreviousSibling) {
         PreviousWeek();
     }
@@ -339,8 +339,7 @@ function PrevWeekAnim() {
     var current = Number(weekCarousel.style.transform.match(/-?\d+/g)[0]);
     var newWeek = current + 100;
     newWeek = Math.floor(newWeek / 100) * 100;
-
-    //console.log(current, newWeek);
+    
     animating = true;
     ease(current, newWeek, 500, (value) => {
         weekCarousel.style.transform = `translateX(${value}%)`;
@@ -427,39 +426,40 @@ function OpenLessonDetail(base64){
 }
 
 // share button
-addButtonToPage('fa-share-from-square', () => {
-   
-    new ZermosModal()
-    .addHeading({text: "Deel je rooster"})
-    .addText({text: "Deel je rooster met je vrienden! De pagina die je nu ziet wordt als link gedeeld, zij hoeven geen account hiervoor te hebben."})
-    .addDatePicker({required: true, initialDate: new Date(Date.now() + 604800000)})
-    .addButton({text: "Deel", onClick: (ctx) => {
+if (isUserOnline) {
+    addButtonToPage('fa-share-from-square', () => {
+       
+        new ZermosModal()
+        .addHeading({text: "Deel je rooster"})
+        .addText({text: "Deel je rooster met je vrienden! De pagina die je nu ziet wordt als link gedeeld, zij hoeven geen account hiervoor te hebben."})
+        .addDatePicker({required: true, initialDate: new Date(Date.now() + 604800000)})
+        .addButton({text: "Deel", onClick: (ctx) => {
+            
+            var values = ctx.getComponentsValue().values;
+            
+            if (values.correct === false) return;
+            
+            
+            const date = values[0].value;
+            const dateObject = new Date(date);
+            const currentYear = new Date().getFullYear();
+            var expires_at = Math.floor(dateObject.getTime() / 1000);
+            
+            //return's an plan string url
+            fetch('/@(Model.roosterOrigin)/rooster/genereer-token?year=' + currentYear+ '&week=' + currentWeek + '&expires_at=' + expires_at)
+            .then(response => response.text())
+            .then((url) => {
+                new ZermosModal()
+                .addHeading({text: "Deel je rooster"})
+                .addText({text: "Deel je rooster met je vrienden! De pagina die je nu ziet wordt als link gedeeld, zij hoeven geen account hiervoor te hebben."})
+                .addUrl({url: "/gedeeld/" + url, showFull: false, copyButton: true})
+                .open();
+            });
+        }})
+        .open();
         
-        var values = ctx.getComponentsValue().values;
-        
-        if (values.correct === false) return;
-        
-        
-        const date = values[0].value;
-        const dateObject = new Date(date);
-        const currentYear = new Date().getFullYear();
-        var expires_at = Math.floor(dateObject.getTime() / 1000);
-        
-        //return's an plan string url
-        fetch('/@(Model.roosterOrigin)/rooster/genereer-token?year=' + currentYear+ '&week=' + currentWeek + '&expires_at=' + expires_at)
-        .then(response => response.text())
-        .then((url) => {
-            new ZermosModal()
-            .addHeading({text: "Deel je rooster"})
-            .addText({text: "Deel je rooster met je vrienden! De pagina die je nu ziet wordt als link gedeeld, zij hoeven geen account hiervoor te hebben."})
-            .addUrl({url: url, showFull: false, copyButton: true})
-            .open();
-        });
-    }})
-    .open();
-    
-}, VerticalAlignment.TL, Background.Primary);
-
+    }, VerticalAlignment.TL, Background.Primary);
+}
 // share button
 addButtonToPage('fa-list', () => {
    
@@ -539,7 +539,6 @@ function getCurrentWeek() {
 var getCurrentWeekElement = () => {
     let index = (Number(weekCarousel.style.transform.match(/-?\d+/g)[0]) * -1) / 100;
     index = Math.floor(index);
-    console.log(index);
     return (index >= 0 && index < weeks?.length) ? weeks[index] : null;
 };
 

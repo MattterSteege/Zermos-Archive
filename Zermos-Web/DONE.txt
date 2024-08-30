@@ -2,6 +2,9 @@ Version 0.6.3.1 - bug fixes
 
 - koppelingen - somtoday
     - Een klein probleempje met de token verversen is nu deels opgelost (ik heb nu wel een beter inzicht in wat er fout gaat)
+    
+- koppelingen - zermelo
+    - het QR code systeem had een klein foutje met inladen van data, maar nu heb ik dat gefixt™
 
 - Zermelo/somtoday - gedeelde links
     - Een probleem waar je de specifieke data van een les niet kon zien is nu opgelost
@@ -9,3 +12,11 @@ Version 0.6.3.1 - bug fixes
     
 - Zermelo/somtoday - rooster
     - het swipen naar de volgende en vorige week vraagt nu niet te pas en te onpas een nieuwe week op. Alleen als er 1 week tussen de huidige week en het einde van de lijst zit, dan wordt er een nieuwe week opgevraagd (TL;DR: het rooster is zuiniger met jouw 4G data)
+    
+- delen
+    - het delen van cijfers of je rooster is nu verbeterd
+    
+- algemeen
+    - er zijn meerdere iconen toegevoegd (voor apple voornamelijk) (nerd stuff)
+    - er is een robot.txt toegevoegd (nerd stuff)
+    

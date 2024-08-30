@@ -1,87 +1,54 @@
-﻿const CACHE_NAME = '${ZERMOSVERSION}';
+﻿// This is the service worker with the combined offline experience (Offline page + Offline copy of pages)
 
-// List of URLs to exclude from caching
-const EXCEPTION_URLS = [
-    '/login',
-    '/logout',
-    '/Koppelingen/Somtoday/Callback',
-    `/Login`,
-    '/Login/Callback'
-];
+const CACHE = "Zermos-Web";
 
-// Function to check if a URL matches any of the exception patterns
-function isException(url) {
-    const urlObj = new URL(url);
-    const path = urlObj.pathname;
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 
-    return EXCEPTION_URLS.some(exceptionPath => {
-        // Use startsWith to match the path regardless of parameters
-        return path.startsWith(exceptionPath);
-    });
+// TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "offline.html";
+const offlineFallbackPage = "/offline";
+
+self.addEventListener("message", (event) => {
+    if (event.data && event.data.type === "SKIP_WAITING") {
+        self.skipWaiting();
+    }
+});
+
+self.addEventListener('install', async (event) => {
+    event.waitUntil(
+        caches.open(CACHE)
+            .then((cache) => cache.add(offlineFallbackPage))
+    );
+});
+
+if (workbox.navigationPreload.isSupported()) {
+    workbox.navigationPreload.enable();
 }
 
-self.addEventListener('install', (event) => {
-    // No specific actions needed on install
-});
-
-self.addEventListener('activate', (event) => {
-    event.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames.map((cacheName) => {
-                    if (cacheName !== CACHE_NAME) {
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        })
-    );
-});
+workbox.routing.registerRoute(
+    new RegExp('/*'),
+    new workbox.strategies.StaleWhileRevalidate({
+        cacheName: CACHE
+    })
+);
 
 self.addEventListener('fetch', (event) => {
-    // Check if the URL is in the exception list
-    if (isException(event.request.url)) {
-        // For exception URLs, fetch from network without caching
-        event.respondWith(fetch(event.request));
-        return;
+    if (event.request.mode === 'navigate') {
+        event.respondWith((async () => {
+            try {
+                const preloadResp = await event.preloadResponse;
+
+                if (preloadResp) {
+                    return preloadResp;
+                }
+
+                const networkResp = await fetch(event.request);
+                return networkResp;
+            } catch (error) {
+
+                const cache = await caches.open(CACHE);
+                const cachedResp = await cache.match(offlineFallbackPage);
+                return cachedResp;
+            }
+        })());
     }
-
-    event.respondWith(
-        fetch(event.request)
-            .then((response) => {
-                // Clone the response as it can only be consumed once
-                const responseToCache = response.clone();
-
-                // Check if the request is for a CSS or JS file from the same origin
-                if (event.request.url.startsWith(self.location.origin) &&
-                    (event.request.url.endsWith('.css') || event.request.url.endsWith('.js'))) {
-                    caches.open(CACHE_NAME)
-                        .then((cache) => {
-                            cache.put(event.request, responseToCache);
-                        });
-                }
-
-                // Check if this is the specific fetch request we want to cache
-                if (event.request.headers.get('X-Requested-With') === 'XMLHttpRequest' &&
-                    event.request.method === 'GET' &&
-                    event.request.cache === 'no-cache') {
-                    if (response.ok) {
-                        caches.open(CACHE_NAME)
-                            .then((cache) => {
-                                cache.put(event.request, responseToCache);
-                            });
-                    }
-                }
-
-                return response;
-            })
-            .catch(() => {
-                // If fetch fails (offline), try to serve from cache
-                return caches.match(event.request);
-            })
-            .then((response) => {
-                // If we have a response, return it. Otherwise, fetch from network.
-                return response || fetch(event.request);
-            })
-    );
 });

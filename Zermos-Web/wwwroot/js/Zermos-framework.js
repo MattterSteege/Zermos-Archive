@@ -444,8 +444,13 @@ function appendScript(element, scriptToWorkWith, isSrc) {
       script.crossOrigin = scriptToWorkWith.crossOrigin;
     if (script.referrerPolicy)
       script.referrerPolicy = scriptToWorkWith.referrerPolicy;
+    if (script.type)
+      script.type = scriptToWorkWith.type;
   } else {
     script.innerHTML = scriptToWorkWith.innerHTML;
+
+    if (scriptToWorkWith.type) 
+      script.type = scriptToWorkWith.type;
   }
 
   if (scriptToWorkWith.defer) {
@@ -516,34 +521,6 @@ function removeEventListenerFromMain(type, listener) {
 window.addEventListener("main:before-unload", () => Zermos.mainBeforeLoad());
 window.addEventListener("main:load", () => Zermos.mainOnLoad());
 window.addEventListener("main:before-unload", () => Zermos.mainBeforeUnload());
-
-//==============================SHARING SYSTEM==============================
-async function ZermosShareImage(title, text, blob) {
-  const data = {
-    files: [
-      new File([blob], "file.png", {
-        type: blob.type,
-      }),
-    ],
-    title: title,
-    text: text,
-  };
-  try {
-    if (!navigator.canShare(data)) {
-      return {
-        name: "NotSupportedError",
-        message: "Your browser does not support this feature",
-      };
-    }
-    await navigator.share(data);
-    return true;
-  } catch (err) {
-    return {
-      name: err.name,
-      message: err.message
-    };
-  }
-}
 
 //==============================UPDATE SYSTEM==============================
 Zermos.checkForUpdates = () => {
@@ -854,7 +831,19 @@ function cachePage(data, url) {
 }
 
 function getCachePage(url) {
-  showLoadingScreen().then(() => {
+  new Promise((resolve) => {
+    document.getElementsByClassName("loader-text")[0].innerHTML = loadingTexts[Math.floor(Math.random() * loadingTexts.length)];
+    document.querySelectorAll(".loading-dots").forEach(function(dot) {
+      dot.style.background = "";
+      dot.style.animation = "";
+      dot.style.transform = "";
+    });
+
+    content.style.opacity = "1";
+    // Assuming a 250ms fade-in animation
+    setTimeout(resolve, 250);
+  })
+  .then(() => {
     //get the current page data from localstorage
     var data = localStorage.getItem(url);
 
@@ -872,7 +861,11 @@ function getCachePage(url) {
     history.replaceState(null, " Zermos", url);
     
     setTimeout(() => {
-        hideLoadingScreen();
+      new Promise((resolve) => {
+        content.style.opacity = "0";
+        // Assuming a 250ms fade-out animation
+        setTimeout(resolve, 250);
+      });
       }, 250);
   });
 }
@@ -900,3 +893,46 @@ function getCacheCSS(url) {
     appendStylesheet(data);
   }
 }
+
+//==============================PAGE INTEGRETY==============================
+function isPageStructureComplete() {
+  const requiredElements = [
+    'html', 'head', 'body', 'main#main',
+    'div#sidebar', 'div#content', 'div.top-bar'
+  ];
+
+  for (let selector of requiredElements) {
+    if (!document.querySelector(selector)) {
+      console.warn(`Missing element: ${selector}`);
+      return false;
+    }
+  }
+
+  const requiredScripts = [
+    '/js/Zermos-framework.min.js',
+    '/js/Zermos-accessibility.min.js',
+    '/js/Zermos-modal.min.js'
+  ];
+
+  for (let src of requiredScripts) {
+    if (!document.querySelector(`script[src^="${src}"]`)) {
+      console.warn(`Missing script: ${src}`);
+      return false;
+    }
+  }
+
+  const requiredStylesheets = [
+    '/css/style.css',
+    '/css/modal.css'
+  ];
+
+  for (let href of requiredStylesheets) {
+    if (!document.querySelector(`link[rel="stylesheet"][href^="${href}"]`)) {
+      console.warn(`Missing stylesheet: ${href}`);
+      return false;
+    }
+  }
+
+  return true;
+}
+

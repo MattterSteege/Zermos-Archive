@@ -448,7 +448,7 @@
                         new ZermosModal()
                             .addHeading({text: "Deel je cijfers"})
                             .addText({text: "Hier is de link die je kan delen met je vrienden. Deze link is geldig tot de datum die je hebt gekozen. Bekijk je geldige links op de account pagina."})
-                            .addUrl({url: url, showFull: false, copyButton: true})
+                            .addUrl({url: "/gedeeld/" + url, showFull: false, copyButton: true})
                             .open();
                     });
             }})

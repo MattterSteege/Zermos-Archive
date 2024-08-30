@@ -1,0 +1,68 @@
+{
+  "name": "Zermos web",
+  "short_name": "Zermos",
+  "description": "Dé webapp voor school! Check je rooster, huiswerk, cijfers en nog veel meer met gemak!",
+  "icons": [
+    {
+      "src": "/images/icon192x192-curved.png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/icon512x512-curved.png",
+      "sizes": "512x512"
+    }
+  ],
+  "display": "minimal-ui",
+  "start_url": "/",
+  "scope": "/",
+  "theme_color": "#f8f9fa",
+  "background_color": "#f8f9fa",
+  "dir": "ltr",
+  "lang": "nl",
+  "orientation": "any",
+  "display_override": [
+    "window-controls-overlay",
+    "minimal-ui",
+    "browser"
+  ],
+  "categories": [
+    "education",
+    "news",
+    "utilities"
+  ],
+  "edge_side_panel": {
+    "preferred_width": 480
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+zermos",
+      "url": "/Deeplink?data=%s"
+    }
+  ],
+  "id": "9cd56f3e-1ce4-421b-87da-d2e79df5ff99",
+  "launch_handler": {
+    "client_mode": "navigate-new"
+  },
+  "shortcuts": [
+    {
+      "name": "Cijfers",
+      "url": "/Somtoday/Cijfers",
+      "description": "Open snel je cijfers"
+    },
+    {
+      "name": "Rooster",
+      "url": "/Zermelo/Rooster",
+      "description": "Open snel je rooster"
+    },
+    {
+      "name": "Huiswerk",
+      "url": "/Somtoday/Huiswerk",
+      "description": "Open snel je huiswerk"
+    }
+  ],
+  "prefer_related_applications": false,
+  "handle_links": "preferred",
+  "scope_extensions": [
+    {"origin": "zermos.kronk.tech"}
+  ]
+}

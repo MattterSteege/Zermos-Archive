@@ -364,6 +364,8 @@
         const urlSection = document.createElement('div');
         urlSection.className = 'url-section';
 
+        component.url = window.location.origin + component.url;
+        
         const urlField = document.createElement('div');
         urlField.className = 'url-field';
         urlField.textContent = component.showFull ? component.url : (new URL(component.url).pathname + new URL(component.url).search);

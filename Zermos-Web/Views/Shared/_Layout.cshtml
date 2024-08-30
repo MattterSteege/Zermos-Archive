@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://fa.kronk.tech">
     @* <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> *@
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="manifest" href="/manifest.webmanifest"/>
+    <link rel="manifest" href="/manifest.json"/>
     <meta name="theme-color" content="@(Context.Request.Cookies["theme"] == "light" || Context.Request.Cookies["theme"] == "blue" ? "#f8f9fa" : Context.Request.Cookies["theme"] == "dark" || Context.Request.Cookies["theme"] == "red" ? "#1a1a1a" : Context.Request.Cookies["theme"] == "pink" ? "#ffebf2" : "#f8f9fa")">
     <link rel="stylesheet" href="~/css/style.css?v=@version">
     <script defer src="/js/Zermos-framework.min.js?v=@version"></script>
@@ -153,6 +153,8 @@ async function ReplacePage(url, force) {
         return;
     }
 
+    isRunning = true;
+
     try {
         Zermos.mainUnload();
     } catch (e) {}
@@ -168,23 +170,14 @@ async function ReplacePage(url, force) {
         url = window.location.pathname.endsWith("/") ? window.location.pathname + url.substring(2) : window.location.pathname + url.substring(1);
     }
 
-    isRunning = true;
-
-    if (!isUserOnline && HasPreview("enable_cache")) {
-        getCachePage(url);
+    @*if (!isUserOnline && HasPreview("enable_cache")) {
+        await getCachePage(url);
         isRunning = false;
+        await hideLoadingScreen();
         return;
-    }
+    }*@
 
-    const useOldOOO = HasPreview("old_ooo");
-
-    if (useOldOOO) {
-        // Old order of operations
-        await showLoadingScreen();
-    } else {
-        // New order of operations
-        loadingScreenPromise = showLoadingScreen();
-    }
+    await showLoadingScreen();
 
     try {
         const response = await fetch(url, { cache: "no-cache", method: "GET", headers: {'X-Requested-With': 'XMLHttpRequest'} });
@@ -192,45 +185,39 @@ async function ReplacePage(url, force) {
         if (!response.ok) {
             throw response;
         }
-
-        if (response.status === 299) {
-            const data = await response.text();
-            window.open(data, "_blank");
-            await hideLoadingScreen();
-            isRunning = false;
-            return;
-        }
-
-        const contentType = response.headers.get("Content-Type");
-        if (contentType === "application/json; charset=utf-8") {
-            isRunning = false;
-            ReplacePage("/Error");
-            return;
-        }
-
-        const data = await response.text();
-        if (data.startsWith('<!DOCTYPE html>')) {
-            isRunning = false;
-            ReplacePage("/Zermelo/Rooster");
-            return;
-        }
-
-        if (!useOldOOO) {
-            // Wait for the loading screen to complete
-            await loadingScreenPromise;
-        }
-
-        // Now set the data
-        await doPageReplace(data, url);
         
+        const data = await response.text();
+        
+        if (response.status === 299) {
+            window.location.href = data
+            await hideLoadingScreen();
+            return;
+        }
+
+        if (data.startsWith('<!DOCTYPE html>')) {
+            // Full page reload required
+            window.location.href = url;
+            return;
+        }
+
+        await doPageReplace(data, url);
+
         if (!HasPreview("disable_accessibility")) {
             try {
                 Zermos.mainProcessAccessibility();
-            }catch{}
+            } catch(e) {
+                console.error("Error processing accessibility:", e);
+            }
         }
 
-        // After setting the data, hide the loading screen
         await hideLoadingScreen();
+
+        // Final check to ensure page integrity
+        if (!isPageStructureComplete()) {
+            console.warn("Page structure is incomplete after replace, reloading...");
+            window.location.reload();
+        }
+
     } catch (xhr) {
         if (xhr.status === 401) {
             isRunning = false;
@@ -243,8 +230,9 @@ async function ReplacePage(url, force) {
                 dot.style.transform = "scale(1)";
             });
             history.replaceState(null, " Zermos", url);
-            isRunning = false;
         }
+    } finally {
+        isRunning = false;
     }
 }
 
@@ -283,14 +271,14 @@ async function doPageReplace(data, url) {
     let amountOfStylesheets = hrefs.length;
 
     for (let href of hrefs) {
-        if (!isUserOnline && HasPreview("enable_cache")) {
+        @*if (!isUserOnline && HasPreview("enable_cache")) {
             getCacheCSS(href);
             amountOfStylesheets--;
             continue;
-        }
+        }*@
 
         const cssData = await fetch(href + "?v=@version").then(response => response.text());
-        await cacheCSS(href, cssData);
+        //await cacheCSS(href, cssData);
         appendStylesheet(cssData);
         amountOfStylesheets--;
     }
@@ -313,7 +301,7 @@ async function doPageReplace(data, url) {
     const timerEnd = performance.now();
     console.log(`Page load took ${timerEnd - timerStart}ms`);
 
-    cachePage(data, url);
+    //cachePage(data, url);
 
     try {
         Zermos.mainAfterLoad();
@@ -336,22 +324,32 @@ window.addEventListener("popstate", function(e) {
 
 });
 
-@*//when user has opend an other app, reload the page after 5 minutes of inactivity
-var visibilityChange = Date.now();
-var minTime = 300000; //5 minutes
-document.addEventListener("visibilitychange", (e) => {
-    if (e.target.visibilityState === "hidden") {
-        visibilityChange = Date.now();
-        main.style.transition = "unset";
-        main.style.opacity = "0"
-    } else {
-        if (visibilityChange === 0) location.reload();
-        else if (Date.now() - visibilityChange > minTime) location.reload();
-        else {
-            main.style.transition = "opacity 0.25s";
-            main.style.opacity = "1"
-        }
+@*document.addEventListener("visibilitychange", async (e) => {
+  if (document.visibilityState === "visible") {
+    console.log("App became visible");
+    
+    // Short delay to allow for any pending operations to complete
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    if (!isPageStructureComplete()) {
+      console.warn("Page structure is incomplete, reloading...");
+      window.location.reload();
+      return;
     }
+
+    // Check if this is a reopen scenario
+    const lastPageUrl = document.cookie.split(";").find(c => c.trim().startsWith("this_session_last_page="))?.split("=")[1];
+    if (lastPageUrl && lastPageUrl !== window.location.pathname) {
+      console.log("Detected page mismatch, replacing page...");
+      await ReplacePage(lastPageUrl, true);
+    } else {
+      console.log("Page is up-to-date");
+    }
+  } else {
+    console.log("App became hidden");
+    // Save the current state if needed
+    document.cookie = "this_session_last_page=" + window.location.pathname + "; path=/";
+  }
 });*@
 
 //check if the user can install the app (PWA)
@@ -363,6 +361,16 @@ window.addEventListener("beforeinstallprompt", (e) => {
     deferredPrompt = e;
     installable = true;
 });
+
+@*if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/serviceworker.js?v=@version', { scope: '/' })
+        .then((registration) => {
+            console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch((error) => {
+            console.error('Service Worker registration failed:', error);
+        });
+}*@
 </script>
 </body>
 </html>

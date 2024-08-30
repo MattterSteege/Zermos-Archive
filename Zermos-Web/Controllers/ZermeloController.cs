@@ -69,7 +69,7 @@ namespace Zermos_Web.Controllers
                 page = "/Zermelo/Rooster/Gedeeld",
                 expires_at = (DateTime) expires_at,
                 max_uses = max_uses
-            })).url;
+            })).key;
             
             return Ok(url);
         }
