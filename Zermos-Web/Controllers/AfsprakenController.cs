@@ -103,11 +103,26 @@ public class AfsprakenController : BaseController
         //remove id, useremail and user from the appointments
         foreach (var appointment in appointments)
         {
-            appointment.Id = -1;
             appointment.UserEmail = null;
             appointment.User = null;
         }
 
         return Ok(appointments);
+    }
+    
+    [Authorize]
+    [HttpDelete("/Api/Afspraken/Verwijder")]
+    public async Task<IActionResult> DeleteCustomAppointment(int id)
+    {
+        if (id == 0 || id < 0)
+            return BadRequest(new {error = "Id is set to an invalid value, dunno how you did that"});
+        
+        int code = await CustomCustomAppointment.DeleteAppointmentAsync(ZermosEmail, id);
+        if (code == 404)
+            return NotFound(new {error = "Appointment not found"});
+        if (code == 403)
+            return StatusCode(403, new {error = "User does not have permission to delete this appointment"});
+        
+        return Ok(new {message = "Appointment deleted successfully"});
     }
 }

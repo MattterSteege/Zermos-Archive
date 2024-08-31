@@ -95,5 +95,30 @@ namespace Infrastructure
                 .Where(appointment => appointment.UserEmail == userEmail)
                 .ToListAsync();
         }
+
+        /// <summary>
+        /// Get an appointment by its ID
+        /// </summary>
+        /// <param name="id">The ID of the appointment</param>
+        /// <returns>The appointment</returns>
+        public async Task<int> DeleteAppointmentAsync(string zermosEmail, int id)
+        {
+            var appointment = await _context.custom_appointments.FindAsync(id);
+            if (appointment == null)
+            {
+                //throw new Exception("Appointment not found");
+                return 404;
+            }
+
+            if (appointment.UserEmail != zermosEmail)
+            {
+                //throw new Exception("User does not have permission to delete this appointment");
+                return 403;
+            }
+
+            _context.custom_appointments.Remove(appointment);
+            await _context.SaveChangesAsync();
+            return 200;
+        }
     }
 }

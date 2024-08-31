@@ -110,6 +110,10 @@
         return this.addComponent({ type: 'datePickerInput', required, initialDate, onChange, id: id});
     }
 
+    addTimePicker({required = false, initialTime = undefined, onChange = () => {}, id = undefined}) {
+        return this.addComponent({ type: 'timePickerInput', required, initialTime, onChange, id: id});
+    }
+
     addDropdown({options, required = false, multiSelect = false, onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'dropdownInput', options, required, multiSelect, onChange, id: id});
     }
@@ -203,6 +207,7 @@
             separator: this.renderSeparator,
             image: this.renderImage,
             datePickerInput: this.renderDatePicker,
+            timePickerInput: this.renderTimePicker,
             dropdownInput: this.renderDropdown,
             numberInput: this.renderNumberInput,
             textInput: this.renderTextInput,
@@ -520,6 +525,78 @@
 
         renderCalendar(currentMonth, currentYear);
 
+        return componentElement;
+    }
+
+    renderTimePicker(component, componentElement) {
+        const timepicker = document.createElement('div');
+        timepicker.className = 'timepicker-parent';
+        timepicker.setAttribute('role', 'combobox');
+        timepicker.setAttribute('aria-expanded', 'false');
+        timepicker.setAttribute('aria-haspopup', 'grid');
+        timepicker.setAttribute('tabindex', this.getTabIndex());
+
+        const selectedTimeElem = document.createElement('div');
+        selectedTimeElem.className = 'selected-time';
+        selectedTimeElem.textContent = component.initialTime ?? 'Kies een tijd';
+        if (component.initialTime) component.userSetValue = component.initialTime;
+        timepicker.appendChild(selectedTimeElem);
+
+        const timepickerElem = document.createElement('div');
+        timepickerElem.className = 'timepicker';
+
+        const hoursElem = document.createElement('select');
+        hoursElem.className = 'hours';
+        for (let i = 0; i < 24; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i.toString().padStart(2, '0');
+            hoursElem.appendChild(option);
+        }
+
+        const minutesElem = document.createElement('select');
+        minutesElem.className = 'minutes';
+        for (let i = 0; i < 60; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i.toString().padStart(2, '0');
+            minutesElem.appendChild(option);
+        }
+
+        timepickerElem.append(hoursElem, minutesElem);
+        componentElement.appendChild(timepicker);
+        componentElement.appendChild(timepickerElem);
+
+        let selectedTime = component.initialTime ? component.initialTime.split(':') : [0, 0];
+        hoursElem.value = selectedTime[0];
+        minutesElem.value = selectedTime[1];
+
+        hoursElem.addEventListener('change', () => {
+            selectedTime[0] = hoursElem.value.toString().padStart(2, '0');
+            selectedTime[1] = minutesElem.value.toString().padStart(2, '0');
+            selectedTimeElem.textContent = `${selectedTime[0].padStart(2, '0')}:${selectedTime[1].padStart(2, '0')}`;
+            if (component.onChange) {
+                component.onChange(this, selectedTime.join(':'));
+                component.userSetValue = selectedTime.join(':');
+            }
+        });
+
+        minutesElem.addEventListener('change', () => {
+            selectedTime[0] = hoursElem.value.toString().padStart(2, '0');
+            selectedTime[1] = minutesElem.value.toString().padStart(2, '0');
+            selectedTimeElem.textContent = `${selectedTime[0].padStart(2, '0')}:${selectedTime[1].padStart(2, '0')}`;
+            if (component.onChange) {
+                component.onChange(this, selectedTime.join(':'));
+                component.userSetValue = selectedTime.join(':');
+            }
+        });
+        
+        timepicker.addEventListener('click', () => {
+            timepicker.classList.toggle("selected");
+            timepickerElem.classList.toggle("show");
+            timepicker.setAttribute('aria-expanded', timepicker.classList.contains('selected') ? 'true' : 'false');
+        });
+        
         return componentElement;
     }
 

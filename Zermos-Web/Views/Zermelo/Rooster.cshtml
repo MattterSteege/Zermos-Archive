@@ -389,7 +389,7 @@ function OpenLessonDetail(base64){
     const json = JSON.parse(atob(base64));
     
     var lessonDetail = new ZermosModal();
-    if (json.id === -1) {
+    if (json.id > 0) {
         lessonDetail.addHeading({text: (json.subject ?? '?') + " - " + new Date(json.start).toLocaleDateString("nl-NL", { weekday: 'long', month: 'short', day: 'numeric'})});
     }
     else {
@@ -420,13 +420,26 @@ function OpenLessonDetail(base64){
     }
     
     
-    if (json.id === -1) {
+    if (json.id > 0) {
         var startDate = new Date(json.start);
         var endDate = new Date(json.end);
         //string is HH:MM
         var startDateString = startDate.getHours().toString().padStart(2, '0') + ":" + startDate.getMinutes().toString().padStart(2, '0');
         var endDateString = endDate.getHours().toString().padStart(2, '0') + ":" + endDate.getMinutes().toString().padStart(2, '0');
         lessonDetail.addText({text: "De les is van: " + startDateString + " tot " + endDateString});
+        
+        lessonDetail.addSpacer({height: 'var(--padding)'})
+        .addButton({text: "Verwijder afspraak", onClick: () => {
+            fetch('/Api/Afspraken/Verwijder?id=' + json.id, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById("custom-appointment-" + json.id).remove();                
+                    lessonDetail.close();
+                }
+            });
+        }});
     }
     //else json.start and json.end are in this format: 2024-09-11T12:00:00
     else {
@@ -441,6 +454,64 @@ function OpenLessonDetail(base64){
 
     lessonDetail.open();
 }
+
+// add appointment button
+addButtonToPage('fa-plus', () => {
+    new ZermosModal()
+    .addHeading({text: "Afspraak toevoegen"})
+    .addText({text: "Voeg een afspraak toe aan je rooster."})
+    .addLabel({text: "Datum van de afspraak"})
+    .addDatePicker({required: true, initialDate: new Date()}) //
+    .addLabel({text: "begintijd van de afspraak"})
+    .addTimePicker({required: true}) //
+    .addLabel({text: "eindtijd van de afspraak"})
+    .addTimePicker({required: true}) //
+    .addLabel({text: "Onderwerp"})
+    .addTextInput({required: true}) //
+    .addLabel({text: "Beschrijving (optioneel)"})
+    .addTextInput({}) //
+    .addLabel({text: "Waar (optioneel)"})
+    .addTextInput({}) //
+    .addButton({text: "Voeg toe", onClick: (ctx) => {
+        
+        var values = ctx.getComponentsValue().values;
+        
+        if (values.correct === false) return;
+        
+        var date = values[0].value;
+        var startTime = values[1].value;
+        var endTime = values[2].value;
+        var subject = values[3].value;
+        var description = values[4].value;    
+        var location = values[5].value;    
+        
+        var dateObject = new Date(date);
+        var startTimeObject = dateObject.setHours(startTime.split(":")[0], startTime.split(":")[1]);
+        var endTimeObject = dateObject.setHours(endTime.split(":")[0], endTime.split(":")[1]);
+        var startTimeString = new Date(startTimeObject).toLocaleDateString("nl-NL", {day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'}).replace(",", "");
+        var endTimeString = new Date(endTimeObject).toLocaleDateString("nl-NL", {day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'}).replace(",", "");
+
+        var formData = new FormData();
+        formData.append("start", startTimeString);
+        formData.append("end", endTimeString);
+        formData.append("appointmentType", "custom");
+        formData.append("subject", subject);
+        formData.append("location", location);
+        formData.append("description", description);
+        
+        fetch('/Api/Afspraken/Nieuw', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                ctx.close();
+            }
+        });
+    }})
+    .open();
+
+}, !HasPreview('hide_zermelo_navigation') ? VerticalAlignment.TL : VerticalAlignment.BT, !HasPreview('hide_zermelo_navigation') ? Background.Primary : Background.Accent);
 
 // share button
 if (isUserOnline) {
@@ -477,6 +548,7 @@ if (isUserOnline) {
         
     }, VerticalAlignment.TL, Background.Primary);
 }
+
 // share button
 addButtonToPage('fa-list', () => {
    
@@ -503,10 +575,8 @@ addButtonToPage('fa-list', () => {
     }
     .addButton({text: "Ok!", onClick: (ctx) => {ctx.close()}})
     .open();
-    
+
 }, VerticalAlignment.TL, Background.Primary);
-
-
 
 var notCurrentWeek = document.getElementsByClassName('notCurrentWeek')[0];
 var clicked = 5;
@@ -610,6 +680,7 @@ function loadCustomAppointments(week, year) {
             if (lesdag) {
                 var les = document.createElement("div");
                 les.className = "lesson-time-based custom";
+                les.id = "custom-appointment-" + item.id;
                 les.style.top = (startSeconds - start) / (end - start) * 100 + "%";
                 les.style.height = (endSeconds - startSeconds) / (end - start) * 100 + "%";
                 les.style.backgroundColor = item.color;
@@ -622,7 +693,14 @@ function loadCustomAppointments(week, year) {
                 description.innerText = item.description ?? "";
                 
                 les.appendChild(title);
-                les.appendChild(description);                
+                les.appendChild(description);      
+                
+                les.style.opacity = 0;
+                les.style.transition = "opacity 0.25s ease";
+                setTimeout(() => {
+                    les.style.opacity = 1;
+                }, 100);
+                          
                 lesdag.appendChild(les);
             }
         });
