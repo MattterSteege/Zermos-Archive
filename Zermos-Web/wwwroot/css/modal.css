@@ -212,6 +212,15 @@
     text-align: left; /* Align the text to the left */
 }
 
+.textarea-element-input.display {
+    max-height: 400px;
+    min-height: 100px;
+    padding: 0 var(--padding) !important;
+    text-align: start;
+    max-width: 100%;
+    min-width: 100%;
+}
+
 .url-field, .dropdown-button, .datepicker-parent, .text-element-input.display,
 .textarea-element-input.display, .password-element-input.display {
     flex-grow: 1;

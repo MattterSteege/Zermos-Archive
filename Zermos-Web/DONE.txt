@@ -1,4 +1,4 @@
-Version 0.6.3.1 - bug fixes
+Version 0.6.4 - bug fixes
 
 - koppelingen - somtoday
     - Een klein probleempje met de token verversen is nu deels opgelost (ik heb nu wel een beter inzicht in wat er fout gaat)
@@ -12,6 +12,8 @@ Version 0.6.3.1 - bug fixes
     
 - Zermelo/somtoday - rooster
     - het swipen naar de volgende en vorige week vraagt nu niet te pas en te onpas een nieuwe week op. Alleen als er 1 week tussen de huidige week en het einde van de lijst zit, dan wordt er een nieuwe week opgevraagd (TL;DR: het rooster is zuiniger met jouw 4G data)
+    - je kunt nu (ja, echt, hou je vast) eigen lessen of afspraken inplannen, nu kun je Zermos dus ook een beetje als agenda gebruiken. Das handig, toch?
+    - geen zin in de navigatieknoppen bij je rooster? Dan kun je ze nu uitzetten in de instellingen (dit synchroniseert niet met je account, dus als je het op je telefoon uitzet, dan staat het op je computer nog aan)
     
 - delen
     - het delen van cijfers of je rooster is nu verbeterd
@@ -19,4 +21,6 @@ Version 0.6.3.1 - bug fixes
 - algemeen
     - er zijn meerdere iconen toegevoegd (voor apple voornamelijk) (nerd stuff)
     - er is een robot.txt toegevoegd (nerd stuff)
+    - foutje in het modal systeem is aangepast
+    - "global variables" zijn verwijderd, ik gebruik nu een beter systeem
     

@@ -18,6 +18,7 @@ using Zermos_Web.APIs;
 using Zermos_Web.Models;
 using Zermos_Web.Models.Requirements;
 using Zermos_Web.Models.Somtoday;
+using Zermos_Web.Models.zermelo;
 using Zermos_Web.Models.zermeloUserModel;
 using Zermos_Web.Utilities;
 
@@ -25,7 +26,7 @@ namespace Zermos_Web.Controllers
 {
     public class KoppelingenController : BaseController
     {
-        public KoppelingenController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
+        public KoppelingenController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
         
         SomtodayAPI somtodayApi = new(new HttpClient());
         InfowijsApi InfowijsApi = new(new HttpClient());

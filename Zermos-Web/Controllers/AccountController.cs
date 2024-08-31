@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Zermos_Web.Models.Requirements;
+using Zermos_Web.Models.zermelo;
 
 namespace Zermos_Web.Controllers
 {
@@ -14,7 +15,7 @@ namespace Zermos_Web.Controllers
     [Route("account/[action]")]
     public class AccountController : BaseController
     {
-        public AccountController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
+        public AccountController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
 
         [Authorize]
         [ZermosPage]

@@ -15,12 +15,13 @@ using Newtonsoft.Json;
 using Zermos_Web.APIs;
 using Zermos_Web.Models;
 using Zermos_Web.Models.Requirements;
+using Zermos_Web.Models.zermelo;
 
 namespace Zermos_Web.Controllers
 {
     public class InfowijsController : BaseController
     {
-        public InfowijsController(Users user, Shares share, ILogger<BaseController> logger, GlobalVariables globalVariables) : base(user, share, logger, globalVariables) { }
+        public InfowijsController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
         
         InfowijsApi infowijsApi = new(new HttpClient());
 

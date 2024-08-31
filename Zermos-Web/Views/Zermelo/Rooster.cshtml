@@ -107,10 +107,12 @@ async function fetchWeek(week, year, append, retry = false) {
                 setTimeout(() => {
                     //remove style attribute
                     weekElement.style = "";
+                    loadCustomAppointments(week, year);
                 }, 250);
             }, 100);
         }, 100);
     });
+
 }
 
 function getLoadingSpinner(week, year) {
@@ -294,7 +296,7 @@ function ease(start, end, time, callback) {
     const interval = setInterval(update, 10); // Update approximately every 16 milliseconds
 }
 
-if (isUserOnline) {
+if (isUserOnline && !HasPreview('hide_zermelo_navigation')) {
     addButtonToPage('fa-arrow-right', NextWeekAnim, VerticalAlignment.BL);
     addButtonToPage('fa-arrow-left', PrevWeekAnim, VerticalAlignment.BL);
 }
@@ -386,16 +388,26 @@ function enableButtons() {
 function OpenLessonDetail(base64){    
     const json = JSON.parse(atob(base64));
     
-    var lessonDetail = new ZermosModal()
-    .addText({text: (json.subjects[0] ?? '?') + " - " + new Date(json.start * 1000).toLocaleDateString("nl-NL", { weekday: 'long', month: 'short', day: 'numeric'})});
-    
+    var lessonDetail = new ZermosModal();
+    if (json.id === -1) {
+        lessonDetail.addHeading({text: (json.subject ?? '?') + " - " + new Date(json.start).toLocaleDateString("nl-NL", { weekday: 'long', month: 'short', day: 'numeric'})});
+    }
+    else {
+        lessonDetail.addHeading({text: (json.subjects[0] ?? '?') + " - " + new Date(json.start * 1000).toLocaleDateString("nl-NL", { weekday: 'long', month: 'short', day: 'numeric'})});
+    }
+           
     lessonDetail.addText({text: "Je hebt:"});
-    if (json.teachers.length > 0) 
+    if (json.teachers && json.teachers.length > 0) 
         lessonDetail.addText({text: "• les van " + json.teachers.join(", ") + "."});
-    if (json.locations.length > 0) 
+    if (json.locations && json.locations.length > 0) 
         lessonDetail.addText({text: "• in lokaal " + json.locations.join(", ") + "."});
     // if (json.groups.length > 0) 
-    //     lessonDetail.addHeading({text: "• met groep " + json.groups.join(", ") + "."});   
+    //     lessonDetail.addHeading({text: "• met groep " + json.groups.join(", ") + "."});
+    else if (json.location) 
+        lessonDetail.addText({text: "• in lokaal " + json.location + "."});
+
+    if (json.description)
+        lessonDetail.addText({text: json.description});
 
     // Check if actions array exists
     if (json.actions && json.actions.length > 0 && json.appointmentType !== "activity") {
@@ -407,21 +419,26 @@ function OpenLessonDetail(base64){
         });
     }
     
-    lessonDetail.addText({text: "De les is van: " + new Date(json.start * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1] + " tot " + new Date(json.end * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1]})
     
-    lessonDetail.addSpacer({height: 'var(--padding)'})
-    .addButton({text: "Bekijk huiswerk (indien beschikbaar)", onClick: () => {
-        ReplacePage('/Somtoday/Huiswerk?les=' + json.start);
-    }});
-       
-    // for (var i = 0; i < json.status.length; i++) {
-    //     var status = json.status[i];
-    //
-    //     if (status['code'] === 2002) continue;
-    //    
-    //     lessonDetail.addHeading({text: "• " + status.nl});
-    // }
+    if (json.id === -1) {
+        var startDate = new Date(json.start);
+        var endDate = new Date(json.end);
+        //string is HH:MM
+        var startDateString = startDate.getHours().toString().padStart(2, '0') + ":" + startDate.getMinutes().toString().padStart(2, '0');
+        var endDateString = endDate.getHours().toString().padStart(2, '0') + ":" + endDate.getMinutes().toString().padStart(2, '0');
+        lessonDetail.addText({text: "De les is van: " + startDateString + " tot " + endDateString});
+    }
+    //else json.start and json.end are in this format: 2024-09-11T12:00:00
+    else {
+        lessonDetail.addText({text: "De les is van: " + new Date(json.start * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1] + " tot " + new Date(json.end * 1000).toLocaleDateString("nl-NL", {hour: '2-digit', minute:'2-digit'}).split(" ")[1]})
+
+        lessonDetail.addSpacer({height: 'var(--padding)'})
+        .addButton({text: "Bekijk huiswerk (indien beschikbaar)", onClick: () => {
+                ReplacePage('/Somtoday/Huiswerk?les=' + json.start);
+            }});
+    }
     
+
     lessonDetail.open();
 }
 
@@ -432,7 +449,7 @@ if (isUserOnline) {
         new ZermosModal()
         .addHeading({text: "Deel je rooster"})
         .addText({text: "Deel je rooster met je vrienden! De pagina die je nu ziet wordt als link gedeeld, zij hoeven geen account hiervoor te hebben."})
-        .addDatePicker({required: true, initialDate: new Date(Date.now() + 604800000)})
+        .addDatePicker({required: true, initialDate: new Date(Date.now() + 604800000)}) // 7 days from now
         .addButton({text: "Deel", onClick: (ctx) => {
             
             var values = ctx.getComponentsValue().values;
@@ -550,5 +567,69 @@ var elementHasPreviousPreviousSibling = (element) => {
     return element?.previousElementSibling?.previousElementSibling !== null && element?.previousElementSibling?.previousElementSibling !== undefined;
 };
 
+
+function loadCustomAppointments(week, year) {
+
+    var curr = undefined;
+    var start = 8 * 3600; // 8:00
+    var end = 17 * 3600; // 17:00
+    if (week && year) {
+        curr = document.querySelector(`.week[data-week="${week}"][data-year="${year}"]`);
+    }
+    else {
+        curr = getCurrentWeekElement();
+        week = curr.dataset.week;
+        year = curr.dataset.year;
+    }
+    
+    if (!curr) return;
+    
+    start = curr.dataset.start;
+    end = curr.dataset.end;
+    
+    fetch("/api/Afspraken/AlleAfspraken?jaarWeek=" + year + week)
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(item => {
+            let startDate = new Date(item.start);
+            let endDate = new Date(item.end);
+
+            // Helper function to get the number of seconds from midnight
+            function getSecondsFromMidnight(date) {
+                return date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds();
+            }
+
+            let startSeconds = getSecondsFromMidnight(startDate);
+            let endSeconds = getSecondsFromMidnight(endDate);
+
+            let dayOfWeek = startDate.getDay(); // Sunday is 0, Monday is 1, etc.
+            let index = (dayOfWeek + 6) % 7; // Adjust so that Monday is 0 and Sunday is 6
+
+            var lesdag = curr.querySelector(".lessons-container .lesdag:nth-child(" + (index + 1) + ")");
+            
+            if (lesdag) {
+                var les = document.createElement("div");
+                les.className = "lesson-time-based custom";
+                les.style.top = (startSeconds - start) / (end - start) * 100 + "%";
+                les.style.height = (endSeconds - startSeconds) / (end - start) * 100 + "%";
+                les.style.backgroundColor = item.color;
+                les.setAttribute("onclick", "OpenLessonDetail('" + btoa(JSON.stringify(item)) + "')");
+                
+                var title = document.createElement("p");
+                title.innerText = item.subject ?? "";
+                
+                var description = document.createElement("p");
+                description.innerText = item.description ?? "";
+                
+                les.appendChild(title);
+                les.appendChild(description);                
+                lesdag.appendChild(les);
+            }
+        });
+    })
+    .catch(error => {
+        console.error("Error fetching data:", error);
+    });
+}
 
 </script>

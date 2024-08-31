@@ -3,16 +3,18 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Infrastructure;
+using Infrastructure.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Zermos_Web.Models.Requirements;
+using Zermos_Web.Models.zermelo;
 
 namespace Zermos_Web.Controllers
 {
     [Route("[action]")]
     public class ErrorController : BaseController
     {
-        public ErrorController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
+        public ErrorController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
 
         [ZermosPage]
         [HttpGet("/Error")]

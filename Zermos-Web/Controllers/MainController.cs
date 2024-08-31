@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Infrastructure;
+using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,7 +16,7 @@ namespace Zermos_Web.Controllers
 {
     public class MainController : BaseController
     {
-        public MainController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
+        public MainController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
         
         private JsMinifier _jsMinifier = new JsMinifier();
         

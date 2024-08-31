@@ -13,7 +13,7 @@
     int timeDifferenceInSeconds = 0;
 }
 
-<div class="week" data-week="@Model.MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.MondayOfAppointmentsWeek.Year" data-unix="@Model.MondayOfAppointmentsWeek.ToUnixTime()">
+<div class="week" data-week="@Model.MondayOfAppointmentsWeek.GetWeekNumber()" data-year="@Model.MondayOfAppointmentsWeek.Year" data-unix="@Model.MondayOfAppointmentsWeek.ToUnixTime()" data-start="@Model.timeStamps[0]" data-end="@Model.timeStamps[1]">
     <div class="days-container">
         <ul>
             <li><div class="days-top">@Model.MondayOfAppointmentsWeek.GetWeekNumber()</div></li>

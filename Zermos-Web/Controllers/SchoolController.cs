@@ -6,17 +6,19 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Infrastructure;
+using Infrastructure.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zermos_Web.Models.PulseCore;
 using Zermos_Web.Models.Requirements;
+using Zermos_Web.Models.zermelo;
 
 namespace Zermos_Web.Controllers
 {
     public class SchoolController : BaseController
     {
-        public SchoolController(Users user, Shares share, ILogger<BaseController> logger, GlobalVariables globalVariables) : base(user, share, logger, globalVariables) { }
+        public SchoolController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
         
         private readonly HttpClient _httpClient = new()
         {

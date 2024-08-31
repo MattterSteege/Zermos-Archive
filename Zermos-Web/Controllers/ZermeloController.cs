@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Infrastructure;
@@ -16,7 +15,7 @@ namespace Zermos_Web.Controllers
 {
     public class ZermeloController : BaseController
     {
-        public ZermeloController(Users user, Shares share, ILogger<BaseController> logger) : base(user, share, logger) { }
+        public ZermeloController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
         ZermeloApi zermeloApi = new(new HttpClient());
 
         [Authorize]

@@ -31,13 +31,13 @@ namespace Zermos_Web
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<ZermosContext>(options =>
-                options.UseMySQL("server=REDACTED_IP_ADRESS;user=root;password=REDACTED_DATABASE_PASSWORD;database=REDACTED_DATABASE_NAME;port=3306;Connect Timeout=5;"));
+            services.AddDbContext<ZermosContext>(
+                //options => options.UseMySQL("server=REDACTED_IP_ADRESS;user=root;password=REDACTED_DATABASE_PASSWORD;database=REDACTED_DATABASE_NAME;port=3306;Connect Timeout=5;")
+                );
             
             services.AddScoped<Users>();
             services.AddScoped<Shares>();
-            
-            services.AddSingleton<GlobalVariables>();
+            services.AddScoped<CustomAppointments>();
 
             var cookieExpiration = TimeSpan.FromDays(60);
 

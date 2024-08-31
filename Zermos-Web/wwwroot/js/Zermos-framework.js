@@ -731,6 +731,13 @@ function TogglePreview(preview) {
   }
 }
 
+function setPreview(preview, value) {
+  var isActivated = HasPreview(preview);
+    if (isActivated !== value) {
+        TogglePreview(preview);
+    }
+}
+
 function HasPreview(preview) {
   var cookie = document.cookie;
   var previewCookie = cookie

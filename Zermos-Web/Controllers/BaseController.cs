@@ -13,15 +13,15 @@ namespace Zermos_Web.Controllers
     {
         protected readonly Users _user;
         private readonly Shares _share;
+        protected readonly CustomAppointments CustomCustomAppointment;
         private readonly ILogger<BaseController> _logger;
-        private readonly GlobalVariables _globalVariables;
 
-        protected BaseController(Users user, Shares share, ILogger<BaseController> logger, GlobalVariables globalVariables = null)
+        protected BaseController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger)
         {
             _user = user;
             _share = share;
+            CustomCustomAppointment = customCustomAppointment;
             _logger = logger;
-            _globalVariables = globalVariables;
         }
 
         // USER METHODS
@@ -40,9 +40,6 @@ namespace Zermos_Web.Controllers
         {
             _logger.Log(logLevel, message);
         }
-        
-        // GLOBAL VARIABLES METHODS
-        protected GlobalVariables GlobalVariables => _globalVariables;
         
         // SHARE METHODS
         protected async Task<share> AddShare(share share)
