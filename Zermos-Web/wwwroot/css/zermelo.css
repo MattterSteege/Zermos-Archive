@@ -200,6 +200,7 @@
     position: absolute;
     margin: 4px;
     max-width: calc(100% - 8px) !important;
+    overflow: hidden;
 }
 
 .lesson-time-based p {
@@ -208,6 +209,7 @@
     overflow: hidden;
     width: calc(100% + 4px);
     text-transform: uppercase;
+    min-height: var(--font-size);
 }
 
 .lesson-time-based p:first-child {

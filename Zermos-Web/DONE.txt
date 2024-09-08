@@ -18,9 +18,12 @@ Version 0.6.4 - bug fixes
 - delen
     - het delen van cijfers of je rooster is nu verbeterd
     
+- modal systeem
+    - Een foutje met hoogte van text areas is opgelost
+    
 - algemeen
     - er zijn meerdere iconen toegevoegd (voor apple voornamelijk) (nerd stuff)
     - er is een robot.txt toegevoegd (nerd stuff)
     - foutje in het modal systeem is aangepast
     - "global variables" zijn verwijderd, ik gebruik nu een beter systeem
-    
+    - Je kunt nu het dyslektische lettertype aanzetten in de instellingen

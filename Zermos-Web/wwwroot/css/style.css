@@ -135,6 +135,10 @@
     --font-family: 'Euclid Circular', sans-serif;
 }
 
+.dyslexic-font {
+    --font-family: 'OpenDyslexic', sans-serif;
+}
+
 .roboto-font {
     --font-family: 'Roboto', sans-serif;
 }

@@ -57,6 +57,7 @@
             @*Model.prefers_font; euclid, inter, roboto, monospace, normal*@
             <button id="5_euclid" onclick="UpdateFont('euclid', this)" class="setting-button@(Model.prefers_font == "euclid" ? " selected" : "")@(Model.prefers_font.IsNullOrEmpty() ? " selected" : "")">Euclid</button>
             <button id="5_normal" onclick="UpdateFont('open-sans', this)" class="setting-button@(Model.prefers_font == "open-sans" ? " selected" : "")">Open Sans</button>
+            <button id="5_dyslexic" onclick="UpdateFont('dyslexic', this)" class="setting-button@(Model.prefers_font == "dyslexic" ? " selected" : "")">Dyslectisch</button>
             <button id="5_monospace" onclick="UpdateFont('monospace', this)" class="setting-button@(Model.prefers_font == "monospace" ? " selected" : "")">Monospace</button>
             <button id="5_roboto" onclick="UpdateFont('roboto', this)" class="setting-button@(Model.prefers_font == "roboto" ? " selected" : "")">Roboto</button>
             <button id="5_inter" onclick="UpdateFont('inter', this)" class="setting-button@(Model.prefers_font == "inter" ? " selected" : "")">Inter</button>
@@ -143,6 +144,7 @@ function UpdateFont(font, element) {
     document.documentElement.classList.remove("monospace-font");
     document.documentElement.classList.remove("roboto-font");
     document.documentElement.classList.remove("inter-font");
+    document.documentElement.classList.remove("dyslexic-font");
     document.documentElement.classList.add(font + "-font");
     
     if (font === "euclid" || font === "normal") {
@@ -164,6 +166,11 @@ function UpdateFont(font, element) {
         var link = document.createElement("link");
         link.rel = "stylesheet";
         link.href = "https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700";
+        document.head.appendChild(link);
+    } else if (font === "dyslexic") {
+        var link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = "/Fonts/OpenDyslexic/OpenDyslexic.css";
         document.head.appendChild(link);
     }
     

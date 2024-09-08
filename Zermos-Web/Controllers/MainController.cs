@@ -163,6 +163,20 @@ namespace Zermos_Web.Controllers
         {
             return Content("User-agent: *\nDisallow: \nDisallow: /js/\nDisallow: /css/\nDisallow: /Fonts/");
         }
+        
+        [Route("/manifest.webmanifest")]
+        public IActionResult Webmanifest()
+        {
+            //return the file from the images folder
+            try
+            {
+                return File(System.IO.File.ReadAllBytes($"wwwroot/manifest.json"), "application/manifest+json");
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
 
         [ZermosPage]
         [Route("/EersteKeer")]

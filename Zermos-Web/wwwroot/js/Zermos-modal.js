@@ -609,7 +609,7 @@
 
         const dropdownButton = document.createElement('button');
         dropdownButton.classList.add('dropdown-button');
-        dropdownButton.innerText = 'Select...';
+        dropdownButton.innerText = 'Selecteer...';
         dropdownButton.setAttribute('tabindex', this.getTabIndex());
 
         const dropdownMenu = document.createElement('div');

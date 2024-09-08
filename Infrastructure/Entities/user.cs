@@ -76,7 +76,7 @@ namespace Infrastructure.Entities
             set => SetSetting("font_size", value);
         }
         
-        [NotMapped, Setting("euclid", "open-sans", "monospace", "roboto", "inter")]
+        [NotMapped, Setting("euclid", "open-sans", "monospace", "roboto", "inter", "dyslexic")]
         public string prefers_font
         {
             get => GetSetting<string>("prefers_font");
