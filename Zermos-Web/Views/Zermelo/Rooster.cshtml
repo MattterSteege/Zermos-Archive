@@ -137,6 +137,8 @@ Zermos.mainAfterLoad = () => {
     if (HasPreview('zermelo_smartwatch')) {
         ReplacePage('/@(Model.roosterOrigin)/Smartwatch');
     }
+
+    loadCustomAppointments(@Model.MondayOfAppointmentsWeek.GetWeekNumber(), @Model.MondayOfAppointmentsWeek.Year); //load the custom appointments for the current week
     
     let nextWeek = weeksArray[weeksArray.length - 1].week + 1;
     let nextYear = weeksArray[weeksArray.length - 1].year;
@@ -552,28 +554,21 @@ if (isUserOnline) {
 // share button
 addButtonToPage('fa-list', () => {
    
-    new ZermosModal()
+   var vakkenLijst = @Html.Raw(Json.Serialize(zermeloTodayLessons.Select(x => x.subjects[0] + " van " + x.teachers[0])));
+   
+    var paklijst = new ZermosModal()
     .addHeading({text: "Je paklijst"})
-    .addText({text: "Je hebt vandaag de volgende vakken:"})
-    @{
-        try
-        {
-            foreach (Appointment les in zermeloTodayLessons.GroupBy(x => x.subjects[0]).Select(x => x.First()))
-            {
-                if (les.cancelled)
-                {
-                    continue;
-                }
+    .addText({text: "Je hebt vandaag de volgende vakken:"});
 
-                @Html.Raw("    .addText({text: \"" + (les.subjects.Count > 0 ? les.subjects[0] : "-") + " van " + (les.teachers.Count > 0 ? les.teachers[0] : "-") + "\"})")
-            }
-        }
-        catch (Exception)
-        {
-            @Html.Raw("    .addText({text: \"Er is iets fout gegaan bij het ophalen van de vakken. Probeer het later opnieuw.\"})")
-        }
+    if (vakkenLijst === null || vakkenLijst.length === 0) {
+        paklijst.addText({text: "Je hebt vandaag geen vakken of er is iets fout gegaan bij het ophalen van de vakken."});
     }
-    .addButton({text: "Ok!", onClick: (ctx) => {ctx.close()}})
+    else {
+        vakkenLijst = vakkenLijst.filter((item, index) => vakkenLijst.indexOf(item) === index);
+        paklijst.addList({items: vakkenLijst, listType: "ul"});
+    }
+
+    paklijst.addButton({text: "Ok!", onClick: (ctx) => {ctx.close()}})
     .open();
 
 }, VerticalAlignment.TL, Background.Primary);

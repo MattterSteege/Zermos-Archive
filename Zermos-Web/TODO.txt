@@ -8,6 +8,8 @@ TODO: infowijs calendar redesign -> https://i.pinimg.com/736x/43/9a/5a/439a5a83b
 
 TODO: jaarbijlagen bij leermiddelen
 TODO: fix homework sorting
+
+TODO: add `var a=(b)=>document.querySelector(b);![0,1,2,3,4].every(i=>!a(['#sidebar','#content','.status','.top-bar'][i]));` to every page, if it returns true, then the page is loaded correctly, IF FALSE, RELOAD PAGE
     
      
 Discord server webhooks:
