@@ -31,9 +31,7 @@ namespace Zermos_Web
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<ZermosContext>(
-                //options => options.UseMySQL("server=REDACTED_IP_ADRESS;user=root;password=REDACTED_DATABASE_PASSWORD;database=REDACTED_DATABASE_NAME;port=3306;Connect Timeout=5;")
-                );
+            services.AddDbContext<ZermosContext>();
             
             services.AddScoped<Users>();
             services.AddScoped<Shares>();
@@ -59,7 +57,7 @@ namespace Zermos_Web
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write($"[{DateTime.Now:HH:mm:ss} Information] ");
             Console.ResetColor();
-            Console.WriteLine(" BETA RELEASE VERSION");
+            Console.WriteLine("BETA RELEASE VERSION");
 #elif RELEASE && !BETA
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write($"[{DateTime.Now:HH:mm:ss} Information] ");
@@ -71,6 +69,11 @@ namespace Zermos_Web
             Console.ResetColor();
             Console.WriteLine("DEBUG VERSION");
 #endif
+            
+// #if RELEASE && BETA
+// #elif RELEASE && !BETA
+// #else
+// #endif
 
         }
 

@@ -150,7 +150,7 @@
         return this.addComponent({ type: 'toggleInput', state: initialState, asCheckbox: true, onChange, id: id});
     }
     
-    addMultiCheckbox(labels, initialStates = [], onChange = () => {}, id = undefined) {
+    addMultiCheckbox({labels, initialStates = [], onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'multiToggleInput', labels, states: initialStates, asCheckbox: true, onChange, id: id});
     }
     

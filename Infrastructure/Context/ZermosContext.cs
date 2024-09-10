@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿#define BETA
+using Microsoft.EntityFrameworkCore;
 using Infrastructure.Entities;
 
 namespace Infrastructure.Context
@@ -32,8 +33,14 @@ namespace Infrastructure.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySQL(
-                    "server=REDACTED_IP_ADRESS;user=root;password=REDACTED_DATABASE_PASSWORD;database=zermos-beta-database;port=3306;Connect Timeout=5;");
+//#if RELEASE && BETA
+//                optionsBuilder.UseMySQL("server=REDACTED_IP_ADRESS;user=root;password=REDACTED_DATABASE_PASSWORD;database=zermos-beta-database;port=3306;Connect Timeout=5;");
+//#elif RELEASE && !BETA
+                optionsBuilder.UseMySQL("server=REDACTED_IP_ADRESS;user=root;password=REDACTED_DATABASE_PASSWORD;database=REDACTED_DATABASE_NAME;port=3306;Connect Timeout=5;");
+//#else
+//                optionsBuilder.UseMySQL("server=REDACTED_IP_ADRESS;user=root;password=REDACTED_DATABASE_PASSWORD;database=zermos-beta-database;port=3306;Connect Timeout=5;");
+//#endif
+                
             }
         }
     }

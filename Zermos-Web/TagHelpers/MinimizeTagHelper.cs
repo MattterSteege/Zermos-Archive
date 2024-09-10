@@ -1,7 +1,5 @@
-﻿using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Threading.Tasks;
-using Zermos_Web.Controllers;
 
 namespace Zermos_Web.TagHelpers
 {
@@ -23,8 +21,17 @@ namespace Zermos_Web.TagHelpers
             //remove all the newlines and tabs
             var content = await output.GetChildContentAsync();
             var contentString = content.GetContent();
+
+            //prepend try{!main;!Zermos}catch{location.href="/"}\n to the content for the checking if the page is loaded correctly
+            //only add if the script tag doesn't contain the "vital-script" id
+            if (!output.Attributes.ContainsName("id") || output.Attributes["id"].Value.ToString() != "vital-script")
+                contentString = "try{!main;!Zermos}catch{location.href=\"/\"}\n" + contentString;
             
-            if (contentString.Contains("//dmjs")) return; // Don't minimize dmjs scripts
+            if (contentString.Contains("//dmjs"))
+            {
+                output.Content.SetHtmlContent(contentString);
+                return;
+            }
             var length = contentString.Length;
             
             contentString = "\n" + _jsMinifier.Minify(contentString) + "\n";

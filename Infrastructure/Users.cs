@@ -31,8 +31,9 @@ namespace Infrastructure
             {
                 return await _context.users.AsNoTracking().ToListAsync();
             }
-            catch
+            catch (DbUpdateException ex)
             {
+                Console.WriteLine(ex);
                 return new List<user>();
             }
             #endif
@@ -44,8 +45,9 @@ namespace Infrastructure
             {
                 return await _context.users.AsNoTracking().Where(x => x.somtoday_refresh_token != null).ToListAsync();
             }
-            catch
+            catch (DbUpdateException ex)
             {
+                Console.WriteLine(ex);
                 return new List<user>();
             }
         }
@@ -62,8 +64,9 @@ namespace Infrastructure
                 //get the user using the email, but detach it from the context so that it can be updated later
                 return await _context.users.AsNoTracking().FirstOrDefaultAsync(x => x.email == email.ToLower());
             }
-            catch
+            catch (DbUpdateException ex)
             {
+                Console.WriteLine(ex);
                 return new user();
             }
         }
@@ -84,9 +87,9 @@ namespace Infrastructure
                 await _context.users.AddAsync(user);
                 await _context.SaveChangesAsync();
             }
-            catch
+            catch (DbUpdateException ex)
             {
-                // ignored
+                Console.WriteLine(ex);
             }
         }
 
@@ -98,43 +101,50 @@ namespace Infrastructure
         /// <param name="user">The user object with the new values.</param>
         public async Task UpdateUserAsync(string email, user user)
         {
-            if (string.IsNullOrEmpty(email))
-                return;
-            
-            var userToUpdate = await _context.users.FirstOrDefaultAsync(x => x.email == email.ToLower());
-
-            if (userToUpdate == null)
+            try
             {
-                await AddUserAsync(user);
-                return;
-            }
+                if (string.IsNullOrEmpty(email))
+                    return;
 
-            var userProperties = typeof(user).GetProperties();
+                var userToUpdate = await _context.users.FirstOrDefaultAsync(x => x.email == email.ToLower());
 
-            foreach (var property in userProperties)
-            {
-                if (property.PropertyType == typeof(bool))
-                    continue;
-                
-                var userValue = property.GetValue(user);
-
-                if (userValue == null)
-                    continue;
-                
-                switch (userValue)
+                if (userToUpdate == null)
                 {
-                    case string value when string.IsNullOrEmpty(value):
-                    case DateTime time when time == DateTime.MinValue:
-                        property.SetValue(userToUpdate, null);
-                        break;
-                    default:
-                        property.SetValue(userToUpdate, userValue);
-                        break;
+                    await AddUserAsync(user);
+                    return;
                 }
-            }
 
-            if (userToUpdate != null) _context.users.Update(userToUpdate);
-            await _context.SaveChangesAsync();
+                var userProperties = typeof(user).GetProperties();
+
+                foreach (var property in userProperties)
+                {
+                    if (property.PropertyType == typeof(bool))
+                        continue;
+
+                    var userValue = property.GetValue(user);
+
+                    if (userValue == null)
+                        continue;
+
+                    switch (userValue)
+                    {
+                        case string value when string.IsNullOrEmpty(value):
+                        case DateTime time when time == DateTime.MinValue:
+                            property.SetValue(userToUpdate, null);
+                            break;
+                        default:
+                            property.SetValue(userToUpdate, userValue);
+                            break;
+                    }
+                }
+
+                if (userToUpdate != null) _context.users.Update(userToUpdate);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
     }
 }

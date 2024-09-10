@@ -7,10 +7,7 @@ TODO: huiswerk afvinken
 TODO: infowijs calendar redesign -> https://i.pinimg.com/736x/43/9a/5a/439a5a83b7161d9caaf29cf8a908ff40.jpg (only right side)
 
 TODO: jaarbijlagen bij leermiddelen
-TODO: fix homework sorting
-
-TODO: add `var a=(b)=>document.querySelector(b);![0,1,2,3,4].every(i=>!a(['#sidebar','#content','.status','.top-bar'][i]));` to every page, if it returns true, then the page is loaded correctly, IF FALSE, RELOAD PAGE
-    
+TODO: fix de bug waarbij de pagina niet volledig laadt (dit kan met een `try{!main;!Zermos}catch{location.href="/"}`), maar fix dit wel (temp fix is gemaakt in MinimizeTagHelper.cs:L26)
      
 Discord server webhooks:
 #informatie: https://discord.com/api/webhooks/1271383220813959251/6YaYKl88vmXV_AH_dfoX-3qTKveuXpaSHTPuuJjPfJTQZfqZyTrCCz3J5-Hf1odT48hA

@@ -257,5 +257,23 @@
                 homeworkItem.style.display = "none";
             }
         }
+        
+        for (var i = 0; i < main.querySelector(".homework-container").children.length; i++) {
+            var day = main.querySelector(".homework-container").children[i];
+            var dayVisible = false;
+            for (var j = 0; j < day.children.length; j++) {
+                if (day.children[j].classList.contains("homeworkItem") && day.children[j].style.display !== "none") {
+                    dayVisible = true;
+                    break;
+                }
+            }
+            if (dayVisible) {
+                day.style.display = "grid";
+            }
+            else {
+                day.style.display = "none";
+            }
+
+        }
     }
 </script>
