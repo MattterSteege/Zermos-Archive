@@ -29,10 +29,22 @@ namespace Zermos_Web.Controllers
         
         protected user ZermosUser
         {
-            get => _user.GetUserAsync(ZermosEmail).Result;
+            get
+            {
+                try
+                {
+                    var user = _user.GetUserAsync(ZermosEmail).Result;
+                    return user;
+                }
+                catch (Exception e)
+                {
+                    Log(LogLevel.Error, e.Message);
+                    return new user();
+                }
+            }
             set => _user.UpdateUserAsync(ZermosEmail, value).Wait();
         }
-        
+
         protected string CurrentZermosVersion => Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION");
         
         // LOGGING METHODS

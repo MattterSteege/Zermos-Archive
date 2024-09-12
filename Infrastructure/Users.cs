@@ -33,7 +33,7 @@ namespace Infrastructure
             }
             catch (DbUpdateException ex)
             {
-                Console.WriteLine(ex);
+                
                 return new List<user>();
             }
             #endif
@@ -47,7 +47,7 @@ namespace Infrastructure
             }
             catch (DbUpdateException ex)
             {
-                Console.WriteLine(ex);
+                
                 return new List<user>();
             }
         }
@@ -61,12 +61,11 @@ namespace Infrastructure
         {
             try
             {
-                //get the user using the email, but detach it from the context so that it can be updated later
                 return await _context.users.AsNoTracking().FirstOrDefaultAsync(x => x.email == email.ToLower());
             }
             catch (DbUpdateException ex)
             {
-                Console.WriteLine(ex);
+                // Handle exception (e.g., log it)
                 return new user();
             }
         }
@@ -89,7 +88,7 @@ namespace Infrastructure
             }
             catch (DbUpdateException ex)
             {
-                Console.WriteLine(ex);
+                
             }
         }
 
@@ -143,7 +142,7 @@ namespace Infrastructure
             }
             catch (DbUpdateException ex)
             {
-                Console.WriteLine(ex);
+                
             }
         }
     }

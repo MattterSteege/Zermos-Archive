@@ -34,7 +34,6 @@
             .addLabel({text: "Wachtwoord"})
             .addPasswordInput({required: true})
             .addButton({text: "Inloggen", onClick: (ctx) => {
-                    console.log(ctx.getComponentsValue().values);
                     var school = ctx.getComponentsValue().values[0].value.value;
                     var username = ctx.getComponentsValue().values[1].value;
                     var password = ctx.getComponentsValue().values[2].value;
