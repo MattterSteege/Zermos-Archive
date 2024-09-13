@@ -2,6 +2,8 @@ Version 0.6.4.1 - bugfixes
 
 - Zermelo - Rooster
     - Ingeplande afspraken worden nu ook echt ingeladen als je ze toevoegt aan je rooster ipv dat je de pagina moet herladen
+    - probleem met "keuze" lessen opgelost, nu zie je (mits er maar 1 keuze is) de les gelijk al ipv een leeg blok
+    - betere dekking toegevoegd voor de verschillende lestypen
 
 - custom afspraken
     - foutje heb ik nu opgelost, dus alles moet weer soepel werken :)

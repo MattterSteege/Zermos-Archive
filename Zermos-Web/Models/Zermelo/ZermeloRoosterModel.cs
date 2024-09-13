@@ -16,8 +16,10 @@ namespace Zermos_Web.Models.zermelo
             get => response.data[0].MondayOfAppointmentsWeek;
             set => response.data[0].MondayOfAppointmentsWeek = value;
         }
+        
         public List<int> timeStamps { get; set; }
         public string roosterOrigin { get; set; }
+        public int tropenRoosterDuration;
     }
 
     public class Appointment

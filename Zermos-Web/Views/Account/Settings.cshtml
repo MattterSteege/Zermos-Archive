@@ -95,6 +95,15 @@
             <button id="8_niet" onclick="setPreview('hide_zermelo_navigation', true); UpdateRoosterNavigation(this)" class="setting-button@(hide_zermelo_navigation ? " selected" : "")">nuh</button>
         </div>
     </div>
+    
+    <div class="setting-item">
+        <h1>Rooster</h1>
+        <p>Geef de normale lesduur aan voor het tropenrooster of ik gooi een kokosnoot naar je 🥥</p>
+        <div class="settings-options"><!-- duration in minutes 1-1440 -->
+            <input type="number" id="5_tropen_rooster_time" name="tropen_rooster_time" min="1" max="1440" value="@(Model.tropen_rooster_time ?? "0")"/>
+            <button id="9_save" onclick="updateTropenRoosterTime(this)" class="setting-button">Opslaan</button>
+        </div>
+    </div>
 </div>
 
 <script minimize>
@@ -199,6 +208,11 @@ function UpdateRoosterNavigation(element) {
         siblings[i].classList.remove("selected");
     }
     element.classList.add("selected");
+}
+
+function updateTropenRoosterTime(element) {
+    var time = document.getElementById("5_tropen_rooster_time").value;
+    UpdateSetting("tropen_rooster_time", time, element);
 }
 
 function UpdateSetting(key, value, element) {   

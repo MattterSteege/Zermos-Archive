@@ -92,6 +92,14 @@ namespace Infrastructure.Entities
             set => SetSetting("zermelo_timestamps", value);
         }
         
+        //1 -> 60*24
+        [NotMapped, Setting("1440|(14[0-3]\\d)|(1[0-3]\\d{2})|(\\d{1,3})")]
+        public string tropen_rooster_time
+        {
+            get => GetSetting<string>("tropen_rooster_time");
+            set => SetSetting("tropen_rooster_time", value);
+        }
+        
         //ROOSTER SETTINGS
         [NotMapped, Setting("zermelo", "somtoday")] 
         public string prefered_rooster_engine

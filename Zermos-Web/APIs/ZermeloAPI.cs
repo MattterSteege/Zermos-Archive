@@ -66,6 +66,7 @@ namespace Zermos_Web.APIs
             zermeloRoosterModel.MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year);
             zermeloRoosterModel.timeStamps = new List<int> {secondsStart, secondsEnd};
             zermeloRoosterModel.roosterOrigin = "zermelo";
+            zermeloRoosterModel.tropenRoosterDuration = int.Parse(user.tropen_rooster_time ?? "0");
             return zermeloRoosterModel;
         }
         

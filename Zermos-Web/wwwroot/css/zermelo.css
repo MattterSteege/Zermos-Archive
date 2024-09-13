@@ -404,6 +404,26 @@ ul:has(> li.empty) {
     border-radius: 50%;
 }
 
+.fa-tree-palm {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    right: 0;
+    top: 0;
+    font-size: 20px;
+    color: var(--text-color);
+    transform: rotate(19deg);
+    opacity: 0.1;
+}
+
+.fa-tree-palm::before {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+}
+
+
 @media screen and (max-width: 600px) {
     .days-container ul li {
         padding: 0;

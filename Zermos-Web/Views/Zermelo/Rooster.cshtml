@@ -560,17 +560,13 @@ addButtonToPage('fa-list', () => {
     var vakkenLijst = [];
     @foreach (var item in zermeloTodayLessons)
     {
-        if (item.subjects != null && item.teachers != null)
+        if (item.subjects != null && item.teachers != null && item.subjects.Count > 0 && item.teachers.Count > 0)
         {
             <text>vakkenLijst.push('@item.subjects[0] van @item.teachers[0]');</text>
         }
-        else if (item.subjects != null)
+        else if (item.subjects != null && item.subjects.Count > 0)
         {
             <text>vakkenLijst.push('@item.subjects[0]');</text>
-        }
-        else
-        {
-            <text>vakkenLijst.push('Onbekend');</text>
         }
     }
    

@@ -191,7 +191,7 @@
     margin-top: var(--padding-small);
 }
 
-.setting-item .settings-options input[type="time"] {
+.setting-item .settings-options input[type="time"], .setting-item .settings-options input[type="number"] {
     width: 100%;
     padding: var(--padding-small);
     font-size: var(--font-size);

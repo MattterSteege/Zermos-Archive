@@ -8,11 +8,12 @@ namespace Zermos_Web.TagHelpers
     [HtmlTargetElement("link", Attributes = "preload", TagStructure = TagStructure.WithoutEndTag)]
     public class CssTagHelper : TagHelper
     {
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             //set the .css extension to .min.css
-            output.Attributes.SetAttribute("href", output.Attributes["href"].Value.ToString().Replace(".css", ".min.css"));
+            output.Attributes.SetAttribute("href", output.Attributes["href"].Value.ToString()?.Replace(".css", ".min.css"));
             output.Attributes.RemoveAll("preload");
+            base.Process(context, output);
         }
     }
 }
