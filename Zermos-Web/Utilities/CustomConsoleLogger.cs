@@ -1,13 +1,22 @@
 ﻿using System;
+using System.Security.Claims;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace Zermos_Web.Utilities;
 
 class CustomConsoleLoggerProvider : ILoggerProvider
 {
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public CustomConsoleLoggerProvider(IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
+
     public ILogger CreateLogger(string categoryName)
     {
-        return new CustomConsoleLogger();
+        return new CustomConsoleLogger(_httpContextAccessor);
     }
 
     public void Dispose()
@@ -17,6 +26,13 @@ class CustomConsoleLoggerProvider : ILoggerProvider
 
 class CustomConsoleLogger : ILogger
 {
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public CustomConsoleLogger(IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
+
     public IDisposable BeginScope<TState>(TState state)
     {
         return null;
@@ -29,7 +45,10 @@ class CustomConsoleLogger : ILogger
 
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
     {
-        //make colored log entries
+        // Get user email
+        string userEmail = _httpContextAccessor.HttpContext?.User.FindFirstValue("email") ?? "Unknown";
+
+        // Set color based on log level
         switch (logLevel)
         {
             case LogLevel.Trace:
@@ -58,6 +77,9 @@ class CustomConsoleLogger : ILogger
         }
         
         Console.Write($"[{DateTime.Now:HH:mm:ss} {logLevel}]");
+        if (logLevel != LogLevel.Information && logLevel != LogLevel.None)
+            Console.Write($" [{userEmail}]");
+        
         Console.ResetColor();
         Console.Write($" {state} {exception?.Message}");
         if (exception?.StackTrace != null)

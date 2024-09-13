@@ -20,13 +20,13 @@ namespace Infrastructure
         /// <summary>
         /// Voeg een afspraak toe voor een gebruiker
         /// </summary>
-        /// <param name="userEmail">The email of the user</param>
+        /// <param name="email">The email of the user</param>
         /// <param name="date">The date of the appointment</param>
         /// <param name="description">The description of the appointment</param>
         /// <param name="location">The location of the appointment</param>
         /// <exception cref="Exception">Thrown when the user does not exist, the date is in the past, the description is null or empty, or the location is null or empty</exception>
         /// <returns></returns>
-        public async Task AddAppointmentAsync(DateTime start, DateTime end, string appointmentType, string subject, string description, string location, string userEmail)
+        public async Task AddAppointmentAsync(DateTime start, DateTime end, string appointmentType, string subject, string description, string location, string email)
         {
             custom_appointment appointment = new()
             {
@@ -36,29 +36,29 @@ namespace Infrastructure
                 subject = subject,
                 location = location,
                 description = description,
-                UserEmail = userEmail,
+                email = email,
             };
             
-            await AddAppointmentAsync(userEmail, appointment);
+            await AddAppointmentAsync(email, appointment);
         }
         
         /// <summary>
         /// Voeg een afspraak toe voor een gebruiker
         /// </summary>
-        /// <param name="userEmail">The email of the user</param>
+        /// <param name="email">The email of the user</param>
         /// <param name="appointment">The appointment to add</param>
         /// <exception cref="Exception">Thrown when the user does not exist, the date is in the past, the description is null or empty, or the location is null or empty</exception>
         /// <returns></returns>
-        public async Task AddAppointmentAsync(string userEmail, custom_appointment appointment)
+        public async Task AddAppointmentAsync(string email, custom_appointment appointment)
         {
             // Valideer of de gebruiker bestaat
-            var user = await _context.users.FindAsync(userEmail);
+            var user = await _context.users.FindAsync(email);
             if (user == null)
             {
                 throw new Exception("User not found");
             }
             
-            appointment.UserEmail = user.email;
+            appointment.email = user.email;
 
             // Voeg de afspraak toe aan de database via de DbSet
             _context.custom_appointments.Add(appointment);
@@ -70,29 +70,29 @@ namespace Infrastructure
         /// <summary>
         /// Haal alle afspraken op voor een gebruiker binnen een bepaalde periode
         /// </summary>
-        /// <param name="userEmail">The email of the user</param>
+        /// <param name="email">The email of the user</param>
         /// <param name="startDate">The start date of the period (inclusive)</param>
         /// <param name="endDate">The end date of the period (inclusive)</param>
         /// <returns>A list of appointments</returns>
-        public async Task<List<custom_appointment>> GetAppointmentsForUserAsync(string userEmail, DateTime startDate, DateTime endDate)
+        public async Task<List<custom_appointment>> GetAppointmentsForUserAsync(string email, DateTime startDate, DateTime endDate)
         {
             startDate = startDate.Date; // Set the time to 00:00:00
             endDate = endDate.Date.AddDays(1).AddSeconds(-1); // Set the time to 23:59:59
             
             return await _context.custom_appointments
-                .Where(appointment => appointment.UserEmail == userEmail && appointment.start >= startDate && appointment.end <= endDate)
+                .Where(appointment => appointment.email == email && appointment.start >= startDate && appointment.end <= endDate)
                 .ToListAsync();
         }
         
         /// <summary>
         /// Get all appointments for a user
         /// </summary>
-        /// <param name="userEmail">The email of the user</param>
+        /// <param name="email">The email of the user</param>
         /// <returns>A list of appointments</returns>
-        public async Task<List<custom_appointment>> GetAppointmentsForUserAsync(string userEmail)
+        public async Task<List<custom_appointment>> GetAppointmentsForUserAsync(string email)
         {
             return await _context.custom_appointments
-                .Where(appointment => appointment.UserEmail == userEmail)
+                .Where(appointment => appointment.email == email)
                 .ToListAsync();
         }
 
@@ -110,7 +110,7 @@ namespace Infrastructure
                 return 404;
             }
 
-            if (appointment.UserEmail != zermosEmail)
+            if (appointment.email != zermosEmail)
             {
                 //throw new Exception("User does not have permission to delete this appointment");
                 return 403;

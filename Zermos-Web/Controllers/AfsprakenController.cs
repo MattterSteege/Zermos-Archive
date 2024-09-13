@@ -11,10 +11,7 @@ namespace Zermos_Web.Controllers;
 
 public class AfsprakenController : BaseController
 {
-    public AfsprakenController(Users user, Shares share, CustomAppointments customCustomAppointment,
-        ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger)
-    {
-    }
+    public AfsprakenController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
 
     [Authorize]
     [HttpPost("/Api/Afspraken/Nieuw")]
@@ -53,7 +50,7 @@ public class AfsprakenController : BaseController
 
         try
         {
-            await CustomCustomAppointment.AddAppointmentAsync(ZermosEmail, custom_appointment);
+            await AddCustomAppointment(custom_appointment);
             return Ok(new {message = "Appointment added successfully"});
         }
         catch (Exception ex)
@@ -96,15 +93,13 @@ public class AfsprakenController : BaseController
         if (endDate == null)
             endDate = DateTime.MaxValue;
 
-        var appointments =
-            await CustomCustomAppointment.GetAppointmentsForUserAsync(ZermosEmail, (DateTime) startDate,
-                (DateTime) endDate);
+        var appointments = await GetCustomAppointmentsForUser(startDate.Value, endDate.Value);
 
-        //remove id, useremail and user from the appointments
+        //remove id, email and user from the appointments
         foreach (var appointment in appointments)
         {
-            appointment.UserEmail = null;
-            appointment.User = null;
+            appointment.email = null;
+            appointment.description = appointment.description == "null" ? null : appointment.description;
         }
 
         return Ok(appointments);
@@ -117,7 +112,7 @@ public class AfsprakenController : BaseController
         if (id == 0 || id < 0)
             return BadRequest(new {error = "Id is set to an invalid value, dunno how you did that"});
         
-        int code = await CustomCustomAppointment.DeleteAppointmentAsync(ZermosEmail, id);
+        int code = await DeleteCustomAppointmentForUser(id);
         if (code == 404)
             return NotFound(new {error = "Appointment not found"});
         if (code == 403)

@@ -59,6 +59,9 @@ namespace Infrastructure
         /// <returns>A list of users with the specified uuid.</returns>
         public async Task<user> GetUserAsync(string email)
         {
+            if (string.IsNullOrEmpty(email))
+                return new user();
+            
             try
             {
                 return await _context.users.AsNoTracking().FirstOrDefaultAsync(x => x.email == email.ToLower());

@@ -38,7 +38,7 @@ namespace Zermos_Web.Controllers
                 }
                 catch (Exception e)
                 {
-                    Log(LogLevel.Error, e.Message);
+                    Log(LogLevel.Error, e.Message + "BaseController.cs:42");
                     return new user();
                 }
             }
@@ -73,6 +73,28 @@ namespace Zermos_Web.Controllers
         protected async Task DeleteShare(string key)
         {
             await _share.DeleteShareAsync(key);
+        }
+        
+        // CUSTOM APPOINTMENT METHODS
+        protected async Task<custom_appointment> AddCustomAppointment(custom_appointment customAppointment)
+        {
+            await CustomCustomAppointment.AddAppointmentAsync(ZermosEmail, customAppointment);
+            return customAppointment;
+        }
+        
+        protected async Task<List<custom_appointment>> GetCustomAppointmentsForUser()
+        {
+            return await CustomCustomAppointment.GetAppointmentsForUserAsync(ZermosEmail);
+        } 
+        
+        protected async Task<List<custom_appointment>> GetCustomAppointmentsForUser(DateTime startDate, DateTime endDate)
+        {
+            return await CustomCustomAppointment.GetAppointmentsForUserAsync(ZermosEmail, startDate, endDate);
+        }
+        
+        protected async Task<int> DeleteCustomAppointmentForUser(int id)
+        {
+            return await CustomCustomAppointment.DeleteAppointmentAsync(ZermosEmail, id);
         }
     }
 }

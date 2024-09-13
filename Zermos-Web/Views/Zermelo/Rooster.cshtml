@@ -471,9 +471,9 @@ addButtonToPage('fa-plus', () => {
     .addLabel({text: "Onderwerp"})
     .addTextInput({required: true}) //
     .addLabel({text: "Beschrijving (optioneel)"})
-    .addTextInput({}) //
+    .addTextInput({required: false}) //
     .addLabel({text: "Waar (optioneel)"})
-    .addTextInput({}) //
+    .addTextInput({required: false}) //
     .addButton({text: "Voeg toe", onClick: (ctx) => {
         
         var values = ctx.getComponentsValue().values;
@@ -508,6 +508,9 @@ addButtonToPage('fa-plus', () => {
         .then(response => {
             if (response.ok) {
                 ctx.close();
+                var week = getWeekNumber(dateObject);
+                var year = dateObject.getFullYear();
+                loadCustomAppointments(week, year);
             }
         });
     }})
@@ -553,8 +556,24 @@ if (isUserOnline) {
 
 // share button
 addButtonToPage('fa-list', () => {
+    
+    var vakkenLijst = [];
+    @foreach (var item in zermeloTodayLessons)
+    {
+        if (item.subjects != null && item.teachers != null)
+        {
+            <text>vakkenLijst.push('@item.subjects[0] van @item.teachers[0]');</text>
+        }
+        else if (item.subjects != null)
+        {
+            <text>vakkenLijst.push('@item.subjects[0]');</text>
+        }
+        else
+        {
+            <text>vakkenLijst.push('Onbekend');</text>
+        }
+    }
    
-   var vakkenLijst = @Html.Raw(Json.Serialize(zermeloTodayLessons.Select(x => x.subjects[0] + " van " + x.teachers[0])));
    
     var paklijst = new ZermosModal()
     .addHeading({text: "Je paklijst"})
@@ -632,6 +651,14 @@ var elementHasPreviousPreviousSibling = (element) => {
     return element?.previousElementSibling?.previousElementSibling !== null && element?.previousElementSibling?.previousElementSibling !== undefined;
 };
 
+function getWeekNumber(date) {
+    var d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    var dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+}
+
 
 function loadCustomAppointments(week, year) {
 
@@ -677,7 +704,7 @@ function loadCustomAppointments(week, year) {
                 les.className = "lesson-time-based custom";
                 les.id = "custom-appointment-" + item.id;
                 les.style.top = (startSeconds - start) / (end - start) * 100 + "%";
-                les.style.height = (endSeconds - startSeconds) / (end - start) * 100 + "%";
+                les.style.height = "calc(" + (endSeconds - startSeconds) / (end - start) * 100 + "% - 8px)";
                 les.style.backgroundColor = item.color;
                 les.setAttribute("onclick", "OpenLessonDetail('" + btoa(JSON.stringify(item)) + "')");
                 

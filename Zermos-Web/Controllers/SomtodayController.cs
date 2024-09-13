@@ -58,8 +58,8 @@ namespace Zermos_Web.Controllers
             
             if (Request.Cookies.ContainsKey("cached-somtoday-plaatsingen"))
             {
-                plaatsingen = JsonConvert.DeserializeObject<SomtodayPlaatsingenModel>(ZermosUser.cached_somtoday_plaatsingen ?? "{}");
-                if (plaatsingen.items.Count == 0)
+                plaatsingen = JsonConvert.DeserializeObject<SomtodayPlaatsingenModel>(ZermosUser.cached_somtoday_plaatsingen ?? "{}"); //object reference is not set to an instance of an object
+                if (plaatsingen == null || plaatsingen.items == null || plaatsingen.items.Count == 0)
                 {
                     plaatsingen = await somtodayApi.GetPlaatsingen(user);
                     Response.Cookies.Append("cached-somtoday-plaatsingen", DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"), new CookieOptions {Expires = DateTime.Now.AddMonths(1)});

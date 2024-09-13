@@ -16,9 +16,9 @@ public class custom_appointment
     public string location { get; set; }
     
     // Foreign key to associate with a user
-    public string UserEmail { get; set; }
+    public string email { get; set; }
     
     // Navigation property
-    [ForeignKey("UserEmail")]
-    public user User { get; set; }
+    //[ForeignKey("UserEmail")]
+   // public user User { get; set; }
 }

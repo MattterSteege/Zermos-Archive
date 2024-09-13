@@ -7,8 +7,7 @@ TODO: huiswerk afvinken
 TODO: infowijs calendar redesign -> https://i.pinimg.com/736x/43/9a/5a/439a5a83b7161d9caaf29cf8a908ff40.jpg (only right side)
 
 TODO: jaarbijlagen bij leermiddelen
-TODO: fix de bug waarbij de pagina niet volledig laadt (dit kan met een `try{!main;!Zermos}catch{location.href="/"}`), maar fix dit wel (temp fix is gemaakt in MinimizeTagHelper.cs:L26)
-     
+ 
 Discord server webhooks:
 #informatie: https://discord.com/api/webhooks/1271383220813959251/6YaYKl88vmXV_AH_dfoX-3qTKveuXpaSHTPuuJjPfJTQZfqZyTrCCz3J5-Hf1odT48hA
 #github-feeds: https://discord.com/api/webhooks/1265994706958028926/LDrbV7YsiuRQIpV-W-5VBkbq6HnprimipbuEqHxpvCMJCSNH8iZpqPIa5cTmBRZh_4i2

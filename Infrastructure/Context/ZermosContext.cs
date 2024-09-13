@@ -1,5 +1,4 @@
-﻿#define BETA
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Infrastructure.Entities;
 
 namespace Infrastructure.Context
@@ -18,16 +17,16 @@ namespace Infrastructure.Context
         public virtual DbSet<share> shares { get; set; }
         public DbSet<custom_appointment> custom_appointments { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            // Configuratie voor de relatie tussen user en CustomAppointment
-            modelBuilder.Entity<custom_appointment>()
-                .HasOne(ca => ca.User)
-                .WithMany(u => u.custom_appointments)
-                .HasForeignKey(ca => ca.UserEmail);
-        }
+        // protected override void OnModelCreating(ModelBuilder modelBuilder)
+        // {
+        //     base.OnModelCreating(modelBuilder);
+        //
+        //     // // Configuratie voor de relatie tussen user en CustomAppointment
+        //     // modelBuilder.Entity<custom_appointment>()
+        //     //     .HasOne(ca => ca.User)
+        //     //     .WithMany(u => u.custom_appointments)
+        //     //     .HasForeignKey(ca => ca.UserEmail);
+        // }
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
