@@ -16,24 +16,16 @@
     <div class="later">
         @foreach (var messageGroup in Model)
         { 
-            <div class="message">
-                @{
-                    var title = messageGroup.FirstOrDefault(m => m.Type == 30);
-                    var contents = messageGroup.Where(m => m.Type == 1);
-                    var attachments = messageGroup.Where(m => m.Type == 2);
-                    var photos = messageGroup.Where(m => m.Type == 3);
-                }
+            var title = messageGroup.FirstOrDefault(m => m.Type == 30);
+            var contents = messageGroup.Where(m => m.Type == 1);
+            var attachments = messageGroup.Where(m => m.Type == 2);
+            var photos = messageGroup.Where(m => m.Type == 3);
+            
+            <div class="message @(lastUpdated < title?.CreatedAt.ToDateTime() ? "notify" : "")">
 
                 @if (title != null)
                 {
                     <h2 class="title">@title.Content.ContentClass?.Title</h2>
-
-                    @if (lastUpdated < title.CreatedAt.ToDateTime())
-                    {
-                        <div class="news-notification">
-                            <div class="notif-dot"></div>
-                        </div>
-                    }
                 }
 
                 <div class="contents">

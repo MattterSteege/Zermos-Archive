@@ -297,6 +297,10 @@ i.fa-solid.fa-graduation-cap, i.fa-solid.fa-layer-group {
     color: var(--background-color);
 }
 
+.notify {
+    border-left: 4px solid var(--confirm-color);
+}
+
 /*CIJFER STATISTIEKEN*/
 .stats-vak {
     font-size: var(--font-size-heading);

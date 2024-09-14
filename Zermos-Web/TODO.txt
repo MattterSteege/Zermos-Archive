@@ -7,6 +7,8 @@ TODO: huiswerk afvinken
 TODO: infowijs calendar redesign -> https://i.pinimg.com/736x/43/9a/5a/439a5a83b7161d9caaf29cf8a908ff40.jpg (only right side)
 
 TODO: jaarbijlagen bij leermiddelen
+
+TODO: rapport downloaden, dit doe je zo: input een jaarlaag en dan worden alle vakken opgevraagd, vraag dan alle cijfers van alle vakken op zodat je een lijst hebt met alle cijfers, dan kan je die in een pdf zetten en downloaden
  
 Discord server webhooks:
 #informatie: https://discord.com/api/webhooks/1271383220813959251/6YaYKl88vmXV_AH_dfoX-3qTKveuXpaSHTPuuJjPfJTQZfqZyTrCCz3J5-Hf1odT48hA

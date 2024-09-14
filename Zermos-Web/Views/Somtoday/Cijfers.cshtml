@@ -16,7 +16,7 @@
     string GetNotificationClass(DateTime? lastGradeDate)
     {
         if (lastGradeDate == null || lastGradeDate == DateTime.MaxValue) return "";
-        return lastUpdated < lastGradeDate ? "notify-me" : "";
+        return lastUpdated < lastGradeDate ? "notify" : "";
     }
     
     float cijferSEAverage = 0;
@@ -45,7 +45,7 @@
         {
             if (grade.cijfer == "-") { continue; }
 
-            <table class="grade-table" @Html.Raw(GetNotificationClass(grade.cijfers?[0]?.datumInvoerEerstePoging ?? DateTime.MaxValue)) onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()/@grade.vakuuid.ShortenUUID()/@Model.relevanteCijferLichtingUUID.ShortenUUID()/@Model.leerjaarUUID.ShortenUUID()')">
+            <table class="grade-table @GetNotificationClass(grade.cijfers?[0]?.datumInvoerEerstePoging ?? DateTime.MaxValue)" onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()/@grade.vakuuid.ShortenUUID()/@Model.relevanteCijferLichtingUUID.ShortenUUID()/@Model.leerjaarUUID.ShortenUUID()')">
                 <tr class="grade-table-header">
                     <td rowspan="2"><i class="fa-solid fa-book" data-name="@grade.vakNaam.ToLower()" data-name-short="@grade.vakAfkorting.ToLower()"></i></td>
                     <td>@grade.vakNaam.Capitalize()</td>
@@ -95,7 +95,7 @@
             cijferSECount++;
             
             //Combine the data from cijferSE with the structure of cijfer
-            <table class="grade-table" @Html.Raw(GetNotificationClass((grade.cijfersSE != null && grade.cijfersSE.Count > 0) ? grade.cijfersSE.FirstOrDefault()!.datumInvoerEerstePoging : DateTime.MinValue)) onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()/@grade.vakuuid.ShortenUUID()/@Model.relevanteCijferLichtingUUID.ShortenUUID()/@Model.leerjaarUUID.ShortenUUID()')">
+            <table class="grade-table @(GetNotificationClass((grade.cijfersSE != null && grade.cijfersSE.Count > 0) ? grade.cijfersSE.FirstOrDefault()!.datumInvoerEerstePoging : DateTime.MinValue))" onclick="ReplacePage('./@grade.vakAfkorting.Capitalize()/@grade.vakuuid.ShortenUUID()/@Model.relevanteCijferLichtingUUID.ShortenUUID()/@Model.leerjaarUUID.ShortenUUID()')">
                 <tr class="grade-table-header">
                     <td rowspan="2"><i class="fa-solid fa-book" data-name="@grade.vakNaam.ToLower()" data-name-short="@grade.vakAfkorting.ToLower()"></i></td>
                     <td>@grade.vakNaam</td>
@@ -125,7 +125,7 @@
         <h1 class="grades-title">Geschiedenis</h1>
         @foreach (var grade in Model.lastGrades)
         {
-            <table class="grade-table" @Html.Raw(GetNotificationClass(grade.datumInvoerEerstePoging))>
+            <table class="grade-table @GetNotificationClass(grade.datumInvoerEerstePoging)">
                 <tr class="grade-table-header">
                     <td>@(grade.isSE ? "(SE) " : "")@grade.additionalObjects.vaknaam</td>
                     <td style="width: 10%; text-align: end;">@(grade.weging)x</td>
@@ -299,8 +299,8 @@
         
         function saveSettings(rapport, exam)
         {
-        
-            var save = getSettings();
+
+            const save = getSettings();
             if (rapport)
                 save[0] = rapport.dataset.settings;
                 
