@@ -64,7 +64,7 @@ namespace Zermos_Web.APIs
 
             var zermeloRoosterModel = JsonConvert.DeserializeObject<ZermeloRoosterModel>(await response.Content.ReadAsStringAsync());
             zermeloRoosterModel.MondayOfAppointmentsWeek = DateTimeUtils.GetMondayOfWeekAndYear(week, year);
-            zermeloRoosterModel.timeStamps = new List<int> {secondsStart, secondsEnd};
+            zermeloRoosterModel.timeStamps = new List<int> {secondsStart, secondsEnd}; //so divide by 60 to get minutes and divide by 3600 to get hours
             zermeloRoosterModel.roosterOrigin = "zermelo";
             zermeloRoosterModel.tropenRoosterDuration = int.Parse(user.tropen_rooster_time ?? "0");
             return zermeloRoosterModel;

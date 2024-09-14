@@ -3,6 +3,14 @@
     height: 100%;
     user-select: none;
     overflow: hidden;
+    
+    
+    --minutes-in-day: 540; /* 9 hours, 17:00 - 8:00 */
+    --min-height-of-min: 1px; /* --minute-height is at least more (or equel to) 1px */
+    --max-height-of-min: 10px; /* --minute-height is at most less (or equel to) 10px */
+    --calculated-height-of-min: calc(100% / (var(--minutes-in-day))); /* calculated height */
+
+    --minute-height: max(var(--min-height-of-min), min(var(--max-height-of-min), var(--calculated-height-of-min))); /* height of 1 minute */
 }
 
 .main-container .week-carousel {
@@ -44,6 +52,7 @@
     position: absolute;
     left: 0px;
     margin-top: 40px;
+    overflow-y: scroll;
 }
 
 .times-container ul {
@@ -51,18 +60,15 @@
     margin: 0px;
     padding: 0px;
     width: 100%;
-    height: 100%;
     display: grid;
+    height: calc(var(--minute-height) * var(--minutes-in-day));
+    position: absolute;
 }
 
 .times-container ul li {
     width: 100%;
     border-bottom: 1px solid var(--inactive-color);
-    /* padding: var(--padding-small) 0; */
-}
-
-.times-container ul li:last-child {
-    border-bottom: none;
+    position: absolute;
 }
 
 .days-container {
@@ -116,35 +122,31 @@
     position: absolute;
     left: 0;
     margin-top: 40px;
+    overflow-y: scroll;
 }
 
 .hours-container ul {
     list-style-type: none;
     padding: 0px;
     width: 50px;
-    height: 100%;
     display: grid;
     margin: 0px 5px;
     text-align: center;
     background: var(--background-color);
+    height: calc(var(--minute-height) * var(--minutes-in-day));
+    position: relative;
 }
 
 .hours-container ul li {
     width: 100%;
-    height: 0;
+    height: 0px;
     font-weight: 600;
-    background-color: var(--background-color);
     color: var(--text-color);
     font-size: var(--font-size);
-}
-
-.hours-container ul li p {
-    height: 20px;
-    translate: 0 -10px;
+    position: absolute;
     display: flex;
-    align-items: center;
     justify-content: center;
-    background: var(--background-color);
+    align-items: center;
 }
 
 .hours-container ul li:first-child, .hours-container ul li:last-child {
@@ -159,8 +161,8 @@
     top: 0px;
     margin-left: 60px;
     margin-top: 40px;
-    --height-of-5-minutes: calc(100% / 102);
     z-index: 100;
+    overflow-y: scroll;
 }
 
 .lessons-container ul {
@@ -168,9 +170,9 @@
     margin: 0px;
     padding: 0px;
     width: 100%;
-    height: 100%;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
+    height: calc(var(--minute-height) * var(--minutes-in-day));
 }
 
 .lesdag {
@@ -201,6 +203,9 @@
     margin: 4px;
     max-width: calc(100% - 8px) !important;
     overflow: hidden;
+
+    --minutes-from-start: 0;
+    --lesson-duration: 0;
 }
 
 .lesson-time-based p {

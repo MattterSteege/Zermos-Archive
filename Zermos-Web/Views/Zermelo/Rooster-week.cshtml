@@ -67,6 +67,7 @@
                             timeDifferenceInSeconds = (int) timeDifference.TotalSeconds;
 
                             dayStartUnix -= timeDifferenceInSeconds;
+                            
                         }
 
                         @foreach (var appointment in appointmentList)
@@ -75,68 +76,42 @@
                             times.Add((appointment.start - dayStartUnix + timeDifference.Seconds) / 60);
                             times.Add((appointment.end - dayStartUnix + timeDifference.Seconds) / 60);
                             //times.Add((appointment.end - dayStartUnix + timeDifference.Seconds) / 60);
-                            
-                            //percentage from top = (appointment start time - dayStartUnix) * minuteHeight *@
-                            //appointment height = (appointment end time - appointment start time) * minuteHeight
 
-                            var appointmentHeight = (appointment.end - appointment.start) / 60f * minuteHeight;
                             var lessonStart = appointment.start;
-                            var appointmentTop = (lessonStart - dayStartUnix) / 60f * minuteHeight;
+                            
+                            string style = "";
+                            style += $"--minutes-from-start: {((lessonStart - dayStartUnix) / 60f)}; --lesson-duration: {(appointment.duration / 60)}; top: calc(var(--minute-height) * var(--minutes-from-start)); height: calc(var(--minute-height) * var(--lesson-duration) - 8px);";
+                            style += appointment.appointmentType == "conflict" ? $" width: calc(50% - 4px);" : " ";
+                            
+                            string classes = "";
+                            classes += $"lesson-time-based {(appointment.cancelled ? "canceled" : "")} {appointment.appointmentType}";
+                            
+                            string base64 = appointment.ObjectToBase64String();
+                            
+                            string subject = appointment.subjects.Count > 0 ? appointment.subjects[0] : (appointment.actions.Count > 0 ? appointment.actions[0].appointment.subjects[0] : "");
+                            string location = appointment.locations.Count > 0 ? appointment.locations[0] : (appointment.actions.Count > 0 ? appointment.actions[0].appointment.locations[0] : "");
+                            string treePalm = (appointment.end - appointment.start) / 60 <= Model.tropenRoosterDuration ? "<i class=\"fa-solid fa-tree-palm\" aria-hidden=\"true\"></i>" : "";
+                            
+                            
+                            <div class="@classes" style="@style" onclick="OpenLessonDetail('@base64')">
+                                <p>@subject</p>
+                                <p>@location</p>
+                                @Html.Raw(treePalm)
+                            </div>
 
-                            if (appointment.actions.Count == 0)
+                            if (appointment.appointmentType == "conflict")
                             {
-                                <div class="lesson-time-based @(appointment.cancelled ? "canceled" : "") @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.ObjectToBase64String())')">
-                                    @(appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.subjects[0] + "</p>") : "")
-                                    @(appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.locations[0] + "</p>") : "")
-                                    @((appointment.end - appointment.start) / 60 <= Model.tropenRoosterDuration ? Html.Raw("<i class=\"fa-solid fa-tree-palm\" aria-hidden=\"true\"></i>") : "")
-                                </div>
-                            }
-                            else if (appointment.actions.Count == 1 && appointment.appointmentType == "choice")
-                            {
-                                <div class="lesson-time-based @(appointment.actions[0].appointment.cancelled ? "canceled" : "") choice" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.actions[0].appointment.ObjectToBase64String())')">
-                                    @(appointment.actions[0].appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.subjects[0] + "</p>") : "")
-                                    @(appointment.actions[0].appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.locations[0] + "</p>") : "")
-                                    @((appointment.end - appointment.start) / 60 < Model.tropenRoosterDuration ? Html.Raw("<i class=\"fa-solid fa-tree-palm\" aria-hidden=\"true\"></i>") : "")
-                                </div>
-                            }
-                            else  if (appointment.actions.Count == 1 && appointment.appointmentType == "lesson")
-                            {
-                                <div class="lesson-time-based @(appointment.actions[0].appointment.cancelled ? "canceled" : "") lesson" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.actions[0].appointment.ObjectToBase64String())')">
-                                    @(appointment.actions[0].appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.subjects[0] + "</p>") : "")
-                                    @(appointment.actions[0].appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.locations[0] + "</p>") : "")
-                                    @((appointment.end - appointment.start) / 60 <= Model.tropenRoosterDuration ? Html.Raw("<i class=\"fa-solid fa-tree-palm\" aria-hidden=\"true\"></i>") : "")
-                                </div>
-                            }
-                            else if (appointment.appointmentType == "conflict")
-                            {
-                                <div class="lesson-time-based @(appointment.actions[0].appointment.cancelled ? "canceled" : "") conflict" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px); width: calc(50% - 4px);" onclick="OpenLessonDetail('@(appointment.actions[0].appointment.ObjectToBase64String())')">
-                                    @(appointment.actions[0].appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.subjects[0] + "</p>") : "")
-                                    @(appointment.actions[0].appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.locations[0] + "</p>") : "")
-                                    @((appointment.end - appointment.start) / 60 <= Model.tropenRoosterDuration ? Html.Raw("<i class=\"fa-solid fa-tree-palm\" aria-hidden=\"true\"></i>") : "")
-                                </div>
+                                subject = appointment.actions[1].appointment.subjects.Count > 0 ? appointment.actions[1].appointment.subjects[0] : "";
+                                location = appointment.actions[1].appointment.locations.Count > 0 ? appointment.actions[1].appointment.locations[0] : "";
+                                treePalm = (appointment.end - appointment.start) / 60 <= Model.tropenRoosterDuration ? "<i class=\"fa-solid fa-tree-palm\" aria-hidden=\"true\"></i>" : "";
                                 
-                                <div class="lesson-time-based @(appointment.actions[1].appointment.cancelled ? "canceled" : "")" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px); width: calc(50% - 8px); left: 50%;" onclick="OpenLessonDetail('@(appointment.actions[1].appointment.ObjectToBase64String())')">
-                                    @(appointment.actions[1].appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.actions[1].appointment.subjects[0] + "</p>") : "")
-                                    @(appointment.actions[1].appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.actions[1].appointment.locations[0] + "</p>") : "")
-                                    @((appointment.end - appointment.start) / 60 <= Model.tropenRoosterDuration ? Html.Raw("<i class=\"fa-solid fa-tree-palm\" aria-hidden=\"true\"></i>") : "")
+                                <div class="@classes" style="@style width: calc(50% - 8px); left:  50%" onclick="OpenLessonDetail('@base64')">
+                                    <p>@subject</p>
+                                    <p>@location</p>
+                                    @Html.Raw(treePalm)
                                 </div>
                             }
-                            else if (appointment.appointmentType == "choice" && appointment.actions.Count == 1)
-                            {
-                                <div class="lesson-time-based @(appointment.actions[0].appointment.cancelled ? "canceled" : "") choice" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.actions[0].appointment.ObjectToBase64String())')">
-                                    @(appointment.actions[0].appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.subjects[0] + "</p>") : "")
-                                    @(appointment.actions[0].appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.actions[0].appointment.locations[0] + "</p>") : "")
-                                    @((appointment.end - appointment.start) / 60 <= Model.tropenRoosterDuration ? Html.Raw("<i class=\"fa-solid fa-tree-palm\" aria-hidden=\"true\"></i>") : "")
-                                </div>
-                            }
-                            else if (appointment.appointmentType == "activity")
-                            {
-                                <div class="lesson-time-based @(appointment.cancelled ? "canceled" : "") @appointment.appointmentType" style="top: @(appointmentTop.ToString("0.000", CultureInfo.InvariantCulture))%; height: calc(@(appointmentHeight.ToString("0.000", CultureInfo.InvariantCulture))% - 8px);" onclick="OpenLessonDetail('@(appointment.ObjectToBase64String())')">
-                                    @(appointment.subjects.Count > 0 ? Html.Raw("<p>" + appointment.subjects[0] + "</p>") : "")
-                                    @(appointment.locations.Count > 0 ? Html.Raw("<p>" + appointment.locations[0] + "</p>") : "")
-                                    @((appointment.end - appointment.start) / 60 <= Model.tropenRoosterDuration ? Html.Raw("<i class=\"fa-solid fa-tree-palm\" aria-hidden=\"true\"></i>") : "")
-                                </div>
-                            }
+
                         }
                     </li>
                 }
@@ -186,35 +161,31 @@
             }
         }
         
-        gridTemplateRows += string.Join("fr ", calcTime) + "fr";
+        //gridTemplateRows += calcTime[n] -> calc(var(--minute-height) * calcTime[n]) (join with spaces)
+        //gridTemplateRows += string.Join(" ", calcTime.Select(c => $"calc(var(--minute-height) * {c})"));
         
-        if (gridTemplateRows == "0 fr") gridTemplateRows = "0";
+        //if (gridTemplateRows == "0 fr") gridTemplateRows = "0";
+        
+        while (times.Count > timesString.Count)
+            timesString.Add(null);
+        while (timesString.Count > times.Count)
+            times.Add(0);
+        
     }
     <div class="times-container">
-        <ul style="grid-template-rows: @gridTemplateRows">
-            <li></li>
-            @for (var i = 0; i < timesString.Count; i++)
+        <ul>
+            @for (var i = 0; i < times.Count; i++)
             {
-                <li></li>
+                <li style="top: calc(var(--minute-height) * @times[i])"></li>
             }
-            <li></li>
         </ul>
     </div>
     <div class="hours-container">
-        <ul style="grid-template-rows: @gridTemplateRows">
-            <li></li>
-            @foreach (var time in timesString)
+        <ul>
+            @for (var i = 0; i < times.Count; i++)
             {
-                if (time == null)
-                {
-                    <li></li>
-                }
-                else
-                {
-                    <li><p>@time</p></li>
-                }
-            }   
-            <li></li> <!-- end schoolday -->
+                <li style="top: calc(var(--minute-height) * @times[i])"><p>@(timesString[i] ?? "")</p></li>
+            }
         </ul>
     </div>
 </div>

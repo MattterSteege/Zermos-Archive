@@ -186,7 +186,8 @@ public class AuthenticationController : Controller
     [Route("/LoginAs")]
     public async Task<IActionResult> LoginAs(string user)
     {
-        if (User.FindFirstValue("email") != "58373@ccg-leerling.nl")
+        //if request comes from same IP as server, allow login as
+        if (Request.HttpContext.Connection.RemoteIpAddress.ToString() != (Request.HttpContext.Connection.LocalIpAddress.ToString()))
         {
             return PartialView("Login", new loginModel {code = 4});
         }

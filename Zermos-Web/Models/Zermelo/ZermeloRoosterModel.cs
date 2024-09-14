@@ -32,6 +32,7 @@ namespace Zermos_Web.Models.zermelo
         public List<string> locations { get; set; }
         public List<string> teachers { get; set; }
         public List<Action> actions { get; set; }
+        public int duration => end - start; //in seconds
         
     }
     

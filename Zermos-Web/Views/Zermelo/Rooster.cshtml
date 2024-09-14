@@ -7,7 +7,7 @@
 
 <link rel="stylesheet" href="/css/zermelo.css" preload/>
 
-<div class="main-container">
+<div class="main-container" style="--minutes-in-day: @(Model.timeStamps[1] / 60 - Model.timeStamps[0] / 60); --min-height-of-min: 1px; --max-height-of-min: 100px;">
     <div class="week-carousel" id="week-carousel" style="transform: translateX(-0%);">
         @(await Html.PartialAsync("../Zermelo/Rooster-week", Model))
     </div>
@@ -109,6 +109,29 @@ async function fetchWeek(week, year, append, retry = false) {
                     weekElement.style = "";
                     loadCustomAppointments(week, year);
                 }, 250);
+
+                //sync the scrolling y position of hours-container, times-container and lessons-container
+                var hoursContainer = weekElement.querySelector('.hours-container');
+                var timesContainer = weekElement.querySelector('.times-container');
+                var lessonsContainer = weekElement.querySelector('.lessons-container');
+
+                hoursContainer.onscroll = (evt) => {
+                    var scrollTop = evt.target.scrollTop;
+                    timesContainer.scrollTop = scrollTop;
+                    lessonsContainer.scrollTop = scrollTop;
+                };
+
+                timesContainer.onscroll = (evt) => {
+                    var scrollTop = evt.target.scrollTop;
+                    hoursContainer.scrollTop = scrollTop;
+                    lessonsContainer.scrollTop = scrollTop;
+                };
+
+                lessonsContainer.onscroll = (evt) => {
+                    var scrollTop = evt.target.scrollTop;
+                    hoursContainer.scrollTop = scrollTop;
+                    timesContainer.scrollTop = scrollTop;
+                };
             }, 100);
         }, 100);
     });
@@ -139,6 +162,35 @@ Zermos.mainAfterLoad = () => {
     }
 
     loadCustomAppointments(@Model.MondayOfAppointmentsWeek.GetWeekNumber(), @Model.MondayOfAppointmentsWeek.Year); //load the custom appointments for the current week
+
+    //sync the scrolling y position of hours-container, times-container and lessons-container
+    var hoursContainer = document.querySelector('.hours-container');
+    var timesContainer = document.querySelector('.times-container');
+    var lessonsContainer = document.querySelector('.lessons-container');
+
+    console.log(hoursContainer, timesContainer, lessonsContainer);
+
+    hoursContainer.onscroll = (evt) => {
+        var scrollTop = evt.target.scrollTop;
+        timesContainer.scrollTop = scrollTop;
+        lessonsContainer.scrollTop = scrollTop;
+    };
+
+    timesContainer.onscroll = (evt) => {
+        var scrollTop = evt.target.scrollTop;
+        hoursContainer.scrollTop = scrollTop;
+        lessonsContainer.scrollTop = scrollTop;
+    };
+
+    lessonsContainer.onscroll = (evt) => {
+        var scrollTop = evt.target.scrollTop;
+        hoursContainer.scrollTop = scrollTop;
+        timesContainer.scrollTop = scrollTop;
+    };
+    
+    
+    
+    
     
     let nextWeek = weeksArray[weeksArray.length - 1].week + 1;
     let nextYear = weeksArray[weeksArray.length - 1].year;
@@ -169,8 +221,7 @@ Zermos.mainBeforeLoad = () => {
         
     var container = document.getElementsByClassName("week-carousel")[0];
     var dragging = false;
-    var startX, scrollLeft;
-
+    var startX, startY;
     
     //MOUSE DOWN
     container.addEventListener("touchstart", function(e) {e.pageX = e.touches[0].pageX; mouseDown(e);}, {passive: true});
@@ -179,6 +230,7 @@ Zermos.mainBeforeLoad = () => {
         if (animating) return;
         dragging = true;
         startX = e.pageX || e.touches[0].pageX;
+        startY = e.pageY || e.touches[0].pageY;
         startXTransform = Math.round(Number(weekCarousel.style.transform.match(/-?\d+/g)[0]) / 100) * 100;
         endXTransform = 0;
     }
@@ -219,6 +271,20 @@ Zermos.mainBeforeLoad = () => {
     function mouseMove(e) {
         if (!dragging) return;
         var x = e.pageX || e.touches[0].pageX;
+        var y = e.pageY || e.touches[0].pageY;
+        
+        //if y is bigger than x, the user is scrolling vertically
+        if (Math.abs(y - startY) > Math.abs(x - startX)) {
+            //return back to the original position
+            animating = true;
+            ease(endXTransform, startXTransform, 250, (value) => {
+                weekCarousel.style.transform = `translateX(${value}%)`;
+            })
+            
+            dragging = false;
+            animating = false;
+            return;
+        }
         
         //log xdiff
         var xDiff = x - startX;
@@ -254,6 +320,8 @@ Zermos.mainBeforeLoad = () => {
         todayLine.style.top = percentage + "%";
     }, 15000);
 };
+
+
 
 Zermos.mainUnload(() => {
     clearInterval(lineInterval);
