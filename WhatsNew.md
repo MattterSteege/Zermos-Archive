@@ -4,6 +4,24 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - Versie 0.6.5 - 15-09-2024
+Version 0.6.5 - una paloma blanca 🌴
+
+- Zermelo - Rooster
+    - Ingeplande afspraken worden nu ook echt ingeladen als je ze toevoegt aan je rooster ipv dat je de pagina moet herladen
+    - probleem met "keuze" lessen opgelost, nu zie je (mits er maar 1 keuze is) de les gelijk al ipv een leeg blok
+    - betere dekking toegevoegd voor de verschillende lestypen
+    - Er is nu een heel nieuw systeem dat de proporties van de lessen berekend, dit wordt via CSS berkend, dus het is super snel en werkt altijd™. Ook is er nu een min-height toegevoegd, zodat de lessen altijd een minimale hoogte hebben, ook als er geen tekst in staat, hierdoor is scollen ook mogelijk als je rooster te groot is voor je scherm, dus Zermos als agenda gebruiken is zeker mogelijk.
+
+- custom afspraken
+    - foutje heb ik nu opgelost, dus alles moet weer soepel werken :)
+    
+- Infowijs - Schoolnieuws
+    - Als er een nieuw bericht is, dan krijg je nu een groene lijn zien ipv een groen bolletje, dit is omdat de bolletjes niet heel goed gepositioneerd waren en het er niet heel mooi uitzag.
+
+- Somtoday - Cijfers
+    - De groene lijn van het schoolnieuws is nu ook toegevoegd aan de cijfers, zodat je ook hier kan zien of er nieuwe cijfers zijn toegevoegd, dus nu ook betere consistentie tussen de verschillende onderdelen van Zermos
+
 # Release Notes - Versie 0.6.4 - 10-09-2024
 Version 0.6.4 - bug fixes
 
