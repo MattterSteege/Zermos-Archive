@@ -1,3 +1,7 @@
+LET OP! momenteel is Somtoday koppelen en (mocht je al gekoppeld zijn) het bekijken van huiswerk, cijfers, leermiddelen &afwezigheid niet mogelijk. Somtoday heeft acties tegen Zermos ondernomen, maar ik denk dat ik die wel kan omzeilen. Ik heb nog geen exacte datum waarop het weer moet werken helaas.
+
+
+---
 
 Hey, welkom. Leuk dat je geïnteresseerd bent in Zermos! Zermos is een webapplicatie die je net iets meer helpt. Zermos geeft jou de mogelijkheid om zowel Somtoday, Zermelo als Infowijs te koppelen aan je account en het in een oogopslag allemaal binnen te krijgen, super handig. Deze pagina's zijn bedoeld om jou wegwijs te maken in Zermos.
 
