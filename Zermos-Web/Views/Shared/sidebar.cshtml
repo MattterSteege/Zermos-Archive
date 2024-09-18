@@ -85,8 +85,17 @@ bool forceShow = (bool) (ViewData["forceShow"] ?? "false");
             </button>
         </li>
 
+        @* <li id="cijfers"> *@
+        @*     <button onclick="ReplacePage('@Url.Action("Cijfers", "Somtoday")')" aria-label="Cijfers" tabindex="5"> *@
+        @*         <div class="menu-item" role="button"> *@
+        @*             <i class="fa-solid fa-line-chart menu-icons fa-fw"></i> *@
+        @*             <p>Cijfers</p> *@
+        @*         </div> *@
+        @*     </button> *@
+        @* </li> *@
+        
         <li id="cijfers">
-            <button onclick="ReplacePage('@Url.Action("Cijfers", "Somtoday")')" aria-label="Cijfers" tabindex="5">
+            <button onclick="FuckSom()" aria-label="Cijfers" tabindex="5">
                 <div class="menu-item" role="button">
                     <i class="fa-solid fa-line-chart menu-icons fa-fw"></i>
                     <p>Cijfers</p>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Sockets;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -610,18 +611,17 @@ namespace Zermos_Web.Controllers
         private async Task<user> GetSomtodayStudent(string auth_token)
         {
             //GET: https://api.somtoday.nl/rest/v1/leerlingen?additional=pasfoto
-            var baseurl = "https://api.somtoday.nl/rest/v1/leerlingen";
+            var baseurl = "https://somtoday-me.mjtsgamer.workers.dev/";
 
             _somtodayHttpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", auth_token);
 
             var response = await _somtodayHttpClient.GetAsync(baseurl);
             var responseString = await response.Content.ReadAsStringAsync();
-            var somtodayStudent =
-                JsonConvert.DeserializeObject<SomtodayStudentModel>(responseString);
+            var somtodayStudent = JsonConvert.DeserializeObject<SomtodayStudentModel>(responseString);
             return new user
             {
-                somtoday_student_id = somtodayStudent.items[0].links[0].id.ToString(),
+                somtoday_student_id = somtodayStudent.id.ToString()
             };
         }
 

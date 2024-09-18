@@ -203,9 +203,11 @@
     margin: 4px;
     max-width: calc(100% - 8px) !important;
     overflow: hidden;
-
+    
     --minutes-from-start: 0;
     --lesson-duration: 0;
+    top: calc(var(--minute-height)* var(--minutes-from-start));
+    height: calc(var(--minute-height)* var(--lesson-duration) - 8px);
 }
 
 .lesson-time-based p {

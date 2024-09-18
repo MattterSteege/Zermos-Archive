@@ -5,6 +5,13 @@
 
 <script minimize>
 @Context.Items["dmjs"]
+
+new ZermosModal()
+    .addHeading({text: "Tijdelijk niet beschikbaar"})
+    .addText({text: "Vanwege een nog te onderzoeken probleem met Somtoday is deze methode (en de STAP methode) tijdelijk geblokkeerd. Sorry voor het ongemak, een oplossing wordt zo snel mogelijk geïmplementeerd.", asHtml: false})
+    .openTroughAppending(main);
+    
+{
     var waitingModal = new ZermosModal()
     .addHeading({text: "Koppel Somtoday aan je account!"})
     .addText({text: "De benodigde data wordt nu opgehaald, even geduld a.u.b."})
@@ -54,4 +61,5 @@
                 }})
             .openTroughAppending(main);
     });
+}
 </script>

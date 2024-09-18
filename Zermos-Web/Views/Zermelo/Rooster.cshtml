@@ -168,8 +168,6 @@ Zermos.mainAfterLoad = () => {
     var timesContainer = document.querySelector('.times-container');
     var lessonsContainer = document.querySelector('.lessons-container');
 
-    console.log(hoursContainer, timesContainer, lessonsContainer);
-
     hoursContainer.onscroll = (evt) => {
         var scrollTop = evt.target.scrollTop;
         timesContainer.scrollTop = scrollTop;
@@ -274,12 +272,21 @@ Zermos.mainBeforeLoad = () => {
         var y = e.pageY || e.touches[0].pageY;
         
         //if y is bigger than x, the user is scrolling vertically
-        if (Math.abs(y - startY) > Math.abs(x - startX)) {
+        if (Math.abs(y - startY) > Math.abs(x - startX) && Math.abs(startXTransform - (startXTransform - (x - startX) / container.offsetWidth * -100)) < 10) {
             //return back to the original position
-            animating = true;
-            ease(endXTransform, startXTransform, 250, (value) => {
-                weekCarousel.style.transform = `translateX(${value}%)`;
-            })
+            weekCarousel.style.transform = `translateX(${startXTransform}%)`;
+            
+            //scroll the elements vertically
+            var hoursContainer = document.querySelector('.hours-container');
+            var timesContainer = document.querySelector('.times-container');
+            var lessonsContainer = document.querySelector('.lessons-container');
+
+            console.log("scrolling vertically, x: " + x + ", y: " + y, (y - startY));
+
+            //when dragging vertically, the other containers should scroll
+            hoursContainer.scrollTop -= (y - startY);
+            timesContainer.scrollTop -= (y - startY);
+            lessonsContainer.scrollTop -= (y - startY);
             
             dragging = false;
             animating = false;
@@ -767,9 +774,11 @@ function loadCustomAppointments(week, year) {
                 var les = document.createElement("div");
                 les.className = "lesson-time-based custom";
                 les.id = "custom-appointment-" + item.id;
-                les.style.top = (startSeconds - start) / (end - start) * 100 + "%";
-                les.style.height = "calc(" + (endSeconds - startSeconds) / (end - start) * 100 + "% - 8px)";
-                les.style.backgroundColor = item.color;
+                
+                //set --minutes-from-start: ; and --lesson-duration: ;
+                les.style.setProperty("--minutes-from-start", (startSeconds - start) / 60);
+                les.style.setProperty("--lesson-duration", (endSeconds - startSeconds) / 60);
+                
                 les.setAttribute("onclick", "OpenLessonDetail('" + btoa(JSON.stringify(item)) + "')");
                 
                 var title = document.createElement("p");
@@ -778,13 +787,16 @@ function loadCustomAppointments(week, year) {
                 var description = document.createElement("p");
                 description.innerText = item.description ?? "";
                 
+                
+                
                 les.appendChild(title);
                 les.appendChild(description);      
                 
                 les.style.opacity = 0;
                 les.style.transition = "opacity 0.25s ease";
                 setTimeout(() => {
-                    les.style.opacity = 1;
+                    les.style.opacity = "";
+                    les.style.transition = "";
                 }, 100);
                           
                 lesdag.appendChild(les);

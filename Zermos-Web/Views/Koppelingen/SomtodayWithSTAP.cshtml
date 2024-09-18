@@ -4,7 +4,12 @@
 
 <script minimize>
 @Context.Items["dmjs"]
+new ZermosModal()
+    .addHeading({text: "Tijdelijk niet beschikbaar"})
+    .addText({text: "Vanwege een nog te onderzoeken probleem met Somtoday is deze methode (en de Gbr + ww methode) tijdelijk geblokkeerd. Sorry voor het ongemak, een oplossing wordt zo snel mogelijk geïmplementeerd.", asHtml: false})
+    .openTroughAppending(main);
 
+{
     var modal = new ZermosModal()
     .addHeading({text: "Koppel Somtoday aan je account!", subheading: "lees deze stappen eerst goed door!"})
     .addList({items: [
@@ -13,7 +18,11 @@
         "Klik op 'Inloggen'. Als je niet automatisch wordt ingelogd, voer dan je inloggegevens in. Verwacht een foutmelding na het inloggen; dit betekent dat je succesvol bent ingelogd op Zermos.",
         "Ga terug naar de Zermos app, je wordt automatisch naar je accountpagina geleid."
     ], listType: "ol"})
-    .addUrl({url: "@Model.vanityUrl", showFull: true, copyButton: true})
+    //.addUrl({url: "@Model.vanityUrl", showFull: false, copyButton: true})
+    .addTextInput({initialValue: "@Model.vanityUrl"})
+    .addButton({text: "Kopieer code", onClick: (ctx) => {
+        copyToClipboard("@Model.vanityUrl");
+    }})
     .addButton({text: "Open mobiele Somtoday app", onClick: () => {
         window.location.href = "somtoday://nl.topicus.somtoday.leerling/login/splash";
     }})
@@ -55,4 +64,5 @@
         };
         xhr.send();
     }
+}
 </script>

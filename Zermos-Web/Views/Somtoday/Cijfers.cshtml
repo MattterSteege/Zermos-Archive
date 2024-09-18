@@ -28,6 +28,16 @@
 <!--  Create 2 equal sized panels, left should be grades and SE grades both with a slider at the top to select which one, the right the last x grades ->
 <!- When the screen is less then 100px wide, the all the panels should be combined into one panel, with 3 options at the slider at the top    -->
 
+@if (Model.items.Count == 0)
+{
+    <div class="grades-container">
+        <div class="panel">
+            <h1 class="grades-title">Geen cijfers gevonden</h1>
+        </div>
+    </div>
+    return;
+}
+
 
 <div class="grade-controls">
     <div id="togglePanel1" onclick="selectLine(1)">Rapport</div>

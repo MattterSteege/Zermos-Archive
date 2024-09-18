@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
@@ -29,7 +31,42 @@ namespace Zermos_Web.Controllers
         public SomtodayController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
         
         private readonly HttpClient _httpClient = new();
-        SomtodayAPI somtodayApi = new(new HttpClient());
+        SomtodayAPI somtodayApi = new(new HttpClient(new SocketsHttpHandler()
+        {
+            ConnectCallback = async (context, cancellationToken) =>
+            {
+                // Use DNS to look up the IP addresses of the target host:
+                // - IP v4: AddressFamily.InterNetwork
+                // - IP v6: AddressFamily.InterNetworkV6
+                // - IP v4 or IP v6: AddressFamily.Unspecified
+                // note: this method throws a SocketException when there is no IP address for the host
+                var entry = await Dns.GetHostEntryAsync(context.DnsEndPoint.Host, AddressFamily.InterNetwork, cancellationToken);
+
+                // Open the connection to the target host/port
+                var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+
+                // Turn off Nagle's algorithm since it degrades performance in most HttpClient scenarios.
+                socket.NoDelay = true;
+
+                try
+                {
+                    await socket.ConnectAsync(entry.AddressList, context.DnsEndPoint.Port, cancellationToken);
+
+                    // If you want to choose a specific IP address to connect to the server
+                    // await socket.ConnectAsync(
+                    //    entry.AddressList[Random.Shared.Next(0, entry.AddressList.Length)],
+                    //    context.DnsEndPoint.Port, cancellationToken);
+
+                    // Return the NetworkStream to the caller
+                    return new NetworkStream(socket, ownsSocket: true);
+                }
+                catch
+                {
+                    socket.Dispose();
+                    throw;
+                }
+            }
+        }));
         
         #region Cijfers
         [Authorize]

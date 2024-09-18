@@ -80,7 +80,7 @@
                             var lessonStart = appointment.start;
                             
                             string style = "";
-                            style += $"--minutes-from-start: {((lessonStart - dayStartUnix) / 60f)}; --lesson-duration: {(appointment.duration / 60)}; top: calc(var(--minute-height) * var(--minutes-from-start)); height: calc(var(--minute-height) * var(--lesson-duration) - 8px);";
+                            style += $"--minutes-from-start: {(lessonStart - dayStartUnix) / 60f}; --lesson-duration: {appointment.duration / 60};";
                             style += appointment.appointmentType == "conflict" ? $" width: calc(50% - 4px);" : " ";
                             
                             string classes = "";
