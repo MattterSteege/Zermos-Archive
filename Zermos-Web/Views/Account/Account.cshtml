@@ -205,16 +205,22 @@ if (isUserOnline) {
         var abscenceModal = new ZermosModal()
         .addHeading({text: 'Afwezigheid'})
         
-        abscence.items.forEach(absence => {
+        abscence.items.forEach((absence, index) => {
             abscenceModal
-            .addSeparator({})
             .addText({text: absence.absentieReden.omschrijving})
             .addText({text: absence.opmerkingen});
             var dateStart = new Date(absence.beginDatumTijd);
             var dateEnd = new Date(absence.eindDatumTijd);
             abscenceModal.addText({text: dateStart.toLocaleDateString() + ' ' + dateStart.toLocaleTimeString() + ' - ' + dateEnd.toLocaleTimeString() + ' ' + dateEnd.toLocaleDateString()});
-        })
-        .addButton({text: 'Sluiten', onClick: (ctx) => ctx.close()})
+            
+            if (index < abscence.items.length - 1) {
+                abscenceModal.addSeparator({});
+            }
+        });
+        
+        abscenceModal.addButton({text: "Sluiten", onClick: (ctx) => {
+            ctx.close();
+        }, id: "submit-button"})
         .open();
 
     }

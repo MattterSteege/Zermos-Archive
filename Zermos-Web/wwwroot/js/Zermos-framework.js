@@ -556,6 +556,22 @@ Zermos.checkForUpdates = () => {
           
             ctx.close();
         }})
+        .onCloseCallback(() => {
+          var url =
+              "/Account/UpdateSetting?key=version_used&value=" +
+              Zermos.CurrentVersion;
+          fetch(url, {
+            method: "POST",
+          });
+
+          //set cookie version_used
+          document.cookie =
+              "version_used=" +
+              Zermos.CurrentVersion +
+              "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+
+          ctx.close();
+        })
         .open();
 
     localStorage.clear();
@@ -828,7 +844,7 @@ window.addEventListener("load", () => {
 function cachePage(data, url) {
   if (!HasPreview("enable_cache")) return;
   
-  var lowerUrl = url.toLowerCase();
+  var lowerUrl = url?.toLowerCase();
   if (lowerUrl.includes("login") || lowerUrl.includes("logout") || lowerUrl.includes("callback")) {
     return;
   }

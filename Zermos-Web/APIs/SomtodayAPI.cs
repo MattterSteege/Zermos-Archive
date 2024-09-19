@@ -88,12 +88,12 @@ public class  SomtodayAPI
     
     public async Task<SomtodayAfwezigheidModel> GetAfwezigheidAsync(user user)
     {
-        //SchooljaarUtils.Schooljaar currentSchoolyear = SchooljaarUtils.getCurrentSchooljaar();
+        SchooljaarUtils.Schooljaar currentSchoolyear = SchooljaarUtils.getCurrentSchooljaar();
         
         //https://api.somtoday.nl/rest/v1/waarnemingen?waarnemingSoort=Afwezig
         
-        //var baseurl = $"https://api.somtoday.nl/rest/v1/absentiemeldingen?begindatumtijd={currentSchoolyear.vanafDatumDate:yyyy-MM-dd}&einddatumtijd={currentSchoolyear.totDatumDate:yyyy-MM-dd}";
-        var baseurl = $"https://somtoday-afwezigheid.mjtsgamer.workers.dev?accessToken={user.somtoday_access_token}";
+        var baseurl = $"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/absentiemeldingen?begindatumtijd={currentSchoolyear.vanafDatumDate:yyyy-MM-dd}&einddatumtijd={currentSchoolyear.totDatumDate:yyyy-MM-dd}";
+        //var baseurl = $"https://somtoday-afwezigheid.mjtsgamer.workers.dev?accessToken={user.somtoday_access_token}";
         
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
@@ -109,8 +109,8 @@ public class  SomtodayAPI
     
     public async Task<SomtodayLeermiddelenModel> GetStudiemateriaal(user user)
     {
-        //var baseurl = $"https://api.somtoday.nl/rest/v1/studiemateriaal/algemeen/{user.somtoday_student_id}";
-        var baseurl = $"https://somtoday-leermiddelen.mjtsgamer.workers.dev?studentId={user.somtoday_student_id}&accessToken={user.somtoday_access_token}";
+        var baseurl = $"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/studiemateriaal/algemeen/{user.somtoday_student_id}";
+        //var baseurl = $"https://somtoday-leermiddelen.mjtsgamer.workers.dev?studentId={user.somtoday_student_id}&accessToken={user.somtoday_access_token}";
         
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
@@ -147,150 +147,101 @@ public class  SomtodayAPI
         var watch = Stopwatch.StartNew();
         #endif
         
-        // var urls = new[]
-        //
-        // {
-        //     gradeType.HasFlag(GradeType.Voortgang) ? $"https://api.somtoday.nl/rest/v1/geldendvoortgangsdossierresultaten/leerling/{user.somtoday_student_id}?type=Toetskolom&type=SamengesteldeToetsKolom&type=DeeltoetsKolom&type=Werkstukcijferkolom&type=Advieskolom&additional=vaknaam&additional=resultaatkolom&additional=vakuuid&additional=lichtinguuid&sort=desc-geldendResultaatCijferInvoer" : null,
-        //     gradeType.HasFlag(GradeType.Exam) ? $"https://api.somtoday.nl/rest/v1/geldendexamendossierresultaten/leerling/{user.somtoday_student_id}?type=Toetskolom&type=SamengesteldeToetsKolom&type=DeeltoetsKolom&type=Werkstukcijferkolom&type=Advieskolom&additional=vaknaam&additional=resultaatkolom&additional=vakuuid&additional=lichtinguuid&sort=desc-geldendResultaatCijferInvoer" : null,
-        //     gradeType.HasFlag(GradeType.Average) ? $"https://api.somtoday.nl/rest/v1/vakkeuzes/plaatsing/{plaatsingen.items[^1].UUID}/vakgemiddelden" : null
-        // };
-        //
-        // _httpClient.DefaultRequestHeaders.Clear();
-        // _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
-        // _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-        //
-        // var tasks = urls.Select(url => url != null ? _httpClient.GetAsync(url) : Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.OK))).ToArray();
-        //
-        // await Task.WhenAll(tasks);
-        //
-        // if (tasks.Any(t => !t.Result.IsSuccessStatusCode))
-        //     return null;
-        //
-        // var jsonTasks = tasks.Select(t => t.Result.Content.ReadAsStringAsync()).ToArray();
-        // await Task.WhenAll(jsonTasks);
-        //
-        // var grades = gradeType.HasFlag(GradeType.Voortgang) ? JsonConvert.DeserializeObject<SomtodayGradesModel>(jsonTasks[0].Result) : null;
-        // var gradesSE = gradeType.HasFlag(GradeType.Exam) ? JsonConvert.DeserializeObject<SomtodayGradesModel>(jsonTasks[1].Result) : null;
-        // var vakgemiddelden = gradeType.HasFlag(GradeType.Average) ? JsonConvert.DeserializeObject<SomtodayVakgemiddeldenModel>(jsonTasks[2].Result) : null;
-        //
-        // var gradesBySubject = grades?.items.GroupBy(x => x.additionalObjects.vaknaam).ToDictionary(g => g.Key, g => g.ToList()) ?? new Dictionary<string, List<Models.SomtodayGradesModel.Item>>();
-        // var gradesBySubjectSE = gradesSE?.items.GroupBy(x => x.additionalObjects.vaknaam).ToDictionary(g => g.Key, g => g.ToList()) ?? new Dictionary<string, List<Models.SomtodayGradesModel.Item>>();
-        //
-        // var distinctSubjects = gradesBySubject.Keys.Union(gradesBySubjectSE.Keys);
-        //
-        // var gradesBySubjectGrouped = distinctSubjects.Select(subject =>
-        // {
-        //     gradesBySubject.TryGetValue(subject, out var grade);
-        //     gradesBySubjectSE.TryGetValue(subject, out var gradeSE);
-        //     return new
-        //     {
-        //         subject,
-        //         grades = grade ?? new List<Models.SomtodayGradesModel.Item>(),
-        //         gradesSE = gradeSE ?? new List<Models.SomtodayGradesModel.Item>()
-        //     };
-        // }).ToList();
-        //
-        // var sortedGrades = new SortedSomtodayGradesModel
-        // {
-        //     items = new List<Models.SortedSomtodayGradesModel.Item>(),
-        //     lastGrades = new List<Models.SomtodayGradesModel.Item>(),
-        //     voortGangsdossierGemiddelde = vakgemiddelden?.voortgangsdossierGemiddelde,
-        //     relevanteCijferLichtingUUID = vakgemiddelden?.gemiddelden.FirstOrDefault()?.relevanteCijferLichtingUUID,
-        //     leerjaarUUID = plaatsingen.items[^1].UUID,
-        //     plaatsing = plaatsingen.items
-        // };
-        //
-        // foreach (var grade in gradesBySubjectGrouped)
-        // {
-        //     var gemiddelden = vakgemiddelden?.gemiddelden.FirstOrDefault(x => x.vakNaam == grade.subject);
-        //     vakgemiddelden?.gemiddelden.Remove(gemiddelden);
-        //     
-        //     var item = new Models.SortedSomtodayGradesModel.Item
-        //     {
-        //         cijfers = grade.grades ?? new List<Models.SomtodayGradesModel.Item>(),
-        //         weging = grade.grades.Sum(x => x.weging),
-        //         cijfer = gemiddelden?.isVoorVoortgangsdossier == true ? gemiddelden.voortgangsdossierResultaat.formattedResultaat : "-",
-        //         cijfersSE = grade.gradesSE ?? new List<Models.SomtodayGradesModel.Item>(),
-        //         wegingSE = grade.gradesSE.Sum(x => x.weging),
-        //         cijferSE = gemiddelden?.isVoorExamendossier == true ? gemiddelden.examendossierResultaat.formattedResultaat : "-",
-        //         vakNaam = grade.subject,
-        //         vakAfkorting = gemiddelden?.vakAfkorting,
-        //         vakuuid = (grade.grades.FirstOrDefault()?.additionalObjects.vakuuid ?? grade.gradesSE.FirstOrDefault()?.additionalObjects.vakuuid),
-        //     };
-        //
-        //     sortedGrades.items.Add(item);
-        // }
-        //
-        // foreach (Gemiddelden gemiddelden in vakgemiddelden?.gemiddelden)
-        // {
-        //     var item = new Models.SortedSomtodayGradesModel.Item
-        //     {
-        //         cijfer = gemiddelden.isVoorVoortgangsdossier ? gemiddelden.voortgangsdossierResultaat.formattedResultaat : "-",
-        //         cijferSE = gemiddelden.isVoorExamendossier ? gemiddelden.examendossierResultaat.formattedResultaat : "-",
-        //         vakNaam = gemiddelden.vakNaam,
-        //         vakAfkorting = gemiddelden.vakAfkorting,
-        //         vakuuid = gemiddelden.vakUUID
-        //     };
-        //
-        //     sortedGrades.items.Add(item);
-        // }
-        //
-        // sortedGrades.items = sortedGrades.items.OrderBy(x => x.vakNaam).ToList();
-        //
-        // if (gradeType.HasFlag(GradeType.History))
-        // {
-        //     var lastGrades = gradesBySubjectGrouped.SelectMany(g => g.grades.Concat(g.gradesSE)).OrderByDescending(x => x.datumInvoerEerstePoging).ToList();
-        //     sortedGrades.lastGrades = lastGrades;
-        // }
+        var urls = new[]
         
-        /*
-         
-         const url = 'https://somtoday-cijfers-huidig.mjtsgamer.workers.dev'; // Replace with your Cloudflare Worker URL
-
-const requestData = {
-  user: {
-    somtoday_student_id: '1409824200',
-    somtoday_access_token: 'eyJ4NXQjUzI1NiI6IkdpZ295b0kyZXcxQS00TDUweGoyWGlPdXIxdE9BMFo3M05mYmZuQXFkU3ciLCJraWQiOiJpcmlkaXVtaWRwLTE2NjgzMzc3ODYzMTA4ODY0NzQwNTkwOTk4NzcyNDAzMjI1MTM0NSIsInR5cCI6ImF0K2p3dCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJjMjNmYmI5OS1iZTRiLTRjMTEtYmJmNS01N2U3ZmM0ZjQzODhcXDM3NWQyMTNmLThmYjYtNGZlNC1iMzM2LWU5MmY3YTIyYzVkZSIsImFtciI6InB3ZCIsImlzcyI6Imh0dHBzOi8vc29tdG9kYXkubmwiLCJ0eXBlIjoiYWNjZXNzIiwiY2xpZW50X2lkIjoic29tdG9kYXktbGVlcmxpbmctd2ViIiwiYXVkIjoiaHR0cHM6Ly9zb210b2RheS5ubCIsIm5iZiI6MTcyNjY4MDY4MCwic2NvcGUiOiJvcGVuaWQiLCJjbGFpbXMiOnsiaWRfdG9rZW4iOnsib3JnbmFtZSI6bnVsbCwiYWZmaWxpYXRpb24iOnsidmFsdWVzIjpbInN0dWRlbnQiLCJwYXJlbnQvZ3VhcmRpYW4iXX0sImxlZXJsaW5nZW4iOm51bGwsImdpdmVuX25hbWUiOm51bGx9fSwiZXhwIjoxNzI2Njg0MjgwLCJpYXQiOjE3MjY2ODA2ODAsImp0aSI6IjBiNjU4YzY0LWQ1YmUtNDhmZi04Njg2LWJlY2RjM2U1ZDhjMDoxODg1MzMyNDE3MzUwMCJ9.bcyL7JQbtV34EMkLXfzkx_53j3NvlSFXpn4hfZd8puHJn-y8sdJ80QK04JvK5_hlzX8zuf3kmbaHV7aqz-m6C3JbWfvrjmSGfVhLst2PKJAAbPf-C4wrhZo00J7oNO0SpuJiTOwxcQlD8fUzGUF9Zut65_NP9TwDNwkS3KVMkKqSXsc33doFsrlxhBoKbWTe9kKYFo8-KapSNZsNbb2pghLbHWGQffibxCDuvEzjs9_OpOHgDrmqLhnvzjDifa3oJHPOHTWXHBkJ0y9LVYIV-OuWFh530D5FYph9kmyOQPoBkbfJYFmiBsRmjBG4wFHzRuRJoTfQuYKeqBtra--TkQ'
-  },
-  plaatsingen: {
-    items: [{ UUID: 'c56d7b26-80df-4bdc-b8f2-95739f6477d2' }]
-  },
-  gradeType: 1 | 2 | 4 | 8 // Example grade types using bitwise OR
-};
-
-fetch(url, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(requestData)
-})
-.then(response => response.json())
-.then(data => {
-  console.log('Success:', data);
-})
-.catch(error => {
-  console.error('Error:', error);
-});
-          
-         */
-        
-        var baseurl = $"https://somtoday-cijfers-huidig.mjtsgamer.workers.dev";
-        
-        string json = @"
-
-
-            ";
+        {
+            gradeType.HasFlag(GradeType.Voortgang) ? $"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/geldendvoortgangsdossierresultaten/leerling/{user.somtoday_student_id}?type=Toetskolom&type=SamengesteldeToetsKolom&type=DeeltoetsKolom&type=Werkstukcijferkolom&type=Advieskolom&additional=vaknaam&additional=resultaatkolom&additional=vakuuid&additional=lichtinguuid&sort=desc-geldendResultaatCijferInvoer" : null,
+            gradeType.HasFlag(GradeType.Exam) ? $"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/geldendexamendossierresultaten/leerling/{user.somtoday_student_id}?type=Toetskolom&type=SamengesteldeToetsKolom&type=DeeltoetsKolom&type=Werkstukcijferkolom&type=Advieskolom&additional=vaknaam&additional=resultaatkolom&additional=vakuuid&additional=lichtinguuid&sort=desc-geldendResultaatCijferInvoer" : null,
+            gradeType.HasFlag(GradeType.Average) ? $"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/vakkeuzes/plaatsing/{plaatsingen.items[^1].UUID}/vakgemiddelden" : null
+        };
         
         _httpClient.DefaultRequestHeaders.Clear();
+        _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
         
-        var response = await _httpClient.PostAsync(baseurl, new StringContent(json));
+        var tasks = urls.Select(url => url != null ? _httpClient.GetAsync(url) : Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.OK))).ToArray();
         
-        if (response.IsSuccessStatusCode == false)
+        await Task.WhenAll(tasks);
+        
+        if (tasks.Any(t => !t.Result.IsSuccessStatusCode))
             return null;
         
-        SortedSomtodayGradesModel sortedGrades = JsonConvert.DeserializeObject<SortedSomtodayGradesModel>(await response.Content.ReadAsStringAsync());
+        var jsonTasks = tasks.Select(t => t.Result.Content.ReadAsStringAsync()).ToArray();
+        await Task.WhenAll(jsonTasks);
+        
+        var grades = gradeType.HasFlag(GradeType.Voortgang) ? JsonConvert.DeserializeObject<SomtodayGradesModel>(jsonTasks[0].Result) : null;
+        var gradesSE = gradeType.HasFlag(GradeType.Exam) ? JsonConvert.DeserializeObject<SomtodayGradesModel>(jsonTasks[1].Result) : null;
+        var vakgemiddelden = gradeType.HasFlag(GradeType.Average) ? JsonConvert.DeserializeObject<SomtodayVakgemiddeldenModel>(jsonTasks[2].Result) : null;
+        
+        var gradesBySubject = grades?.items.GroupBy(x => x.additionalObjects.vaknaam).ToDictionary(g => g.Key, g => g.ToList()) ?? new Dictionary<string, List<Models.SomtodayGradesModel.Item>>();
+        var gradesBySubjectSE = gradesSE?.items.GroupBy(x => x.additionalObjects.vaknaam).ToDictionary(g => g.Key, g => g.ToList()) ?? new Dictionary<string, List<Models.SomtodayGradesModel.Item>>();
+        
+        var distinctSubjects = gradesBySubject.Keys.Union(gradesBySubjectSE.Keys);
+        
+        var gradesBySubjectGrouped = distinctSubjects.Select(subject =>
+        {
+            gradesBySubject.TryGetValue(subject, out var grade);
+            gradesBySubjectSE.TryGetValue(subject, out var gradeSE);
+            return new
+            {
+                subject,
+                grades = grade ?? new List<Models.SomtodayGradesModel.Item>(),
+                gradesSE = gradeSE ?? new List<Models.SomtodayGradesModel.Item>()
+            };
+        }).ToList();
+        
+        var sortedGrades = new SortedSomtodayGradesModel
+        {
+            items = new List<Models.SortedSomtodayGradesModel.Item>(),
+            lastGrades = new List<Models.SomtodayGradesModel.Item>(),
+            voortGangsdossierGemiddelde = vakgemiddelden?.voortgangsdossierGemiddelde,
+            relevanteCijferLichtingUUID = vakgemiddelden?.gemiddelden.FirstOrDefault()?.relevanteCijferLichtingUUID,
+            leerjaarUUID = plaatsingen.items[^1].UUID,
+            plaatsing = plaatsingen.items
+        };
+        
+        foreach (var grade in gradesBySubjectGrouped)
+        {
+            var gemiddelden = vakgemiddelden?.gemiddelden.FirstOrDefault(x => x.vakNaam == grade.subject);
+            vakgemiddelden?.gemiddelden.Remove(gemiddelden);
+            
+            var item = new Models.SortedSomtodayGradesModel.Item
+            {
+                cijfers = grade.grades ?? new List<Models.SomtodayGradesModel.Item>(),
+                weging = grade.grades.Sum(x => x.weging),
+                cijfer = gemiddelden?.isVoorVoortgangsdossier == true ? gemiddelden.voortgangsdossierResultaat.formattedResultaat : "-",
+                cijfersSE = grade.gradesSE ?? new List<Models.SomtodayGradesModel.Item>(),
+                wegingSE = grade.gradesSE.Sum(x => x.weging),
+                cijferSE = gemiddelden?.isVoorExamendossier == true ? gemiddelden.examendossierResultaat.formattedResultaat : "-",
+                vakNaam = grade.subject,
+                vakAfkorting = gemiddelden?.vakAfkorting,
+                vakuuid = (grade.grades.FirstOrDefault()?.additionalObjects.vakuuid ?? grade.gradesSE.FirstOrDefault()?.additionalObjects.vakuuid),
+            };
+        
+            sortedGrades.items.Add(item);
+        }
+        
+        foreach (Gemiddelden gemiddelden in vakgemiddelden?.gemiddelden)
+        {
+            var item = new Models.SortedSomtodayGradesModel.Item
+            {
+                cijfer = gemiddelden.isVoorVoortgangsdossier ? gemiddelden.voortgangsdossierResultaat.formattedResultaat : "-",
+                cijferSE = gemiddelden.isVoorExamendossier ? gemiddelden.examendossierResultaat.formattedResultaat : "-",
+                vakNaam = gemiddelden.vakNaam,
+                vakAfkorting = gemiddelden.vakAfkorting,
+                vakuuid = gemiddelden.vakUUID
+            };
+        
+            sortedGrades.items.Add(item);
+        }
+        
+        sortedGrades.items = sortedGrades.items.OrderBy(x => x.vakNaam).ToList();
+        
+        if (gradeType.HasFlag(GradeType.History))
+        {
+            var lastGrades = gradesBySubjectGrouped.SelectMany(g => g.grades.Concat(g.gradesSE)).OrderByDescending(x => x.datumInvoerEerstePoging).ToList();
+            sortedGrades.lastGrades = lastGrades;
+        }
         
         #if DEBUG
         watch.Stop();
@@ -319,7 +270,7 @@ fetch(url, {
         _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
-        var response = await _httpClient.GetAsync($"https://api.somtoday.nl/rest/v1/vakkeuzes/plaatsing/{plaatsingUUID}/vakgemiddelden");
+        var response = await _httpClient.GetAsync($"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/vakkeuzes/plaatsing/{plaatsingUUID}/vakgemiddelden");
         
         var vakgemiddelden = JsonConvert.DeserializeObject<SomtodayVakgemiddeldenModel>(await response.Content.ReadAsStringAsync());
         
@@ -380,8 +331,8 @@ fetch(url, {
         var urls = new[]
         {
             //voeg &type=PeriodeGemiddeldeKolom&type=RapportGemiddeldeKolom&type=RapportCijferKolom&type=RapportToetskolom&type=SEGemiddeldeKolom&type=ToetssoortGemiddeldeKolom toe als je de verschillende gemiddelden wilt zien en wilt verwerken in Zermos
-            $"https://api.somtoday.nl/rest/v1/geldendvoortgangsdossierresultaten/vakresultaten/{user.somtoday_student_id}/vak/{vakUUID}/lichting/{lichtingUUID}?additional=vaknaam&additional=resultaatkolom&additional=naamalternatiefniveau&additional=naamstandaardniveau&additional=periodeAfkorting&type=Toetskolom&type=SamengesteldeToetsKolom&type=Werkstukcijferkolom&type=Advieskolom&sort=desc-geldendResultaatCijferInvoer&plaatsingUuid={plaatsingUuid}",
-            $"https://api.somtoday.nl/rest/v1/geldendexamendossierresultaten/vakresultaten/{user.somtoday_student_id}/vak/{vakUUID}/lichting/{lichtingUUID}?additional=vaknaam&additional=resultaatkolom&additional=naamalternatiefniveau&additional=naamstandaardniveau&type=Toetskolom&type=SamengesteldeToetsKolom&type=Werkstukcijferkolom&type=Advieskolom&sort=desc-geldendResultaatCijferInvoer&plaatsingUuid={plaatsingUuid}"
+            $"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/geldendvoortgangsdossierresultaten/vakresultaten/{user.somtoday_student_id}/vak/{vakUUID}/lichting/{lichtingUUID}?additional=vaknaam&additional=resultaatkolom&additional=naamalternatiefniveau&additional=naamstandaardniveau&additional=periodeAfkorting&type=Toetskolom&type=SamengesteldeToetsKolom&type=Werkstukcijferkolom&type=Advieskolom&sort=desc-geldendResultaatCijferInvoer&plaatsingUuid={plaatsingUuid}",
+            $"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/geldendexamendossierresultaten/vakresultaten/{user.somtoday_student_id}/vak/{vakUUID}/lichting/{lichtingUUID}?additional=vaknaam&additional=resultaatkolom&additional=naamalternatiefniveau&additional=naamstandaardniveau&type=Toetskolom&type=SamengesteldeToetsKolom&type=Werkstukcijferkolom&type=Advieskolom&sort=desc-geldendResultaatCijferInvoer&plaatsingUuid={plaatsingUuid}"
         };
         
         _httpClient.DefaultRequestHeaders.Clear();
@@ -439,7 +390,9 @@ fetch(url, {
     
     public async Task<SomtodayPlaatsingenModel> GetPlaatsingen(user user)
     {
-        var baseurl = $"https://somtoday-leerjaar.mjtsgamer.workers.dev?studentId={user.somtoday_student_id}&accessToken={user.somtoday_access_token}";
+        //var baseurl = $"https://api.somtoday.nl/rest/v1/plaatsingen?leerling={user.somtoday_student_id}";
+        var baseurl = $"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/plaatsingen?leerling={user.somtoday_student_id}";
+        //var baseurl = $"https://somtoday-leerjaar.mjtsgamer.workers.dev?studentId={user.somtoday_student_id}&accessToken={user.somtoday_access_token}";
         
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
@@ -459,49 +412,49 @@ fetch(url, {
         var watch = Stopwatch.StartNew();
         #endif
         
-        // var urls = new[]
-        // {
-        //     $"https://api.somtoday.nl/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={DateTime.Now.AddDays(-dagen):yyyy-MM-dd}&additional=swigemaaktVinkjes",
-        //     $"https://api.somtoday.nl/rest/v1/studiewijzeritemdagtoekenningen?schooljaar=&begintNaOfOp={DateTime.Now.AddDays(-dagen):yyyy-MM-dd}&additional=swigemaaktVinkjes",
-        //     $"https://api.somtoday.nl/rest/v1/studiewijzeritemweektoekenningen?schooljaar=&begintNaOfOp={DateTime.Now.AddDays(-dagen):yyyy-MM-dd}&additional=swigemaaktVinkjes"
-        // };
-        //
-        // _httpClient.DefaultRequestHeaders.Clear();
-        // _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
-        // _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-        //
-        // var tasks = urls.Select(url => url != null ? _httpClient.GetAsync(url) : Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.OK))).ToArray();
-        //
-        // await Task.WhenAll(tasks);
-        //
-        // if (tasks.Any(t => !t.Result.IsSuccessStatusCode))
-        //     return null;
-        //
-        // var jsonTasks = tasks.Select(t => t.Result.Content.ReadAsStringAsync()).ToArray();
-        // await Task.WhenAll(jsonTasks);
-        //
-        // var homework = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(jsonTasks[0].Result);
-        // var homeworkDay = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(jsonTasks[1].Result);
-        // var homeworkWeek = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(jsonTasks[2].Result);
-        //
-        // homework.items.AddRange(homeworkDay.items);
-        // homework.items.AddRange(homeworkWeek.items);
-        //
-        // homework.items = homework.items.OrderBy(x => x.datumTijd).ToList();
-        
-        //https://somtoday-huiswerk.mjtsgamer.workers.dev/?accessToken=eyJ4NXQjUzI1NiI6IkdpZ295b0kyZXcxQS00TDUweGoyWGlPdXIxdE9BMFo3M05mYmZuQXFkU3ciLCJraWQiOiJpcmlkaXVtaWRwLTE2NjgzMzc3ODYzMTA4ODY0NzQwNTkwOTk4NzcyNDAzMjI1MTM0NSIsInR5cCI6ImF0K2p3dCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJjMjNmYmI5OS1iZTRiLTRjMTEtYmJmNS01N2U3ZmM0ZjQzODhcXDM3NWQyMTNmLThmYjYtNGZlNC1iMzM2LWU5MmY3YTIyYzVkZSIsImFtciI6InB3ZCIsImlzcyI6Imh0dHBzOi8vc29tdG9kYXkubmwiLCJ0eXBlIjoiYWNjZXNzIiwiY2xpZW50X2lkIjoic29tdG9kYXktbGVlcmxpbmctd2ViIiwiYXVkIjoiaHR0cHM6Ly9zb210b2RheS5ubCIsIm5iZiI6MTcyNjY4MDY4MCwic2NvcGUiOiJvcGVuaWQiLCJjbGFpbXMiOnsiaWRfdG9rZW4iOnsib3JnbmFtZSI6bnVsbCwiYWZmaWxpYXRpb24iOnsidmFsdWVzIjpbInN0dWRlbnQiLCJwYXJlbnQvZ3VhcmRpYW4iXX0sImxlZXJsaW5nZW4iOm51bGwsImdpdmVuX25hbWUiOm51bGx9fSwiZXhwIjoxNzI2Njg0MjgwLCJpYXQiOjE3MjY2ODA2ODAsImp0aSI6IjBiNjU4YzY0LWQ1YmUtNDhmZi04Njg2LWJlY2RjM2U1ZDhjMDoxODg1MzMyNDE3MzUwMCJ9.bcyL7JQbtV34EMkLXfzkx_53j3NvlSFXpn4hfZd8puHJn-y8sdJ80QK04JvK5_hlzX8zuf3kmbaHV7aqz-m6C3JbWfvrjmSGfVhLst2PKJAAbPf-C4wrhZo00J7oNO0SpuJiTOwxcQlD8fUzGUF9Zut65_NP9TwDNwkS3KVMkKqSXsc33doFsrlxhBoKbWTe9kKYFo8-KapSNZsNbb2pghLbHWGQffibxCDuvEzjs9_OpOHgDrmqLhnvzjDifa3oJHPOHTWXHBkJ0y9LVYIV-OuWFh530D5FYph9kmyOQPoBkbfJYFmiBsRmjBG4wFHzRuRJoTfQuYKeqBtra--TkQ&dagen=21
-        var url = $"https://somtoday-huiswerk.mjtsgamer.workers.dev/?accessToken={user.somtoday_access_token}&dagen={dagen}";
+        var urls = new[]
+        {
+            $"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/studiewijzeritemafspraaktoekenningen?begintNaOfOp={DateTime.Now.AddDays(-dagen):yyyy-MM-dd}&additional=swigemaaktVinkjes",
+            $"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/studiewijzeritemdagtoekenningen?schooljaar=&begintNaOfOp={DateTime.Now.AddDays(-dagen):yyyy-MM-dd}&additional=swigemaaktVinkjes",
+            $"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/studiewijzeritemweektoekenningen?schooljaar=&begintNaOfOp={DateTime.Now.AddDays(-dagen):yyyy-MM-dd}&additional=swigemaaktVinkjes"
+        };
         
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
         
-        var response = await _httpClient.GetAsync(url);
+        var tasks = urls.Select(url => url != null ? _httpClient.GetAsync(url) : Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.OK))).ToArray();
         
-        if (response.IsSuccessStatusCode == false)
+        await Task.WhenAll(tasks);
+        
+        if (tasks.Any(t => !t.Result.IsSuccessStatusCode))
             return null;
         
-        var homework = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(await response.Content.ReadAsStringAsync());
+        var jsonTasks = tasks.Select(t => t.Result.Content.ReadAsStringAsync()).ToArray();
+        await Task.WhenAll(jsonTasks);
+        
+        var homework = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(jsonTasks[0].Result);
+        var homeworkDay = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(jsonTasks[1].Result);
+        var homeworkWeek = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(jsonTasks[2].Result);
+        
+        homework.items.AddRange(homeworkDay.items);
+        homework.items.AddRange(homeworkWeek.items);
+        
+        homework.items = homework.items.OrderBy(x => x.datumTijd).ToList();
+        
+        // //https://somtoday-huiswerk.mjtsgamer.workers.dev/?accessToken=eyJ4NXQjUzI1NiI6IkdpZ295b0kyZXcxQS00TDUweGoyWGlPdXIxdE9BMFo3M05mYmZuQXFkU3ciLCJraWQiOiJpcmlkaXVtaWRwLTE2NjgzMzc3ODYzMTA4ODY0NzQwNTkwOTk4NzcyNDAzMjI1MTM0NSIsInR5cCI6ImF0K2p3dCIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJjMjNmYmI5OS1iZTRiLTRjMTEtYmJmNS01N2U3ZmM0ZjQzODhcXDM3NWQyMTNmLThmYjYtNGZlNC1iMzM2LWU5MmY3YTIyYzVkZSIsImFtciI6InB3ZCIsImlzcyI6Imh0dHBzOi8vc29tdG9kYXkubmwiLCJ0eXBlIjoiYWNjZXNzIiwiY2xpZW50X2lkIjoic29tdG9kYXktbGVlcmxpbmctd2ViIiwiYXVkIjoiaHR0cHM6Ly9zb210b2RheS5ubCIsIm5iZiI6MTcyNjY4MDY4MCwic2NvcGUiOiJvcGVuaWQiLCJjbGFpbXMiOnsiaWRfdG9rZW4iOnsib3JnbmFtZSI6bnVsbCwiYWZmaWxpYXRpb24iOnsidmFsdWVzIjpbInN0dWRlbnQiLCJwYXJlbnQvZ3VhcmRpYW4iXX0sImxlZXJsaW5nZW4iOm51bGwsImdpdmVuX25hbWUiOm51bGx9fSwiZXhwIjoxNzI2Njg0MjgwLCJpYXQiOjE3MjY2ODA2ODAsImp0aSI6IjBiNjU4YzY0LWQ1YmUtNDhmZi04Njg2LWJlY2RjM2U1ZDhjMDoxODg1MzMyNDE3MzUwMCJ9.bcyL7JQbtV34EMkLXfzkx_53j3NvlSFXpn4hfZd8puHJn-y8sdJ80QK04JvK5_hlzX8zuf3kmbaHV7aqz-m6C3JbWfvrjmSGfVhLst2PKJAAbPf-C4wrhZo00J7oNO0SpuJiTOwxcQlD8fUzGUF9Zut65_NP9TwDNwkS3KVMkKqSXsc33doFsrlxhBoKbWTe9kKYFo8-KapSNZsNbb2pghLbHWGQffibxCDuvEzjs9_OpOHgDrmqLhnvzjDifa3oJHPOHTWXHBkJ0y9LVYIV-OuWFh530D5FYph9kmyOQPoBkbfJYFmiBsRmjBG4wFHzRuRJoTfQuYKeqBtra--TkQ&dagen=21
+        // var url = $"https://somtoday-huiswerk.mjtsgamer.workers.dev/?accessToken={user.somtoday_access_token}&dagen={dagen}";
+        //
+        // _httpClient.DefaultRequestHeaders.Clear();
+        // _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
+        // _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        //
+        // var response = await _httpClient.GetAsync(url);
+        //
+        // if (response.IsSuccessStatusCode == false)
+        //     return null;
+        //
+        // var homework = JsonConvert.DeserializeObject<SomtodayHomeworkModel>(await response.Content.ReadAsStringAsync());
         
         #if DEBUG
         watch.Stop();
@@ -516,8 +469,8 @@ fetch(url, {
 #if DEBUG
         var watch = Stopwatch.StartNew();
 #endif
-        //string url = $"https://api.somtoday.nl/rest/v1/afspraakitems/{user.somtoday_student_id}/jaar/{year}/week/{week}";
-        string url = $"https://somtoday-rooster.mjtsgamer.workers.dev/?studentId={user.somtoday_student_id}&accessToken={user.somtoday_access_token}&week={week}&year={year}";
+        string url = $"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/afspraakitems/{user.somtoday_student_id}/jaar/{year}/week/{week}";
+        //string url = $"https://somtoday-rooster.mjtsgamer.workers.dev/?studentId={user.somtoday_student_id}&accessToken={user.somtoday_access_token}&week={week}&year={year}";
 
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);

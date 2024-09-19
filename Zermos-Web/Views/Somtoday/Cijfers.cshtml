@@ -248,7 +248,7 @@
 
             //check if the name-short or name is in the iconMap, if it is, set the icon to the iconMap value, if not, set it to the default icon
             document.querySelectorAll('.grade-table-header i').forEach((icon) => {
-                icon.outerHTML = iconMap.get(icon.dataset.name.toLowerCase()) ?? iconMap.get(icon.dataset.nameShort.toLowerCase()) ?? "<i class=\"fa-solid fa-book\"></i>";
+                icon.outerHTML = iconMap.get(icon.dataset.name?.toLowerCase()) ?? iconMap.get(icon.dataset.nameShort?.toLowerCase()) ?? "<i class=\"fa-solid fa-book\"></i>";
             });
         });
         

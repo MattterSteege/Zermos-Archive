@@ -5,6 +5,7 @@
         this.conditions = conditions;
         this.tabIndex = 0;
         this.close();
+        this.onClose = () => {};
     }
 
     addComponent(component) {
@@ -53,7 +54,7 @@
     }
 
     isInputType(type){
-        return type.toLowerCase().includes("input");
+        return type?.toLowerCase().includes("input");
     }
 
     updateRenderedModal() {
@@ -64,7 +65,13 @@
                 element.parentElement.classList.add("hidden");
         });
     }
-
+    
+    onCloseCallback(callback) {
+        this.onClose = callback;
+        return this;
+    }  
+    
+    //================================================================================================
     addHeading({text, subheading = "", level = 1, id = undefined}) {
         return this.addComponent({ type: 'heading', text, subheading, level, id: id});
     }
@@ -1066,7 +1073,10 @@
         modalBackground.className = 'zermos-modal-background';
         if (!this.disableClosing) {
             modalBackground.addEventListener('click', (e) => {
-                if (e.target === modalBackground) this.close();
+                if (e.target === modalBackground) {
+                    this.close();
+                    this.onClose();
+                }
             });
         }
         
@@ -1077,7 +1087,10 @@
         modalContainer.className = 'zermos-modal-container';
         if (!this.disableClosing) {
             modalContainer.addEventListener('click', (e) => {
-                if (e.target === modalContainer) this.close();
+                if (e.target === modalContainer) {
+                    this.close();
+                    this.onClose();
+                }
             });
         }
         
@@ -1111,7 +1124,7 @@
     }
     
     //close w
-    close() {
+    close(callCloseCallback = false) {
         if (this.openingType === "opening") {
             ease(1, 0, 250, opacity => this.modalElement.style.opacity = opacity);
             setTimeout(() => this.modalElement.remove(), 300);
@@ -1120,10 +1133,12 @@
         if (this.openingType === "appending") {
             this.modalElement.parentElement.remove();
         }
+        
+        callCloseCallback ? this.onClose() : null;
     }
     
-    closeAll() {
-        document.querySelectorAll('.zermos-modal-background').forEach(modal => modal.remove());
+    closeAll(callCloseCallback = false) {
+        document.querySelectorAll('.zermos-modal-background').forEach(modal => {modal.remove(); callCloseCallback ? modal.onClose() : null;});
     }
 
     deepCopy() {
