@@ -4,6 +4,10 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - Versie 0.6.5.1 - 159-09-2024
+
+Somtoday is bijna weer gereintergreerd in de app, alen het koppelen (via STAP of Gbr + WW) werkt nog niet. Ik denk dat dit wel gaat lukken, in de tussentijd kan je (via PC) een korte (6 uur) koppeling maken met Somtoday door de hackerman methode te gebruiken.
+
 # Release Notes - Versie 0.6.5 - 15-09-2024
 Version 0.6.5 - una paloma blanca 🌴
 
