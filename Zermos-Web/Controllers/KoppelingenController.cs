@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using Infrastructure;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -478,69 +479,85 @@ namespace Zermos_Web.Controllers
             //code verifier: 16BBJMtEJe8blIJY848ROvvO02F5V205l5A10x_DqFE
 
             var baseurl = string.Format(
-                "https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtoday://nl.topicus.somtoday.leerling/oauth/callback&client_id=somtoday-leerling-native&response_type=code&state={0}&scope=openid&tenant_uuid={1}&session=no_session&code_challenge={2}&code_challenge_method=S256&knf_entree_notification",
+                "https://302.mjtsgamer.workers.dev/https://inloggen.somtoday.nl/oauth2/authorize?redirect_uri=somtoday://nl.topicus.somtoday.leerling/oauth/callback&client_id=somtoday-leerling-native&response_type=code&state={0}&scope=openid&tenant_uuid={1}&session=no_session&code_challenge={2}&code_challenge_method=S256&knf_entree_notification",
                 TokenUtils.RandomString(8), school,
                 tokens[1]);
             
             var response = await _httpClientWithoutRedirect.GetAsync(baseurl);
-            var authCode = response.Headers.Location.Query.Remove(0, 6);
-            var fullLocation = response.Headers.Location.ToString();
-            //get the cookies (production-authenticator-stickiness)
-            foreach (var cookie in response.Headers.GetValues("Set-Cookie"))
-            {
-                if (cookie.Contains("production-authenticator-stickiness"))
-                {
-                    production_authenticator_stickiness = cookie.Split(";")[0];
-                    break;
-                }
-            }
+            string responseString = await response.Content.ReadAsStringAsync();
             
-            if (production_authenticator_stickiness == "")
-                return Ok("failed, no production-authenticator-stickiness cookie found");
-
+            if (responseString == "No redirect found")
+                return Ok("failed, error in responseString");
             
+            SomtodayCFAuthenticatieModel somtodayCfAuthenticatie = JsonConvert.DeserializeObject<SomtodayCFAuthenticatieModel>(responseString);
+            var location = somtodayCfAuthenticatie.location; //https://inloggen.somtoday.nl/?auth=
+            var authCode = HttpUtility.ParseQueryString(new Uri(location).Query)["auth"];
+            List<string> cookies = somtodayCfAuthenticatie.cookies;
             
-                //set the cookie to the _somtodayHttpClientWithoutRedirect
-            _somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("Cookie", production_authenticator_stickiness);
+            // foreach (var cookie in cookies)
+            // {
+            //     if (cookie.Contains("production-authenticator-stickiness"))
+            //     {
+            //         production_authenticator_stickiness = cookie.Split(";")[0];
+            //         break;
+            //     }
+            // }
+            
+            //set the cookie to the _somtodayHttpClientWithoutRedirect
+            _somtodayHttpClient.DefaultRequestHeaders.Add("tenant", school.StringToBase64String());
             
             //send http request to to location
-            response = await _httpClientWithoutRedirect.GetAsync(fullLocation);
+            response = await _httpClientWithoutRedirect.GetAsync("https://302.mjtsgamer.workers.dev/" + location);
+            responseString = await response.Content.ReadAsStringAsync();
+            somtodayCfAuthenticatie = JsonConvert.DeserializeObject<SomtodayCFAuthenticatieModel>(responseString);
             //get (JSESSIONID) cookie
-            foreach (var cookie in response.Headers.GetValues("Set-Cookie"))
+            foreach (var cookie in somtodayCfAuthenticatie.cookies)
             {
                 if (cookie.Contains("JSESSIONID"))
                 {
                     jsessionid = cookie.Split(";")[0];
-                    break;
+                    _somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("Cookie", jsessionid);
+                    _somtodayHttpClient.DefaultRequestHeaders.Add("Cookie", jsessionid);
+                }
+                else if (cookie.Contains("production-authenticator-stickiness"))
+                {
+                    production_authenticator_stickiness = cookie.Split(";")[0];
+                    _somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("Cookie", production_authenticator_stickiness);
+                    _somtodayHttpClient.DefaultRequestHeaders.Add("Cookie", production_authenticator_stickiness);
+
                 }
             }
             
-            //Check if user is 2 step login or 3 step login
-            _somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("Cookie", production_authenticator_stickiness);
-            _somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("Cookie", jsessionid);
-            var formInputs = Regex.Matches((await (await _httpClientWithoutRedirect.GetAsync(response.Headers.Location)).Content.ReadAsStringAsync()), "form--input", RegexOptions.Multiline).Count;
+            _somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("Cookie", "tenant=" + school.StringToBase64String());
+            _somtodayHttpClient.DefaultRequestHeaders.Add("Cookie", "tenant=" + school.StringToBase64String());
+            
+            //get the amount of input fields in the form
+            response = await _somtodayHttpClientWithoutRedirect.GetAsync("https://passtrough.mjtsgamer.workers.dev/" + somtodayCfAuthenticatie.location);
+            responseString = await response.Content.ReadAsStringAsync();
+            var formInputs = Regex.Matches(responseString, "form--input", RegexOptions.Multiline).Count;
+            
             if (formInputs != 2 && formInputs != 3)
                 return Ok("failed, input field count is not 2 or 3");
-            
-            
             
             if (jsessionid == "")
                 return Ok("failed, no JSESSIONID cookie found");
             
+            
+            
+            
             string finalAuthCode = null;
 
             if (formInputs == 2)
-                finalAuthCode = await TripleLogin(username, password, jsessionid, authCode);
+                finalAuthCode = await TripleLogin(username, password, jsessionid, authCode, school);
             else
-                finalAuthCode = await DoubleLogin(username, password, jsessionid, authCode);
-
+                finalAuthCode = await DoubleLogin(username, password, jsessionid, authCode, school);
+            
             if (finalAuthCode == null)
                 return Ok("failed, no finalAuthCode found");
-            
-            
-            baseurl =
-                "https://inloggen.somtoday.nl/oauth2/token?grant_type=authorization_code&session=no_session&scope=openid&client_id=somtoday-leerling-native&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&code=" +
-                finalAuthCode + "&code_verifier=" + tokens[0];
+
+
+            baseurl = "https://passtrough.mjtsgamer.workers.dev/https://inloggen.somtoday.nl/oauth2/token?grant_type=authorization_code&session=no_session&scope=openid&client_id=somtoday-leerling-native&tenant_uuid=c23fbb99-be4b-4c11-bbf5-57e7fc4f4388&code=" +
+                      finalAuthCode + "&code_verifier=" + tokens[0];
             
             response = await _somtodayHttpClientWithoutRedirect.PostAsync(baseurl,
                 new FormUrlEncodedContent(new Dictionary<string, string> {{"", ""}}));
@@ -557,9 +574,10 @@ namespace Zermos_Web.Controllers
             return Ok("success");
         }
 
-        private async Task<string> DoubleLogin(string username, string password, string jsessionid, string authCode)
+        private async Task<string> DoubleLogin(string username, string password, string jsessionid, string authCode, string school)
         {
             _somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("Cookie", jsessionid);
+            _somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("tenant", school.StringToBase64String());
 
             string baseurl = "https://inloggen.somtoday.nl/?0-1.-panel-signInForm&auth=" + authCode;
             
@@ -575,14 +593,13 @@ namespace Zermos_Web.Controllers
             return HTMLUtils.ParseQuery(response.Headers.Location.Query)["code"];
         }
         
-        private async Task<string> TripleLogin(string username, string password, string jsessionid, string authCode)
+        private async Task<string> TripleLogin(string username, string password, string jsessionid, string authCode, string school)
         {
             //set the cookie to the _somtodayHttpClientWithoutRedirect
             _somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("Cookie", jsessionid);
-
-
-            //_somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
-            
+            _somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("tenant", school.StringToBase64String());
+            _somtodayHttpClient.DefaultRequestHeaders.Add("tenant", school.StringToBase64String());
+            _somtodayHttpClient.DefaultRequestHeaders.Add("Cookie", jsessionid);
             
             string baseurl = "https://inloggen.somtoday.nl/?0-1.-panel-signInForm&auth=" + authCode;
             
@@ -592,9 +609,12 @@ namespace Zermos_Web.Controllers
                 {"usernameFieldPanel:usernameFieldPanel_body:usernameField", username}
             });
             
-            await _somtodayHttpClientWithoutRedirect.PostAsync(baseurl, Content);
+            var response = await  _somtodayHttpClient.PostAsync(baseurl, Content);
             
-            baseurl = "https://inloggen.somtoday.nl/login?2-1.-passwordForm";
+            //get the final url that all the redirects lead to
+            
+            
+            baseurl = "https://inloggen.somtoday.nl/login?2-1.-passwordForm&auth=" + authCode;
             
             Content = new FormUrlEncodedContent(new Dictionary<string, string>
             {
@@ -602,7 +622,9 @@ namespace Zermos_Web.Controllers
                 {"loginLink", "x"}
             });
             
-            var response = await _somtodayHttpClientWithoutRedirect.PostAsync(baseurl, Content);
+            response = await _somtodayHttpClientWithoutRedirect.PostAsync(baseurl, Content);
+            string responseString = await response.Content.ReadAsStringAsync();
+            SomtodayCFAuthenticatieModel somtodayCfAuthenticatie = JsonConvert.DeserializeObject<SomtodayCFAuthenticatieModel>(responseString);
             
             return HTMLUtils.ParseQuery(response.Headers.Location.Query)["code"];
         }
@@ -610,8 +632,7 @@ namespace Zermos_Web.Controllers
 
         private async Task<user> GetSomtodayStudent(string auth_token)
         {
-            //GET: https://api.somtoday.nl/rest/v1/leerlingen?additional=pasfoto
-            var baseurl = "https://somtoday-me.mjtsgamer.workers.dev/";
+            var baseurl = "https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/leerlingen"; //"?additional=pasfoto";
 
             _somtodayHttpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", auth_token);
@@ -621,7 +642,7 @@ namespace Zermos_Web.Controllers
             var somtodayStudent = JsonConvert.DeserializeObject<SomtodayStudentModel>(responseString);
             return new user
             {
-                somtoday_student_id = somtodayStudent.id.ToString()
+                somtoday_student_id = somtodayStudent.items[0].links[0].id.ToString()
             };
         }
 

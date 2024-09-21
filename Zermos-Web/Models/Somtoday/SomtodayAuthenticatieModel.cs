@@ -1,4 +1,6 @@
-﻿namespace Zermos_Web.Models
+﻿using System.Collections.Generic;
+
+namespace Zermos_Web.Models
 {
     public class SomtodayAuthenticatieModel
     {
@@ -11,5 +13,13 @@
         // public string id_token { get; set; }
         // public string token_type { get; set; }
         // public int expires_in { get; set; }
+    }
+    
+    public class SomtodayCFAuthenticatieModel
+    {
+        public string location { get; set; }
+        //is the auth? param from the location url
+        //public string auth => location.Substring(35);
+        public List<string> cookies { get; set; }
     }
 }
