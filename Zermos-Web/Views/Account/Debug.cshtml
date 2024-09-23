@@ -107,6 +107,11 @@
         <p>Ga naar de intro pagina</p>
     </div>
     
+    <div class="account-item" onclick="openURLModal()">
+        <h1>Go to URL</h1>
+        <p>Ga naar een opgegeven URL (voor native app handig)</p>
+    </div>
+    
     <h4>device info</h4>
     
     <div class="account-item">
@@ -436,6 +441,16 @@ function openTestModal(){
         .addText({text: "<div style='font-weight: 400; font-style: normal;'>This is a paragraph of text with font-weight: 400 and font-style: normal (Regular)</div>", asHtml: true})
         .addText({text: "<div style='font-weight: 600; font-style: italic;'>This is a paragraph of text with font-weight: 600 and font-style: italic (SemiBold Italic)</div>", asHtml: true})
         .addText({text: "<div style='font-weight: 600; font-style: normal;'>This is a paragraph of text with font-weight: 600 and font-style: normal (SemiBold)</div>", asHtml: true})
+        .open();
+    }
+    
+    function openURLModal() {
+        new ZermosModal()
+        .addHeading({text: "Go to URL", subheading: "Enter the URL you want to go to", level: 1})
+        .addTextInput({required: true, initialValue: "", maxLength: 10000, onChange: (ctx, value) => {
+            document.getElementById("url").href = value;
+        }})
+        .addHTML({html: "<a id='url' href='#' target='_blank'>Open URL</a>"})
         .open();
     }
 </script>

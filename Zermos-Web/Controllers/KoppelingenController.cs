@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -8,11 +9,13 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Infrastructure;
 using Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -28,11 +31,6 @@ namespace Zermos_Web.Controllers
 {
     public class KoppelingenController : BaseController
     {
-        public KoppelingenController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
-        
-        SomtodayAPI somtodayApi = new(new HttpClient());
-        InfowijsApi InfowijsApi = new(new HttpClient());
-
         private readonly HttpClient _infowijsHttpClient = new()
         {
             DefaultRequestHeaders =
@@ -50,23 +48,40 @@ namespace Zermos_Web.Controllers
             }
         };
 
-        private readonly HttpClient _somtodayHttpClient = new()
-        {
-            DefaultRequestHeaders =
-            {
-                {"origin", "https://inloggen.somtoday.nl"},
-                {"accept", "application/json"}
-            }
-        };
+        private readonly HttpClient _somtodayHttpClient;
+        //    = new()
+        // {
+        //     DefaultRequestHeaders =
+        //     {
+        //         {"origin", "https://inloggen.somtoday.nl"},
+        //         {"accept", "application/json"}
+        //     }
+        // };
 
-        private readonly HttpClient _somtodayHttpClientWithoutRedirect =
-            new(new HttpClientHandler {AllowAutoRedirect = false})
-            {
-                DefaultRequestHeaders =
-                {
-                    {"origin", "https://inloggen.somtoday.nl"},
-                }
-            };
+        private readonly HttpClient _somtodayHttpClientWithoutRedirect;
+        //     = new(new HttpClientHandler
+        // {
+        //     AllowAutoRedirect = false,
+        // })
+        // {
+        //     DefaultRequestHeaders =
+        //     {
+        //         {"origin", "https://inloggen.somtoday.nl"},
+        //     }
+        // };
+
+        
+        public KoppelingenController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger, IHttpClientFactory httpClientFactory) : base(user, share, customCustomAppointment, logger, httpClientFactory)
+        {
+            _somtodayHttpClient = httpClientFactory.CreateClient("ipv6Client");
+            _somtodayHttpClient.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
+            //create client for ...WithoutRedirect and set redirect to false
+            _somtodayHttpClientWithoutRedirect = httpClientFactory.CreateClient("ipv6ClientWithoutRedirect");
+            _somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
+        }
+        
+        SomtodayAPI somtodayApi = new(new HttpClient());
+        InfowijsApi InfowijsApi = new(new HttpClient());
 
         private readonly HttpClient _httpClientWithoutRedirect = new(new HttpClientHandler {AllowAutoRedirect = false});
         private readonly HttpClient _normalHttpClient = new();
@@ -409,6 +424,7 @@ namespace Zermos_Web.Controllers
             return PartialView();
         }
         
+        //==================================HACKERMAN==================================
         [HttpGet]
         [Authorize]
         [ZermosPage]
@@ -417,37 +433,86 @@ namespace Zermos_Web.Controllers
         {
             return PartialView();
         }
+
         
         [HttpGet]
         [Authorize]
         [ZermosPage]
         [Route("/Koppelingen/Somtoday/Callback")]
-        public async Task<IActionResult> SomtodayCallback()
+        public async Task<IActionResult> SomtodayCallback(string code, string iss, string state)
         {
-            //get the code behind the ? in the url
-            if (Request.QueryString.Value != null)
+            Log(LogLevel.Information, Request.QueryString.Value);
+            
+            //HACKERMAN CODE CALLBACK
+            if (!code.IsNullOrEmpty() && iss.IsNullOrEmpty() && state.IsNullOrEmpty())
             {
-                var refresh_token = Request.QueryString.Value.Remove(0, 1).Split("&")[0];
-                
-                var somtoday = await somtodayApi.RefreshTokenAsync(refresh_token);
+                var somtoday = await somtodayApi.RefreshTokenAsync(code);
             
                 if (somtoday != null)
                 {
-                    var user = await GetSomtodayStudent(somtoday.access_token);
-                    
+                    string somtodayInternalID = (await somtodayApi.GetSomtodayStudent(new user{somtoday_access_token = somtoday.access_token})).items[0].links[0].id.ToString();
                     ZermosUser = new user
                     {
                         somtoday_access_token = somtoday.access_token,
                         somtoday_refresh_token = somtoday.refresh_token,
-                        somtoday_student_id = user.somtoday_student_id,
+                        somtoday_student_id = somtodayInternalID
                     };
+
                     return PartialView(model: "success");
                 }
+            }
+            
+            //DEEPLINK CALLBACK
+            else if (!code.IsNullOrEmpty() || !iss.IsNullOrEmpty() || !state.IsNullOrEmpty())
+            {
+                var code_verifier = Request.Cookies["zermos_somtoday_auth_verifier"];
+
+                var url = "https://inloggen.somtoday.nl/oauth2/token";
+                var form = new Dictionary<string, string>
+                {
+                    {"grant_type", "authorization_code"},
+                    {"code", code},
+                    {"redirect_uri", "somtoday://nl.topicus.somtoday.leerling/oauth/callback"},
+                    {"code_verifier", code_verifier},
+                    {"client_id", "somtoday-leerling-native"},
+                    {"client_secret", "42"}
+                };
+                
+                var response = await _somtodayHttpClient.PostAsync(url, new FormUrlEncodedContent(form));
+                var somtodayAuthentication = JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(await response.Content.ReadAsStringAsync());
+
+                string somtodayInternalID = (await somtodayApi.GetSomtodayStudent(new user{somtoday_access_token = somtodayAuthentication.access_token})).items[0].links[0].id.ToString();
+                ZermosUser = new user
+                {
+                    somtoday_access_token = somtodayAuthentication.access_token,
+                    somtoday_refresh_token = somtodayAuthentication.refresh_token,
+                    somtoday_student_id = somtodayInternalID
+                };
+
+                return Ok("success");
             }
 
             return PartialView(model: "failed");
         }
 
+        //==================================DEEPLINK==================================
+        [HttpGet]
+        [Authorize]
+        [ZermosPage]
+        [Route("/Koppelingen/Somtoday/Deeplink")]
+        public IActionResult SomtodayDeeplink()
+        {
+            var tokens = GenerateTokens();
+            //0 = code verifier
+            //1 = code challenge
+            
+            //set zermos_somtoday_auth_verifier cookie for 10 minutes
+            Response.Cookies.Append("zermos_somtoday_auth_verifier", tokens[0], new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
+            
+            return PartialView(tokens);
+        }
+        
+        //==================================INLOGGEGEVENS==================================
         [HttpGet]
         [Authorize]
         [ZermosPage]
@@ -462,6 +527,9 @@ namespace Zermos_Web.Controllers
         [Route("/Koppelingen/Somtoday/Inloggegevens")]
         public async Task<IActionResult> SomtodayCreds(string username, string password, string school)
         {
+            //console.writeLine if the _somtodayHttpClientWithoutRedirect and/or _somtodayHttpClient are sending requests using the IPV4 or IPV6 protocol
+            //Console.WriteLine("SomtodayHttpClientWithoutRedirect: " + _somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Host);
+            
             string production_authenticator_stickiness = "";
             string jsessionid = "";
             
@@ -566,14 +634,16 @@ namespace Zermos_Web.Controllers
                 JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(response.Content.ReadAsStringAsync()
                     .Result);
 
-            var user = await GetSomtodayStudent(somtodayAuthentication.access_token);
-            user.somtoday_access_token = somtodayAuthentication.access_token;
-            user.somtoday_refresh_token = somtodayAuthentication.refresh_token;
+            string somtodayInternalID = (await somtodayApi.GetSomtodayStudent(new user{somtoday_access_token = somtodayAuthentication.access_token})).items[0].links[0].id.ToString();
+            ZermosUser = new user
+            {
+                somtoday_access_token = somtodayAuthentication.access_token,
+                somtoday_refresh_token = somtodayAuthentication.refresh_token,
+                somtoday_student_id = somtodayInternalID
+            };
 
-            ZermosUser = user;
             return Ok("success");
         }
-
         private async Task<string> DoubleLogin(string username, string password, string jsessionid, string authCode, string school)
         {
             _somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("Cookie", jsessionid);
@@ -592,7 +662,6 @@ namespace Zermos_Web.Controllers
             
             return HTMLUtils.ParseQuery(response.Headers.Location.Query)["code"];
         }
-        
         private async Task<string> TripleLogin(string username, string password, string jsessionid, string authCode, string school)
         {
             //set the cookie to the _somtodayHttpClientWithoutRedirect
@@ -601,7 +670,7 @@ namespace Zermos_Web.Controllers
             _somtodayHttpClient.DefaultRequestHeaders.Add("tenant", school.StringToBase64String());
             _somtodayHttpClient.DefaultRequestHeaders.Add("Cookie", jsessionid);
             
-            string baseurl = "https://inloggen.somtoday.nl/?0-1.-panel-signInForm&auth=" + authCode;
+            string baseurl = "https://passtrough.mjtsgamer.workers.dev/https://inloggen.somtoday.nl/?0-1.-panel-signInForm&auth=" + authCode;
             
             var Content = new FormUrlEncodedContent(new Dictionary<string, string>
             {
@@ -614,7 +683,7 @@ namespace Zermos_Web.Controllers
             //get the final url that all the redirects lead to
             
             
-            baseurl = "https://inloggen.somtoday.nl/login?2-1.-passwordForm&auth=" + authCode;
+            baseurl = "https://passtrough.mjtsgamer.workers.dev/https://inloggen.somtoday.nl/login?2-1.-passwordForm&auth=" + authCode;
             
             Content = new FormUrlEncodedContent(new Dictionary<string, string>
             {
@@ -628,24 +697,6 @@ namespace Zermos_Web.Controllers
             
             return HTMLUtils.ParseQuery(response.Headers.Location.Query)["code"];
         }
-
-
-        private async Task<user> GetSomtodayStudent(string auth_token)
-        {
-            var baseurl = "https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/leerlingen"; //"?additional=pasfoto";
-
-            _somtodayHttpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", auth_token);
-
-            var response = await _somtodayHttpClient.GetAsync(baseurl);
-            var responseString = await response.Content.ReadAsStringAsync();
-            var somtodayStudent = JsonConvert.DeserializeObject<SomtodayStudentModel>(responseString);
-            return new user
-            {
-                somtoday_student_id = somtodayStudent.items[0].links[0].id.ToString()
-            };
-        }
-
         public string[] GenerateTokens()
         {
             var tokens = new string[2];
@@ -653,7 +704,6 @@ namespace Zermos_Web.Controllers
             tokens[1] = GenerateCodeChallenge(tokens[0]);
             return tokens;
         }
-
         private string GenerateNonce()
         {
             const string chars = "abcdefghijklmnopqrstuvwxyz123456789";
@@ -663,7 +713,6 @@ namespace Zermos_Web.Controllers
 
             return new string(nonce);
         }
-
         private string GenerateCodeChallenge(string codeVerifier)
         {
             using var sha256 = SHA256.Create();
@@ -675,6 +724,8 @@ namespace Zermos_Web.Controllers
             return code;
         }
         
+        
+        //==================================STAP==================================
         [HttpGet]
         [Authorize]
         [ZermosPage]
@@ -742,11 +793,14 @@ namespace Zermos_Web.Controllers
             var responseString = await response.Content.ReadAsStringAsync();
             var somtodayAuthentication = JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(responseString);
             
-            var user = await GetSomtodayStudent(somtodayAuthentication.access_token);
-            user.somtoday_access_token = somtodayAuthentication.access_token;
-            user.somtoday_refresh_token = somtodayAuthentication.refresh_token;
+            string somtodayInternalID = (await somtodayApi.GetSomtodayStudent(new user{somtoday_access_token = somtodayAuthentication.access_token})).items[0].links[0].id.ToString();
+            ZermosUser = new user
+            {
+                somtoday_access_token = somtodayAuthentication.access_token,
+                somtoday_refresh_token = somtodayAuthentication.refresh_token,
+                somtoday_student_id = somtodayInternalID
+            };
             
-            await _user.UpdateUserAsync(model.user, user);
             return Ok("Fuck off");
         }
         #endregion

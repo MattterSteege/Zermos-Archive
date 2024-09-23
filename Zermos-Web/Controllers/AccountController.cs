@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
@@ -15,7 +16,7 @@ namespace Zermos_Web.Controllers
     [Route("account/[action]")]
     public class AccountController : BaseController
     {
-        public AccountController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
+        public AccountController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger, IHttpClientFactory httpClientFactory) : base(user, share, customCustomAppointment, logger, httpClientFactory) { }
 
         [Authorize]
         [ZermosPage]

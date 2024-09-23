@@ -221,8 +221,7 @@
     min-width: 100%;
 }
 
-.url-field, .dropdown-button, .datepicker-parent, .text-element-input.display,
-.textarea-element-input.display, .password-element-input.display {
+.url-field, .dropdown-button, .datepicker-parent, .text-element-input.display, .textarea-element-input.display, .password-element-input.display, .dropdown-search {
     flex-grow: 1;
     padding: var(--modal-padding);
     border-radius: var(--button-border-radius);
@@ -363,6 +362,10 @@
 
 .dropdown-option::before {
     content: '- ';
+}
+
+.dropdown-option.hidden {
+    display: none;
 }
 
 .dropdown-menu {
@@ -685,6 +688,16 @@
     padding: var(--padding);
     border-radius: var(--border-radius);
     overflow-y: auto;
+}
+
+input.dropdown-search {
+    position: relative;
+    left: calc(-1 * var(--modal-padding));
+    top: calc(-1 * var(--modal-padding));
+    width: calc(100% + 2 * var(--modal-padding));
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: 1px solid #ccc;
 }
 
 @media only screen and (max-width: 1000px) {

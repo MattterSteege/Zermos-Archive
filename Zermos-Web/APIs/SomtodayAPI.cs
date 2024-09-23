@@ -500,4 +500,20 @@ public class  SomtodayAPI
 #endif
         return afspraakItems;
     }
+
+    public async Task<SomtodayStudentModel> GetSomtodayStudent(user user)
+    {
+        var baseurl = "https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/leerlingen"; //"?additional=pasfoto";
+
+        _httpClient.DefaultRequestHeaders.Clear();
+        _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
+        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+
+        var response = await _httpClient.GetAsync(baseurl);
+        
+        if (response.IsSuccessStatusCode == false)
+            return null;
+        
+        return JsonConvert.DeserializeObject<SomtodayStudentModel>(await response.Content.ReadAsStringAsync());
+    }
 }

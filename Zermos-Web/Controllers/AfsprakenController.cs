@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Infrastructure;
 using Infrastructure.Entities;
@@ -11,7 +12,7 @@ namespace Zermos_Web.Controllers;
 
 public class AfsprakenController : BaseController
 {
-    public AfsprakenController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
+    public AfsprakenController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger, IHttpClientFactory httpClientFactory) : base(user, share, customCustomAppointment, logger, httpClientFactory) { }
 
     [Authorize]
     [HttpPost("/Api/Afspraken/Nieuw")]

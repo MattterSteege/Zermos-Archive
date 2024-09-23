@@ -21,7 +21,7 @@ namespace Zermos_Web.Controllers
 {
     public class InfowijsController : BaseController
     {
-        public InfowijsController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
+        public InfowijsController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger, IHttpClientFactory httpClientFactory) : base(user, share, customCustomAppointment, logger, httpClientFactory) { }
         
         InfowijsApi infowijsApi = new(new HttpClient());
 

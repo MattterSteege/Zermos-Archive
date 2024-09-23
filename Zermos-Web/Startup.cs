@@ -4,13 +4,10 @@ using Infrastructure.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Zermos_Web.Controllers;
 using Zermos_Web.Utilities;
 
 //using WebEssentials.AspNetCore.Pwa;
@@ -29,6 +26,7 @@ namespace Zermos_Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIpv6ClientService();
             services.AddControllersWithViews();
 
             services.AddDbContext<ZermosContext>();

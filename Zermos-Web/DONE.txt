@@ -1,1 +1,4 @@
 Version 0.6.6 - bugfixes
+
+- algemeen
+    - Het modal systeem heeft een heel mooi dropdown systeem, maar daar kunnen veel opties in. Dit is nu opgelost door een zoekbalk toe te voegen. :yey:

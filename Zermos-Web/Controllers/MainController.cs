@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Infrastructure;
@@ -16,7 +17,14 @@ namespace Zermos_Web.Controllers
 {
     public class MainController : BaseController
     {
-        public MainController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
+        private readonly HttpClient _httpClient;
+
+        public MainController(Users user, Shares share, CustomAppointments customCustomAppointment,
+            ILogger<BaseController> logger, IHttpClientFactory httpClientFactory) : base(user, share,
+            customCustomAppointment, logger, httpClientFactory)
+        {
+            _httpClient = httpClientFactory.CreateClient("ipv6Client");
+        }
         
         private JsMinifier _jsMinifier = new JsMinifier();
         
@@ -240,6 +248,19 @@ namespace Zermos_Web.Controllers
                 return PartialView("~/Views/Somtoday/GedeeldCijfers.cshtml", share.value.Base64StringToObject<SortedSomtodayGradesModel>());
 
             return RedirectToAction("Verlopen", "Error");
+        }
+        
+        [HttpGet]
+        [Authorize]
+        [Route("/test/ip")]
+        public async Task<IActionResult> TestIp()
+        {
+            if (ZermosEmail != "58373@ccg-leerling.nl")
+                return NotFound();
+            
+            var response = await _httpClient.GetAsync("https://api6.ipify.org");
+            var responseString = await response.Content.ReadAsStringAsync();
+            return Ok(responseString);
         }
     }
 }

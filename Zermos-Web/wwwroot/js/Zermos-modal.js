@@ -608,7 +608,6 @@
     }
 
     renderDropdown(component, componentElement) {
-
         const dropdownElement = document.createElement('div');
         dropdownElement.classList.add('dropdown');
         dropdownElement.setAttribute('role', 'combobox');
@@ -619,11 +618,16 @@
         dropdownButton.innerText = 'Selecteer...';
         dropdownButton.setAttribute('tabindex', this.getTabIndex());
 
+        const searchInput = document.createElement('input');
+        searchInput.type = 'text';
+        searchInput.placeholder = 'Zoeken...';
+        searchInput.classList.add('dropdown-search');
+
         const dropdownMenu = document.createElement('div');
         dropdownMenu.classList.add('dropdown-menu');
         dropdownMenu.setAttribute('role', 'listbox');
 
-        component.options.forEach(option => {
+        const createOptionElement = (option) => {
             const optionElement = document.createElement('div');
             optionElement.classList.add('dropdown-option');
             optionElement.innerText = option.label;
@@ -638,32 +642,59 @@
                     optionElement.classList.add('selected');
                     dropdownButton.click();
                 }
-                const selectedOptions = Array.from(dropdownMenu.children)
-                    .filter(child => child.classList.contains('selected'))
-                    .map(child => child.dataset);
-                
-                const selectedOptionsLabels = Array.from(dropdownMenu.children)
-                    .filter(child => child.classList.contains('selected'))
-                    .map(child => child.dataset.label);
-
-                dropdownButton.innerText = selectedOptionsLabels.length ? selectedOptionsLabels.join(", ") : "Select...";
-
-                if (component.onChange) {
-                    component.onChange(this, component.multiSelect ? selectedOptions : selectedOptions[0]);
-                    component.userSetValue = component.multiSelect ? selectedOptions : selectedOptions[0];
-                }
+                updateSelectedOptions();
             });
 
+            return optionElement;
+        };
+
+        const updateSelectedOptions = () => {
+            const selectedOptions = Array.from(dropdownMenu.children)
+                .filter(child => child.classList.contains('selected') && !child.classList.contains('hidden'))
+                .map(child => child.dataset);
+
+            const selectedOptionsLabels = selectedOptions.map(option => option.label);
+
+            dropdownButton.innerText = selectedOptionsLabels.length ? selectedOptionsLabels.join(", ") : "Selecteer...";
+
+            if (component.onChange) {
+                component.onChange(this, component.multiSelect ? selectedOptions : selectedOptions[0]);
+                component.userSetValue = component.multiSelect ? selectedOptions : selectedOptions[0];
+            }
+        };
+
+        component.options.forEach(option => {
+            const optionElement = createOptionElement(option);
             dropdownMenu.appendChild(optionElement);
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            Array.from(dropdownMenu.children).forEach(child => {
+                const childLabel = child.innerText.toLowerCase();
+                
+                //const matchesSearch = child.innerText.toLowerCase().includes(searchTerm);
+
+                let matchesSearch = true;
+                //the search term and the label are all lowercase and spaces are removed from the search and label
+                if (searchTerm.replace(/\s/g, '') != "" && childLabel.replace(/\s/g, '').includes(searchTerm.replace(/\s/g, '')) == false)
+                    matchesSearch = false;
+                
+                child.classList.toggle('hidden', !matchesSearch);
+            });
         });
 
         dropdownButton.addEventListener('click', () => {
             dropdownButton.classList.toggle("selected");
             dropdownMenu.classList.toggle("show");
             dropdownElement.setAttribute('aria-expanded', dropdownButton.classList.contains('selected') ? 'true' : 'false');
+            if (dropdownMenu.classList.contains("show")) {
+                searchInput.focus();
+            }
         });
 
         dropdownElement.appendChild(dropdownButton);
+        dropdownMenu.prepend(searchInput);
         dropdownElement.appendChild(dropdownMenu);
 
         componentElement.appendChild(dropdownElement);

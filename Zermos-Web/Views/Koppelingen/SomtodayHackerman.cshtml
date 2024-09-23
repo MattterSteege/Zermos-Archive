@@ -55,7 +55,7 @@ console.log('De code is gekopieerd naar je klembord, plak deze in het veld op de
                 var code = ctx.getComponentsValue().values[0].value;
 
                 if (code.startsWith("ey")) {
-                    ReplacePage('/Koppelingen/Somtoday/Callback?' + code);
+                    ReplacePage('/Koppelingen/Somtoday/Callback?code=' + code);
                 }
             }})
             .openTroughAppending(main);

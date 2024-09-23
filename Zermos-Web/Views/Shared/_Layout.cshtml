@@ -315,8 +315,9 @@ async function doPageReplace(data, url) {
 }
 
 window.onbeforeunload = function() {
-    //save the current url in a cookie
-    document.cookie = "this_session_last_page=" + window.location.pathname + "; path=/";
+    if (!isNativeApp)
+        //save the current url in a cookie
+        document.cookie = "this_session_last_page=" + window.location.pathname + "; path=/";
 }
 
 window.addEventListener("popstate", function(e) {

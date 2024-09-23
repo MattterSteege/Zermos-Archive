@@ -14,7 +14,7 @@ namespace Zermos_Web.Controllers
     [Route("[action]")]
     public class ErrorController : BaseController
     {
-        public ErrorController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
+        public ErrorController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger, IHttpClientFactory httpClientFactory) : base(user, share, customCustomAppointment, logger, httpClientFactory) { }
 
         [ZermosPage]
         [HttpGet("/Error")]

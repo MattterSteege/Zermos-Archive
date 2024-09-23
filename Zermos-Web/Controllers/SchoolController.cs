@@ -18,7 +18,7 @@ namespace Zermos_Web.Controllers
 {
     public class SchoolController : BaseController
     {
-        public SchoolController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
+        public SchoolController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger, IHttpClientFactory httpClientFactory) : base(user, share, customCustomAppointment, logger, httpClientFactory) { }
         
         private readonly HttpClient _httpClient = new()
         {
