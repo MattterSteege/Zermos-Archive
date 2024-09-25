@@ -51,28 +51,26 @@ namespace Zermos_Web
             //sets the data protection keys to be stored in the /dataprotection folder (in the docker volume dataprotection)
             services.AddDataProtection().PersistKeysToFileSystem(new System.IO.DirectoryInfo("/dataprotection"));
             
+            //            Environment.SetEnvironmentVariable("PROJECT-HASH", [Random hash]);
+            
 #if RELEASE && BETA
+            Environment.SetEnvironmentVariable("PROJECT-HASH", TokenUtils.RandomString(12, TokenUtils.RandomStringType.UpperCase | TokenUtils.RandomStringType.Numbers));
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write($"[{DateTime.Now:HH:mm:ss} Information] ");
             Console.ResetColor();
-            Console.WriteLine("BETA RELEASE VERSION");
+            Console.WriteLine("BETA RELEASE VERSION (" + Environment.GetEnvironmentVariable("PROJECT-HASH") + ")");
 #elif RELEASE && !BETA
+            Environment.SetEnvironmentVariable("PROJECT-HASH", TokenUtils.RandomString(12, TokenUtils.RandomStringType.UpperCase | TokenUtils.RandomStringType.Numbers));
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write($"[{DateTime.Now:HH:mm:ss} Information] ");
             Console.ResetColor();
-            Console.WriteLine("RELEASE VERSION");
+            Console.WriteLine("RELEASE VERSION" + Environment.GetEnvironmentVariable("PROJECT-HASH"));
 #else
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write($"[{DateTime.Now:HH:mm:ss} Information] ");
             Console.ResetColor();
             Console.WriteLine("DEBUG VERSION");
 #endif
-            
-// #if RELEASE && BETA
-// #elif RELEASE && !BETA
-// #else
-// #endif
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

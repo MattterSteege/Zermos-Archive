@@ -49,6 +49,9 @@ namespace Zermos_Web.Controllers
         }
 
         protected string CurrentZermosVersion => Environment.GetEnvironmentVariable("ZERMOS-WEB-VERSION");
+        //make a persistent  
+        protected string BuildHash => Environment.GetEnvironmentVariable("PROJECT-HASH");
+        
         
         // LOGGING METHODS
         protected void Log(LogLevel logLevel, string message)

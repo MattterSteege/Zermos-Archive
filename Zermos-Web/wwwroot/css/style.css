@@ -110,15 +110,19 @@
 .font-scale-1 {
     --font-size-multiplier: 1;
 }
+
 .font-scale-2 {
     --font-size-multiplier: 1.25;
 }
+
 .font-scale-3 {
     --font-size-multiplier: 1.5;
 }
+
 .font-scale-4 {
     --font-size-multiplier: 1.75;
 }
+
 .font-scale-5 {
     --font-size-multiplier: 2;
 }
@@ -166,7 +170,6 @@
     font-family: var(--font-family);
     -webkit-tap-highlight-color: transparent;
 }
-
 
 
 html, body, div, p, ul, li {
@@ -221,7 +224,7 @@ body {
     position: fixed;
     top: 0;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     left: 0;
     border-radius: var(--border-radius);
     margin-left: var(--padding);
@@ -233,8 +236,6 @@ body {
 }
 
 .divider {
-    position: absolute;
-    top: calc(48px + var(--padding));
     width: 100%;
     height: 1px;
     background: linear-gradient(90deg, rgba(0, 0, 0, 0), rgba(142, 142, 142, 0.25), rgba(0, 0, 0, 0));
@@ -242,11 +243,16 @@ body {
 }
 
 #sidebar .docs {
-    position: absolute;
-    bottom: var(--padding);
     width: calc(100% - calc(var(--padding) * 2));
     height: 160px;
     border-radius: var(--border-radius-small);
+    margin-bottom: var(--padding);
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
 }
 
 .docs .docs-image {
@@ -260,46 +266,46 @@ body {
     background-repeat: no-repeat;
     transition: background-size 0.3s;
     padding: 80px;
+    grid-area: 1 / 1 / 2 / 2;
 }
 
 .docs:hover .docs-image {
     background-size: 130%;
 }
 
+.docs-inside {
+    display: flex;
+    grid-area: 1 / 1 / 2 / 2;
+    flex-direction: column;
+    padding: var(--padding);
+}
+
 #sidebar .docs h4 {
-    position: absolute;
-    top: var(--padding);
-    left: var(--padding);
     color: var(--white-color);
     font-weight: 600;
     font-size: var(--font-size-heading);
 }
 
 #sidebar .docs p {
-    position: absolute;
-    top: 48px;
-    left: var(--padding);
     color: var(--white-color);
     font-weight: 600;
     font-size: var(--font-size);
 }
 
 #sidebar .docs a {
-    position: absolute;
-    bottom: var(--padding);
-    left: var(--padding);
-    width: calc(100% - calc(var(--padding) * 2));
-    height: 40px;
+    width: 100%;
+    height: var(--button-height);
     border-radius: var(--border-radius-small);
     background: var(--overlay-color);
-    /*border: none;*/
     color: var(--text-color);
     font-weight: 700;
     font-size: var(--font-size);
     cursor: pointer;
-    align-content: center;
+    text-align: center;
+    display: flex;
     justify-content: center;
-    display: grid;
+    align-items: center;
+    margin-top: auto;
 }
 
 #sidebar .docs button:hover {
@@ -308,11 +314,9 @@ body {
 
 #sidebar .top {
     height: calc(48px + var(--padding));
-    top: 0;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    position: absolute;
     width: 100%;
     font-weight: 600;
     font-size: var(--font-size);
@@ -346,12 +350,9 @@ body {
 /*End of the animation*/
 #sidebar .bottom {
     height: auto;
-    top: calc(48px + var(--padding) * 2);
-    bottom: 176px;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    position: absolute;
     width: 100%;
     font-weight: 600;
     overflow-y: auto;
@@ -478,7 +479,6 @@ body {
 
 main.main {
     left: 266px;
-    transition: 0.25s;
     width: calc(100% - 266px);
     height: 100%;
     position: fixed;
@@ -489,7 +489,7 @@ main.main {
 }
 
 .top-bar {
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: calc(48px + var(--padding) * 2);
     padding: var(--padding);
@@ -497,7 +497,7 @@ main.main {
     overflow: hidden;
     top: 0;
     z-index: 10;
-    background-image: linear-gradient(to top, rgba(255,0,0,0), var(--background-color) calc(var(--padding) / 2))
+    background-image: linear-gradient(to top, rgba(255, 0, 0, 0), var(--background-color) calc(var(--padding) / 2))
 }
 
 .top-right-profile-picture {
@@ -592,7 +592,7 @@ main.main::-webkit-scrollbar-track {
 }
 
 .notifications {
-    width: 3calc(var(--padding) * 2);
+    width: 3 calc(var(--padding) * 2);
     padding-bottom: 0;
     position: fixed;
     bottom: 0;
@@ -788,7 +788,6 @@ main.main::-webkit-scrollbar-track {
         --padding: var(--padding-small);
         --border-radius: var(--border-radius-small);
         --button-height: var(--button-height-small);
-        /*zoom: 70%;*/
     }
 
     #sidebar {
@@ -829,7 +828,8 @@ main.main::-webkit-scrollbar-track {
         z-index: 100;
         left: 0;
         width: calc(100% - 64px);
-        padding: var(--padding); !important;
+        padding: var(--padding);
+    !important;
     }
 
     .offline main.main {
@@ -851,7 +851,8 @@ main.main::-webkit-scrollbar-track {
         z-index: 101;
         left: 0 !important;
         width: calc(100% - 64px) !important;
-        padding: var(--padding); !important;
+        padding: var(--padding);
+    !important;
     }
 
     .left #content {
@@ -875,17 +876,6 @@ main.main::-webkit-scrollbar-track {
         left: 0;
     }
 
-    #sidebar .top {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        top: 0;
-        left: 0;
-        border-radius: 0;
-    }
-
     /*#sidebar .top .svgText from second to last child*/
     #sidebar .top .svgText:nth-child(n+2) {
         display: none;
@@ -900,11 +890,12 @@ main.main::-webkit-scrollbar-track {
     }
 
     #sidebar .bottom {
-        bottom: 0;
+        position: static;
+        height: 100%;
     }
 
     .docs {
-        display: none;
+        display: none !important;
     }
 
     .bottom {
@@ -961,9 +952,9 @@ main.main::-webkit-scrollbar-track {
     }
 }
 
-@media only screen and (max-height: 772px){
+@media only screen and (max-height: 772px) {
     .docs {
-        display: none;
+        display: none !important;
     }
 
     #sidebar .bottom {

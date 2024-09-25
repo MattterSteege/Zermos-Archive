@@ -196,7 +196,7 @@
     padding: var(--padding-small);
     font-size: var(--font-size);
     border-radius: var(--border-radius-small);
-    background: var(--overlay-overlay-color);
+    background: var(--background-color);
     border: transparent;
 }
 

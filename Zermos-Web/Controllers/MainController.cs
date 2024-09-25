@@ -75,6 +75,14 @@ namespace Zermos_Web.Controllers
             ViewData["isSomtodayGekoppeld"] = TokenUtils.CheckToken(user.somtoday_refresh_token);
             ViewData["prefersSomtodayRooster"] = user.prefered_rooster_engine == "somtoday";
             ViewData["forceShow"] = false;
+            
+            #if RELEASE && BETA
+            ViewData["releaseType"] = "BETA";
+            #elif RELEASE && !BETA
+            ViewData["releaseType"] = "RELEASE";
+            #else
+            ViewData["releaseType"] = "DEV";
+            #endif
 
             return View();
         }

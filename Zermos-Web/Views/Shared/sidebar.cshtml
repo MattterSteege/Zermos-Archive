@@ -1,10 +1,10 @@
 ﻿@using System.Security.Claims
 @{
-bool isZermeloGekoppeld = (bool) ViewData["isZermeloGekoppeld"];
-bool isInfowijsGekoppeld = (bool) ViewData["isInfowijsGekoppeld"];
-bool isSomtodayGekoppeld = (bool) ViewData["isSomtodayGekoppeld"];
-bool prefersSomtodayRooster = (bool) ViewData["prefersSomtodayRooster"];
-bool forceShow = (bool) (ViewData["forceShow"] ?? "false");
+    bool isZermeloGekoppeld = (bool) ViewData["isZermeloGekoppeld"];
+    bool isInfowijsGekoppeld = (bool) ViewData["isInfowijsGekoppeld"];
+    bool isSomtodayGekoppeld = (bool) ViewData["isSomtodayGekoppeld"];
+    bool prefersSomtodayRooster = (bool) ViewData["prefersSomtodayRooster"];
+    bool forceShow = (bool) (ViewData["forceShow"] ?? "false");
 }
 
 <div class="top deep-no-select">
@@ -23,131 +23,131 @@ bool forceShow = (bool) (ViewData["forceShow"] ?? "false");
 <div class="bottom">
     <ul>
 
-        @if(User.Identity != null && (!isInfowijsGekoppeld && !isZermeloGekoppeld && !isSomtodayGekoppeld) && User.Identity.IsAuthenticated)
+        @if (User.Identity != null && (!isInfowijsGekoppeld && !isZermeloGekoppeld && !isSomtodayGekoppeld) && User.Identity.IsAuthenticated)
         {
-        <li id="koppelingen">
-            <button onclick="ReplacePage('@Url.Action("Index", "Koppelingen")')" aria-label="Koppeling toevoegen" tabindex="0">
-                <div class="menu-item" role="button">
-                    <i class="fa-solid fa-plus menu-icons fa-fw" aria-hidden="true"></i>
-                    <p>Koppeling toevoegen...</p>
-                </div>
-            </button>
-        </li>
+            <li id="koppelingen">
+                <button onclick="ReplacePage('@Url.Action("Index", "Koppelingen")')" aria-label="Koppeling toevoegen" tabindex="0">
+                    <div class="menu-item" role="button">
+                        <i class="fa-solid fa-plus menu-icons fa-fw" aria-hidden="true"></i>
+                        <p>Koppeling toevoegen...</p>
+                    </div>
+                </button>
+            </li>
         }
         else if (User.Identity == null || !User.Identity.IsAuthenticated)
         {
-        <li id="inloggen">
-            <button onclick="ReplacePage('@Url.Action("Login", "Authentication")')" aria-label="Inloggen" tabindex="1">
-                <div class="menu-item" role="button">
-                    <i class="fa-solid fa-sign-in menu-icons fa-fw" aria-hidden="true"></i>
-                    <p>Inloggen</p>
-                </div>
-            </button>
-        </li>
+            <li id="inloggen">
+                <button onclick="ReplacePage('@Url.Action("Login", "Authentication")')" aria-label="Inloggen" tabindex="1">
+                    <div class="menu-item" role="button">
+                        <i class="fa-solid fa-sign-in menu-icons fa-fw" aria-hidden="true"></i>
+                        <p>Inloggen</p>
+                    </div>
+                </button>
+            </li>
         }
 
         @if ((isZermeloGekoppeld && !prefersSomtodayRooster) || forceShow)
         {
-        <h5 class="Heading">Zermelo</h5>
+            <h5 class="Heading">Zermelo</h5>
 
-        <li id="rooster">
-            <button onclick="ReplacePage('@Url.Action("Rooster", "Zermelo")')" aria-label="Rooster via Zermelo" tabindex="2">
-                <div class="menu-item" role="button">
-                    <i class="fa-solid fa-calendar-day menu-icons fa-fw"></i>
-                    <p>Rooster</p>
-                </div>
-            </button>
-        </li>
+            <li id="rooster">
+                <button onclick="ReplacePage('@Url.Action("Rooster", "Zermelo")')" aria-label="Rooster via Zermelo" tabindex="2">
+                    <div class="menu-item" role="button">
+                        <i class="fa-solid fa-calendar-day menu-icons fa-fw"></i>
+                        <p>Rooster</p>
+                    </div>
+                </button>
+            </li>
         }
 
         @if (isSomtodayGekoppeld || forceShow)
         {
-        <h5 class="Heading">SOMtoday</h5>
+            <h5 class="Heading">SOMtoday</h5>
 
-        @if ((prefersSomtodayRooster && !forceShow) || !isZermeloGekoppeld)
-        {
-        <li id="rooster">
-            <button onclick="ReplacePage('@Url.Action("Rooster", "Somtoday")')" aria-label="Rooster via SOMtoday" tabindex="3">
-                <div class="menu-item" role="button">
-                    <i class="fa-solid fa-calendar-day menu-icons fa-fw"></i>
-                    <p>Rooster</p>
-                </div>
-            </button>
-        </li>
-        }
+            @if ((prefersSomtodayRooster && !forceShow) || !isZermeloGekoppeld)
+            {
+                <li id="rooster">
+                    <button onclick="ReplacePage('@Url.Action("Rooster", "Somtoday")')" aria-label="Rooster via SOMtoday" tabindex="3">
+                        <div class="menu-item" role="button">
+                            <i class="fa-solid fa-calendar-day menu-icons fa-fw"></i>
+                            <p>Rooster</p>
+                        </div>
+                    </button>
+                </li>
+            }
 
-        <li id="huiswerk">
-            <button onclick="ReplacePage('@Url.Action("Huiswerk", "Somtoday")')" aria-label="Huiswerk" tabindex="4">
-                <div class="menu-item" role="button">
-                    <i class="fa-solid fa-pen-to-square menu-icons fa-fw"></i>
-                    <p>Huiswerk</p>
-                </div>
-            </button>
-        </li>
+            <li id="huiswerk">
+                <button onclick="ReplacePage('@Url.Action("Huiswerk", "Somtoday")')" aria-label="Huiswerk" tabindex="4">
+                    <div class="menu-item" role="button">
+                        <i class="fa-solid fa-pen-to-square menu-icons fa-fw"></i>
+                        <p>Huiswerk</p>
+                    </div>
+                </button>
+            </li>
 
-        <li id="cijfers">
-            <button onclick="ReplacePage('@Url.Action("Cijfers", "Somtoday")')" aria-label="Cijfers" tabindex="5">
-                <div class="menu-item" role="button">
-                    <i class="fa-solid fa-line-chart menu-icons fa-fw"></i>
-                    <p>Cijfers</p>
-                </div>
-            </button>
-        </li>
+            <li id="cijfers">
+                <button onclick="ReplacePage('@Url.Action("Cijfers", "Somtoday")')" aria-label="Cijfers" tabindex="5">
+                    <div class="menu-item" role="button">
+                        <i class="fa-solid fa-line-chart menu-icons fa-fw"></i>
+                        <p>Cijfers</p>
+                    </div>
+                </button>
+            </li>
 
-        <li id="leermiddelen">
-            <button onclick="ReplacePage('@Url.Action("Leermiddelen", "Somtoday")')" aria-label="Leermiddelen" tabindex="6">
-                <div class="menu-item" role="button">
-                    <i class="fa-solid fa-book menu-icons fa-fw"></i>
-                    <p>Leermiddelen</p>
-                </div>
-            </button>
-        </li>
+            <li id="leermiddelen">
+                <button onclick="ReplacePage('@Url.Action("Leermiddelen", "Somtoday")')" aria-label="Leermiddelen" tabindex="6">
+                    <div class="menu-item" role="button">
+                        <i class="fa-solid fa-book menu-icons fa-fw"></i>
+                        <p>Leermiddelen</p>
+                    </div>
+                </button>
+            </li>
         }
 
         @if ((User.FindFirstValue("email") ?? "").Contains("ccg-leerling.nl"))
         {
-        <h5 class="Heading">School</h5>
+            <h5 class="Heading">School</h5>
 
-        <li id="informatiebord">
-            <button onclick="ReplacePage('@Url.Action("Informatiebord", "School")')" aria-label="Informatiebord" tabindex="7">
-                <div class="menu-item" role="button">
-                    <i class="fa-solid fa-info-circle menu-icons fa-fw"></i>
-                    <p>Informatiebord</p>
-                </div>
-            </button>
-        </li>
+            <li id="informatiebord">
+                <button onclick="ReplacePage('@Url.Action("Informatiebord", "School")')" aria-label="Informatiebord" tabindex="7">
+                    <div class="menu-item" role="button">
+                        <i class="fa-solid fa-info-circle menu-icons fa-fw"></i>
+                        <p>Informatiebord</p>
+                    </div>
+                </button>
+            </li>
 
-        <li id="printen">
-            <button onclick="ReplacePage('@Url.Action("Printen", "School")')" aria-label="Printen" tabindex="8">
-                <div class="menu-item" role="button">
-                    <i class="fa-solid fa-print menu-icons fa-fw"></i>
-                    <p>Printen</p>
-                </div>
-            </button>
-        </li>
+            <li id="printen">
+                <button onclick="ReplacePage('@Url.Action("Printen", "School")')" aria-label="Printen" tabindex="8">
+                    <div class="menu-item" role="button">
+                        <i class="fa-solid fa-print menu-icons fa-fw"></i>
+                        <p>Printen</p>
+                    </div>
+                </button>
+            </li>
         }
 
         @if (isInfowijsGekoppeld || forceShow)
         {
-        <h5 class="Heading">Infowijs</h5>
+            <h5 class="Heading">Infowijs</h5>
 
-        <li id="schoolnieuws">
-            <button onclick="ReplacePage('@Url.Action("Schoolnieuws", "Infowijs")')" aria-label="Schoolnieuws" tabindex="9">
-                <div class="menu-item" role="button">
-                    <i class="fa-solid fa-newspaper menu-icons fa-fw"></i>
-                    <p>Schoolnieuws</p>
-                </div>
-            </button>
-        </li>
+            <li id="schoolnieuws">
+                <button onclick="ReplacePage('@Url.Action("Schoolnieuws", "Infowijs")')" aria-label="Schoolnieuws" tabindex="9">
+                    <div class="menu-item" role="button">
+                        <i class="fa-solid fa-newspaper menu-icons fa-fw"></i>
+                        <p>Schoolnieuws</p>
+                    </div>
+                </button>
+            </li>
 
-        <li id="schoolkalender">
-            <button onclick="ReplacePage('@Url.Action("Schoolkalender", "Infowijs")')" aria-label="Schoolkalender" tabindex="10">
-                <div class="menu-item" role="button">
-                    <i class="fa-solid fa-calendar-days menu-icons fa-fw"></i>
-                    <p>Schoolkalender</p>
-                </div>
-            </button>
-        </li>
+            <li id="schoolkalender">
+                <button onclick="ReplacePage('@Url.Action("Schoolkalender", "Infowijs")')" aria-label="Schoolkalender" tabindex="10">
+                    <div class="menu-item" role="button">
+                        <i class="fa-solid fa-calendar-days menu-icons fa-fw"></i>
+                        <p>Schoolkalender</p>
+                    </div>
+                </button>
+            </li>
         }
 
         <li style="display: none" class="hidden-account" id="account-2">
@@ -162,8 +162,10 @@ bool forceShow = (bool) (ViewData["forceShow"] ?? "false");
     </ul>
 </div>
 <div class="docs">
-    <img class="docs-image background-tint" aria-hidden="true" />
-    <h4>Hulp nodig?</h4>
-    <p>Check hoe je Zermos kunt gebruiken</p>
-    <a href="https://zermos-docs.kronk.tech" tabindex="12">Bekijk de documentatie</a>
+    <img class="docs-image background-tint" aria-hidden="true"/>
+    <div class="docs-inside">
+        <h4>Hulp nodig?</h4>
+        <p>Check hoe je Zermos kunt gebruiken</p>
+        <a href="https://zermos-docs.kronk.tech" tabindex="12">Bekijk de documentatie</a>
+    </div>
 </div>

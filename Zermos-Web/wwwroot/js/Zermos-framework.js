@@ -1,5 +1,6 @@
 ﻿const Zermos = {
   CurrentVersion: "",
+  BuildHash: "",
   mainBeforeLoad: function(callback) {},
   mainAfterLoad: function(callback) {},
   mainUnload: function(callback) {},
