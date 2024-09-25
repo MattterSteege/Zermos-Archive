@@ -1,26 +1,23 @@
 ﻿@model string
 
-<link rel="stylesheet" href="/css/koppelingen.css" preload>
-
 @if (Model == "success")
 {
-    <div class="login">
-        <div class="login-explanation">
-            <h1>Gelukt</h1>
-            <p>Je hebt succesvol de koppeling gelegd met Somtoday, je kan nu gebruik maken van de Somtoday functionaliteiten op Zermos.</p>
-        </div>
-    </div>
-    
 <script>
+    new ZermosModal()
+    .addHeading({text: "Gelukt!"})
+    .addText({text: "Je hebt succesvol de koppeling gelegd met Somtoday, je kan nu gebruik maken van de Somtoday functionaliteiten op Zermos."})
+    .openTroughAppending(main);
+
     newSidebar();
 </script>
 }
 else if (Model == "failed")
 {
-<div class="login">
-    <div class="login-explanation">
-        <h1>Helaas</h1>
-        <p>het is niet gelukt om de koppeling te leggen met Somtoday, probeer uit te loggen bij Somtoday en probeer opnieuw op de 'Open Somtoday' knop te kliken.</p>
-    </div>
-</div>
+
+<script>
+    new ZermosModal()
+    .addHeading({text: "Helaas"})
+    .addText({text: "het is niet gelukt om de koppeling te leggen met Somtoday, probeer het nog een keer."})
+    .openTroughAppending(main);
+</script>
 }

@@ -72,119 +72,150 @@
     }  
     
     //================================================================================================
+    
+    //.addHeading({text: "Heading", subheading: "Subheading", level: 1, id: "heading1"})
     addHeading({text, subheading = "", level = 1, id = undefined}) {
         return this.addComponent({ type: 'heading', text, subheading, level, id: id});
     }
 
+    //.addToggle({label: "Toggle", initialState: false, onChange: (ctx, value) => {}, id: "toggle1"})
     addToggle({label, initialState = false, onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'toggleInput', label, state: initialState, onChange, id: id});
     }
-
+    
+    //.addMultiToggles({labels: ["Toggle1", "Toggle2"], initialStates: [false, true], onChange: (ctx, values) => {}, id: "multiToggle1"})
     addMultiToggles({labels, initialStates = [],  onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'multiToggleInput', labels, states: initialStates, onChange, id: id});
     }
 
+    //.addButton({text: "Button", onClick: (ctx) => {}, id: "button1"})
     addButton({text, onClick = () => {}, id = undefined}) {
         return this.addComponent({ type: 'button', text, onClick, id: id});
     }
 
+    //.addDoubleButtons({text: "Button1", secondText: "Button2", onClick: () => {}, secondOnClick: () => {}, id: "doubleButton1"})
     addDoubleButtons({text, secondText, onClick = () => {}, secondOnClick = () => {}, id = undefined}) {
         return this.addComponent({ type: 'doubleButton', text, onClick, secondText, secondOnClick, id: id});
     }
 
+    //.addTripleButtons({text: "Button1", secondText: "Button2", thirdText: "Button3", onClick: () => {}, secondOnClick: () => {}, thirdOnClick: () => {}, id: "tripleButton1"})
     addTripleButtons({text, secondText, thirdText, onClick = () => {}, secondOnClick = () => {}, thirdOnClick = () => {}, id = undefined}) {
         return this.addComponent({ type: 'tripleButton', text, onClick, secondText, secondOnClick, thirdText, thirdOnClick, id: id});
     }
 
+    //.addSubmenu({showCondition: "condition", subModal: new ZermosModal(), id: "submenu1"})
     addSubmenu({showCondition, subModal, id = undefined}) {
         return this.addComponent({ type: 'submenu', showCondition, subModal, id: id});
     }
 
+    //.addText({text: "Text", asHtml: false, id: "text1"})
     addText({text, asHtml = false, id = undefined}) {
         return this.addComponent({ type: 'text', text, asHtml: asHtml, id: id});
     }
 
+    //.addLabel({text: "Label", id: "label1"})
     addLabel({text, id = undefined}) {
         return this.addComponent({ type: 'label', text, id: id});
     }
 
+    //.addUrl({url: "https://www.google.com", showFull: false, copyButton: true, id: "url1"})
     addUrl({url, showFull = false, copyButton = true, id = undefined}) {
         return this.addComponent({ type: 'url', url, showFull, copyButton, id: id});
     }
 
     ///INPUT ELEMENTS
+    
+    //.addDatePicker({required: false, initialDate: new Date(), onChange: (ctx, date) => {}, id: "datePicker1"})
     addDatePicker({required = false, initialDate = undefined, onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'datePickerInput', required, initialDate, onChange, id: id});
     }
 
+    //.addTimePicker({required: false, initialTime: "00:00", onChange: (ctx, time) => {}, id: "timePicker1"})
     addTimePicker({required = false, initialTime = undefined, onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'timePickerInput', required, initialTime, onChange, id: id});
     }
 
+    //.addDropdown({options: [{label: "Option1", value: "option1"}, {label: "Option2", value: "option2"}], required: false, multiSelect: false, onChange: (ctx, value) => {}, id: "dropdown1"})
     addDropdown({options, required = false, multiSelect = false, onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'dropdownInput', options, required, multiSelect, onChange, id: id});
     }
 
+    //.addNumberInput({required: false, initialValue: 0, decimals: 0, min: Number.MIN_VALUE, max: Number.MAX_VALUE, step: 1, onChange: (ctx, value) => {}, id: "numberInput1"})
     addSeparator({text = '', id = undefined}) {
         return this.addComponent({ type: 'separator', text, id: id});
     }
 
+    //.addImage({src: "https://www.google.com/image.png", alt: "Image", id: "image1"})
     addImage({src, alt = '', id = undefined}) {
         return this.addComponent({ type: 'image', src, alt, id: id});
     }
 
+    //.addSpacer({height: "20px", id: "spacer1"})
     addSpacer({height = "20px", id = undefined}) {
         return this.addComponent({ type: 'spacer', height, id: id});
     }
 
+    //.addDatePicker({required: false, initialDate: new Date(), onChange: (ctx, date) => {}, id: "datePicker1"})
     addNumberInput({required = false, initialValue = 0, decimals = 0, min = Number.MIN_VALUE, max = Number.MAX_VALUE, step = 1, onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'numberInput', required, initialValue, decimals, min, max, step, onChange, id: id});
     }
 
+    //.addTextInput({required: false, initialValue: "", maxLength: -1, onChange: (ctx, value) => {}, id: "textInput1"})
     addTextInput({required = false, initialValue = '', maxLength = -1, onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'textInput', required, initialValue, maxLength, onChange, id: id});
     }
 
+    //.addPasswordInput({required: false, maxLength: -1, onChange: (ctx, value) => {}, id: "passwordInput1"})
     addPasswordInput({required = false, maxLength = -1, onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'passwordInput', required, maxLength, onChange, id: id});
     }
 
+    //.addTextArea({required: false, initialValue: "", maxLength: -1, onChange: (ctx, value) => {}, id: "textArea1"})
     addTextArea({required = false, initialValue = '', maxLength = -1, onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'textAreaInput', required, initialValue, maxLength, onChange, id: id});
     }
 
+    //.addSlider({min: 0, max: 100, step: 1, initialValue: 50, onChange: (ctx, value) => {}, id: "slider1"})
     addCheckbox({initialState = false, onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'toggleInput', state: initialState, asCheckbox: true, onChange, id: id});
     }
     
+    //.addMultiCheckbox({labels: ["Option1", "Option2"], initialStates: [false, true], onChange: (ctx, values) => {}, id: "multiCheckbox1"})
     addMultiCheckbox({labels, initialStates = [], onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'multiToggleInput', labels, states: initialStates, asCheckbox: true, onChange, id: id});
     }
     
+    //.addSlider({min: 0, max: 100, step: 1, initialValue: 50, onChange: (ctx, value) => {}, id: "slider1"})
     addSlider({min = 0, max = 100, step = 1, initialValue = 50, onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'sliderInput', min, max, step, initialValue, onChange, id: id});
     }
 
+    //.addColorPicker({required: false, initialColor: "#000000", onChange: (ctx, color) => {}, id: "colorPicker1"})
     addColorPicker({required, initialColor = '#000000', onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'colorPickerInput', required, initialColor, onChange, id: id});
     }
 
+    //.addRating({required: false, maxRating: 5, initialRating: 0, onChange: (ctx, rating) => {}, id: "rating1"})
     addRating({required, maxRating = 5, initialRating = 0, onChange = () => {}, id = undefined}) {
         return this.addComponent({ type: 'ratingInput', required, maxRating, initialRating, onChange, id: id});
     }
     
+    //.addHTML({html: "<p>HTML</p>", id: "html1"})
     addHTML({html, id = undefined}) {
         return this.addComponent({ type: 'html', html, id: id});
     }
     
+    //.addCodeBlock({code: "code", id: "code1"})
     addCodeBlock({code, id = undefined}) {
         return this.addComponent({ type: 'code', code, id: id});
     }
 
+    //.addList({items: ["Item1", "Item2"], listType: "ul", id: "list1"})
     addList({items, listType = "ul", id = undefined}) {
         return this.addComponent({ type: 'list', items, listType, id: id});
     }
 
+//================================================================================================
     render() {
         const modalElement = document.createElement('div');
         modalElement.className = 'zermos-modal';

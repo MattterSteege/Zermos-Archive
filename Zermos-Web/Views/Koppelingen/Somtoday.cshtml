@@ -25,7 +25,7 @@
             <a onclick="ReplacePage('@Url.Action("SomtodayHackerman", "Koppelingen")')">Koppel Somtoday als een echte hackerman</a>
         </div>
     </div>
-    <div class="zermelo">
+    <div class="zermelo" id="deeplink">
         <h1>Somtoday deeplink methode</h1>
         <p>Deze methode werkt net zoals de normale SOMtoday manier van inloggen, dus lekker bekend. Klik na het inloggen om 'openen met Zermos' ipv 'Somtoday'</p>
         <div class="spacer" style="padding: 0; margin-top: 8px"></div>
@@ -34,3 +34,11 @@
         </div>
     </div>
 </div>
+
+<script>
+Zermos.mainBeforeLoad = () => {
+    if (!isNativeApp()) {
+        document.getElementById("deeplink").style.display = "none";
+    }
+}
+</script>

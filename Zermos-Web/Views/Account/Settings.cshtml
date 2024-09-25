@@ -98,7 +98,7 @@
     
     <div class="setting-item">
         <h1>Rooster</h1>
-        <p>Geef de normale lesduur aan voor het tropenrooster of ik gooi een kokosnoot naar je 🥥</p>
+        <p>Geef de normale lesduur in minuten aan voor het tropenrooster of ik gooi een kokosnoot naar je 🥥</p>
         <div class="settings-options"><!-- duration in minutes 1-1440 -->
             <input type="number" id="5_tropen_rooster_time" name="tropen_rooster_time" min="1" max="1440" value="@(Model.tropen_rooster_time ?? "0")"/>
             <button id="9_save" onclick="updateTropenRoosterTime(this)" class="setting-button">Opslaan</button>
@@ -118,9 +118,15 @@ function UpdateTheme(theme, element) {
     document.querySelector("meta[name=theme-color]").setAttribute("content", theme === "light" || theme === "blue" ? "#f8f9fa" : theme === "dark" || theme === "red" ? "#1a1a1a" : theme === "pink" ? "#ffebf2" : "#f8f9fa");
     document.documentElement.classList.add(theme);
     
+    // Call Android function to change the status bar color
+    if (window.AndroidFunction && typeof AndroidFunction.changeStatusBarColor === 'function') {
+        AndroidFunction.changeStatusBarColor(theme);
+    }
+    
     //expires in 60 days
     document.cookie = "theme=" + theme + ";path=/;max-age=5184000";
     UpdateSetting("theme", theme, element);
+    
 }
 
 function UpdateHandSide(side, element) {

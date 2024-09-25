@@ -441,8 +441,6 @@ namespace Zermos_Web.Controllers
         [Route("/Koppelingen/Somtoday/Callback")]
         public async Task<IActionResult> SomtodayCallback(string code, string iss, string state)
         {
-            Log(LogLevel.Information, Request.QueryString.Value);
-            
             //HACKERMAN CODE CALLBACK
             if (!code.IsNullOrEmpty() && iss.IsNullOrEmpty() && state.IsNullOrEmpty())
             {
@@ -467,18 +465,40 @@ namespace Zermos_Web.Controllers
             {
                 var code_verifier = Request.Cookies["zermos_somtoday_auth_verifier"];
 
-                var url = "https://inloggen.somtoday.nl/oauth2/token";
-                var form = new Dictionary<string, string>
-                {
-                    {"grant_type", "authorization_code"},
-                    {"code", code},
-                    {"redirect_uri", "somtoday://nl.topicus.somtoday.leerling/oauth/callback"},
-                    {"code_verifier", code_verifier},
-                    {"client_id", "somtoday-leerling-native"},
-                    {"client_secret", "42"}
-                };
+                // var client = new HttpClient();
+                // var request = new HttpRequestMessage(HttpMethod.Post, "https://passtrough.mjtsgamer.workers.dev/https://inloggen.somtoday.nl/oauth2/token");
+                // request.Headers.Add("accept", "application/json, text/plain, */*");
+                // request.Headers.Add("content-type", "application/x-www-form-urlencoded");
+                // request.Headers.Add("origin", "https://leerling.somtoday.nl");
+                //
+                // var collection = new List<KeyValuePair<string, string>>();
+                // collection.Add(new("grant_type", "authorization_code"));
+                // collection.Add(new("code", ""));
+                // collection.Add(new("redirect_uri", "somtoday://nl.topicus.somtoday.leerling/oauth/callback"));
+                // collection.Add(new("code_verifier", ""));
+                // collection.Add(new("client_id", "somtoday-leerling-native"));
+                // collection.Add(new("claims", "{\"id_token\":{\"given_name\":null, \"leerlingen\":null, \"orgname\": null, \"affiliation\":{\"values\":[\"student\",\"parent/guardian\"]} }}"));
+                // var content = new FormUrlEncodedContent(collection);
+                // request.Content = content;
+                // var response = await client.SendAsync(request);
+                // response.EnsureSuccessStatusCode();
+                // Console.WriteLine(await response.Content.ReadAsStringAsync());
                 
-                var response = await _somtodayHttpClient.PostAsync(url, new FormUrlEncodedContent(form));
+                var url = "https://passtrough.mjtsgamer.workers.dev/https://inloggen.somtoday.nl/oauth2/token";
+                var response = await _somtodayHttpClientWithoutRedirect.PostAsync(url,
+                    new FormUrlEncodedContent(new Dictionary<string, string>
+                    {
+                        {"grant_type", "authorization_code"},
+                        {"code", code},
+                        {"redirect_uri", "somtoday://nl.topicus.somtoday.leerling/oauth/callback"},
+                        {"code_verifier", code_verifier},
+                        {"client_id", "somtoday-leerling-native"},
+                        {"claims", "{\"id_token\":{\"given_name\":null, \"leerlingen\":null, \"orgname\": null, \"affiliation\":{\"values\":[\"student\",\"parent/guardian\"]} }}"}
+                    }));
+                
+                if (!response.IsSuccessStatusCode)
+                    return PartialView(model: "failed");
+                
                 var somtodayAuthentication = JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(await response.Content.ReadAsStringAsync());
 
                 string somtodayInternalID = (await somtodayApi.GetSomtodayStudent(new user{somtoday_access_token = somtodayAuthentication.access_token})).items[0].links[0].id.ToString();
@@ -489,7 +509,7 @@ namespace Zermos_Web.Controllers
                     somtoday_student_id = somtodayInternalID
                 };
 
-                return Ok("success");
+                return PartialView(model: "success");
             }
 
             return PartialView(model: "failed");

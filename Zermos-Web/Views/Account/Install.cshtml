@@ -1,0 +1,37 @@
+﻿@model dynamic
+
+<script>
+new ZermosModal()
+.addHeading({text: "Wil je Zermos installeren?"})
+.addText({text: "Zermos is een webapplicatie die je kan installeren op je telefoon of computer. Hierdoor kan je Zermos ook gebruiken als een app, zonder dat je een browser nodig hebt."})
+.addText({text: "Momenteel kan je kiezen uit 4 versies van Zermos:"})
+.addList({items: [
+    "Gebruiken als webapplicatie (deze versie)",
+    "Gebruiken als Android app",
+    "Gebruiken als Windows app",
+    "Gebruiken als Progressive Web App"
+], listType: "ul"})
+.addText({text: "Kies de versie die je wilt installeren:"})
+.addDropdown({options: [
+    {label: "Webapplicatie", value: "web"},
+    {label: "Android app", value: "android"},
+    {label: "Windows app", value: "windows"},
+    {label: "Progressive Web App", value: "pwa"}
+], id: "version"})
+.addButton({text: "Installeren", onClick: (ctx) => {
+    
+        console.log(ctx.getComponentsValue().values[0].value.value);
+    
+        var value = ctx.getComponentsValue().values[0].value.value;
+        
+        if (value === "web") null;    
+        else if (value === "android") 
+            window.location.href = "https://play.google.com/store/apps/details?id=nl.zermos";    
+        else if (value === "windows") 
+            window.location.href = "https://www.microsoft.com/store/apps/9N8QZQZJZ3ZK";
+        else if (value === "pwa") 
+            showUserInstallAppBanner();
+    
+}})
+.openTroughAppending(main)
+</script>

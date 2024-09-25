@@ -10,8 +10,6 @@ TODO: jaarbijlagen bij leermiddelen
 
 TODO: rapport downloaden, dit doe je zo: input een jaarlaag en dan worden alle vakken opgevraagd, vraag dan alle cijfers van alle vakken op zodat je een lijst hebt met alle cijfers, dan kan je die in een pdf zetten en downloaden
  
-TODO: add onClose callback to modal system
- 
 Discord server webhooks:
 #informatie: https://discord.com/api/webhooks/1271383220813959251/6YaYKl88vmXV_AH_dfoX-3qTKveuXpaSHTPuuJjPfJTQZfqZyTrCCz3J5-Hf1odT48hA
 #github-feeds: https://discord.com/api/webhooks/1265994706958028926/LDrbV7YsiuRQIpV-W-5VBkbq6HnprimipbuEqHxpvCMJCSNH8iZpqPIa5cTmBRZh_4i2
@@ -22,3 +20,5 @@ de kleur voor de embeds is #2f3136
 
 
 WATCH OUT, FIND A FIX FOR THE SOMTODAY BLOCK, WITHOUT THE CF WORKER PROXY
+
+TODO: NIET ALLES ABSOLUTE!!!! OH NEE. DIT IS NIET GOED. - Tijme over mijn css voor de sidebar
