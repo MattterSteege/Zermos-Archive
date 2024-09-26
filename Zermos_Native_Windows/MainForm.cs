@@ -1,6 +1,7 @@
 using Microsoft.Web.WebView2.WinForms;
 using System;
 using System.Windows.Forms;
+using Microsoft.Web.WebView2.Core;
 
 namespace Zermos_Native_Windows
 {
@@ -14,75 +15,85 @@ namespace Zermos_Native_Windows
         {
             this.isDebugVersion = isDebugVersion;
             this.deepLink = deepLink ?? string.Empty;
+            Logger.Log($"Initializing MainForm. Debug version: {isDebugVersion}, deeplink: {this.deepLink}");
             InitializeComponent();
             InitializeWebView();
         }
 
-        private void HandleDeeplink(Uri uri)
-        {
-            // Extract the query parameters from the deeplink URI
-            var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
-            var code = queryParams["code"];
-            var iss = queryParams["iss"];
-            var state = queryParams["state"];
-
-            // Navigate the WebView to the callback URL with the extracted parameters
-            string callbackUrl = $"https://zermos.kronk.tech/koppelingen/somtoday/callback?code={code}&iss={iss}&state={state}";
-            webView.Source = new Uri(callbackUrl);
-        }
-
         private async Task InitializeWebView()
         {
-            webView = new WebView2
+            try
             {
-                Dock = DockStyle.Fill
-            };
+                Logger.Log("Starting InitializeWebView method");
+                webView = new WebView2
+                {
+                    Dock = DockStyle.Fill
+                };
+                Logger.Log("WebView2 instance created");
 
-            await webView.EnsureCoreWebView2Async();
-            webView.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false; // Disable context menus
-            webView.CoreWebView2.Settings.UserAgent += " zermos_windows_app";
+                var env = await CoreWebView2Environment.CreateAsync(null, Path.Combine(Path.GetTempPath(), "WebView2UserData"));
+                Logger.Log("CoreWebView2Environment created");
 
-            // Handle JavaScript message from the website
-            //webView.CoreWebView2.WebMessageReceived += WebView_WebMessageReceived;
+                await webView.EnsureCoreWebView2Async(env);
+                Logger.Log("EnsureCoreWebView2Async completed");
 
-            Controls.Add(webView);
+                webView.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
+                webView.CoreWebView2.Settings.UserAgent += " zermos_windows_app";
+                Logger.Log("WebView2 settings configured");
 
-            // Load either the beta or production site based on the flag
-            string url = isDebugVersion ? "https://zermos-beta.kronk.tech" : "https://zermos.kronk.tech";
-            
-            
-            // If there's a deeplink, navigate to the callback with parameters
-            if (!string.IsNullOrEmpty(this.deepLink))
-            {
-                HandleDeeplink(new Uri(this.deepLink));
+                Controls.Add(webView);
+                Logger.Log("WebView2 added to Controls");
+
+                string url = isDebugVersion ? "https://zermos-beta.kronk.tech" : "https://zermos.kronk.tech";
+
+                if (!string.IsNullOrEmpty(this.deepLink))
+                {
+                    Logger.Log($"Handling deeplink: {this.deepLink}");
+                    HandleDeeplink(new Uri(this.deepLink));
+                }
+                else
+                {
+                    Logger.Log($"Navigating to URL: {url}");
+                    webView.Source = new Uri(url);
+                }
+
+                Logger.Log("Navigation initiated");
             }
-            else
+            catch (WebView2RuntimeNotFoundException ex)
             {
-                webView.Source = new Uri(url);
+                Logger.Log($"WebView2 Runtime not found: {ex.Message}");
+                MessageBox.Show("WebView2 Runtime is not installed. Please run the installer again or download it from Microsoft's website.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
+            catch (Exception ex)
+            {
+                Logger.Log($"Exception in InitializeWebView: {ex.Message}");
+                Logger.Log($"Stack trace: {ex.StackTrace}");
+                MessageBox.Show($"An error occurred while initializing WebView2: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        //invoke using window.chrome.webview.postMessage("#ff0000")
-        // private void WebView_WebMessageReceived(object sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e)
-        // {
-        //     // Assuming the website sends a JSON message like { "color": "#ff0000" }
-        //     var colorMessage = e.TryGetWebMessageAsString();
-        //     if (!string.IsNullOrEmpty(colorMessage))
-        //     {
-        //         try
-        //         {
-        //             Color newColor = ColorTranslator.FromHtml(colorMessage);
-        //             this.BackColor = newColor; // Change the form background color
-        //             //color of the top bar (minimize, maximize, close) set to the same color
-        //             this.ControlBox = false;
-        //             this.ControlBox = true;
-        //         }
-        //         catch
-        //         {
-        //             // Handle invalid color
-        //         }
-        //     }
-        // }
+        private void HandleDeeplink(Uri uri)
+        {
+            try
+            {
+                Logger.Log($"Handling deeplink: {uri}");
+                var queryParams = System.Web.HttpUtility.ParseQueryString(uri.Query);
+                var code = queryParams["code"];
+                var iss = queryParams["iss"];
+                var state = queryParams["state"];
+
+                string callbackUrl =
+                    $"https://zermos.kronk.tech/koppelingen/somtoday/callback?code={code}&iss={iss}&state={state}";
+                Logger.Log($"Constructed callback URL: {callbackUrl}");
+
+                webView.Source = new Uri(callbackUrl);
+                Logger.Log("Navigation to callback URL initiated");
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Exception in HandleDeeplink: {ex.Message}");
+                Logger.Log($"Stack trace: {ex.StackTrace}");
+            }
+        }
     }
 }

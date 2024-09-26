@@ -35,7 +35,14 @@ partial class MainForm
         this.ClientSize = new System.Drawing.Size(1200, 800);
         this.Name = "MainForm";
         this.Text = "Zermos";
-        this.Icon = new System.Drawing.Icon(@"icon.ico");
+        try
+        {
+            this.Icon = new System.Drawing.Icon(@"icon.ico");
+        }
+        catch
+        {
+            this.Icon = null;
+        }
         this.ResumeLayout(false);
 
     }
