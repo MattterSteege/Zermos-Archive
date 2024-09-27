@@ -3,6 +3,9 @@
 @using Infrastructure.Entities
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Zermos_Web.TagHelpers
+@using System.ComponentModel.DataAnnotations.Schema
+@using System.Reflection
+@using Infrastructure.Utils
 @model dynamic
 
 
@@ -50,6 +53,12 @@
                     {
                         continue;
                     }
+                    
+                    // //if it has a NotMapped, or Settings attribute, skip it
+                    // if (property.GetCustomAttribute<NotMappedAttribute>() != null || property.GetCustomAttribute<SettingAttribute>() != null)
+                    // {
+                    //     continue;
+                    // }
 
                     <p><b>@property.Name</b></p>
                 }
@@ -171,23 +180,8 @@ function Ontkoppel(app) {
     });
 };
 
-if (window.matchMedia('(display-mode: standalone)').matches) {
-    document.getElementById('install-button').style.display = "none";
-} 
-else if (!installable) {
-    document.getElementById('install-button').setAttribute('onclick', 'window.location.href="https://zermos-docs.kronk.tech/PWA%20installeren"');
-} else {
-    document.getElementById('install-button').addEventListener('click', () => {
-        deferredPrompt.prompt();
-
-        deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-                document.getElementById('install-button').style.display = "none"; // Hide the button
-            } else {
-                console.log('User dismissed the install prompt');
-            }
-        });
-    });
+if (isNativeApp()) {
+    document.getElementById('install').style.display = 'none';
 }
 
 if (isUserOnline) {

@@ -25,20 +25,32 @@
             <a onclick="ReplacePage('@Url.Action("SomtodayHackerman", "Koppelingen")')">Koppel Somtoday als een echte hackerman</a>
         </div>
     </div>
-    <div class="zermelo" id="deeplink">
-        <h1>Somtoday deeplink methode</h1>
-        <p>Deze methode werkt net zoals de normale SOMtoday manier van inloggen, dus lekker bekend. Klik na het inloggen om 'openen met Zermos' ipv 'Somtoday'</p>
-        <div class="spacer" style="padding: 0; margin-top: 8px"></div>
-        <div class="methods">
-            <a onclick="ReplacePage('@Url.Action("SomtodayDeeplink", "Koppelingen")')">Koppel Somtoday via deeplink</a>
-        </div>
-    </div>
-</div>
-
-<script>
-Zermos.mainBeforeLoad = () => {
-    if (!isNativeApp()) {
-        document.getElementById("deeplink").style.display = "none";
+    
+    @{
+        //isNative is true when the userAgent contains either "zermos_mobile_app" or "zermos_mobile_app"
+        bool isNative = Context.Request.Headers["User-Agent"].Contains("zermos_mobile_app") || Context.Request.Headers["User-Agent"].Contains("zermos_mobile_app");
     }
-}
-</script>
+    
+    @if (isNative)
+    {
+        <div class="zermelo" id="deeplink">
+            <h1>Somtoday deeplink methode</h1>
+            <p>Koppel Somtoday super makkelijk en veilig, je logt in op de Somtoday website en je wordt automatisch gekoppeld.</p>
+            <div class="spacer" style="padding: 0; margin-top: 8px"></div>
+            <div class="methods">
+                <a onclick="ReplacePage('@Url.Action("SomtodayDeeplink", "Koppelingen")')">Koppel Somtoday via deeplink</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="zermelo" id="deeplink">
+            <h1>Somtoday deeplink methode</h1>
+            <p>Deze methode is alleen te gebruiken als je de Zermos app hebt gedownload voor android of windows</p>
+            <div class="spacer" style="padding: 0; margin-top: 8px"></div>
+            <div class="methods">
+                <a onclick="ReplacePage('@Url.Action("Install", "Account")')">Download Zermos</a>
+            </div>
+        </div>
+    }
+</div>

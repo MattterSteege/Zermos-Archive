@@ -493,13 +493,11 @@
 }
 
 .dropdown-menu.show {
-    max-height: 100px;
+    max-height: 130px;
     padding: var(--modal-padding);
     opacity: 1;
     margin-top: 10px;
 }
-
-/*<div class="sliderInput" id="MTgxLDEwLDg"><div class="slider-container"><input type="range" class="slider-input" min="0" max="50" step="1"><span class="slider-value">0</span></div></div>*/
 
 .slider-container {
     display: flex;

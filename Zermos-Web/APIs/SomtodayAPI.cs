@@ -46,7 +46,7 @@ public class  SomtodayAPI
         
         if (!response.IsSuccessStatusCode)
         {
-            Console.Write("undefined error: " + await response.Content.ReadAsStringAsync());
+            Console.WriteLine("undefined error: " + await response.Content.ReadAsStringAsync());
         }
         
         var content = await response.Content.ReadAsStringAsync();

@@ -108,6 +108,14 @@ namespace Infrastructure.Entities
             set => SetSetting("prefered_rooster_engine", value);
         }
         
+        //CODE VERIFIER REGEX
+        [NotMapped, Setting("^[A-Za-z0-9-._~]{43,128}$")]
+        public string somtoday_code_verifier
+        {
+            get => GetSetting<string>("somtoday_code_verifier");
+            set => SetSetting("somtoday_code_verifier", value);
+        }
+        
         // Helper method to get a setting value do with <int> or <string> etc.
         private T GetSetting<T>(string settingName)
         {

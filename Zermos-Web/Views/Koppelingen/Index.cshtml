@@ -37,6 +37,19 @@
             <a onclick="ReplacePage('@Url.Action("SomtodayWithCreds", "Koppelingen")')">Koppel Somtoday met je wachtwoord</a>
             <a onclick="ReplacePage('@Url.Action("SomtodayWithSTAP", "Koppelingen")')">Koppel Somtoday via STAP</a>
             <a onclick="ReplacePage('@Url.Action("SomtodayHackerman", "Koppelingen")')">Koppel Somtoday als een echte hackerman</a>
+            @{
+                //isNative is true when the userAgent contains either "zermos_mobile_app" or "zermos_mobile_app"
+                bool isNative = Context.Request.Headers["User-Agent"].Contains("zermos_mobile_app") || Context.Request.Headers["User-Agent"].Contains("zermos_mobile_app");
+            }
+            
+            @if (isNative)
+            {
+                <a onclick="ReplacePage('@Url.Action("SomtodayDeeplink", "Koppelingen")')">Koppel Somtoday via deeplink</a>
+            }
+            else
+            {
+                <a onclick="ReplacePage('@Url.Action("Install", "Account")')">Download Zermos (Koppel Somtoday via deeplink)</a>
+            }
         </div>
     </div>
     <div class="zermelo">

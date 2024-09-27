@@ -399,7 +399,7 @@ let isMobile = () =>
         navigator.userAgent.match(/zermos_mobile_app/i)
     );
 
-let isNativeApp = () => !!navigator.userAgent.match(/zermos_mobile_app/i);
+let isNativeApp = () => !!(navigator.userAgent.match(/zermos_mobile_app/i) || navigator.userAgent.match(/zermos_windows_app/i));
 
 let isSmartWatch = () =>
     //check if screen is smaller than 600px

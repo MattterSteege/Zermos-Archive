@@ -5,19 +5,19 @@ function mainModal() {
     new ZermosModal()
     .addHeading({text: "Wil je Zermos installeren?"})
     .addText({text: "Zermos is een webapplicatie die je kan installeren op je telefoon of computer. Hierdoor kan je Zermos ook gebruiken als een app, zonder dat je een browser nodig hebt."})
-    .addText({text: "Momenteel kan je kiezen uit 4 versies van Zermos:"})
+    .addText({text: "Momenteel kan je kiezen uit 3 versies van Zermos:"})
     .addList({items: [
         "Gebruiken als webapplicatie (deze versie)",
         "Gebruiken als Android app",
         "Gebruiken als Windows app",
-        "Gebruiken als Progressive Web App"
+        //"Gebruiken als Progressive Web App"
     ], listType: "ul"})
     .addText({text: "Kies de versie die je wilt installeren:"})
     .addDropdown({options: [
         {label: "Webapplicatie", value: "web"},
         {label: "Android app", value: "android"},
         {label: "Windows app", value: "windows"},
-        {label: "Progressive Web App", value: "pwa"}
+        //{label: "Progressive Web App", value: "pwa"}
     ], id: "version"})
     .addButton({text: "Installeren", onClick: (ctx) => {
         
@@ -31,8 +31,8 @@ function mainModal() {
                 installAndroidApp(); 
             else if (value === "windows") 
                 installWindowsApp();
-            else if (value === "pwa") 
-                showUserInstallAppBanner();
+            //else if (value === "pwa") 
+            //    showUserInstallAppBanner();
             
             ctx.close();
         

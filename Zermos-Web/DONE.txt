@@ -5,6 +5,7 @@ Version 0.6.6 - bugfixes
     - welke versie je gebruikt (RELEASE, BETA & DEV) staat nu aangegeven als je Zermos opent (Zermos, Zermos Beta, Zermos Dev)
     - een deel van de CSS geüpdatet, maar volgens sommige gebruikers is het nog steeds niet helemaal goed. Tijme.
     - achter de schermen wat dingen aangepast, waardoor nieuwe versies beter kunnen worden uitgerold.
+    - Er is een nieuw menu om de Windows, android of PWA versie te downloaden (account > installeren)
     
 - koppelen
     - Somtoday callback pagina is nu ook overgeschakeld naar het modal systeem, was ik blijkbaar vergeten.
@@ -14,3 +15,6 @@ Version 0.6.6 - bugfixes
     
 - Zermelo - rooster
     - in de paklijst staan geen uitgevallen lessen meer.
+    
+- koppelingen - Somtoday
+    - Somtoday is nu beschikbaar voor 80% van de gebruikers, heb jij een android telefoon of een windows computer? Dan kan je nu Zermos downloaden en op een veilige en makkelijke manier Somtoday koppelen.

@@ -19,7 +19,4 @@ Discord server webhooks:
 de kleur voor de embeds is #2f3136
 
 
-WATCH OUT, FIND A FIX FOR THE SOMTODAY BLOCK, WITHOUT THE CF WORKER PROXY
-
-TODO: NIET ALLES ABSOLUTE!!!! OH NEE. DIT IS NIET GOED. - Tijme over mijn css voor de sidebar
-TODO": remove the ipv6 shit
+TODO: change all the HTTPclient instances to use the DI methods

@@ -456,27 +456,11 @@ namespace Zermos_Web.Controllers
             //DEEPLINK CALLBACK
             else if (!code.IsNullOrEmpty() || !iss.IsNullOrEmpty() || !state.IsNullOrEmpty())
             {
-                var code_verifier = Request.Cookies["zermos_somtoday_auth_verifier"];
-
-                // var client = new HttpClient();
-                // var request = new HttpRequestMessage(HttpMethod.Post, "https://passtrough.mjtsgamer.workers.dev/https://inloggen.somtoday.nl/oauth2/token");
-                // request.Headers.Add("accept", "application/json, text/plain, */*");
-                // request.Headers.Add("content-type", "application/x-www-form-urlencoded");
-                // request.Headers.Add("origin", "https://leerling.somtoday.nl");
-                //
-                // var collection = new List<KeyValuePair<string, string>>();
-                // collection.Add(new("grant_type", "authorization_code"));
-                // collection.Add(new("code", ""));
-                // collection.Add(new("redirect_uri", "somtoday://nl.topicus.somtoday.leerling/oauth/callback"));
-                // collection.Add(new("code_verifier", ""));
-                // collection.Add(new("client_id", "somtoday-leerling-native"));
-                // collection.Add(new("claims", "{\"id_token\":{\"given_name\":null, \"leerlingen\":null, \"orgname\": null, \"affiliation\":{\"values\":[\"student\",\"parent/guardian\"]} }}"));
-                // var content = new FormUrlEncodedContent(collection);
-                // request.Content = content;
-                // var response = await client.SendAsync(request);
-                // response.EnsureSuccessStatusCode();
-                // Console.WriteLine(await response.Content.ReadAsStringAsync());
+                var code_verifier = ZermosUser.somtoday_code_verifier ?? "";
                 
+                if (code_verifier.IsNullOrEmpty())
+                    return PartialView(model: "failed");
+
                 var url = "https://passtrough.mjtsgamer.workers.dev/https://inloggen.somtoday.nl/oauth2/token";
                 var response = await _somtodayHttpClientWithoutRedirect.PostAsync(url,
                     new FormUrlEncodedContent(new Dictionary<string, string>
@@ -520,7 +504,8 @@ namespace Zermos_Web.Controllers
             //1 = code challenge
             
             //set zermos_somtoday_auth_verifier cookie for 10 minutes
-            Response.Cookies.Append("zermos_somtoday_auth_verifier", tokens[0], new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
+            //Response.Cookies.Append("zermos_somtoday_auth_verifier", tokens[0], new CookieOptions {Expires = DateTime.Now.AddMinutes(10)});
+            ZermosUser = new user {somtoday_code_verifier = tokens[0]};
             
             return PartialView(tokens);
         }
