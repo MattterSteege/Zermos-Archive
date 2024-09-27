@@ -21,9 +21,12 @@ namespace Infrastructure
         /// Voeg een afspraak toe voor een gebruiker
         /// </summary>
         /// <param name="email">The email of the user</param>
-        /// <param name="date">The date of the appointment</param>
+        /// <param name="subject"></param>
         /// <param name="description">The description of the appointment</param>
         /// <param name="location">The location of the appointment</param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="appointmentType"></param>
         /// <exception cref="Exception">Thrown when the user does not exist, the date is in the past, the description is null or empty, or the location is null or empty</exception>
         /// <returns></returns>
         public async Task AddAppointmentAsync(DateTime start, DateTime end, string appointmentType, string subject, string description, string location, string email)

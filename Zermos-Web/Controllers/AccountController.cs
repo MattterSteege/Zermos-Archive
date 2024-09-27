@@ -49,7 +49,6 @@ namespace Zermos_Web.Controllers
             return PartialView(ZermosUser);
         }
         
-        [Authorize]
         [ZermosPage]
         [Route("/Installeren")]
         public IActionResult Install()

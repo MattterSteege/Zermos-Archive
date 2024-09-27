@@ -10,14 +10,14 @@ function mainModal() {
         "Gebruiken als webapplicatie (deze versie)",
         "Gebruiken als Android app",
         "Gebruiken als Windows app",
-        //"Gebruiken als Progressive Web App"
+        "Gebruiken als Progressive Web App"
     ], listType: "ul"})
     .addText({text: "Kies de versie die je wilt installeren:"})
     .addDropdown({options: [
         {label: "Webapplicatie", value: "web"},
         {label: "Android app", value: "android"},
         {label: "Windows app", value: "windows"},
-        //{label: "Progressive Web App", value: "pwa"}
+        {label: "Progressive Web App", value: "pwa"}
     ], id: "version"})
     .addButton({text: "Installeren", onClick: (ctx) => {
         
@@ -31,8 +31,8 @@ function mainModal() {
                 installAndroidApp(); 
             else if (value === "windows") 
                 installWindowsApp();
-            //else if (value === "pwa") 
-            //    showUserInstallAppBanner();
+            else if (value === "pwa") 
+               installPWA();
             
             ctx.close();
         
@@ -64,6 +64,15 @@ function installWindowsApp() {
     .addHeading({text: "Bedankt voor het installeren van Zermos!"})
     .addText({text: "Je kan de app nu installeren op je computer."})
     .openTroughAppending(main)
+}
+
+function installPWA() {
+    new ZermosModal()
+    .addHeading({text: "Zermos installeren als Progressive Web App"})
+    .addText({text: "Zermos kan je installeren als Progressive Web App. Hierdoor kan je Zermos gebruiken als een app, zonder dat je een browser nodig hebt."})
+    .openTroughAppending(main);
+    
+    showUserInstallAppBanner();
 }
 
 mainModal();

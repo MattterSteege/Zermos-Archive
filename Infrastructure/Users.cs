@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.Context;
 using Infrastructure.Entities;
@@ -31,25 +30,12 @@ namespace Infrastructure
             {
                 return await _context.users.AsNoTracking().ToListAsync();
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 
                 return new List<user>();
             }
             #endif
-        }
-
-        public async Task<List<user>> GetUsersWithSomtodayAsync()
-        {
-            try
-            {
-                return await _context.users.AsNoTracking().Where(x => x.somtoday_refresh_token != null).ToListAsync();
-            }
-            catch (DbUpdateException ex)
-            {
-                
-                return new List<user>();
-            }
         }
 
         /// <summary>
@@ -66,7 +52,7 @@ namespace Infrastructure
             {
                 return await _context.users.AsNoTracking().FirstOrDefaultAsync(x => x.email == email.ToLower());
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 // Handle exception (e.g., log it)
                 return new user();
@@ -77,7 +63,7 @@ namespace Infrastructure
         /// This method adds a user to the database.
         /// </summary>
         /// <param name="user">The user object to add to the database.</param>
-        public async Task AddUserAsync(user user)
+        private async Task AddUserAsync(user user)
         {
             try
             {
@@ -89,7 +75,7 @@ namespace Infrastructure
                 await _context.users.AddAsync(user);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 
             }
@@ -140,10 +126,10 @@ namespace Infrastructure
                     }
                 }
 
-                if (userToUpdate != null) _context.users.Update(userToUpdate);
+                _context.users.Update(userToUpdate);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 
             }

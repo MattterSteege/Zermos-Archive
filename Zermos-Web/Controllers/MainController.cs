@@ -174,6 +174,8 @@ namespace Zermos_Web.Controllers
         [Route("/installeren/{app}")]
         public IActionResult install(string app)
         {
+            Log(LogLevel.Information, $"User: {ZermosEmail} initiated install of {app}");
+            
             //app can be equel to Zermos.exe and Zermos.apk
             //files are in wwwroot/installs/[app]
             try

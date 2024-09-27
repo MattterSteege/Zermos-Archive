@@ -20,11 +20,6 @@
   "dir": "ltr",
   "lang": "nl",
   "orientation": "any",
-  "display_override": [
-    "window-controls-overlay",
-    "minimal-ui",
-    "browser"
-  ],
   "categories": [
     "education",
     "news",
