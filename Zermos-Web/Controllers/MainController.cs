@@ -17,14 +17,11 @@ namespace Zermos_Web.Controllers
 {
     public class MainController : BaseController
     {
-        private readonly HttpClient _httpClient;
+        private readonly HttpClient _httpClient = new HttpClient();
 
         public MainController(Users user, Shares share, CustomAppointments customCustomAppointment,
-            ILogger<BaseController> logger, IHttpClientFactory httpClientFactory) : base(user, share,
-            customCustomAppointment, logger, httpClientFactory)
-        {
-            _httpClient = httpClientFactory.CreateClient("ipv6Client");
-        }
+            ILogger<BaseController> logger) : base(user, share,
+            customCustomAppointment, logger) { }
         
         private JsMinifier _jsMinifier = new JsMinifier();
         
@@ -173,6 +170,22 @@ namespace Zermos_Web.Controllers
             }
         }
         
+        //any request that requests a png (/x.png) will be redirected to /images/x.png
+        [Route("/installeren/{app}")]
+        public IActionResult install(string app)
+        {
+            //app can be equel to Zermos.exe and Zermos.apk
+            //files are in wwwroot/installs/[app]
+            try
+            {
+                return File(System.IO.File.ReadAllBytes($"wwwroot/installs/{app}"), "application/octet-stream");
+            }
+            catch (Exception e)
+            {
+                return NotFound();
+            }
+        }
+        
         //basic do whatever you want robots.txt
         [Route("/robots.txt")]
         public IActionResult Robots()
@@ -270,5 +283,7 @@ namespace Zermos_Web.Controllers
             var responseString = await response.Content.ReadAsStringAsync();
             return Ok(responseString);
         }
+        
+        
     }
 }

@@ -16,10 +16,9 @@ namespace Zermos_Web.Controllers
         private readonly Shares _share;
         protected readonly CustomAppointments CustomCustomAppointment;
         private readonly ILogger<BaseController> _logger;
-        protected readonly IHttpClientFactory _clientFactory;
 
         protected BaseController(Users user, Shares share, CustomAppointments customCustomAppointment,
-            ILogger<BaseController> logger, IHttpClientFactory httpClientFactory)
+            ILogger<BaseController> logger)
         {
             _user = user;
             _share = share;

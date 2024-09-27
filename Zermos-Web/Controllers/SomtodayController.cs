@@ -28,7 +28,7 @@ namespace Zermos_Web.Controllers
 {
     public class SomtodayController : BaseController
     {
-        public SomtodayController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger, IHttpClientFactory httpClientFactory) : base(user, share, customCustomAppointment, logger, httpClientFactory) { }
+        public SomtodayController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
         
         private readonly HttpClient _httpClient = new();
         SomtodayAPI somtodayApi = new(new HttpClient(new SocketsHttpHandler()

@@ -391,6 +391,20 @@ window.addEventListener("beforeinstallprompt", (e) => {
     installable = true;
 });
 
+function showUserInstallAppBanner() {
+    if (installable) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === "accepted") {
+                console.log("User accepted the A2HS prompt");
+            } else {
+                console.log("User dismissed the A2HS prompt");
+            }
+            deferredPrompt = null;
+        });
+    }
+}
+
 @*if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/serviceworker.js?v=@version', { scope: '/' })
         .then((registration) => {

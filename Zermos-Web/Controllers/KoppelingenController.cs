@@ -48,37 +48,30 @@ namespace Zermos_Web.Controllers
             }
         };
 
-        private readonly HttpClient _somtodayHttpClient;
-        //    = new()
-        // {
-        //     DefaultRequestHeaders =
-        //     {
-        //         {"origin", "https://inloggen.somtoday.nl"},
-        //         {"accept", "application/json"}
-        //     }
-        // };
+        private readonly HttpClient _somtodayHttpClient
+           = new()
+        {
+            DefaultRequestHeaders =
+            {
+                {"origin", "https://inloggen.somtoday.nl"},
+                {"accept", "application/json"}
+            }
+        };
 
-        private readonly HttpClient _somtodayHttpClientWithoutRedirect;
-        //     = new(new HttpClientHandler
-        // {
-        //     AllowAutoRedirect = false,
-        // })
-        // {
-        //     DefaultRequestHeaders =
-        //     {
-        //         {"origin", "https://inloggen.somtoday.nl"},
-        //     }
-        // };
+        private readonly HttpClient _somtodayHttpClientWithoutRedirect
+            = new(new HttpClientHandler
+        {
+            AllowAutoRedirect = false,
+        })
+        {
+            DefaultRequestHeaders =
+            {
+                {"origin", "https://inloggen.somtoday.nl"},
+            }
+        };
 
         
-        public KoppelingenController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger, IHttpClientFactory httpClientFactory) : base(user, share, customCustomAppointment, logger, httpClientFactory)
-        {
-            _somtodayHttpClient = httpClientFactory.CreateClient("ipv6Client");
-            _somtodayHttpClient.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
-            //create client for ...WithoutRedirect and set redirect to false
-            _somtodayHttpClientWithoutRedirect = httpClientFactory.CreateClient("ipv6ClientWithoutRedirect");
-            _somtodayHttpClientWithoutRedirect.DefaultRequestHeaders.Add("origin", "https://inloggen.somtoday.nl");
-        }
+        public KoppelingenController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
         
         SomtodayAPI somtodayApi = new(new HttpClient());
         InfowijsApi InfowijsApi = new(new HttpClient());

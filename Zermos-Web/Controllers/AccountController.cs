@@ -16,7 +16,7 @@ namespace Zermos_Web.Controllers
     [Route("account/[action]")]
     public class AccountController : BaseController
     {
-        public AccountController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger, IHttpClientFactory httpClientFactory) : base(user, share, customCustomAppointment, logger, httpClientFactory) { }
+        public AccountController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
 
         [Authorize]
         [ZermosPage]

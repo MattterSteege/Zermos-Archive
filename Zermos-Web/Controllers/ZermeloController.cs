@@ -15,7 +15,7 @@ namespace Zermos_Web.Controllers
 {
     public class ZermeloController : BaseController
     {
-        public ZermeloController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger, IHttpClientFactory httpClientFactory) : base(user, share, customCustomAppointment, logger, httpClientFactory) { }
+        public ZermeloController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
         ZermeloApi zermeloApi = new(new HttpClient());
 
         [Authorize]

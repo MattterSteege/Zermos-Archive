@@ -12,7 +12,7 @@ namespace Zermos_Web.Controllers;
 
 public class AfsprakenController : BaseController
 {
-    public AfsprakenController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger, IHttpClientFactory httpClientFactory) : base(user, share, customCustomAppointment, logger, httpClientFactory) { }
+    public AfsprakenController(Users user, Shares share, CustomAppointments customCustomAppointment, ILogger<BaseController> logger) : base(user, share, customCustomAppointment, logger) { }
 
     [Authorize]
     [HttpPost("/Api/Afspraken/Nieuw")]
