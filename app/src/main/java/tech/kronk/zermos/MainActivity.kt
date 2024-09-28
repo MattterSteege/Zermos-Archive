@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.Network
@@ -18,27 +19,119 @@ import android.view.View
 import android.view.WindowManager
 import android.webkit.*
 import android.widget.Toast
-import tech.kronk.zermos.R
 
 class MainActivity : Activity() {
     private lateinit var mWebView: WebView
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
     private val baseURL = "https://zermos.kronk.tech"
     private var isDeeplinkHandled = false
+    private var isErrorPageLoaded = false
 
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Correct the WebView initialization with the correct ID from your layout
         mWebView = findViewById(R.id.activity_main_webview)
+
+        setupWebView()
+
+        // Load the base URL initially if network is available
+        if (isNetworkAvailable()) {
+            mWebView.loadUrl(baseURL)
+        } else {
+            mWebView.loadUrl("file:///android_asset/offline.html")
+        }
+
+        setupNetworkCallback()  // Ensures WebView is aware of network changes
+        handleDeeplink(intent)   // In case a deeplink is triggered on startup
+        checkCookiesAndSetTheme()
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun setupWebView() {
         val webSettings = mWebView.settings
         webSettings.javaScriptEnabled = true
+        webSettings.domStorageEnabled = true
+        webSettings.cacheMode = WebSettings.LOAD_DEFAULT  // Use the default cache mode
+        mWebView.clearCache(false)  // Clear cache, but do not remove cached resources from disk
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            webSettings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+        }
+
         val defaultUA = webSettings.userAgentString
         webSettings.userAgentString = "$defaultUA zermos_mobile_app"
 
-        mWebView.webViewClient = HelloWebViewClient(baseURL)
-        handleDeeplink(intent)
+        mWebView.webViewClient = object : WebViewClient() {
+            private var retryCount = 0
+            private val maxRetries = 3
+
+            override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                super.onReceivedError(view, request, error)
+
+                // Log the error details
+                Log.e("WebView Error", "Error code: ${error?.errorCode}, description: ${error?.description}")
+
+                // Handle only main frame errors
+                if (request?.isForMainFrame == true) {
+                    if (!isNetworkAvailable()) {
+                        view?.loadUrl("file:///android_asset/offline.html")
+                    } else if (retryCount < maxRetries) {
+                        retryCount++
+
+                        // Delay retry by 2 seconds to avoid rapid retries
+                        view?.postDelayed({
+                            Log.d("WebView", "Retrying load after error... (attempt: $retryCount)")
+                            view.reload()
+                        }, 2000)
+                    } else {
+                        // After max retries, show an error page or message
+                        view?.loadUrl("file:///android_asset/error.html")
+                        retryCount = 0  // Reset retry count
+                    }
+                }
+            }
+
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                super.onPageStarted(view, url, favicon)
+                Log.d("WebView", "Page started loading: $url")
+                isErrorPageLoaded = false
+            }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+
+                Log.d("WebView", "Page finished loading: $url")
+            }
+
+
+            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+                val url = request.url.toString()
+
+                if ("somtoday" == request.url.scheme) {
+                    // handle deeplinks
+                    val code = request.url.getQueryParameter("code")
+                    val iss = request.url.getQueryParameter("iss")
+                    val state = request.url.getQueryParameter("state")
+
+                    val redirectUrl = "$baseURL/Koppelingen/Somtoday/Callback?code=$code&iss=$iss&state=$state"
+                    Log.d("WebViewClient", "Loading deeplink URL: $redirectUrl")
+
+                    view.loadUrl(redirectUrl)
+                    return true
+                }
+
+                // Check if the error occurs after a form submission
+                if (request.method == "POST") {
+                    Log.d("WebViewClient", "Form resubmission detected. Reloading page.")
+                    view.reload()  // Reload the page to avoid cache miss
+                    return true
+                }
+
+                return false  // Let the WebView handle the URL
+            }
+
+        }
 
         mWebView.addJavascriptInterface(WebAppInterface(), "AndroidFunction")
 
@@ -55,16 +148,9 @@ class MainActivity : Activity() {
             dm.enqueue(request)
             Toast.makeText(applicationContext, "Downloading File", Toast.LENGTH_LONG).show()
         }
+    }
 
-        // Check cookies for theme and set status bar color
-        checkCookiesAndSetTheme()
-
-        if (!isDeeplinkHandled && isNetworkAvailable()) {
-            mWebView.loadUrl(baseURL)
-        } else if (!isDeeplinkHandled) {
-            mWebView.loadUrl("file:///android_asset/offline.html")
-        }
-
+    private fun setupNetworkCallback() {
         networkCallback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 runOnUiThread {
@@ -131,28 +217,6 @@ class MainActivity : Activity() {
             actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
             actNw.hasTransport(NetworkCapabilities.TRANSPORT_VPN) -> true
             else -> false
-        }
-    }
-
-    private class HelloWebViewClient(private val baseURL: String) : WebViewClient() {
-        override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
-            val url = request.url
-
-            if ("somtoday" == url.scheme) {
-                val code = url.getQueryParameter("code")
-                val iss = url.getQueryParameter("iss")
-                val state = url.getQueryParameter("state")
-
-                val redirectUrl = "$baseURL/Koppelingen/Somtoday/Callback?code=$code&iss=$iss&state=$state"
-
-                Log.d("WebViewClient", "Loading deeplink URL: $redirectUrl")
-
-                view.loadUrl(redirectUrl)
-                return true
-            }
-
-            view.loadUrl(url.toString())
-            return true
         }
     }
 
