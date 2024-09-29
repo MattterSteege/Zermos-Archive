@@ -130,13 +130,23 @@
         <p id="co_size">cookies size: [CALC...]</p>
         <p id="ss_size">sessionstorage size: [CALC...]</p>
     </div>
-    
+
+    <div class="account-item" id="cookjes_pot">
+        <h1>Cookjes Pot</h1>
+        <p>Deze pot is leeg, maar je kan er altijd wat in gooien</p>
+    </div>
+
+    <div class="account-item" id="localstorage_content">
+        <h1>Localstorage Content</h1>
+        <p>Er is geen opgeslagen data in localstorage</p>
+    </div>
+
     <h4>LOGS</h4>
-    
+
     <div class="account-item" id="Clogs">
         <h1>Console Logs</h1>
     </div>
-    
+
     <div class="account-item" id="Nlogs">
         <h1>Network Logs</h1>
     </div>
@@ -163,6 +173,46 @@ Zermos.mainAfterLoad = () => {
     document.getElementById("ls_size").innerText = "localstorage size: " + (localstorageSize / 1024).toFixed(2) + "KB";
     document.getElementById("co_size").innerText = "cookies size: " + (cookiesSize / 1024).toFixed(2) + "KB";
     document.getElementById("ss_size").innerText = "sessionstorage size: " + (sessionstorageSize / 1024).toFixed(2) + "KB";
+    
+    //loop over cookies and write to cookjes_pot
+    var cookies = document.cookie.split(";");
+    
+    if (cookies.length > 0) {
+        var pot = document.getElementById("cookjes_pot");
+        pot.innerHTML = "<h1>Cookjes Pot</h1>";
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i];
+            var cookieElement = document.createElement("p");
+            cookieElement.innerText = decodeURIComponent(cookie);
+            pot.appendChild(cookieElement);
+        }
+    }
+    
+    //loop over localstorage and write to localstorage_content
+    var ls = document.getElementById("localstorage_content");
+    
+    if (localStorage.length > 0) {
+        ls.innerHTML = "<h1>Localstorage Content</h1>";
+        for (var i = 0; i < localStorage.length; i++) {
+            var key = localStorage.key(i);
+            var value = localStorage.getItem(key);
+            if (value.startsWith("{") && value.endsWith("}")) {
+                var jsonElement = createCollapsibleElement(JSON.parse(value));
+                var jsonHeader = document.createElement("p");
+                jsonHeader.innerText = key;
+                jsonHeader.style.fontWeight = "bold";
+                jsonHeader.style.marginBottom = "5px";
+                ls.appendChild(jsonHeader);
+                ls.appendChild(jsonElement);
+            }
+            else
+            {
+                var lsElement = document.createElement("p");
+                lsElement.innerText = key + ": " + value;
+                ls.appendChild(lsElement);
+            }
+        }
+    }
 }
 
 addEventListenerToMain("onerror", function(e) {

@@ -963,3 +963,64 @@ function isPageStructureComplete() {
   return true;
 }
 
+//==============================JSON VISUALIZER==============================
+function createCollapsibleElement(data, depth = 0) {
+  const markerWidth = '10px'; // Set marker width for indentation
+
+  // Create a details element
+  const details = document.createElement('details');
+
+  // Create a summary element
+  const summary = document.createElement('summary');
+
+  // Set the summary text based on the type of data
+  if (typeof data === 'object' && data !== null) {
+    const keys = Object.keys(data);
+    const preview = keys.length > 3 ?
+        `{<span style="color: gray;">${keys.slice(0, 3).join('</span>, <span style="color: gray;">')}</span>, ...}` :
+        `{<span style="color: gray;">${keys.join('</span>, <span style="color: gray;">')}</span>}`;
+    summary.innerHTML = preview; // Use innerHTML to allow for color styling
+  } else {
+    summary.textContent = data;
+  }
+
+  // Apply margin based on depth for the details element
+  details.style.marginLeft = markerWidth;
+
+  details.appendChild(summary);
+
+  // If data is an object, traverse it
+  if (typeof data === 'object' && data !== null) {
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        const childData = data[key];
+        const childElement = createCollapsibleElement(childData, depth + 1);
+
+        // If the child is not an object (leaf node), display it as a key-value pair
+        if (typeof childData !== 'object' || childData === null) {
+          const keyValueDiv = document.createElement('div');
+          keyValueDiv.style.marginLeft = markerWidth; // Use consistent margin for key-value pairs
+
+          // Create key and value spans with appropriate styles
+          const keySpan = document.createElement('span');
+          keySpan.style.color = 'lightblue'; // Key color
+          keySpan.textContent = `${key}: `;
+
+          const valueSpan = document.createElement('span');
+          valueSpan.style.color = 'orange'; // Value color
+          valueSpan.textContent = `"${decodeURI(childData)}"`;
+
+          // Append key and value spans to the keyValueDiv
+          keyValueDiv.appendChild(keySpan);
+          keyValueDiv.appendChild(valueSpan);
+
+          details.appendChild(keyValueDiv);
+        } else {
+          details.appendChild(childElement);
+        }
+      }
+    }
+  }
+
+  return details;
+}

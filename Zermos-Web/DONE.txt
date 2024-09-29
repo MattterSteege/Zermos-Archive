@@ -2,3 +2,4 @@ Version 0.6.6.1 - small fixes
 
 - algemeen
     - PWA is ook een optie op de download pagina
+    - op de debug pagina is nu een makkelijke weergave van alle cookies and localstorage items toegevoegd

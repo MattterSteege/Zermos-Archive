@@ -63,7 +63,7 @@ namespace Zermos_Web
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write($"[{DateTime.Now:HH:mm:ss} Information] ");
             Console.ResetColor();
-            Console.WriteLine("RELEASE VERSION" + Environment.GetEnvironmentVariable("PROJECT-HASH"));
+            Console.WriteLine("RELEASE VERSION (" + Environment.GetEnvironmentVariable("PROJECT-HASH") + ")");
 #else
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write($"[{DateTime.Now:HH:mm:ss} Information] ");

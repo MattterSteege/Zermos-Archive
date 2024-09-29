@@ -5,18 +5,6 @@ TODO: QR koppelen voor smartwatch, dan weet je ook gelijk dat de gebruiker een s
 TODO: husiwerk pagina redesign
 TODO: huiswerk afvinken
 TODO: infowijs calendar redesign -> https://i.pinimg.com/736x/43/9a/5a/439a5a83b7161d9caaf29cf8a908ff40.jpg (only right side)
-
 TODO: jaarbijlagen bij leermiddelen
-
 TODO: rapport downloaden, dit doe je zo: input een jaarlaag en dan worden alle vakken opgevraagd, vraag dan alle cijfers van alle vakken op zodat je een lijst hebt met alle cijfers, dan kan je die in een pdf zetten en downloaden
- 
-Discord server webhooks:
-#informatie: https://discord.com/api/webhooks/1271383220813959251/6YaYKl88vmXV_AH_dfoX-3qTKveuXpaSHTPuuJjPfJTQZfqZyTrCCz3J5-Hf1odT48hA
-#github-feeds: https://discord.com/api/webhooks/1265994706958028926/LDrbV7YsiuRQIpV-W-5VBkbq6HnprimipbuEqHxpvCMJCSNH8iZpqPIa5cTmBRZh_4i2
-#suggestions: https://discord.com/api/webhooks/1271384153002213377/-Bt4dtPEY8fe3LLREQpPRKj46R_mZcD0kR1OU1rxWAq8cjjIo00JgwBb0kYkcgEk53VB
-#bugs: https://discord.com/api/webhooks/1271384242517053491/e5AFmZvHIKbryPW1cvnKRpqbqLGiaBkKADOakGcr4jhSkMt1ZUXQioX4hZ4J1pF6c3Jt
-
-de kleur voor de embeds is #2f3136
-
-
 TODO: change all the HTTPclient instances to use the DI methods

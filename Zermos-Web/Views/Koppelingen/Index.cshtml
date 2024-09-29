@@ -39,7 +39,8 @@
             <a onclick="ReplacePage('@Url.Action("SomtodayHackerman", "Koppelingen")')">Koppel Somtoday als een echte hackerman</a>
             @{
                 //isNative is true when the userAgent contains either "zermos_mobile_app" or "zermos_mobile_app"
-                bool isNative = Context.Request.Headers["User-Agent"].Contains("zermos_mobile_app") || Context.Request.Headers["User-Agent"].Contains("zermos_mobile_app");
+                string userAgent = Context.Request.Headers["User-Agent"];
+                bool isNative = userAgent.Contains("zermos_mobile_app") || userAgent.Contains("zermos_windows_app");
             }
             
             @if (isNative)
