@@ -97,10 +97,20 @@ namespace Zermos_Web.APIs
         
         public async Task<InfowijsEventsModel> GetSchoolKalenderAsync(user user)
         {
+            #if DEBUG
+            var watch = Stopwatch.StartNew();
+            #endif
+            
             var json = TokenUtils.DecodeJwt(user.infowijs_access_token);
             var client = json.payload.customerProduct.name;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetSessionTokenAsync(user));
             var response = await _httpClient.GetAsync($"https://{client}.hoyapp.nl/hoy/v1/events");
+            
+            #if DEBUG
+            watch.Stop();
+            Console.WriteLine(watch.ElapsedMilliseconds + "ms");
+            #endif
+            
             return JsonConvert.DeserializeObject<InfowijsEventsModel>(await response.Content.ReadAsStringAsync(), Converter.Settings);
         }
         

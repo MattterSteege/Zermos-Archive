@@ -129,74 +129,135 @@ img.photo-attachment {
     text-align: center;
 }
 
+
+
+
+
+
+
+
+
+
+/* ================== CALENDAR ================== */
+
 .calendar-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: var(--padding);
-    /* width: 80%; */
-    color: var(--text-color);
+    text-align: center;
 }
 
-.calendar-month-parent {
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    background-color: var(--overlay-color);
+    border-radius: var(--border-radius);
+    align-items: center;
+    height: var(--button-height);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+}
+
+.prev-month, .next-month {
+    cursor: pointer;
+    height: 100%;
+    min-height: var(--button-height);
+}
+
+.prev-month:hover, .next-month:hover {
+    background: var(--overlay-overlay-color);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: var(--padding);
+    margin-top: var(--padding);
     background: var(--overlay-color);
     padding: var(--padding);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
 }
 
-.calendar-month-parent h1 {
-    margin: 0;
-    font-size: var(--font-size-heading);
-    font-weight: 700;
-}
-
-.calendar-month-parent .calendar-item {
-    padding: var(--padding-small);
-    background: var(--background-color);
-    margin: var(--padding-small) var(--padding-small) var(--padding-small) 0;
-    border-radius: var(--border-radius-small);
-    font-size: var(--font-size);
-}
-
-.dates-container {
-    position: sticky;
-    top: 0;
-    background: var(--overlay-color);
-    padding: var(--padding);
-    display: flex;
-    flex-direction: column;
+.day-header {
+    font-weight: bold;
     color: var(--text-color);
+}
+
+.calendar-grid .day {
+    padding: 10px;
+    background-color: var(--overlay-overlay-color);
     border-radius: var(--border-radius);
-    height: min-content;
+    cursor: pointer;
+    position: relative;
 }
 
-.month {
-    padding: var(--padding-small) 0 var(--padding-small) var(--padding-small);
-    border-radius: var(--border-radius-small);
+.next-month-day, .prev-month-day {
+    padding: 10px;
+    background-color: var(--overlay-overlay-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    position: relative;
+    opacity: 0.25;
 }
 
-.calander-group {
+.calendar-grid .day.has-events {
+    background-color: var(--confirm-color);
+    color: var(--white-color);
+}
+
+.calendar-grid .day.selected {
+    background-color: #00b5d6;
+}
+
+.event-list {
+    margin-top: calc(var(--padding) * 2);
+    background-color: var(--white-color);
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow)
+}
+
+.event-list h3 {
+    font-size: 18px;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.event-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: var(--padding);
+    margin-bottom: calc(var(--padding) / 2);
+    border-radius: var(--border-radius);
+    background-color: var(--overlay-overlay-color);
+    flex-direction: column;
+}
+
+.calendar-days {
+    grid-area: 2 / 1 / 2 / 8;
     display: grid;
-    grid-template-columns: 8fr 150px;
-    grid-gap: var(--padding);
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
 }
 
+.event-item.all-day {
+    border-left: 4px solid #ffcc00;
+}
 
+.event-item.event-time {
+    border-left: 4px solid #00b5d6;
+}
 
-/*If screen width is 700px*/
-@media only screen and (max-width: 1000px) {
-
-    .dates-container {
-        display: none;
+@media screen and (min-width: 1201px) {
+    .calendar-grid {
+        margin-top: var(--padding);
+        width: 400px;
+        position: absolute;
+        right: var(--padding);
     }
 
-    .calendar-container {
-        width: 100%;
+    .event-list {
+        width: calc(100% - 400px - var(--padding));
+        margin-top: var(--padding);
     }
-
-    .calander-group {
-        display: grid;
-        grid-template-columns: 1fr 0;
-        grid-gap: 0;
-    }    
 }

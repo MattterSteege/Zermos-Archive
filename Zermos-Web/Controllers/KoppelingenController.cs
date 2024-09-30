@@ -92,7 +92,10 @@ namespace Zermos_Web.Controllers
             switch (app)
             {
                 case "infowijs":
-                    ZermosUser = new user {infowijs_access_token = string.Empty};
+                    ZermosUser = new user
+                    {
+                        infowijs_access_token = string.Empty
+                    };
                     return Ok("success");
             
                 case "somtoday":
@@ -477,7 +480,8 @@ namespace Zermos_Web.Controllers
                 {
                     somtoday_access_token = somtodayAuthentication.access_token,
                     somtoday_refresh_token = somtodayAuthentication.refresh_token,
-                    somtoday_student_id = somtodayInternalID
+                    somtoday_student_id = somtodayInternalID,
+                    somtoday_code_verifier = string.Empty
                 };
 
                 return PartialView(model: "success");

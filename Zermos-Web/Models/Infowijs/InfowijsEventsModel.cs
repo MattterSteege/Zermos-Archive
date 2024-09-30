@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 
 namespace Zermos_Web.Models
 {
@@ -8,15 +9,22 @@ namespace Zermos_Web.Models
     }
     public class Datum
     {
-        public string id { get; set; }
         public string title { get; set; }
-        public string content { get; set; }
         public int startsAt { get; set; }
         public int endsAt { get; set; }
         public bool isAllDay { get; set; }
-        public bool isSubscribed { get; set; }
-        public string group { get; set; }
-        public int createdAt { get; set; }
-        public int updatedAt { get; set; }
+
+        
+        //turn the unix timestamp into a readable date using the code above
+        public string TimeFormat { get {
+            var culture = new CultureInfo("nl-NL");
+            var startsAt = this.startsAt.ConvertUnixTimestampToDutchTime();
+            var endsAt = this.endsAt.ConvertUnixTimestampToDutchTime();
+            var itemDate = startsAt.Date;
+            if (itemDate == endsAt.Date && !isAllDay) return startsAt.ToString("dddd d MMMM HH:mm", culture) + " - " + endsAt.ToString("HH:mm", culture);
+            if (itemDate != endsAt.Date && !isAllDay) return startsAt.ToString("dddd d MMMM", culture) + " t/m " + endsAt.AddDays(-1).ToString("dddd d MMMM", culture);
+            if (isAllDay) return startsAt.ToString("dddd d MMMM", culture);
+            return "";
+        } }
     }
 }

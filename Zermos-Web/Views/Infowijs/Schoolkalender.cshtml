@@ -1,74 +1,32 @@
-﻿@using System.Globalization
-@model System.Collections.Generic.List<Zermos_Web.Models.Datum>
-
-@{
-    var items = Model;
-    var groupedByMonth = items
-        .GroupBy(item => item.startsAt.ToDateTime().Year)
-        .SelectMany(yearGroup => yearGroup
-        .GroupBy(item => item.startsAt.ToDateTime().Month));
-
-    var culture = new CultureInfo("nl-NL");
-}
+﻿@model dynamic
 
 <link rel="stylesheet" href="/css/infowijs.css" preload/>
 
-<div class="calander-group">
-    <div class="calendar-container">
-        @foreach (var monthGroup in groupedByMonth)
-        {
-            if (monthGroup.Last().endsAt.ToDateTime() < DateTime.Now)
-                continue;
-            
-            
-            var monthYear = monthGroup.First().startsAt.ToDateTime().ToString("M-yy");
-            var startsAtMonthYear = monthGroup.First().startsAt.ToDateTime();
-            var monthName = startsAtMonthYear.ToString("MMMM yyyy", culture);
-
-            <div class="calendar-month-parent" id="@monthYear">
-                <h1>@monthName</h1>
-
-                @foreach (var calenderItem in monthGroup)
-                {
-                    if (calenderItem.endsAt.ToDateTime() < DateTime.Now)
-                        continue;
-                    
-                    var startsAt = calenderItem.startsAt.ConvertUnixTimestampToDutchTime();
-                    var endsAt = calenderItem.endsAt.ConvertUnixTimestampToDutchTime();
-                    var itemDate = startsAt.Date;
-
-                    <div class="calendar-item" style="@(endsAt < DateTime.Now ? "opacity: 0.5;" : "opacity: 1;")">
-                        @calenderItem.title <br/>
-
-                        @if (itemDate == endsAt.Date && !calenderItem.isAllDay)
-                        {
-                            @(startsAt.ToString("dddd d MMMM HH:mm", culture) + " - " + endsAt.ToString("HH:mm", culture))
-                        }
-                        else if (itemDate != endsAt.Date && !calenderItem.isAllDay)
-                        {
-                            @(startsAt.ToString("dddd d MMMM", culture) + " t/m " + endsAt.AddDays(-1).ToString("dddd d MMMM", culture))
-                        }
-                        else if (calenderItem.isAllDay)
-                        {
-                            @startsAt.ToString("dddd d MMMM", culture)
-                        }
-                        <br/>
-                    </div>
-                }
-            </div>
-        }
+<div class="calendar-container">
+    <div class="calendar-header">
+        <button class="prev-month" onclick="changeMonth(-1)">&#10094;</button>
+        <h2 id="calendar-title">Data is aan het laden...</h2>
+        <button class="next-month" onclick="changeMonth(1)">&#10095;</button>
     </div>
 
-    <div class="dates-container">
-        @* @foreach (var monthGroup in groupedByMonth) *@
-        @* { *@
-        @*     var startsAtMonthYear = monthGroup.First().startsAt.ToDateTime(); *@
-        @*     var monthYear = startsAtMonthYear.ToString("M-yy"); *@
-        @* *@
-        @*     <div class="month" onclick="doScrolling('[id=\'@monthYear\']', 1000)" href="?@monthYear"> *@
-        @*         @startsAtMonthYear.ToString("MMMM", culture) *@
-        @*     </div> *@
-        @* } *@
+    <div class="calendar-grid">
+        <div class="day-header">M</div>
+        <div class="day-header">D</div>
+        <div class="day-header">W</div>
+        <div class="day-header">D</div>
+        <div class="day-header">V</div>
+        <div class="day-header">Z</div>
+        <div class="day-header">Z</div>
+
+        <!-- Calendar Days will be dynamically inserted here -->
+        <div id="calendar-days" class="calendar-days"></div>
+    </div>
+
+    <div class="event-list">
+        <h3>Evenementen van deze maand</h3>
+        <div id="event-items">
+            <!-- Event items will be dynamically inserted here -->
+        </div>
     </div>
 </div>
 
@@ -76,75 +34,159 @@
 <script minimize>
 @Context.Items["dmjs"]
 
-    function createDatesContainer() {
-        var datesContainer = document.querySelector('.dates-container');
-        var items = document.querySelectorAll('.calendar-month-parent');
-        
-        for (var i = 0; i < items.length; i++) {
-            var month = document.createElement('div');
-            month.classList.add('month');
-            month.setAttribute('href', '?' + items[i].getAttribute('id'));
-            month.innerHTML = items[i].querySelector('h1').innerHTML.split(' ')[0];
-            datesContainer.appendChild(month);
-            
-            month.addEventListener('click', function() {
-                doScrolling(`[id='` + this.getAttribute('href').replace('?', '') + `']`, 1000);
-            });
-        }
+var events = [];
+var last_save = 0;
+
+InfowijsCalenderItem = function (title, startsAt, endsAt, isAllDay, timeFormat) {
+    this.title = title;
+    this.startsAt = startsAt;
+    this.endsAt = endsAt;
+    this.isAllDay = isAllDay;
+    this.timeFormat = timeFormat;
+}
+
+Zermos.mainBeforeLoad = async () => {
+    const savedData = localStorage.getItem("infowijs-schoolkalender");
+    if (savedData) {
+        const parsedData = JSON.parse(savedData);
+        events = parsedData.events;
+        last_save = new Date(parsedData.last_save);
+        renderCalendar(last_save.getMonth(), last_save.getFullYear());
+    }
+    else {
+        await fetchCalendarData();  // Make sure fetchCalendarData completes before proceeding
+    }
+}
+
+async function fetchCalendarData() {
+    const response = await fetch('/Infowijs/Schoolkalender?no-framework');
+    const data = await response.json();
+    const today = new Date();
+    events = data.map(event => new InfowijsCalenderItem(event.title, event.startsAt, event.endsAt, event.isAllDay, event.timeFormat));
+    last_save = new Date();
+    renderCalendar(today.getMonth(), today.getFullYear());
+
+    // Save to localStorage
+    localStorage.setItem("infowijs-schoolkalender", JSON.stringify({ events: events, last_save: last_save }));
+}
+
+function renderCalendar(month, year) {
+    const daysElement = document.getElementById("calendar-days");
+    daysElement.innerHTML = "";
+
+    // Adjust firstDay to start from Monday (Mo-Su)
+    let firstDay = new Date(year, month, 1).getDay();
+    firstDay = (firstDay === 0) ? 6 : firstDay - 1; // Adjust so Monday is 0 and Sunday is 6
+
+    const totalDays = new Date(year, month + 1, 0).getDate(); // Total days in the current month
+    const prevMonthTotalDays = new Date(year, month, 0).getDate(); // Total days in the previous month
+
+    // Empty cells for days from the previous month
+    for (let i = firstDay - 1; i >= 0; i--) {
+        const emptyDiv = document.createElement("div");
+        emptyDiv.classList.add("prev-month-day");
+        emptyDiv.textContent = prevMonthTotalDays - i;
+        daysElement.appendChild(emptyDiv);
     }
 
-    // Function to extract the target element ID from the URL
-    function getTargetElementId() {
-        var d = new Date();
-        return d.getMonth() + 1 + "-" + d.getFullYear().toString().slice(-2);
-    }
+    // Populate days with events for the current month
+    for (let day = 1; day <= totalDays; day++) {
+        const dayDiv = document.createElement("div");
+        dayDiv.classList.add("day");
+        dayDiv.textContent = day;
 
-    // Check if the URL contains a target element ID and scroll to it
-    Zermos.mainBeforeLoad = () => {
-        createDatesContainer();
-        
-        const targetElementId = getTargetElementId();
-        if (targetElementId) {
-            const targetElement = document.getElementById(targetElementId);
-            if (targetElement) {
-                doScrolling(`[id='` + targetElementId + `']`, 1000);
-            }
-        }
+        const date = new Date(year, month, day);
+        const unixDate = Math.floor(date.getTime() / 1000);
 
-        var indexItems = document.querySelectorAll('.dates-container div');
-        var items = document.querySelectorAll('.calendar-month-parent');
-
-        //add the 'active' class to the item who's top is the closest to the top of the mainElement
-        function setActive() {
-          var closest = items[0];
-          var closestDistance = Math.abs(items[0].getBoundingClientRect().top - main.getBoundingClientRect().top - 96);
-        
-          for (var i = 1; i < items.length; i++) {
-            var distance = Math.abs(items[i].getBoundingClientRect().top - main.getBoundingClientRect().top - 96);
-            if (distance < closestDistance) {
-              closest = items[i];
-              closestDistance = distance;
-            }
-          }
-        
-          for (var i = 0; i < indexItems.length; i++) {
-            indexItems[i].classList.remove('active');
-          }
-        
-          for (var i = 0; i < indexItems.length; i++) {
-            if (indexItems[i].getAttribute('href') === '?' + closest.getAttribute('id')) {
-              indexItems[i].classList.add('active');
-              break;
-            }
-          }
-        }
-
-        //add the 'active' class to the item who's top is the closest to the top of the mainElement
-        setActive();
-
-        //add the 'active' class to the item who's top is the closest to the top of the mainElement when scrolling
-        main.addEventListener('scroll', function() {
-            setActive();
+        // Check for events on this day
+        const eventOnDay = events.find(event => {
+            return event.startsAt <= unixDate && unixDate <= event.endsAt;
         });
+
+        if (eventOnDay) {
+            dayDiv.classList.add("has-events");
+        }
+
+        daysElement.appendChild(dayDiv);
     }
+
+    // Remaining cells for next month's days
+    const totalCells = firstDay + totalDays; // Total cells filled so far
+    const nextMonthDays = 7 - (totalCells % 7); // Remaining cells to fill the week
+
+    if (nextMonthDays < 7) {
+        for (let day = 1; day <= nextMonthDays; day++) {
+            const nextMonthDiv = document.createElement("div");
+            nextMonthDiv.classList.add("next-month-day");
+            nextMonthDiv.textContent = day;
+            daysElement.appendChild(nextMonthDiv);
+        }
+    }
+
+    document.getElementById("calendar-title").textContent = (new Date(year, month).toLocaleString('default', { month: 'long', year: 'numeric' })).charAt(0).toUpperCase() + (new Date(year, month).toLocaleString('default', { month: 'long', year: 'numeric' })).slice(1);
+
+    renderEvents(month, year);
+}
+
+function renderEvents(month, year) {
+    const eventsElement = document.getElementById("event-items");
+    eventsElement.innerHTML = "";
+
+    events.forEach(event => {
+        const eventStart = new Date(event.startsAt * 1000);
+        if (eventStart.getMonth() === month && eventStart.getFullYear() === year) {
+            const eventDiv = document.createElement("div");
+            eventDiv.classList.add("event-item");
+
+            event.isAllDay ?  eventDiv.classList.add('all-day') :  eventDiv.classList.add('event-time')
+
+            eventDiv.innerHTML = `
+                <span>${event.title}</span>
+                <span>${event.timeFormat}</span>
+            `;
+            eventsElement.appendChild(eventDiv);
+        }
+    });
+}
+
+var _currentMonth = new Date().getMonth();
+var _currentYear = new Date().getFullYear();
+
+function changeMonth(direction) {
+    _currentMonth += direction;
+    if (_currentMonth < 0) {
+        _currentMonth = 11;
+        _currentYear--;
+    }
+    else if (_currentMonth > 11) {
+        _currentMonth = 0;
+        _currentYear++;
+    }
+    
+    const currentMonth = new Date(_currentYear, _currentMonth);
+    const newMonth = currentMonth.getMonth();
+    const year = currentMonth.getFullYear();
+
+    renderCalendar(newMonth, year);
+}
+
+//calendar-container
+//when user swipes left or right, change the panel
+var touchstartX = 0;
+var touchendX = 0;
+addEventListenerToMain('touchstart', function(event) {
+    touchstartX = event.changedTouches[0].screenX;
+}, false);
+addEventListenerToMain('touchend', function(event) {
+    touchendX = event.changedTouches[0].screenX;
+    handleGesture();
+}, false);
+
+function handleGesture() {
+    var distance = Math.abs(touchstartX - touchendX);
+    if (distance > 100) {
+        var nextPanel = (touchstartX - touchendX > 0 ? 1 : -1);
+        changeMonth(nextPanel);        
+    }
+}
 </script>
