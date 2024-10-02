@@ -26,8 +26,7 @@ ArchitecturesInstallIn64BitMode=x64compatible
 DefaultGroupName=Zermos
 AllowNoIcons=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
-;PrivilegesRequired=lowest
-PrivilegesRequiredOverridesAllowed=dialog
+PrivilegesRequired=admin
 OutputDir=C:\Users\mattt\Documents\GitHub\Zermos-docs\Zermos_Native_Windows\bin\Release\inno
 OutputBaseFilename=Zermos
 SetupIconFile=C:\Users\mattt\Documents\GitHub\Zermos-docs\Zermos_Native_Windows\bin\Release\net7.0-windows\icon.ico
