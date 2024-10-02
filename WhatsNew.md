@@ -4,7 +4,25 @@ title: what's new
 nav_exclude: false
 ---
 
-# Release Notes - Versie 0.6.5.1 - 159-09-2024
+# Release Notes - versie 0.6.6 - 30-09-2024
+Version 0.6.6 - Somtoday is back.
+
+- algemeen
+    - Het modal systeem heeft een heel mooi dropdown systeem, maar daar kunnen veel opties in. Dit is nu opgelost door een zoekbalk toe te voegen. :yey:
+    - welke versie je gebruikt (RELEASE, BETA & DEV) staat nu aangegeven als je Zermos opent (Zermos, Zermos Beta, Zermos Dev)
+    - een deel van de CSS geüpdatet, maar volgens sommige gebruikers is het nog steeds niet helemaal goed. Tijme.
+    - achter de schermen wat dingen aangepast, waardoor nieuwe versies beter kunnen worden uitgerold.
+    - Er is een nieuw menu om de Windows, android of PWA versie te downloaden (account > installeren)
+- koppelen
+    - Somtoday callback pagina is nu ook overgeschakeld naar het modal systeem, was ik blijkbaar vergeten.
+- Somtoday - cijfers
+    - als je wel examencijfers hebt, maar geen cijfers, dan wordt je rapport tabblad niet meer weergegeven, maar geschiedenis en examencijfers wel.
+- Zermelo - rooster
+    - in de paklijst staan geen uitgevallen lessen meer.
+- koppelingen - Somtoday
+    - Somtoday is nu beschikbaar voor 80%-85% van de gebruikers, heb jij een android telefoon of een windows computer? Dan kan je nu Zermos downloaden en op een veilige en makkelijke manier Somtoday koppelen.
+
+# Release Notes - Versie 0.6.5.1 - 19-09-2024
 
 Somtoday is bijna weer gereintergreerd in de app, alen het koppelen (via STAP of Gbr + WW) werkt nog niet. Ik denk dat dit wel gaat lukken, in de tussentijd kan je (via PC) een korte (6 uur) koppeling maken met Somtoday door de hackerman methode te gebruiken.
 
