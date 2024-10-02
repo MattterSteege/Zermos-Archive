@@ -6,4 +6,3 @@ TODO: husiwerk pagina redesign
 TODO: huiswerk afvinken
 TODO: jaarbijlagen bij leermiddelen
 TODO: rapport downloaden, dit doe je zo: input een jaarlaag en dan worden alle vakken opgevraagd, vraag dan alle cijfers van alle vakken op zodat je een lijst hebt met alle cijfers, dan kan je die in een pdf zetten en downloaden
-TODO: change all the HTTPclient instances to use the DI methods

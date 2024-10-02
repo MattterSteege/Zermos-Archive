@@ -447,6 +447,19 @@ namespace Zermos_Web.Controllers
             return PartialView(Sort(somtodayHomework));
         }
         
+        [Authorize]
+        [SomtodayRequirement]
+        [HttpGet("/Somtoday/Huiswerk/afvinken")]
+        public async Task<IActionResult> Afvinken(string swiToekenningId, bool afvinken)
+        {
+            var success = await somtodayApi.SetHomeworkStateAsync(ZermosUser, swiToekenningId, afvinken);
+            
+            if (success)
+                return Ok();
+            
+            return BadRequest();
+        }
+        
         [NonAction]
         private List<Models.somtodayHomeworkModel.Item> GetRemappedCustomHuiswerk()
         {

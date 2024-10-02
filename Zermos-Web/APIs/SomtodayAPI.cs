@@ -516,4 +516,39 @@ public class  SomtodayAPI
         
         return JsonConvert.DeserializeObject<SomtodayStudentModel>(await response.Content.ReadAsStringAsync());
     }
+
+    public async Task<bool> SetHomeworkStateAsync(user user, string swiToekenningId, bool afvinken)
+    {
+        var baseurl = "https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/swigemaakt/cou";
+        
+        _httpClient.DefaultRequestHeaders.Clear();
+        _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
+        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        
+        var body = new
+        {
+            leerling = new
+            {
+                links = new[]
+                {
+                    new
+                    {
+                        id = user.somtoday_student_id,
+                        rel = "self",
+                        type = "leerling.RLeerlingPrimer"
+                    }
+                }
+            },
+            swiToekenningId = swiToekenningId,
+            gemaakt = afvinken
+        };
+        
+        var response = await _httpClient.PutAsync(baseurl, new StringContent(JsonConvert.SerializeObject(body), System.Text.Encoding.UTF8, "application/json"));
+        
+        //if 201 or 200, then it was successful
+        if (response.IsSuccessStatusCode == false)
+            Console.WriteLine("Error: " + await response.Content.ReadAsStringAsync());
+        
+        return response.IsSuccessStatusCode;
+    }
 }
