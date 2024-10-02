@@ -4,6 +4,21 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - versie 0.6.7 - 02-10-2024
+Version 0.6.7 - new UI someone?
+
+P.S. dit is een relatief kleine update, maar ik vond het wel nodig om een nieuwe versie te maken, omdat er veel veranderingen zijn gemaakt in de code die niet perse zichtbaar zijn voor de gebruiker, maar wel belangrijk zijn voor stabiliteit.
+
+- algemeen
+    - PWA is ook een optie op de download pagina
+    - op de debug pagina is nu een makkelijke weergave van alle cookies and localstorage items toegevoegd
+    
+- koppelingen - somtoday
+    - de STAP en WW+GBR mehtoden zijn verwijderd, deze kunnen (door mij) helaas niet meer ondersteund worden
+    
+- infowijs - schoolkalender
+    - er is een nieuwe layout en UI gemaakt voor de infowijs pagina, veel mooier nu!
+
 # Release Notes - versie 0.6.6 - 30-09-2024
 Version 0.6.6 - Somtoday is back.
 
