@@ -16,6 +16,8 @@ public class SettingAttribute : Attribute
 
     public bool IsValid(string value)
     {
+        if (Options == null || Options.Length == 0) return true; // No options means any value is valid
+        if (string.IsNullOrEmpty(value) || value == string.Empty) return true; // Null values are always valid
         if (Options.Length == 1) return Regex.IsMatch(value, Options[0]); // Single option is treated as a regex pattern
         return Options.Any(option => string.Equals(option, value, StringComparison.OrdinalIgnoreCase)); // Multiple options are treated as a case-insensitive match
     }

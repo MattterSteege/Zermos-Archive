@@ -476,6 +476,13 @@ namespace Zermos_Web.Controllers
                 var somtodayAuthentication = JsonConvert.DeserializeObject<SomtodayAuthenticatieModel>(await response.Content.ReadAsStringAsync());
 
                 string somtodayInternalID = (await somtodayApi.GetSomtodayStudent(new user{somtoday_access_token = somtodayAuthentication.access_token})).items[0].links[0].id.ToString();
+
+                if (somtodayInternalID.IsNullOrEmpty())
+                {
+                    Log(LogLevel.Information, "SomtodayCallback: somtodayInternalID is null");
+                    return PartialView(model: "failed");
+                }
+                
                 ZermosUser = new user
                 {
                     somtoday_access_token = somtodayAuthentication.access_token,

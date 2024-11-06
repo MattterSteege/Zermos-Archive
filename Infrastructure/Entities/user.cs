@@ -139,6 +139,7 @@ namespace Infrastructure.Entities
         private void SetSetting(string settingName, string settingValue)
         {
             if (settings == null) settings = "";
+            if (settingValue == null) settingValue = "";
             
             if (settingName.Contains("=") || settingName.Contains(";")) throw new ArgumentException("Setting name cannot contain '=' or ';'.");
             if (settingValue.Contains("=") || settingValue.Contains(";")) throw new ArgumentException("Setting value cannot contain '=' or ';'.");
