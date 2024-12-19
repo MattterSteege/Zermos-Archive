@@ -639,11 +639,11 @@ console.log = function(...args) {
     consoleLog(`%c[Log]%c`, "font-weight:700;color:royalblue;", "", ...args);
 };
 
-consoleError = console.error;
-console.error = function(...args) {
-    consoleArray.push(["error", new Error().stack, ...args]);
-    consoleError(`%c[Error]%c`, "font-weight:700;color:red;", "", ...args);
-};
+// consoleError = console.error;
+// console.error = function(...args) {
+//     consoleArray.push(["error", new Error().stack, ...args]);
+//     consoleError(`%c[Error]%c`, "font-weight:700;color:red;", "", ...args);
+// };
 
 consoleWarn = console.warn;
 console.warn = function(...args) {
@@ -1023,4 +1023,10 @@ function createCollapsibleElement(data, depth = 0) {
   }
 
   return details;
+}
+
+
+//
+function padLeft(string, length, padding) {
+  return (new Array(length).fill(padding).join('') + string).slice(-length);
 }

@@ -117,7 +117,7 @@ public static class DateTimeUtils
 
         // Calculate the date of the first Monday of the year
         var daysToFirstMonday = (int) DayOfWeek.Monday - (int) jan1.DayOfWeek;
-        if (daysToFirstMonday < 0) daysToFirstMonday += 7;
+       // if (daysToFirstMonday < 0) daysToFirstMonday += 7;
         var firstMonday = jan1.AddDays(daysToFirstMonday);
 
         // Calculate the date of the Monday of the specified week and year

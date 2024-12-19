@@ -745,13 +745,18 @@ function loadCustomAppointments(week, year) {
         week = curr.dataset.week;
         year = curr.dataset.year;
     }
+
+
+    week = padLeft(week, 2, '0').toString();
+
+    console.log(week)
     
     if (!curr) return;
     
     start = curr.dataset.start;
     end = curr.dataset.end;
     
-    fetch("/api/Afspraken/AlleAfspraken?jaarWeek=" + year + week)
+    fetch("/api/Afspraken/AlleAfspraken?jaarWeek=" + year + padLeft(week, 2, '0'))
     .then(response => response.json())
     .then(data => {
         data.forEach(item => {
