@@ -4,6 +4,11 @@ title: what's new
 nav_exclude: false
 ---
 
+# Release Notes - versie 0.6.8.1 - 10-01-2024
+Version 0.6.8.1 - Kleine bugifx
+
+Er zat een fout de cijfers statistieken niet altijd even goed werkten (voornamelijk met SE's) dat is nu opgelost. In je cijferstatistieken worden nu ook je SE cijfers meegenomen.
+
 # Release Notes - versie 0.6.7 - 02-10-2024
 Version 0.6.7 - new UI someone?
 
