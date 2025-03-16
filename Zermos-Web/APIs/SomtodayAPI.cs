@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Infrastructure.Entities;
 using Newtonsoft.Json;
 using Zermos_Web.Models;
+using Zermos_Web.Models.Somtoday;
 using Zermos_Web.Models.SomtodayLeermiddelen;
 using Zermos_Web.Models.SomtodayAfwezigheidModel;
 using Zermos_Web.Models.SomtodayGradesModel;
@@ -109,19 +110,80 @@ public class  SomtodayAPI
     
     public async Task<SomtodayLeermiddelenModel> GetStudiemateriaal(user user)
     {
-        var baseurl = $"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/studiemateriaal/algemeen/{user.somtoday_student_id}";
-        //var baseurl = $"https://somtoday-leermiddelen.mjtsgamer.workers.dev?studentId={user.somtoday_student_id}&accessToken={user.somtoday_access_token}";
+        // var baseurl = $"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/studiemateriaal/algemeen/{user.somtoday_student_id}";
+        // //var baseurl = $"https://somtoday-leermiddelen.mjtsgamer.workers.dev?studentId={user.somtoday_student_id}&accessToken={user.somtoday_access_token}";
+        //
+        // _httpClient.DefaultRequestHeaders.Clear();
+        // _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
+        // _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        //
+        // var response = await _httpClient.GetAsync(baseurl);
+        //
+        // if (response.IsSuccessStatusCode == false)
+        //     return null;
+        //
+        // return JsonConvert.DeserializeObject<SomtodayLeermiddelenModel>(await response.Content.ReadAsStringAsync());
+        
+        #if DEBUG
+        var watch = Stopwatch.StartNew();
+        #endif
+        
+        var urls = new[]
+        
+        {
+            $"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/studiemateriaal/algemeen/{user.somtoday_student_id}",
+            $"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/vakken/studiemateriaal/{user.somtoday_student_id}"
+        };
         
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("authorization", "Bearer " + user.somtoday_access_token);
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
         
-        var response = await _httpClient.GetAsync(baseurl);
-
-        if (response.IsSuccessStatusCode == false)
+        var tasks = urls.Select(url => url != null ? _httpClient.GetAsync(url) : Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.OK))).ToArray();
+        
+        await Task.WhenAll(tasks);
+        
+        if (tasks.Any(t => !t.Result.IsSuccessStatusCode))
             return null;
         
-        return JsonConvert.DeserializeObject<SomtodayLeermiddelenModel>(await response.Content.ReadAsStringAsync());
+        var jsonTasks = tasks.Select(t => t.Result.Content.ReadAsStringAsync()).ToArray();
+        await Task.WhenAll(jsonTasks);
+        
+        var leermiddelenBoeken = JsonConvert.DeserializeObject<SomtodayLeermiddelenModel>(jsonTasks[0].Result);
+        var leermiddelenBijlagen = JsonConvert.DeserializeObject<SomtodayLeermiddelenBijlageModel>(jsonTasks[1].Result);
+        var leermiddelenBijlageLink = new List<SomtodayLeermiddelenBijlageLinkModel>();
+        
+        Dictionary<string, string> bjilageUUIDs = leermiddelenBijlagen.items.ToDictionary(item => item.naam, item => $"https://passtrough.mjtsgamer.workers.dev/https://api.somtoday.nl/rest/v1/studiemateriaal/{user.somtoday_student_id}/vak/{item.UUID}");
+        
+        var bijlageLinkTasks = bjilageUUIDs.Select(async kvp =>
+        {
+            var response = await _httpClient.GetAsync(kvp.Value);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var bijlageLink = JsonConvert.DeserializeObject<SomtodayLeermiddelenBijlageLinkModel>(content);
+                bijlageLink.vak = kvp.Key;
+                bijlageLink.UUID = bjilageUUIDs[kvp.Key];
+                bijlageLink.UUID = bijlageLink.UUID[^36..];
+                return bijlageLink;
+            }
+            return null;
+        }).ToList();
+        
+        await Task.WhenAll(bijlageLinkTasks);
+        
+        leermiddelenBijlageLink.AddRange(bijlageLinkTasks.Where(task => task.Result != null).Select(task => task.Result));
+
+        //Console.WriteLine(JsonConvert.SerializeObject(leermiddelenBijlageLink));
+
+        leermiddelenBoeken.jaarBijlagen = leermiddelenBijlageLink;
+        
+        #if DEBUG
+        watch.Stop();
+        Console.WriteLine(watch.ElapsedMilliseconds + "ms");
+        #endif
+        
+        return leermiddelenBoeken;
     }
     
     [Flags]

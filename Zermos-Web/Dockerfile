@@ -7,7 +7,7 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-ENV ZERMOS-WEB-VERSION="0.6.7"
+ENV ZERMOS-WEB-VERSION="0.6.8.1"
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src

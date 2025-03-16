@@ -1,25 +1,57 @@
-﻿@model Zermos_Web.Models.SomtodayLeermiddelen.SomtodayLeermiddelenModel
+﻿@using Zermos_Web.Models.Somtoday
+@using Zermos_Web.Utilities
+@model Zermos_Web.Models.SomtodayLeermiddelen.SomtodayLeermiddelenModel
 
 <link rel="stylesheet" href="/css/somtoday.css" preload/>
 
 <div class="leermiddelen-container">
-    @foreach (var leermiddel in Model.items)
+    @if(Model.items.Count > 0)
     {
-        <div class="leermiddel" onclick="window.open('@leermiddel.URL')">
-            <i class="fa-solid fa-external-link"></i>
-            <h1>@leermiddel.Title</h1>
+        <h1>Algemene leermiddelen</h1>
+        foreach (var leermiddel in Model.items)
+        {
+            <div class="leermiddel" onclick="window.open('@leermiddel.URL')">
+                <i class="fa-solid fa-external-link"></i>
+                <h1>@leermiddel.Title</h1>
 
-            @{
-                List<string> desc = new() { };
-                desc = leermiddel.Uitgever != null ? desc.Append(leermiddel.Uitgever).ToList() : desc;
-                desc = leermiddel.DashboardMethodeNaam != null ? desc.Append(leermiddel.DashboardMethodeNaam).ToList() : desc;
+                @{
+                    List<string> desc = new() { };
+                    desc = leermiddel.Uitgever != null ? desc.Append(leermiddel.Uitgever).ToList() : desc;
+                    desc = leermiddel.DashboardMethodeNaam != null ? desc.Append(leermiddel.DashboardMethodeNaam).ToList() : desc;
+                }
+
+                <p>@string.Join(" • ", desc)</p>
+            </div>
+        }
+    }
+    
+    @if(Model.jaarBijlagen.Count > 0)
+    {
+        foreach (var leermiddel in Model.jaarBijlagen)
+        {
+            if (leermiddel.jaarBijlagen.Count == 0) continue;
+            
+            <h1>@leermiddel.vak.Capitalize()</h1>
+            foreach (var item in leermiddel.jaarBijlagen)
+            {
+                <div class="leermiddel" onclick="window.open('@item.assemblyResults[0].fileUrl')">
+                    <i class="fa-solid fa-external-link"></i>
+                    <h1>@item.omschrijving</h1>
+
+                    @{
+                        List<string> desc = new() { };
+                        desc = item.assemblyResults[0].fileName != null ? desc.Append(item.assemblyResults[0].fileName).ToList() : desc;
+                        desc = item.assemblyResults[0].fileSize > 0 ? desc.Append(item.assemblyResults[0].fileSize / 1000 + " KB").ToList() : desc;
+                        desc = item.assemblyResults[0].fileExtension != null ? desc.Append(item.assemblyResults[0].fileExtension).ToList() : desc;
+                    }
+
+                    <p>@string.Join(" • ", desc)</p>
+                </div>
             }
-
-            <p>@string.Join(" • ", desc)</p>
-        </div>
+        }
     }
 
-    @if (Model.items.Count == 0)
+    @if (Model.items.Count == 0 && Model.jaarBijlagen.Count == 0)
     {
         <div class="add-leermiddel" onclick="openAddingModal()">
             <i class="fa-solid fa-plus"></i>

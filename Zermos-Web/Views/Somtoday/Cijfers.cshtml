@@ -73,7 +73,7 @@
                 </tr>
                 @if (grade.cijfers != null && grade.cijfers.Count > 0)
                 {
-                    <tr class="grade-table-header">+
+                    <tr class="grade-table-header">
                         <td style="display: none"></td>
                         <td>Laatste cijfer</td>
                         <td></td>
@@ -118,7 +118,7 @@
                 <tr class="grade-table-header">
                     <td rowspan="2"><i class="fa-solid fa-book" data-name="@grade.vakNaam.ToLower()" data-name-short="@grade.vakAfkorting.ToLower()"></i></td>
                     <td>@grade.vakNaam</td>
-                    <td>@(grade.wegingSE)x</td>
+                    <td></td>
                     <td class="@(grade.cijferSE.ToFloat() >= 5.45f ? "sufficient" : "insufficient ")">@grade.cijferSE.Replace(",", ".")</td>
                     <td style="display: none" class="@(grade.cijferSE.ToFloat() >= 5.45f ? "sufficient" : "insufficient ")">@grade.cijferSE.ToFloat().ExamenAfronding()</td>
                 </tr>

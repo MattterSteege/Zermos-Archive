@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Zermos_Web.Models.Somtoday;
 
 namespace Zermos_Web.Models.SomtodayLeermiddelen;
 
@@ -31,5 +32,6 @@ public class Product
 public class SomtodayLeermiddelenModel
 {
     public List<Item> items { get; set; }
+    public List<SomtodayLeermiddelenBijlageLinkModel> jaarBijlagen { get; set; }
 }
 

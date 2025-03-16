@@ -41,6 +41,14 @@ namespace Zermos_Web.APIs
             if (user.zermelo_access_token.IsNullOrEmpty() || user.school_id.IsNullOrEmpty()) throw new ArgumentNullException(nameof(user));
             if (year.IsNullOrEmpty() || week.IsNullOrEmpty()) throw new ArgumentNullException();
 
+            if (week == "53")
+            {
+                week = "01";
+                int _year = int.Parse(year);
+                _year++;
+                year = _year.ToString();
+            } 
+
             var baseUrl = $"https://{user.zermelo_school_abbr}.zportal.nl/api/v3/liveschedule" +
                           $"?access_token={user.zermelo_access_token}" +
                           $"&student={user.school_id}" +

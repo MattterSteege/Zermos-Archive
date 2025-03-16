@@ -31,7 +31,7 @@
     padding: var(--padding);
 }
 
-.homeworkItem .homeworkItem-top{
+.homeworkItem .homeworkItem-top {
     margin-right: auto;
 }
 
@@ -206,7 +206,7 @@
     margin-left: auto;
     display: flex;
     gap: var(--padding);
-    font-size: calc(1.4 *var(--font-size-heading));
+    font-size: calc(1.4 * var(--font-size-heading));
 }
 
 .grade-table {
@@ -230,7 +230,12 @@
     font-weight: 700;
 }
 
-.grade-table-header td[rowspan="2"] {width: 40px;height: 40px;font-size: calc(1.5 * var(--font-size-heading));text-align: center;}
+.grade-table-header td[rowspan="2"] {
+    width: 40px;
+    height: 40px;
+    font-size: calc(1.5 * var(--font-size-heading));
+    text-align: center;
+}
 
 .grade-table-header td:nth-child(3), .grade-table-header td:nth-child(4), .grade-table-header td:nth-child(5) {
     width: 10%;
@@ -242,7 +247,7 @@ i.fa-solid.fa-graduation-cap, i.fa-solid.fa-layer-group {
     width: 0;
     height: 0;
     right: 0;
-    top: calc(-2* var(--padding));
+    top: calc(-2 * var(--padding));
     font-size: var(--font-size-heading);
     color: var(--text-color);
     cursor: pointer;
@@ -284,8 +289,8 @@ i.fa-solid.fa-graduation-cap, i.fa-solid.fa-layer-group {
 
 .grade-notification {
     position: absolute;
-    top: calc(-0.5* var(--padding));
-    left: calc(-0.5* var(--padding));
+    top: calc(-0.5 * var(--padding));
+    left: calc(-0.5 * var(--padding));
     height: var(--padding);
     width: var(--padding);
     border-radius: var(--border-radius);
@@ -471,6 +476,7 @@ input[type="number"] {
 #C .horizontal-line {
     grid-area: 2 / 2 / 3 / 3;
     display: flex;
+    justify-content: space-around;
 }
 
 #C .vertical-line .grade,
@@ -507,6 +513,13 @@ input[type="number"] {
     grid-gap: var(--padding);
 }
 
+.leermiddelen-container > h1 {
+    grid-column: 1 / span 2;
+    font-size: calc(1.5* var(--font-size-heading));
+    font-weight: 700;
+    color: var(--text-color);
+}
+
 .leermiddel {
     display: grid;
     grid-template-columns: 1fr;
@@ -522,7 +535,7 @@ input[type="number"] {
 }
 
 .leermiddel i {
-    font-size: calc(var(--font-size)* 1.5);
+    font-size: calc(var(--font-size) * 1.5);
     color: var(--text-color);
     position: absolute;
     right: 0;
@@ -589,4 +602,10 @@ input[type="number"] {
 
 .add-leermiddel i {
     font-size: var(--font-size-heading);
+}
+
+@media screen and (max-width: 794px) {
+    .leermiddelen-container > h1 {
+        grid-column: unset; 
+    }    
 }

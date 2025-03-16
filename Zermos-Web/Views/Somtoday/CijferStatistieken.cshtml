@@ -30,7 +30,7 @@
                 <div>
                     <h1>percentage voldoende</h1>
                     <p class="gemiddelde">Percentage voldoendes: @(((double) Model.voldoendes / (Model.item.cijfers.Count + Model.item.cijfersSE.Count) * 100).ToString("0.00").Replace(",", "."))%</p>
-                    <p class="gemiddelde">aantal cijfers: @Model.item.cijfers.Count</p>
+                    <p class="gemiddelde">aantal cijfers: @(Model.item.cijfers.Count + Model.item.cijfersSE.Count)</p>
                     <p class="gemiddelde">voldoendes: @Model.voldoendes</p>
                     <p class="gemiddelde">onvoldoendes: @Model.onvoldoendes</p>
                 </div>
@@ -73,6 +73,7 @@
             <h1>Cijfers over tijd</h1>
             @{
                 List<double> grades = Model.item.cijfers.Where(c => c.isVoortgang).Select(c => c.cijfer).Reverse().ToList(); //List<double>
+                grades.AddRange(Model.item.cijfersSE.Where(c => c.isSE).Select(c => c.cijfer).Reverse().ToList());
             }
             <div class="canvas">
                 <div class="chart" id="@letters[2]">
@@ -135,6 +136,7 @@
                     <div class="horizontal-line">
                         @{
                             List<int> wegingen = Model.item.cijfers.Where(c => c.isVoortgang).Select(c => c.weging).Reverse().ToList(); //List<int>
+                            wegingen.AddRange(Model.item.cijfersSE.Where(c => c.isSE).Select(c => c.weging).Reverse().ToList());
                             double average = 0;
                             int weging = 0;
                             List<double> snapshots = new List<double>();

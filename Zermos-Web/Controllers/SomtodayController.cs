@@ -258,7 +258,7 @@ namespace Zermos_Web.Controllers
             double somSE = 0;
             foreach (var item in allgrades)
             {
-                if (item.isLabel) continue;
+                if (!item.isCijfer) continue;
                 
                 if (item.cijfer >= 5.45)
                     voldoendes++;
@@ -306,7 +306,7 @@ namespace Zermos_Web.Controllers
             //line chart: grades over time
             
             somtodayGradesModel.items[0].cijfers = somtodayGradesModel.items[0].cijfers.FindAll(x => x.isVoortgang && x.isCijfer);
-            somtodayGradesModel.items[0].cijfersSE = somtodayGradesModel.items[0].cijfersSE.FindAll(x => x.isVoortgang && x.isCijfer);
+            somtodayGradesModel.items[0].cijfersSE = somtodayGradesModel.items[0].cijfersSE.FindAll(x => !x.isVoortgang && x.isCijfer);
             
             SomtodayStatistiekenModel model = new()
             {
@@ -320,8 +320,8 @@ namespace Zermos_Web.Controllers
                 som = som,
                 wegingSE = wegingSE,
                 somSE = somSE,
-                containsSE = somtodayGradesModel.items[0].cijfersSE.Count > 0,
-                containsVoortgang = somtodayGradesModel.items[0].cijfers.Count > 0,
+                containsSE = somSE > 0,
+                containsVoortgang = som > 0,
             };
             
             
@@ -625,8 +625,8 @@ namespace Zermos_Web.Controllers
             var customLeermiddelen = JsonConvert.DeserializeObject<SomtodayLeermiddelenModel>(user.custom_leermiddelen ?? "{\"items\": []}") ?? new SomtodayLeermiddelenModel { items = new List<Models.SomtodayLeermiddelen.Item>() };
             somtodayLeermiddelen.items.AddRange(customLeermiddelen.items ?? new List<Models.SomtodayLeermiddelen.Item>());
             
-            if (somtodayLeermiddelen.items.Count == 0)
-                return NoContent();
+            // if (somtodayLeermiddelen.items.Count == 0 && customLeermiddelen.items.Count == 0)
+            //     return NoContent();
             
             string json = JsonConvert.SerializeObject(somtodayLeermiddelen);
             
