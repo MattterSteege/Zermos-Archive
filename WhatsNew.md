@@ -4,7 +4,16 @@ title: what's new
 nav_exclude: false
 ---
 
-# Release Notes - versie 0.6.8.1 - 10-01-2024
+# Release Notes - versie 0.6.8.2 - 16-03-2025
+Version 0.6.8.2 - leermiddelen
+ 
+- Somtoday - Leermiddelen
+    - Ik heb meerdere leermiddelen toegevoegd aan de leermiddelen pagina, namelijk de jaarbijlage van een vak. Deze werken op precies dezelfde manier als de online methodeboeken.
+
+- Somtoday - Cijfers
+    - Het icoontje van het vak "Latijn" (,la, ltc) is aangepast naar een icoontje van een Romeinse rol.
+
+# Release Notes - versie 0.6.8.1 - 10-01-2025
 Version 0.6.8.1 - Kleine bugifx
 
 Er zat een fout de cijfers statistieken niet altijd even goed werkten (voornamelijk met SE's) dat is nu opgelost. In je cijferstatistieken worden nu ook je SE cijfers meegenomen.
