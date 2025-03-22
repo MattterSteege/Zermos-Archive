@@ -188,6 +188,10 @@ namespace Zermos_Web.Utilities
             var convertedText = Regex.Replace(text, pattern, match =>
             {
                 var originalLink = match.Value;
+                
+                //remove any non-url characters from the end of the link
+                originalLink = originalLink.TrimEnd('.', ',', ';', ':', '!', '?', ')', ']', '}');
+                
                 var uri = new Uri(originalLink);
                 var domain = uri.Host;
                 var modifiedLink = $"<a href='{originalLink}'>{domain}</a>";

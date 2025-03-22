@@ -27,7 +27,7 @@ var waitingModal = new ZermosModal()
     var schools = [];
     var suggestions = document.getElementById("suggestions");
     //https://servers.somtoday.nl/organisaties.json where oidcurls are [] and do not contain data
-    fetch("https://cors.mjtsgamer.workers.dev/https://servers.somtoday.nl/organisaties.json")
+    fetch("https://raw.githubusercontent.com/NONtoday/organisaties.json/refs/heads/main/organisaties.json")
     .then(response => response.json())
     .then(data => {
         data[0].instellingen.forEach(school => {
