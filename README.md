@@ -91,7 +91,7 @@ https://github.com/user-attachments/assets/e9f8bda6-aa8e-48d2-94f5-2d00616127bd
 
    Dit gaf me ook de optie om een database voor gebruikers aan te maken, dus dan konden mensen op hun computer, tablet, ipad, laptop, telefoon, en ja ook smartwatch hun rooster, cijfers en alles bekijken!
 
-4. **Windows, Android en PWS apps**  
+4. **Windows, Android en PWA apps**  
    Om het af te maken zijn er ook native apps gekomen:  
    - Allen zijn in feite een webview van de website.  
    - Met extra kleine features, zoals deeplinking, speciaal voor de Somtoday-koppeling. (android en windows)  
