@@ -11,7 +11,7 @@
   <a href="https://github.com/MattterSteege/Zermos-Archive">
     <img src="https://img.shields.io/github/stars/MattterSteege/Zermos-Archive?style=for-the-badge" alt="GitHub Stars" />
   </a>
-  <a href="https://github.com/MattterSteege/Zermos-Archive/blob/main/LICENSE">
+  <a href="https://github.com/MattterSteege/Zermos-Archive/blob/Zermos-Web-ASP/LICENSE">
     <img src="https://img.shields.io/github/license/MattterSteege/Zermos-Archive?style=for-the-badge" alt="License: MIT" />
   </a>
   <a href="https://zermos.kronk.tech">
