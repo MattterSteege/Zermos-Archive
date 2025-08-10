@@ -77,13 +77,24 @@ https://github.com/user-attachments/assets/e9f8bda6-aa8e-48d2-94f5-2d00616127bd
 2. **Raw HTML/CSS/JS website**  
    Daarna ben ik helemaal teruggegaan naar basics: een pure statische website met vanilla HTML, CSS en JavaScript. Lekker direct, geen gedoe met backend, maar wel beperkt in wat je kon doen met de koppelingen.
 
+<details>
+<summary>Wat was dit intens lelijk 😬</summary>
+
+![Screenshot 1](https://github.com/user-attachments/assets/754fe313-10cd-4d9b-a99b-51010e346ee4)
+![Screenshot 2](https://github.com/user-attachments/assets/ac579d97-3d12-4efe-a670-2dca34415eb0)
+![Screenshot 3](https://github.com/user-attachments/assets/805f0251-ac37-43a5-bb12-0adb5f45c3eb)
+
+</details>
+
 3. **ASP.NET Core website (huidige versie)**  
    Toen vond ik het tijd voor iets stevigers: een ASP.NET Core backend, waarmee ik alle koppelingen serieus kon aanpakken en dynamische functionaliteit kon bouwen. Dit is nu het kloppende hart van Zermos.
 
-4. **Windows en Android apps**  
+   Dit gaf me ook de optie om een database voor gebruikers aan te maken, dus dan konden mensen op hun computer, tablet, ipad, laptop, telefoon, en ja ook smartwatch hun rooster, cijfers en alles bekijken!
+
+4. **Windows, Android en PWS apps**  
    Om het af te maken zijn er ook native apps gekomen:  
-   - Beide zijn in feite een webview van de website.  
-   - Met extra kleine features, zoals deeplinking, speciaal voor de Somtoday-koppeling.  
+   - Allen zijn in feite een webview van de website.  
+   - Met extra kleine features, zoals deeplinking, speciaal voor de Somtoday-koppeling. (android en windows)  
    - Hiermee kon ik gebruikers een app-gevoel geven zonder alles helemaal opnieuw te bouwen.
 
 ---
@@ -98,11 +109,11 @@ https://github.com/user-attachments/assets/e9f8bda6-aa8e-48d2-94f5-2d00616127bd
 <details>
 <summary>Klik om screenshots te tonen</summary>
 
-![Screenshot 1](https://github.com/user-attachments/assets/6f042921-c219-4b68-86d4-87fb9312e287)  
-![Screenshot 2](https://github.com/user-attachments/assets/79ea16e3-76e0-44f2-ae09-ac769987c358)  
-![Screenshot 3](https://github.com/user-attachments/assets/086069fb-1a62-4717-9e1f-cae126befb9b)  
-![Screenshot 4](https://github.com/user-attachments/assets/042220c7-9ba3-41d3-9e6f-f1e55f1b3a02)  
-![Screenshot 5](https://github.com/user-attachments/assets/912c0fec-c5fd-4728-917d-446e191d3f24)  
+![Screenshot 4](https://github.com/user-attachments/assets/6f042921-c219-4b68-86d4-87fb9312e287)  
+![Screenshot 5](https://github.com/user-attachments/assets/79ea16e3-76e0-44f2-ae09-ac769987c358)  
+![Screenshot 6](https://github.com/user-attachments/assets/086069fb-1a62-4717-9e1f-cae126befb9b)  
+![Screenshot 7](https://github.com/user-attachments/assets/042220c7-9ba3-41d3-9e6f-f1e55f1b3a02)  
+![Screenshot 8](https://github.com/user-attachments/assets/912c0fec-c5fd-4728-917d-446e191d3f24)  
 
 > Niet alle screenshots zijn beschikbaar — ik heb geen toegang meer tot Somtoday, dus de cijferpagina’s ontbreken.
 </details>
